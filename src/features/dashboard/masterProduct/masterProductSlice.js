@@ -49,7 +49,8 @@ const createMasterProductSlice = createSlice({
                 additionalWeek: "-",
                 updatedData: "27/10/20, at 13:54 PM"
             }],
-        selection:[]
+        selection: [],
+        
     },
     reducers: {
         setMasterProduct: (state, action) => {

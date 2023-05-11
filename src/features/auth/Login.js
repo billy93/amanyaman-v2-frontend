@@ -63,7 +63,7 @@ const Login = () => {
       setFields({...fields,[e.target.name]:e.target.value})
   }
   console.log('fields', fields?.username)
-  const handlelogin = (e) => {
+  const handlelogin = async (e) => {
       let userroles = role?.filter((user) => user.username === fields?.username)
       // console.log('user roles', userroles)
       // console.log('user roles fields', fields)
@@ -91,6 +91,24 @@ const Login = () => {
                 })
             
       }
+    // try {
+    //         const userData = await login({ username:fields?.username, password:fields?.password }).unwrap()
+    //         // dispatch(setCredentials({ ...userData, user }))
+    //         console.log('user data', userData)
+    //     } catch (err) {
+    //         if (!err?.originalStatus) {
+    //             // isLoading: true until timeout occurs
+    //             setErrMsg('No Server Response');
+    //         } else if (err.originalStatus === 400) {
+    //             setErrMsg('Missing Username or Password');
+    //         } else if (err.originalStatus === 401) {
+    //             setErrMsg('Unauthorized');
+    //         } else {
+    //             setErrMsg('Login Failed');
+    //         }
+    //         errRef.current.focus();
+    //     }
+
       
     }
     const content = isLoading ? <h1>Loading...</h1> : (

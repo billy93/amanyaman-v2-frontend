@@ -397,9 +397,11 @@ const MasterUser = () => {
                     <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
                         Import 
                     </Button>
+                    <Link to="/master-data/create-user">  
                     <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white">
                         Add User 
                     </Button>
+                    </Link>
                 </Stack>
             </Box>
             

@@ -19,6 +19,8 @@ import MasterUser from './features/dashboard/masterUser/masterUser'
 import MasterProduct from './features/dashboard/masterProduct/masterProduct'
 import PolicyDetails from './features/dashboard/policy/policyDetail'
 import CreateProduct from './features/dashboard/masterProduct/createProduct'
+import CreateUser from './features/dashboard/masterUser/createUser'
+
 function App() {
   return (
     <Routes>
@@ -42,8 +44,9 @@ function App() {
         <Route path="list" element={<PolicyList />} />
         <Route path="policy-detail" element={<PolicyDetails />} />
       </Route>
-      <Route path="/master-user" exact element={<LayoutDashboard />}>
-        <Route path="" element={<MasterUser />} />
+      <Route path="/master-data" exact element={<LayoutDashboard />}>
+        <Route path="master-user" element={<MasterUser />} />
+        <Route path="create-user" element={<CreateUser />} />
       </Route>
       <Route path="/master-data" exact element={<LayoutDashboard />}>
         <Route path="master-products" element={<MasterProduct />} />

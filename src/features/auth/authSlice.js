@@ -21,7 +21,7 @@ const authSlice = createSlice({
                     {
                         id: "2",
                         name: "Users",
-                        link: "/master-user",
+                        link: "/master-data/master-user",
                         icon:""
                     },
                     {
