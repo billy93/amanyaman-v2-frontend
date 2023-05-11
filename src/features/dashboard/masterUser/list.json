@@ -1,0 +1,41 @@
+[
+   {
+      "policyNumber":"101015254327772229992QD",
+      "traveller":"Mrs. Yulianisa Mirti",
+      "premiumPrice":"480000",
+      "netToAgent":"260000",
+      "bookingNumber":"01230400000014",
+      "poin":"Worldwide 50 Non Rebooking Individual",
+      "policyStatus":"Success",
+      "paymentStatus":"Success",
+      "issueBy":"AMAN JELAJAH INTERNASIONAL",
+      "startDate":"13-Apr-2023",
+      "purchaseDate":"17-Apr-2023"
+   },
+   {
+      "policyNumber":"111015254327772229992QO",
+      "traveller":"Mr.Bayu",
+      "premiumPrice":"680000",
+      "netToAgent":"360000",
+      "bookingNumber":"01230400000016",
+      "poin":"Worldwide 50 Non Rebooking Individual",
+      "policyStatus":"Success",
+      "paymentStatus":"Success",
+      "issueBy":"AMAN JELAJAH INTERNASIONAL",
+      "startDate":"13-Apr-2023",
+      "purchaseDate":"17-Apr-2023"
+   },
+   {
+      "policyNumber":"211015254327772229992RO",
+      "traveller":"Mr.Akbar",
+      "premiumPrice":"780000",
+      "netToAgent":"760000",
+      "bookingNumber":"01230400000086",
+      "poin":"Worldwide 50 Non Rebooking Individual",
+      "policyStatus":"Success",
+      "paymentStatus":"Success",
+      "issueBy":"AMAN JELAJAH INTERNASIONAL",
+      "startDate":"15-Apr-2023",
+      "purchaseDate":"17-Apr-2023"
+   }
+]
