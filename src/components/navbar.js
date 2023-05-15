@@ -40,15 +40,16 @@ import {
 import Logo from '../img/logo.svg'
 import { Link,NavLink as Nav } from "react-router-dom"
 import { MdLogout, MdArrowDropDown } from 'react-icons/md'
-import { useSelector } from "react-redux"
-import { selectCurrentUser,selectCurrentTraveller,roleUser,Menulist } from "../features/auth/authSlice"
+import { useSelector, useDispatch } from "react-redux"
+import { selectCurrentUser,selectCurrentTraveller,roleUser,Menulist,userLoginCurrent, logOut} from "../features/auth/authSlice"
 import {
   FiHome,
   FiEdit,
   FiBell,
   FiFileText
 } from 'react-icons/fi';
-
+import useAuth from "../features/hook/useAuth"
+import usePersist from "../features/hook/useAuth"
 const LinksOther = ['Policy', 'Products', 'Dashboard','News & Promo','User','Master Products', 'Travellers'];
 const LinksTraveller = ['Policy','Claim', 'Latest Feeds'];
 
@@ -64,18 +65,28 @@ const LinkItemsUser = [
   { name: 'News & Promo', icon: FiFileText },
 ];
 
-export default function Navbar() {
+export default function Navbar({allowedRoles}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const username = useSelector(selectCurrentUser);
+  const dispatch = useDispatch()
+  const username = useSelector(userLoginCurrent);
   const role = useSelector(roleUser);
   const menus = useSelector(Menulist);
   const traveller = useSelector(selectCurrentTraveller);
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
   const popoverContentBgColor = useColorModeValue('white', 'gray.800');
+  const { roles } = useAuth()
+  // const [setPersist] = usePersist()
 
-  const NavLink = ({ children, ...rest }) => (
+  const handleLogout = () => {
+    dispatch(logOut())
+    // setPersist(null)
+    localStorage.removeItem('persist')
+    localStorage.setItem("persist", null)
+    localStorage.clear()
+  }
   
+  const NavLink = ({ children, ...rest }) => (
   <NewLink
     as={Nav}
     px={2}
@@ -223,7 +234,7 @@ const NavItem = ({ icon, children, ...rest }) => {
             <Button variant={'ClaimBtn'} size="xs" w={'35px'} h="20px" borderRadius={'base'}>
               <Text as="b" size={'xs'} style={{fontSize:'9px',padding:'3px'}}>
                 {
-                  username !==undefined ? 'Sale' : 'Claim'
+                  username?.firstName !==undefined ? 'Sale' : 'Claim'
                 }
               </Text>
             </Button>
@@ -236,7 +247,7 @@ const NavItem = ({ icon, children, ...rest }) => {
               spacing={4}
               display={{ base: 'none', md: 'flex' }}>
               {
-                username !== undefined && role ==="admin" &&(
+                // roles?.some(role => allowedRoles.includes(role.name)) &&(
                     // sortMenuRole()
                   menus && menus[0] && menus[0].menu.map((link,i) => (
                     // <NavLink key={i} {...link}>{link.name}</NavLink>
@@ -277,14 +288,7 @@ const NavItem = ({ icon, children, ...rest }) => {
                   </Popover>
                     </>
               ))
-                )
-              }
-              {
-                traveller !== undefined && (
-                  LinksTraveller.map((link) => (
-                  <NavLink key={link}>{link}</NavLink>
-              ))
-                )
+                // )
               }
             </HStack>
           </HStack>
@@ -306,18 +310,15 @@ const NavItem = ({ icon, children, ...rest }) => {
                 />
                   <Text color="#231F20" pl="5px" as="b" size="xs" style={{ textTransform: 'uppercase' }}>
                     {
-                      username !==null && username
-                    }
-                    {
-                      traveller !==null && traveller
+                      username?.firstName !==null && username?.firstName
                     }
                   </Text>
                   <MdArrowDropDown size="25px" color="#231F20" style={{paddingLeft:'4px'}} />
                 </Box>
               </MenuButton>
               <MenuList>
-                <Link to="/">    
-                <MenuItem fontSize="14px">
+                {/* <Link to="/">     */}
+                <MenuItem fontSize="14px" onClick={handleLogout}>
                       <Box w="100%" display="flex" justifyContent="flex-start" alignItems="center">
                         <MdLogout color="blue" style={{fontSize:"15px",marginRight:'4px'}} /> 
                         <Text fontSize='sm' as="b" color="grey">
@@ -325,7 +326,7 @@ const NavItem = ({ icon, children, ...rest }) => {
                         </Text>
                       </Box>
                 </MenuItem>
-                </Link>
+                {/* </Link> */}
               </MenuList>
             </Menu>
           </Flex>

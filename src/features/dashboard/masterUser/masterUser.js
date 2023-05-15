@@ -342,7 +342,7 @@ const MasterUser = () => {
           <Link
             color="#065BAA"
             style={{textDecoration:"underline"}}
-            to={`/user-detail/${row.original.username}`}
+            to={`/master-data/detail-user/${row.original.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.username}

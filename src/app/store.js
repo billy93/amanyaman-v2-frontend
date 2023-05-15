@@ -1,12 +1,24 @@
 import { Iterable } from 'immutable'
-import { configureStore,createSerializableStateInvariantMiddleware,isPlain } from "@reduxjs/toolkit"
+import { configureStore,createSerializableStateInvariantMiddleware,isPlain,combineReducers } from "@reduxjs/toolkit"
 import { apiSlice } from "./api/apiSlice"
 import authReducer from '../features/auth/authSlice'
+import storage from 'redux-persist/lib/storage';
+import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'reduxjs-toolkit-persist';
+import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import createClaimReducer from '../features/dashboard/claim/createClaimSlice'
 import createSearchQuotaReducer from '../features/dashboard/quota-search/quotaSearchSlice'
 import policyList from '../features/dashboard/policy/policySlice'
 import masterUser from '../features/dashboard/masterUser/masterUserSlice'
 import masterProducts from '../features/dashboard/masterProduct/masterProductSlice'
+import storageSession from 'reduxjs-toolkit-persist/lib/storage/session'
+
+const rootPersistConfig = {
+  key: 'root',
+  storage,
+  whitelist:['auth']
+}
+
+
 
 const isSerializable = (value) => Iterable.isIterable(value) || isPlain(value)
 
@@ -18,19 +30,34 @@ const serializableMiddleware = createSerializableStateInvariantMiddleware({
   getEntries,
 })
 
-export const store = configureStore({
-    reducer: {
-        [apiSlice.reducerPath]: apiSlice.reducer,
+const rootReducer = combineReducers({
+       [apiSlice.reducerPath]: apiSlice.reducer,
         auth: authReducer,
         createClaimForm: createClaimReducer,
         quotaSearch: createSearchQuotaReducer,
         policyList: policyList,
         masterUser: masterUser,
         masterProduct: masterProducts,
-    },
-    middleware: getDefaultMiddleware =>
-        getDefaultMiddleware({
-            serializableCheck: false,
-        }).concat(apiSlice.middleware),
-    devTools: true
 })
+
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer)
+export const store = configureStore({
+    reducer: persistedReducer,
+     middleware: getDefaultMiddleware =>
+       getDefaultMiddleware({
+        serializableCheck: {
+      /* ignore persistance actions */
+      ignoredActions: [
+        FLUSH,
+        REHYDRATE,
+        PAUSE,
+        PERSIST,
+        PURGE,
+        REGISTER
+      ],
+    },
+      }).concat(apiSlice.middleware),
+      devTools: true
+})
+export const persistor = persistStore(store)
+// setupListeners(store.dispatch)

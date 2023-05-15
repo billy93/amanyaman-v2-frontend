@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { usePersist } from '../hook/usePersist'
 
+const defaultToken = JSON.parse(localStorage.getItem("persist")) ? JSON.parse(localStorage.getItem("persist")).token : null
 const authSlice = createSlice({
     name: 'auth',
     initialState: { 
@@ -8,9 +10,11 @@ const authSlice = createSlice({
             password: null,
             role: null
         },
+        userLogin:null,
+        tokenAccess:null,
         mainMenu: [
             {
-                role: 'admin',
+                role: 'ROLE_ADMIN',
                 menu: [
                     {
                         id: "1",
@@ -83,17 +87,17 @@ const authSlice = createSlice({
      },
     reducers: {
         setCredentials: (state, action) => {
-            const { username, password,role,insuredName,policyNumber,pasportNumber } = action.payload
-            state.otherLogin.username = username
-            state.otherLogin.password = password
-            state.otherLogin.role = role
-            state.traveller.insuredName = insuredName
-            state.traveller.policyNumber = policyNumber
-            state.traveller.pasportNumber = pasportNumber
+            const { userDatas } = action.payload
+            state.userLogin = action.payload
+            // state.tokenAccess = token
+            // state.otherLogin.password = password
+            // state.otherLogin.role = role
+            // state.traveller.insuredName = insuredName
+            // state.traveller.policyNumber = policyNumber
+            // state.traveller.pasportNumber = pasportNumber
         },
         logOut: (state, action) => {
-            state.otherLogin.username = null
-            state.otherLogin.password = null
+            state.userLogin = null
         }
     },
 })
@@ -108,3 +112,5 @@ export const selectCurrentToken = (state) => state.auth.otherLogin.password
 export const selectCurrentTraveller = (state) => state.auth.traveller.insuredName
 export const UserRoles = (state) => state.auth.userRole
 export const Menulist = (state) => state.auth.mainMenu
+export const userLoginCurrent = (state) => state.auth.userLogin
+export const tokenLoginCurrent = (state) => state.auth.tokenAccess

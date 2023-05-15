@@ -1,14 +1,28 @@
-import { Outlet } from "react-router-dom"
+import { useLocation, Navigate, Outlet } from "react-router-dom"
 import Navbar from "./navbar"
 import { Box } from '@chakra-ui/react'
+import useAuth from "../features/hook/useAuth"
+import usePersist from "../features/hook/usePersist"
+import { useSelector } from 'react-redux'
+import { userLoginCurrent } from "../features/auth/authSlice"
 
-const LayoutDashboard = () => {
-    return (
-        <Box w="100%">
-            <Navbar/>
-            <Outlet />
-        </Box>
+const LayoutDashboard = ({allowedRoles}) => {
+    const token = useSelector(userLoginCurrent)
+    const {role} = useAuth()
+    const location = useLocation()
+    const [persist] = usePersist()
+    console.log('token?.id_token && persist', (token!==null && persist.isPersist))
+    const content = (
+        token !==null && role.some(role => allowedRoles.includes(role.name))
+            ?
+            <Box w="100%">
+                <Navbar allowedRoles={allowedRoles}/>
+                <Outlet />
+            </Box>
+            :
+            <Navigate to="/" state={{ from: location }} replace />
     )
+    return content
 }
 
 export default LayoutDashboard
