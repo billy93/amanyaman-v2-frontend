@@ -24,34 +24,14 @@ BreadcrumbLink,
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux"
 import {useDispatch} from 'react-redux'
-import { selectCurrentTraveller } from "../../auth/authSlice"
-import {setMasterUser,setListUser,listUsers,listUsersSelection} from './masterUserSlice'
-import Umbrellaico from '../../../img/Umbrella.png'
-import Traveller from '../../../img/traveller.png'
-import { ArrowBackIcon } from '@chakra-ui/icons'
-import {SlCalender} from 'react-icons/sl'
-import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
+import {setListUser,listUsers} from './masterUserSlice'
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
 
-const disabledDates = ["tomorrow", "in3Days", "in5Days"];
-function isSameDay(a, b) {
-  return differenceInCalendarDays(a, b) === 0;
-}
-function tileDisabled({ date, view }) {
-  // Disable tiles in month view only
-  if (view === 'month') {
-    // Check if a date React-Calendar wants to check is on the list of disabled dates
-    return disabledDates.find(dDate => isSameDay(dDate, date));
-  }
-}
 const CreateUser = () => {
   const dispatch = useDispatch()
   const listProducts = useSelector(listUsers)
-  const [isActive, setActive] = useState(false);
-  const [isActiveDescLoc, setActiveDescLoc] = useState(false);
-  const [isActiveSelectCountry, setActiveSelectCountry] = useState(false);
   const hiddenInputIdtty = React.useRef(null)
   const navigate = useNavigate()
   const [fields, setFields] = React.useState(null)
@@ -68,15 +48,6 @@ const handleidentityCard = (e, i) => {
     }
 };
     
-  function getMonthName(monthNumber) {
-  const date = new Date();
-  date.setMonth(monthNumber - 1);
-
-  const formatter = new Intl.DateTimeFormat('en-us', {month: 'long'});
-
-  return formatter.format(date);
-  }
-
   
     const handleNext = (e) => {
       e.preventDefault()
@@ -102,7 +73,6 @@ const handleidentityCard = (e, i) => {
     }
   
   const handleData = (e) => {
-    // console.log('e', { [e.target.name]: e.target.value })
      let idx = listProducts?.length
     setFields({
       ...fields,

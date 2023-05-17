@@ -11,9 +11,8 @@ const LayoutDashboard = ({allowedRoles}) => {
     const {role} = useAuth()
     const location = useLocation()
     const [persist] = usePersist()
-    console.log('token?.id_token && persist', (token!==null && persist.isPersist))
     const content = (
-        token !==null && role.some(role => allowedRoles.includes(role.name))
+        token !==null && role.some(role => allowedRoles.includes(role))
             ?
             <Box w="100%">
                 <Navbar allowedRoles={allowedRoles}/>

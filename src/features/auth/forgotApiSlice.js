@@ -3,8 +3,8 @@ import { apiSlice } from "../../app/api/apiSlice";
 export const forgotApiSlice = apiSlice.injectEndpoints({
    endpoints: builder => ({
         forgotPass: builder.query({
-            query: () => ({
-                url: `/app/users/getByEmail/andreas.sutandi@atibusinessgroup.com`,
+            query: (email) => ({
+                url: `/app/users/getByEmail/${email}`,
                 // method: "GET",
                 // body:{...email}
             }),
@@ -21,10 +21,17 @@ export const forgotApiSlice = apiSlice.injectEndpoints({
             // }
         }),
         sendEmailConfirm: builder.mutation({
-            query: init => ({
+            query: ({email}) => ({
                 url: "/app/account/reset-password/init",
                 method: "POST",
-                body:init
+                body:{email}
+            }),
+        }),
+        resetNewPassword: builder.mutation({
+            query: (user) => ({
+                url: "/app/account/reset-password/finish",
+                method: "POST",
+                body:{...user}
             }),
         })
     })
@@ -32,6 +39,7 @@ export const forgotApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
+    useResetNewPasswordMutation,
     useForgotPassQuery,
     useSendEmailConfirmMutation
 } = forgotApiSlice

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { useSelector,useDispatch} from 'react-redux'
 import {selectManualInput,selectedTravelInsurance,setSelectTravelInsurancePlan,selectTravelInsurance,setFormStateCoverageType,setFormStateTravellerType,setFormStateTotalPass,setFormStateDestinationCountry,setFormStateStartDate} from '../quota-search/quotaSearchSlice'
 import { Stack,Text,Image,Flex,InputRightElement,InputGroup,Heading,Input,Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Box,Button, FormControl,FormLabel, ButtonGroup} from '@chakra-ui/react'
@@ -12,9 +13,61 @@ import Plan from '../../../img/images/Plane.png'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md'
 
-const Form2 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,isLastStep}) => {
+
+export const useInfiniteLoading = (props) => {
+  const { getItems } = props;
+  const [items, setItems] = useState([]);
+  const pageToLoad = React.useRef(new URLSearchParams(window.location.search).get('page') || 1);
+  const initialPageLoaded = React.useRef(false);
+  const [hasNext, setHasNext] = useState(true); /* 1 */
+  const [hasPrevious, setHasPrevious] = useState(() => pageToLoad.current !== 1); /* 2 */
+  const history = useNavigate();
+
+  const loadItems = React.useCallback(async (page, itemCombineMethod) => {
+    const data = await getItems({ page });
+    setHasNext(data.totalPages > pageToLoad.current); /* 3 */
+    setHasPrevious(pageToLoad.current > 1); /* 4 */
+    setItems(prevItems => {
+      /* 5 */
+      return itemCombineMethod === 'prepend' ?
+        [...data.items, ...prevItems] :
+        [...prevItems, ...data.items]
+    });
+  });
+
+  const loadNext = () => {
+    pageToLoad.current = Number(pageToLoad.current) + 1;
+    history.replace(`?page=${pageToLoad.current}`);
+    loadItems(pageToLoad.current, 'append');
+  }
+
+  const loadPrevious = () => {
+    pageToLoad.current = Number(pageToLoad.current) - 1;
+    history.replace(`?page=${pageToLoad.current}`);
+    loadItems(pageToLoad.current, 'prepend');
+  }
+
+  React.useEffect(() => {
+    if (initialPageLoaded.current) {
+      return;
+    }
+
+    loadItems(pageToLoad.current, 'append');
+    initialPageLoaded.current = true;
+  }, [loadItems])
+
+  return {
+    items,
+    hasNext,
+    hasPrevious,
+    loadNext,
+    loadPrevious
+  };
+}
+const Form2 = ({}) => {
     const initState = useSelector(selectTravelInsurance)
     const selectedInsurance = useSelector(selectedTravelInsurance)
+    const {items, hasNext, hasPrevious, loadNext, loadPrevious } = useInfiniteLoading({getItems: ({ }) })
     const dispatch = useDispatch()
     const selectProduct = (data) => {
        dispatch(setSelectTravelInsurancePlan({
@@ -113,6 +166,9 @@ const Form2 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                     })
                 }
             </Box>
+            {hasNext && 
+              <button onClick={() =>loadNext()}>Load More</button>
+            }
         </Box>
     )
 }

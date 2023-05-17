@@ -22,6 +22,7 @@ import PolicyDetails from './features/dashboard/policy/policyDetail'
 import CreateProduct from './features/dashboard/masterProduct/createProduct'
 import CreateUser from './features/dashboard/masterUser/createUser'
 import DetailMasterUser from './features/dashboard/masterUser/detailMasterUser'
+import ResetPassword from './features/auth/confirmResetPassword'
 
 function App() {
   return (
@@ -30,12 +31,13 @@ function App() {
         {/* public routes */}
         <Route index element={<Login />} />
         <Route path="forgot-password" element={<ForgotPass />} />
+        <Route path="reset-password" element={<ResetPassword />} />
       </Route>
       
         <Route path="/create-quota" exact element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']}/>}>
           <Route path="search" element={<QuotaSearch />} />
         </Route>
-        <Route path="/policies" exact element={<LayoutDashboard allowedRoles={['ROLE_SALES']}/>}>
+        <Route path="/policies" exact element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}>
           <Route path="list" element={<PolicyList />} />
           <Route path="policy-detail" element={<PolicyDetails />} />
         </Route>

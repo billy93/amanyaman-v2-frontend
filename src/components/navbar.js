@@ -259,9 +259,11 @@ const NavItem = ({ icon, children, ...rest }) => {
                        to={link.link}
                         p={2}
                         fontSize={'sm'}
-                        fontWeight={500}
+                        style={{fontSize:"14px"}}
+                        fontWeight={800}
+                        fontFamilly={'Mulish'}
                         color={linkColor}
-                        _activeLink={{ fontWeight: "bold",color:'#065BAA' }}
+                        _activeLink={{ fontWeight: "bold",color:'#065BAA',borderBottom:"1px solid #065BAA" }}
                         _hover={{
                           textDecoration: 'none',
                           color: linkHoverColor,

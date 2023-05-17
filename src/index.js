@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { PersistGate } from 'redux-persist/integration/react';
-import { createStandaloneToast } from '@chakra-ui/react'
+import { createStandaloneToast,Center } from '@chakra-ui/react'
 import { defaultTheme } from './theme';
 import '@coreui/coreui/dist/css/coreui.min.css'
 import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
@@ -23,7 +23,7 @@ root.render(
       // toastOptions={{ defaultOptions: { position: 'top-right' } }}
     >
     <Provider store={store}>
-        <PersistGate loading={ <PulseLoader color={"#FFF"} />} persistor={persistor}>
+        <PersistGate loading={ <Center h='50vh'><PulseLoader color={"#FFF"} /></Center>} persistor={persistor}>
         {/* <ApiProvider api={apiSlice}>     */}
       <BrowserRouter>
         <Routes>

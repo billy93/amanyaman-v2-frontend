@@ -10,6 +10,7 @@ const authSlice = createSlice({
             password: null,
             role: null
         },
+        resetPassword:null,
         userLogin:null,
         tokenAccess:null,
         mainMenu: [
@@ -87,9 +88,8 @@ const authSlice = createSlice({
      },
     reducers: {
         setCredentials: (state, action) => {
-            const { userDatas } = action.payload
+            const { userDatas,resetPassword } = action.payload
             state.userLogin = action.payload
-            // state.tokenAccess = token
             // state.otherLogin.password = password
             // state.otherLogin.role = role
             // state.traveller.insuredName = insuredName
@@ -98,11 +98,14 @@ const authSlice = createSlice({
         },
         logOut: (state, action) => {
             state.userLogin = null
+        },
+        resetPassword: (state, action) => {
+            state.resetPassword = action.payload
         }
     },
 })
 
-export const { setCredentials, logOut } = authSlice.actions
+export const { setCredentials, logOut,resetPassword } = authSlice.actions
 
 export default authSlice.reducer
 
@@ -114,3 +117,4 @@ export const UserRoles = (state) => state.auth.userRole
 export const Menulist = (state) => state.auth.mainMenu
 export const userLoginCurrent = (state) => state.auth.userLogin
 export const tokenLoginCurrent = (state) => state.auth.tokenAccess
+export const userResetPassword = (state) => state.auth.resetPassword

@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { useGetUsersQuery } from "./masterProductApiSlice"
-import { Link } from "react-router-dom";
-import Data from './list.json'
-import Table from "react-table";
+import React from "react";
+import styled from "styled-components";
+import {Link} from 'react-router-dom' 
+import { useTable, usePagination, useGlobalFilter,useRowSelect } from "react-table";
+import { listProduct,setMasterProduct,setListSelectProduct,listProductSelection } from './masterProductSlice'
+import { useSelector,useDispatch } from 'react-redux'
 import {
 useToast,
 Modal,
+Button,
 ModalOverlay,
 ModalContent,
 ModalHeader,
@@ -35,20 +37,17 @@ Link as Links,
   useDisclosure,
   IconButton
 } from '@chakra-ui/react'
-import { Button } from '@chakra-ui/react'
-import { useDispatch, useSelector } from 'react-redux'
-import {setMasterProduct,setListSelectProduct,listProduct,listProductSelection} from './masterProductSlice'
-import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
 import {AiOutlinePlusCircle} from 'react-icons/ai'
-import styled from "styled-components";
-import { useTable, useRowSelect } from "react-table";
+import {BiSkipPreviousCircle,BiSkipNextCircle} from 'react-icons/bi'
 import { Search2Icon } from "@chakra-ui/icons";
+// A great library for fuzzy filtering/sorting items
+
+// import makeData from "./mockdata";
 
 const Styles = styled.div`
   padding: 1rem;
-
   table {
     width:100%;
     border-spacing: 0;
@@ -62,44 +61,33 @@ const Styles = styled.div`
       }
     }
 
-    thead {
-      th,td{
-        margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid #ebebeb;
-      border-right: 1px solid #ebebeb;
+    th{
+    background-color: #fff;
+    color: #231F20;
+    padding: 13px 15px;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb;
+    text-align: left;
+    white-space: nowrap;
+    font-weight: bold;
+    min-width: 40px;
+    vertical-align: bottom;
+    background-clip: padding-box;
+    font-family:"Mulish";
+    },
+    td {
       background-color: #fff;
+      font-family:"Mulish";
       color: #231F20;
       padding: 13px 15px;
       border-top: 1px solid #ebebeb;
       border-bottom: 1px solid #ebebeb;
       text-align: left;
       white-space: nowrap;
-      font-weight: bold;
+      font-weight: normal;
       min-width: 40px;
       vertical-align: bottom;
       background-clip: padding-box;
-      }
-    }
-    
-      
-      :last-child {
-        border-right: 0;
-      },
-      tbody{
-        td,th{
-          max-width: 250px;
-          color: #231F20;
-          padding: 13px 15px 10px;
-          text-align: left;
-          white-space: normal;
-          vertical-align: top;
-          border-bottom: 1px solid #ebebeb;
-          background-clip: padding-box;
-          height: 35px;
-          color:"grey";
-        }
-      }
     }
   }
 `;
@@ -115,6 +103,7 @@ function usePrevious(value) {
   // Return previous value (happens before update in useEffect above)
   return ref.current;
 }
+
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
     const defaultRef = React.useRef();
@@ -132,54 +121,15 @@ const IndeterminateCheckbox = React.forwardRef(
   }
 );
 
-const Tables = ({ columns, data }) => {
- const dispatch = useDispatch()
- const listproduct = useSelector(listProduct)
- const selected = useSelector(listProductSelection)
- const prevSelected = usePrevious(selected)
- const { isOpen, onOpen, onClose } = useDisclosure()
- const toast = useToast()
-   const onOpenModal = () => {
-        onOpen()
-        // getSelectedRows()
- }
-    const onCloseModal = () => {
-        onClose()
-        dispatch(setListSelectProduct([]))
-        // resetSelectedRows: () => toggleAllRowsSelected(false)
-        // getSelectedRows()
-    }
-     const clearSelect = () => {
-     dispatch(setListSelectProduct([]))
-     onClose()
-     const rowIds = listproduct?.map((item,i) =>i);
-     rowIds.forEach(id => toggleRowSelected(id, false));
- }
-     const cancelDelete = () => {
-     onClose()
- }
-    const deletedUser = () => {
-    //  dispatch(setMasterUser([]))
-     onOpen()
-    //  const rowIds = listuser?.map((item,i) =>i);
-    //  rowIds.forEach(id => toggleRowSelected(id, false));
- }
-  // Use the state and functions returned from useTable to build your UI
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    selectedFlatRows,
-    toggleAllRowsSelected,
-    toggleRowSelected,
-    state: { selectedRowIds }
-  } = useTable(
+// Our table component
+function Table({ columns, data }) {
+  const props = useTable(
     {
       columns,
       data
     },
+    useGlobalFilter, // useGlobalFilter!
+    usePagination,
     useRowSelect,
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
@@ -204,17 +154,23 @@ const Tables = ({ columns, data }) => {
         ...columns
       ]);
     }
-      );
-  const prev = usePrevious(selectedRowIds)
-  React.useEffect(() => {
-      toggleAllRowsSelected();
-  }, []);
-    
-  React.useEffect(() => {
-      if (JSON.stringify(prev) !== JSON.stringify(selectedRowIds)) {
-          getValues(selectedFlatRows)
-      }
-  }, [prev, selectedRowIds]);
+  );
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const dispatch = useDispatch()
+  const toast = useToast()
+  const selected = useSelector(listProductSelection)
+  const listuser = useSelector(listProduct)
+
+  const onOpenModal = () => {
+        onOpen()
+        // getSelectedRows()
+ }
+    const onCloseModal = () => {
+        onClose()
+        dispatch(setListSelectProduct([]))
+        // resetSelectedRows: () => toggleAllRowsSelected(false)
+        // getSelectedRows()
+    }
   
   // Render the UI for your table
     const getValues = (data) => {
@@ -224,7 +180,7 @@ const Tables = ({ columns, data }) => {
     
     const deletedUserUpdate = (e) => {
         e.preventDefault()
-        const nextState = listproduct.filter(
+        const nextState = listuser.filter(
         item => !selected.some(({ id }) => item.id === id)
         );
         console.log('nextState',nextState)
@@ -239,11 +195,67 @@ const Tables = ({ columns, data }) => {
                   isClosable: true,
                   variant:"solid",
                 })
-          } 
- console.log('id', listproduct)
+  } 
+     const clearSelect = () => {
+     dispatch(setListSelectProduct([]))
+     onClose()
+     const rowIds = listuser?.map((item,i) =>i);
+     rowIds.forEach(id => toggleRowSelected(id, false));
+ }
+     const cancelDelete = () => {
+     onClose()
+ }
+    const deletedUser = () => {
+    //  dispatch(setMasterUser([]))
+     onOpen()
+    //  const rowIds = listuser?.map((item,i) =>i);
+    //  rowIds.forEach(id => toggleRowSelected(id, false));
+ }
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    setGlobalFilter,
+    state,
+    page, // Instead of using 'rows', we'll use page,
+    // which has only the rows for the active page
+
+    // The rest of these things are super handy, too ;)
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    selectedFlatRows,
+    toggleAllRowsSelected,
+    toggleRowSelected,
+    state: { pageIndex, pageSize, globalFilter,selectedRowIds }
+  } = props;
+  
+  React.useEffect(() => {
+    // props.dispatch({ type: actions.resetPage })
+    console.log(globalFilter);
+  }, [globalFilter]);
+
+ const prev = usePrevious(selectedRowIds)
+  React.useEffect(() => {
+      toggleAllRowsSelected();
+  }, []);
+    
+  React.useEffect(() => {
+      if (JSON.stringify(prev) !== JSON.stringify(selectedRowIds)) {
+          getValues(selectedFlatRows)
+      }
+  }, [prev, selectedRowIds]);
+
   return (
-      <>
-          <Modal size="xl" blockScrollOnMount={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+    <Box mt="5em" pl="2em" pr="2em">
+     <Modal size="xl" blockScrollOnMount={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent maxW="56rem">
                 <ModalHeader>
@@ -251,7 +263,7 @@ const Tables = ({ columns, data }) => {
                         Delete Product
                     </Heading>
                     <Text as="p" fontSize={'sm'} fontFamily={'Mulish'} color={'#231F20'} style={{fontSize:'14px'}} fontWeight={'normal'}>
-                        You’re about to delete {selected?.length} product:
+                        {/* You’re about to delete {selected && selected?.length > 0} product: */}
                     </Text>
                 </ModalHeader>
                 <ModalCloseButton onClick={clearSelect}/>
@@ -276,7 +288,7 @@ const Tables = ({ columns, data }) => {
                         </Thead>
                         <Tbody>
                              {
-                                    selected?.map((item, i) => {
+                                    selected && selected?.map((item, i) => {
                                         return (
                                             <Tr key={item.id} >
                                                 <Td>{item.productId }</Td>
@@ -307,46 +319,77 @@ const Tables = ({ columns, data }) => {
 
                 <ModalFooter>
                         <Button onClick={cancelDelete}>Cancel</Button>
-                      <Button colorScheme='blue' mr={3} onClick={ deletedUserUpdate}>
-                        Delete User
+                          <Button colorScheme='blue' mr={3} onClick={ deletedUserUpdate}>
+                        Delete Product
                         </Button>
                 </ModalFooter>
                 </ModalContent>
             </Modal>
-    <Box mb="1em" display="flex" alignItems="center" gap="10px">
-        
-        {
-             selected?.length > 0 && (
-                <>
-                <Text as="p" size="sm">
-                {Object.keys(selectedRowIds).length} Selected
-                 </Text>
-                 <IconButton border="none" bg={'white'} onClick={clearSelect} size="sm" icon={<AiOutlineClose size="16px" color='black'/>} />
-                <Box display="flex" gap="5px" alignItems="center">
-                    <IconButton border="none" bg={'white'} size="sm" icon={<BsFillTrashFill size="16px" color='black' onClick={ deletedUser} />} />
-                    {/* <Text as="p" size="sm">Delete</Text> */}
-                </Box>
-                </>
-            )
-        }
-        
-    </Box>
-      <table {...getTableProps()}>
+            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                <Heading as={'h6'} size={'sm'}>Products</Heading>
+                <Stack direction='row' spacing={4} m={'2.5'}>
+                  <Box>
+                    <InputGroup borderRadius={5} size="sm">
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={<Search2Icon color="gray.600" />}
+                      />
+              <Input
+                value={globalFilter || ""}
+                onChange={e => setGlobalFilter(e.target.value)}
+                type="text" placeholder="Search product id" border="1px solid #949494" />
+                      <InputRightAddon
+                        p={0}
+                        border="none"
+                      >
+                      </InputRightAddon>
+                    </InputGroup>
+                  </Box>
+                  <Link to="/master-data/create-product"> 
+                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white">
+                        Add Product 
+                    </Button>
+                  </Link>
+                </Stack>
+      </Box>
+        <Box mb="1em" display="flex" alignItems="center" gap="10px">
+          
+          {
+              selected?.length > 0 && (
+                  <>
+                  <Text as="p" size="sm">
+                  {Object.keys(selectedRowIds).length} Selected
+                  </Text>
+                  <IconButton border="none" bg={'white'} onClick={clearSelect} size="sm" icon={<AiOutlineClose size="16px" color='black'/>} />
+                  <Box display="flex" gap="5px" alignItems="center">
+                      <IconButton border="none" bg={'white'} size="sm" icon={<BsFillTrashFill size="16px" color='black' onClick={ deletedUser} />} />
+                      {/* <Text as="p" size="sm">Delete</Text> */}
+                  </Box>
+                  </>
+              )
+          }
+          
+        </Box>
+      <Box bg="white" overflow={'scroll'} p="3">
+      <table {...getTableProps()} >
         <thead>
-          {headerGroups.map((headerGroup) => (
+          {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              {headerGroup.headers.map(column => (
+                <th {...column.getHeaderProps()}>
+                  {column.render("Header")}
+                  {/* Render the columns filter UI */}
+                </th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.slice(0, 10).map((row, i) => {
+          {page.map((row, i) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
+                {row.cells.map(cell => {
                   return (
                     <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                   );
@@ -356,36 +399,70 @@ const Tables = ({ columns, data }) => {
           })}
         </tbody>
       </table>
-      
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedRowIds: selectedRowIds,
-              "selectedFlatRows[].original": selectedFlatRows.map(
-                (d) => d.original
-              )
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
-    </>
+      </Box>
+      <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
+        <Box>
+          <Button onClick={() => previousPage()} disabled={!canPreviousPage} bg="white" border={'none'} _hover={{
+            bg: "#f0eeee",
+            borderRadius: "5px",
+            WebkitBorderRadius: "5px",
+            MozBorderRadius:"5px"
+        }}>
+            <BiSkipPreviousCircle size="25px" color="black" />
+            <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
+        </Button>{' | '}
+          <Button _hover={{
+            bg: "#f0eeee",
+            borderRadius: "5px",
+            WebkitBorderRadius: "5px",
+            MozBorderRadius:"5px"
+        }} onClick={() => nextPage()} disabled={!canNextPage} bg="white" border={'none'}>
+            <BiSkipNextCircle size="25px" color="black" />
+            <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
+            Next
+            </Text>
+          </Button>{' '}
+        </Box>
+        <Box>
+          Page{' '}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{' '}
+        </Box>
+        {/* <select
+          value={pageSize}
+          onChange={e => {
+            setPageSize(Number(e.target.value))
+          }}
+        >
+          {[10, 20, 30, 40, 50].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select> */}
+      </Box>
+
+      <br />
+      <div>Showing the first 20 results of {rows.length} rows</div>
+      <div>
+        <pre>
+          <code>{JSON.stringify(state.filters, null, 2)}</code>
+        </pre>
+      </div>
+    </Box>
   );
 }
 
-const MasterProduct = () => {
-    const [MasterChecked, setMasterChecked] = useState(false)
-    const dispatch = useDispatch()
-    const tempList = useSelector(listProduct);
-    const selectedUser = useSelector(listProductSelection);
-    const tableRef = React.useRef(null)
-    const columns = React.useMemo(
+function MasterProduct() {
+  const list = useSelector(listProduct)
+  // const [loading, setLoading] = React.useState(false)
+  const columns = React.useMemo(
     () => [
       {
         Header: "Product Id",
         accessor: "productId",
+        filter: 'fuzzyText',
         Cell: ({ row }) => (
        
           <Link
@@ -402,10 +479,12 @@ const MasterProduct = () => {
       {
         Header: "Product Code",
         accessor: "productCode",
+        enableGlobalFilter: true, 
       },
       {
         Header: "Product Detail Code",
-        accessor: "productDetailCode"
+        accessor: "productDetailCode",
+        enableGlobalFilter: true, 
       },
       {
         Header: "Currency",
@@ -429,7 +508,8 @@ const MasterProduct = () => {
       },
       {
         Header: "Product Type",
-        accessor: "productType"
+        accessor: "productType",
+        enableGlobalFilter: true, 
       },
       {
         Header: "Travel Duration",
@@ -446,62 +526,21 @@ const MasterProduct = () => {
     ],
     []
   );
-    const data = React.useMemo(() => tempList);
-    const {
-        data: users,
-        isLoading,
-        isSuccess,
-        isError,
-        error
-    } = useGetUsersQuery()
 
-    let content;
-    if (isLoading) {
-        content = <Center h='50vh' color='#065BAA'>
-                    <Text as={'p'} size="xs">
-                        Loading...
-                    </Text>
-                   </Center>;
-    } else if (Data) {
-        content = (
-            <Box pl="4" pr="4" mt="5em"> 
-            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                <Heading as={'h6'} size={'sm'}>Products</Heading>
-                <Stack direction='row' spacing={4} m={'2.5'}>
-                  <Box>
-                    <InputGroup borderRadius={5} size="sm">
-                      <InputLeftElement
-                        pointerEvents="none"
-                        children={<Search2Icon color="gray.600" />}
-                      />
-                      <Input type="text" placeholder="Search product id" border="1px solid #949494" />
-                      <InputRightAddon
-                        p={0}
-                        border="none"
-                      >
-                      </InputRightAddon>
-                    </InputGroup>
-                  </Box>
-                  <Link to="/master-data/create-product"> 
-                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white">
-                        Add Product 
-                    </Button>
-                  </Link>
-                </Stack>
-            </Box>
-            
-            <Box bg="white" overflow={'scroll'} p="3">
-                <Styles>
-                <Tables columns={columns} data={data} />
-                </Styles>
-                {/* <Link to="/welcome">Back to Welcome</Link> */}
-            </Box>
-          </Box>
-        )
-    } else if (isError) {
-        content = <p>{JSON.stringify(error)}</p>;
-    }
+  // const data = React.useMemo(() => makeData(100), []);
+  const [data, setData] = React.useState(list);
 
-    return content
+  // React.useEffect(() => {
+  //   setData(makeData(100));
+  // }, []);
+  
+
+  return (
+      <Styles>
+        {/* <button onClick={handleReset}>Reset Data</button> */}
+        <Table columns={columns} data={data} />
+      </Styles>
+  );
 }
-export default MasterProduct
+
+export default MasterProduct;

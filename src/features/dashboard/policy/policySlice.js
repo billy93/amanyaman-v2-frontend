@@ -14,18 +14,18 @@ const createPolicySlice = createSlice({
                 product: "Amanyaman Asia 50",
                 status:"Success",
                 issuedBy:"Mr. Fadli as",
-                purchaseDate:"15 november 2022",
+                purchaseDate:"2023-05-16",
                 select:"false"
             },
             {
                 id: 2,
                 policyNumber: "94735395",
                 traveller: "Mr. Dudung",
-                bookingId: "12345",
+                bookingId: "345211",
                 product: "Amanyaman Worldwide 50",
                 status:"Success",
                 issuedBy:"Mr. Rama ",
-                purchaseDate: "25 november 2022",
+                purchaseDate: "2023-05-26",
                 select:"false"
             }
             ],
