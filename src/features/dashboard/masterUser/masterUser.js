@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGetUsersQuery } from "./policyApiSlice"
+import { useGetUsersQuery } from "./userApiSlice"
 import { Link } from "react-router-dom";
 import Data from './list.json'
 import Table, { usePagination } from "react-table";
@@ -429,12 +429,19 @@ const MasterUser = () => {
     const dispatch = useDispatch()
     const tempList = useSelector(listUsers);
     const selectedUser = useSelector(listUsersSelection);
+    const {
+        data: listUserAccount,
+        isLoading,
+        isSuccess,
+        isError,
+        error
+    } = useGetUsersQuery()
     const tableRef = React.useRef(null)
     const [data, setData] = React.useState([])
     const [loading, setLoading] = React.useState(false)
     const [pageCount, setPageCount] = React.useState(0)
     const fetchIdRef = React.useRef(0)
-
+    // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
     const fetchData = React.useCallback(({ pageSize, pageIndex }) => {
     // This will get called when the table needs new data
     // You could fetch your data from literally anywhere,
@@ -452,11 +459,11 @@ const MasterUser = () => {
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
-        setData(tempList.slice(startRow, endRow))
+        setData(listUserAccount.slice(startRow, endRow))
 
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(tempList.length / pageSize))
+        setPageCount(Math.ceil(listUserAccount.length / pageSize))
 
         setLoading(false)
       }
@@ -498,20 +505,14 @@ const MasterUser = () => {
 
     // const data = React.useMemo(() => tempList);
     // console.log('ddd', data)
-    const {
-        data: users,
-        isLoading,
-        isSuccess,
-        isError,
-        error
-    } = useGetUsersQuery()
+    
 
     let content;
     if (isLoading) {
         content = <Center h='50vh' color='#065BAA'>
                        <PulseLoader color={"#065BAA"} />
                    </Center>;
-    } else if (Data) {
+    } else if (isSuccess) {
         content = (
             <Box pl="2em" pr="2em" mt="5em"> 
             <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>

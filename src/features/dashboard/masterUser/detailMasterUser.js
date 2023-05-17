@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetUsersQuery } from "./policyApiSlice"
+import { useGetUsersQuery } from "./userApiSlice"
 import { NavLink, useParams, Link } from "react-router-dom";
 import {listPolicy} from '../policy/policySlice'
 import Data from './list.json'
