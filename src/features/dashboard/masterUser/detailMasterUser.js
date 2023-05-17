@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetUsersQuery } from "./userApiSlice"
+import { useGetUserQuery } from "./userApiSlice"
 import { NavLink, useParams, Link } from "react-router-dom";
 import {listPolicy} from '../policy/policySlice'
 import Data from './list.json'
@@ -228,7 +228,7 @@ const DetailMasterUser = () => {
         isSuccess,
         isError,
         error
-    } = useGetUsersQuery()
+    } = useGetUserQuery()
   const data = React.useMemo(() => policyList?.listPolicy);
   const dataUsers = React.useMemo(() => dataUserDetail);
   const [user,setUser] = React.useState(null)

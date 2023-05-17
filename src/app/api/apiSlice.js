@@ -5,7 +5,7 @@ const baseQuery = fetchBaseQuery({
     baseUrl: 'https://amapi.ati-bv.dev/api',
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
-        const token = getState().auth.token
+        const token = getState().auth?.userLogin?.id_token
         if (token) {
             headers.set("authorization", `Bearer ${token}`)
             headers.set('Content-Type', 'application/json') 

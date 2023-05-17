@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGetUsersQuery } from "./userApiSlice"
+import { useGetUserQuery } from "./userApiSlice"
 import { Link } from "react-router-dom";
 import Data from './list.json'
 import Table, { usePagination } from "react-table";
@@ -142,9 +142,12 @@ const Tables = ({
     }
      const clearSelect = () => {
      dispatch(setMasterUser([]))
-     onClose()
-     const rowIds = listuser?.map((item,i) =>i);
-     rowIds.forEach(id => toggleRowSelected(id, false));
+       onClose()
+       
+     const rowIds = data && data?.map((item,i) =>i);
+       if (rowIds) {
+       rowIds.forEach(id => toggleRowSelected(id, false));
+     }
  }
      const cancelDelete = () => {
      onClose()
@@ -435,9 +438,10 @@ const MasterUser = () => {
         isSuccess,
         isError,
         error
-    } = useGetUsersQuery()
+    } = useGetUserQuery()
     const tableRef = React.useRef(null)
     const [data, setData] = React.useState([])
+    const prevData = usePrevious(listUserAccount)
     const [loading, setLoading] = React.useState(false)
     const [pageCount, setPageCount] = React.useState(0)
     const fetchIdRef = React.useRef(0)
@@ -452,28 +456,34 @@ const MasterUser = () => {
 
     // Set the loading state
     setLoading(true)
-
     // We'll even set a delay to simulate a server here
     setTimeout(() => {
       // Only update the data if this is the latest fetch
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
-        setData(listUserAccount.slice(startRow, endRow))
+        setData(listUserAccount?.slice(startRow, endRow))
 
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(listUserAccount.length / pageSize))
+        setPageCount(Math.ceil(listUserAccount?.length / pageSize))
 
         setLoading(false)
       }
     }, 1000)
-  }, [])
+    }, [])
+  
+  React.useEffect(() => {
+    if (JSON.stringify(prevData) !== JSON.stringify(listUserAccount)) {
+       dispatch(setListUser(listUserAccount))
+    }
+  }, [listUserAccount, prevData, dispatch])
+  
     const columns = React.useMemo(
     () => [
       {
-        Header: "Username",
-        accessor: "username",
+        Header: "Fullname",
+        accessor: "firstName",
         Cell: ({ row }) => (
        
           <Link
@@ -482,29 +492,29 @@ const MasterUser = () => {
             to={`/master-data/detail-user/${row.original.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.username}
+            {row.original.firstName} 
           </Link>
        
     ),
-      },
-      {
-        Header: "Fullname",
-        accessor: "fullname"
       },
       {
         Header: "Email",
         accessor: "email"
       },
       {
+        Header: "Travel Agent",
+        accessor: "travelAgentName"
+      },
+      {
         Header: "Role",
-        accessor: "role"
+        accessor: "roles"
       }
     ],
     []
   );
 
     // const data = React.useMemo(() => tempList);
-    // console.log('ddd', data)
+    console.log('ddd', data)
     
 
     let content;
@@ -536,14 +546,19 @@ const MasterUser = () => {
             </Box>
             
             <Box bg="white" overflow={'scroll'} p="3">
-                <Styles>
-                <Tables
-                columns={columns}
-                data={data}
-                fetchData={fetchData}
-                loading={loading}
-                pageCount={pageCount}
-                />
+              <Styles>
+                {
+                  
+                    <Tables
+                    columns={columns}
+                    data={data && data}
+                    fetchData={fetchData}
+                    loading={loading}
+                    pageCount={pageCount}
+                    />
+                 
+                }
+                
                 </Styles>
                 {/* <Link to="/welcome">Back to Welcome</Link> */}
             </Box>

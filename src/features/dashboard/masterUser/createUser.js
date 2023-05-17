@@ -69,7 +69,7 @@ const handleidentityCard = (e, i) => {
                   variant:"solid",
       })
       setFields(null)
-      navigate('/master-user')
+      navigate('/master-data/master-user')
     }
   
   const handleData = (e) => {
