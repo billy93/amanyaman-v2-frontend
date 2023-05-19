@@ -77,8 +77,8 @@ const Login = () => {
     if (isSuccess && checkAccount !==null) {
        navigate('/forgot-password')
     }
-  }, [checkAccount,isSuccess,navigate])
-  console.log('is sukses', isSuccess)
+  }, [checkAccount, isSuccess, navigate])
+  
   useEffect(() => {
         let isAuth = JSON.parse(localStorage.getItem('auth')) && JSON.parse(localStorage.getItem('auth')).userLogin;
         if( usersCurrent && usersCurrent !== null) {
@@ -102,58 +102,76 @@ const Login = () => {
                           variant:"solid",
                         })
             }
-        } catch (err) {
-            if (!err?.originalStatus) {
-              navigate('/')
-              const id = `errorres`
-              if (!toast.isActive(id)) {
-                toast({
-                              id,
-                              title: `No Server Response`,
-                              status:"error",
-                              position: 'top-right',
-                              duration:3000,
-                              isClosable: true,
-                              variant:"solid"
-                            })
-              }
-                // isLoading: true until timeout occurs
-                // setErrMsg('No Server Response');
-            } else if (err.originalStatus === 400) {
-                // setErrMsg('Missing Username or Password');
-                navigate('/')
-                toast({
-                              title: `Missing Username or Password`,
-                              status:"error",
-                              position: 'top-right',
-                              duration:3000,
-                              isClosable: true,
-                              variant:"solid"
-                            })
-            } else if (err.originalStatus === 401) {
-              navigate('/')
-                setErrMsg('Unauthorized');
-                toast({
-                              title: `Unauthorized`,
-                              status:"error",
-                              position: 'top-right',
-                              duration:3000,
-                              isClosable: true,
-                              variant:"solid"
-                            })
-            } else {
-              navigate('/')
-                setErrMsg('Login Failed');
-                toast({
-                              title: `Login Failed`,
-                              status:"error",
-                              position: 'top-right',
-                              duration:3000,
-                              isClosable: true,
-                              variant:"solid"
-                            })
-            }
+    } catch (err) {
+      console.log('eerrr',err?.data)
+      if (err?.data?.resetKey) {
+              navigate(`/reset-password?key=${err?.data?.resetKey}`)
+              
             // errRef.current.focus();
+      }
+      else if (err?.data.message) {
+        toast({
+                                id:err?.data.message,
+                                title: `${err?.data.message}`,
+                                status:"error",
+                                position: 'top-right',
+                                duration:3000,
+                                isClosable: true,
+                                variant:"solid"
+                              })
+      }
+      else {
+        if (!err?.originalStatus) {
+                navigate('/')
+                const id = `errorres`
+                if (!toast.isActive(id)) {
+                  toast({
+                                id,
+                                title: `No Server Response`,
+                                status:"error",
+                                position: 'top-right',
+                                duration:3000,
+                                isClosable: true,
+                                variant:"solid"
+                              })
+                }
+                  // isLoading: true until timeout occurs
+                  // setErrMsg('No Server Response');
+              } else if (err.originalStatus === 400) {
+                  // setErrMsg('Missing Username or Password');
+                  navigate('/')
+                  toast({
+                                title: `Missing Username or Password`,
+                                status:"error",
+                                position: 'top-right',
+                                duration:3000,
+                                isClosable: true,
+                                variant:"solid"
+                              })
+              } else if (err.originalStatus === 401) {
+                navigate('/')
+                  setErrMsg('Unauthorized');
+                  toast({
+                                title: `Unauthorized`,
+                                status:"error",
+                                position: 'top-right',
+                                duration:3000,
+                                isClosable: true,
+                                variant:"solid"
+                              })
+              } else {
+                navigate('/')
+                  setErrMsg('Login Failed');
+                  toast({
+                                title: `Login Failed`,
+                                status:"error",
+                                position: 'top-right',
+                                duration:3000,
+                                isClosable: true,
+                                variant:"solid"
+                              })
+              }
+            }
         }
 
       
@@ -163,7 +181,6 @@ const Login = () => {
     e.preventDefault()
    setFormReset(!formReset)
   }
-  console.log('log', formReset)
   const handleReset = (e) => {
     e.preventDefault()
     setTriger(true)

@@ -3,6 +3,9 @@ import { setCredentials, logOut } from '../../features/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'https://amapi.ati-bv.dev/api',
+    tagTypes: ['MasterUser','RoleUser'],
+    refetchOnMountOrArgChange: 30,
+    refetchOnReconnect: true,
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         const token = getState().auth?.userLogin?.id_token

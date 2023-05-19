@@ -1,6 +1,6 @@
 import React from "react";
-import { useGetUserQuery } from "./userApiSlice"
-import { NavLink, useParams, Link } from "react-router-dom";
+import { useGetUserQuery,useDeleteUserMutation } from "./userApiSlice"
+import { NavLink, useParams, Link, Navigate, useNavigate } from "react-router-dom";
 import {listPolicy} from '../policy/policySlice'
 import Data from './list.json'
 import Table from "react-table";
@@ -14,7 +14,8 @@ import {
   Button,
   Stack,
   Divider,
-  useToast
+  useToast,
+  IconButton
 } from '@chakra-ui/react'
 import PulseLoader from 'react-spinners/PulseLoader'
 import {
@@ -27,11 +28,14 @@ import {useDispatch} from 'react-redux'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { useMediaQuery } from "@chakra-ui/media-query";
 import 'react-calendar/dist/Calendar.css';
-import {listUsers} from './masterUserSlice'
+import {listUsers,listDetailUsers,setDetailUser,formUser,setFormUser} from './masterUserSlice'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
+import {BsFillPencilFill} from 'react-icons/bs'
+import {CiTrash} from 'react-icons/ci'
 import {AiOutlinePlusCircle} from 'react-icons/ai'
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi'
+import { setListUser } from "./masterUserSlice";
 
 const Styles = styled.div`
   padding: 1rem;
@@ -216,30 +220,89 @@ const Tables = ({ columns, data }) => {
 
 const DetailMasterUser = () => {
     // const currentstep = useSelector()
+    const dispatch = useDispatch()
     const detailUser = useSelector(listUsers)
+    const detail = useSelector(listDetailUsers)
     const policyList = useSelector(listPolicy)
     const {id} = useParams()
     const [isMobile] = useMediaQuery("(max-width: 768px)")
-    const dataUserDetail = detailUser.filter((user) => user.id === id)
-    console.log('dataUserDetail', dataUserDetail)
+    const [onDelete,setOnDelete] = React.useState(false)
     const {
         data: users,
         isLoading,
         isSuccess,
         isError,
         error
-    } = useGetUserQuery()
+    } = useGetUserQuery({count:5}, { refetchOnMountOrArgChange: true })
+  const [deleteUser, { isLoading: onLoading, isSuccess: onSuccess, isError: onError }] = useDeleteUserMutation()
   const data = React.useMemo(() => policyList?.listPolicy);
-  const dataUsers = React.useMemo(() => dataUserDetail);
-  const [user,setUser] = React.useState(null)
-  const Prev = usePrevious(dataUsers)
-  
-  React.useEffect(() => {
-    if (JSON.stringify(Prev) !== JSON.stringify(dataUsers)) {
-      setUser({dataUsers})
-    }
-  },[dataUsers,Prev])
-  console.log('dataUsers', user)
+  const toast = useToast()
+  const navigate = useNavigate()
+  const Prev = usePrevious(users)
+  React.useMemo(() => {
+      const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
+    if (dataUserDetail) {
+        dispatch(setDetailUser([...dataUserDetail]))
+      }
+  }, users, dispatch, id)
+  // const detail 
+
+  // React.useEffect(() => {
+  //   // const newUser = [...users]
+  //   if (users !== null) {
+  //      const dataUserDetail = users?.filter((user) => user.id === id)
+  //     dispatch(setDetailUser([...dataUserDetail]))
+      
+  // }
+  // }, [users])
+  console.log('users', users)
+  console.log('users detail', detail)
+  // console.log('dataNew', dataNew)
+  const handleDeletUser = async (e) => {
+    e.preventDefault()
+    try {
+      const res = await deleteUser(parseInt(id))
+      const idx="deleteuser"
+      if (res) {
+         if(!toast.isActive(idx)){
+         toast({
+                          id:"deleteuser",
+                          title: `Delete Success`,
+                          status:"success",
+                          position: 'top-right',
+                          duration:3000,
+                          isClosable: true,
+                          variant:"solid",
+                        })
+         }
+        navigate('/master-data/master-user')
+       }
+      
+    } catch (err) {
+       toast({
+                          id:"deleteuser",
+                          title: `${err?.originalStatus}`,
+                          status:"success",
+                          position: 'top-right',
+                          duration:3000,
+                          isClosable: true,
+                          variant:"solid",
+                        })
+       }
+  }
+  const handleEditUser = (e) => {
+    e.preventDefault()
+    const datas = {
+          id:detail !==null ? detail[0].id : null,
+          login:detail !==null ? detail[0].login : null,
+          firstName:detail !==null ? detail[0].firstName : null,
+          lastName:detail !==null ? detail[0].lastName : null,
+          email:detail !==null ? detail[0].email : null,
+          authorities:[`${detail !==null ? detail[0].authorities[0] : ''}`]
+        }
+    dispatch(setFormUser(datas))
+    navigate('/master-data/create-user')
+}
 const columns = React.useMemo(
     () => [
       {
@@ -282,47 +345,53 @@ const columns = React.useMemo(
         content = (
             <Box pl="2em" pr="2em">
                 <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} mt={{base:"4em", md:"4em"}}>
-                 <Box borderBottom="1px" borderColor={'#ebebeb'} w="100%" pt="15px">  
-                  <Breadcrumb spacing='8px' separator={<ChevronRightIcon color='gray.500' />}>
-                    <BreadcrumbItem isCurrentPage>
-                            <BreadcrumbLink as={NavLink} to='/claim/create'>
-                                <Text as="b" ml="4" fontSize="sm" color="#065BAA"  _hover={{
-                                    borderBottom: "#065BAA",
-                                    border:"1 px solid"
-                                }}>
-                                    User 
-                                </Text>
-                            </BreadcrumbLink>
-                    </BreadcrumbItem>
+                 <Box display="flex" justifyContent={'space-between'} w="100%" borderBottom="1px" borderColor={'#ebebeb'}> 
+                  <Box w="100%" pt="15px">  
+                    <Breadcrumb spacing='8px' separator={<ChevronRightIcon color='gray.500' />}>
+                      <BreadcrumbItem isCurrentPage>
+                              <BreadcrumbLink as={NavLink} to='/claim/create'>
+                                  <Text as="b" ml="4" fontSize="sm" color="#065BAA"  _hover={{
+                                      borderBottom: "#065BAA",
+                                      border:"1 px solid"
+                                  }}>
+                                      User 
+                                  </Text>
+                              </BreadcrumbLink>
+                      </BreadcrumbItem>
 
-                    <BreadcrumbItem>
-                        <BreadcrumbLink as={NavLink} to='#' style={{ pointerEvents: 'none'}}>
-                            <Text as={'b'} fontSize={'sm'} color="#231F20"
-                           >
-                              {'Mr.'}{dataUsers[0].fullname}
-                            </Text>
-                        </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    </Breadcrumb>
+                      <BreadcrumbItem>
+                          <BreadcrumbLink as={NavLink} to='#' style={{ pointerEvents: 'none'}}>
+                              <Text as={'b'} fontSize={'sm'} color="#231F20"
+                            >
+                                {'Mr.'}{detail !==null ? detail[0].firstName : null } {detail !==null ? detail && detail[0].lastName : null}
+                              </Text>
+                          </BreadcrumbLink>
+                      </BreadcrumbItem>
+                      </Breadcrumb>
+                  </Box>
+                  <Box display={'flex'} alignItems={'center'} gap="5px">
+                  <IconButton _hover={{color:"white"}} icon={ <BsFillPencilFill color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleEditUser}/>
+                  <IconButton _hover={{color:"white"}} icon={ <CiTrash color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleDeletUser}/>
+                  </Box>
                  </Box>
                 </Box>
                 <Box display={'flex'}>
                     <Box p="3" display={'flex'} flexDirection={'column'}>
                         <Box bg="#ebebeb" w={{base:"100%", md:"386px"}} p={{base:"5px", md:"1em"}}>
-                            <Heading as="h4" variant={'primary'} fontFamily={'Mulish'} style={{fontSize:"18px"}} color={'#231F20'}>{dataUsers[0].fullname}</Heading>
+                            <Heading as="h4" variant={'primary'} fontFamily={'Mulish'} style={{fontSize:"18px"}} color={'#231F20'}>{detail !== null ? detail[0].firstName : null} {detail !==null ? detail[0].lastName : null}</Heading>
                         </Box>
                         <Box bg="white" w={{base:"100%", md:"386px"}} p={{base:"5px", md:"1em"}}>
                             <Box pb="10px" borderBottom={'1px solid #ebebeb'} display={'flex'} flexDirection={'column'} alignItems={'flex-start'} justifyContent={'center'}>
                                 <Text as="b" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{'Fullname'}</Text>
-                                <Text as="p" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{dataUsers[0].fullname}</Text>
+                                <Text as="p" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{ detail !==null ?  detail[0].firstName : null } {detail !==null ? detail[0].lastName : null}</Text>
                             </Box>
                             <Box pb="10px" pt="10px" borderBottom={'1px solid #ebebeb'} display={'flex'} flexDirection={'column'} alignItems={'flex-start'} justifyContent={'center'}>
                                 <Text as="b" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{'Email Address'}</Text>
-                                <Text as="p" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{dataUsers[0].email}</Text>
+                                <Text as="p" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{detail !==null ? detail[0].email : null}</Text>
                             </Box>
                             <Box pt="10px" pb="10px" borderBottom={'1px solid #ebebeb'} display={'flex'} flexDirection={'column'} alignItems={'flex-start'} justifyContent={'center'}>
                                 <Text as="b" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{'Role'}</Text>
-                                <Text as="p" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{dataUsers && dataUsers[0]?.role}</Text>
+                                <Text as="p" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{detail !==null ? detail && detail[0]?.authorities[0] : null}</Text>
                             </Box>
                             <Box pb="10px" pt="10px" borderBottom={'1px solid #ebebeb'} display={'flex'} flexDirection={'column'} alignItems={'flex-start'} justifyContent={'center'}>
                                 <Text as="b" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{'Area'}</Text>

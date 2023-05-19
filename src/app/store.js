@@ -59,5 +59,5 @@ export const store = configureStore({
       }).concat(apiSlice.middleware),
       devTools: true
 })
+setupListeners(store.dispatch)
 export const persistor = persistStore(store)
-// setupListeners(store.dispatch)

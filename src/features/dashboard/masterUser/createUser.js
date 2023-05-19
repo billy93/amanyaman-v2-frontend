@@ -23,23 +23,45 @@ BreadcrumbItem,
 BreadcrumbLink,
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux"
-import {useDispatch} from 'react-redux'
-import {setListUser,listUsers} from './masterUserSlice'
+import { useDispatch } from 'react-redux'
+import {useCreateUserMutation,useGetRoleQuery,useUpdateUserMutation} from './userApiSlice'
+import {setListUser,listUsers,listRoleUsers,setRoleUser,formUser,setFormUser} from './masterUserSlice'
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
 
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef();
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
+}
+
 const CreateUser = () => {
   const dispatch = useDispatch()
   const listProducts = useSelector(listUsers)
+  const listRoles = useSelector(listRoleUsers)
+  const formuser = useSelector(formUser)
   const hiddenInputIdtty = React.useRef(null)
   const navigate = useNavigate()
   const [fields, setFields] = React.useState(null)
-    const toast = useToast()
-    
-const handleUploadIdentity = (e) => {
-      hiddenInputIdtty.current.click()
-}
+  const [trigger, setTrigger] = React.useState(false)
+  const { data: rolesData, isLoading, isError, isSuccess } = useGetRoleQuery()
+  const prevListRoles = usePrevious(rolesData)
+  const [selectFill,setSelectFille] = React.useState(false)
+  const [createUser] = useCreateUserMutation({
+   skip:trigger === false 
+  })
+  const [updateUser] = useUpdateUserMutation()
+  const toast = useToast()
+  const handleUploadIdentity = (e) => {
+        hiddenInputIdtty.current.click()
+  }
 const handleidentityCard = (e, i) => {
     e.preventDefault()
     if (e.target.files) {
@@ -49,37 +71,55 @@ const handleidentityCard = (e, i) => {
 };
     
   
-    const handleNext = (e) => {
+    const handleNext = async (e) => {
       e.preventDefault()
-        const data = {
-          id:fields?.id,
-          username:fields?.username,
-          fullname:`${fields?.firstName} ${fields?.lastName}`,
-          email:fields?.email,
-          role:fields?.role,
-          area:fields?.area,
-      }
-      dispatch(setListUser([...listProducts,data ]))
-      toast({
-                  title: `Created User Success`,
+        const datas = {
+          login:formuser?.login,
+          firstName:formuser?.firstName,
+          lastName:formuser?.lastName,
+          email:formuser?.email,
+          authorities:[`${formuser?.authorities}`]
+        }
+      
+      try {
+        let data = await formuser?.id !==""? updateUser({...datas, id:formuser?.id}) : createUser(datas)
+         dispatch(setListUser([...listProducts, datas]));
+        toast({
+                  title: `${formuser?.login !=='' ? 'Edit User Success' : 'Created User Success'}`,
                   status:"success",
                   position: 'top-right',
                   duration:3000,
                   isClosable: true,
                   variant:"solid",
       })
+        
+      } catch (err) {
+        toast({
+                  title: `${err?.originalStatus}`,
+                  status:"error",
+                  position: 'top-right',
+                  duration:3000,
+                  isClosable: true,
+                  variant:"solid",
+      })
+      }
       setFields(null)
       navigate('/master-data/master-user')
     }
   
   const handleData = (e) => {
-     let idx = listProducts?.length
-    setFields({
-      ...fields,
-      id:idx+1,
+    const forms = {
+      ...formuser,
       [e.target.name]: e.target.value 
-    })
+    }
+    dispatch(setFormUser(forms))
   }
+
+  React.useEffect(() => {
+    if (JSON.stringify(prevListRoles) !== JSON.stringify(rolesData)) {
+      dispatch(setRoleUser(rolesData))
+    }
+  }, [rolesData, prevListRoles, dispatch])
   
   return (
     <Stack mt={{base:"1em", md:"5em"}}>
@@ -101,7 +141,9 @@ const handleidentityCard = (e, i) => {
                         <BreadcrumbLink as={NavLink} to='#' style={{ pointerEvents: 'none'}}>
                             <Text as={'b'} fontSize={'sm'} color="#231F20"
                            >
-                              Create User
+                            {
+                              formuser?.id !== "" ? 'Edit User' : 'Create User'
+                            }  
                             </Text>
                         </BreadcrumbLink>
                     </BreadcrumbItem>
@@ -125,14 +167,14 @@ const handleidentityCard = (e, i) => {
                 
                 </Box>
                     <Input type="file" name={"identityCard"} onChange={(e) =>handleidentityCard(e,'File Identity')} style={{ display: "none" }} ref={hiddenInputIdtty}  />
-                <FormLabel fontSize="14" pt="1.5" style={{ transform:  "translate(-12px, -37px) scale(0.75)",color: "#231F20" , fontSize:"20px", fontWeight:"bold" }} fontFamily={'Mulish'}>Add User</FormLabel>
+              <FormLabel fontSize="14" pt="1.5" style={{ transform: "translate(-12px, -37px) scale(0.75)", color: "#231F20", fontSize: "20px", fontWeight: "bold" }} fontFamily={'Mulish'}>{ formuser?.login !=='' ? 'Edit User' :'Add User' }</FormLabel>
                 <Text as="p" fontSize={'sm'} fontFamily={'Mulish'} style={{fontSize:'12px'}}></Text>
                 {/* <Button onClick={handleUploadClick}>Upload</Button> */}
               </FormControl>
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto">  
-          <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="username" value={fields?.username} onChange={handleData} h="48px"/>
+          <FormControl variant="floating" id="first-name" isRequired mt="14px">      
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="login" value={formuser?.login} onChange={handleData} h="48px"/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">Username</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -141,7 +183,7 @@ const handleidentityCard = (e, i) => {
           <Box display="flex" gap="5px" m="auto" width={{base:"100%",md:"540px"}}>
             <Box width={{base:"100%",md:"240px"}} >  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="firstName" value={fields?.firstName} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="firstName" value={formuser?.firstName} onChange={handleData} h="48px"/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">FistName</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -149,7 +191,7 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"240px"}} >  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="lastName" value={fields?.lastName} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="lastName" value={formuser?.lastName} onChange={handleData} h="48px"/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">LastName</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -158,7 +200,7 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto">  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="email" value={fields?.email} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="email" value={formuser?.email} onChange={handleData} h="48px"/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">Email</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -168,13 +210,22 @@ const handleidentityCard = (e, i) => {
              <FormControl variant="floating" isRequired fontFamily={'Mulish'} mt="14px" id="float-label"> 
                     <Box className='floating-form'>
                       <Box className='floating-label'>
-                        <Select className="floating-select" placeholder='' value={fields?.role} name="role" h="48px" onChange={handleData}>  
-                          <option value="">Role</option>
-                          <option value="admin">Admin</option>
-                          <option value="user">User</option>
+                        <Select className="floating-select" placeholder='' defaultValue={formuser !== null ? formuser?.authorities[0] : ''} name="authorities" h="48px" onChange={handleData}>  
+                         {
+                          formuser?.id ==='' &&(
+                           <option value={''} >{''}</option>
+                         )
+                         }
+                        {
+                          listRoles?.map((role, i) => {
+                            return (
+                              <option value={role.name} key={i}>{role.name}</option>
+                            )
+                          })
+                        }
                         </Select>
                         <span className="highlight"></span>
-                        <FormLabel fontSize="12" pt="1.5" style={{ transform: fields?.role ? "translate(0, -19px) scale(0.75)": "",color: fields?.role ?"#065baa" :"", fontSize:"14px" }} fontFamily={'Mulish'}>Role</FormLabel>
+                        <FormLabel fontSize="12" pt="1.5" style={{ transform: formuser !==null && formuser?.authorities[0] ? "translate(0, -19px) scale(0.75)": "",color: formuser !== null && formuser?.authorities[0] ?"#065baa" :"", fontSize:"14px" }} fontFamily={'Mulish'}>Role</FormLabel>
                        </Box>
                     </Box>
                     {/* It is important that the Label comes after the Control due to css selectors */}
@@ -198,8 +249,8 @@ const handleidentityCard = (e, i) => {
          </Box>
        </Box>
       <Box display={'flex'} justifyContent={'flex-end'} alignItems={'center'} p="9px" borderRadius={'5px'} border="1px" borderColor={'#ebebeb'}>
-          <Button isDisabled={!fields?.area || !fields?.role || !fields?.username || !fields?.firstName || !fields?.email
-          || !fields?.lastName 
+          <Button isDisabled={formuser?.authorities.length ===0 || formuser?.login ==='' || formuser?.firstName ==='' || formuser?.email ===''
+          || formuser?.lastName ===''
             ? true : false} variant={'ClaimBtn'} style={{ textTransform: 'uppercase', fontSize: '14px' }} fontFamily="arial" fontWeight={'700'} onClick={handleNext}>Add</Button>
       </Box>
       </Box>

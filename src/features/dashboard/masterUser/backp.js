@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
 import { useGetUserQuery } from "./userApiSlice"
 import { Link, useNavigate } from "react-router-dom";
@@ -6,8 +5,6 @@ import Data from './list.json'
 import matchSorter from 'match-sorter'
 import Table, { usePagination } from "react-table";
 import PulseLoader from 'react-spinners/PulseLoader'
-import { motion, AnimatePresence } from 'framer-motion'
-import {FaChevronUp, FaSort} from 'react-icons/fa'
 import {
  useToast,
   Modal,
@@ -45,7 +42,7 @@ import {BsFillTrashFill} from 'react-icons/bs'
 import {AiOutlinePlusCircle} from 'react-icons/ai'
 import {BiSkipPreviousCircle,BiSkipNextCircle} from 'react-icons/bi'
 import styled from "styled-components";
-import { useTable, useRowSelect,useFilters,useSortBy } from "react-table";
+import { useTable, useRowSelect } from "react-table";
 
 const Styles = styled.div`
   padding: 1rem;
@@ -146,86 +143,18 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = val => !val
 
-function SelectColumnFilter({
-  column: { filterValue, setFilter, preFilteredRows, id },
-}) {
-  // Calculate the options for filtering
-  // using the preFilteredRows
-  const options = React.useMemo(() => {
-    const options = new Set()
-    preFilteredRows.forEach(row => {
-      options.add(row.values[id])
-    })
-    return [...options.values()]
-  }, [id, preFilteredRows])
 
-  // Render a multi-select box
-  return (
-    <select
-      value={filterValue}
-      onChange={e => {
-        setFilter(e.target.value || undefined)
-      }}
-    >
-      <option value="">All</option>
-      {options.map((option, i) => (
-        <option key={i} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  )
-}
 const Tables = ({
   columns,
   data,
   fetchData,
-  loading,
-  pageCount: controlledPageCount,
 }) => {
  const dispatch = useDispatch()
- const navigate = useNavigate()
  const listuser = useSelector(listUsers)
  const selected = useSelector(listUsersSelection)
  const formuser = useSelector(formUser)
  const prevSelected = usePrevious(selected)
  const { isOpen, onOpen, onClose } = useDisclosure()
- const [showFilter,setShowFilter] = React.useState(false)
- const handleAddUser = (e) => {
-    e.preventDefault()
-    const datas = {
-          id:'',
-          login:'',
-          firstName:'',
-          lastName:'',
-          email:'',
-          authorities:[]
-    }
-    dispatch(setFormUser(datas))
-    navigate('/master-data/create-user')
- }
-const defaultColumn = React.useMemo(
-    () => ({
-      // Let's set up our default Filter UI
-      Filter: DefaultColumnFilter,
-    }),
-    []
-  )
-const filterTypes = React.useMemo(
-    () => ({
-      text: (rows, id, filterValue) => {
-        return rows.filter(row => {
-          const rowValue = row.values[id]
-          return rowValue !== undefined
-            ? String(rowValue)
-                .toLowerCase()
-                .startsWith(String(filterValue).toLowerCase())
-            : true
-        })
-      },
-    }),
-    []
-  )
  const toast = useToast()
    const onOpenModal = () => {
         onOpen()
@@ -283,18 +212,13 @@ const filterTypes = React.useMemo(
     {
       columns,
       data,
-      defaultColumn,
       initialState: { pageIndex: 0 }, // Pass our hoisted table state
       manualPagination: true, // Tell the usePagination
-      pageCount: controlledPageCount,
-      filterTypes,
       // hook that we'll handle our own data fetching
       // This means we'll also have to provide our own
       // pageCount.
       // pageCount: controlledPageCount,
     },
-    useFilters,
-    useSortBy,
     usePagination,
     useRowSelect,
     (hooks) => {
@@ -326,23 +250,17 @@ const filterTypes = React.useMemo(
       toggleAllRowsSelected();
   }, []);
     
-   const getValues = (data) => {
-     let original = data.map((item) => item.original)
-     dispatch(setMasterUser(original))
-   }
-  
   React.useEffect(() => {
       if (JSON.stringify(prev) !== JSON.stringify(selectedRowIds)) {
           getValues(selectedFlatRows)
       }
-  }, [prev, selectedRowIds,getValues,selectedFlatRows]);
+  }, [prev, selectedRowIds]);
   
-  const showFilterBtn = () => {
-    setShowFilter(!showFilter)
-  }
-
   // Render the UI for your table
-   
+    const getValues = (data) => {
+     let original = data.map((item) => item.original)
+     dispatch(setMasterUser(original))
+    }
     
     const deletedUserUpdate = (e) => {
         e.preventDefault()
@@ -365,14 +283,6 @@ const filterTypes = React.useMemo(
   React.useEffect(() => {
     fetchData({ pageIndex, pageSize })
   }, [fetchData, pageIndex, pageSize])
-  const spring = React.useMemo(
-    () => ({
-      type: 'spring',
-      damping: 50,
-      stiffness: 100,
-    }),
-    []
-  )
   return (
       <>
           <Modal size="xl" blockScrollOnMount={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
@@ -446,110 +356,43 @@ const filterTypes = React.useMemo(
             )
         }
         
-      </Box>
-      <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                <Heading as={'h6'} size={'sm'}>User</Heading>
-                <Stack direction='row' spacing={4} m={'2.5'}>
-                    <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
-                        Apply Filter
-                    </Button>
-                    <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
-                        Export 
-                    </Button>
-                    <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
-                        Import 
-                    </Button>
-                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAddUser}>
-                        Add User 
-                    </Button>
-                </Stack>
-      </Box>
-      <Box bg="white" overflow={'scroll'} p="3">
-
-        <table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <motion.th
-                    {...column.getHeaderProps({
-                      layoutTransition: spring,
-                      style: {
-                        minWidth: column.minWidth,
-                      },
-                    })}
-                    >
-                      <div {...column.getSortByToggleProps()} style={{display:"flex", justifyContent:"space-between", alignItems:"center", cursor:"pointer"}} >
-                      {column.render('Header')}
-                      <Box>
-                        {column.isSorted
-                          ? column.isSortedDesc
-                            ? <Box><FaSort color='#065BAA' size="14px" style={{paddingLeft:"4px"}} /></Box>
-                            : <Box><FaSort color='#065BAA' size="14px" style={{paddingLeft:"4px"}} /></Box>
-                          : ''}
-                      </Box>
-                    </div>
-                    {/* <div>{column.canFilter ? column.render('Filter') : null} </div> */}
-                    {showFilter ? <>{column.canFilter ? column.render('Filter') : null}</> : null }
-                    {/* {column.canFilter ? column.render('Filter') : null} */}
-                  </motion.th>
-                  
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {/* {rows.slice(0, 10).map((row, i) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })} */}
-          <AnimatePresence>
-              {rows.slice(0, 10).map((row, i) => {
-                prepareRow(row)
-                return (
-                  <motion.tr
-                    {...row.getRowProps({
-                      layoutTransition: spring,
-                      exit: { opacity: 0, maxHeight: 0 },
-                    })}
-                  >
-                    {row.cells.map((cell, i) => {
-                      return (
-                        <motion.td
-                          {...cell.getCellProps({
-                            layoutTransition: spring,
-                          })}
-                        >
-                          {cell.render('Cell')}
-                        </motion.td>
-                      )
-                    })}
-                  </motion.tr>
-                )
-              })}
-            </AnimatePresence>
-            <tr>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-                  results
-                </td>
-              )}
+    </Box>
+      <table {...getTableProps()}>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              ))}
             </tr>
-          </tbody>
-          </table>
-      </Box>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.slice(0, 10).map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+          {/* <tr>
+            {loading ? (
+              // Use our custom loading state to show a loading indicator
+              <td colSpan="10000">Loading...</td>
+            ) : (
+              <td colSpan="10000">
+                Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
+                results
+              </td>
+            )}
+          </tr> */}
+        </tbody>
+      </table>
       <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
         <Box>
           <Button onClick={() => previousPage()} disabled={!canPreviousPage} bg="white" border={'none'} _hover={{
@@ -647,36 +490,41 @@ const MasterUser = () => {
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
-        setData(listUserAccount?.slice(startRow, endRow))
+        setData(tempList?.slice(startRow, endRow))
 
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(listUserAccount?.length / pageSize))
+        setPageCount(Math.ceil(tempList?.length / pageSize))
 
         setLoading(false)
       }
     }, 1000)
-    }, [listUserAccount])
-  
-    const newdata = React.useMemo(()=>{
-      return tempList ? tempList : [{}]
-    }, [tempList]);
+    }, [])
   
   React.useEffect(() => {
-    if (listUserAccount !== null && JSON.stringify(prevData) !== JSON.stringify(listUserAccount)) {
+    if (JSON.stringify(prevData) !== JSON.stringify(listUserAccount)) {
        dispatch(setListUser([...listUserAccount]))
     }
-    //  dispatch(setListUser([...listUserAccount]))
-  }, [listUserAccount,prevData])
-  console.log('new data', listUserAccount)
+  }, [listUserAccount, prevData, dispatch, tempList])
+  
+  const handleAddUser = (e) => {
+    e.preventDefault()
+    const datas = {
+          id:'',
+          login:'',
+          firstName:'',
+          lastName:'',
+          email:'',
+          authorities:[]
+    }
+    dispatch(setFormUser(datas))
+    navigate('/master-data/create-user')
+  }
     const columns = React.useMemo(
     () => [
       {
         Header: "Fullname",
         accessor: "firstName",
-        maxWidth: 400,
-        minWidth: 140,
-        width: 200,
         filter: 'fuzzyText',
         Cell: ({ row }) => (
        
@@ -694,27 +542,14 @@ const MasterUser = () => {
       {
         Header: "Email",
         accessor: "email",
-        maxWidth: 400,
-        minWidth: 140,
-        width: 200,
-        filter: 'fuzzyText',
       },
       {
         Header: "Travel Agent",
-        accessor: "travelAgentName",
-        maxWidth: 400,
-        minWidth: 140,
-        width: 200,
-        filter: 'fuzzyText',
+        accessor: "travelAgentName"
       },
       {
         Header: "Role",
-        accessor: "authorities",
-        maxWidth: 400,
-        minWidth: 140,
-        width: 200,
-        Filter: SelectColumnFilter,
-        filter:'includes'
+        accessor: "authorities"
       }
     ],
     []
@@ -731,16 +566,34 @@ const MasterUser = () => {
     } else if (isSuccess) {
         content = (
             <Box pl="2em" pr="2em" mt="5em"> 
+            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                <Heading as={'h6'} size={'sm'}>User</Heading>
+                <Stack direction='row' spacing={4} m={'2.5'}>
+                    <Button leftIcon={<MdFilterList />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+                        Apply Filter
+                    </Button>
+                    <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+                        Export 
+                    </Button>
+                    <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+                        Import 
+                    </Button>
+                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAddUser}>
+                        Add User 
+                    </Button>
+                </Stack>
+            </Box>
+            
             <Box bg="white" overflow={'scroll'} p="3">
               <Styles>
                 {
                   
                     <Tables
                     columns={columns}
-                    data={listUserAccount}
+                    data={tempList}
                     fetchData={fetchData}
-                    loading={loading}
-                    pageCount={pageCount}
+                    // loading={loading}
+                    // pageCount={pageCount}
                     />
                  
                 }
