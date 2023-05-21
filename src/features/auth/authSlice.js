@@ -39,12 +39,18 @@ const authSlice = createSlice({
                                 link: '/master-data/master-products',
                                 name: 'Master Products',
                                 href: '#',
+                             },
+                             {
+                                link: '/master-data/travel-agent',
+                                name: 'Travel Agent',
+                                href: '#',
                             },
                             {
                                 link: '/master/price',
                                 name: 'Master Price',
                                 href: '#',
                             },
+                           
                             ],
                     },
                     {

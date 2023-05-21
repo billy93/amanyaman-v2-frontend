@@ -21,6 +21,11 @@ import MasterProduct from './features/dashboard/masterProduct/masterProduct'
 import PolicyDetails from './features/dashboard/policy/policyDetail'
 import CreateProduct from './features/dashboard/masterProduct/createProduct'
 import CreateUser from './features/dashboard/masterUser/createUser'
+import TravelAgent from './features/dashboard/travelAgent/travelAgent'
+import CreateTravelAgent from './features/dashboard/travelAgent/createTravelAgent'
+import DetailTravelAgent from './features/dashboard/travelAgent/detailTravelAgent'
+import EditUser from './features/dashboard/masterUser/editUser'
+import EditAgent from './features/dashboard/travelAgent/editAgent'
 import DetailMasterUser from './features/dashboard/masterUser/detailMasterUser'
 import ResetPassword from './features/auth/confirmResetPassword'
 
@@ -44,11 +49,16 @@ function App() {
         <Route path="/master-data" exact element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']}/>}>
           <Route path="master-user" element={<MasterUser />} />
           <Route path="create-user" element={<CreateUser />} />
+          <Route path="edit-user/:id" element={<EditUser />} />
           <Route path="detail-user/:id" element={<DetailMasterUser />} />
         </Route>
         <Route path="/master-data" exact element={<LayoutDashboard allowedRoles={[ 'ROLE_ADMIN']}/>}>
           <Route path="master-products" element={<MasterProduct />} />
           <Route path="create-product" element={<CreateProduct />} />
+          <Route path="travel-agent" element={<TravelAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="create-agent" element={<CreateTravelAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="edit-agent/:id" element={<EditAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="detail-agent/:id" element={<DetailTravelAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>
         </Route>
         <Route path="/claim" exact element={<LayoutDashboard />}>
           <Route path="list" element={<ClaimList />} />

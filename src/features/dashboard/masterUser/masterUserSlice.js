@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
-
+import {apiSlice} from '../../../app/api/apiSlice'
 const createMasterUserSlice = createSlice({
     name: 'masterUser',
     initialState: { 
+        messages:null,
         list:[{
          id: "1",
          username: "bayu",
@@ -57,6 +58,14 @@ const createMasterUserSlice = createSlice({
         },
         
     },
+    extraReducers: (builder) => {
+    builder.addMatcher(
+      apiSlice.endpoints.getUser.matchFulfilled,
+      (state, { payload }) => {
+        state.messages = payload
+      }
+    )
+  },
 })
 
 export const {setMasterUser,setListUser,setRoleUser,setDetailUser,setFormUser} = createMasterUserSlice.actions

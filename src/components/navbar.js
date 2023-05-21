@@ -85,7 +85,7 @@ export default function Navbar({allowedRoles}) {
     localStorage.setItem("persist", null)
     localStorage.clear()
   }
-  
+  console.log('menus', menus)
   const NavLink = ({ children, ...rest }) => (
   <NewLink
     as={Nav}
@@ -282,7 +282,7 @@ const NavItem = ({ icon, children, ...rest }) => {
                         minW={'sm'}>
                         <Stack>
                           {link.children.map((child) => (
-                            <DesktopSubNav key={child.label} {...child} />
+                            <DesktopSubNav key={child.name} {...child} />
                           ))}
                         </Stack>
                       </PopoverContent>

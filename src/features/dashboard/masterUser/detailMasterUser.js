@@ -301,7 +301,7 @@ const DetailMasterUser = () => {
           authorities:[`${detail !==null ? detail[0].authorities[0] : ''}`]
         }
     dispatch(setFormUser(datas))
-    navigate('/master-data/create-user')
+    navigate(`/master-data/edit-user/${id}`)
 }
 const columns = React.useMemo(
     () => [
@@ -349,7 +349,7 @@ const columns = React.useMemo(
                   <Box w="100%" pt="15px">  
                     <Breadcrumb spacing='8px' separator={<ChevronRightIcon color='gray.500' />}>
                       <BreadcrumbItem isCurrentPage>
-                              <BreadcrumbLink as={NavLink} to='/claim/create'>
+                              <BreadcrumbLink as={NavLink} to='/master-data/master-user'>
                                   <Text as="b" ml="4" fontSize="sm" color="#065BAA"  _hover={{
                                       borderBottom: "#065BAA",
                                       border:"1 px solid"

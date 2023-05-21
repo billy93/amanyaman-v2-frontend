@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
-import { useGetUserQuery,useGetRoleQuery } from "./userApiSlice"
+import { useGetTravelAgentQuery } from "./travelApiSlice"
 import { Link, useNavigate } from "react-router-dom";
-import Data from './list.json'
 import matchSorter from 'match-sorter'
 import Table, { usePagination } from "react-table";
 import PulseLoader from 'react-spinners/PulseLoader'
@@ -40,7 +39,7 @@ Link as Links,
 } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
-import {listUsers,setMasterUser,listUsersSelection,setListUser, setFormUser,formUser,listRoleUsers} from './masterUserSlice'
+import {listAgent,setMasterAgent,listAgentSelection,setListAgent, setFormAgent,formAgent,listRoleUsers} from './travelAgentSlice'
 import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
@@ -200,29 +199,31 @@ const Tables = ({
 }) => {
  const dispatch = useDispatch()
  const navigate = useNavigate()
- const listuser = useSelector(listUsers)
- const selected = useSelector(listUsersSelection)
- const formuser = useSelector(formUser)
+ const listuser = useSelector(listAgent)
+ const selected = useSelector(listAgentSelection)
+ const formuser = useSelector(formAgent)
  const prevSelected = usePrevious(selected)
  const { isOpen, onOpen, onClose } = useDisclosure()
  const [showFilter,setShowFilter] = React.useState(false)
  const [filterName,setFilterName] = React.useState('')
  const [filterEmail,setFilterEmail] = React.useState('')
  const [filterRole,setFilterRole] = React.useState('')
- const { data: rolesData, isLoading, isError, isSuccess } = useGetRoleQuery()
- const listRoles = useSelector(listRoleUsers)
+
  const handleAddUser = (e) => {
     e.preventDefault()
     const datas = {
-          id:'',
-          login:'',
-          firstName:'',
-          lastName:'',
-          email:'',
-          authorities:[]
+            travelAgentName:'',    
+            travelAgentEmail:'',    
+            travelAgentAddress:'',  
+            travelAgentPhone:'',  
+            custcode:'',   
+            custid:'',   
+            promoInvoiceRecipents:'',   
+            allowCreditPayment:'',   
+            city:''
     }
-    dispatch(setFormUser(datas))
-    navigate('/master-data/create-user')
+    dispatch(setFormAgent(datas))
+    navigate('/master-data/create-agent')
  }
 const defaultColumn = React.useMemo(
     () => ({
@@ -253,12 +254,12 @@ const filterTypes = React.useMemo(
  }
     const onCloseModal = () => {
         onClose()
-        dispatch(setMasterUser([]))
+        dispatch(setMasterAgent([]))
         // resetSelectedRows: () => toggleAllRowsSelected(false)
         // getSelectedRows()
     }
      const clearSelect = () => {
-     dispatch(setMasterUser([]))
+     dispatch(setMasterAgent([]))
        onClose()
        
      const rowIds = data && data?.map((item,i) =>i);
@@ -318,29 +319,6 @@ const filterTypes = React.useMemo(
     useSortBy,
     usePagination,
     useRowSelect,
-    (hooks) => {
-      hooks.visibleColumns.push((columns) => [
-        // Let's make a column for selection
-        {
-          id: "selection",
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
-          Header: ({ getToggleAllRowsSelectedProps }) => (
-            <div style={{display:"flex", justifyContent:"center", alignItems:'center'}}>
-              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-            </div>
-          ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
-          Cell: ({ row }) => (
-            <div style={{display:"flex", justifyContent:"center", alignItems:'center'}}>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          )
-        },
-        ...columns
-      ]);
-    }
       );
   const prev = usePrevious(selectedRowIds)
   React.useEffect(() => {
@@ -349,7 +327,7 @@ const filterTypes = React.useMemo(
     
    const getValues = (data) => {
      let original = data.map((item) => item.original)
-     dispatch(setMasterUser(original))
+     dispatch(setMasterAgent(original))
    }
   
   React.useEffect(() => {
@@ -371,8 +349,8 @@ const filterTypes = React.useMemo(
         item => !selected.some(({ id }) => item.id === id)
         );
         console.log('nextState',nextState)
-        dispatch(setListUser(nextState))
-        dispatch(setMasterUser([]))
+        dispatch(setListAgent(nextState))
+        dispatch(setMasterAgent([]))
         onClose()
         toast({
                   title: `Deleted Success`,
@@ -396,17 +374,17 @@ const filterTypes = React.useMemo(
   )
   const handleFilterByName = e => {
   const value = e.target.value || undefined;
-  setFilter("firstName", value); 
+  setFilter("travelAgentName", value); 
   setFilterName(value);
 };
   const handleFilterByEmail = e => {
   const value = e.target.value || undefined;
-  setFilter("email", value); 
+  setFilter("custcode", value); 
   setFilterEmail(value);
 };
   const handleFilterByRole = e => {
   const value = e.target.value || undefined;
-  setFilter("authorities", value); 
+  setFilter("custcode", value); 
   setFilterRole(value);
 };
 
@@ -468,7 +446,7 @@ const filterTypes = React.useMemo(
                 </ModalContent>
             </Modal>
       <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                <Heading as={'h6'} size={'sm'}>User</Heading>
+                <Heading as={'h6'} size={'sm'}>Travel Agent</Heading>
                 <Stack direction='row' spacing={4} m={'2.5'}>
                     <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
                         Apply Filter
@@ -508,28 +486,18 @@ const filterTypes = React.useMemo(
                 <Input
                   value={filterName}
                   onChange={handleFilterByName}
-                  placeholder={"Search by name"}
+                  placeholder={"Search travel agent name"}
                   bg="#ebebeb"
                   borderRadius={'5px'}
           />
                 <Input
                   value={filterEmail}
                   onChange={handleFilterByEmail}
-                  placeholder={"Search by email"}
+                  placeholder={"Search cust code"}
                   bg="#ebebeb"
                   borderRadius={'5px'}
           />
-                  <Select className="floating-select" placeholder='Select Role' defaultValue={''} bg="#ebebeb"
-                  borderRadius={'5px'}
-                  name="authorities" onChange={handleFilterByRole}>  
-                                  {
-                                    rolesData?.map((role, i) => {
-                                      return (
-                                        <option value={role.name} key={i}>{role.name}</option>
-                                      )
-                                    })
-                                  }
-                  </Select>
+                  
           </Box>
         ): null
       }
@@ -683,9 +651,9 @@ const filterTypes = React.useMemo(
 const MasterUser = () => {
     const [MasterChecked, setMasterChecked] = useState(false)
     const dispatch = useDispatch()
-    const tempList = useSelector(listUsers);
-    const formuser = useSelector(formUser);
-    const selectedUser = useSelector(listUsersSelection);
+    const tempList = useSelector(listAgent);
+    const formuser = useSelector(formAgent);
+    const selectedUser = useSelector(listAgentSelection);
     const [paginations,setPagination] = React.useState({
       page: 0,
       size:10
@@ -697,7 +665,7 @@ const MasterUser = () => {
         isSuccess,
         isError,
         error
-    } = useGetUserQuery({page:paginations?.page,size:paginations?.size}, { refetchOnMountOrArgChange: true })
+    } = useGetTravelAgentQuery({page:paginations?.page,size:paginations?.size}, { refetchOnMountOrArgChange: true })
     const tableRef = React.useRef(null)
     const [data, setData] = React.useState([])
     const prevData = usePrevious(listUserAccount)
@@ -741,59 +709,117 @@ const MasterUser = () => {
     }, 1000)
     }, [listUserAccount])
   
+    console.log('data pge', data)
+    console.log('data pge count', pageCount)
     const newdata = React.useMemo(()=>{
       return tempList ? tempList : [{}]
     }, [tempList]);
   
   React.useEffect(() => {
     if (listUserAccount !== null && JSON.stringify(prevData) !== JSON.stringify(listUserAccount)) {
-       dispatch(setListUser([...listUserAccount]))
+       dispatch(setListAgent([...listUserAccount]))
     }
     //  dispatch(setListUser([...listUserAccount]))
-  }, [listUserAccount, prevData])
-  
+  }, [listUserAccount,prevData])
+  console.log('new data', isSuccess)
     const columns = React.useMemo(
-    () => [
-      {
-        Header: "Fullname",
-        accessor: "firstName",
-        maxWidth: 400,
-        minWidth: 140,
-        width: 200,
+      () => [
+       {
+        Header: "ID",
+        accessor: "id",
+        maxWidth: 100,
+        minWidth: 50,
+        width: 50,
         Cell: ({ row }) => (
        
           <Link
             color="#065BAA"
             style={{textDecoration:"underline"}}
-            to={`/master-data/detail-user/${row.original.id}`}
+            to={`/master-data/detail-agent/${row.original.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.firstName} {row.original.lastName} 
+            {row.original.id}
           </Link>
        
     ),
       },
       {
-        Header: "Email",
-        accessor: "email",
-        maxWidth: 400,
-        minWidth: 140,
-        width: 200,
-      },
-      {
-        Header: "Travel Agent",
+        Header: "travel Agent Name",
         accessor: "travelAgentName",
         maxWidth: 400,
         minWidth: 140,
         width: 200,
       },
       {
-        Header: "Role",
-        accessor: "authorities",
+        Header: "travel Agent Phone",
+        accessor: "travelAgentPhone",
         maxWidth: 400,
         minWidth: 140,
         width: 200,
-      }
+      },
+      {
+        Header: "Travel Agent Email",
+        accessor: "travelAgentEmail",
+        maxWidth: 400,
+        minWidth: 140,
+        width: 200,
+      },
+      {
+        Header: "Travel Agent Address",
+        accessor: "travelAgentAddress",
+        maxWidth: 400,
+        minWidth: 140,
+        width: 200,
+      },
+      {
+        Header: "Commision",
+        accessor: "commision",
+        maxWidth: 400,
+        minWidth: 140,
+        width: 200,
+      },
+      {
+        Header: "Payment Type",
+        accessor: "paymentType",
+        maxWidth: 400,
+        minWidth: 140,
+        width: 200,
+      },
+      {
+        Header: "Cust Code",
+        accessor: "custcode",
+        maxWidth: 200,
+        minWidth: 140,
+        width: 100,
+      },
+      {
+        Header: "Cust Id",
+        accessor: "custid",
+        maxWidth: 200,
+        minWidth: 140,
+        width: 100,
+      },
+      {
+        Header: "CustGroup",
+        accessor: "cgroup",
+        maxWidth: 200,
+        minWidth: 140,
+        width: 100,
+      },
+      {
+        Header: "City",
+        accessor: "city.name",
+        maxWidth: 200,
+        minWidth: 140,
+        width: 100,
+      },
+      {
+        Header: "Allow Credit Payment",
+        accessor: "allowCreditPayment",
+        maxWidth: 300,
+        minWidth: 140,
+        width: 200,
+      },
     ],
     []
   );
@@ -817,7 +843,7 @@ const MasterUser = () => {
                     columns={columns}
                     data={listUserAccount}
                     fetchData={fetchData}
-                    // loading={loading}
+                    loading={loading}
                     pageCount={pageCount}
                     />
                  

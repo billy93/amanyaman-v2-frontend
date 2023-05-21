@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NavLink,Navigate, useNavigate } from "react-router-dom";
+import { NavLink,Navigate, useNavigate, useParams } from "react-router-dom";
 import {
 Box,
 Stack,
@@ -24,7 +24,7 @@ BreadcrumbLink,
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux"
 import { useDispatch } from 'react-redux'
-import {useCreateUserMutation,useGetRoleQuery,useUpdateUserMutation} from './userApiSlice'
+import {useCreateUserMutation,useGetRoleQuery,useUpdateUserMutation,useGetUserQuery} from './userApiSlice'
 import {setListUser,listUsers,listRoleUsers,setRoleUser,formUser,setFormUser} from './masterUserSlice'
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
@@ -44,6 +44,7 @@ function usePrevious(value) {
 
 const CreateUser = () => {
   const dispatch = useDispatch()
+  const {id} = useParams()
   const listProducts = useSelector(listUsers)
   const listRoles = useSelector(listRoleUsers)
   const formuser = useSelector(formUser)
@@ -51,12 +52,35 @@ const CreateUser = () => {
   const navigate = useNavigate()
   const [fields, setFields] = React.useState(null)
   const [trigger, setTrigger] = React.useState(false)
-  const { data: rolesData, isLoading, isError, isSuccess } = useGetRoleQuery()
+  const { data: rolesData} = useGetRoleQuery()
   const prevListRoles = usePrevious(rolesData)
   const [selectFill,setSelectFille] = React.useState(false)
+  const {
+        data: users,
+        isLoading,
+        isSuccess,
+        isError,
+        error
+    } = useGetUserQuery({count:5}, { refetchOnMountOrArgChange: true })
   const [createUser] = useCreateUserMutation({
    skip:trigger === false 
   })
+  React.useMemo(() => {
+      const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
+      if (dataUserDetail) {
+          const editUser = {
+                login:dataUserDetail !==null ? dataUserDetail[0]?.login : null,
+                firstName:dataUserDetail !==null ? dataUserDetail[0]?.firstName : null,
+                lastName:dataUserDetail !==null ? dataUserDetail[0]?.lastName : null,
+                email:dataUserDetail !==null ? dataUserDetail[0]?.email : null,
+                authorities:dataUserDetail !==null ? [`${dataUserDetail[0]?.authorities}`] : null
+          }
+          console.log('edit user dataUserDetail', dataUserDetail)
+          console.log('edit user', editUser)
+        // dispatch(setFormUser(editUser))
+      }
+  }, users, dispatch, id)
+    
   const [updateUser] = useUpdateUserMutation()
   const toast = useToast()
   const handleUploadIdentity = (e) => {
@@ -82,10 +106,10 @@ const handleidentityCard = (e, i) => {
         }
       
       try {
-        let data = await createUser(datas)
+        let data = await updateUser({...datas, id:formuser?.id})
          dispatch(setListUser([...listProducts, datas]));
         toast({
-                  title: `${formuser?.login !=='' ? 'Edit User Success' : 'Created User Success'}`,
+                  title: `Edit User Success `,
                   status:"success",
                   position: 'top-right',
                   duration:3000,
@@ -141,9 +165,9 @@ const handleidentityCard = (e, i) => {
                         <BreadcrumbLink as={NavLink} to='#' style={{ pointerEvents: 'none'}}>
                             <Text as={'b'} fontSize={'sm'} color="#231F20"
                            >
-                            {
-                              'Create User'
-                            }  
+                            
+                             Edit User 
+                            
                             </Text>
                         </BreadcrumbLink>
                     </BreadcrumbItem>
@@ -167,18 +191,10 @@ const handleidentityCard = (e, i) => {
                 
                 </Box>
                     <Input type="file" name={"identityCard"} onChange={(e) =>handleidentityCard(e,'File Identity')} style={{ display: "none" }} ref={hiddenInputIdtty}  />
-              <FormLabel fontSize="14" pt="1.5" style={{ transform: "translate(-12px, -37px) scale(0.75)", color: "#231F20", fontSize: "20px", fontWeight: "bold" }} fontFamily={'Mulish'}>{ 'Add User' }</FormLabel>
+              <FormLabel fontSize="14" pt="1.5" style={{ transform: "translate(-12px, -37px) scale(0.75)", color: "#231F20", fontSize: "20px", fontWeight: "bold" }} fontFamily={'Mulish'}>{'Edit User' }</FormLabel>
                 <Text as="p" fontSize={'sm'} fontFamily={'Mulish'} style={{fontSize:'12px'}}></Text>
                 {/* <Button onClick={handleUploadClick}>Upload</Button> */}
               </FormControl>
-          </Box>
-          <Box width={{base:"100%",md:"540px"}} m="auto">  
-          <FormControl variant="floating" id="first-name" isRequired mt="14px">      
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="login" value={formuser?.login} onChange={handleData} h="48px"/>
-                        {/* It is important that the Label comes after the Control due to css selectors */}
-                        <FormLabel fontSize="12" pt="1.5">Username</FormLabel>
-                        {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-          </FormControl>
           </Box>
           <Box display="flex" gap="5px" m="auto" width={{base:"100%",md:"540px"}}>
             <Box width={{base:"100%",md:"240px"}} >  

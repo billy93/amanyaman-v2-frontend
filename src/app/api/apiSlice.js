@@ -3,7 +3,7 @@ import { setCredentials, logOut } from '../../features/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'https://amapi.ati-bv.dev/api',
-    tagTypes: ['MasterUser','RoleUser'],
+    tagTypes: ['MasterUser','RoleUser','MasterAgent'],
     refetchOnMountOrArgChange: 30,
     refetchOnReconnect: true,
     credentials: 'include',
