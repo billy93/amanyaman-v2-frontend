@@ -138,7 +138,7 @@ const Tables = ({
  const formuser = useSelector(formAgent)
  const prevSelected = usePrevious(selected)
  const [showFilter,setShowFilter] = React.useState(false)
- const [filterProduct,setFilterProduct] = React.useState('')
+ const [filterProduct,setFilterProduct] = React.useState(undefined)
  const [filterProductCode,setFilterProductCode] = React.useState('')
  const [filterPremiumPrice,setFilterPremiumPrice] = React.useState('')
  const [filterDiscont1,setFilterDiscount1] = React.useState('')
@@ -271,13 +271,17 @@ const filterTypes = React.useMemo(
   )
   const handleFilterByProduct = e => {
   const value = e.target.value || undefined;
+    if (value) {
     setFilter("product", value); 
     setFilterProduct(value);
+  }
 };
   const handleFilterByProductCode = e => {
   const value = e.target.value || undefined;
+    if (value) {
     setFilter("productCode", value); 
     setFilterProductCode(value);
+  }
 };
   const handleFilterByPremiumPrice = e => {
   const value = e.target.value || undefined;
@@ -548,8 +552,42 @@ const DetailMasterUser = () => {
   const toast = useToast()
   const navigate = useNavigate()
   const Prev = usePrevious(users)
-  const [data, setData] = React.useState([])
-  const newData = useSelector(detailAgentProductaList)
+  const [data, setData] = React.useState([ 
+    {
+      id:"1",
+      product:"product permata",
+      productCode:"123908",
+      premiumPrice:"123",
+      discount1:"123",
+      discount2:"123",
+      discount3:"123",
+      totalCommision:"123",
+      netToAgent:"123",
+    },
+    {
+      id:"2",
+      product:"product2",
+      productCode:"123000",
+      premiumPrice:"123",
+      discount1:"123",
+      discount2:"123",
+      discount3:"123",
+      totalCommision:"123",
+      netToAgent:"123",
+    },
+    {
+      id:"3",
+      product:"product3",
+      productCode:"1235555",
+      premiumPrice:"123",
+      discount1:"123",
+      discount2:"123",
+      discount3:"123",
+      totalCommision:"123",
+      netToAgent:"123",
+    },
+  ])
+  const prevData = usePrevious(detailAgentProductaList)
   const [loading, setLoading] = React.useState(false)
   const [pageCount, setPageCount] = React.useState(0)
    const PageInit = React.useCallback((pageSize,pageIndex) => {
@@ -577,16 +615,16 @@ const DetailMasterUser = () => {
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
-        setData(newData?.slice(startRow, endRow))
+        setData(data?.slice(startRow, endRow))
         PageInit(pageSize,pageIndex)
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(newData?.length / pageSize))
+        setPageCount(Math.ceil(data?.length / pageSize))
 
         setLoading(false)
       }
     }, 1000)
-    }, [newData])
+    }, [data])
   
   React.useMemo(() => {
       const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
@@ -617,11 +655,12 @@ const columns = React.useMemo(
       {
         Header: "Product",
         accessor: "product",
+        filter:"includes",
         Cell: ({ row }) => (
        
           <Link
             color="#065BAA"
-            style={{textDecoration:"underline",color:"#065BAA"}}
+            style={{textDecoration:"underline"}}
             to={`/policies/policy-detail/${row.original.product}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
@@ -700,10 +739,9 @@ const columns = React.useMemo(
                   </Box>
                  </Box>
                 </Box>
-                <Box display={'flex'} gap="10px" >
-                    <Box display={'flex'} flexDirection={'column'} mt="1em"  >
-                        <Box border="1px solid #ebebeb" borderRadius={'5px'} borderBottom={'none'}>  
-                        <Box bg="#ebebeb" w={{base:"100%", md:"386px"}} p={{base:"5px", md:"10px"}} display="flex" justifyContent="space-around" alignItems="center" >
+                <Box display={'flex'}>
+                    <Box p="3" display={'flex'} flexDirection={'column'}>
+                        <Box bg="#ebebeb" w={{base:"100%", md:"386px"}} p={{base:"5px", md:"10px"}} display="flex" justifyContent="space-around" alignItems="center">
                             <Heading as="h4" variant={'primary'} fontFamily={'Mulish'} style={{fontSize:"17px"}} color={'#231F20'}>{detail !== null ? detail[0].id : null} </Heading>
                         </Box>
                         <Box bg="white" w={{base:"100%", md:"386px"}} p={{md:"10px"}}>
@@ -720,73 +758,72 @@ const columns = React.useMemo(
                                 <Text as="p" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'} fontWeight={'normal'}>{detail !==null ? detail && detail[0]?.travelAgentEmail : null}</Text>
                             </Box>
                         </Box>
-                        </Box>
                     </Box>
                     <Box w="100%">
-                            <Box bg="white" mt="18px" p="14px" border="1px solid #ebebeb" borderRadius={'5px'}>
+                            <Box bg="white" mt="18px" p="14px" border="1px solid #ebebeb">
                                 <Text as="b" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Travel Agent Detail</Text>
                             </Box>
                             <Box w={{base:"100%"}} display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
-                                <Box w={{md:"30%"}}>
+                                <Box w={{md:"40%"}}>
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Travel Agent Address</Text>
                                 </Box>
-                                <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >Travel Agent Address</Text>
+                                <Box w={{md:"60%"}}>
+                                    <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >Travel Agent Address</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}}  display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
-                                <Box w={{md:"30%"}}>
+                                <Box w={{md:"40%"}}>
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Allow Credit Payments</Text>
                                 </Box>
-                                <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}}>True</Text>
+                                <Box w={{md:"60%"}}>
+                                    <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}}>True</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}}  display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
-                                <Box w={{md:"30%"}}>
+                                <Box w={{md:"40%"}}>
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Cust Id</Text>
                                 </Box>
-                                <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >7</Text>
+                                <Box w={{md:"60%"}}>
+                                    <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >7</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}} display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
-                                <Box w={{md:"30%"}}>
+                                <Box w={{md:"40%"}}>
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Cust Code</Text>
                                 </Box>
-                                <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >WCAH0006</Text>
+                                <Box w={{md:"60%"}}>
+                                    <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >WCAH0006</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}}  display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
-                                <Box w={{md:"30%"}}>
+                                <Box w={{md:"40%"}}>
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Cgroup</Text>
                                 </Box>
-                                <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >WITA_T</Text>
+                                <Box w={{md:"60%"}}>
+                                    <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >WITA_T</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}}  display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
-                                <Box w={{md:"30%"}}>
+                                <Box w={{md:"40%"}}>
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Proforma Invoice Recipients</Text>
                                 </Box>
-                                <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >itdevelopment@atibusinessgroup.com</Text>
+                                <Box w={{md:"60%"}}>
+                                    <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >itdevelopment@atibusinessgroup.com</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}}  display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
-                                <Box w={{md:"30%"}}>
+                                <Box w={{md:"40%"}}>
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>City</Text>
                                 </Box>
-                                <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >JAKARTA PUSAT</Text>
+                                <Box w={{md:"60%"}}>
+                                    <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >JAKARTA PUSAT</Text>
                                 </Box>
                             </Box>
                             <Box>
                             </Box>
                         </Box>
                 </Box>
-                <Box border={'1px solid #ebebeb'} pt="5px" pl="5px" mt="1em" borderRadius={'5px'}>
+                <Box border={'1px solid #ebebeb'} pt="5px" pl="5px">
                   <Box borderBottom={'1px solid #ebebeb'} h="35px" display={'flex'} alignItems={'center'}>
                   <Text p="10px" as="b" size={'sm'} fontFamily={'Mulish'} style={{fontSize:"14px"}} >
                               Product
