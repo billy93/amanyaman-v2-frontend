@@ -144,7 +144,7 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                                         }}
                                         onClick={() =>handleTypeTrip('Single Trip')}
                                     >Single Trip</Button>
-                                    <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -40px) scale(0.75)", fontSize:"18px" }}>Select Coverage Type</FormLabel>
+                                    <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -40px) scale(0.75)", fontSize:"18px",zIndex:"0" }}>Select Coverage Type</FormLabel>
                                 </FormControl>
                                 <FormControl variant="floating" id="first-name" isRequired fontFamily={'Mulish'}>    
                                     <Button bg="#ebebeb" border={initState?.coverageType ==="Anual Trip" ? '2px solid #065BAA' : ''} w={{base:"100%", md:"259px"}} 
@@ -159,7 +159,7 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                             </Box>
                             <Box >
                                 <FormControl variant="floating" id="first-name" isRequired fontFamily={'Mulish'}>
-                                    <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -40px) scale(0.75)", fontSize:"18px" }}>Select Travellers Type</FormLabel>
+                                    <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -40px) scale(0.75)", fontSize:"18px",zIndex:"0" }}>Select Travellers Type</FormLabel>
                                 </FormControl>
                                 <Box display="flex" justifyContent="flext-start" width={{base:"100%", md:"530px"}} mt="3em" gap="4px">
                                 {/* <Box>
@@ -198,10 +198,10 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                                 </FormControl>
                             </Box>
                             </Box>
-                            <Box mt="1em" width={{base:"100%", md:"300px"}}>
+                            <Box mt="1em" width={{base:"100%", md:"300px"}} position={'relative'}>
                                 <FormControl variant="floating" fontFamily={'Mulish'} >    
                                     <Input type="number" w="100%" h="48px" value={initState?.totalPass } bg="#ebebeb" borderRadius="5px" onChange={ handleTotalPass} />
-                                    <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(16px, 2px) scale(0.75)", fontSize:"18px", background:"#ebebeb",color:"#171923" }}>Adult</FormLabel>
+                                    <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(16px, 2px) scale(0.75)", fontSize:"18px", background:"#ebebeb",color:"#171923",zIndex:"0" }} >Adult</FormLabel>
                                 </FormControl>
                             </Box>
                             <Box mt="3em" w={{base:"100%", md:"520px"}} h={{sm:"48px"}}>
@@ -214,7 +214,7 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                                     value={initState?.destinationCountry}
                                     isSearchable={true}
                                     styles={{
-                                    menuPortal: (provided) => ({ ...provided, zIndex: 999 })
+                                    menuPortal: (provided) => ({ ...provided})
                                     }}
                                     options={[
                                     {
@@ -226,9 +226,13 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                                         label: "Korea",
                                         value: "Korea",
                                     },
+                                    {
+                                        label: "Singapore",
+                                        value: "Singapore",
+                                    },
                                     ]}
                                     />
-                                    <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -40px) scale(0.75)", fontSize:"18px",color:"#171923" }}>Select Destination Country</FormLabel>
+                                    <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -40px) scale(0.75)", fontSize:"18px",color:"#171923",zIndex:"0" }}>Select Destination Country</FormLabel>
                                 </FormControl>
                             </Box>
                             <Box mt="1em" position={'relative'} zIndex={'0'} display={'flex'} justifyContent={'flex-start'} alignItems={'center'} gap="4px" width={{base:"100%", md:"530px"}}>
@@ -243,6 +247,7 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                                     formatInputText={formatInputValue} 
                                     inputClassName="my-custom-inputs" // custom class
                                     renderInput={renderCustomInput} 
+                                    wrapperClassName={'calendarClassName'}
                                     shouldHighlightWeekends
                                     />
                                     </FormControl>
@@ -258,6 +263,7 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                                     inputClassName="my-custom-inputs" // custom class
                                     renderInput={renderCustomInputs} 
                                     shouldHighlightWeekends
+                                    wrapperClassName={'calendarClassName'}
                                     />
                                     </FormControl>
                             </Box>

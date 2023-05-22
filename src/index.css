@@ -510,3 +510,7 @@ p{
   37.5% { opacity: 0;}
   100% { opacity: 0;} 
 }
+.calendarClassName{
+  position: relative;
+  z-index: 9999;
+}
