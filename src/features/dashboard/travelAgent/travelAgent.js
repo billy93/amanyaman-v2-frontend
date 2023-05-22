@@ -773,8 +773,8 @@ const MasterUser = () => {
         width: 200,
       },
       {
-        Header: "Commision",
-        accessor: "commision",
+        Header: "Commission",
+        accessor: "commission",
         maxWidth: 400,
         minWidth: 140,
         width: 200,

@@ -326,6 +326,7 @@ const Tables = ({
   React.useEffect(() => {
     setGlobalFilter(globalFilter || undefined);
   }, [globalFilter]);
+  
   return (
       <>
     <Modal size="xl" blockScrollOnMount={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>

@@ -3,7 +3,7 @@ import { setCredentials, logOut } from '../../features/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'https://amapi.ati-bv.dev/api',
-    tagTypes: ['MasterUser','RoleUser','MasterAgent'],
+    tagTypes: ['MasterUser','RoleUser','MasterAgent','cities'],
     refetchOnMountOrArgChange: 30,
     refetchOnReconnect: true,
     credentials: 'include',
@@ -19,8 +19,8 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions)
-
-    if (result?.error?.originalStatus === 401) {
+        console.log('err', result?.error)
+    if (result?.error?.originalStatus === 401 || result?.error?.status ==='FETCH_ERROR') {
         // console.log('sending refresh token')
         // send refresh token to get new access token
         // const refreshResult = await baseQuery('/refresh', api, extraOptions)

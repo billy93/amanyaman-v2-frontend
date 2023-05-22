@@ -32,7 +32,6 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
         dispatch(setFormStateTotalPass(number))
     }
     function handleSelect(data) {
-        console.log('data c', data)
         // const data = data
         const d = data
         dispatch(setFormStateDestinationCountry({

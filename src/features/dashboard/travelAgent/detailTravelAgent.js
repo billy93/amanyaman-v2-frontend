@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetTravelAgentQuery } from "./travelApiSlice"
+import { useGetTravelAgentQuery,useDeleteAgentMutation } from "./travelApiSlice"
 import { NavLink, useParams, Link, Navigate, useNavigate } from "react-router-dom";
 import Table from "react-table";
 import { useTable, useRowSelect,useFilters,useSortBy,usePagination  } from "react-table";
@@ -146,6 +146,7 @@ const Tables = ({
  const [filterDiscont3,setFilterDiscount3] = React.useState('')
  const [filterTotalComm,setFilterTotalComm] = React.useState('')
  const [filterNet,setFilterNet] = React.useState('')
+ 
  
 const defaultColumn = React.useMemo(
     () => ({
@@ -531,6 +532,9 @@ const DetailMasterUser = () => {
   const dispatch = useDispatch()
   const detailUser = useSelector(listAgent)
   const detail = useSelector(listDetailAgent)
+   const [deleteAgent, { isLoading }] = useDeleteAgentMutation({
+   skip:false
+ })
   const [paginations,setPagination] = React.useState({
       page: 0,
       size:10
@@ -540,7 +544,6 @@ const DetailMasterUser = () => {
     const [onDelete,setOnDelete] = React.useState(false)
     const {
         data: users,
-        isLoading,
         isSuccess,
         isError,
         error
@@ -613,7 +616,40 @@ const DetailMasterUser = () => {
     // dispatch(setDetailAgent([{...datas}]))
     navigate(`/master-data/edit-agent/${id}`)
   }
- console.log('detail', detail)
+
+const handleDeletAgent = async (e) => {
+    e.preventDefault()
+    try {
+      const res = await deleteAgent(parseInt(id))
+      const idx="deleteagent"
+      if (res) {
+         if(!toast.isActive(idx)){
+         toast({
+                          id:"deleteagent",
+                          title: `Delete Agent Success`,
+                          status:"success",
+                          position: 'top-right',
+                          duration:3000,
+                          isClosable: true,
+                          variant:"solid",
+                        })
+         }
+        navigate('/master-data/travel-agent')
+       }
+      
+    } catch (err) {
+       toast({
+                          id:"deleteagent",
+                          title: `${err?.originalStatus}`,
+                          status:"success",
+                          position: 'top-right',
+                          duration:3000,
+                          isClosable: true,
+                          variant:"solid",
+                        })
+       }
+}
+  
 const columns = React.useMemo(
     () => [
       {
@@ -698,7 +734,7 @@ const columns = React.useMemo(
                   </Box>
                   <Box display={'flex'} alignItems={'center'} gap="5px">
                   <IconButton _hover={{color:"white"}} icon={ <BsFillPencilFill color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleEditUser}/>
-                  {/* <IconButton _hover={{color:"white"}} icon={ <CiTrash color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleDeletUser}/> */}
+                  <IconButton _hover={{color:"white"}} icon={ <CiTrash color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleDeletAgent}/>
                   </Box>
                  </Box>
                 </Box>

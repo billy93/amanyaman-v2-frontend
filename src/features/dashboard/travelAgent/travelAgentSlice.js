@@ -7,6 +7,7 @@ const createMasterAgentSlice = createSlice({
         list:[],
         detail: null,
         editAgent: null,
+        citylist:null,
         detailAgent: {
         productList:[ {
             id:"1",
@@ -46,14 +47,19 @@ const createMasterAgentSlice = createSlice({
         roleUser:[],
         selection:[],
         formagent: {
+        id:"",
         travelAgentName:"",    
         travelAgentEmail:"",    
         travelAgentAddress:"",  
         travelAgentPhone:"",  
+        commision:"",  
+        paymentType:"",  
         custcode:"",   
+        apiPassword:"",   
         custid:"",   
         cgroup:"",   
-        promoInvoiceRecipents:"",   
+        legalName:"",   
+        proformaInvoiceRecipients:"",   
         allowCreditPayment:'false',   
         city:""
        }
@@ -86,6 +92,9 @@ const createMasterAgentSlice = createSlice({
         setEditAgent: (state, action) => {
             state.editAgent = action.payload
         },
+        setListCity: (state, action) => {
+            state.citylist = action.payload
+        },
         
     },
     extraReducers: (builder) => {
@@ -98,7 +107,7 @@ const createMasterAgentSlice = createSlice({
   },
 })
 
-export const {setEditAgent,setProductAgentSelection,setProductAgent,setMasterAgent,setListAgent,setRoleUser,setDetailAgent,setFormAgent} = createMasterAgentSlice.actions
+export const {setListCity,setEditAgent,setProductAgentSelection,setProductAgent,setMasterAgent,setListAgent,setRoleUser,setDetailAgent,setFormAgent} = createMasterAgentSlice.actions
 
 export default createMasterAgentSlice.reducer
 export const listRoleUsers = (state) => state.agent.roleUser
@@ -107,5 +116,6 @@ export const editAgentVal = (state) => state.agent.editAgent
 export const listAgent = (state) => state.agent.list
 export const listAgentSelection = (state) => state.masterUser.selection
 export const formAgent = (state) => state.agent.formagent
+export const getlistcity = (state) => state.agent.citylist
 export const detailAgentProductaList = (state) => state.agent.detailAgent.productList
 export const detailAgentProductSelection = (state) => state.agent.detailAgent.selection

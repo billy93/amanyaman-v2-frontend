@@ -15,10 +15,22 @@ export const getAgentList = apiSlice.injectEndpoints({
                 }
             },
            }),       
+        getCities: builder.query({
+            query: (datas) => {
+                const { page, size } = datas;
+                return {
+                    url: `/app/cities?page=${page}&size=${size}`,
+                    providesTags: (result, error, arg) =>
+                    result
+                    ? [...result.map(({ id }) => ({ type: 'cities', id })), 'cities']
+                    : ['cities'],
+                }
+            },
+           }),       
            createAgent: builder.mutation({
                query: (users) => {
                    return {
-                        url: `/app/travel-agent`,
+                        url: `/app/travel-agents`,
                         method: "POST",
                         body: { ...users },
                         invalidatesTags: (result, error, arg) =>
@@ -31,7 +43,7 @@ export const getAgentList = apiSlice.injectEndpoints({
            updateAgent: builder.mutation({
                query: (users) => {
                    return {
-                        url: `/app/travel-agent`,
+                        url: `/app/travel-agents`,
                         method: "PUT",
                         body: { ...users },
                         invalidatesTags: (result, error, arg) =>
@@ -41,6 +53,20 @@ export const getAgentList = apiSlice.injectEndpoints({
                         }
             }
         }),
+        deleteAgent: builder.mutation({
+            query: (id) => {
+                return {
+                    url: `/app/travel-agents/${id}`,
+                    method: "DELETE",
+                    invalidatesTags: (result, error, arg) =>
+                        result
+                        ? [...result.map(({ id }) => ({ type: 'MasterAgent', id })), 'MasterAgent']
+                        : ['MasterAgent'],
+                }   
+                
+            },
+            
+        }),
     })
 
 })
@@ -48,5 +74,7 @@ export const getAgentList = apiSlice.injectEndpoints({
 export const {
     useGetTravelAgentQuery,
     useCreateAgentMutation,
-    useUpdateAgentMutation
+    useUpdateAgentMutation,
+    useGetCitiesQuery,
+    useDeleteAgentMutation
 } = getAgentList
