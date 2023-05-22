@@ -598,20 +598,22 @@ const DetailMasterUser = () => {
   const handleEditUser = (e) => {
     e.preventDefault()
       const datas = {
-           travelAgentName:detail?.travelAgentName,    
-            travelAgentEmail:detail?.travelAgentEmail,    
-            travelAgentAddress:detail?.travelAgentAddress,  
-            travelAgentPhone:detail?.travelAgentPhone,  
-            custcode:detail?.custcode,   
-            custid:detail?.custid,   
-            promoInvoiceRecipents:detail?.promoInvoiceRecipents,   
-            allowCreditPayment:detail?.allowCreditPayment,   
-            city:detail?.city
+            travelAgentName:detail !==null ? detail[0]?.travelAgentName : null,    
+            travelAgentEmail:detail !==null ? detail[0]?.travelAgentEmail : null,    
+            travelAgentAddress:detail !==null ? detail[0]?.travelAgentAddress : null,  
+            travelAgentPhone:detail !==null ? detail[0]?.travelAgentPhone : null,  
+            custcode:detail !==null ? detail[0]?.custcode : null,   
+            custid:detail !==null ? detail[0]?.custid : null,   
+            cgroup:detail !==null ? detail[0]?.cgroup : null,   
+            promoInvoiceRecipents:detail !==null ? detail[0]?.promoInvoiceRecipents : null,   
+            allowCreditPayment:detail !==null ? detail[0]?.allowCreditPayment : null,   
+            city:detail !==null ? detail[0]?.city : null
         }
     dispatch(setFormAgent(datas))
+    // dispatch(setDetailAgent([{...datas}]))
     navigate(`/master-data/edit-agent/${id}`)
   }
-  
+ console.log('detail', detail)
 const columns = React.useMemo(
     () => [
       {
@@ -688,7 +690,7 @@ const columns = React.useMemo(
                           <BreadcrumbLink as={NavLink} to='#' style={{ pointerEvents: 'none'}}>
                               <Text as={'b'} fontSize={'sm'} color="#231F20"
                             >
-                               {detail !==null ? detail[0].id : null } 
+                               {detail !==null ? detail[0]?.id : null } 
                               </Text>
                           </BreadcrumbLink>
                       </BreadcrumbItem>
@@ -704,16 +706,16 @@ const columns = React.useMemo(
                     <Box display={'flex'} flexDirection={'column'} mt="1em"  >
                         <Box border="1px solid #ebebeb" borderRadius={'5px'} borderBottom={'none'}>  
                         <Box bg="#ebebeb" w={{base:"100%", md:"386px"}} p={{base:"5px", md:"10px"}} display="flex" justifyContent="space-around" alignItems="center" >
-                            <Heading as="h4" variant={'primary'} fontFamily={'Mulish'} style={{fontSize:"17px"}} color={'#231F20'}>{detail !== null ? detail[0].id : null} </Heading>
+                            <Heading as="h4" variant={'primary'} fontFamily={'Mulish'} style={{fontSize:"17px"}} color={'#231F20'}>{detail !== null ? detail[0]?.id : null} </Heading>
                         </Box>
                         <Box bg="white" w={{base:"100%", md:"386px"}} p={{md:"10px"}}>
                             <Box pb="10px" pt="10px" borderBottom={'1px solid #ebebeb'} display={'flex'} flexDirection={'column'} alignItems={'flex-start'} justifyContent={'center'}>
                                 <Text as="b" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{'Travel Agent Name'}</Text>
-                                <Text as="p" fontFamily={'Mulish'} style={{fontSize:"14px"}}  fontWeight={'400'}>{detail !==null ? detail[0].travelAgentName : null}</Text>
+                                <Text as="p" fontFamily={'Mulish'} style={{fontSize:"14px"}}  fontWeight={'400'}>{detail !==null ? detail[0]?.travelAgentName : null}</Text>
                             </Box>
                             <Box pb="10px" pt="10px" borderBottom={'1px solid #ebebeb'} display={'flex'} flexDirection={'column'} alignItems={'flex-start'} justifyContent={'center'}>
                                 <Text as="b" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{'Travel Agent Phone'}</Text>
-                                <Text as="p" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'} fontWeight={'normal'}>{detail !==null ? detail[0].travelAgentPhone : null}</Text>
+                                <Text as="p" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'} fontWeight={'normal'}>{detail !==null ? detail[0]?.travelAgentPhone : null}</Text>
                             </Box>
                             <Box pt="10px" pb="10px" borderBottom={'1px solid #ebebeb'} display={'flex'} flexDirection={'column'} alignItems={'flex-start'} justifyContent={'center'}>
                                 <Text as="b" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>{'Trael Agent Email'}</Text>

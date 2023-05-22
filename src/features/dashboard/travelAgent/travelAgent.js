@@ -218,6 +218,7 @@ const Tables = ({
             travelAgentPhone:'',  
             custcode:'',   
             custid:'',   
+            cgroup:'',   
             promoInvoiceRecipents:'',   
             allowCreditPayment:'',   
             city:''

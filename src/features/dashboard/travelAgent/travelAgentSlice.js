@@ -6,6 +6,7 @@ const createMasterAgentSlice = createSlice({
         messages:null,
         list:[],
         detail: null,
+        editAgent: null,
         detailAgent: {
         productList:[ {
             id:"1",
@@ -82,6 +83,9 @@ const createMasterAgentSlice = createSlice({
         setFormAgent: (state, action) => {
             state.formagent = action.payload
         },
+        setEditAgent: (state, action) => {
+            state.editAgent = action.payload
+        },
         
     },
     extraReducers: (builder) => {
@@ -94,11 +98,12 @@ const createMasterAgentSlice = createSlice({
   },
 })
 
-export const {setProductAgentSelection,setProductAgent,setMasterAgent,setListAgent,setRoleUser,setDetailAgent,setFormAgent} = createMasterAgentSlice.actions
+export const {setEditAgent,setProductAgentSelection,setProductAgent,setMasterAgent,setListAgent,setRoleUser,setDetailAgent,setFormAgent} = createMasterAgentSlice.actions
 
 export default createMasterAgentSlice.reducer
 export const listRoleUsers = (state) => state.agent.roleUser
 export const listDetailAgent = (state) => state.agent.detail
+export const editAgentVal = (state) => state.agent.editAgent
 export const listAgent = (state) => state.agent.list
 export const listAgentSelection = (state) => state.masterUser.selection
 export const formAgent = (state) => state.agent.formagent

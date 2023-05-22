@@ -27,7 +27,7 @@ Radio,
 import { useSelector } from "react-redux"
 import { useDispatch } from 'react-redux'
 import {useCreateAgentMutation,useGetRoleQuery,useUpdateAgentMutation,useGetTravelAgentQuery} from './travelApiSlice'
-import {setListAgent,listAgent,formAgent,setFormAgent,listDetailAgent} from './travelAgentSlice'
+import {setListAgent,listAgent,formAgent,setFormAgent,listDetailAgent,setDetailAgent,setEditAgent,editAgentVal} from './travelAgentSlice'
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
@@ -48,7 +48,7 @@ const CreateUser = () => {
   const {id} = useParams()
   const dispatch = useDispatch()
   const listProducts = useSelector(listAgent)
-  const detail = useSelector(listDetailAgent)
+  const detail = useSelector(editAgentVal)
   const formuser = useSelector(formAgent)
   const hiddenInputIdtty = React.useRef(null)
   const navigate = useNavigate()
@@ -77,16 +77,17 @@ React.useMemo(() => {
             travelAgentPhone:detail !==null ? detail[0]?.travelAgentPhone : null,  
             custcode:detail !==null ? detail[0]?.custcode : null,   
             custid:detail !==null ? detail[0]?.custid : null,   
+            cgroup:detail !==null ? detail[0]?.cgroup : null,   
             promoInvoiceRecipents:detail !==null ? detail[0]?.promoInvoiceRecipents : null,   
             allowCreditPayment:detail !==null ? detail[0]?.allowCreditPayment : null,   
             city:detail !==null ? detail[0]?.city : null
         }
-        dispatch(setFormAgent(datas))
-        // dispatch(setDetailAgent([...dataUserDetail]))
+        dispatch(setEditAgent(datas))
+        dispatch(setDetailAgent(datas))
       }
 }, users, dispatch, id)
     
-
+console.log('deta',detail)
   const onSelectAllowCredit = (selected) => {
       const formstate = {
           ...formuser,
@@ -217,7 +218,7 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto">  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">      
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="travelAgentName" value={detail !==null ? detail[0]?.travelAgentName : null } onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="travelAgentName" value={detail !==null ? detail?.travelAgentName : null } onChange={handleData} h="48px"/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">Travel Agent Name</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -226,7 +227,7 @@ const handleidentityCard = (e, i) => {
           <Box display="flex" gap="5px" m="auto" width={{base:"100%",md:"540px"}}>
             <Box width={{base:"100%",md:"240px"}} >  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="travelAgentEmail" value={detail !==null ? detail[0]?.travelAgentEmail : null} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="travelAgentEmail" value={detail !==null ? detail?.travelAgentEmail : null} onChange={handleData} h="48px"/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">Travel Agent Email</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -234,7 +235,7 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"240px"}} >  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="travelAgentAddress" value={detail !==null ? detail[0]?.travelAgentAddress : null} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="travelAgentAddress" value={detail !==null ? detail?.travelAgentAddress : null} onChange={handleData} h="48px"/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">travel Agent Address</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -251,7 +252,7 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto">  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="custcode" value={detail !==null ? detail[0]?.custcode : null} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="custcode" value={detail !==null ? detail?.custcode : null} onChange={handleData} h="48px"/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">Cust Code</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -259,7 +260,7 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto">  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="custid" value={detail !==null ? detail[0]?.custid : null } onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="custid" value={detail !==null ? detail?.custid : null } onChange={handleData} h="48px"/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">Cust Id</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -267,7 +268,7 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto">  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="cgroup" value={detail !==null ? detail[0]?.cgroup : null} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="cgroup" value={detail !==null ? detail?.cgroup : null} onChange={handleData} h="48px"/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">CGroup</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -275,14 +276,14 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto">  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="promoInvoiceRecipents" value={detail !==null ? detail[0]?.promoInvoiceRecipents : null} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="promoInvoiceRecipents" value={detail !==null ? detail?.promoInvoiceRecipents : null} onChange={handleData} h="48px"/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">promo Invoice Recipents</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
           </FormControl>
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto" mt="15px">  
-           <RadioGroup defaultValue={detail !==null ? detail[0]?.allowCreditPayment : null} onChange={onSelectAllowCredit}>
+           <RadioGroup defaultValue={detail !==null ? detail?.allowCreditPayment : null} onChange={onSelectAllowCredit}>
              <Stack spacing={4} direction='column'>
                  <Radio value={'true'}><Text as="p" fontSize={'sm'} fontFamily={'Mulish'}>Allow Credit Payment</Text></Radio>
               </Stack>
@@ -292,12 +293,12 @@ const handleidentityCard = (e, i) => {
              <FormControl variant="floating" isRequired fontFamily={'Mulish'} mt="14px" id="float-label"> 
                     <Box className='floating-form'>
                       <Box className='floating-label'>
-                        <Select className="floating-select" placeholder='' defaultValue={detail !==null ? detail[0].city : null} name="city" h="48px" onChange={handleData}>  
+                        <Select className="floating-select" placeholder='' defaultValue={detail !==null ? detail?.city?.name : null} name="city" h="48px" onChange={handleData}>  
                          <option value={'jakarta barat'}>{'Jakarta Barat'}</option>
                          <option value={'jakarta timur'}>{'Jakarta Timur'}</option>
                         </Select>
                         <span className="highlight"></span>
-                        <FormLabel fontSize="12" pt="1.5" style={{ transform: detail !==null && detail[0]?.city ? "translate(0, -19px) scale(0.75)": "",color: detail !== null && detail[0]?.city ?"#065baa" :"", fontSize:"14px" }} fontFamily={'Mulish'}>City</FormLabel>
+                        <FormLabel fontSize="12" pt="1.5" style={{ transform: detail !==null && detail?.city ? "translate(0, -19px) scale(0.75)": "",color: detail !== null && detail?.city ?"#065baa" :"", fontSize:"14px" }} fontFamily={'Mulish'}>City</FormLabel>
                        </Box>
                     </Box>
                     {/* It is important that the Label comes after the Control due to css selectors */}
