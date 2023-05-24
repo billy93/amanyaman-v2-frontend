@@ -314,7 +314,7 @@ const filterTypes = React.useMemo(
   // console.log('filters', filters)
   return (
       <>
-          <Box w={{base:"100%", md:"100%"}} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px">
+          <Box w={{base:"100%", md:"90%"}} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px">
                 <Input
                   value={filterProduct}
                   onChange={handleFilterByProduct}

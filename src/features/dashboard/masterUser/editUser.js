@@ -10,14 +10,19 @@ Button,
 Image,
 FormControl,
 Input,
+Select as SelectDef,
 FormLabel,
 useToast,
 InputGroup,
 InputRightElement,
-Select,
 Divider,
 Textarea,
+useTheme,
+useColorMode,
+useColorModeValue,
 Center,
+Container,
+useMultiStyleConfig,
 Breadcrumb,
 BreadcrumbItem,
 BreadcrumbLink,
@@ -25,10 +30,12 @@ BreadcrumbLink,
 import { useSelector } from "react-redux"
 import { useDispatch } from 'react-redux'
 import {useCreateUserMutation,useGetRoleQuery,useUpdateUserMutation,useGetUserQuery} from './userApiSlice'
-import {setListUser,listUsers,listRoleUsers,setRoleUser,formUser,setFormUser} from './masterUserSlice'
+import {setListUser,listUsers,listRoleUsers,setRoleUser,formUser,setFormUser,selectAgentList,setFormSelectAgent} from './masterUserSlice'
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
+import { useGetTravelAgentQuery } from "../travelAgent/travelApiSlice"
+import { Select } from 'chakra-react-select'
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -48,13 +55,23 @@ const CreateUser = () => {
   const listProducts = useSelector(listUsers)
   const listRoles = useSelector(listRoleUsers)
   const formuser = useSelector(formUser)
+  const selectListAgent = useSelector(selectAgentList)
   const hiddenInputIdtty = React.useRef(null)
   const navigate = useNavigate()
   const [fields, setFields] = React.useState(null)
   const [trigger, setTrigger] = React.useState(false)
   const { data: rolesData} = useGetRoleQuery()
   const prevListRoles = usePrevious(rolesData)
-  const [selectFill,setSelectFille] = React.useState(false)
+  const [selectFill, setSelectFille] = React.useState(false)
+  const { th } = useMultiStyleConfig("Table", {});
+  const theme = useTheme();
+  const outlineColor = useColorModeValue(
+    theme.colors.blue[500],
+    theme.colors.blue[300]
+  );
+  const {
+        data: listAgent,
+    } = useGetTravelAgentQuery({page:0,size:999}, { refetchOnMountOrArgChange: true })
   const {
         data: users,
         isLoading,
@@ -66,18 +83,33 @@ const CreateUser = () => {
    skip:trigger === false 
   })
   React.useMemo(() => {
-      const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
+    if (listAgent) {
+      let city = listAgent?.map((obj,i) => ({ ...obj, 'label': obj.travelAgentName,'value':obj.id, idx:i }))
+        dispatch(setFormSelectAgent(city))
+    }
+  }, [listAgent])
+
+  React.useMemo(() => {
+    if (rolesData) {
+      let city = rolesData?.map((obj,i) => ({ ...obj, 'label': obj.name }))
+        dispatch(setRoleUser(city))
+    }
+  }, [rolesData])
+
+  React.useMemo(() => {
+      const dataUserDetail = users?.filter((user,i) => user.id === parseInt(id))
       if (dataUserDetail) {
           const editUser = {
+                id:dataUserDetail !==null ? dataUserDetail[0]?.id : null,
                 login:dataUserDetail !==null ? dataUserDetail[0]?.login : null,
                 firstName:dataUserDetail !==null ? dataUserDetail[0]?.firstName : null,
                 lastName:dataUserDetail !==null ? dataUserDetail[0]?.lastName : null,
                 email:dataUserDetail !==null ? dataUserDetail[0]?.email : null,
-                authorities:dataUserDetail !==null ? [`${dataUserDetail[0]?.authorities}`] : null
+                authorities: dataUserDetail !== null ? [{ 'label': dataUserDetail[0]?.authorities[0], 'name': dataUserDetail[0]?.authorities[0]}] : null,
+                travelAgent:dataUserDetail !==null ? [{'value' : dataUserDetail[0]?.travelAgent?.id, 'label':dataUserDetail[0]?.travelAgent?.travelAgentName}] : null
           }
-          console.log('edit user dataUserDetail', dataUserDetail)
-          console.log('edit user', editUser)
-        // dispatch(setFormUser(editUser))
+         
+        dispatch(setFormUser(editUser))
       }
   }, users, dispatch, id)
     
@@ -94,15 +126,23 @@ const handleidentityCard = (e, i) => {
     }
 };
     
-  
+  const getdefaultSelect = (id) => {
+    let value 
+    
+      return value
+    }
     const handleNext = async (e) => {
       e.preventDefault()
-        const datas = {
+      const datas = {
+          id:formuser?.id,
           login:formuser?.login,
           firstName:formuser?.firstName,
           lastName:formuser?.lastName,
           email:formuser?.email,
-          authorities:[`${formuser?.authorities}`]
+          authorities:[`${formuser?.authorities[0]?.label}`],
+          travelAgent:{
+            id: formuser && formuser?.travelAgent[0].id
+          }
         }
       
       try {
@@ -139,12 +179,45 @@ const handleidentityCard = (e, i) => {
     dispatch(setFormUser(forms))
   }
 
-  React.useEffect(() => {
-    if (JSON.stringify(prevListRoles) !== JSON.stringify(rolesData)) {
-      dispatch(setRoleUser(rolesData))
+  // React.useEffect(() => {
+  //   if (JSON.stringify(prevListRoles) !== JSON.stringify(rolesData)) {
+  //     dispatch(setRoleUser(rolesData))
+  //   }
+  // }, [rolesData, prevListRoles, dispatch])
+
+  function handleSelect(data) {
+    console.log('datas', data)
+         const forms = {
+          ...formuser,
+          travelAgent:[{
+            id: data.id,
+            label: data.label
+          }]
+        }
+    dispatch(setFormUser(forms))
+  }
+
+  function handleSelectRoles(data) {
+        console.log('data', data)
+         const forms = {
+          ...formuser,
+          authorities: 
+           [{...data}]
+          }
+    dispatch(setFormUser(forms))
+  }
+  const test = [
+    {
+      id:'1',
+      label:"GOLDEN RAMA",
+    },
+    {
+      id:'4',
+      label:"TEST GOLDEN RAMA 2",
     }
-  }, [rolesData, prevListRoles, dispatch])
-  
+  ]
+  console.log('formuser', formuser)
+  console.log('selectListAgent', selectListAgent)
   return (
     <Stack mt={{base:"1em", md:"5em"}}>
       <Box p="12px" display="flex" justifyContent={'space-between'} alignItems="center">
@@ -199,7 +272,7 @@ const handleidentityCard = (e, i) => {
           <Box display="flex" gap="5px" m="auto" width={{base:"100%",md:"540px"}}>
             <Box width={{base:"100%",md:"240px"}} >  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="firstName" value={formuser?.firstName} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="firstName" value={formuser?.firstName} onChange={handleData} h="48px" variant={'custom'}/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">FistName</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -207,7 +280,7 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"240px"}} >  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="lastName" value={formuser?.lastName} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="lastName" value={formuser?.lastName} onChange={handleData} h="48px" variant={'custom'}/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">LastName</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -216,48 +289,68 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto">  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="email" value={formuser?.email} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="email" value={formuser?.email} onChange={handleData} h="48px" variant={'custom'}/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">Email</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
           </FormControl>
           </Box>
          <Box width={{base:"100%",md:"540px"}} m="auto">
-             <FormControl variant="floating" isRequired fontFamily={'Mulish'} mt="14px" id="float-label"> 
+             <FormControl variant="floating" isRequired fontFamily={'Mulish'} mt="14px"> 
                     <Box className='floating-form'>
-                      <Box className='floating-label'>
-                        <Select className="floating-select" placeholder='' defaultValue={formuser !== null ? formuser?.authorities[0] : ''} name="authorities" h="48px" onChange={handleData}>  
-                         {
-                          formuser?.id ==='' &&(
-                           <option value={''} >{''}</option>
-                         )
-                         }
-                        {
-                          listRoles?.map((role, i) => {
-                            return (
-                              <option value={role.name} key={i}>{role.name}</option>
-                            )
-                          })
-                        }
-                        </Select>
+                      <Box className='react-select-container'>
+                        <Select
+                            isMulti={false}
+                            name="colors"
+                            onChange={handleSelectRoles}
+                            value={formuser?.authorities}
+                            classNamePrefix="chakra-react-select"
+                            options={listRoles}
+                            placeholder="Select some colors..."
+                            closeMenuOnSelect={true}
+                            chakraStyles={{
+                              dropdownIndicator: (prev, { selectProps: { menuIsOpen } }) => ({
+                                ...prev,
+                                "> svg": {
+                                  transitionDuration: "normal",
+                                  transform: `rotate(${menuIsOpen ? -180 : 0}deg)`
+                                }
+                              })
+                            }}
+                          />
                         <span className="highlight"></span>
-                        <FormLabel fontSize="12" pt="1.5" style={{ transform: formuser !==null && formuser?.authorities[0] ? "translate(0, -19px) scale(0.75)": "",color: formuser !== null && formuser?.authorities[0] ?"#065baa" :"", fontSize:"14px" }} fontFamily={'Mulish'}>Role</FormLabel>
+                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.authorities !=='' ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.authorities ==='' ?"#231F20" :"#065baa", fontSize:"14px", fontWeight:"600" }} fontFamily={'Mulish'}>Role</FormLabel>
+                      
                        </Box>
                     </Box>
                     {/* It is important that the Label comes after the Control due to css selectors */}
                 </FormControl>
-         </Box>
-         <Box width={{base:"100%",md:"540px"}} m="auto">
-             <FormControl variant="floating" isRequired fontFamily={'Mulish'} mt="14px" id="float-label"> 
+          </Box>
+          <Box width={{base:"100%",md:"540px"}} m="auto">
+             <FormControl variant="floating" isRequired fontFamily={'Mulish'} mt="14px" > 
                     <Box className='floating-form'>
                       <Box className='floating-label'>
-                        <Select className="floating-select" placeholder='' value={fields?.area} name="area" h="48px" onChange={handleData}>  
-                          <option value="">Area</option>
-                          <option value="area1">Area1</option>
-                          <option value="area2">Area2</option>
-                        </Select>
+                        <Select
+                            isMulti={false}
+                            name="colors"
+                            onChange={handleSelect}
+                            value={formuser?.travelAgent}
+                            classNamePrefix="chakra-react-select"
+                            options={selectListAgent}
+                            placeholder="Select some colors..."
+                            closeMenuOnSelect={true}
+                            chakraStyles={{
+                              dropdownIndicator: (prev, { selectProps: { menuIsOpen } }) => ({
+                                ...prev,
+                                "> svg": {
+                                  transitionDuration: "normal",
+                                  transform: `rotate(${menuIsOpen ? -180 : 0}deg)`
+                                }
+                              })
+                            }}
+                          />
                         <span className="highlight"></span>
-                        <FormLabel fontSize="12" pt="1.5" style={{ transform: fields?.area ? "translate(0, -19px) scale(0.75)": "",color: fields?.area ?"#065baa" :"", fontSize:"14px" }} fontFamily={'Mulish'}>Area</FormLabel>
+                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.travelAgent !=='' ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.travelAgent ==='' ?"#231F20" :"#065baa", fontSize:"14px", fontWeight:"600" }} fontFamily={'Mulish'}>Travel Agent</FormLabel>
                        </Box>
                     </Box>
                     {/* It is important that the Label comes after the Control due to css selectors */}
@@ -265,7 +358,7 @@ const handleidentityCard = (e, i) => {
          </Box>
        </Box>
       <Box display={'flex'} justifyContent={'flex-end'} alignItems={'center'} p="9px" borderRadius={'5px'} border="1px" borderColor={'#ebebeb'}>
-          <Button isDisabled={formuser?.authorities.length ===0 || formuser?.login ==='' || formuser?.firstName ==='' || formuser?.email ===''
+          <Button isDisabled={formuser?.authorities?.length ===0 || formuser?.login ==='' || formuser?.firstName ==='' || formuser?.email ===''
           || formuser?.lastName ===''
             ? true : false} variant={'ClaimBtn'} style={{ textTransform: 'uppercase', fontSize: '14px' }} fontFamily="arial" fontWeight={'700'} onClick={handleNext}>Add</Button>
       </Box>

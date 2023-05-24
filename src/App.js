@@ -22,6 +22,10 @@ import PolicyDetails from './features/dashboard/policy/policyDetail'
 import CreateProduct from './features/dashboard/masterProduct/createProduct'
 import CreateUser from './features/dashboard/masterUser/createUser'
 import TravelAgent from './features/dashboard/travelAgent/travelAgent'
+import SystemParams from './features/dashboard/systemParameters/systemParameters'
+import CreateSystemParams from './features/dashboard/systemParameters/createParams'
+import EditSystemParams from './features/dashboard/systemParameters/editParams'
+import DetailSystemParams from './features/dashboard/systemParameters/detailSystemParams'
 import CreateTravelAgent from './features/dashboard/travelAgent/createTravelAgent'
 import DetailTravelAgent from './features/dashboard/travelAgent/detailTravelAgent'
 import EditUser from './features/dashboard/masterUser/editUser'
@@ -56,6 +60,10 @@ function App() {
           <Route path="master-products" element={<MasterProduct />} />
           <Route path="create-product" element={<CreateProduct />} />
           <Route path="travel-agent" element={<TravelAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="system-params" element={<SystemParams />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="create-system-params" element={<CreateSystemParams />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="detail-system-params/:id" element={<DetailSystemParams />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="edit-system-params/:id" element={<EditSystemParams />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="create-agent" element={<CreateTravelAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="edit-agent/:id" element={<EditAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="detail-agent/:id" element={<DetailTravelAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>

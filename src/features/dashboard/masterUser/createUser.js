@@ -29,6 +29,7 @@ import {setListUser,listUsers,listRoleUsers,setRoleUser,formUser,setFormUser} fr
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
+import { useGetTravelAgentQuery } from "../travelAgent/travelApiSlice"
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -53,7 +54,10 @@ const CreateUser = () => {
   const [trigger, setTrigger] = React.useState(false)
   const { data: rolesData, isLoading, isError, isSuccess } = useGetRoleQuery()
   const prevListRoles = usePrevious(rolesData)
-  const [selectFill,setSelectFille] = React.useState(false)
+  const [selectFill, setSelectFille] = React.useState(false)
+   const {
+        data: listAgent,
+    } = useGetTravelAgentQuery({page:0,size:999}, { refetchOnMountOrArgChange: true })
   const [createUser] = useCreateUserMutation({
    skip:trigger === false 
   })
@@ -78,7 +82,10 @@ const handleidentityCard = (e, i) => {
           firstName:formuser?.firstName,
           lastName:formuser?.lastName,
           email:formuser?.email,
-          authorities:[`${formuser?.authorities}`]
+          authorities: [`${formuser?.authorities}`],
+          travelAgent: {
+            id:formUser?.travelAgent
+          }
         }
       
       try {
@@ -174,7 +181,7 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto">  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">      
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="login" value={formuser?.login} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="login" value={formuser?.login} onChange={handleData} h="48px" variant={'custom'}/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">Username</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -183,15 +190,15 @@ const handleidentityCard = (e, i) => {
           <Box display="flex" gap="5px" m="auto" width={{base:"100%",md:"540px"}}>
             <Box width={{base:"100%",md:"240px"}} >  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="firstName" value={formuser?.firstName} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="firstName" value={formuser?.firstName} onChange={handleData} h="48px" variant={'custom'}/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">FistName</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
           </FormControl>
           </Box>
           <Box width={{base:"100%",md:"240px"}} >  
-          <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="lastName" value={formuser?.lastName} onChange={handleData} h="48px"/>
+          <FormControl variant="floating" id="lastname-name" isRequired mt="14px">
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="lastName" value={formuser?.lastName} onChange={handleData} h="48px" variant={'custom'} bg={formuser !==null && formuser?.lastName !=='' ? '#e8f0fe' : '#ebebeb'} />
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">LastName</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -200,7 +207,7 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto">  
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="email" value={formuser?.email} onChange={handleData} h="48px"/>
+                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="email" value={formuser?.email} onChange={handleData} h="48px" variant={'custom'}/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">Email</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -210,22 +217,22 @@ const handleidentityCard = (e, i) => {
              <FormControl variant="floating" isRequired fontFamily={'Mulish'} mt="14px" id="float-label"> 
                     <Box className='floating-form'>
                       <Box className='floating-label'>
-                        <Select className="floating-select" placeholder='' defaultValue={formuser !== null ? formuser?.authorities[0] : ''} name="authorities" h="48px" onChange={handleData}>  
+                        <Select bg={formuser !==null && formuser?.authorities?.length !==0 ? '#e8f0fe' : '#ebebeb'} placeholder=''  name="authorities" h="48px" onChange={handleData}>  
                          {
-                          formuser?.id ==='' &&(
+                          formuser?.authorities?.length ===0 &&(
                            <option value={''} >{''}</option>
                          )
                          }
                         {
                           listRoles?.map((role, i) => {
                             return (
-                              <option value={role.name} key={i}>{role.name}</option>
+                              <option value={role.name} key={i} fontFamily={'Mulish'} fontSize={'12px'}>{role.name}</option>
                             )
                           })
                         }
                         </Select>
                         <span className="highlight"></span>
-                        <FormLabel fontSize="12" pt="1.5" style={{ transform: formuser !==null && formuser?.authorities[0] ? "translate(0, -19px) scale(0.75)": "",color: formuser !== null && formuser?.authorities[0] ?"#065baa" :"", fontSize:"14px" }} fontFamily={'Mulish'}>Role</FormLabel>
+                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.authorities?.length !==0 ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.authorities?.length ===0 ?"#231F20" :"#065baa", fontSize:"14px", fontWeight:"600" }} fontFamily={'Mulish'}>Role</FormLabel>
                        </Box>
                     </Box>
                     {/* It is important that the Label comes after the Control due to css selectors */}
@@ -235,13 +242,22 @@ const handleidentityCard = (e, i) => {
              <FormControl variant="floating" isRequired fontFamily={'Mulish'} mt="14px" id="float-label"> 
                     <Box className='floating-form'>
                       <Box className='floating-label'>
-                        <Select className="floating-select" placeholder='' value={fields?.area} name="area" h="48px" onChange={handleData}>  
-                          <option value="">Area</option>
-                          <option value="area1">Area1</option>
-                          <option value="area2">Area2</option>
+                        <Select bg={formuser !==null && formuser?.travelAgent !=='' ? '#e8f0fe' : '#ebebeb'} placeholder=''  name="travelAgent" h="48px" onChange={handleData}>  
+                         {
+                          formuser?.travelAgent ==='' &&(
+                           <option value={''} >{''}</option>
+                         )
+                         }
+                        {
+                          listAgent?.map((role, i) => {
+                            return (
+                              <option value={role.id} key={i} fontFamily={'Mulish'} fontSize={'12px'}>{role.travelAgentName}</option>
+                            )
+                          })
+                        }
                         </Select>
                         <span className="highlight"></span>
-                        <FormLabel fontSize="12" pt="1.5" style={{ transform: fields?.area ? "translate(0, -19px) scale(0.75)": "",color: fields?.area ?"#065baa" :"", fontSize:"14px" }} fontFamily={'Mulish'}>Area</FormLabel>
+                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.travelAgent !=='' ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.travelAgent ==='' ?"#231F20" :"#065baa", fontSize:"14px", fontWeight:"600" }} fontFamily={'Mulish'}>Travel Agent</FormLabel>
                        </Box>
                     </Box>
                     {/* It is important that the Label comes after the Control due to css selectors */}

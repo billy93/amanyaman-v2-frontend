@@ -27,7 +27,8 @@ const baseStyle = definePartsStyle({
 const variantOutline = definePartsStyle((props) => {
   return {
     field: {
-      fontFamily: "'Mulish', sans-serif", // change font family to mono
+      fontFamily: 'Mulish', // change font family to mono
+      fontsize:"14px"
     }
   }
 })
@@ -36,6 +37,7 @@ const variantFilled = definePartsStyle((props) => {
   return {
     field: {
       fontWeight: "semibold", // change font weight to semibold
+      fontsize:"14px"
     },
   }
 })
@@ -46,9 +48,10 @@ const variantCustom = definePartsStyle((props) => {
   return {
     field: {
       border: "0px solid",
-      bg: "gray.50",
-      borderTopRightRadius: "full",
-      borderBottomRightRadius: "full",
+      bg: "#ebebeb",
+      borderTopRightRadius: "5px",
+      borderBottomRightRadius: "5px",
+      color:"#1a202c",
       _dark: {
         bg: "whiteAlpha.50"
       },
@@ -63,10 +66,14 @@ const variantCustom = definePartsStyle((props) => {
         boxShadow: "none !important",
         userSelect: "all",
       },
+      _placeholder: {
+        color:"#1a202c85"
+      },
       _focusVisible: {
         bg: "gray.200",
+        borderBottom:"1px solid #231F20",
         _dark: {
-          bg: "whiteAlpha.100"
+          bg: "#ebebeb"
         }
       },
     },

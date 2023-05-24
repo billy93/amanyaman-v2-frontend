@@ -45,6 +45,11 @@ const authSlice = createSlice({
                                 name: 'Travel Agent',
                                 href: '#',
                             },
+                             {
+                                link: '/master-data/system-params',
+                                name: 'System Params',
+                                href: '#',
+                            },
                             {
                                 link: '/master/price',
                                 name: 'Master Price',

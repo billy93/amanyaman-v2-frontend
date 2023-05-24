@@ -20,8 +20,8 @@ import "@fontsource/mulish/700.css";
 //   },
 // };
 const activeLabelStyles = {
-  transform: "scale(0.85) translateY(-24px)",
-  color:"#065baa"
+  transform: "scale(0.85) translateY(-12px)",
+  color: "#065baa",
 };
 
 const breakpoints = {
@@ -68,6 +68,46 @@ const spacing = {
     80: '20rem',
     96: '24rem',
   },
+}
+const Select = {
+   parts: ["field", "icon"],
+   baseStyle: {
+      field: {
+         color: "#231f20ab",
+         fontSize:"12px",
+         background: "whiteAlpha.100",
+         border: "1px dashed",
+         borderColor: "purple.200",
+         borderRadius: "full",
+         _focusWithin: {
+          ringColor: "purple.200",
+          ring: "2px",
+          ringOffset: "1px",
+          ringOffsetColor: "purple.100",
+          borderColor: "purple.50"
+       },
+         _hover: {
+        bg: "gray.200",
+        _dark: {
+          bg: "whiteAlpha.100"
+        }
+      },
+         _focusVisible: {
+          background: "gray.200",
+          borderBottom:"1px solid #231F20",
+        _dark: {
+          background: "whiteAlpha.100"
+        }
+      },
+          _dark: {
+         background: "gray.600"
+    }
+      },
+      icon: {
+         width: "1rem",
+         fontSize: "1.5rem"
+      }
+   }
 }
 
 const defaultTheme = extendTheme({
@@ -153,6 +193,7 @@ const defaultTheme = extendTheme({
     Input: inputTheme,
     Steps:StepsTheme,
     // CustomSteps,
+    Select,
     Table: {
       variants: {
         mytable: {
@@ -197,7 +238,7 @@ const defaultTheme = extendTheme({
               left: 0,
               zIndex: 2,
               position: "absolute",
-              backgroundColor: "white",
+              backgroundColor: "transparent",
               pointerEvents: "none",
               mx: 3,
               px: 1,

@@ -485,6 +485,7 @@ const filterTypes = React.useMemo(
         showFilter ? (
           <Box w={{base:"100%", md:"650px"}} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px">
                 <Input
+                  variant={'custom'}
                   value={filterName}
                   onChange={handleFilterByName}
                   placeholder={"Search travel agent name"}
@@ -492,6 +493,7 @@ const filterTypes = React.useMemo(
                   borderRadius={'5px'}
           />
                 <Input
+                  variant={'custom'}
                   value={filterEmail}
                   onChange={handleFilterByEmail}
                   placeholder={"Search cust code"}
@@ -710,8 +712,6 @@ const MasterUser = () => {
     }, 1000)
     }, [listUserAccount])
   
-    console.log('data pge', data)
-    console.log('data pge count', pageCount)
     const newdata = React.useMemo(()=>{
       return tempList ? tempList : [{}]
     }, [tempList]);
@@ -820,6 +820,16 @@ const MasterUser = () => {
         maxWidth: 300,
         minWidth: 140,
         width: 200,
+        Cell: ({ row }) => (
+       
+          <Link
+            color="#065BAA"
+          >
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.allowCreditPayment ? 'True' : 'False'}
+          </Link>
+       
+    ),
       },
     ],
     []

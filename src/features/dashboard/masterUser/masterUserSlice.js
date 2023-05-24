@@ -26,6 +26,7 @@ const createMasterUserSlice = createSlice({
          role:"admin"
     }],
        detail:null,
+       listAgentSelect:null,
        roleUser:[],
        selection:[],
        formuser: {
@@ -33,7 +34,8 @@ const createMasterUserSlice = createSlice({
         firstName:"",    
         lastName:"",  
         area:"",  
-        authorities:[]    
+        authorities:[],
+        travelAgent:''
        }
     },
     
@@ -56,6 +58,9 @@ const createMasterUserSlice = createSlice({
         setFormUser: (state, action) => {
             state.formuser = action.payload
         },
+        setFormSelectAgent: (state, action) => {
+            state.listAgentSelect = action.payload
+        },
         
     },
     extraReducers: (builder) => {
@@ -68,7 +73,7 @@ const createMasterUserSlice = createSlice({
   },
 })
 
-export const {setMasterUser,setListUser,setRoleUser,setDetailUser,setFormUser} = createMasterUserSlice.actions
+export const {setFormSelectAgent,setMasterUser,setListUser,setRoleUser,setDetailUser,setFormUser} = createMasterUserSlice.actions
 
 export default createMasterUserSlice.reducer
 export const listRoleUsers = (state) => state.masterUser.roleUser
@@ -76,3 +81,4 @@ export const listDetailUsers = (state) => state.masterUser.detail
 export const listUsers = (state) => state.masterUser.list
 export const listUsersSelection = (state) => state.masterUser.selection
 export const formUser = (state) => state.masterUser.formuser
+export const selectAgentList = (state) => state.masterUser.listAgentSelect

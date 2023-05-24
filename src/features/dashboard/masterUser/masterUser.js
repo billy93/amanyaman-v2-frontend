@@ -511,6 +511,7 @@ const filterTypes = React.useMemo(
                   placeholder={"Search by name"}
                   bg="#ebebeb"
                   borderRadius={'5px'}
+                  variant={'custom'}
           />
                 <Input
                   value={filterEmail}
@@ -518,9 +519,11 @@ const filterTypes = React.useMemo(
                   placeholder={"Search by email"}
                   bg="#ebebeb"
                   borderRadius={'5px'}
+                  variant={'custom'}
           />
-                  <Select className="floating-select" placeholder='Select Role' defaultValue={''} bg="#ebebeb"
-                  borderRadius={'5px'}
+            <Select placeholder='Select Role' _placeholder={{
+                    color:"grey"
+                  }} defaultValue={''}
                   name="authorities" onChange={handleFilterByRole}>  
                                   {
                                     rolesData?.map((role, i) => {
