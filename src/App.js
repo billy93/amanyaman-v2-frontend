@@ -30,6 +30,7 @@ import CreateTravelAgent from './features/dashboard/travelAgent/createTravelAgen
 import DetailTravelAgent from './features/dashboard/travelAgent/detailTravelAgent'
 import EditUser from './features/dashboard/masterUser/editUser'
 import EditAgent from './features/dashboard/travelAgent/editAgent'
+import ProductPrice from './features/dashboard/productPrice/productPrice'
 import DetailMasterUser from './features/dashboard/masterUser/detailMasterUser'
 import ResetPassword from './features/auth/confirmResetPassword'
 
@@ -59,6 +60,7 @@ function App() {
         <Route path="/master-data" exact element={<LayoutDashboard allowedRoles={[ 'ROLE_ADMIN']}/>}>
           <Route path="master-products" element={<MasterProduct />} />
           <Route path="create-product" element={<CreateProduct />} />
+          <Route path="product-price" element={<ProductPrice allowedRoles={[ 'ROLE_ADMIN']}/>} />
           <Route path="travel-agent" element={<TravelAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="system-params" element={<SystemParams />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="create-system-params" element={<CreateSystemParams />} allowedRoles={[ 'ROLE_ADMIN']}/>

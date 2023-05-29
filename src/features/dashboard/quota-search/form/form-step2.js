@@ -98,9 +98,6 @@ const Form2 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                         <Button variant="base">
                             View Benefits
                         </Button>
-                        <Button variant="base">
-                            Download PDF
-                        </Button>
                     </ButtonGroup>
                 </Box>
                 </Box>

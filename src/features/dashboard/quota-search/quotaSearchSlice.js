@@ -9,6 +9,7 @@ const createSearchSlice = createSlice({
                 travellerType:"",
                 totalPass:1,
                 destinationCountry:[],
+                child:false,
                 startDate:null,
                 endDate: null,
                 
@@ -79,6 +80,9 @@ const createSearchSlice = createSlice({
         setFormStateCoverageType: (state, action) => {
             state.formState.manualInput.coverageType = action.payload
         },
+        setFormStateCoverageChild: (state, action) => {
+            state.formState.manualInput.child = action.payload
+        },
         setFormStateTravellerType: (state, action) => {
             state.formState.manualInput.travellerType = action.payload
         },
@@ -111,7 +115,7 @@ const createSearchSlice = createSlice({
     },
 })
 
-export const {setFormEndDate,setTravellersData,setPaymentMethod,setFormStateCoverageType,setFormStateTravellerType,setFormStateTotalPass,setFormStateDestinationCountry,setFormStateStartDate,setSelectTravelInsurancePlan } = createSearchSlice.actions
+export const {setFormStateCoverageChild,setFormEndDate,setTravellersData,setPaymentMethod,setFormStateCoverageType,setFormStateTravellerType,setFormStateTotalPass,setFormStateDestinationCountry,setFormStateStartDate,setSelectTravelInsurancePlan } = createSearchSlice.actions
 
 export default createSearchSlice.reducer
 export const selectManualInput = (state) => state.quotaSearch?.formState?.manualInput

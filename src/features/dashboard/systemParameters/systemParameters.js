@@ -363,8 +363,8 @@ const filterTypes = React.useMemo(
                 })
   } 
   React.useEffect(() => {
-    fetchData({ pageIndex, pageSize })
-  }, [fetchData, pageIndex, pageSize])
+    fetchData({ pageIndex, pageSize,pageOptions })
+  }, [fetchData, pageIndex, pageSize,pageOptions])
 
     const spring = React.useMemo(
     () => ({
@@ -486,7 +486,7 @@ const filterTypes = React.useMemo(
         </tbody>
         </table>
         </Box>
-      <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
+      {/* <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
         <Box>
           <Button onClick={() => previousPage()} disabled={!canPreviousPage} bg="white" border={'none'} _hover={{
             bg: "#f0eeee",
@@ -509,7 +509,7 @@ const filterTypes = React.useMemo(
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
-        </Box>
+        </Box> */}
         {/* <select
           value={pageSize}
           onChange={e => {
@@ -522,7 +522,7 @@ const filterTypes = React.useMemo(
             </option>
           ))}
         </select> */}
-      </Box>
+      {/* </Box> */}
       {/* <pre>
         <code>
           {JSON.stringify(
@@ -562,20 +562,23 @@ const Polcies = () => {
     const [data, setData] = React.useState([])
     const [loading, setLoading] = React.useState(false)
     const [pageCount, setPageCount] = React.useState(0)
+    const [count,setCount] = React.useState(0)
     const fetchIdRef = React.useRef(0)
+    const [page,setPage] = React.useState(0)
     const [paginations,setPagination] = React.useState({
       page: 0,
-      size:20
+      size:1000
     })
     const {
         data: systemParams,
         isLoading,
         isSuccess,
         isError,
-        error
-    } = useGetSystemParamsQuery({ page: paginations?.page, size: paginations?.size }, { refetchOnMountOrArgChange: true })
+        error,
+        refetch
+    } = useGetSystemParamsQuery({ page, size: 10 })
     
-    const fetchData = React.useCallback(({ pageSize, pageIndex }) => {
+    const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
     // This will get called when the table needs new data
     // You could fetch your data from literally anywhere,
     // even a server. But for this example, we'll just fake it.
@@ -585,7 +588,7 @@ const Polcies = () => {
 
     // Set the loading state
     setLoading(true)
-
+    
     // We'll even set a delay to simulate a server here
     setTimeout(() => {
       // Only update the data if this is the latest fetch
@@ -593,8 +596,7 @@ const Polcies = () => {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
         setData(systemParams?.slice(startRow, endRow))
-        console.log('pageSize',pageSize)
-        console.log('pageIndex',pageIndex)
+        setCount(pageOptions)
         // Your server could send back total page count.
         // For now we'll just fake it, too
         setPageCount(Math.ceil(systemParams?.length / pageSize))
@@ -651,8 +653,16 @@ const Polcies = () => {
 
     // const data = React.useMemo(() => tempList);
     console.log('ddd listParams', listParams)
+  React.useEffect(() => {
+    refetch({ page, size: 10 })
     
-    
+    },[page,refetch])
+  const nextPages = () => {
+    setPage(prevPage => prevPage+1)
+  }
+  const prevPages = () => {
+    setPage(prevPage => prevPage-1)
+  }
     let content;
     if (isLoading) {
         content = <Center h='50vh' color='#065BAA'>
@@ -670,7 +680,44 @@ const Polcies = () => {
                     pageCount={pageCount}
                 />
                 </Styles>
-                {/* <Link to="/welcome">Back to Welcome</Link> */}
+            {/* <Link to="/welcome">Back to Welcome</Link> */}
+            <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
+        <Box>
+          <Button onClick={prevPages} isDisabled={page ===0 ? true : false} bg="white" border={'none'} _hover={{
+            bg: "#f0eeee",
+            borderRadius: "5px",
+            WebkitBorderRadius: "5px",
+            MozBorderRadius:"5px"
+        }}>
+            <BiSkipPreviousCircle size="25px" color="black" />
+            <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
+        </Button>{' | '}
+          <Button onClick={nextPages} bg="white" border={'none'}>
+            <BiSkipNextCircle size="25px" color="black" />
+            <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
+            Next
+            </Text>
+          </Button>{' '}
+        </Box>
+        <Box>
+          Page{' '}
+          <strong>
+            {page + 1} of {count?.length}
+          </strong>{' '}
+        </Box>
+        {/* <select
+          value={pageSize}
+          onChange={e => {
+            setPageSize(Number(e.target.value))
+          }}
+        >
+          {[10, 20, 30, 40, 50].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select> */}
+      </Box>
             </Box>
         )
     } else if (isError) {

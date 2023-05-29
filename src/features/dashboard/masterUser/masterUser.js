@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
-import { useGetUserQuery,useGetRoleQuery } from "./userApiSlice"
+import { useGetUserQuery, useGetRoleQuery } from "./userApiSlice"
+import { useGetSystemParamsQuery} from '../systemParameters/systemParamsApiSlice'
 import { Link, useNavigate } from "react-router-dom";
 import Data from './list.json'
 import matchSorter from 'match-sorter'
@@ -196,6 +197,7 @@ const Tables = ({
   data,
   fetchData,
   loading,
+  setPageCount,
   pageCount: controlledPageCount,
 }) => {
  const dispatch = useDispatch()
@@ -297,6 +299,7 @@ const filterTypes = React.useMemo(
     nextPage,
     previousPage,
     setPageSize,
+    setPageIndex,
     setFilter,
     // Get the state from the instance
     state: { pageIndex, pageSize,selectedRowIds,filters },
@@ -384,8 +387,12 @@ const filterTypes = React.useMemo(
                 })
   } 
   React.useEffect(() => {
-    fetchData({ pageIndex, pageSize })
+    fetchData({ pageIndex, pageSize,pageOptions })
+    // setPageCount({pageIndex, pageSize})
   }, [fetchData, pageIndex, pageSize])
+
+  console.log('test', pageIndex)
+
   const spring = React.useMemo(
     () => ({
       type: 'spring',
@@ -410,7 +417,11 @@ const filterTypes = React.useMemo(
   setFilterRole(value);
 };
 
-  // console.log('filters', filters)
+  const handleNext = () => {
+    console.log('eee', pageIndex + 1)
+    setPageCount(pageIndex+1)
+}
+  console.log('filters', pageIndex)
   return (
       <>
           <Modal size="xl" blockScrollOnMount={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
@@ -521,7 +532,7 @@ const filterTypes = React.useMemo(
                   borderRadius={'5px'}
                   variant={'custom'}
           />
-            <Select placeholder='Select Role' _placeholder={{
+            <Select placeholder='Select Role' style={{fontSize:"14px"}} _placeholder={{
                     color:"grey"
                   }} defaultValue={''}
                   name="authorities" onChange={handleFilterByRole}>  
@@ -623,62 +634,6 @@ const filterTypes = React.useMemo(
           </tbody>
           </table>
       </Box>
-      <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
-        <Box>
-          <Button onClick={() => previousPage()} disabled={!canPreviousPage} bg="white" border={'none'} _hover={{
-            bg: "#f0eeee",
-            borderRadius: "5px",
-            WebkitBorderRadius: "5px",
-            MozBorderRadius:"5px"
-        }}>
-            <BiSkipPreviousCircle size="25px" color="black" />
-            <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
-        </Button>{' | '}
-          <Button _hover={{
-            bg: "#f0eeee",
-            borderRadius: "5px",
-            WebkitBorderRadius: "5px",
-            MozBorderRadius:"5px"
-        }} onClick={() => nextPage()} disabled={!canNextPage} bg="white" border={'none'}>
-            <BiSkipNextCircle size="25px" color="black" />
-            <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
-            Next
-            </Text>
-          </Button>{' '}
-        </Box>
-        <Box>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </Box>
-        {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
-      </Box>
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedRowIds: selectedRowIds,
-              "selectedFlatRows[].original": selectedFlatRows.map(
-                (d) => d.original
-              )
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
     </>
   );
 }
@@ -694,18 +649,23 @@ const MasterUser = () => {
       size:10
     })
     const [size,setSize] = React.useState(10)
+    const [page,setPage] = React.useState(0)
     const {
         data: listUserAccount,
         isLoading,
         isSuccess,
         isError,
-        error
-    } = useGetUserQuery({page:paginations?.page,size:paginations?.size}, { refetchOnMountOrArgChange: true })
+        error,
+        refetch
+    } = useGetUserQuery({page,size:10})
     const tableRef = React.useRef(null)
     const [data, setData] = React.useState([])
     const prevData = usePrevious(listUserAccount)
+    const [changePage,setChangePage] = React.useState(false) 
     const [loading, setLoading] = React.useState(false)
+    const [count, setCount] = React.useState(false)
     const [pageCount, setPageCount] = React.useState(0)
+    
    const PageInit = React.useCallback((pageSize,pageIndex) => {
     // console.log('page init', pageSize,pageIndex)
      setPagination({
@@ -713,11 +673,11 @@ const MasterUser = () => {
        size:pageSize
       })
    }, [paginations?.page, paginations?.size])
-  
+    const refpage = React.useRef(null)
     const navigate = useNavigate()
     const fetchIdRef = React.useRef(0)
     // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
-    const fetchData = React.useCallback(({ pageSize, pageIndex }) => {
+    const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
     // This will get called when the table needs new data
     // You could fetch your data from literally anywhere,
     // even a server. But for this example, we'll just fake it.
@@ -733,6 +693,7 @@ const MasterUser = () => {
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
+        setCount(pageOptions)
         setData(listUserAccount?.slice(startRow, endRow))
         PageInit(pageSize,pageIndex)
         // Your server could send back total page count.
@@ -744,6 +705,8 @@ const MasterUser = () => {
     }, 1000)
     }, [listUserAccount])
   
+  
+
     const newdata = React.useMemo(()=>{
       return tempList ? tempList : [{}]
     }, [tempList]);
@@ -754,6 +717,11 @@ const MasterUser = () => {
     }
     //  dispatch(setListUser([...listUserAccount]))
   }, [listUserAccount, prevData])
+  
+  React.useEffect(() => {
+   refetch({page,size:10})
+  }, [page])
+  
   
     const columns = React.useMemo(
     () => [
@@ -771,7 +739,7 @@ const MasterUser = () => {
             to={`/master-data/detail-user/${row.original.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.firstName} {row.original.lastName} 
+            {row.original.firstName} {row.original.lastName}
           </Link>
        
     ),
@@ -785,7 +753,7 @@ const MasterUser = () => {
       },
       {
         Header: "Travel Agent",
-        accessor: "travelAgentName",
+        accessor: "travelAgent.travelAgentName",
         maxWidth: 400,
         minWidth: 140,
         width: 200,
@@ -800,7 +768,17 @@ const MasterUser = () => {
     ],
     []
   );
+  
+  const handleNexts = () => {
+    setPage(prevPage => prevPage + 1)
+    // setChangePage(true)
+  }
 
+  const previousPage = () => {
+    setPage(prevPage => prevPage - 1)
+    // setChangePage(true)
+  }
+  
     // const data = React.useMemo(() => tempList);
     
 
@@ -818,15 +796,58 @@ const MasterUser = () => {
                   
                     <Tables
                     columns={columns}
-                    data={listUserAccount}
+                    data={data}
                     fetchData={fetchData}
-                    // loading={loading}
+                    loading={loading}
                     pageCount={pageCount}
+                    setPageCount={setPageCount}
                     />
                  
                 }
                 
                 </Styles>
+                  <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
+                    <Box>
+                      <Button isDisabled={page ===0 ? true : false} onClick={previousPage} bg="white" border={'none'} _hover={{
+                        bg: "#f0eeee",
+                        borderRadius: "5px",
+                        WebkitBorderRadius: "5px",
+                        MozBorderRadius:"5px"
+                    }}>
+                        <BiSkipPreviousCircle size="25px" color="black" />
+                        <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
+                    </Button>{' | '}
+                      <Button _hover={{
+                        bg: "#f0eeee",
+                        borderRadius: "5px",
+                        WebkitBorderRadius: "5px",
+                        MozBorderRadius:"5px"
+                    }} onClick={handleNexts}  bg="white" border={'none'}>
+                        <BiSkipNextCircle size="25px" color="black" />
+                        <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
+                        Next
+                        </Text>
+                      </Button>{' '}
+                    </Box>
+                    <Box>
+                      Page{' '}
+                      <strong>
+                        {page + 1} of {count.length}
+                      </strong>{' '}
+                    </Box>
+                    {/* <select
+                      value={pageSize}
+                      onChange={e => {
+                        setPageSize(Number(e.target.value))
+                      }}
+                    >
+                      {[10, 20, 30, 40, 50].map(pageSize => (
+                        <option key={pageSize} value={pageSize}>
+                          Show {pageSize}
+                        </option>
+                      ))}
+                    </select> */}
+                  </Box>
                 {/* <Link to="/welcome">Back to Welcome</Link> */}
             </Box>
           </Box>

@@ -51,7 +51,7 @@ const authSlice = createSlice({
                                 href: '#',
                             },
                             {
-                                link: '/master/price',
+                                link: '/master-data/product-price',
                                 name: 'Master Price',
                                 href: '#',
                             },

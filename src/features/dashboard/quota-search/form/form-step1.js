@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector,useDispatch} from 'react-redux'
-import {selectManualInput,setFormStateCoverageType,setFormStateTravellerType,setFormStateTotalPass,setFormStateDestinationCountry,setFormStateStartDate,setFormEndDate} from '../quotaSearchSlice'
+import {setFormStateCoverageChild,selectManualInput,setFormStateCoverageType,setFormStateTravellerType,setFormStateTotalPass,setFormStateDestinationCountry,setFormStateStartDate,setFormEndDate} from '../quotaSearchSlice'
 import { Flex,InputRightElement,InputGroup,Heading,Input,Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Box,Button, FormControl,FormLabel} from '@chakra-ui/react'
 import { Select } from 'chakra-react-select'
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
@@ -26,6 +26,9 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
     }
     const handleTravellerType = (type) => {
         dispatch(setFormStateTravellerType(type))
+    }
+    const handleTravellerChild = () => {
+        dispatch(setFormStateCoverageChild(!initState.child))
     }
     const handleTotalPass = (e) => {
         let number  = e.target.value
@@ -197,12 +200,25 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                                 </FormControl>
                             </Box>
                             </Box>
-                            <Box mt="1em" width={{base:"100%", md:"300px"}} position={'relative'}>
-                                <FormControl variant="floating" fontFamily={'Mulish'} >    
-                                    <Input type="number" w="100%" h="48px" value={initState?.totalPass } bg="#ebebeb" borderRadius="5px" onChange={ handleTotalPass} />
-                                    <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(16px, 2px) scale(0.75)", fontSize:"18px", background:"#ebebeb",color:"#171923",zIndex:"0" }} >Adult</FormLabel>
-                                </FormControl>
+                            <Box mt="1em" width={{base:"100%", md:"100%"}} position={'relative'} display={'flex'} gap="10px">
+                                <Box w={{md:"60%"}}>    
+                                    <FormControl variant="floating" fontFamily={'Mulish'} >    
+                                        <Input type="number" w="100%" h="48px" value={initState?.totalPass } bg="#ebebeb" borderRadius="5px" onChange={ handleTotalPass} />
+                                        <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(16px, 2px) scale(0.75)", fontSize:"18px", background:"#ebebeb",color:"#171923",zIndex:"0" }} >Adult</FormLabel>
+                                    </FormControl>
+                                </Box>
+                                <Box w={{md:"40%"}}>
+                                    <Button bg="#ebebeb" 
+                                    w="100%"
+                                    h="48px" aria-label='Search database' border={initState?.child ? '2px solid #065BAA' : ''} color={ initState?.child ? "#065BAA" : "#231F20"}
+                                        _hover={{
+                                        bg: "#ebebeb",
+                                    }}
+                                    onClick={handleTravellerChild}
+                                    >1 Child</Button>
+                                </Box>
                             </Box>
+                            
                             <Box mt="3em" w={{base:"100%", md:"520px"}} h={{sm:"48px"}}>
                                 <FormControl variant="floating" fontFamily={'Mulish'} isRequired h="48px" >  
                                 <Select
@@ -279,16 +295,7 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                        <></>
                         ) : (
                         <>
-                            <Button
-                            h="48px"
-                            w={{base:"100%", md:"270px"}}
-                            isDisabled={activeStep === 0}
-                            onClick={prevStep}
-                            size="md"
-                            variant="ghost"
-                            >
-                            Prev
-                            </Button>
+                            
                             <Button size="sm" onClick={nextStep} w={{base:"100%", md:"270px"}} h="48px"
                             isDisabled={initState?.coverageType ==='' || initState?.travellerType ==='' || initState?.destinationCountry?.length ===0 || initState?.startDate === null || initState?.endDate ===null ? true : false}
                                                 >
