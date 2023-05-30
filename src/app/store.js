@@ -13,6 +13,7 @@ import masterProducts from '../features/dashboard/masterProduct/masterProductSli
 import travelAgent from '../features/dashboard/travelAgent/travelAgentSlice'
 import systemParams from '../features/dashboard/systemParameters/systemParamsSlice'
 import productPrice from '../features/dashboard/productPrice/productPriceSlice'
+import dashboards from '../features/dashboard/dashboards/dashboardSlice'
 import storageSession from 'reduxjs-toolkit-persist/lib/storage/session'
 
 const rootPersistConfig = {
@@ -43,7 +44,8 @@ const rootReducer = combineReducers({
         masterProduct: masterProducts,
         agent:travelAgent,
         systemParams:systemParams,
-        productPrice:productPrice
+        productPrice:productPrice,
+        dashboards:dashboards,
 })
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer)

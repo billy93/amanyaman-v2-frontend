@@ -31,6 +31,7 @@ import DetailTravelAgent from './features/dashboard/travelAgent/detailTravelAgen
 import EditUser from './features/dashboard/masterUser/editUser'
 import EditAgent from './features/dashboard/travelAgent/editAgent'
 import ProductPrice from './features/dashboard/productPrice/productPrice'
+import Dashboards from './features/dashboard/dashboards/dashboard'
 import DetailMasterUser from './features/dashboard/masterUser/detailMasterUser'
 import ResetPassword from './features/auth/confirmResetPassword'
 
@@ -46,6 +47,9 @@ function App() {
       
         <Route path="/create-quota" exact element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']}/>}>
           <Route path="search" element={<QuotaSearch />} />
+        </Route>
+        <Route path="/dashboard" exact element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']}/>}>
+          <Route path='chart' element={<Dashboards />} />
         </Route>
         <Route path="/policies" exact element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}>
           <Route path="list" element={<PolicyList />} />

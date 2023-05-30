@@ -20,7 +20,7 @@ const authSlice = createSlice({
                     {
                         id: "1",
                         name: "Dashboard",
-                        link:"/dashboard",
+                        link:"/dashboard/chart",
                         icon:""
                     },
                     {
