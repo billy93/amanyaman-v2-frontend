@@ -5,6 +5,7 @@ import { useTable,useSortBy, usePagination, useGlobalFilter,useRowSelect,useFilt
 import { listProduct,setMasterProduct,setListSelectProduct,listProductSelection } from './productPriceSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import matchSorter from 'match-sorter'
+
 import {
 useToast,
 Modal,
@@ -416,7 +417,10 @@ const Tables = ({
     setFilter("travellerType", value);
     setFilterTravellerType(value);
   };
-
+  const redirectCreatePrice = (e) => {
+    e.preventDefault()
+    navigate('/master-data/create-product-price')
+ }
   // console.log('filters', filters)
   return (
     <>
@@ -432,7 +436,7 @@ const Tables = ({
           <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
             Import
           </Button>
-          <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" >
+          <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={redirectCreatePrice}>
             Add Product Price
           </Button>
         </Stack>

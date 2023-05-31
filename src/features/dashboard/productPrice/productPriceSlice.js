@@ -62,6 +62,52 @@ const createMasterProductPriceSlice = createSlice({
             },
         ],
         selection: [],
+        formData: {
+          travelAgentName:null,  
+          productName:null,  
+          premiumPrice:"",  
+          commissionlvl1:"",  
+          commissionlvl2:"",  
+          commissionlvl3:"",  
+          totalCommission:"",  
+          afterCommission:"",  
+          ppn:"",  
+          pph23:"",  
+        },
+        travelAgent: [
+            {
+                id: "1",
+                name:"Dwi Daya Tour",
+                label:"Dwi Daya Tour",
+            },
+            {
+                id: "2",
+                name:"Golden Rama",
+                label:"Golden Rama",
+            },
+            {
+                id: "3",
+                name:"Avia Tour",
+                label:"Avia Tour",
+            }
+        ],
+        products: [
+            {
+                id: "1",
+                name:"Product 1",
+                label:"Product 1",
+            },
+            {
+                id: "2",
+                name:"Product 2",
+                label:"Product 2",
+            },
+            {
+                id: "3",
+                name:"Product 3",
+                label:"Product 3",
+            }
+        ]
         
     },
     reducers: {
@@ -71,12 +117,18 @@ const createMasterProductPriceSlice = createSlice({
         setListSelectProduct: (state, action) => {
             state.selection = action.payload
         },
+        setFormData: (state, action) => {
+            state.formData = action.payload
+        },
         
     },
 })
 
-export const {setMasterProduct,setListSelectProduct} = createMasterProductPriceSlice.actions
+export const {setFormData,setMasterProduct,setListSelectProduct} = createMasterProductPriceSlice.actions
 
 export default createMasterProductPriceSlice.reducer
 export const listProduct = (state) => state.productPrice.list
+export const listAgent = (state) => state.productPrice.travelAgent
+export const listProducts = (state) => state.productPrice.products
+export const formData = (state) => state.productPrice.formData
 export const listProductSelection = (state) => state.productPrice.selection

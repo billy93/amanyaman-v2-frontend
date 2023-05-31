@@ -214,6 +214,15 @@ nav a{
   transform: translate(0, -16px) scale(0.75);
    color: #231F20;
 }
+#react-select-5-placeholder{
+  display: none!important;
+}
+#react-select-3-placeholder{
+  display: none!important;
+}
+#react-select-7-placeholder{
+  display: none!important;
+}
 #float-label .Active {
   transform: translate(-14px, -20px) scale(0.75);
   color: #231F20;
