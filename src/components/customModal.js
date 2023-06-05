@@ -10,7 +10,7 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
     const dispatch= useDispatch()
     const [download,setDowload] = React.useState(false)
     const [filesUpload,setFilesUpload] = React.useState(null)
-  const [uploadFile, { isLoading: loading, isSuccess: success }] = useUploadFileTravelAgentMutation({
+  const [uploadFileTravelAgent, { isLoading: loading, isSuccess: success }] = useUploadFileTravelAgentMutation({
       skip:true
     })
     
@@ -34,9 +34,10 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
   const handleImport = async (e) => {
     e.preventDefault()
      const formData = new FormData();
-    formData.append('file',filesUpload,filesUpload.name);
+     formData.append('file',filesUpload);
+    //  formData.append('file', new Blob([filesUpload], { type: 'text/csv' }));
     try {
-            const res = await uploadFile(formData).unwrap()
+            const res = await uploadFileTravelAgent(formData)
             console.log('ress', res)
     } catch (err) {
      console.log('err', err)

@@ -58,10 +58,9 @@ export const getAgentList = apiSlice.injectEndpoints({
                 return {
                 url: `/app/travel-agents/list/import`,
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                    body: file,
+                body:file,
+                formData: true,
+                
                 transform: response => {
                         console.log('repso',response);
                         return response;
