@@ -67,7 +67,8 @@ export const getUserList = apiSlice.injectEndpoints({
                 return {
                 url: `/app/users/list/import`,
                 method: 'POST',
-                body: formData,
+                body: formData
+                // headers: { 'Content-Type': 'multipart/form-data' },
                 }
         },
         }),
