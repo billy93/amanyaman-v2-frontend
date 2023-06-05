@@ -14,6 +14,7 @@ export const getUserList = apiSlice.injectEndpoints({
                     : ['MasterUser'],
                 }
             },
+           
             // async onQueryStarted(id, { dispatch, queryFulfilled }) {
             //     // `onStart` side-effect
             //     dispatch(Toast('Fetching post...'))
@@ -39,6 +40,36 @@ export const getUserList = apiSlice.injectEndpoints({
                 providesTags: [ 'RoleUser' ]
                 
             }),
+        }),
+        getTemplateFile: builder.query({
+           query() {
+                return {
+                url: `/app/users/list/template/download`,
+                method: "GET",
+                responseHandler: (response) => response.blob().then(blob => URL.createObjectURL(blob)),
+                cache: "no-cache",
+                };
+        //    query: () => {
+        //        return {
+        //             url: `/app/users/list/template/download`,
+        //             method:"GET",
+        //        }
+            }
+            
+        }),
+        
+        uploadFile: builder.mutation({
+            query: (file) => {
+                const formData = new FormData();
+                formData.append('file', file, file.name);
+                console.log('body file', file)
+                console.log('body', formData)
+                return {
+                url: `/app/users/list/import`,
+                method: 'POST',
+                body: formData,
+                }
+        },
         }),
         createUser: builder.mutation({
             query: (users) => ({
@@ -71,5 +102,7 @@ export const {
     useCreateUserMutation,
     useGetRoleQuery,
     useUpdateUserMutation,
-    useDeleteUserMutation
+    useDeleteUserMutation,
+    useGetTemplateFileQuery,
+    useUploadFileMutation
 } = getUserList

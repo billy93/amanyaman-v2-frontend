@@ -59,9 +59,25 @@ function handleSelectProduct(data) {
         const newData = {
             ...form,
             [e.target.name] : e.target.value
-      }
+        }
+        
      dispatch(setFormData(newData))
   }
+    const total = React.useMemo(() => {
+        let tot;
+              tot= parseInt(form?.commissionlvl1) + parseInt(form?.commissionlvl2) + parseInt(form?.commissionlvl3)
+        return tot
+    }, [form?.commissionlvl1, form?.commissionlvl2, form?.commissionlvl3])
+   
+    const ppnDeduction = React.useMemo(() => {
+        let tot;
+              tot= parseInt(form?.commissionlvl1) + parseInt(form?.commissionlvl2) + parseInt(form?.commissionlvl3)
+        return tot
+    }, [form?.commissionlvl1, form?.commissionlvl2, form?.commissionlvl3])
+    
+  const displayPercent = (percent, fallback, digits = 2) =>
+      (percent === null || percent === undefined) ? fallback : `${(percent * 100).toFixed(digits)}%`;
+    
     return (
       <>
       <Box p="12px" display="flex" justifyContent={'space-between'} alignItems="center" mt="5em">
@@ -119,7 +135,7 @@ function handleSelectProduct(data) {
                             }}
                           />
                         <span className="highlight"></span>
-                        <FormLabel  pt="1.5" style={{ transform: form !==null && form?.travelAgentName !==null ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: form !== null && form?.travelAgentName !==null ? "#065baa" : "#231F20", fontSize:"14px", fontWeight:"500" }} fontFamily={'Mulish'}>TravelAgent</FormLabel>
+                        <FormLabel  pt="1.5" style={{ transform: form !==null && form?.travelAgentName !==null ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: form !== null && form?.travelAgentName !==null ? "#065baa" : "#231F20", fontSize:"14px" }} fontFamily={'Mulish'}>TravelAgent</FormLabel>
                       
                        </Box>
                     </Box>
@@ -149,7 +165,7 @@ function handleSelectProduct(data) {
                             }}
                           />
                         <span className="highlight"></span>
-                        <FormLabel  pt="1.5" style={{ transform: form !==null && form?.productName !==null ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: form !== null && form?.productName !==null ? "#065baa" : "#231F20", fontSize:"14px", fontWeight:"500" }} fontFamily={'Mulish'}>Product</FormLabel>
+                        <FormLabel  pt="1.5" style={{ transform: form !==null && form?.productName !==null ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: form !== null && form?.productName !==null ? "#065baa" : "#231F20", fontSize:"14px"}} fontFamily={'Mulish'}>Product</FormLabel>
                       
                        </Box>
                     </Box>
@@ -161,7 +177,7 @@ function handleSelectProduct(data) {
                     <FormControl variant="floating" id="first-name" isRequired mt="14px">
                                     <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="premiumPrice" value={form?.premiumPrice} onChange={handleData} h="48px" variant={'custom'}/>
                                     {/* It is important that the Label comes after the Control due to css selectors */}
-                                    <FormLabel fontSize="12" pt="1.5" zIndex={'0'} style={{zIndex:"0"}}>Premium Price</FormLabel>
+                                    <FormLabel fontSize="12" pt="1.5" zIndex={'0'} style={{zIndex:0,color: form !== null && form?.premiumPrice !=="" ? "#065baa" : "#171923", fontWeight:'normal', paddingBottom:"4px"}}>Premium Price</FormLabel>
                                     {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                     </FormControl>
                 </Box>
@@ -169,9 +185,9 @@ function handleSelectProduct(data) {
                     <FormControl variant="floating" id="first-name" isRequired mt="14px">
                                    <Stack>
                         <InputGroup size='sm'>
-                                <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="commissionlvl1" value={form?.commissionlvl1} onChange={handleData} h="48px" variant={'custom'}/>
+                                <Input type="number" placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="commissionlvl1" value={form?.commissionlvl1} onChange={handleData} h="48px" variant={'custom'}/>
                                 <InputRightAddon children='%' h="48px" />
-                                 <FormLabel fontSize="12" pt="1.5" style={{ transform:form?.commissionlvl1 !=="" ? "translate(-3px, -8px) scale(0.75)" : "translate(16px, 2px) scale(0.75)", fontSize:"12px", background:"#ebebeb",color:"#171923",zIndex:"0" }}>Commission Level 1</FormLabel>
+                                 <FormLabel fontSize="12" pt="1.5" style={{ transform:form?.commissionlvl1 !=="" ? "translate(-3px, -8px) scale(0.75)" : "translate(0px, 2px) scale(0.75)", fontSize:"14px", background:"transparent",color: form !== null && form?.commissionlvl1 !=="" ? "#065baa" : "#171923",zIndex:"0",fontWeight:"normal"}}>Commission Level 1</FormLabel>
                             </InputGroup>
                             </Stack>
                     </FormControl>
@@ -180,9 +196,9 @@ function handleSelectProduct(data) {
                     <FormControl variant="floating" id="first-name" isRequired mt="14px">
                         <Stack>
                         <InputGroup size='sm'>
-                                <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="commissionlvl2" value={form?.commissionlvl2} onChange={handleData} h="48px" variant={'custom'}/>
+                                <Input type="number" placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="commissionlvl2" value={form?.commissionlvl2} onChange={handleData} h="48px" variant={'custom'}/>
                                 <InputRightAddon children='%' h="48px" />
-                                <FormLabel fontSize="12" pt="1.5" style={{ transform:form?.commissionlvl2 !=="" ? "translate(-3px, -8px) scale(0.75)" : "translate(16px, 2px) scale(0.75)", fontSize:"12px", background:"#ebebeb",color: form?.commissionlvl2 !== "" ? "#065baa" : "#171923",zIndex:"0" }}>Commission Level 2</FormLabel>
+                                <FormLabel fontSize="12" pt="1.5" style={{ transform:form?.commissionlvl2 !=="" ? "translate(-3px, -8px) scale(0.75)" : "translate(0px, 2px) scale(0.75)", fontSize:"14px", background:"transparent",color: form?.commissionlvl2 !== "" ? "#065baa" : "#171923",zIndex:"0",fontWeight:'normal' }}>Commission Level 2</FormLabel>
                                  {/* <FormLabel fontSize="12" pt="1.5">Commission Level 2</FormLabel> */}
                             </InputGroup>
                             </Stack>
@@ -196,9 +212,9 @@ function handleSelectProduct(data) {
                             <FormControl variant="floating" id="first-name" isRequired mt="14px">
                                 <Stack>
                                     <InputGroup size='sm'>
-                                             <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="commissionlvl3" value={form?.commissionlvl3} onChange={handleData} h="48px" variant={'custom'}/>
+                                             <Input type="number" placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="commissionlvl3" value={form?.commissionlvl3} onChange={handleData} h="48px" variant={'custom'}/>
                                             <InputRightAddon children='%' h="48px" />
-                                            <FormLabel fontSize="12" pt="1.5" style={{ transform:form?.commissionlvl3 !=="" ? "translate(-3px, -8px) scale(0.75)" : "translate(16px, 2px) scale(0.75)", fontSize:"12px", background:"#ebebeb",color: form?.commissionlvl3 !=='' ? "#065baa" : "#171923",zIndex:"0" }}>Commission Level 3</FormLabel>
+                                            <FormLabel fontSize="12" pt="1.5" style={{ transform:form?.commissionlvl3 !=="" ? "translate(-3px, -8px) scale(0.75)" : "translate(0px, 2px) scale(0.75)", fontSize:"14px", background:"transparent",color: form?.commissionlvl3 !=='' ? "#065baa" : "#171923",zIndex:"0", fontWeight:"normal" }}>Commission Level 3</FormLabel>
                                             {/* <FormLabel fontSize="12" pt="1.5">Commission Level 3</FormLabel> */}
                                         </InputGroup>
                                         </Stack>
@@ -210,11 +226,16 @@ function handleSelectProduct(data) {
                 </Box>
                 </Box>
                 <Box width={{base:"100%",md:"1217px"}} display={'flex'} justifyContent={'center'} gap="20px" alignItems={'center'}>
-                    <Box border="1px solid #ebebeb" p="10px" w="320px">Total Commision</Box>
-                    <Box border="1px solid #ebebeb" p="10px" w="320px">RP. 50.000</Box>
+                    <Box border="1px solid #ebebeb" p="10px" w="320px" style={{fontSize:"14px",fontFamily:'Mulish'}}>Total Commision</Box>
+                    <Box border="1px solid #ebebeb" p="10px" w="320px" style={{fontSize:"14px",fontFamily:'Mulish'}}>
+                        {'Rp '}
+                        {
+                                 (Math.ceil(total*form?.premiumPrice)/100).toFixed(0)
+                        }
+                    </Box>
                     <Box style={{border:"none"}} p="10px" w="320px">
-                        <Box display='flex' alignItems={'center'} justifyContent={'space-around'} gap="5px">    
-                            <RiErrorWarningLine size={'20px'} color="blue" />
+                        <Box display='flex' alignItems={'center'} gap="5px">    
+                            <RiErrorWarningLine size={'25px'} color="blue" />
                             <Box display={'flex'} flexDirection={'column'}>
                                 <Text as="b" fontSize={'sm'} style={{fontSize:"12px",fontFamily:'Mulish'}}> Total commission:</Text>
                                 <Text as="p" fontSize={'sm'} style={{fontSize:"12px",fontFamily:'Mulish'}}>   
@@ -226,11 +247,11 @@ function handleSelectProduct(data) {
                     </Box>
                 </Box>
                 <Box width={{base:"100%",md:"1217px"}} display={'flex'} justifyContent={'center'} gap="20px" alignItems={'center'}>
-                    <Box border="1px solid #ebebeb" p="10px" w="320px">After Commission Price</Box>
-                    <Box border="1px solid #ebebeb" p="10px" w="320px">RP. 50.000</Box>
+                    <Box border="1px solid #ebebeb" p="10px" w="320px" style={{fontSize:"14px",fontFamily:'Mulish'}}>After Commission Price</Box>
+                    <Box border="1px solid #ebebeb" p="10px" w="320px" style={{fontSize:"14px",fontFamily:'Mulish'}}>{'Rp '}{parseInt(form?.premiumPrice) - (Math.ceil(total*form?.premiumPrice)/100).toFixed(0)}</Box>
                     <Box style={{border:"none"}} p="10px" w="320px">
-                        <Box display='flex' alignItems={'center'} justifyContent={'space-around'} gap="5px">    
-                            <RiErrorWarningLine size={'20px'} color="blue" />
+                        <Box display='flex' alignItems={'center'} gap="5px">    
+                            <RiErrorWarningLine size={'25px'} color="blue" />
                             <Box display={'flex'} flexDirection={'column'} >
                                 <Text as="b" fontSize={'sm'} style={{fontSize:"12px",fontFamily:'Mulish'}}>After commission price:</Text>
                                 <Text as="p" fontSize={'sm'} style={{fontSize:"12px",fontFamily:'Mulish'}}>   
@@ -247,7 +268,7 @@ function handleSelectProduct(data) {
                                 <InputGroup>
                                     <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="ppn" value={form?.ppn} onChange={handleData} h="48px" variant={'custom'}/>
                                     {/* It is important that the Label comes after the Control due to css selectors */}
-                                    <FormLabel fontSize="12" pt="1.5" style={{ transform:form?.ppn !=="" ? "translate(-3px, -8px) scale(0.75)" : "translate(16px, 2px) scale(0.75)", fontSize:"12px", background:"#ebebeb",color: form?.ppn !=='' ? "#065baa" : "#171923",zIndex:"0" }}>PPN</FormLabel>
+                                    <FormLabel fontSize="12" pt="1.5" style={{ transform:form?.ppn !=="" ? "translate(-3px, -8px) scale(0.75)" : "translate(0px, 2px) scale(0.75)", fontSize:"14px", background:"transparent",color: form?.ppn !=='' ? "#065baa" : "#171923",zIndex:"0", fontWeight:"normal" }}>PPN</FormLabel>
                                 <InputRightAddon children='%' h="48px" />    
                                 </InputGroup>
                                 {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -260,7 +281,7 @@ function handleSelectProduct(data) {
                                 <InputGroup>
                                      <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="ppn" value={form?.pph23} onChange={handleData} h="48px" variant={'custom'}/>
                                     {/* It is important that the Label comes after the Control due to css selectors */}
-                                     <FormLabel fontSize="12" pt="1.5" style={{ transform:form?.pph23 !=="" ? "translate(-3px, -8px) scale(0.75)" : "translate(16px, 2px) scale(0.75)", fontSize:"12px", background:"#ebebeb",color: form?.pph23 !=='' ? "#065baa" : "#171923",zIndex:"0" }}>PPH23</FormLabel>
+                                     <FormLabel fontSize="12" pt="1.5" style={{ transform:form?.pph23 !=="" ? "translate(-3px, -8px) scale(0.75)" : "translate(0px, 2px) scale(0.75)", fontSize:"14px", background:"transparent",color: form?.pph23 !=='' ? "#065baa" : "#171923",zIndex:"0", fontWeight:"normal" }}>PPH23</FormLabel>
                                 <InputRightAddon children='%' h="48px" />
                                 </InputGroup>
                                    
@@ -269,10 +290,10 @@ function handleSelectProduct(data) {
                 </Box>
                 </Box>
                 <Box width={{base:"100%",md:"1139px"}} display={'flex'} justifyContent={'center'} gap="20px" alignItems={'center'} mt="15px">
-                    <Box border="1px solid #ebebeb" p="10px" w="320px">PPH 23 Value</Box>
-                    <Box border="1px solid #ebebeb" p="10px" w="320px">RP. 5000</Box>
+                    <Box border="1px solid #ebebeb" p="10px" w="320px" style={{fontSize:"14px",fontFamily:'Mulish'}}>PPH 23 Value</Box>
+                    <Box border="1px solid #ebebeb" p="10px" w="320px" style={{fontSize:"14px",fontFamily:'Mulish'}}>RP. 5000</Box>
                     <Box style={{border:"none"}} p="10px" w="240px">
-                        <Box display='flex' alignItems={'center'} justifyContent={'space-around'} gap="5px">    
+                        <Box display='flex' alignItems={'center'} gap="5px">    
                             {/* <RiErrorWarningLine size={'20px'} color="blue" /> */}
                             <Box display={'flex'} flexDirection={'column'} >
                                 {/* <Text as="b" fontSize={'sm'} style={{fontSize:"12px",fontFamily:'Mulish'}}>After commission price:</Text> */}
@@ -284,12 +305,12 @@ function handleSelectProduct(data) {
                         
                     </Box>
                 </Box>
-                <Box width={{base:"100%",md:"1139px"}} display={'flex'} justifyContent={'center'} gap="20px" alignItems={'center'}>
-                    <Box border="1px solid #ebebeb" p="10px" w="320px">AJI Price</Box>
-                    <Box border="1px solid #ebebeb" p="10px" w="320px">RP. 35000</Box>
-                    <Box style={{border:"none"}} p="10px" w="240px">
-                        <Box display='flex' alignItems={'center'} justifyContent={'space-around'} gap="5px">    
-                            <RiErrorWarningLine size={'20px'} color="blue" />
+                <Box width={{base:"100%",md:"1222px"}} display={'flex'} justifyContent={'center'} gap="20px" alignItems={'center'}>
+                    <Box border="1px solid #ebebeb" p="10px" w="320px" style={{fontSize:"14px",fontFamily:'Mulish'}}>AJI Price</Box>
+                    <Box border="1px solid #ebebeb" p="10px" w="320px" style={{fontSize:"14px",fontFamily:'Mulish'}}>RP. 35000</Box>
+                    <Box style={{border:"none"}} p="10px" w="320px">
+                        <Box display='flex' alignItems={'center'} gap="5px">    
+                            <RiErrorWarningLine size={'25px'} color="blue" />
                             <Box display={'flex'} flexDirection={'column'} >
                                 <Text as="b" fontSize={'sm'} style={{fontSize:"12px",fontFamily:'Mulish'}}>AJI Price:</Text>
                                 <Text as="p" fontSize={'sm'} style={{fontSize:"12px",fontFamily:'Mulish'}}>   

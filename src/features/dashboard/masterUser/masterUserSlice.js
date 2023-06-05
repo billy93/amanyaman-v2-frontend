@@ -25,11 +25,12 @@ const createMasterUserSlice = createSlice({
          email: "fajare@gmail.com",
          role:"admin"
     }],
-       detail:null,
-       listAgentSelect:null,
-       roleUser:[],
-       selection:[],
-       formuser: {
+        detail:null,
+        uploadFile:null,
+        listAgentSelect:null,
+        roleUser:[],
+        selection:[],
+        formuser: {
         login:"",    
         firstName:"",    
         lastName:"",  
@@ -61,6 +62,9 @@ const createMasterUserSlice = createSlice({
         setFormSelectAgent: (state, action) => {
             state.listAgentSelect = action.payload
         },
+        setUploadFile: (state, action) => {
+            state.uploadFile = action.payload
+        },
         
     },
     extraReducers: (builder) => {
@@ -73,7 +77,7 @@ const createMasterUserSlice = createSlice({
   },
 })
 
-export const {setFormSelectAgent,setMasterUser,setListUser,setRoleUser,setDetailUser,setFormUser} = createMasterUserSlice.actions
+export const {setUploadFile,setFormSelectAgent,setMasterUser,setListUser,setRoleUser,setDetailUser,setFormUser} = createMasterUserSlice.actions
 
 export default createMasterUserSlice.reducer
 export const listRoleUsers = (state) => state.masterUser.roleUser
@@ -82,3 +86,4 @@ export const listUsers = (state) => state.masterUser.list
 export const listUsersSelection = (state) => state.masterUser.selection
 export const formUser = (state) => state.masterUser.formuser
 export const selectAgentList = (state) => state.masterUser.listAgentSelect
+export const uploadFiles = (state) => state.masterUser.uploadFile

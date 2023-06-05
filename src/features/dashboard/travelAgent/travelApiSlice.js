@@ -53,6 +53,22 @@ export const getAgentList = apiSlice.injectEndpoints({
                         }
             }
         }),
+        uploadFileTravelAgent: builder.mutation({
+            query: (file) => {
+                return {
+                url: `/app/travel-agents/list/import`,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                    body: file,
+                transform: response => {
+                        console.log('repso',response);
+                        return response;
+                    },
+                }
+        },
+        }),
         deleteAgent: builder.mutation({
             query: (id) => {
                 return {
@@ -76,5 +92,6 @@ export const {
     useCreateAgentMutation,
     useUpdateAgentMutation,
     useGetCitiesQuery,
-    useDeleteAgentMutation
+    useDeleteAgentMutation,
+    useUploadFileTravelAgentMutation
 } = getAgentList

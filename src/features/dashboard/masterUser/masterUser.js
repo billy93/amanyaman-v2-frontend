@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
-import { useGetUserQuery, useGetRoleQuery } from "./userApiSlice"
+import { useGetUserQuery, useGetRoleQuery,useUploadFileMutation } from "./userApiSlice"
 import { useGetSystemParamsQuery} from '../systemParameters/systemParamsApiSlice'
 import { Link, useNavigate } from "react-router-dom";
 import Data from './list.json'
@@ -49,6 +49,7 @@ import {AiOutlinePlusCircle} from 'react-icons/ai'
 import {BiSkipPreviousCircle,BiSkipNextCircle} from 'react-icons/bi'
 import styled from "styled-components";
 import { useTable, useRowSelect,useFilters,useSortBy } from "react-table";
+import CustomModal from './customModal';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -477,7 +478,8 @@ const filterTypes = React.useMemo(
                         </Button>
                 </ModalFooter>
                 </ModalContent>
-            </Modal>
+      </Modal>
+      
       <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                 <Heading as={'h6'} size={'sm'}>User</Heading>
                 <Stack direction='row' spacing={4} m={'2.5'}>
@@ -487,9 +489,14 @@ const filterTypes = React.useMemo(
                     <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
                         Export 
                     </Button>
-                    <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+                    <CustomModal
+                      showModalButtonText="Import"
+                      modalHeader="Import Excel File"
+                      modalBody="Import Excel File"
+                    />
+                    {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
                         Import 
-                    </Button>
+                    </Button> */}
                     <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAddUser}>
                         Add User 
                     </Button>
