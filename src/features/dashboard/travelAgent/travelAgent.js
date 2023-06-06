@@ -454,9 +454,9 @@ const filterTypes = React.useMemo(
                     <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
                         Apply Filter
                     </Button>
-                    <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+                    {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
                         Export 
-                    </Button>
+                    </Button> */}
                     <CustomModal
                       showModalButtonText="Import"
                       modalHeader="Import Excel File"

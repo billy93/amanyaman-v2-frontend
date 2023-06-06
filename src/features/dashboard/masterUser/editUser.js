@@ -327,7 +327,7 @@ const handleidentityCard = (e, i) => {
                 </FormControl>
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto">
-             <FormControl variant="floating" isRequired fontFamily={'Mulish'} mt="14px" > 
+             <FormControl variant="floating" fontFamily={'Mulish'} mt="14px" > 
                     <Box className='floating-form'>
                       <Box className='floating-label'>
                         <Select
@@ -358,7 +358,7 @@ const handleidentityCard = (e, i) => {
          </Box>
        </Box>
       <Box display={'flex'} justifyContent={'flex-end'} alignItems={'center'} p="9px" borderRadius={'5px'} border="1px" borderColor={'#ebebeb'}>
-          <Button isDisabled={formuser?.authorities?.length ===0 || formuser?.login ==='' || formuser?.firstName ==='' || formuser?.email ===''
+          <Button isDisabled={formuser?.login ==='' || formuser?.firstName ==='' || formuser?.email ===''
           || formuser?.lastName ===''
             ? true : false} variant={'ClaimBtn'} style={{ textTransform: 'uppercase', fontSize: '14px' }} fontFamily="arial" fontWeight={'700'} onClick={handleNext}>Add</Button>
       </Box>

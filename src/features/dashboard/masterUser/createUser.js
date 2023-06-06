@@ -239,7 +239,7 @@ const handleidentityCard = (e, i) => {
                 </FormControl>
          </Box>
          <Box width={{base:"100%",md:"540px"}} m="auto">
-             <FormControl variant="floating" isRequired fontFamily={'Mulish'} mt="14px" id="float-label"> 
+             <FormControl variant="floating" fontFamily={'Mulish'} mt="14px" id="float-label"> 
                     <Box className='floating-form'>
                       <Box className='floating-label'>
                         <Select bg={formuser !==null && formuser?.travelAgent !=='' ? '#e8f0fe' : '#ebebeb'} placeholder=''  name="travelAgent" h="48px" onChange={handleData}>  

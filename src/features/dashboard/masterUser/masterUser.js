@@ -216,17 +216,7 @@ const Tables = ({
  const [exportUserdata, {isLoading:loadExport}] = useExportUserdataMutation()
  const { data: rolesData, isLoading, isError, isSuccess } = useGetRoleQuery()
  const listRoles = useSelector(listRoleUsers)
- const handleAddUser = (e) => {
-    e.preventDefault()
-    const datas = {
-          id:'',
-          login:'',
-          firstName:'',
-          lastName:'',
-          email:'',
-          authorities:[]
-    }
-    dispatch(setFormUser(datas))
+ const handleAddUser = () => {
     navigate('/master-data/create-user')
  }
 const defaultColumn = React.useMemo(

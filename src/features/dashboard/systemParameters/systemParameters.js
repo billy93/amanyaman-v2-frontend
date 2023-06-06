@@ -624,8 +624,7 @@ const Polcies = () => {
   }
 
   }, [data])
-  console.log('responses', systemParams)
-  console.log('responses', response)
+  
 
     const columns = React.useMemo(
     () => [
@@ -658,8 +657,16 @@ const Polcies = () => {
         filter: 'fuzzyText',
       },
       {
-        Header: "Create Date",
+        Header: "Value",
         accessor: "value",
+        maxWidth: 200,
+        minWidth: 200,
+        width: 200,
+        filter: 'fuzzyText',
+      },
+      {
+        Header: "Create Date",
+        accessor: "createdDate",
         maxWidth: 200,
         minWidth: 200,
         width: 200,
