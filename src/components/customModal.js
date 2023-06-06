@@ -2,24 +2,45 @@ import React from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import {Box,Input,useDisclosure,Button,Modal,ModalOverlay,ModalBody,ModalFooter,ModalContent, ModalHeader,ModalCloseButton } from '@chakra-ui/react'
 import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md'
-import { useUploadFileTravelAgentMutation } from '../features/dashboard/travelAgent/travelApiSlice'
+import { useUploadFileTravelAgentMutation,useGetTravelAgentQuery } from '../features/dashboard/travelAgent/travelApiSlice'
 // import { setUploadFile, uploadFiles } from './masterUserSlice'
+import { setListAgent } from '../features/dashboard/travelAgent/travelAgentSlice'
 
 import DownloadBtn from '../features/dashboard/travelAgent/downloadBtn'
+
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef();
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
+}
 
 const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const dispatch= useDispatch()
     const [download,setDowload] = React.useState(false)
+    const [page,setPage] = React.useState(0)
     const [filesUpload,setFilesUpload] = React.useState(null)
   const [uploadFileTravelAgent, { isLoading: loading, isSuccess: success }] = useUploadFileTravelAgentMutation({
       skip:true
     })
-    
+    const {
+        data: listUserAccount,
+        isLoading,
+        isSuccess,
+        isError,
+        error,
+        refetch
+    } = useGetTravelAgentQuery({page,size:10}, { refetchOnMountOrArgChange: true })
     // const {isLoading,isSuccess,isError} = useGetTemplateFileQuery({
     // skip:true
     // })
-  
+    const prevData = usePrevious(listUserAccount)
     const handleDownload = (e) => {
         e.preventDefault()
         setDowload(true)
@@ -46,6 +67,20 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
         }
   }
 
+ React.useEffect(() => {
+    if (success) {
+      refetch({ page, size: 10 })
+      onClose()
+   }
+ }, [success, page])
+  
+  React.useEffect(() => {
+    if (listUserAccount !== null && JSON.stringify(prevData) !== JSON.stringify(listUserAccount)) {
+       dispatch(setListAgent([...listUserAccount]))
+    }
+    //  dispatch(setListUser([...listUserAccount]))
+  }, [listUserAccount, prevData])
+  
   return (
     <>
       <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20" onClick={onOpen}>

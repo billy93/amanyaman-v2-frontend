@@ -2,20 +2,45 @@ import React from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import {Box,Input,useDisclosure,Button,Modal,ModalOverlay,ModalBody,ModalFooter,ModalContent, ModalHeader,ModalCloseButton } from '@chakra-ui/react'
 import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md'
-import { useGetTemplateFileQuery, useUploadFileMutation } from './userApiSlice'
-import { setUploadFile, uploadFiles } from './masterUserSlice'
+import { useGetTemplateFileQuery, useUploadFileMutation,useGetUserQuery } from './userApiSlice'
+import { setUploadFile, uploadFiles,setUploadMessage,uploadFilesMessage,setListUser } from './masterUserSlice'
 import DownloadBtn from './download'
+
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef();
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
+}
 
 const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const dispatch= useDispatch()
     const filecsv = useSelector(uploadFiles)
     const [download,setDowload] = React.useState(false)
+    const [page,setPage] = React.useState(0)
     const [filesUpload,setFilesUpload] = React.useState(null)
+    const uploadFilesMessages = useSelector(uploadFilesMessage)
+    const [trigger,settrigger] = React.useState(false)
     const [uploadFile, { isLoading: loading, isSuccess: success }] = useUploadFileMutation({
         skip:true
       })
-    
+    const {
+        data: listUserAccount,
+        isLoading,
+        isSuccess,
+        isError,
+        error,
+        refetch
+    } = useGetUserQuery({ page, size: 10 },{refetchOnMountOrArgChange:true})
+  const prev = usePrevious(isSuccess)
+  const prevData = usePrevious(listUserAccount)
+  
     const handleDownload = (e) => {
         e.preventDefault()
     }
@@ -30,12 +55,26 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
   const handleImport = async (e) => {
     e.preventDefault()
     try {
-            const res = await uploadFile(filesUpload).unwrap()
-            console.log('ress', res)
+      await uploadFile(filesUpload).unwrap()
     } catch (err) {
-     console.log('err', err)
+      console.log('err', err)
+      settrigger(false)
         }
   }
+  
+  React.useEffect(() => {
+    if (success) {
+      refetch({ page, size: 10 })
+      onClose()
+   }
+  }, [success,page])
+  
+  React.useEffect(() => {
+    if (listUserAccount !== null && JSON.stringify(prevData) !== JSON.stringify(listUserAccount)) {
+       dispatch(setListUser([...listUserAccount]))
+    }
+    //  dispatch(setListUser([...listUserAccount]))
+  }, [listUserAccount, prevData,dispatch])
 
   return (
     <>
@@ -55,6 +94,9 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
             <Button variant="ghost" mr={3} onClick={onClose}>
               Cancel
             </Button>
+            {/* <Button variant="ghost" mr={3} onClick={() => refetch()}>
+              refetch
+            </Button> */}
             <DownloadBtn />
             <Button onClick={handleImport} isLoading={loading}>
               Import

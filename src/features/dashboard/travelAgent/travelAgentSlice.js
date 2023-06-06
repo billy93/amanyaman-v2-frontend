@@ -60,7 +60,7 @@ const createMasterAgentSlice = createSlice({
         cgroup:"",   
         legalName:"",   
         proformaInvoiceRecipients:"",   
-        allowCreditPayment:'allowCreditPayment',   
+        allowCreditPayment:'',   
         city:""
        }
     },

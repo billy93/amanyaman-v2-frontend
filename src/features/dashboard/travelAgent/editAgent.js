@@ -63,9 +63,6 @@ function CustomRadio(props) {
           ...detail,
           allowCreditPayment: props.value
     }
-    console.log('props',props)
-    console.log('props checkbox',checkbox)
-    console.log('props is check',props.isChecked)
     dispatch(setEditAgent(formstate));
   }, [input.onChange, props.isChecked]);
   

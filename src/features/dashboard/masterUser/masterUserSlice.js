@@ -3,7 +3,8 @@ import {apiSlice} from '../../../app/api/apiSlice'
 const createMasterUserSlice = createSlice({
     name: 'masterUser',
     initialState: { 
-        messages:null,
+        messages: null,
+        uploadMessage:'',
         list:[{
          id: "1",
          username: "bayu",
@@ -65,6 +66,9 @@ const createMasterUserSlice = createSlice({
         setUploadFile: (state, action) => {
             state.uploadFile = action.payload
         },
+        setUploadMessage: (state, action) => {
+            state.uploadMessage = action.payload
+        },
         
     },
     extraReducers: (builder) => {
@@ -77,7 +81,7 @@ const createMasterUserSlice = createSlice({
   },
 })
 
-export const {setUploadFile,setFormSelectAgent,setMasterUser,setListUser,setRoleUser,setDetailUser,setFormUser} = createMasterUserSlice.actions
+export const {setUploadMessage,setUploadFile,setFormSelectAgent,setMasterUser,setListUser,setRoleUser,setDetailUser,setFormUser} = createMasterUserSlice.actions
 
 export default createMasterUserSlice.reducer
 export const listRoleUsers = (state) => state.masterUser.roleUser
@@ -87,3 +91,4 @@ export const listUsersSelection = (state) => state.masterUser.selection
 export const formUser = (state) => state.masterUser.formuser
 export const selectAgentList = (state) => state.masterUser.listAgentSelect
 export const uploadFiles = (state) => state.masterUser.uploadFile
+export const uploadFilesMessage = (state) => state.masterUser.uploadMessage

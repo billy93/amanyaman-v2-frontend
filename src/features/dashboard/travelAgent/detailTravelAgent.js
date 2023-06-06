@@ -5,6 +5,7 @@ import Table from "react-table";
 import { useTable, useRowSelect,useFilters,useSortBy,usePagination  } from "react-table";
 import styled from "styled-components";
 import matchSorter from 'match-sorter'
+import DeleteBtn from './deleteAgent' 
 import {
   Box,
   Heading,
@@ -734,7 +735,12 @@ const columns = React.useMemo(
                   </Box>
                   <Box display={'flex'} alignItems={'center'} gap="5px">
                   <IconButton _hover={{color:"white"}} icon={ <BsFillPencilFill color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleEditUser}/>
-                  <IconButton _hover={{color:"white"}} icon={ <CiTrash color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleDeletAgent}/>
+                  {/* <IconButton _hover={{color:"white"}} icon={ <CiTrash color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleDeletAgent}/> */}
+                   <DeleteBtn
+                  showModalButtonText="Delete"
+                  modalHeader="Delete Agent"
+                  modalBody="Confirm delete Agent ?"
+                  />
                   </Box>
                  </Box>
                 </Box>

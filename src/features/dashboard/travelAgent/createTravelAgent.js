@@ -22,11 +22,14 @@ BreadcrumbItem,
 BreadcrumbLink,
 RadioGroup,
 Radio,
+useRadio,
+useRadioGroup,
+HStack
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux"
 import { useDispatch } from 'react-redux'
 import {useCreateAgentMutation,useGetRoleQuery,useUpdateAgentMutation,useGetCitiesQuery} from './travelApiSlice'
-import {setListAgent,listAgent,formAgent,setFormAgent,listDetailAgent,setListCity,getlistcity} from './travelAgentSlice'
+import {setListAgent,setEditAgent,listAgent,formAgent,setFormAgent,listDetailAgent,setListCity,getlistcity} from './travelAgentSlice'
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
@@ -42,6 +45,55 @@ function usePrevious(value) {
   }, [value]); // Only re-run if value changes
   // Return previous value (happens before update in useEffect above)
   return ref.current;
+}
+function CustomRadio(props) {
+  const dispatch = useDispatch()
+  const { getInputProps, getCheckboxProps } = useRadio(props);
+  const input = getInputProps();
+  const formuser = useSelector(formAgent)
+  const checkbox = getCheckboxProps();
+  const [a, setA] = React.useState(false);
+  const handleSelect = React.useCallback(() => {
+    if (props.isChecked && input.onChange) {
+     /* eslint-disable */ 
+      (input.onChange)("");
+    }
+     const formstate = {
+          ...formuser,
+          allowCreditPayment: props.value
+    }
+    dispatch(setFormAgent(formstate));
+  }, [input.onChange, props.isChecked]);
+  
+  return (
+    <Box as="label">
+      {/* <Radio defaultChecked={props.isChecked} /> */}
+      <input
+        {...input}
+        type={input.type}
+        onClick={handleSelect}
+        onKeyUp={(e) => {
+          if (e.key !== " ") return;
+          if (props.isChecked) {
+            e.preventDefault();
+            handleSelect();
+          }
+        }}
+      />
+      <Box {...checkbox} _checked={{ color: "#231F20",fontsize:"14px", fontFamily:'Mulish' }} display={'flex'} alignItems={'center'}>
+        <Box
+          border="1px solid #ebebeb"
+          pl="5px"
+          bg="white"
+          w={"15px"}
+          h={"15px"}
+          borderRadius="full"
+          style={{ background: props.isChecked === true ? "#065BAA" : "white" }}
+        ></Box>
+        {props.children}
+      </Box>
+    </Box>
+  );
 }
 
 const CreateUser = () => {
@@ -59,6 +111,15 @@ const CreateUser = () => {
   const [createAgent,{isLoading:loadingCreate}] = useCreateAgentMutation({
    skip:trigger === false 
   })
+  const list = ['allowCreditPayment'];
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    name: "test",
+    defaultValue:'',
+    onChange: console.log
+  });
+
+  const group = getRootProps();
+
   React.useMemo(() => {
     if (cities) {
       let city = cities.map((obj) => ({ ...obj, 'label': obj.name }))
@@ -66,11 +127,12 @@ const CreateUser = () => {
     }
   }, [cities])
 
-  console.log('cities',cities)
+ 
   const [updateAgent] = useUpdateAgentMutation()
     const toast = useToast()
     
   const onSelectAllowCredit = (e) => {
+    console.log('e', e.target.value)
       const formstate = {
           ...formuser,
           allowCreditPayment:e.target.value
@@ -105,7 +167,7 @@ const handleidentityCard = (e, i) => {
             cgroup:formuser?.cgroup,   
             legalName:formuser?.legalName,   
             proformaInvoiceRecipients:formuser?.proformaInvoiceRecipients,   
-            allowCreditPayment:formuser?.allowCreditPayment,   
+            allowCreditPayment:formuser?.allowCreditPayment ==='allowCreditPayment' ? true : false,   
             city: {
               ...formuser?.city
             }
@@ -286,7 +348,7 @@ const handleidentityCard = (e, i) => {
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
                         <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="apiPassword" value={formuser !==null ? formuser?.apiPassword : null} onChange={handleData} h="48px" variant={'custom'}/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
-                        <FormLabel fontSize="12" pt="1.5">Cust Code</FormLabel>
+                        <FormLabel fontSize="12" pt="1.5">Api Password</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
           </FormControl>
           </Box>
@@ -324,7 +386,15 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto" mt="15px">  
              <Stack spacing={4} direction='column'>
-                 <Radio value={formuser?.allowCreditPayment} onChange={(e)=>onSelectAllowCredit(e)}><Text as="p" fontSize={'sm'} fontFamily={'Mulish'}>Allow Credit Payment</Text></Radio>
+                 <HStack {...group}>
+                  {list.map((item) => (
+                    <CustomRadio key={item} {...getRadioProps({ value: item })}>
+                      <Text as="p" fontsize="12px" style={{color: "#231F20",fontSize:"14px", fontFamily:'Mulish',paddingLeft:"5px" }}>
+                      {item}
+                      </Text>
+                    </CustomRadio>
+                  ))}
+                </HStack>  
               </Stack>
           </Box>
          <Box width={{base:"100%",md:"540px"}} m="auto" mt="1em" mb="1em">
@@ -366,8 +436,8 @@ const handleidentityCard = (e, i) => {
                             </Box>
        </Box>
       <Box display={'flex'} justifyContent={'flex-end'} alignItems={'center'} p="9px" borderRadius={'5px'} border="1px" borderColor={'#ebebeb'}>
-          <Button isDisabled={formuser?.travelAgentName  ==='' || formuser?.commision  ==='' || formuser?.paymentType  ==='' || formuser?.legalName  ==='' ||  formuser?.travelAgentEmail === '' || formuser?.travelAgentPhone ==='' || formuser?.custid ==='' || formuser?.proformaInvoiceRecipients ===''
-          || formuser?.custcode ==='' || formuser?.city?.id ==='' || formuser?.allowCreditPayment ==='false' || formuser?.cgroup ===''
+          <Button isDisabled={formuser?.travelAgentName  ==='' || formuser?.commission  ==='' || formuser?.paymentType  ==='' || formuser?.legalName  ==='' ||  formuser?.travelAgentEmail === '' || formuser?.travelAgentPhone ==='' || formuser?.custid ==='' || formuser?.proformaInvoiceRecipients ===''
+          || formuser?.custcode ==='' || formuser?.city?.id ==='' || formuser?.cgroup ===''
             ? true : false} variant={'ClaimBtn'} style={{ textTransform: 'uppercase', fontSize: '14px' }} fontFamily="arial" fontWeight={'700'} onClick={handleNext}>Add</Button>
       </Box>
       </Box>

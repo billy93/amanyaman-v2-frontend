@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
-import { useGetUserQuery, useGetRoleQuery,useUploadFileMutation } from "./userApiSlice"
+import { useGetUserQuery, useGetRoleQuery,useUploadFileMutation,useExportUserdataMutation } from "./userApiSlice"
 import { useGetSystemParamsQuery} from '../systemParameters/systemParamsApiSlice'
 import { Link, useNavigate } from "react-router-dom";
 import Data from './list.json'
@@ -8,7 +8,8 @@ import matchSorter from 'match-sorter'
 import Table, { usePagination } from "react-table";
 import PulseLoader from 'react-spinners/PulseLoader'
 import { motion, AnimatePresence } from 'framer-motion'
-import {FaChevronUp, FaSort} from 'react-icons/fa'
+import { FaChevronUp, FaSort } from 'react-icons/fa'
+import ExportData from './export'
 import {
   useToast,
   Select,
@@ -41,7 +42,7 @@ Link as Links,
 } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
-import {listUsers,setMasterUser,listUsersSelection,setListUser, setFormUser,formUser,listRoleUsers} from './masterUserSlice'
+import {listUsers,setMasterUser,listUsersSelection,setListUser, setFormUser,formUser,listRoleUsers,uploadFilesMessage} from './masterUserSlice'
 import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
@@ -212,6 +213,7 @@ const Tables = ({
  const [filterName,setFilterName] = React.useState('')
  const [filterEmail,setFilterEmail] = React.useState('')
  const [filterRole,setFilterRole] = React.useState('')
+ const [exportUserdata, {isLoading:loadExport}] = useExportUserdataMutation()
  const { data: rolesData, isLoading, isError, isSuccess } = useGetRoleQuery()
  const listRoles = useSelector(listRoleUsers)
  const handleAddUser = (e) => {
@@ -422,7 +424,14 @@ const filterTypes = React.useMemo(
     console.log('eee', pageIndex + 1)
     setPageCount(pageIndex+1)
 }
-  console.log('filters', pageIndex)
+ 
+  const handleExportUser = async() => {
+    try {
+      await exportUserdata()
+    } catch (error) {
+      console.log(error)
+    }
+}
   return (
       <>
           <Modal size="xl" blockScrollOnMount={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
@@ -486,9 +495,7 @@ const filterTypes = React.useMemo(
                     <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
                         Apply Filter
                     </Button>
-                    <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
-                        Export 
-                    </Button>
+                    <ExportData />
                     <CustomModal
                       showModalButtonText="Import"
                       modalHeader="Import Excel File"
@@ -665,6 +672,7 @@ const MasterUser = () => {
         error,
         refetch
     } = useGetUserQuery({page,size:10})
+    
     const tableRef = React.useRef(null)
     const [data, setData] = React.useState([])
     const prevData = usePrevious(listUserAccount)
@@ -672,6 +680,8 @@ const MasterUser = () => {
     const [loading, setLoading] = React.useState(false)
     const [count, setCount] = React.useState(false)
     const [pageCount, setPageCount] = React.useState(0)
+    const uploadFilesMessages = useSelector(uploadFilesMessage)
+    const usePrevMessage = usePrevious(uploadFilesMessages)
     
    const PageInit = React.useCallback((pageSize,pageIndex) => {
     // console.log('page init', pageSize,pageIndex)
@@ -713,7 +723,7 @@ const MasterUser = () => {
     }, [listUserAccount])
   
   
-
+    console.log('uploadFilesMessages 111', uploadFilesMessages ==='success')
     const newdata = React.useMemo(()=>{
       return tempList ? tempList : [{}]
     }, [tempList]);
@@ -728,6 +738,7 @@ const MasterUser = () => {
   React.useEffect(() => {
    refetch({page,size:10})
   }, [page])
+  
   
   
     const columns = React.useMemo(

@@ -17,25 +17,6 @@ export const getUserList = apiSlice.injectEndpoints({
                     : ['MasterUser'],
                 }
             },
-           
-            // async onQueryStarted(id, { dispatch, queryFulfilled }) {
-            //     // `onStart` side-effect
-            //     dispatch(Toast('Fetching post...'))
-            //     try {
-            //     const { data } = await queryFulfilled
-            //     // `onSuccess` side-effect
-            //         dispatch(Toast({
-            //         title: 'Success',
-            //         status: 'success',
-            //         duration: 5,
-            //         isClosable: true,
-            //         position:'top-right'
-            //     }))
-            //     } catch (err) {
-            //     // `onError` side-effect
-            //     dispatch(Toast('Error fetching post!'))
-            //     }
-            // },
            }),
        getRole: builder.query({
             query: () => ({
@@ -67,10 +48,23 @@ export const getUserList = apiSlice.injectEndpoints({
                 return {
                 url: `/app/users/list/import`,
                 method: 'POST',
-                body: formData
+                body: formData,
                 // headers: { 'Content-Type': 'multipart/form-data' },
                 }
-        },
+            },
+            invalidatesTags: ['MasterUser']
+            
+        }),
+        exportUserdata: builder.mutation({
+            query: () => {
+                return {
+                url: `/app/users/list/export?page=0&size=99999`,
+                method: 'POST',
+                responseType: 'blob',
+                responseHandler: (response) => response.blob().then(blob => URL.createObjectURL(blob))
+                // headers: { 'Content-Type': 'multipart/form-data' },
+                }
+            },
         }),
         createUser: builder.mutation({
             query: (users) => ({
@@ -106,6 +100,7 @@ export const {
     useDeleteUserMutation,
     useGetTemplateFileQuery,
     useUploadFileMutation,
-    useDownloadTemplateQuery
+    useDownloadTemplateQuery,
+    useExportUserdataMutation
 } = getUserList
 

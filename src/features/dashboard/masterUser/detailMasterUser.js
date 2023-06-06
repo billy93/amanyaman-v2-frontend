@@ -36,7 +36,7 @@ import {CiTrash} from 'react-icons/ci'
 import {AiOutlinePlusCircle} from 'react-icons/ai'
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi'
 import { setListUser } from "./masterUserSlice";
-
+import DeleteBtn from './deleteUser'
 const Styles = styled.div`
   padding: 1rem;
 
@@ -245,51 +245,7 @@ const DetailMasterUser = () => {
         dispatch(setDetailUser([...dataUserDetail]))
       }
   }, users, dispatch, id)
-  // const detail 
-
-  // React.useEffect(() => {
-  //   // const newUser = [...users]
-  //   if (users !== null) {
-  //      const dataUserDetail = users?.filter((user) => user.id === id)
-  //     dispatch(setDetailUser([...dataUserDetail]))
-      
-  // }
-  // }, [users])
-  console.log('users', users)
-  console.log('users detail', detail)
-  // console.log('dataNew', dataNew)
-  const handleDeletUser = async (e) => {
-    e.preventDefault()
-    try {
-      const res = await deleteUser(parseInt(id))
-      const idx="deleteuser"
-      if (res) {
-         if(!toast.isActive(idx)){
-         toast({
-                          id:"deleteuser",
-                          title: `Delete Success`,
-                          status:"success",
-                          position: 'top-right',
-                          duration:3000,
-                          isClosable: true,
-                          variant:"solid",
-                        })
-         }
-        navigate('/master-data/master-user')
-       }
-      
-    } catch (err) {
-       toast({
-                          id:"deleteuser",
-                          title: `${err?.originalStatus}`,
-                          status:"success",
-                          position: 'top-right',
-                          duration:3000,
-                          isClosable: true,
-                          variant:"solid",
-                        })
-       }
-  }
+ 
   const handleEditUser = (e) => {
     e.preventDefault()
     const datas = {
@@ -371,7 +327,12 @@ const columns = React.useMemo(
                   </Box>
                   <Box display={'flex'} alignItems={'center'} gap="5px">
                   <IconButton _hover={{color:"white"}} icon={ <BsFillPencilFill color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleEditUser}/>
-                  <IconButton _hover={{color:"white"}} icon={ <CiTrash color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleDeletUser}/>
+                  {/* <IconButton _hover={{color:"white"}} icon={ <CiTrash color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleDeletUser}/> */}
+                  <DeleteBtn
+                  showModalButtonText="Delete"
+                  modalHeader="Delete user"
+                  modalBody="Confirm delete user ?"
+                  />
                   </Box>
                  </Box>
                 </Box>

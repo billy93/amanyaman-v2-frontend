@@ -464,7 +464,7 @@ const filterTypes = React.useMemo(
                       
                       />
                     <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAddUser}>
-                        Add User 
+                        Add Agent 
                     </Button>
                 </Stack>
       </Box>
