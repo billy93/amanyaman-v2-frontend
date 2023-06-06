@@ -6,7 +6,7 @@ import matchSorter from 'match-sorter'
 import Table, { usePagination } from "react-table";
 import PulseLoader from 'react-spinners/PulseLoader'
 import { motion, AnimatePresence } from 'framer-motion'
-import {FaChevronUp, FaSort} from 'react-icons/fa'
+import { FaChevronUp, FaSort } from 'react-icons/fa'
 import {
   useToast,
   Select,

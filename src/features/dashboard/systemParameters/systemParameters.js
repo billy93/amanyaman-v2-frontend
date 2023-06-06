@@ -575,7 +575,8 @@ const Polcies = () => {
         isSuccess,
         isError,
         error,
-        refetch
+        refetch,
+        response
     } = useGetSystemParamsQuery({ page, size: 10 })
     
     const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
@@ -609,6 +610,23 @@ const Polcies = () => {
     }, 1000)
     }, [systemParams])
     
+  React.useEffect(() => {
+    
+  if (data && 'totalCount' in data) {
+    // Retrieve the value of the "X-Total-Count" header
+    const totalCount = data.totalCount;
+
+    // Print the total count
+    console.log(totalCount);
+  } else {
+    // If the "X-Total-Count" header is not present in the response
+    console.log('X-Total-Count header not found.');
+  }
+
+  }, [data])
+  console.log('responses', systemParams)
+  console.log('responses', response)
+
     const columns = React.useMemo(
     () => [
       {

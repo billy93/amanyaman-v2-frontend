@@ -5,6 +5,8 @@ import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md'
 import { useUploadFileTravelAgentMutation } from '../features/dashboard/travelAgent/travelApiSlice'
 // import { setUploadFile, uploadFiles } from './masterUserSlice'
 
+import DownloadBtn from '../features/dashboard/travelAgent/downloadBtn'
+
 const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const dispatch= useDispatch()
@@ -62,9 +64,7 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
             <Button variant="ghost" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={handleDownload} >
-              Download Template
-            </Button>
+            <DownloadBtn/>
             <Button onClick={handleImport} isLoading={loading}>
               Import
             </Button>

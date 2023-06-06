@@ -100,7 +100,8 @@ const createMasterAgentSlice = createSlice({
     extraReducers: (builder) => {
     builder.addMatcher(
       apiSlice.endpoints.getUser.matchFulfilled,
-      (state, { payload }) => {
+        (state, { payload }) => {
+          console.log('extraa', payload, state)
         state.messages = payload
       }
     )

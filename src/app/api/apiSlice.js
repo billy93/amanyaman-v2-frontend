@@ -3,12 +3,14 @@ import { setCredentials, logOut } from '../../features/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'https://amapi.ati-bv.dev/api',
+    responseType:"blob",
     tagTypes: ['MasterUser','RoleUser','MasterAgent','cities','MasterQuery'],
     refetchOnMountOrArgChange: 30,
     refetchOnReconnect: true,
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         const token = getState().auth?.userLogin?.id_token
+        console.log('tt', getState().systemParams?.listSystemParams)
         if (token) {
             headers.set("authorization", `Bearer ${token}`)
             // headers.set('Content-Type', 'application/json') 

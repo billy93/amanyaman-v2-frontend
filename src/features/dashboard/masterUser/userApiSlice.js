@@ -8,6 +8,9 @@ export const getUserList = apiSlice.injectEndpoints({
                 const { page, size } = datas;
                 return {
                     url: `/app/users?page=${page}&size=${size}`,
+                    transformResponse(apiResponse, meta) {
+                            return { apiResponse, totalCount: Number(meta.response.headers.get('X-Total-Count')) }
+                    },
                     providesTags: (result, error, arg) =>
                     result
                     ? [...result.map(({ id }) => ({ type: 'MasterUser', id })), 'MasterUser']
@@ -41,27 +44,24 @@ export const getUserList = apiSlice.injectEndpoints({
                 
             }),
         }),
-        getTemplateFile: builder.query({
-           query() {
-                return {
-                url: `/app/users/list/template/download`,
-                method: "GET",
-                responseHandler: (response) => response.blob().then(blob => URL.createObjectURL(blob)),
-                cache: "no-cache",
-                };
-        //    query: () => {
-        //        return {
-        //             url: `/app/users/list/template/download`,
-        //             method:"GET",
-        //        }
-            }
-            
+       downloadTemplate: builder.query({
+            query: () => ({
+                url: `/list/template/download`,
+                
+            }),
         }),
-        
+       getTemplateFile: builder.query({
+            query: (url) => ({
+                url:"/app/users/list/template/download",
+                method: 'GET',
+                responseType: 'blob',
+                responseHandler: (response) => response.blob().then(blob => URL.createObjectURL(blob))
+            }),
+            }),
         uploadFile: builder.mutation({
             query: (file) => {
                 const formData = new FormData();
-                formData.append('file', file, file.name);
+                formData.append('file', file);
                 console.log('body file', file)
                 console.log('body', formData)
                 return {
@@ -105,5 +105,7 @@ export const {
     useUpdateUserMutation,
     useDeleteUserMutation,
     useGetTemplateFileQuery,
-    useUploadFileMutation
+    useUploadFileMutation,
+    useDownloadTemplateQuery
 } = getUserList
+

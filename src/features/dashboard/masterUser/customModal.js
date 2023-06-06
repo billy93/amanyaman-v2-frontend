@@ -4,6 +4,7 @@ import {Box,Input,useDisclosure,Button,Modal,ModalOverlay,ModalBody,ModalFooter,
 import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md'
 import { useGetTemplateFileQuery, useUploadFileMutation } from './userApiSlice'
 import { setUploadFile, uploadFiles } from './masterUserSlice'
+import DownloadBtn from './download'
 
 const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -11,16 +12,12 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
     const filecsv = useSelector(uploadFiles)
     const [download,setDowload] = React.useState(false)
     const [filesUpload,setFilesUpload] = React.useState(null)
-  const [uploadFile, { isLoading: loading, isSuccess: success }] = useUploadFileMutation({
-      skip:true
-    })
+    const [uploadFile, { isLoading: loading, isSuccess: success }] = useUploadFileMutation({
+        skip:true
+      })
     
-    const {isLoading,isSuccess,isError} = useGetTemplateFileQuery({
-    skip:true
-  })
     const handleDownload = (e) => {
         e.preventDefault()
-        setDowload(true)
     }
  const handleFileChange = (e) => {
     if (e.target.files) {
@@ -29,7 +26,7 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
       // dispatch(setUploadFile({csvfile:e.target.files[0]}))
     }
  };
-  
+
   const handleImport = async (e) => {
     e.preventDefault()
     try {
@@ -58,9 +55,7 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
             <Button variant="ghost" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={handleDownload} isLoading={isLoading}>
-              Download Template
-            </Button>
+            <DownloadBtn />
             <Button onClick={handleImport} isLoading={loading}>
               Import
             </Button>

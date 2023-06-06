@@ -14,7 +14,15 @@ export const getAgentList = apiSlice.injectEndpoints({
                     : ['MasterAgent'],
                 }
             },
-           }),       
+        }), 
+       getTemplateFileAgent: builder.query({
+            query: (url) => ({
+                url:"/app/travel-agents/list/template/download",
+                method: 'GET',
+                responseType: 'blob',
+                responseHandler: (response) => response.blob().then(blob => URL.createObjectURL(blob))
+            }),
+            }),     
         getCities: builder.query({
             query: (datas) => {
                 const { page, size } = datas;
@@ -92,5 +100,6 @@ export const {
     useUpdateAgentMutation,
     useGetCitiesQuery,
     useDeleteAgentMutation,
-    useUploadFileTravelAgentMutation
+    useUploadFileTravelAgentMutation,
+    useGetTemplateFileAgentQuery
 } = getAgentList

@@ -7,16 +7,25 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
                 const { page, size } = data;
                 return {
                     url: `/app/system-parameters?page=${page}&size=${size}`,
-                    // responseHandler: (response) => response.headers('Access-Control-Expose-Headers', 'X-Total-Count'),
-                    // res.header('Access-Control-Expose-Headers', 'X-Total-Count')
-                    transformResponse(apiResponse, meta) {
-                            return { apiResponse, totalCount: Number(meta.response.headers.get('X-Total-Count')) }
+                    prepareHeaders: (headers) => {
+                        headers.append('Accept', 'application/json');
+                        return headers;
+                        },
+                    onSuccess: (data, _, { response }) => {
+                        if ('x-total-count' in response.headers) {
+                        const totalCount = response.headers['x-total-count'];
+                        console.log(totalCount);
+                        } else {
+                        console.log('X-Total-Count header not found.');
+                        }
                     },
+
                     providesTags: (result, error, arg) =>
                     result
                     ? [...result.map(({ id }) => ({ type: 'MasterQuery', id })), 'MasterQuery']
                     : ['MasterQuery'],
                 }
+                
             },
     }),
         createParams: builder.mutation({
