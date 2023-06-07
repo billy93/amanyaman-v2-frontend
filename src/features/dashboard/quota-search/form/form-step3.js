@@ -36,6 +36,7 @@ import ModalForm from './modal'
 
 const Form3 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,isLastStep}) => {
     const initState = useSelector(selectTravelInsurance)
+    const initStateTraveller = useSelector(selectManualInput)
     const selectedInsurance = useSelector(selectedTravelInsurance)
     const listTravellers = useSelector(FillTravellersData)
     const [travellerName, setTravellerName] = React.useState("")
@@ -403,23 +404,34 @@ const Form3 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                 <Box bg="white" p="10px">
                     <Box display={'flex'} justifyContent={'flex-start'} alignItems={'center'} boxSizing='borderBox' borderBottom={'1px solid #ebebeb'} pb="10px" pt="10px">
                         <Text as="b" w={'50%'} fontFamily={'Mulish'} style={{fontSize:'14px'}}>Plan Type</Text>
-                        <Text as="p" w={'50%'} fontFamily={'Mulish'} style={{fontSize:'12px'}} pl="5px">Single Trip</Text>
+                        <Text as="p" w={'50%'} fontFamily={'Mulish'} style={{fontSize:'12px'}} pl="5px">{initStateTraveller?.coverageType}</Text>
                     </Box>
                     <Box display={'flex'} justifyContent={'lex-start'} alignItems={'center'} borderBottom={'1px solid #ebebeb'} pb="10px" pt="10px">
                         <Text as="b" w="50%" fontFamily={'Mulish'} style={{fontSize:'14px'}}>Travellers Type</Text>
-                        <Text as="p" w="50%" fontFamily={'Mulish'} style={{fontSize:'12px'}} pl="5px">individuals - 2 adults</Text>
+                        <Text as="p" w="50%" fontFamily={'Mulish'} style={{fontSize:'12px'}} pl="5px">{initStateTraveller?.travellerType} - {initStateTraveller?.adult} adults</Text>
                     </Box>
                     <Box display={'flex'} justifyContent={'lex-start'} alignItems={'center'} borderBottom={'1px solid #ebebeb'} pb="10px" pt="10px">
                         <Text as="b" w="50%" fontFamily={'Mulish'} style={{fontSize:'14px'}}>Destination</Text>
-                        <Text as="p" w="50%" fontFamily={'Mulish'} style={{fontSize:'12px'}} pl="5px">Australia, Germany, Hong Kong, Luxembourg, United Kingdom</Text>
+                        <Text as="p" w="50%" fontFamily={'Mulish'} style={{fontSize:'12px'}} pl="5px">
+                            {
+                                    initStateTraveller?.destinationCountry.length > 0 && initStateTraveller?.destinationCountry.map((item, i) => {
+                                        return (
+                                        <span key={i}>{ (i ? ', ' : '') + item.value }</span>
+                                    )
+                                })
+                            }
+                        </Text>
                     </Box>
                     <Box display={'flex'} justifyContent={'lex-start'} alignItems={'center'} borderBottom={'1px solid #ebebeb'} pb="10px" pt="10px">
                         <Text as="b" w="50%" fontFamily={'Mulish'} style={{fontSize:'14px'}}>Start Date</Text>
-                        <Text as="p" w="50%" fontFamily={'Mulish'} style={{fontSize:'12px'}} pl="5px">9 November 2020</Text>
+                            <Text as="p" w="50%" fontFamily={'Mulish'} style={{ fontSize: '12px' }} pl="5px">
+                                {initStateTraveller?.startDate ? `${initStateTraveller?.startDate?.day} ${getMonthName(initStateTraveller?.startDate?.month)} ${initStateTraveller?.startDate?.year}` : null} 
+                            </Text>
                     </Box>
                     <Box display={'flex'} justifyContent={'lex-start'} alignItems={'center'}borderBottom={'1px solid #ebebeb'} pb="10px" pt="10px">
                         <Text as="b" w="50%" fontFamily={'Mulish'} style={{fontSize:'14px'}}>End Date</Text>
-                        <Text as="p" w="50%" fontFamily={'Mulish'} style={{fontSize:'12px'}} pl="5px">5 Januari 2021</Text>
+                         
+                        <Text as="p" w="50%" fontFamily={'Mulish'} style={{fontSize:'12px'}} pl="5px">{initStateTraveller?.endDate ? `${initStateTraveller?.endDate?.day} ${getMonthName(initStateTraveller?.endDate?.month)} ${initStateTraveller?.endDate?.year}` : null} </Text>
                     </Box>
                 </Box>
                 </Box>

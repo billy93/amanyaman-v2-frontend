@@ -383,7 +383,7 @@ const Form3 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                             {'Total Payment'}
                              </Text>
                             <Text as="b" size={'sm'} fontFamily={'Mulish'} style={{fontSize:"12px"}}>
-                                        { 'Rp' }{'2.345.555'}
+                                        { 'Rp' }{listTravellers?.listTravellers?.length * parseInt(selectedInsurance?.cost)}
                              </Text>
                         </Box>
                     </Box>

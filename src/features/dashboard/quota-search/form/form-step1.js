@@ -1,11 +1,22 @@
 import React, { useState } from 'react'
 import { useSelector,useDispatch} from 'react-redux'
-import {setFormStateCoverageChild,selectManualInput,setFormStateCoverageType,setFormStateTravellerType,setFormStateTotalPass,setFormStateDestinationCountry,setFormStateStartDate,setFormEndDate} from '../quotaSearchSlice'
-import { Flex,InputRightElement,InputGroup,Heading,Input,Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Box,Button, FormControl,FormLabel} from '@chakra-ui/react'
+import {setFormStateAdult,setFormStateCoverageChild,selectManualInput,setFormStateCoverageType,setFormStateTravellerType,setFormStateTotalPass,setFormStateDestinationCountry,setFormStateStartDate,setFormEndDate} from '../quotaSearchSlice'
+import { Text,Flex,InputRightElement,InputGroup,Heading,Input,Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Box,Button, FormControl,FormLabel} from '@chakra-ui/react'
 import { Select } from 'chakra-react-select'
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 import { SlCalender } from 'react-icons/sl'
 
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef();
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
+}
 const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,isLastStep}) => {
     const initState = useSelector(selectManualInput)
     const dispatch = useDispatch()
@@ -27,8 +38,13 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
     const handleTravellerType = (type) => {
         dispatch(setFormStateTravellerType(type))
     }
-    const handleTravellerChild = () => {
-        dispatch(setFormStateCoverageChild(!initState.child))
+    const handleTravellerAdult = (e) => {
+        let number  = e.target.value
+        dispatch(setFormStateAdult(number))
+    }
+    const handleTravellerChild = (e) => {
+         let number  = e.target.value
+        dispatch(setFormStateCoverageChild(number))
     }
     const handleTotalPass = (e) => {
         let number  = e.target.value
@@ -105,6 +121,19 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
           setActives(false)
         }
     }
+   
+    const prevType = usePrevious(initState?.travellerType)
+
+    React.useEffect(() => {
+        if (prevType !== initState?.travellerType) {
+            if (initState?.travellerType === 'Group') {
+                 dispatch(setFormStateAdult(2))
+            } else {
+                dispatch(setFormStateAdult(1))
+            }
+            dispatch(setFormStateCoverageChild(1))
+        }
+    },[initState?.travellerType,prevType,dispatch])
     console.log('initState', initState)
     return (
         <Box border={'1px'} borderColor="#ebebeb" >
@@ -203,23 +232,42 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                             <Box mt="1em" width={{base:"100%", md:"100%"}} position={'relative'} display={'flex'} gap="10px">
                                 <Box w={{md:"60%"}}>    
                                     <FormControl variant="floating" fontFamily={'Mulish'} >    
-                                        <Input type="number" w="100%" h="48px" value={initState?.totalPass } bg="#ebebeb" borderRadius="5px" onChange={ handleTotalPass} />
-                                        <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(16px, 2px) scale(0.75)", fontSize:"18px", background:"#ebebeb",color:"#171923",zIndex:"0" }} >Adult</FormLabel>
-                                    </FormControl>
+                                        <Input min={initState?.travellerType === 'Family' ? 1 : initState?.travellerType === 'Group' ? 2 : 1 } max={initState?.travellerType === 'Family' ? 2 : initState?.travellerType === 'Group' ? 100 : 100 } type="number" w="100%" h="48px" value={initState?.adult } bg="#ebebeb" borderRadius="5px" onChange={ handleTravellerAdult} />
+                                        <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(29px, 2px) scale(0.75)", fontSize:"18px", background:"#ebebeb",color:"#171923",zIndex:"0" }} >Adult</FormLabel>
+                                        
+                                        </FormControl>
+                                        {
+                                                initState?.travellerType === 'Family' && (
+                                                    <Box>
+                                                        <Text fontSize="12" fontFamily={'Mulish'} style={{ transform: "translate(-24px, 5px) scale(0.75)", fontSize: "14px", background: "white", color: "#171923", zIndex: "0",width:"100%" }} >max 2 adults.</Text>
+                                                    </Box>
+                                            )
+                                        }
+                                        {
+                                                initState?.travellerType === 'Group' && (
+                                                    <Box pb="20px">
+                                                        <Text fontSize="12" fontFamily={'Mulish'} style={{ transform: "translate(-24px, 5px) scale(0.75)", fontSize: "14px", background: "white", color: "#171923", zIndex: "0",width:"100%" }} >min 2 or max 100 adults.</Text>
+                                                    </Box>
+                                            )
+                                        }
                                 </Box>
-                                <Box w={{md:"40%"}}>
-                                    <Button bg="#ebebeb" 
-                                    w="100%"
-                                    h="48px" aria-label='Search database' border={initState?.child ? '2px solid #065BAA' : ''} color={ initState?.child ? "#065BAA" : "#231F20"}
-                                        _hover={{
-                                        bg: "#ebebeb",
-                                    }}
-                                    onClick={handleTravellerChild}
-                                    >1 Child</Button>
-                                </Box>
+                                {
+                                        initState?.travellerType === 'Family' && (
+                                            <Box w={{md:"40%"}}>    
+                                                <FormControl variant="floating" fontFamily={'Mulish'} >    
+                                                    <Input type="number" w="100%" h="48px" value={initState?.child } bg="#ebebeb" borderRadius="5px" onChange={ handleTravellerChild} />
+                                                    <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(16px, 2px) scale(0.75)", fontSize: "18px", background: "#ebebeb", color: "#171923", zIndex: "0" }} >Child</FormLabel> 
+                                                     <Box>
+                                                        <Text fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-15px, -6px) scale(0.75)", fontSize: "14px", background: "white", color: "#171923", zIndex: "0", width: "100%" }} >max 23 years old, not married yet and still studying in university.</Text>
+                                                    </Box>
+                                                    
+                                                </FormControl>
+                                            </Box>
+                                    )
+                                }
                             </Box>
                             
-                            <Box mt="3em" w={{base:"100%", md:"520px"}} h={{sm:"48px"}}>
+                            <Box mt="2em" w={{base:"100%", md:"520px"}} h={{sm:"48px"}}>
                                 <FormControl variant="floating" fontFamily={'Mulish'} isRequired h="48px" >  
                                 <Select
                                     size="lg"

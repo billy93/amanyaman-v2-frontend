@@ -8,8 +8,9 @@ const createSearchSlice = createSlice({
                 coverageType:"",
                 travellerType:"",
                 totalPass:1,
-                destinationCountry:[],
-                child:false,
+                destinationCountry: [],
+                adult:1,
+                child:1,
                 startDate:null,
                 endDate: null,
                 
@@ -37,7 +38,7 @@ const createSearchSlice = createSlice({
                 {
                     id: 1,
                     titleProduct:"Amanyaman Asia 50",
-                    cost: "IDR 400.000",
+                    cost: 400000,
                     cover: {
                         personalAccidentCover: {
                             title: "Personal Accident Cover",
@@ -56,7 +57,7 @@ const createSearchSlice = createSlice({
                 {
                     id: 2,
                     titleProduct:"Amanyaman Asia 150",
-                    cost: "IDR 600.000",
+                    cost: 600000,
                     cover: {
                         personalAccidentCover: {
                             title: "Personal Accident Cover",
@@ -82,6 +83,9 @@ const createSearchSlice = createSlice({
         },
         setFormStateCoverageChild: (state, action) => {
             state.formState.manualInput.child = action.payload
+        },
+        setFormStateAdult: (state, action) => {
+            state.formState.manualInput.adult = action.payload
         },
         setFormStateTravellerType: (state, action) => {
             state.formState.manualInput.travellerType = action.payload
@@ -115,7 +119,7 @@ const createSearchSlice = createSlice({
     },
 })
 
-export const {setFormStateCoverageChild,setFormEndDate,setTravellersData,setPaymentMethod,setFormStateCoverageType,setFormStateTravellerType,setFormStateTotalPass,setFormStateDestinationCountry,setFormStateStartDate,setSelectTravelInsurancePlan } = createSearchSlice.actions
+export const {setFormStateAdult,setFormStateCoverageChild,setFormEndDate,setTravellersData,setPaymentMethod,setFormStateCoverageType,setFormStateTravellerType,setFormStateTotalPass,setFormStateDestinationCountry,setFormStateStartDate,setSelectTravelInsurancePlan } = createSearchSlice.actions
 
 export default createSearchSlice.reducer
 export const selectManualInput = (state) => state.quotaSearch?.formState?.manualInput

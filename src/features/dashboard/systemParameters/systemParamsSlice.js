@@ -5,6 +5,7 @@ const createSystemParamsSlice = createSlice({
     initialState: { 
         systemParams: {
             masterChecked: false,
+            totalCount:null,
             listSystemParams: [],
             fields: {
                 name:"",
@@ -33,10 +34,13 @@ const createSystemParamsSlice = createSlice({
         setEdit: (state, action) => {
             state.systemParams.edit = action.payload
         },
+        setTotalCount: (state, action) => {
+            state.systemParams.totalCount = action.payload
+        },
     },
 })
 
-export const {setEdit,setDetail,setSystemParams,setSystemParamsFieldName,setSystemParamsFieldValue,setFields} = createSystemParamsSlice.actions
+export const {setTotalCount,setEdit,setDetail,setSystemParams,setSystemParamsFieldName,setSystemParamsFieldValue,setFields} = createSystemParamsSlice.actions
 
 export default createSystemParamsSlice.reducer
 export const listSystemParam = (state) => state.systemParams.listSystemParams
@@ -45,4 +49,5 @@ export const systemParamsValues = (state) => state.systemParams.systemParamsValu
 export const listFields = (state) => state.systemParams.systemParams.fields
 export const detailParams = (state) => state.systemParams.systemParams.detail
 export const editParams = (state) => state.systemParams.systemParams.edit
+export const totalCounts = (state) => state.systemParams.systemParams.totalCount
 

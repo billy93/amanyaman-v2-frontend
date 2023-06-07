@@ -214,6 +214,9 @@ nav a{
   transform: translate(0, -16px) scale(0.75);
    color: #231F20;
 }
+input[type=number]::-webkit-inner-spin-button {
+    opacity: 1
+}
 #react-select-5-placeholder{
   display: none!important;
 }
@@ -338,7 +341,7 @@ nav a{
    color: #231F20;
 }
 #float-labelss .Actives {
-  transform: translate(-2px, -14px) scale(0.75);
+  transform: translate(-2px, -5px) scale(0.75);
     color: #065baa;
 }
 #float-labelss_new {

@@ -1,33 +1,31 @@
 import { apiSlice } from "../../../app/api/apiSlice"
+import { setTotalCount } from './systemParamsSlice'
 
 export const systemParamsApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getSystemParams: builder.query({
+       getSystemParams: builder.query({
             query: (data) => {
                 const { page, size } = data;
                 return {
-                    url: `/app/system-parameters?page=${page}&size=${size}`,
-                    prepareHeaders: (headers) => {
-                        headers.append('Accept', 'application/json');
-                        return headers;
-                        },
-                    onSuccess: (data, _, { response }) => {
-                        if ('x-total-count' in response.headers) {
-                        const totalCount = response.headers['x-total-count'];
-                        console.log(totalCount);
-                        } else {
-                        console.log('X-Total-Count header not found.');
-                        }
+                url: `/app/system-parameters?page=${page}&size=${size}`,
+                method:"GET",
+                prepareHeaders: (headers) => {
+                    headers.append('Accept', 'application/json');
+                    return headers;
                     },
-
-                    providesTags: (result, error, arg) =>
+                };
+           },
+        //    transformResponse: (response) => {
+        //      console.log('ressssss', response)
+        //         const totalCount = response.headers.get('X-Total-Count');
+        //         const data = response.data;
+        //         return { totalCount, data };
+        //     },
+            providesTags: (result, error, arg) =>
                     result
                     ? [...result.map(({ id }) => ({ type: 'MasterQuery', id })), 'MasterQuery']
-                    : ['MasterQuery'],
-                }
-                
-            },
-    }),
+                   : ['MasterQuery'],
+            }),
         createParams: builder.mutation({
             query: (data) => {
                 return {

@@ -39,7 +39,7 @@ import matchSorter from 'match-sorter'
 import { Button } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { listPolicy, listSelected, setStateSelectedt, setStatePolicyList } from '../policy/policySlice'
-import {setSystemParams,listSystemParam} from './systemParamsSlice'
+import {setSystemParams,listSystemParam,setTotalCount} from './systemParamsSlice'
 import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
@@ -232,7 +232,24 @@ const Tables = ({
     const { isOpen, onOpen, onClose } = useDisclosure()
     const toast = useToast()
     const [showFilter,setShowFilter] = React.useState(false)
-    
+    const [pages]= React.useState(0)
+    const {
+        data: systemParams,
+        isLoading,
+        isSuccess,
+        isError,
+        error,
+        refetch,
+        response,
+        extra
+    } = useGetSystemParamsQuery({ page:pages, size: 10 }, {
+      onSuccess: (response, { requestId }, meta) => {
+        const totalCount = response.headers.get('X-Total-Count');
+        console.log('ddddtot', totalCount)
+      // handleSuccess(totalCount); // Update the total count in the component state
+      return response;
+    },
+    })
     const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -391,6 +408,7 @@ const filterTypes = React.useMemo(
                       <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
                         Add System Params 
                     </Button>
+                    <button onClick={refetch}>Refresh</button>
                 </Stack>
       </Box>
       {/* <Box mb={'3'} bg={'#ffeccc'} border={'1px'} borderColor={'#ffa000'} width={'300px'} height={'100px'} p={'2'} display="flex" justifyContent={'center'} alignItems={'center'}>
@@ -576,8 +594,12 @@ const Polcies = () => {
         isError,
         error,
         refetch,
-        response
+        response,
+        extra,
+        accessHeaders,
+        totalCount
     } = useGetSystemParamsQuery({ page, size: 10 })
+  
     
     const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
     // This will get called when the table needs new data
@@ -612,20 +634,21 @@ const Polcies = () => {
     
   React.useEffect(() => {
     
-  if (data && 'totalCount' in data) {
+  if (systemParams && 'totalCount' in systemParams) {
     // Retrieve the value of the "X-Total-Count" header
-    const totalCount = data.totalCount;
+    const totalCount = systemParams.totalCount;
 
     // Print the total count
-    console.log(totalCount);
+    console.log('cccxxxx',totalCount);
   } else {
     // If the "X-Total-Count" header is not present in the response
-    console.log('X-Total-Count header not found.');
+    console.log('X-Total-Count header not found.', response);
   }
 
-  }, [data])
+  }, [data,response])
   
-
+//  console.log('cccxxxx systemParams',systemParams);
+//  console.log('cccxxxx totalCount',systemParams?.totalCount);
     const columns = React.useMemo(
     () => [
       {
@@ -677,7 +700,7 @@ const Polcies = () => {
   );
 
     // const data = React.useMemo(() => tempList);
-    console.log('ddd listParams', listParams)
+    // console.log('ddd listParams', listParams)
   React.useEffect(() => {
     refetch({ page, size: 10 })
     
@@ -693,9 +716,11 @@ const Polcies = () => {
         content = <Center h='50vh' color='#065BAA'>
                        <PulseLoader color={"#065BAA"} />
                    </Center>;
-    } else if (isSuccess) {
+    } else if (systemParams) {
+      const totalCount = data;
         content = (
-            <Box pl="2em" pr="2em" mt="3em"> 
+          <Box pl="2em" pr="2em" mt="3em"> 
+            {/* <div>{ console.log('celelng',totalCount)}</div> */}
                 <Styles>
                 <Tables
                     columns={columns}
@@ -723,6 +748,7 @@ const Polcies = () => {
             Next
             </Text>
           </Button>{' '}
+          
         </Box>
         <Box>
           Page{' '}
