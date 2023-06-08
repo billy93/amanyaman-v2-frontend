@@ -15,16 +15,14 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
                     },
                 };
            },
-        //    transformResponse: (response) => {
-        //      console.log('ressssss', response)
-        //         const totalCount = response.headers.get('X-Total-Count');
-        //         const data = response.data;
-        //         return { totalCount, data };
-        //     },
-            providesTags: (result, error, arg) =>
-                    result
-                    ? [...result.map(({ id }) => ({ type: 'MasterQuery', id })), 'MasterQuery']
-                   : ['MasterQuery'],
+            transformResponse(response, meta) {
+                console.log('resssssss', meta.response.headers.get('X-Total-Count'))
+                return {response,totalCount: Number(meta.response.headers.get('X-Total-Count')) }
+            },
+            // providesTags: (result, error, arg) =>
+            //         result
+            //         ? [...result.map(({ id }) => ({ type: 'MasterQuery', id })), 'MasterQuery']
+            //        : ['MasterQuery'],
             }),
         createParams: builder.mutation({
             query: (data) => {

@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { setCredentials, logOut } from '../../features/auth/authSlice'
+import axios from 'axios';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'https://amapi.ati-bv.dev/api',
@@ -17,7 +18,7 @@ const baseQuery = fetchBaseQuery({
         }
         return headers
     },
-})
+},axios)
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions)

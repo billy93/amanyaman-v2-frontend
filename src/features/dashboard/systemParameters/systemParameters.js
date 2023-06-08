@@ -408,7 +408,7 @@ const filterTypes = React.useMemo(
                       <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
                         Add System Params 
                     </Button>
-                    <button onClick={refetch}>Refresh</button>
+                    {/* <button onClick={refetch}>Refresh</button> */}
                 </Stack>
       </Box>
       {/* <Box mb={'3'} bg={'#ffeccc'} border={'1px'} borderColor={'#ffa000'} width={'300px'} height={'100px'} p={'2'} display="flex" justifyContent={'center'} alignItems={'center'}>
@@ -618,11 +618,11 @@ const Polcies = () => {
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
-        setData(systemParams?.slice(startRow, endRow))
+        setData(systemParams?.response.slice(startRow, endRow))
         setCount(pageOptions)
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(systemParams?.length / pageSize))
+        setPageCount(Math.ceil(systemParams?.response?.length / pageSize))
           setPagination({
             page:pageIndex,
             size:pageSize
@@ -630,7 +630,7 @@ const Polcies = () => {
         setLoading(false)
       }
     }, 1000)
-    }, [systemParams])
+    }, [systemParams?.response])
     
   React.useEffect(() => {
     
@@ -647,8 +647,8 @@ const Polcies = () => {
 
   }, [data,response])
   
-//  console.log('cccxxxx systemParams',systemParams);
-//  console.log('cccxxxx totalCount',systemParams?.totalCount);
+ console.log('cccxxxx systemParams',systemParams);
+ console.log('cccxxxx totalCount',response);
     const columns = React.useMemo(
     () => [
       {
@@ -716,7 +716,7 @@ const Polcies = () => {
         content = <Center h='50vh' color='#065BAA'>
                        <PulseLoader color={"#065BAA"} />
                    </Center>;
-    } else if (systemParams) {
+    } else if (systemParams?.response) {
       const totalCount = data;
         content = (
           <Box pl="2em" pr="2em" mt="3em"> 
