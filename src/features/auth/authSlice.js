@@ -71,7 +71,7 @@ const authSlice = createSlice({
                                 href: '#',
                             },
                             {
-                                link: '/master-data/group-area',
+                                link: '/master-data/list-group-area',
                                 name: 'List Group Area',
                                 href: '#',
                             },
