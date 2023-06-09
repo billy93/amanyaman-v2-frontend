@@ -32,7 +32,7 @@ export const getUserList = apiSlice.injectEndpoints({
             }),
         }),
        getTemplateFile: builder.query({
-            query: (url) => ({
+            query: () => ({
                 url:"/app/users/list/template/download",
                 method: 'GET',
                 responseType: 'blob',

@@ -15,6 +15,8 @@ import systemParams from '../features/dashboard/systemParameters/systemParamsSli
 import productPrice from '../features/dashboard/productPrice/productPriceSlice'
 import dashboards from '../features/dashboard/dashboards/dashboardSlice'
 import storageSession from 'reduxjs-toolkit-persist/lib/storage/session'
+// import { apiSlice } from './api/apiSlice';
+import { logOut } from '../features/auth/authSlice';
 
 const rootPersistConfig = {
   key: 'root',
@@ -22,6 +24,11 @@ const rootPersistConfig = {
   whitelist:['auth']
 }
 
+const persistConfig = {
+  key: 'root',
+  storage,
+  blacklist: ['apiSlice'], // Exclude the 'api' reducer from persisting
+};
 
 
 const isSerializable = (value) => Iterable.isIterable(value) || isPlain(value)
@@ -33,10 +40,11 @@ const serializableMiddleware = createSerializableStateInvariantMiddleware({
   isSerializable,
   getEntries,
 })
+const persistAuth = persistReducer(persistConfig, authReducer)
 
 const rootReducer = combineReducers({
        [apiSlice.reducerPath]: apiSlice.reducer,
-        auth: authReducer,
+        auth: persistAuth,
         createClaimForm: createClaimReducer,
         quotaSearch: createSearchQuotaReducer,
         policyList: policyList,
@@ -68,4 +76,27 @@ export const store = configureStore({
       devTools: true
 })
 setupListeners(store.dispatch)
+// console.log('tokens',JSON.parse(localStorage.getItem('persist')).token?.id_token )
+// const checkTokenInLocalStorage = () => {
+//   const token = JSON.parse(localStorage.getItem('persist')) && JSON.parse(localStorage.getItem('persist')).token?.id_token;
+//   if (!token) {
+//     store.dispatch(logOut()); // Force logout if token is not found
+//     // window.location.reload(); // Refresh the page
+//   } else {
+//     store.dispatch(logOut(token));
+//   }
+// };
+
+// // // Initialize the store and check token in localStorage
+// checkTokenInLocalStorage();
+
+// // Listen to the storage event to detect changes in localStorage
+// window.addEventListener('storage', (event) => {
+//   if (event.key === 'token' && event.newValue === null) {
+//     store.dispatch(logOut()); // Force logout if token is cleared in localStorage
+//     window.location.reload(); // Refresh the page
+//   }
+// });
+
+
 export const persistor = persistStore(store)

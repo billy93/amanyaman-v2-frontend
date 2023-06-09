@@ -55,6 +55,26 @@ const authSlice = createSlice({
                                 name: 'Master Price',
                                 href: '#',
                             },
+                            {
+                                link: '/master-data/list-country',
+                                name: 'List Country',
+                                href: '#',
+                            },
+                            {
+                                link: '/master-data/list-city',
+                                name: 'List City',
+                                href: '#',
+                            },
+                            {
+                                link: '/master-data/list-area',
+                                name: 'List Area',
+                                href: '#',
+                            },
+                            {
+                                link: '/master-data/group-area',
+                                name: 'List Group Area',
+                                href: '#',
+                            },
                            
                             ],
                     },

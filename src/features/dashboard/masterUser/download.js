@@ -4,40 +4,42 @@ import { Button } from '@chakra-ui/react'
 
 const DownloadXLSButton = (props) => {
     const [trigger, setTrigger] = React.useState(false)
-    const { data, error, isLoading } = useGetTemplateFileQuery('/path/to/blob',{
+    const { data, error, isLoading } = useGetTemplateFileQuery({
       skip: trigger ===false
   });
-
+  const handleClick = (e) => {
+    e.preventDefault()
+    setTrigger(!trigger)
+    handleDownload()
+  }
   const handleDownload = () => {
-    setTrigger(true)
     if (data) {
-    //  const blobUrl = URL.createObjectURL(blobData);
+       console.log('dass', data)
+      const downloadLink = document.createElement('a');
+      downloadLink.href = data;
+      downloadLink.download = 'templateUser.xlsx'; // Set the desired file name and extension
 
-    // Create a download link element
-    const downloadLink = document.createElement('a');
-    downloadLink.href = data;
-    downloadLink.download = 'dataUser.xlsx'; // Set the desired file name and extension
+      // Append the link to the DOM
+      document.body.appendChild(downloadLink);
 
-    // Append the link to the DOM
-    document.body.appendChild(downloadLink);
+      // Trigger the download
+      downloadLink.click();
 
-    // Trigger the download
-    downloadLink.click();
-
-    // Remove the link element from the DOM after a short delay
-    setTimeout(() => {
-      document.body.removeChild(downloadLink);
-      // Clean up the blob URL
-      URL.revokeObjectURL(data);
-    }, 1000);
-    };
-}
+      // Remove the link element from the DOM after a short delay
+      setTimeout(() => {
+        document.body.removeChild(downloadLink);
+        // Clean up the blob URL
+        URL.revokeObjectURL(data);
+      }, 1000);
+    }
+  }
+  console.log('datadatadata', data)
   return (
     <div>
       {isLoading ? (
         <span>Loading...</span>
       ) : (
-        <Button onClick={handleDownload} disabled={!!error}>
+        <Button onClick={handleClick} disabled={!!error}>
           Download Template
         </Button>
       )}

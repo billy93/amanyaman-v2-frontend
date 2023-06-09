@@ -31,6 +31,9 @@ import DetailTravelAgent from './features/dashboard/travelAgent/detailTravelAgen
 import EditUser from './features/dashboard/masterUser/editUser'
 import EditAgent from './features/dashboard/travelAgent/editAgent'
 import ProductPrice from './features/dashboard/productPrice/productPrice'
+import ListCountry from './features/dashboard/country/listCountry'
+import ListCity from './features/dashboard/city/listCity'
+import ListArea from './features/dashboard/area/listArea'
 import Dashboards from './features/dashboard/dashboards/dashboard'
 import CreateProductPrice from './features/dashboard/productPrice/createProductPrice'
 import DetailMasterUser from './features/dashboard/masterUser/detailMasterUser'
@@ -75,6 +78,9 @@ function App() {
           <Route path="create-agent" element={<CreateTravelAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="edit-agent/:id" element={<EditAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="detail-agent/:id" element={<DetailTravelAgent />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="list-country" element={<ListCountry />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="list-city" element={<ListCity />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="list-area" element={<ListArea />} allowedRoles={[ 'ROLE_ADMIN']}/>
         </Route>
         <Route path="/claim" exact element={<LayoutDashboard />}>
           <Route path="list" element={<ClaimList />} />
