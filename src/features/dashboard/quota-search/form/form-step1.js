@@ -3,7 +3,7 @@ import { useSelector,useDispatch} from 'react-redux'
 import {setFormStateAdult,setFormStateCoverageChild,selectManualInput,setFormStateCoverageType,setFormStateTravellerType,setFormStateTotalPass,setFormStateDestinationCountry,setFormStateStartDate,setFormEndDate} from '../quotaSearchSlice'
 import { Text,Flex,InputRightElement,InputGroup,Heading,Input,Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Box,Button, FormControl,FormLabel} from '@chakra-ui/react'
 import { Select } from 'chakra-react-select'
-import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
+import DatePicker,{ utils } from '@hassanmojab/react-modern-calendar-datepicker';
 import { SlCalender } from 'react-icons/sl'
 
 function usePrevious(value) {
@@ -104,6 +104,9 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
         dispatch(setFormStateStartDate({
             startDate: date
         }))
+        dispatch(setFormEndDate({
+            endDate: date
+        }))
         if (date !== null) {
         //   setActive(true)
         } else {
@@ -123,7 +126,9 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
     }
    
     const prevType = usePrevious(initState?.travellerType)
-
+    // const prevstartdate = usePrevious(initState?.startDate)
+    
+    
     React.useEffect(() => {
         if (prevType !== initState?.travellerType) {
             if (initState?.travellerType === 'Group') {
@@ -133,8 +138,31 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
             }
             dispatch(setFormStateCoverageChild(1))
         }
-    },[initState?.travellerType,prevType,dispatch])
-    console.log('initState', initState)
+    }, [initState?.travellerType, prevType, dispatch])
+    
+    const currentDate = new Date();
+
+  // Calculate start and end dates
+  const startDate = {
+    year: currentDate.getFullYear(),
+    month: currentDate.getMonth() + 1,
+    day: currentDate.getDate(),
+  };
+  const startToEndDate = {
+    year: initState?.startDate.year,
+    month: initState?.startDate.month,
+    day: initState?.startDate.day ,
+  };
+//  const tomorrow = utils().getRelativeDate(utils().getToday(), 1);
+  const endDate = new Date();
+  endDate.setDate(currentDate.getDate() + 30);
+
+  const endDateObj = {
+    year: endDate.getFullYear(),
+    month: endDate.getMonth() + 1,
+    day: endDate.getDate(),
+  };
+    
     return (
         <Box border={'1px'} borderColor="#ebebeb" >
              <Box  border={'1px'} borderColor="#ebebeb" p="12px" display="flex" justifyContent={'space-between'} alignItems="center">
@@ -312,6 +340,8 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                                     renderInput={renderCustomInput} 
                                     wrapperClassName={'calendarClassName'}
                                     shouldHighlightWeekends
+                                    minimumDate={startDate}
+                                    // maximumDate={endDateObj}
                                     />
                                     </FormControl>
                             </Box>
@@ -327,6 +357,8 @@ const Form1 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                                     renderInput={renderCustomInputs} 
                                     shouldHighlightWeekends
                                     wrapperClassName={'calendarClassName'}
+                                    minimumDate={startToEndDate}
+                                    maximumDate={endDateObj}
                                     />
                                     </FormControl>
                             </Box>

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { usePersist } from '../hook/usePersist'
 
-const defaultToken = JSON.parse(localStorage.getItem("persist")) ? JSON.parse(localStorage.getItem("persist")).token : null
+const defaultToken = JSON.parse(localStorage.getItem("persist")) && JSON.parse(localStorage.getItem("persist")).token !==null ? true : false
 const authSlice = createSlice({
     name: 'auth',
     initialState: { 
@@ -10,6 +10,7 @@ const authSlice = createSlice({
             password: null,
             role: null
         },
+        isAuthenticated:false ,
         resetPassword:null,
         userLogin:null,
         tokenAccess:null,
@@ -121,14 +122,18 @@ const authSlice = createSlice({
         setCredentials: (state, action) => {
             const { userDatas,resetPassword } = action.payload
             state.userLogin = action.payload
-            // state.otherLogin.password = password
-            // state.otherLogin.role = role
-            // state.traveller.insuredName = insuredName
-            // state.traveller.policyNumber = policyNumber
-            // state.traveller.pasportNumber = pasportNumber
+            
+        },
+         saveToken: (state, action) => {
+                state.isAuthenticated = action.payload;
         },
         logOut: (state, action) => {
             state.userLogin = null
+            state.isAuthenticated = false
+        },
+        setAuth: (state, action) => {
+            console.log('isAuthenticated', action.payload)
+            state.isAuthenticated = action.payload
         },
         resetPassword: (state, action) => {
             state.resetPassword = action.payload
@@ -136,7 +141,7 @@ const authSlice = createSlice({
     },
 })
 
-export const { setCredentials, logOut,resetPassword } = authSlice.actions
+export const {setAuth,saveToken, setCredentials, logOut,resetPassword } = authSlice.actions
 
 export default authSlice.reducer
 
@@ -149,3 +154,4 @@ export const Menulist = (state) => state.auth.mainMenu
 export const userLoginCurrent = (state) => state.auth.userLogin
 export const tokenLoginCurrent = (state) => state.auth.tokenAccess
 export const userResetPassword = (state) => state.auth.resetPassword
+export const isAuthenticate = (state) => state.auth.isAuthenticated

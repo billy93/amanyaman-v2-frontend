@@ -197,7 +197,7 @@ const Form3 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
     const onSave = (e) => {
         e.preventDefault()
         let i = listTravellers?.listTravellers?.length;
-        let dates = `${dateOfBirth.day} ${getMonthName(dateOfBirth.month)} ${dateOfBirth.year}`
+        let dates = `${dateOfBirth?.day} ${getMonthName(dateOfBirth?.month)} ${dateOfBirth?.year}`
             const newAdd = {
                 id: i + 1,
                 typeStatus:typeStatus,
@@ -408,7 +408,13 @@ const Form3 = ({label,hasCompletedAllSteps,activeStep,reset,prevStep,nextStep,is
                     </Box>
                     <Box display={'flex'} justifyContent={'lex-start'} alignItems={'center'} borderBottom={'1px solid #ebebeb'} pb="10px" pt="10px">
                         <Text as="b" w="50%" fontFamily={'Mulish'} style={{fontSize:'14px'}}>Travellers Type</Text>
-                        <Text as="p" w="50%" fontFamily={'Mulish'} style={{fontSize:'12px'}} pl="5px">{initStateTraveller?.travellerType} - {initStateTraveller?.adult} adults</Text>
+                            <Text as="p" w="50%" fontFamily={'Mulish'} style={{ fontSize: '12px' }} pl="5px">
+                                {
+                                    initStateTraveller?.travellerType} -
+                                
+                                    {` ${initStateTraveller?.adult} adult `}{`${parseInt(initStateTraveller?.child) >0 ? `${initStateTraveller?.child} child` : ''}`} 
+                                
+                            </Text>
                     </Box>
                     <Box display={'flex'} justifyContent={'lex-start'} alignItems={'center'} borderBottom={'1px solid #ebebeb'} pb="10px" pt="10px">
                         <Text as="b" w="50%" fontFamily={'Mulish'} style={{fontSize:'14px'}}>Destination</Text>

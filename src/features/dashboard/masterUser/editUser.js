@@ -274,7 +274,7 @@ const handleidentityCard = (e, i) => {
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
                         <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="firstName" value={formuser?.firstName} onChange={handleData} h="48px" variant={'custom'}/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
-                        <FormLabel fontSize="12" pt="1.5">FistName</FormLabel>
+                        <FormLabel fontSize="12" pt="1.5" style={{fontFamily:"Mulish", fontWeight:"normal"}}>FistName</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
           </FormControl>
           </Box>
@@ -282,7 +282,7 @@ const handleidentityCard = (e, i) => {
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
                         <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="lastName" value={formuser?.lastName} onChange={handleData} h="48px" variant={'custom'}/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
-                        <FormLabel fontSize="12" pt="1.5">LastName</FormLabel>
+                        <FormLabel fontSize="12" pt="1.5" style={{fontFamily:"Mulish", fontWeight:"normal"}}>LastName</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
           </FormControl>
           </Box>
@@ -291,7 +291,7 @@ const handleidentityCard = (e, i) => {
           <FormControl variant="floating" id="first-name" isRequired mt="14px">
                         <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="email" value={formuser?.email} onChange={handleData} h="48px" variant={'custom'}/>
                         {/* It is important that the Label comes after the Control due to css selectors */}
-                        <FormLabel fontSize="12" pt="1.5">Email</FormLabel>
+                        <FormLabel fontSize="12" pt="1.5" style={{fontFamily:"Mulish", fontWeight:"normal"}}>Email</FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
           </FormControl>
           </Box>
@@ -319,7 +319,7 @@ const handleidentityCard = (e, i) => {
                             }}
                           />
                         <span className="highlight"></span>
-                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.authorities !=='' ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.authorities ==='' ?"#231F20" :"#065baa", fontSize:"14px", fontWeight:"600" }} fontFamily={'Mulish'}>Role</FormLabel>
+                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.authorities !=='' ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.authorities ==='' ?"#231F20" :"#065baa", fontSize:"14px"}} fontFamily={'Mulish'}>Role</FormLabel>
                       
                        </Box>
                     </Box>
@@ -350,7 +350,7 @@ const handleidentityCard = (e, i) => {
                             }}
                           />
                         <span className="highlight"></span>
-                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.travelAgent !=='' ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.travelAgent ==='' ?"#231F20" :"#065baa", fontSize:"14px", fontWeight:"600" }} fontFamily={'Mulish'}>Travel Agent</FormLabel>
+                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.travelAgent !=='' ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.travelAgent ==='' ?"#231F20" :"#065baa", fontSize:"14px" }} fontFamily={'Mulish'}>Travel Agent</FormLabel>
                        </Box>
                     </Box>
                     {/* It is important that the Label comes after the Control due to css selectors */}

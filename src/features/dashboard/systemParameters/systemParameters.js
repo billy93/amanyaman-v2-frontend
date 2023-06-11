@@ -398,7 +398,23 @@ const filterTypes = React.useMemo(
     const handleAdd = (e) => {
         e.preventDefault()
         navigate('/master-data/create-system-params')
-  }
+    }
+  const [expandedRows, setExpandedRows] = useState([]);
+
+  const handleRowClick = (rowIndex) => {
+    const expandedRowsCopy = [...expandedRows];
+    const index = expandedRows.indexOf(rowIndex);
+
+    if (index > -1) {
+      expandedRowsCopy.splice(index, 1);
+    } else {
+      expandedRowsCopy.push(rowIndex);
+    }
+
+    setExpandedRows(expandedRowsCopy);
+  };
+
+  const isRowExpanded = (rowIndex) => expandedRows.includes(rowIndex);
   return (
       <>
       <Box mb="2em" mt="2em">
@@ -421,7 +437,7 @@ const filterTypes = React.useMemo(
             </Box> */}
       </Box>
       <Box bg="white" overflow={'scroll'} p="3">
-      <table {...getTableProps()}>
+      <table {...getTableProps()} className='my-table'>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -433,6 +449,14 @@ const filterTypes = React.useMemo(
                       minWidth: column.minWidth,
                     },
                   })}
+                  style={{ 
+                            // backgroundColor: 'red',
+                            fontWeight: 'bold',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px'
+                          }}
                   >
                     <div {...column.getSortByToggleProps()} style={{display:"flex", justifyContent:"space-between", alignItems:"center", cursor:"pointer"}} >
                     {column.render('Header')}
@@ -452,55 +476,39 @@ const filterTypes = React.useMemo(
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
-          {/* {rows.slice(0, 10).map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
+        <tbody {...getTableBodyProps()} >
+           {rows.map((row, rowIndex) => {
+          prepareRow(row);
+          const isExpanded = isRowExpanded(rowIndex);
+
+          return (
+            <React.Fragment key={rowIndex}>
+              <tr {...row.getRowProps()} onClick={() => handleRowClick(rowIndex)}>
+                {row.cells.map((cell) => (
+                  <td
+                    {...cell.getCellProps()}
+                    className={`${cell.column.id === 'value' && isExpanded ? 'expanded' : ''}`}
+                  >
+                    {cell.column.id === 'value' && cell.value.length > 30
+                      ? (isExpanded ? cell.value : cell.value.substring(0, 30) + '...')
+                      : cell.render('Cell')}
+                  </td>
+                ))}
               </tr>
-            );
-          })} */}
-         <AnimatePresence>
-            {rows.slice(0, 10).map((row, i) => {
-              prepareRow(row)
-              return (
-                <motion.tr
-                  {...row.getRowProps({
-                    layoutTransition: spring,
-                    exit: { opacity: 0, maxHeight: 0 },
-                  })}
-                >
-                  {row.cells.map((cell, i) => {
-                    return (
-                      <motion.td
-                        {...cell.getCellProps({
-                          layoutTransition: spring,
-                        })}
-                      >
-                        {cell.render('Cell')}
-                      </motion.td>
-                    )
-                  })}
-                </motion.tr>
-              )
-            })}
-          </AnimatePresence>
-          <tr>
-            {loading ? (
-              // Use our custom loading state to show a loading indicator
-              <td colSpan="10000">Loading...</td>
-            ) : (
-              <td colSpan="10000">
-                Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-                results
-              </td>
-            )}
-          </tr>
+            </React.Fragment>
+          );
+        })}
+        <tr>
+              {loading ? (
+                // Use our custom loading state to show a loading indicator
+                <td colSpan="10000">Loading...</td>
+              ) : (
+                <td colSpan="10000">
+                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
+                  results
+                </td>
+              )}
+            </tr>
         </tbody>
         </table>
         </Box>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { NavLink,Navigate, useNavigate,Link as Links, useParams } from "react-router-dom";
 import {
+chakra,
 Box,
 Stack,
 Text,
@@ -25,7 +26,10 @@ Radio,
 useRadioGroup,
 UseRadioGroupReturn,
 HStack,
-useRadio
+useRadio,
+useTheme,
+useColorModeValue,
+useMultiStyleConfig
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux"
 import { useDispatch } from 'react-redux'
@@ -112,7 +116,12 @@ const CreateUser = () => {
   const [selectFill, setSelectFille] = React.useState(false)
   const [isChek, setIsChek] = React.useState('allowCreditPayment')
   const list = ['allowCreditPayment'];
-  
+  const { th } = useMultiStyleConfig("Table", {});
+  const theme = useTheme();
+  const outlineColor = useColorModeValue(
+    theme.colors.blue[500],
+    theme.colors.blue[300]
+  );
   React.useEffect(() => {
     if (detail?.allowCreditPayment ===false) {
         setIsChek(null)
@@ -167,7 +176,7 @@ React.useMemo(() => {
             legalName:detail !==null ? detail[0]?.legalName : null,   
             proformaInvoiceRecipients:detail !==null ? detail[0]?.proformaInvoiceRecipients : null,   
             allowCreditPayment:detail !==null && detail[0]?.allowCreditPayment ===false ? '' :'allowCreditPayment' ,   
-            city:detail !==null ? {...detail[0]?.city,'label':detail[0]?.city?.name} : null
+            city:detail !==null ? [{...detail[0]?.city,'label': detail[0]?.city?.name, 'value': detail[0]?.city?.id}] : null
         }
         dispatch(setEditAgent(datas))
         dispatch(setDetailAgent(datas))
@@ -264,12 +273,27 @@ const handleidentityCard = (e, i) => {
         console.log('d', data)
          const forms = {
           ...detail,
-          city: {
-            ...data
-          } 
+          city: [{
+            ...data,
+            value:data.id
+          } ]
         }
     dispatch(setEditAgent(forms))
   }
+  
+  const customStyles = {
+  menu: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? 'red' : 'white',
+    color: state.isFocused ? 'white' : 'black',
+  }),
+  dropdownIndicator: (prev, { selectProps }) => ({
+    ...prev,
+    "> svg": {
+      transform: `rotate(${selectProps.menuIsOpen ? -180 : 0}deg)`,
+    },
+  }),
+};
   console.log('', formuser?.allowCreditPayment)
   return (
     <Stack mt={{base:"1em", md:"5em"}}>
@@ -447,25 +471,79 @@ const handleidentityCard = (e, i) => {
          <Box width={{base:"100%",md:"540px"}} m="auto" mt="1em" mb="1em">
                                 <FormControl variant="floating" fontFamily={'Mulish'} isRequired h="48px" >  
                                 <Select
+                                    isMulti={false}
+                                    name="colors"
+                                    onChange={handleSelect}
+                                    value={detail?.city}
+                                    classNamePrefix="chakra-react-select"
+                                    options={listCity}
+                                    placeholder="Select some colors..."
+                                    closeMenuOnSelect={true}
+                                    chakraStyles={{
+                                      dropdownIndicator: (prev, { selectProps: { menuIsOpen } }) => ({
+                                        ...prev,
+                                        "> svg": {
+                                          transitionDuration: "normal",
+                                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`
+                                        }
+                                      })
+                                    }}
+                                  />
+                                    {/* <Select
                                       isMulti={false}
                                       name="colors"
                                       onChange={handleSelect}
-                                      value={detail?.city}
-                                      isSearchable={false}
-                                      classNamePrefix="chakra-react-select"
                                       options={listCity}
                                       placeholder="Select some colors..."
-                                      closeMenuOnSelect={true}
+                                      closeMenuOnSelect={false}
                                       chakraStyles={{
-                                        dropdownIndicator: (prev, { selectProps: { menuIsOpen } }) => ({
-                                          ...prev,
-                                          "> svg": {
-                                            transitionDuration: "normal",
-                                            transform: `rotate(${menuIsOpen ? -180 : 0}deg)`
+                                        dropdownIndicator: (provided) => ({
+                                          ...provided,
+                                          p: 0,
+                                          w: "40px"
+                                        }),
+                                        control: (provided, state) => ({
+                                          ...provided,
+                                          borderBottomLeftRadius: state.menuIsOpen ? 0 : "md",
+                                          borderBottomRightRadius: state.menuIsOpen ? 0 : "md",
+                                          transitionDuration: 0
+                                        }),
+                                        group: (provided) => ({
+                                          ...provided,
+                                          borderBottomWidth: "1px",
+                                          _last: {
+                                            borderBottomWidth: 0
                                           }
+                                        }),
+                                        groupHeading: (provided) => ({
+                                          ...provided,
+                                          fontSize: th.fontSize,
+                                          color: th.color,
+                                          fontWeight: th.fontWeight,
+                                          px: "0.8rem",
+                                          textTransform: "uppercase"
+                                        }),
+                                        menu: (provided) => ({
+                                          ...provided,
+                                          my: 0,
+                                          borderTopLeftRadius: 0,
+                                          borderTopRightRadius: 0,
+                                          shadow: `0 0 0 1px ${outlineColor}`,
+                                          borderWidth: "1px",
+                                          borderColor: outlineColor,
+                                          borderBottomRadius: "md",
+                                          backgroundColor:"red"
+                                        }),
+                                        menuList: (provided) => ({
+                                          ...provided,
+                                          borderTopLeftRadius: 0,
+                                          borderTopRightRadius: 0,
+                                          borderWidth: 0,
+                                          backgroundColor:"red"
                                         })
-                                      }}
-                                    />
+                                      }} */}
+                                      
+                                    {/* // /> */}
                                 {/* <Select
                                     size="lg"
                                     isMulti={false}

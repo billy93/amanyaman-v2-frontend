@@ -148,6 +148,25 @@ nav a{
   font-weight: 600;
   color: #231F20;
 }
+.my-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.expanded {
+  white-space: pre-wrap;
+}
+.my-table .expanded {
+  cursor: pointer;
+}
+
+.my-table .expanded-cell {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.custom-select-menu:focus {
+  background-color: red;
+  color: white;
+}
 .chakra-react-select__control{
   font-family: "Mulish";
   font-size: 11px;
@@ -214,8 +233,15 @@ nav a{
   transform: translate(0, -16px) scale(0.75);
    color: #231F20;
 }
+input[type=number]::-webkit-outer-spin-button, 
 input[type=number]::-webkit-inner-spin-button {
-    opacity: 1
+    /*-webkit-appearance: inner-spin-button !important;*/
+    opacity: 1;
+    margin-left: 5px;
+}
+.custom-select-option {
+  background-color: red;
+  color: white;
 }
 #react-select-5-placeholder{
   display: none!important;

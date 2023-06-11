@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+const date = new Date()
+console.log('date', date.getMonth())
 const createSearchSlice = createSlice({
     name: 'createQuotaSearch',
     initialState: { 
@@ -11,8 +13,16 @@ const createSearchSlice = createSlice({
                 destinationCountry: [],
                 adult:1,
                 child:1,
-                startDate:null,
-                endDate: null,
+                startDate: {
+                    day:date.getDate(),
+                    month:date.getMonth()+1,
+                    year:date.getFullYear()
+                },
+                endDate: {
+                    day:date.getDate(),
+                    month:date.getMonth()+1,
+                    year:date.getFullYear()
+                },
                 
             },
             selectPaymentMethod:"Credit Card",

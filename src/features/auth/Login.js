@@ -1,8 +1,8 @@
-import { useRef, useState, useEffect } from 'react'
+import React,{ useRef, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box,Center } from '@chakra-ui/react'
 import { useDispatch,useSelector } from 'react-redux'
-import { resetPassword,userResetPassword,setCredentials,UserRoles,selectCurrentUser,selectCurrentToken,userLoginCurrent,tokenLoginCurrent } from './authSlice'
+import { saveToken,setAuth,resetPassword,userResetPassword,setCredentials,UserRoles,selectCurrentUser,selectCurrentToken,userLoginCurrent,tokenLoginCurrent } from './authSlice'
 import { useLoginMutation } from './authApiSlice'
 import { useForgotPassQuery,useSendEmailConfirmMutation } from './forgotApiSlice'
 import { ArrowBackIcon } from '@chakra-ui/icons'
@@ -28,7 +28,22 @@ import {
 import { Image } from '@chakra-ui/react'
 import Logo from '../../img/logo.jpeg'
 import { Stack, HStack, VStack } from '@chakra-ui/react'
+import { isAuthenticate } from "../../features/auth/authSlice"
 import { MdWarning } from 'react-icons/md'
+
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef();
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
+}
+
+
 const Login = () => {
   const userRef = useRef()
   const errRef = useRef()
@@ -40,9 +55,11 @@ const Login = () => {
   const [errMsg, setErrMsg] = useState(false)
   const navigate = useNavigate()
   const [formReset, setFormReset] = useState(false)
-  const [login, { isLoading }] = useLoginMutation()
+  const [login, { isLoading,isSuccess:loginSuccess }] = useLoginMutation()
+  const isAuthenticated = useSelector(isAuthenticate);
   const [sendEmailConfirm] = useSendEmailConfirmMutation()
-  
+  const isAuth = JSON.parse(localStorage.getItem('persist')) && JSON.parse(localStorage.getItem("persist")).token
+  const prevAuth = usePrevious(isAuth)
     const dispatch = useDispatch()
     const [input, setInput] = useState('')
 
@@ -79,18 +96,47 @@ const Login = () => {
     }
   }, [checkAccount, isSuccess, navigate])
   
-  useEffect(() => {
-        let isAuth = JSON.parse(localStorage.getItem('auth')) && JSON.parse(localStorage.getItem('auth')).userLogin;
-        if( usersCurrent && usersCurrent !== null) {
-            navigate('/create-quota/search')
+  const waitForToken = () => {
+    return new Promise((resolve) => {
+      const checkToken = () => {
+        const token = localStorage.getItem('persist') && localStorage.getItem('persist').token;
+
+        if (token) {
+          clearInterval(interval);
+          resolve(token);
         }
-    }, [usersCurrent, navigate]);
- 
+      };
+
+      const interval = setInterval(checkToken, 500); // Check every 500 milliseconds
+      checkToken(); // Check immediately
+    });
+  };
+
+  const handleRedirect = React.useCallback (() => {
+    const token =  waitForToken();
+    if (token !== null) {
+    dispatch(saveToken(true));
+    navigate('/create-quota/search') 
+    }
+  },[dispatch,navigate]);
+
+  React.useEffect(() => {
+    if (loginSuccess) {
+        handleRedirect()
+   }
+  }, [loginSuccess, handleRedirect]);
+  
+  React.useEffect(() => {
+    if (isAuthenticated) {
+        navigate('/create-quota/search') 
+   }
+  }, [navigate,isAuthenticated]);
+
   const handlelogin = async (e) => {
     try {
             const userData = await login({ username:fields?.username, password:fields?.password,rememberMe:fields?.rememberMe }).unwrap()
             dispatch(setCredentials({...userData}))
-            navigate('/create-quota/search')
+            // navigate('/create-quota/search')
             const id = 'test-toast'
             if(!toast.isActive(id)){
               toast({

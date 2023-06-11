@@ -48,6 +48,7 @@ import {BiSkipPreviousCircle,BiSkipNextCircle} from 'react-icons/bi'
 import styled from "styled-components";
 import { useTable, useRowSelect,useFilters,useSortBy } from "react-table";
 import CustomModal from '../../../components/customModal';
+// import 'react-table-6/react-table.css';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -209,7 +210,11 @@ const Tables = ({
  const [filterName,setFilterName] = React.useState('')
  const [filterEmail,setFilterEmail] = React.useState('')
  const [filterRole,setFilterRole] = React.useState('')
-
+const [expandedCell, setExpandedCell] = useState(null);
+  
+  const handleCellClick = (columnId) => {
+    setExpandedCell(columnId === expandedCell ? null : columnId);
+  };
  const handleAddUser = (e) => {
     e.preventDefault()
     const datas = {
@@ -388,8 +393,23 @@ const filterTypes = React.useMemo(
   const value = e.target.value || undefined;
   setFilter("custcode", value); 
   setFilterRole(value);
-};
+  };
+const [expandedRows, setExpandedRows] = useState([]);
+  
+const handleRowClick = (rowIndex) => {
+    const expandedRowsCopy = [...expandedRows];
+    const index = expandedRows.indexOf(rowIndex);
 
+    if (index > -1) {
+      expandedRowsCopy.splice(index, 1);
+    } else {
+      expandedRowsCopy.push(rowIndex);
+    }
+
+    setExpandedRows(expandedRowsCopy);
+  };
+
+  const isRowExpanded = (rowIndex) => expandedRows.includes(rowIndex);
   // console.log('filters', filters)
   return (
       <>
@@ -524,6 +544,14 @@ const filterTypes = React.useMemo(
                         minWidth: column.minWidth,
                       },
                     })}
+                    style={{ 
+                            // backgroundColor: 'red',
+                            fontWeight: 'bold',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px'
+                          }}
                     >
                       <div {...column.getSortByToggleProps()} style={{display:"flex", justifyContent:"space-between", alignItems:"center", cursor:"pointer"}} >
                       {column.render('Header')}
@@ -545,44 +573,42 @@ const filterTypes = React.useMemo(
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {/* {rows.slice(0, 10).map((row, i) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })} */}
-          <AnimatePresence>
-              {rows.slice(0, 10).map((row, i) => {
-                prepareRow(row)
-                return (
-                  <motion.tr
-                    {...row.getRowProps({
-                      layoutTransition: spring,
-                      exit: { opacity: 0, maxHeight: 0 },
-                    })}
+            {rows.map((row, rowIndex) => {
+          prepareRow(row);
+          const isExpanded = isRowExpanded(rowIndex);
+
+          return (
+            <React.Fragment key={rowIndex}>
+              <tr {...row.getRowProps()} onClick={() => handleRowClick(rowIndex)}>
+                {row.cells.map((cell) => (
+                  <td
+                    {...cell.getCellProps()}
+                    className={isExpanded ? 'expanded' : ''}
                   >
-                    {row.cells.map((cell, i) => {
-                      return (
-                        <motion.td
-                          {...cell.getCellProps({
-                            layoutTransition: spring,
-                          })}
-                        >
-                          {cell.render('Cell')}
-                        </motion.td>
-                      )
-                    })}
-                  </motion.tr>
-                )
-              })}
-            </AnimatePresence>
-            <tr>
+                    {cell.column.id === 'travelAgentAddress' && cell.value.length > 30
+                      ? (isExpanded ? cell.value : cell.value.substring(0, 30) + '...')
+                      : cell.render('Cell')}
+                  </td>
+                ))}
+                {isExpanded && (
+                <tr>
+                  <td colSpan={columns.length}>
+                    <div>{row.cells.find((cell) => cell.column.id === 'travelAgentAddress').value}</div>
+                  </td>
+                </tr>
+              )}
+              </tr>
+              {/* {isExpanded && (
+                <tr>
+                  <td colSpan={columns.length}>
+                    <div>{row.cells.find((cell) => cell.column.id === 'travelAgentAddress').value}</div>
+                  </td>
+                </tr>
+              )} */}
+            </React.Fragment>
+          );
+        })}
+        <tr>
               {loading ? (
                 // Use our custom loading state to show a loading indicator
                 <td colSpan="10000">Loading...</td>
@@ -773,7 +799,7 @@ const MasterUser = () => {
       {
         Header: "Travel Agent Address",
         accessor: "travelAgentAddress",
-        maxWidth: 400,
+        maxWidth: 200,
         minWidth: 140,
         width: 200,
       },

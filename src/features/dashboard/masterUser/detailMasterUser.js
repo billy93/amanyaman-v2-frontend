@@ -138,7 +138,16 @@ const Tables = ({ columns, data }) => {
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                <th {...column.getHeaderProps()}
+                style={{ 
+                            // backgroundColor: 'red',
+                            fontWeight: 'bold',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px'
+                          }}
+                >{column.render('Header')}</th>
               ))}
             </tr>
           ))}
@@ -149,7 +158,16 @@ const Tables = ({ columns, data }) => {
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map(cell => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  return <td {...cell.getCellProps()}
+                  style={{ 
+                            // backgroundColor: 'red',
+                            fontWeight: 'normal',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px'
+                          }}
+                  >{cell.render('Cell')}</td>
                 })}
               </tr>
             )

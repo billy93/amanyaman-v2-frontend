@@ -404,6 +404,14 @@ const filterTypes = React.useMemo(
                       minWidth: column.minWidth,
                     },
                   })}
+                   style={{ 
+                            // backgroundColor: 'red',
+                            fontWeight: 'bold',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px'
+                          }}
                   >
                     <div {...column.getSortByToggleProps()} style={{display:"flex", justifyContent:"space-between", alignItems:"center", cursor:"pointer"}} >
                     {column.render('Header')}
@@ -452,6 +460,14 @@ const filterTypes = React.useMemo(
                         {...cell.getCellProps({
                           layoutTransition: spring,
                         })}
+                         style={{ 
+                            // backgroundColor: 'red',
+                            fontWeight: 'normal',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px'
+                          }}
                       >
                         {cell.render('Cell')}
                       </motion.td>

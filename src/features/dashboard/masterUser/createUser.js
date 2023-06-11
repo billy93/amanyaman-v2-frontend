@@ -217,7 +217,7 @@ const handleidentityCard = (e, i) => {
              <FormControl variant="floating" isRequired fontFamily={'Mulish'} mt="14px" id="float-label"> 
                     <Box className='floating-form'>
                       <Box className='floating-label'>
-                        <Select bg={formuser !==null && formuser?.authorities?.length !==0 ? '#e8f0fe' : '#ebebeb'} placeholder=''  name="authorities" h="48px" onChange={handleData}>  
+                        <Select style={{fontFamily:"Mulish", fontWeight:"normal"}} bg={formuser !==null && formuser?.authorities?.length !==0 ? '#e8f0fe' : '#ebebeb'} placeholder=''  name="authorities" h="48px" onChange={handleData}>  
                          {
                           formuser?.authorities?.length ===0 &&(
                            <option value={''} >{''}</option>
@@ -232,7 +232,7 @@ const handleidentityCard = (e, i) => {
                         }
                         </Select>
                         <span className="highlight"></span>
-                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.authorities?.length !==0 ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.authorities?.length ===0 ?"#231F20" :"#065baa", fontSize:"14px", fontWeight:"600" }} fontFamily={'Mulish'}>Role</FormLabel>
+                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.authorities?.length !==0 ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.authorities?.length ===0 ?"#231F20" :"#065baa", fontSize:"14px"}} fontFamily={'Mulish'}>Role</FormLabel>
                        </Box>
                     </Box>
                     {/* It is important that the Label comes after the Control due to css selectors */}
@@ -257,7 +257,7 @@ const handleidentityCard = (e, i) => {
                         }
                         </Select>
                         <span className="highlight"></span>
-                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.travelAgent !=='' ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.travelAgent ==='' ?"#231F20" :"#065baa", fontSize:"14px", fontWeight:"600" }} fontFamily={'Mulish'}>Travel Agent</FormLabel>
+                        <FormLabel  pt="1.5" style={{ transform: formuser !==null && formuser?.travelAgent !=='' ? "translate(0, -10px) scale(0.75)": "translate(0, 4px) scale(0.75)",color: formuser !== null && formuser?.travelAgent ==='' ?"#231F20" :"#065baa", fontSize:"14px"}} fontFamily={'Mulish'}>Travel Agent</FormLabel>
                        </Box>
                     </Box>
                     {/* It is important that the Label comes after the Control due to css selectors */}
