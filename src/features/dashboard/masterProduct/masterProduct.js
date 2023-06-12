@@ -1,25 +1,25 @@
-import React from "react";
-import styled from "styled-components";
-import {Link,useNavigate} from 'react-router-dom' 
-import { useTable,useSortBy, usePagination, useGlobalFilter,useRowSelect,useFilters } from "react-table";
-import { listProduct,setMasterProduct,setListSelectProduct,listProductSelection } from './masterProductSlice'
-import { useSelector, useDispatch } from 'react-redux'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState } from 'react';
+import { useGetProductsQuery } from "./masterProductApiSlice"
+import { Link, useNavigate } from "react-router-dom";
+import Data from './list.json'
 import matchSorter from 'match-sorter'
+import Table, { usePagination } from "react-table";
+import PulseLoader from 'react-spinners/PulseLoader'
+import { motion, AnimatePresence } from 'framer-motion'
+import { FaChevronUp, FaSort } from 'react-icons/fa'
+// import ExportData from './export'
 import {
-useToast,
-Modal,
-Select,
-Button,
+  useToast,
+  Select,
+ Input,
+  Modal,
 ModalOverlay,
 ModalContent,
 ModalHeader,
 ModalFooter,
 ModalBody,
 ModalCloseButton,
-Input,
-InputGroup,
-InputLeftElement,
-InputRightAddon,
 Link as Links,
   Box,
   Table as TableNew,
@@ -39,20 +39,21 @@ Link as Links,
   useDisclosure,
   IconButton
 } from '@chakra-ui/react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { Button } from '@chakra-ui/react'
+import { useDispatch, useSelector } from 'react-redux'
+import {listProduct,setMasterProduct,listProductSelection,setListSelectProduct} from './masterProductSlice'
+import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
 import {AiOutlinePlusCircle} from 'react-icons/ai'
 import {BiSkipPreviousCircle,BiSkipNextCircle} from 'react-icons/bi'
-import { Search2Icon } from "@chakra-ui/icons";
-import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md'
-import {FaChevronUp, FaSort} from 'react-icons/fa'
-// A great library for fuzzy filtering/sorting items
-
-// import makeData from "./mockdata";
+import styled from "styled-components";
+import { useTable, useRowSelect,useFilters,useSortBy } from "react-table";
+// import CustomModal from './customModal';
 
 const Styles = styled.div`
   padding: 1rem;
+
   table {
     width:100%;
     border-spacing: 0;
@@ -197,70 +198,82 @@ const Tables = ({
   data,
   fetchData,
   loading,
+  setPageCount,
   pageCount: controlledPageCount,
 }) => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const listuser = useSelector(listProduct)
-  const selected = useSelector(listProductSelection)
-  const prevSelected = usePrevious(selected)
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [showFilter, setShowFilter] = React.useState(false)
-  const [filterName, setFilterName] = React.useState('')
-  const [filterEmail, setFilterEmail] = React.useState('')
-  const [filterRole, setFilterRole] = React.useState('')
- 
-  const defaultColumn = React.useMemo(
+ const dispatch = useDispatch()
+ const navigate = useNavigate()
+ const listuser = useSelector(listProduct)
+ const selected = useSelector(listProductSelection)
+ const prevSelected = usePrevious(selected)
+ const { isOpen, onOpen, onClose } = useDisclosure()
+ const [showFilter,setShowFilter] = React.useState(false)
+ const [productcode,setFilterName] = React.useState('')
+ const [filterEmail,setFilterEmail] = React.useState('')
+ const [filterRole,setFilterRole] = React.useState('')
+ const handleAddUser = () => {
+   const stateUser = {
+        login:"",    
+        firstName:"",    
+        lastName:"",  
+        area:"",  
+        authorities:[],
+        travelAgent:""
+   }
+  //  dispatch(setFormUser(stateUser))
+    navigate('/master-data/create-user')
+ }
+const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
       Filter: DefaultColumnFilter,
     }),
     []
   )
-  const filterTypes = React.useMemo(
+const filterTypes = React.useMemo(
     () => ({
       text: (rows, id, filterValue) => {
         return rows.filter(row => {
           const rowValue = row.values[id]
           return rowValue !== undefined
             ? String(rowValue)
-              .toLowerCase()
-              .startsWith(String(filterValue).toLowerCase())
+                .toLowerCase()
+                .startsWith(String(filterValue).toLowerCase())
             : true
         })
       },
     }),
     []
   )
-  const toast = useToast()
-  const onOpenModal = () => {
-    onOpen()
-    // getSelectedRows()
-  }
-  const onCloseModal = () => {
-    onClose()
-    dispatch(setMasterProduct([]))
-    // resetSelectedRows: () => toggleAllRowsSelected(false)
-    // getSelectedRows()
-  }
-  const clearSelect = () => {
-    dispatch(setMasterProduct([]))
-    onClose()
-       
-    const rowIds = data && data?.map((item, i) => i);
-    if (rowIds) {
-      rowIds.forEach(id => toggleRowSelected(id, false));
+ const toast = useToast()
+   const onOpenModal = () => {
+        onOpen()
+        // getSelectedRows()
+ }
+    const onCloseModal = () => {
+        onClose()
+        dispatch(setListSelectProduct([]))
+        // resetSelectedRows: () => toggleAllRowsSelected(false)
+        // getSelectedRows()
     }
-  }
-  const cancelDelete = () => {
-    onClose()
-  }
-  const deletedUser = () => {
+     const clearSelect = () => {
+     dispatch(setListSelectProduct([]))
+       onClose()
+       
+     const rowIds = data && data?.map((item,i) =>i);
+       if (rowIds) {
+       rowIds.forEach(id => toggleRowSelected(id, false));
+     }
+ }
+     const cancelDelete = () => {
+     onClose()
+ }
+    const deletedUser = () => {
     //  dispatch(setMasterUser([]))
-    onOpen()
+     onOpen()
     //  const rowIds = listuser?.map((item,i) =>i);
     //  rowIds.forEach(id => toggleRowSelected(id, false));
-  }
+ }
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -283,9 +296,10 @@ const Tables = ({
     nextPage,
     previousPage,
     setPageSize,
+    setPageIndex,
     setFilter,
     // Get the state from the instance
-    state: { pageIndex, pageSize, selectedRowIds, filters },
+    state: { pageIndex, pageSize,selectedRowIds,filters },
   } = useTable(
     {
       columns,
@@ -312,14 +326,14 @@ const Tables = ({
           // The header can use the table's getToggleAllRowsSelectedProps method
           // to render a checkbox
           Header: ({ getToggleAllRowsSelectedProps }) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: 'center' }}>
+            <div style={{display:"flex", justifyContent:"center", alignItems:'center'}}>
               <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
             </div>
           ),
           // The cell can use the individual row's getToggleRowSelectedProps method
           // to the render a checkbox
           Cell: ({ row }) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: 'center' }}>
+            <div style={{display:"flex", justifyContent:"center", alignItems:'center'}}>
               <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
             </div>
           )
@@ -327,22 +341,22 @@ const Tables = ({
         ...columns
       ]);
     }
-  );
+      );
   const prev = usePrevious(selectedRowIds)
   React.useEffect(() => {
-    toggleAllRowsSelected();
+      toggleAllRowsSelected();
   }, []);
     
-  const getValues = (data) => {
-    let original = data.map((item) => item.original)
-    dispatch(setMasterProduct(original))
-  }
+   const getValues = (data) => {
+     let original = data.map((item) => item.original)
+     dispatch(setListSelectProduct(original))
+   }
   
   React.useEffect(() => {
-    if (JSON.stringify(prev) !== JSON.stringify(selectedRowIds)) {
-      getValues(selectedFlatRows)
-    }
-  }, [prev, selectedRowIds, getValues, selectedFlatRows]);
+      if (JSON.stringify(prev) !== JSON.stringify(selectedRowIds)) {
+          getValues(selectedFlatRows)
+      }
+  }, [prev, selectedRowIds,getValues,selectedFlatRows]);
   
   const showFilterBtn = () => {
     setShowFilter(!showFilter)
@@ -351,27 +365,30 @@ const Tables = ({
   // Render the UI for your table
    
     
-  const deletedUserUpdate = (e) => {
-    e.preventDefault()
-    const nextState = listuser?.filter(
-      item => !selected.some(({ id }) => item.id === id)
-    );
-    console.log('nextState', nextState)
-    dispatch(setListSelectProduct(nextState))
-    dispatch(setMasterProduct([]))
-    onClose()
-    toast({
-      title: `Deleted Success`,
-      status: "success",
-      position: 'top-right',
-      duration: 3000,
-      isClosable: true,
-      variant: "solid",
-    })
-  }
+    const deletedUserUpdate = (e) => {
+        e.preventDefault()
+        const nextState = listuser?.filter(
+        item => !selected.some(({ id }) => item.id === id)
+        );
+        console.log('nextState',nextState)
+        dispatch(setMasterProduct(nextState))
+        dispatch(setListSelectProduct([]))
+        onClose()
+        toast({
+                  title: `Deleted Success`,
+                  status:"success",
+                  position: 'top-right',
+                  duration:3000,
+                  isClosable: true,
+                  variant:"solid",
+                })
+  } 
   React.useEffect(() => {
-    fetchData({ pageIndex, pageSize })
+    fetchData({ pageIndex, pageSize,pageOptions })
+    // setPageCount({pageIndex, pageSize})
   }, [fetchData, pageIndex, pageSize])
+
+  console.log('test', pageIndex)
 
   const spring = React.useMemo(
     () => ({
@@ -382,150 +399,146 @@ const Tables = ({
     []
   )
   const handleFilterByName = e => {
-    const value = e.target.value || undefined;
-    setFilter("productDetailCode", value);
-    setFilterName(value);
-  };
+  const value = e.target.value || undefined;
+  setFilter("productCode", value); 
+  setFilterName(value);
+};
   const handleFilterByEmail = e => {
-    const value = e.target.value || undefined;
-    setFilter("email", value);
-    setFilterEmail(value);
-  };
+  const value = e.target.value || undefined;
+  setFilter("email", value); 
+  setFilterEmail(value);
+};
   const handleFilterByRole = e => {
-    const value = e.target.value || undefined;
-    setFilter("additionalWeek", value);
-    setFilterRole(value);
-  };
+  const value = e.target.value || undefined;
+  setFilter("authorities", value); 
+  setFilterRole(value);
+};
 
-  // console.log('filters', filters)
+  const handleNext = () => {
+    console.log('eee', pageIndex + 1)
+    setPageCount(pageIndex+1)
+}
+ 
+//   const handleExportUser = async() => {
+//     try {
+//       await exportUserdata()
+//     } catch (error) {
+//       console.log(error)
+//     }
+// }
   return (
-    <>
-      <Modal size="xl" blockScrollOnMount={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent maxW="56rem">
-          <ModalHeader>
-            <Heading variant="primary" as="div" size="lg" fontFamily={'Mulish'} color={'#231F20'} style={{ fontSize: '18px' }}>
-              Delete Product
-            </Heading>
-            <Text as="p" fontSize={'sm'} fontFamily={'Mulish'} color={'#231F20'} style={{ fontSize: '14px' }} fontWeight={'normal'}>
-              {/* You’re about to delete {selected && selected?.length > 0} product: */}
-            </Text>
-          </ModalHeader>
-          <ModalCloseButton onClick={clearSelect} />
-          <ModalBody pb={6}>
-            <TableContainer>
-              <TableNew variant={'simple'}>
-                <Thead>
-                  <Tr>
-                    <Th>Product Id</Th>
-                    <Th>Product Code</Th>
-                    <Th>Product Detail Code</Th>
-                    <Th >Currency</Th>
-                    <Th >Product Description</Th>
-                    <Th >Personal Accident Cover</Th>
-                    <Th >Medical Cover</Th>
-                    <Th >Travel Cover	</Th>
-                    <Th >Product Type	</Th>
-                    <Th >Travel Duration</Th>
-                    <Th >Additional Week</Th>
-                    <Th >Updated Data</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {
-                    selected && selected?.map((item, i) => {
-                      return (
-                        <Tr key={item.id} >
-                          <Td>{item.productId}</Td>
-                          <Td>{item.productCode}</Td>
-                          <Td>{item.productDetailCode}</Td>
-                          <Td>{item.currency}</Td>
-                          <Td>{item.productDescription}</Td>
-                          <Td>{item.personalAccidentCover}</Td>
-                          <Td>{item.medicalCover}</Td>
-                          <Td>{item.travelCover}</Td>
-                          <Td>{item.productType}</Td>
-                          <Td>{item.travelDuration}</Td>
-                          <Td>{item.additionalWeek}</Td>
-                          <Td>{item.updatedData}</Td>
+      <>
+          <Modal size="xl" blockScrollOnMount={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent maxW="56rem">
+                <ModalHeader>
+                    <Heading variant="primary" as="div" size="lg" fontFamily={'Mulish'} color={'#231F20'} style={{fontSize:'18px'}}>
+                        Delete Product
+                    </Heading>
+                    <Text as="p" fontSize={'sm'} fontFamily={'Mulish'} color={'#231F20'} style={{fontSize:'14px'}} fontWeight={'normal'}>
+                        You’re about to delete {selected?.length} products:
+                    </Text>
+                </ModalHeader>
+                <ModalCloseButton onClick={clearSelect}/>
+                <ModalBody pb={6}>
+                   <TableContainer>
+                    <TableNew variant={'simple'}>
+                        <Thead>
+                        <Tr>
+                                    <Th>Fullname</Th>
+                                    <Th>Email</Th>
+                                    <Th>Travel Agent</Th>
+                                    <Th >Role</Th>
                         </Tr>
-                      )
-                    })
-                  }
-                </Tbody>
-                <TableCaption textAlign={'left'} >
-                  <Text as="p" fontSize={'sm'} style={{ fontSize: "14px" }} fontFamily={'Mulish'}>
-                    Deleting these products will remove all of it’s information from the database. This cannot be undone.
-                  </Text>
-                </TableCaption>
-              </TableNew>
-            </TableContainer>
-          </ModalBody>
+                        </Thead>
+                        <Tbody>
+                             {
+                                    selected?.map((item, i) => {
+                                        return (
+                                            <Tr key={item.id} >
+                                                <Td>{ item.firstName} { item.lastName}</Td>
+                                                <Td>{ item.email}</Td>
+                                                <Td>{ item.travelAgemt}</Td>
+                                                <Td>{ item.authorities}</Td>
+                                            </Tr>
+                                        )
+                                    })
+                               }
+                        </Tbody>
+                         <TableCaption textAlign={'left'} >
+                                        <Text as="p" fontSize={'sm'} style={{fontSize:"14px"}} fontFamily={'Mulish'}>
+                                         Deleting these users will remove all of their information from the database. This cannot be undone.
+                                        </Text>
+                         </TableCaption>
+                    </TableNew>
+                    </TableContainer>
+                </ModalBody>
 
-          <ModalFooter>
-            <Button onClick={cancelDelete}>Cancel</Button>
-            <Button colorScheme='blue' mr={3} onClick={deletedUserUpdate}>
-              Delete Product
-            </Button>
-          </ModalFooter>
-        </ModalContent>
+                <ModalFooter>
+                        <Button onClick={cancelDelete}>Cancel</Button>
+                      <Button colorScheme='blue' mr={3} onClick={ deletedUserUpdate}>
+                        Delete Products
+                        </Button>
+                </ModalFooter>
+                </ModalContent>
       </Modal>
+      
       <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-        <Heading as={'h6'} size={'sm'}>Product</Heading>
-        <Stack direction='row' spacing={4} m={'2.5'}>
-          <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : ''} onClick={showFilterBtn}>
-            Apply Filter
-          </Button>
-          <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
-            Export
-          </Button>
-          <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
-            Import
-          </Button>
-          <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" >
-            Add Product
-          </Button>
-        </Stack>
+                <Heading as={'h6'} size={'sm'}>Product</Heading>
+                <Stack direction='row' spacing={4} m={'2.5'}>
+                    <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
+                        Apply Filter
+                    </Button>
+                    {/* <ExportData /> */}
+                   
+                    {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+                        Import 
+                    </Button> */}
+                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAddUser}>
+                        Add Product 
+                    </Button>
+                </Stack>
       </Box>
       <Box mt="1em" mb="1em" display="flex" alignItems="center" gap="10px">
         
         {
-          selected?.length > 0 && (
-            <>
-              <Text as="p" size="sm">
+             selected?.length > 0 && (
+                <>
+                <Text as="p" size="sm">
                 {Object.keys(selectedRowIds).length} Selected
-              </Text>
-              <IconButton border="none" bg={'white'} onClick={clearSelect} size="sm" icon={<AiOutlineClose size="16px" color='black' />} />
-              <Box display="flex" gap="5px" alignItems="center">
-                <IconButton border="none" bg={'white'} size="sm" icon={<BsFillTrashFill size="16px" color='black' onClick={deletedUser} />} />
-                {/* <Text as="p" size="sm">Delete</Text> */}
-              </Box>
-            </>
-          )
+                 </Text>
+                 <IconButton border="none" bg={'white'} onClick={clearSelect} size="sm" icon={<AiOutlineClose size="16px" color='black'/>} />
+                <Box display="flex" gap="5px" alignItems="center">
+                    <IconButton border="none" bg={'white'} size="sm" icon={<BsFillTrashFill size="16px" color='black' onClick={ deletedUser} />} />
+                    {/* <Text as="p" size="sm">Delete</Text> */}
+                </Box>
+                </>
+            )
         }
         
       </Box>
       {
         showFilter ? (
-          <Box w={{ base: "100%", md: "650px" }} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px">
-            <Input
-              value={filterName}
-              onChange={handleFilterByName}
-              placeholder={"Search by product detail code"}
-              bg="#ebebeb"
-              borderRadius={'5px'}
-            />
-            <Select className="floating-select" placeholder='Select Travel duration' defaultValue={''} bg="#ebebeb"
-              borderRadius={'5px'}
-              name="authorities" onChange={handleFilterByRole}>
-              <option value="1-5">1-5 days</option>
-              <option value="6-8">6-8 days</option>
-              <option value="8-11">9-11 days</option>
-              <option value="annual">annual</option>
-              <option value="additionalweek">additional week</option>
-            </Select>
+          <Box w={{base:"100%", md:"650px"}} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px">
+                <Input
+                  value={productcode}
+                  onChange={handleFilterByName}
+                  placeholder={"Search by product code"}
+                  bg="#ebebeb"
+                  borderRadius={'5px'}
+                  variant={'custom'}
+          />
+                <Input
+                  value={filterEmail}
+                  onChange={handleFilterByEmail}
+                  placeholder={"Search by email"}
+                  bg="#ebebeb"
+                  borderRadius={'5px'}
+                  variant={'custom'}
+          />
+            
           </Box>
-        ) : null
+        ): null
       }
       
       <Box bg="white" overflow={'scroll'} p="3">
@@ -542,14 +555,22 @@ const Tables = ({
                         minWidth: column.minWidth,
                       },
                     })}
-                  >
-                    <div {...column.getSortByToggleProps()} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }} >
+                    style={{ 
+                      // backgroundColor: 'red',
+                      fontWeight: 'bold',
+                      textAlign: 'left',
+                      padding: '10px',
+                      fontFamily: 'Mulish',
+                      fontSize: '14px'
+                    }}
+                    >
+                      <div {...column.getSortByToggleProps()} style={{display:"flex", justifyContent:"space-between", alignItems:"center", cursor:"pointer"}} >
                       {column.render('Header')}
                       <Box>
                         {column.isSorted
                           ? column.isSortedDesc
-                            ? <Box><FaSort color='#065BAA' size="14px" style={{ paddingLeft: "4px" }} /></Box>
-                            : <Box><FaSort color='#065BAA' size="14px" style={{ paddingLeft: "4px" }} /></Box>
+                            ? <Box><FaSort color='#065BAA' size="14px" style={{paddingLeft:"4px"}} /></Box>
+                            : <Box><FaSort color='#065BAA' size="14px" style={{paddingLeft:"4px"}} /></Box>
                           : ''}
                       </Box>
                     </div>
@@ -575,7 +596,7 @@ const Tables = ({
                 </tr>
               );
             })} */}
-            <AnimatePresence>
+          <AnimatePresence>
               {rows.slice(0, 10).map((row, i) => {
                 prepareRow(row)
                 return (
@@ -591,6 +612,14 @@ const Tables = ({
                           {...cell.getCellProps({
                             layoutTransition: spring,
                           })}
+                          style={{ 
+                            // backgroundColor: 'red',
+                            fontWeight: 'normal',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px'
+                          }}
                         >
                           {cell.render('Cell')}
                         </motion.td>
@@ -612,87 +641,55 @@ const Tables = ({
               )}
             </tr>
           </tbody>
-        </table>
+          </table>
       </Box>
-      <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
-        <Box>
-          <Button onClick={() => previousPage()} disabled={!canPreviousPage} bg="white" border={'none'} _hover={{
-            bg: "#f0eeee",
-            borderRadius: "5px",
-            WebkitBorderRadius: "5px",
-            MozBorderRadius: "5px"
-          }}>
-            <BiSkipPreviousCircle size="25px" color="black" />
-            <Text as="p" fontFamily={'Mulish'} style={{ fontSize: "12px" }} color="#231F20" pl="5px">Prev</Text>
-          </Button>{' | '}
-          <Button _hover={{
-            bg: "#f0eeee",
-            borderRadius: "5px",
-            WebkitBorderRadius: "5px",
-            MozBorderRadius: "5px"
-          }} onClick={() => nextPage()} disabled={!canNextPage} bg="white" border={'none'}>
-            <BiSkipNextCircle size="25px" color="black" />
-            <Text fontFamily={'Mulish'} style={{ fontSize: "12px" }} color="#231F20" pl="5px">
-              Next
-            </Text>
-          </Button>{' '}
-        </Box>
-        <Box>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </Box>
-        {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
-      </Box>
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedRowIds: selectedRowIds,
-              "selectedFlatRows[].original": selectedFlatRows.map(
-                (d) => d.original
-              )
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
     </>
   );
 }
-function MasterProduct() {
-  const list = useSelector(listProduct)
-  console.log('listProduct',list)
-  const [loading, setLoading] = React.useState(false)
-  const [pageCount, setPageCount] = React.useState(0)
-  const [data, setData] = React.useState([])
-  const [paginations,setPagination] = React.useState({
+
+const MasterUser = () => {
+    const [MasterChecked, setMasterChecked] = useState(false)
+    const dispatch = useDispatch()
+    // const tempList = useSelector(listUsers);
+    // const formuser = useSelector(formUser);
+    // const selectedUser = useSelector(listUsersSelection);
+    const [paginations,setPagination] = React.useState({
       page: 0,
       size:10
     })
+    const [size,setSize] = React.useState(10)
+    const [page,setPage] = React.useState(0)
+    const {
+        data: listUserAccount,
+        isLoading,
+        isSuccess,
+        isError,
+        error,
+        refetch
+    } = useGetProductsQuery({page,size:10})
+    
+    const tableRef = React.useRef(null)
+    const [data, setData] = React.useState([])
+    const prevData = usePrevious(listUserAccount)
+    const [changePage,setChangePage] = React.useState(false) 
+    const [loading, setLoading] = React.useState(false)
+    const [count, setCount] = React.useState(false)
+    const [pageCount, setPageCount] = React.useState(0)
+    // const uploadFilesMessages = useSelector(uploadFilesMessage)
+    // const usePrevMessage = usePrevious(uploadFilesMessages)
+    
    const PageInit = React.useCallback((pageSize,pageIndex) => {
+    // console.log('page init', pageSize,pageIndex)
      setPagination({
        page: pageIndex,
        size:pageSize
       })
    }, [paginations?.page, paginations?.size])
+    const refpage = React.useRef(null)
     const navigate = useNavigate()
     const fetchIdRef = React.useRef(0)
     // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
-    const fetchData = React.useCallback(({ pageSize, pageIndex }) => {
+    const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
     // This will get called when the table needs new data
     // You could fetch your data from literally anywhere,
     // even a server. But for this example, we'll just fake it.
@@ -708,31 +705,49 @@ function MasterProduct() {
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
-        setData(list?.slice(startRow, endRow))
+        setCount(pageOptions)
+        setData(listUserAccount?.slice(startRow, endRow))
         PageInit(pageSize,pageIndex)
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(list?.length / pageSize))
+        setPageCount(Math.ceil(listUserAccount?.length / pageSize))
 
         setLoading(false)
       }
     }, 1000)
-    }, [list])
+    }, [listUserAccount])
   
-  const columns = React.useMemo(
+  
+    // console.log('uploadFilesMessages 111', uploadFilesMessages ==='success')
+   
+  
+  React.useEffect(() => {
+    if (listUserAccount !== null && JSON.stringify(prevData) !== JSON.stringify(listUserAccount)) {
+       dispatch(setMasterProduct([...listUserAccount]))
+    }
+    //  dispatch(setListUser([...listUserAccount]))
+  }, [listUserAccount, prevData])
+  
+  React.useEffect(() => {
+   refetch({page,size:10})
+  }, [page])
+  
+  
+  
+    const columns = React.useMemo(
     () => [
       {
         Header: "Product Id",
-        accessor: "productId",
+        accessor: "id",
         Cell: ({ row }) => (
        
           <Link
             color="#065BAA"
             style={{textDecoration:"underline"}}
-            to={`/product-detail/${row.original.productId}`}
+            to={`/product-detail/${row.original.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.productId}
+            {row.original.id}
           </Link>
        
     ),
@@ -742,12 +757,8 @@ function MasterProduct() {
         accessor: "productCode",
       },
       {
-        Header: "Product Detail Code",
-        accessor: "productDetailCode",
-      },
-      {
         Header: "Currency",
-        accessor: "currency"
+        accessor: "currId"
       },
       {
         Header: "Product Description",
@@ -755,49 +766,60 @@ function MasterProduct() {
       },
       {
         Header: "Personal Accident Cover",
-        accessor: "personalAccidentCover"
+        accessor: "productPersonalAccidentCover"
       },
       {
         Header: "Medical Cover",
-        accessor: "medicalCover"
+        accessor: "productMedicalCover"
       },
       {
         Header: "Travel Cover",
-        accessor: "travelCover"
+        accessor: "productTravelCover"
       },
       {
         Header: "Product Type",
-        accessor: "productType",
+        accessor: "planType.name",
         enableGlobalFilter: true, 
       },
       {
         Header: "Travel Duration",
         accessor: "travelDuration"
       },
-      {
-        Header: "Additional Week",
-        accessor: "additionalWeek"
-      },
-      {
-        Header: "Updated Data",
-        accessor: "updatedData"
-      }
+      // {
+      //   Header: "Additional Week",
+      //   accessor: "productAdditionalWeek"
+      // },
+      // {
+      //   Header: "Updated Data",
+      //   accessor: "updatedData"
+      // }
     ],
     []
   );
 
-  // const data = React.useMemo(() => makeData(100), []);
-  // const [data, setData] = React.useState(list);
-
-  // React.useEffect(() => {
-  //   setData(makeData(100));
-  // }, []);
   
+  const handleNexts = () => {
+    setPage(prevPage => prevPage + 1)
+    // setChangePage(true)
+  }
 
-  return (
-      <Styles>
-        {/* <button onClick={handleReset}>Reset Data</button> */}
-        <Box bg="white" overflow={'scroll'} p="3" mt="3em">
+  const previousPage = () => {
+    setPage(prevPage => prevPage - 1)
+    // setChangePage(true)
+  }
+  
+    // const data = React.useMemo(() => tempList);
+    
+
+    let content;
+    if (isLoading) {
+        content = <Center h='50vh' color='#065BAA'>
+                       <PulseLoader color={"#065BAA"} />
+                   </Center>;
+    } else if (data) {
+        content = (
+            <Box pl="2em" pr="2em" mt="5em"> 
+            <Box bg="white" overflow={'scroll'} p="3">
               <Styles>
                 {
                   
@@ -806,15 +828,63 @@ function MasterProduct() {
                     data={data}
                     fetchData={fetchData}
                     loading={loading}
-                    pageCount={pageCount} />
+                    pageCount={pageCount}
+                    setPageCount={setPageCount}
+                    />
                  
                 }
                 
                 </Styles>
+                  <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
+                    <Box>
+                      <Button isDisabled={page ===0 ? true : false} onClick={previousPage} bg="white" border={'none'} _hover={{
+                        bg: "#f0eeee",
+                        borderRadius: "5px",
+                        WebkitBorderRadius: "5px",
+                        MozBorderRadius:"5px"
+                    }}>
+                        <BiSkipPreviousCircle size="25px" color="black" />
+                        <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
+                    </Button>{' | '}
+                      <Button _hover={{
+                        bg: "#f0eeee",
+                        borderRadius: "5px",
+                        WebkitBorderRadius: "5px",
+                        MozBorderRadius:"5px"
+                    }} onClick={handleNexts}  bg="white" border={'none'}>
+                        <BiSkipNextCircle size="25px" color="black" />
+                        <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
+                        Next
+                        </Text>
+                      </Button>{' '}
+                    </Box>
+                    <Box>
+                      Page{' '}
+                      <strong>
+                        {page + 1} of {count.length}
+                      </strong>{' '}
+                    </Box>
+                    {/* <select
+                      value={pageSize}
+                      onChange={e => {
+                        setPageSize(Number(e.target.value))
+                      }}
+                    >
+                      {[10, 20, 30, 40, 50].map(pageSize => (
+                        <option key={pageSize} value={pageSize}>
+                          Show {pageSize}
+                        </option>
+                      ))}
+                    </select> */}
+                  </Box>
                 {/* <Link to="/welcome">Back to Welcome</Link> */}
             </Box>
-      </Styles>
-  );
-}
+          </Box>
+        )
+    } else if (isError) {
+        content = <p>{JSON.stringify(error)}</p>;
+    }
 
-export default MasterProduct;
+    return content
+}
+export default MasterUser

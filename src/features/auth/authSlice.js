@@ -76,6 +76,31 @@ const authSlice = createSlice({
                                 name: 'List Group Area',
                                 href: '#',
                             },
+                            {
+                                link: '/master-data/list-document-type',
+                                name: 'Document Type List',
+                                href: '#',
+                            },
+                            {
+                                link: '/master-data/list-plan-type',
+                                name: 'Plan Type List',
+                                href: '#',
+                            },
+                            {
+                                link: '/master-data/list-traveller-type',
+                                name: 'Traveller Type List',
+                                href: '#',
+                            },
+                            {
+                                link: '/master-data/list-product-code',
+                                name: 'Product Code List',
+                                href: '#',
+                            },
+                            {
+                                link: '/master-data/list-variant',
+                                name: 'Variant List',
+                                href: '#',
+                            },
                            
                             ],
                     },

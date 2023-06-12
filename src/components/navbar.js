@@ -5,6 +5,7 @@ import {
   Avatar,
   Popover,
   PopoverContent,
+  PopoverBody,
   PopoverTrigger,
   HStack,
   Link as NewLink,
@@ -29,6 +30,7 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerBody,
+  PopoverBodyContent,
   DrawerContent,
   VStack,
 } from '@chakra-ui/react';
@@ -280,11 +282,11 @@ const NavItem = ({ icon, children, ...rest }) => {
                         p={4}
                         rounded={'xl'}
                         minW={'sm'}>
-                        <Stack>
+                        <PopoverBody maxHeight="200px" overflowY="auto">
                           {link.children.map((child) => (
                             <DesktopSubNav key={child.name} {...child} />
                           ))}
-                        </Stack>
+                        </PopoverBody>
                       </PopoverContent>
                     )}
                   </Popover>
