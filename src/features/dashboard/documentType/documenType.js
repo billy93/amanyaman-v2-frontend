@@ -688,16 +688,8 @@ const Polcies = () => {
         filter: 'fuzzyText',
       },
       {
-        Header: "File Path",
-        accessor: "filepath",
-        maxWidth: 200,
-        minWidth: 200,
-        width: 200,
-        filter: 'fuzzyText',
-      },
-      {
         Header: "Create Date",
-        accessor: "created_date",
+        accessor: "createdDate",
         maxWidth: 200,
         minWidth: 200,
         width: 200,
@@ -705,7 +697,7 @@ const Polcies = () => {
       },
       {
         Header: "Update Date",
-        accessor: "update_Date",
+        accessor: "lastModifiedBy",
         maxWidth: 200,
         minWidth: 200,
         width: 200,

@@ -42,6 +42,7 @@ import DetailMasterUser from './features/dashboard/masterUser/detailMasterUser'
 import ResetPassword from './features/auth/confirmResetPassword'
 import DocumentType from './features/dashboard/documentType/documenType'
 import PlanType from './features/dashboard/planType/planType'
+import CreateProducts from './features/dashboard/masterProduct/createProduct'
 
 function App() {
   return (
@@ -88,6 +89,7 @@ function App() {
           <Route path="list-group-area" element={<ListGroupArea />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="list-document-type" element={<DocumentType />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="list-plan-type" element={<PlanType />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="create-master-product" element={<CreateProducts />} allowedRoles={[ 'ROLE_ADMIN']}/>
         </Route>
         <Route path="/claim" exact element={<LayoutDashboard />}>
           <Route path="list" element={<ClaimList />} />

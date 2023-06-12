@@ -212,16 +212,16 @@ const Tables = ({
  const [filterEmail,setFilterEmail] = React.useState('')
  const [filterRole,setFilterRole] = React.useState('')
  const handleAddUser = () => {
-   const stateUser = {
-        login:"",    
-        firstName:"",    
-        lastName:"",  
-        area:"",  
-        authorities:[],
-        travelAgent:""
-   }
+  //  const stateUser = {
+  //       login:"",    
+  //       firstName:"",    
+  //       lastName:"",  
+  //       area:"",  
+  //       authorities:[],
+  //       travelAgent:""
+  //  }
   //  dispatch(setFormUser(stateUser))
-    navigate('/master-data/create-user')
+    navigate('/master-data/create-master-product')
  }
 const defaultColumn = React.useMemo(
     () => ({
@@ -781,10 +781,17 @@ const MasterUser = () => {
         accessor: "planType.name",
         enableGlobalFilter: true, 
       },
-      {
-        Header: "Travel Duration",
-        accessor: "travelDuration"
-      },
+        {
+          Header: "Additional Week",
+          accessor: "productAdditionalWeek",
+          Cell: ({ row }) => (
+       
+            <span>
+              {row.original.productAdditionalWeek === null ? row.original.productAdditionalWeek : ''}
+            </span>
+       
+          ),
+        }
       // {
       //   Header: "Additional Week",
       //   accessor: "productAdditionalWeek"

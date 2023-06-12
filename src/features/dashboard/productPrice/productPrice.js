@@ -1,26 +1,19 @@
-import React from "react";
-import styled from "styled-components";
-import {Link,useNavigate} from 'react-router-dom' 
-import { useTable,useSortBy, usePagination, useGlobalFilter,useRowSelect,useFilters } from "react-table";
-import { listProduct,setMasterProduct,setListSelectProduct,listProductSelection } from './productPriceSlice'
-import { useSelector, useDispatch } from 'react-redux'
-import matchSorter from 'match-sorter'
-
+import React, { useState } from 'react';
+import { useGetProductPriceQuery } from "./productPriceApi"
+import { Link, useNavigate } from "react-router-dom";
+import Table, { usePagination,useSortBy, useFilters, useColumnOrder } from "react-table";
+import PulseLoader from 'react-spinners/PulseLoader'
+import {FaChevronUp, FaSort} from 'react-icons/fa'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
-useToast,
-Modal,
-Select,
-Button,
+ useToast,
+  Modal,
 ModalOverlay,
 ModalContent,
 ModalHeader,
 ModalFooter,
 ModalBody,
 ModalCloseButton,
-Input,
-InputGroup,
-InputLeftElement,
-InputRightAddon,
 Link as Links,
   Box,
   Table as TableNew,
@@ -38,22 +31,25 @@ Link as Links,
   Text,
   Center,
   useDisclosure,
-  IconButton
+  IconButton,
+  AbsoluteCenter,
+  Input
 } from '@chakra-ui/react'
-import { motion, AnimatePresence } from 'framer-motion'
+import matchSorter from 'match-sorter'
+import { Button } from '@chakra-ui/react'
+import { useDispatch, useSelector } from 'react-redux'
+import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
 import {AiOutlinePlusCircle} from 'react-icons/ai'
 import {BiSkipPreviousCircle,BiSkipNextCircle} from 'react-icons/bi'
-import { Search2Icon } from "@chakra-ui/icons";
-import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md'
-import {FaChevronUp, FaSort} from 'react-icons/fa'
-// A great library for fuzzy filtering/sorting items
-
-// import makeData from "./mockdata";
+import styled from "styled-components";
+import { useTable, useRowSelect } from "react-table";
+import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 
 const Styles = styled.div`
   padding: 1rem;
+
   table {
     width:100%;
     border-spacing: 0;
@@ -98,35 +94,6 @@ const Styles = styled.div`
   }
 `;
 
-function usePrevious(value) {
-  // The ref object is a generic container whose current property is mutable ...
-  // ... and can hold any value, similar to an instance property on a class
-  const ref = React.useRef();
-  // Store current value in ref
-  React.useEffect(() => {
-    ref.current = value;
-  }, [value]); // Only re-run if value changes
-  // Return previous value (happens before update in useEffect above)
-  return ref.current;
-}
-
-const IndeterminateCheckbox = React.forwardRef(
-  ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = React.useRef();
-    const resolvedRef = ref || defaultRef;
-
-    React.useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate;
-    }, [resolvedRef, indeterminate]);
-
-    return (
-      <>
-        <input type="checkbox" ref={resolvedRef} {...rest} />
-      </>
-    );
-  }
-);
-
 function DefaultColumnFilter({
   column: { filterValue, preFilteredRows, setFilter,Header },
 }) {
@@ -149,20 +116,18 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = val => !val
-
-function SearchBox({ filterValue, setFilter }) {
-  console.log('filter val', filterValue)
-    return (
-      <input
-        value={filterValue || ""}
-        onChange={(e) => {
-          setFilter(e.target.value || undefined);
-        }}
-        placeholder={`Search records...`}
-      />
-    );
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef();
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
 }
-  
+
 function SelectColumnFilter({
   column: { filterValue, setFilter, preFilteredRows, id },
 }) {
@@ -193,78 +158,132 @@ function SelectColumnFilter({
     </select>
   )
 }
+
+// const formatInputValue = () => {
+//     if (!initState?.startDate) return '';
+//     return `${initState?.startDate?.day} ${getMonthName(initState?.startDate?.month)} ${initState?.startDate?.year}`;
+// };
+  
+function SelectDateColumnFilter({
+  column: { filterValue, setFilter, preFilteredRows, id },
+}) {
+  // Calculate the options for filtering
+  // using the preFilteredRows
+  const options = React.useMemo(() => {
+    const options = new Set()
+    preFilteredRows.forEach(row => {
+      options.add(row.values[id])
+    })
+    return [...options.values()]
+  }, [id, preFilteredRows])
+
+  // Render a multi-select box
+  return (
+     <input type="date"
+        width="100%"
+        value={filterValue}
+        onChange={e => {
+          setFilter(e.target.value || undefined)
+        }}
+                                    />
+  )
+}
+
+const IndeterminateCheckbox = React.forwardRef(
+  ({ indeterminate, ...rest }, ref) => {
+    const defaultRef = React.useRef();
+    const resolvedRef = ref || defaultRef;
+
+    React.useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate;
+    }, [resolvedRef, indeterminate]);
+
+    return (
+      <>
+        <input type="checkbox" ref={resolvedRef} {...rest} />
+      </>
+    );
+  }
+);
+function shuffle(arr) {
+  arr = [...arr]
+  const shuffled = []
+  while (arr.length) {
+    const rand = Math.floor(Math.random() * arr.length)
+    shuffled.push(arr.splice(rand, 1)[0])
+  }
+  return shuffled
+}
+// fuzzyTextFilterFn.autoRemove = val => !val
+
 const Tables = ({
   columns,
   data,
-//   fetchData,
+  fetchData,
   loading,
-  pageCount: controlledPageCount,
-}) => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const listuser = useSelector(listProduct)
-  const selected = useSelector(listProductSelection)
-  const prevSelected = usePrevious(selected)
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [showFilter, setShowFilter] = React.useState(false)
-  const [filterName, setFilterName] = React.useState('')
-  const [filterEmail, setFilterEmail] = React.useState('')
-  const [filterTravelAgent, setFilterTravelAgent] = React.useState('')
-  const [filterTravelType, setFilterTravelType] = React.useState('')
-  const [filterPlanType, setFilterPlanType] = React.useState('')
-  const [filterTravellerType, setFilterTravellerType] = React.useState('')
- 
-  const defaultColumn = React.useMemo(
+  pageCount: controlledPageCount}) => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const toast = useToast()
+    const [showFilter,setShowFilter] = React.useState(false)
+    const [pages]= React.useState(0)
+    const {
+        data: systemParams,
+        isLoading,
+        isSuccess,
+        isError,
+        error,
+        refetch,
+        response,
+        extra
+    } = useGetProductPriceQuery({ page:pages, size: 10 }, {
+      onSuccess: (response, { requestId }, meta) => {
+        const totalCount = response.headers.get('X-Total-Count');
+        console.log('ddddtot', totalCount)
+      // handleSuccess(totalCount); // Update the total count in the component state
+      return response;
+    },
+    })
+    const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
       Filter: DefaultColumnFilter,
     }),
     []
   )
-  const filterTypes = React.useMemo(
+const filterTypes = React.useMemo(
     () => ({
       text: (rows, id, filterValue) => {
         return rows.filter(row => {
           const rowValue = row.values[id]
           return rowValue !== undefined
             ? String(rowValue)
-              .toLowerCase()
-              .startsWith(String(filterValue).toLowerCase())
+                .toLowerCase()
+                .startsWith(String(filterValue).toLowerCase())
             : true
         })
       },
     }),
     []
   )
-  const toast = useToast()
-  const onOpenModal = () => {
-    onOpen()
-    // getSelectedRows()
+  const showFilterBtn = () => {
+    setShowFilter(!showFilter)
   }
-  const onCloseModal = () => {
-    onClose()
-    dispatch(setMasterProduct([]))
-    // resetSelectedRows: () => toggleAllRowsSelected(false)
-    // getSelectedRows()
-  }
-  const clearSelect = () => {
-    dispatch(setMasterProduct([]))
-    onClose()
-       
-    const rowIds = data && data?.map((item, i) => i);
-    if (rowIds) {
-      rowIds.forEach(id => toggleRowSelected(id, false));
-    }
-  }
-  const cancelDelete = () => {
-    onClose()
-  }
-  const deletedUser = () => {
+
+   const onOpenModal = () => {
+        onOpen()
+        // getSelectedRows()
+ }
+     const cancelDelete = () => {
+     onClose()
+ }
+    const deletedUser = () => {
     //  dispatch(setMasterUser([]))
-    onOpen()
+     onOpen()
     //  const rowIds = listuser?.map((item,i) =>i);
     //  rowIds.forEach(id => toggleRowSelected(id, false));
-  }
+ }
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -287,9 +306,8 @@ const Tables = ({
     nextPage,
     previousPage,
     setPageSize,
-    setFilter,
     // Get the state from the instance
-    state: { pageIndex, pageSize, selectedRowIds, filters },
+    state: { pageIndex, pageSize,selectedRowIds },
   } = useTable(
     {
       columns,
@@ -297,87 +315,29 @@ const Tables = ({
       defaultColumn,
       initialState: { pageIndex: 0 }, // Pass our hoisted table state
       manualPagination: true, // Tell the usePagination
-      pageCount: controlledPageCount,
-      filterTypes,
       // hook that we'll handle our own data fetching
       // This means we'll also have to provide our own
       // pageCount.
-      // pageCount: controlledPageCount,
+      pageCount: controlledPageCount,
+      filterTypes
     },
+    useColumnOrder,
     useFilters,
     useSortBy,
     usePagination,
     useRowSelect,
-    (hooks) => {
-      hooks.visibleColumns.push((columns) => [
-        // Let's make a column for selection
-        {
-          id: "selection",
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
-          Header: ({ getToggleAllRowsSelectedProps }) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: 'center' }}>
-              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-            </div>
-          ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
-          Cell: ({ row }) => (
-            <div style={{ display: "flex", justifyContent: "center", alignItems: 'center' }}>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          )
-        },
-        ...columns
-      ]);
-    }
-  );
+      );
   const prev = usePrevious(selectedRowIds)
   React.useEffect(() => {
-    toggleAllRowsSelected();
+      toggleAllRowsSelected();
   }, []);
     
-  const getValues = (data) => {
-    let original = data.map((item) => item.original)
-    dispatch(setMasterProduct(original))
-  }
   
   React.useEffect(() => {
-    if (JSON.stringify(prev) !== JSON.stringify(selectedRowIds)) {
-      getValues(selectedFlatRows)
-    }
-  }, [prev, selectedRowIds, getValues, selectedFlatRows]);
-  
-  const showFilterBtn = () => {
-    setShowFilter(!showFilter)
-  }
+    fetchData({ pageIndex, pageSize,pageOptions })
+  }, [fetchData, pageIndex, pageSize,pageOptions])
 
-  // Render the UI for your table
-   
-    
-  const deletedUserUpdate = (e) => {
-    e.preventDefault()
-    const nextState = listuser?.filter(
-      item => !selected.some(({ id }) => item.id === id)
-    );
-    console.log('nextState', nextState)
-    dispatch(setListSelectProduct(nextState))
-    dispatch(setMasterProduct([]))
-    onClose()
-    toast({
-      title: `Deleted Success`,
-      status: "success",
-      position: 'top-right',
-      duration: 3000,
-      isClosable: true,
-      variant: "solid",
-    })
-  }
-//   React.useEffect(() => {
-//     fetchData({ pageIndex, pageSize })
-//   }, [fetchData, pageIndex, pageSize])
-
-  const spring = React.useMemo(
+    const spring = React.useMemo(
     () => ({
       type: 'spring',
       damping: 50,
@@ -385,188 +345,114 @@ const Tables = ({
     }),
     []
   )
-  const handleFilterByName = e => {
-    const value = e.target.value || undefined;
-    setFilter("productDetailCode", value);
-    setFilterName(value);
-  };
-  const handleFilterByEmail = e => {
-    const value = e.target.value || undefined;
-    setFilter("email", value);
-    setFilterEmail(value);
-  };
-  const handleFilterByTravelAgent = e => {
-    const value = e.target.value || undefined;
-    setFilter("travelAgent", value);
-    setFilterTravelAgent(value);
-  };
-  const handleFilterByTravelType = e => {
-    const value = e.target.value || undefined;
-    setFilter("coverageType", value);
-    setFilterTravelType(value);
-  };
-  
-    const handleFilterByPlanType = e => {
-    const value = e.target.value || undefined;
-    setFilter("product", value);
-    setFilterPlanType(value);
-    };
-    
-    const handleFilterByTravellerType = e => {
-    const value = e.target.value || undefined;
-    setFilter("travellerType", value);
-    setFilterTravellerType(value);
-  };
-  const redirectCreatePrice = (e) => {
-    e.preventDefault()
-    navigate('/master-data/create-product-price')
- }
-  // console.log('filters', filters)
-  return (
-    <>
-      <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-        <Heading as={'h6'} size={'sm'}>Product Prices</Heading>
-        <Stack direction='row' spacing={4} m={'2.5'}>
-          <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : ''} onClick={showFilterBtn}>
-            Apply Filter
-          </Button>
-          <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
-            Export
-          </Button>
-          <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
-            Import
-          </Button>
-          <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={redirectCreatePrice}>
-            Add Product Price
-          </Button>
-        </Stack>
-      </Box>
-      <Box mt="1em" mb="1em" display="flex" alignItems="center" gap="10px">
-        
-        {
-          selected?.length > 0 && (
-            <>
-              <Text as="p" size="sm">
-                {Object.keys(selectedRowIds).length} Selected
-              </Text>
-              <IconButton border="none" bg={'white'} onClick={clearSelect} size="sm" icon={<AiOutlineClose size="16px" color='black' />} />
-              <Box display="flex" gap="5px" alignItems="center">
-                <IconButton border="none" bg={'white'} size="sm" icon={<BsFillTrashFill size="16px" color='black' onClick={deletedUser} />} />
-                {/* <Text as="p" size="sm">Delete</Text> */}
-              </Box>
-            </>
-          )
-        }
-        
-      </Box>
-      {
-        showFilter ? (
-          <Box w={{ base: "100%", md: "60%" }} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px">
-            <Select className="floating-select" placeholder='Select Travel duration' _placeholder={{fontSize:"12px"}} style={{fontSize:"12px"}} defaultValue={''} bg="#ebebeb"
-              borderRadius={'5px'}
-              name="travelAgent" onChange={handleFilterByTravelAgent}>
-              <option value="Golden Rama">Golden Rama</option>
-              <option value="AVIA TOUR">AVIA TOUR</option>
-              <option value="BAYU BUANA">BAYU BUANA</option>
-              <option value="PANORAMA">PANORAMA</option>
-            </Select>
-            <Select className="floating-select" placeholder='Coverage Type' style={{fontSize:"12px"}}  defaultValue={''} bg="#ebebeb"
-              borderRadius={'5px'}
-              name="typeTrip" onChange={handleFilterByTravelType}>
-              <option value="Single Trip">Single Trip</option>
-              <option value="Anual Trip">Anual Trip</option>
-            </Select>
-            <Select className="floating-select" placeholder='Plan Type'style={{fontSize:"12px"}}  defaultValue={''} bg="#ebebeb"
-              borderRadius={'5px'}
-              name="typeTrip" onChange={handleFilterByPlanType}>
-              <option value="ASIA 50">ASIA 50</option>
-              <option value="Worldwide 100">Worldwide 100</option>
-              <option value="Worldwide 150">Worldwide 150</option>
-            </Select>
-            <Select className="floating-select" style={{fontSize:"12px"}}  placeholder='Traveller Type' defaultValue={''} bg="#ebebeb"
-              borderRadius={'5px'}
-              name="typeTrip" onChange={handleFilterByTravellerType}>
-              <option value="ASIA 50">ASIA 50</option>
-              <option value="Worldwide 100">Worldwide 100</option>
-              <option value="Worldwide 150">Worldwide 150</option>
-            </Select>
-          </Box>
-        ) : null
-      }
-      
-      <Box bg="white" overflow={'scroll'} p="3">
 
-        <table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <motion.th
-                    {...column.getHeaderProps({
-                      layoutTransition: spring,
-                      style: {
-                        minWidth: column.minWidth,
-                      },
-                    })}
+  // function fuzzyTextFilterFn(rows, id, filterValue) {
+  // return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
+  // }
+    const handleAdd = (e) => {
+        e.preventDefault()
+        navigate('/master-data/create-product-price')
+    }
+  const [expandedRows, setExpandedRows] = useState([]);
+
+  const handleRowClick = (rowIndex) => {
+    const expandedRowsCopy = [...expandedRows];
+    const index = expandedRows.indexOf(rowIndex);
+
+    if (index > -1) {
+      expandedRowsCopy.splice(index, 1);
+    } else {
+      expandedRowsCopy.push(rowIndex);
+    }
+
+    setExpandedRows(expandedRowsCopy);
+  };
+
+  const isRowExpanded = (rowIndex) => expandedRows.includes(rowIndex);
+  return (
+      <>
+      <Box mb="2em" mt="2em">
+        <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                <Heading as={'h6'} size={'sm'}>Product Price</Heading>
+                <Stack direction='row' spacing={4} m={'2.5'}>
+                      <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
+                        Add Product Price 
+                    </Button>
+                    {/* <button onClick={refetch}>Refresh</button> */}
+                </Stack>
+      </Box>
+      {/* <Box mb={'3'} bg={'#ffeccc'} border={'1px'} borderColor={'#ffa000'} width={'300px'} height={'100px'} p={'2'} display="flex" justifyContent={'center'} alignItems={'center'}>
+                <Box bg="#FFA00">
+                    <MdWarning size={'20px'} color="#FFA000"/>
+                </Box>
+                <Text as={'p'} fontSize='xs' color={'black.200'} p={'3'}>
+                        You can only claim policy of Success policy status with maximum 30 days from the end date and no ongoing/successful refund record
+                </Text>
+            </Box> */}
+      </Box>
+      <Box bg="white" overflow={'scroll'} p="3">
+      <table {...getTableProps()} className='my-table'>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <motion.th
+                  {...column.getHeaderProps({
+                    layoutTransition: spring,
+                    style: {
+                      minWidth: column.minWidth,
+                    },
+                  })}
+                  style={{ 
+                            // backgroundColor: 'red',
+                            fontWeight: 'bold',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px'
+                          }}
                   >
-                    <div {...column.getSortByToggleProps()} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }} >
-                      {column.render('Header')}
-                      <Box>
-                        {column.isSorted
-                          ? column.isSortedDesc
-                            ? <Box><FaSort color='#065BAA' size="14px" style={{ paddingLeft: "4px" }} /></Box>
-                            : <Box><FaSort color='#065BAA' size="14px" style={{ paddingLeft: "4px" }} /></Box>
-                          : ''}
-                      </Box>
-                    </div>
-                    {/* <div>{column.canFilter ? column.render('Filter') : null} </div> */}
-                    {/* {column.canFilter ? column.render('Filter') : null} */}
-                    {/* {column.canFilter ? column.render('Filter') : null} */}
-                  </motion.th>
-                  
+                    <div {...column.getSortByToggleProps()} style={{display:"flex", justifyContent:"space-between", alignItems:"center", cursor:"pointer"}} >
+                    {column.render('Header')}
+                    <Box>
+                      {column.isSorted
+                        ? column.isSortedDesc
+                          ? <Box><FaSort color='#065BAA' size="14px" style={{paddingLeft:"4px"}} /></Box>
+                          : <Box><FaSort color='#065BAA' size="14px" style={{paddingLeft:"4px"}} /></Box>
+                        : ''}
+                    </Box>
+                  </div>
+                  {/* <div>{column.canFilter ? column.render('Filter') : null} </div> */}
+                      {showFilter ? <>{column.canFilter ? column.render('Filter') : null}</> : null }
+                </motion.th>
+                
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()} >
+           {rows.map((row, rowIndex) => {
+          prepareRow(row);
+          const isExpanded = isRowExpanded(rowIndex);
+
+          return (
+            <React.Fragment key={rowIndex}>
+              <tr {...row.getRowProps()} onClick={() => handleRowClick(rowIndex)}>
+                {row.cells.map((cell) => (
+                  <td
+                    {...cell.getCellProps()}
+                    className={`${cell.column.id === 'value' && isExpanded ? 'expanded' : ''}`}
+                  >
+                    {cell.column.id === 'value' && cell.value.length > 30
+                      ? (isExpanded ? cell.value : cell.value.substring(0, 30) + '...')
+                      : cell.render('Cell')}
+                  </td>
                 ))}
               </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {/* {rows.slice(0, 10).map((row, i) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })} */}
-            <AnimatePresence>
-              {rows.slice(0, 10).map((row, i) => {
-                prepareRow(row)
-                return (
-                  <motion.tr
-                    {...row.getRowProps({
-                      layoutTransition: spring,
-                      exit: { opacity: 0, maxHeight: 0 },
-                    })}
-                  >
-                    {row.cells.map((cell, i) => {
-                      return (
-                        <motion.td
-                          {...cell.getCellProps({
-                            layoutTransition: spring,
-                          })}
-                        >
-                          {cell.render('Cell')}
-                        </motion.td>
-                      )
-                    })}
-                  </motion.tr>
-                )
-              })}
-            </AnimatePresence>
-            <tr>
+            </React.Fragment>
+          );
+        })}
+        <tr>
               {loading ? (
                 // Use our custom loading state to show a loading indicator
                 <td colSpan="10000">Loading...</td>
@@ -577,29 +463,24 @@ const Tables = ({
                 </td>
               )}
             </tr>
-          </tbody>
+        </tbody>
         </table>
-      </Box>
-      <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
+        </Box>
+      {/* <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
         <Box>
           <Button onClick={() => previousPage()} disabled={!canPreviousPage} bg="white" border={'none'} _hover={{
             bg: "#f0eeee",
             borderRadius: "5px",
             WebkitBorderRadius: "5px",
-            MozBorderRadius: "5px"
-          }}>
+            MozBorderRadius:"5px"
+        }}>
             <BiSkipPreviousCircle size="25px" color="black" />
-            <Text as="p" fontFamily={'Mulish'} style={{ fontSize: "12px" }} color="#231F20" pl="5px">Prev</Text>
-          </Button>{' | '}
-          <Button _hover={{
-            bg: "#f0eeee",
-            borderRadius: "5px",
-            WebkitBorderRadius: "5px",
-            MozBorderRadius: "5px"
-          }} onClick={() => nextPage()} disabled={!canNextPage} bg="white" border={'none'}>
+            <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
+        </Button>{' | '}
+          <Button onClick={() => nextPage()} disabled={!canNextPage} bg="white" border={'none'}>
             <BiSkipNextCircle size="25px" color="black" />
-            <Text fontFamily={'Mulish'} style={{ fontSize: "12px" }} color="#231F20" pl="5px">
-              Next
+            <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
+            Next
             </Text>
           </Button>{' '}
         </Box>
@@ -608,7 +489,7 @@ const Tables = ({
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
-        </Box>
+        </Box> */}
         {/* <select
           value={pageSize}
           onChange={e => {
@@ -621,7 +502,7 @@ const Tables = ({
             </option>
           ))}
         </select> */}
-      </Box>
+      {/* </Box> */}
       {/* <pre>
         <code>
           {JSON.stringify(
@@ -639,70 +520,118 @@ const Tables = ({
     </>
   );
 }
-function MasterProduct() {
-  const list = useSelector(listProduct)
-  const [loading, setLoading] = React.useState(false)
-  const [pageCount, setPageCount] = React.useState(0)
-  const [data, setData] = React.useState([])
-  const [paginations,setPagination] = React.useState({
-      page: 0,
-      size:10
-    })
-   
-    const navigate = useNavigate()
+
+function filterGreaterThan(rows, id, filterValue) {
+  return rows.filter(row => {
+    const rowValue = row.values[id]
+    return rowValue >= filterValue
+  })
+}
+
+// This is an autoRemove method on the filter function that
+// when given the new filter value and returns true, the filter
+// will be automatically removed. Normally this is just an undefined
+// check, but here, we want to remove the filter if it's not a number
+filterGreaterThan.autoRemove = val => typeof val !== 'number'
+
+const Polcies = () => {
+    const [MasterChecked, setMasterChecked] = useState(false)
+    const dispatch = useDispatch()
+    const [data, setData] = React.useState([])
+    const [loading, setLoading] = React.useState(false)
+    const [pageCount, setPageCount] = React.useState(0)
+    const [count,setCount] = React.useState(0)
     const fetchIdRef = React.useRef(0)
-    // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
-    const fetchData = React.useCallback(({ pageSize, pageIndex }) => {
+    const [page,setPage] = React.useState(0)
+    const [paginations,setPagination] = React.useState({
+      page: 0,
+      size:1000
+    })
+    const {
+        data: systemParams,
+        isLoading,
+        isSuccess,
+        isError,
+        error,
+        refetch,
+        response,
+        extra,
+        accessHeaders,
+        totalCount
+    } = useGetProductPriceQuery({ page, size: 10 })
+  
+    
+    const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
     // This will get called when the table needs new data
     // You could fetch your data from literally anywhere,
     // even a server. But for this example, we'll just fake it.
-    
+
     // Give this fetch an ID
     const fetchId = ++fetchIdRef.current
 
     // Set the loading state
     setLoading(true)
+    
     // We'll even set a delay to simulate a server here
     setTimeout(() => {
       // Only update the data if this is the latest fetch
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
-        setData(list?.slice(startRow, endRow))
+        setData(systemParams.slice(startRow, endRow))
+        setCount(pageOptions)
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(list?.length / pageSize))
-
+        setPageCount(Math.ceil(systemParams?.length / pageSize))
+          setPagination({
+            page:pageIndex,
+            size:pageSize
+        })
         setLoading(false)
       }
     }, 1000)
-    }, [list])
+    }, [systemParams])
+    
+  React.useEffect(() => {
+    
+  if (systemParams && 'totalCount' in systemParams) {
+    // Retrieve the value of the "X-Total-Count" header
+    const totalCount = systemParams.totalCount;
+
+    // Print the total count
+    console.log('cccxxxx',totalCount);
+  } else {
+    // If the "X-Total-Count" header is not present in the response
+    console.log('X-Total-Count header not found.', response);
+  }
+
+  }, [data,response])
   
-  const columns = React.useMemo(
+    const columns = React.useMemo(
     () => [
       {
         Header: "Price Id",
-        accessor: "priceId",
+        accessor: "id",
         Cell: ({ row }) => (
        
           <Link
             color="#065BAA"
             style={{textDecoration:"underline"}}
-            to={`/product-detail/${row.original.priceId}`}
+            to={`/product-detail/${row.original.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.priceId}
+            {row.original.id}
           </Link>
        
     ),
       },
       {
         Header: "Travel Agent",
-        accessor: "travelAgent",
+        accessor: "travelAgent.travelAgentName",
       },
       {
         Header: "Product Detail Code",
-        accessor: "productDetailCode",
+        accessor: "productMapping.productCode",
       },
       {
         Header: "Premium Price",
@@ -710,19 +639,19 @@ function MasterProduct() {
       },
       {
         Header: "Discount Lvl 1",
-        accessor: "discountlvl1"
+        accessor: "commisionLv1"
       },
       {
         Header: "Discount Lvl 2",
-        accessor: "discountlvl2"
+        accessor: "commisionLv2"
       },
       {
         Header: "Discount Lvl 3",
-        accessor: "discountlvl3"
+        accessor: "commisionLv3"
       },
       {
         Header: "Total Commission",
-        accessor: "totalCommission"
+        accessor: "totalCommision"
       },
       {
         Header: "Net To Agent",
@@ -733,36 +662,83 @@ function MasterProduct() {
     []
   );
 
-  // const data = React.useMemo(() => makeData(100), []);
-  // const [data, setData] = React.useState(list);
 
-  // React.useEffect(() => {
-  //   setData(makeData(100));
-  // }, []);
-  
-
-  return (
-      <Styles>
-        {/* <button onClick={handleReset}>Reset Data</button> */}
-        <Box bg="white" overflow={'scroll'} p="3" mt="3em">
-              <Styles>
-                {
-                  
-                    <Tables
+    // const data = React.useMemo(() => tempList);
+    // console.log('ddd listParams', listParams)
+  React.useEffect(() => {
+    refetch({ page, size: 10 })
+    
+    },[page,refetch])
+  const nextPages = () => {
+    setPage(prevPage => prevPage+1)
+  }
+  const prevPages = () => {
+    setPage(prevPage => prevPage-1)
+  }
+    let content;
+    if (isLoading) {
+        content = <Center h='50vh' color='#065BAA'>
+                       <PulseLoader color={"#065BAA"} />
+                   </Center>;
+    } else if (systemParams) {
+      const totalCount = data;
+        content = (
+          <Box pl="2em" pr="2em" mt="3em"> 
+            {/* <div>{ console.log('celelng',totalCount)}</div> */}
+                <Styles>
+                <Tables
                     columns={columns}
                     data={data}
-                    // fetchData={fetchData}
+                    fetchData={fetchData}
                     loading={loading}
-                    // pageCount={pageCount} 
-                    />
-                 
-                }
-                
+                    pageCount={pageCount}
+                />
                 </Styles>
-                {/* <Link to="/welcome">Back to Welcome</Link> */}
+            {/* <Link to="/welcome">Back to Welcome</Link> */}
+            <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
+        <Box>
+          <Button onClick={prevPages} isDisabled={page ===0 ? true : false} bg="white" border={'none'} _hover={{
+            bg: "#f0eeee",
+            borderRadius: "5px",
+            WebkitBorderRadius: "5px",
+            MozBorderRadius:"5px"
+        }}>
+            <BiSkipPreviousCircle size="25px" color="black" />
+            <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
+        </Button>{' | '}
+          <Button onClick={nextPages} bg="white" border={'none'}>
+            <BiSkipNextCircle size="25px" color="black" />
+            <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
+            Next
+            </Text>
+          </Button>{' '}
+          
+        </Box>
+        <Box>
+          Page{' '}
+          <strong>
+            {page + 1} of {count?.length}
+          </strong>{' '}
+        </Box>
+        {/* <select
+          value={pageSize}
+          onChange={e => {
+            setPageSize(Number(e.target.value))
+          }}
+        >
+          {[10, 20, 30, 40, 50].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select> */}
+      </Box>
             </Box>
-      </Styles>
-  );
-}
+        )
+    } else if (isError) {
+        content = <p>{JSON.stringify(error)}</p>;
+    }
 
-export default MasterProduct;
+    return content
+}
+export default Polcies
