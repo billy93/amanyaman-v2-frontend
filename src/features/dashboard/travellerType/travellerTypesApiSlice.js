@@ -1,13 +1,13 @@
 import { apiSlice } from "../../../app/api/apiSlice"
-import { setTotalCount } from './systemParamsSlice'
+// import { setTotalCount } from './systemParamsSlice'
 
 export const systemParamsApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-       getSystemParams: builder.query({
+       getTravellerTypes: builder.query({
             query: (data) => {
                 const { page, size } = data;
                 return {
-                url: `/app/system-parameters?page=${page}&size=${size}`,
+                url: `/app/traveller-types?page=${page}&size=${size}`,
                 method:"GET",
                 prepareHeaders: (headers) => {
                     headers.append('Accept', 'application/json');
@@ -68,6 +68,7 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
+    useGetTravellerTypesQuery,
     useGetSystemParamsQuery,
     useCreateParamsMutation,
     useUpdateParamsMutation,

@@ -101,6 +101,11 @@ const authSlice = createSlice({
                                 name: 'Variant List',
                                 href: '#',
                             },
+                            {
+                                link: '/master-data/list-band-type',
+                                name: 'Band Type List',
+                                href: '#',
+                            },
                            
                             ],
                     },

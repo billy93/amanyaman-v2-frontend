@@ -42,6 +42,8 @@ import DetailMasterUser from './features/dashboard/masterUser/detailMasterUser'
 import ResetPassword from './features/auth/confirmResetPassword'
 import DocumentType from './features/dashboard/documentType/documenType'
 import PlanType from './features/dashboard/planType/planType'
+import BandType from './features/dashboard/bandType/bandTypes'
+import TravellerType from './features/dashboard/travellerType/travellerTypes'
 import CreateProducts from './features/dashboard/masterProduct/createProduct'
 
 function App() {
@@ -89,6 +91,8 @@ function App() {
           <Route path="list-group-area" element={<ListGroupArea />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="list-document-type" element={<DocumentType />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="list-plan-type" element={<PlanType />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="list-band-type" element={<BandType />} allowedRoles={[ 'ROLE_ADMIN']}/>
+          <Route path="list-traveller-type" element={<TravellerType />} allowedRoles={[ 'ROLE_ADMIN']}/>
           <Route path="create-master-product" element={<CreateProducts />} allowedRoles={[ 'ROLE_ADMIN']}/>
         </Route>
         <Route path="/claim" exact element={<LayoutDashboard />}>

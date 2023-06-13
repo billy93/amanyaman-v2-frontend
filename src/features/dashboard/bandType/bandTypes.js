@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGetSystemParamsQuery } from "./systemParamsApiSlice"
+import { useGetBandTypeQuery } from "./bandTypesApiSlice"
 import { Link, useNavigate } from "react-router-dom";
 import Table, { usePagination,useSortBy, useFilters, useColumnOrder } from "react-table";
 import PulseLoader from 'react-spinners/PulseLoader'
@@ -39,7 +39,7 @@ import matchSorter from 'match-sorter'
 import { Button } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { listPolicy, listSelected, setStateSelectedt, setStatePolicyList } from '../policy/policySlice'
-import {setSystemParams,listSystemParam,setTotalCount} from './systemParamsSlice'
+import {setSystemParams,listSystemParam,setTotalCount} from './bandTypesSlice'
 import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
@@ -242,7 +242,7 @@ const Tables = ({
         refetch,
         response,
         extra
-    } = useGetSystemParamsQuery({ page:pages, size: 10 }, {
+    } = useGetBandTypeQuery({ page:pages, size: 10 }, {
       onSuccess: (response, { requestId }, meta) => {
         const totalCount = response.headers.get('X-Total-Count');
         console.log('ddddtot', totalCount)
@@ -419,10 +419,10 @@ const filterTypes = React.useMemo(
       <>
       <Box mb="2em" mt="2em">
         <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                <Heading as={'h6'} size={'sm'}>System Parameters</Heading>
+                <Heading as={'h6'} size={'sm'}>Band Types</Heading>
                 <Stack direction='row' spacing={4} m={'2.5'}>
                       <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
-                        Add System Params 
+                        Add Band Types 
                     </Button>
                     {/* <button onClick={refetch}>Refresh</button> */}
                 </Stack>
@@ -477,28 +477,40 @@ const filterTypes = React.useMemo(
           ))}
         </thead>
         <tbody {...getTableBodyProps()} >
-           {rows.map((row, rowIndex) => {
-          prepareRow(row);
-          const isExpanded = isRowExpanded(rowIndex);
-
-          return (
-            <React.Fragment key={rowIndex}>
-              <tr {...row.getRowProps()} onClick={() => handleRowClick(rowIndex)}>
-                {row.cells.map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
-                    className={`${cell.column.id === 'value' && isExpanded ? 'expanded' : ''}`}
+            <AnimatePresence>
+              {rows.slice(0, 10).map((row, i) => {
+                prepareRow(row)
+                return (
+                  <motion.tr
+                    {...row.getRowProps({
+                      layoutTransition: spring,
+                      exit: { opacity: 0, maxHeight: 0 },
+                    })}
                   >
-                    {cell.column.id === 'value' && cell.value.length > 30
-                      ? (isExpanded ? cell.value : cell.value.substring(0, 30) + '...')
-                      : cell.render('Cell')}
-                  </td>
-                ))}
-              </tr>
-            </React.Fragment>
-          );
-        })}
-        <tr>
+                    {row.cells.map((cell, i) => {
+                      return (
+                        <motion.td
+                          {...cell.getCellProps({
+                            layoutTransition: spring,
+                          })}
+                          style={{ 
+                            // backgroundColor: 'red',
+                            fontWeight: 'normal',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px'
+                          }}
+                        >
+                          {cell.render('Cell')}
+                        </motion.td>
+                      )
+                    })}
+                  </motion.tr>
+                )
+              })}
+            </AnimatePresence>
+            <tr>
               {loading ? (
                 // Use our custom loading state to show a loading indicator
                 <td colSpan="10000">Loading...</td>
@@ -606,7 +618,7 @@ const Polcies = () => {
         extra,
         accessHeaders,
         totalCount
-    } = useGetSystemParamsQuery({ page, size: 10 })
+    } = useGetBandTypeQuery({ page, size: 10 })
   
     
     const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
@@ -639,24 +651,7 @@ const Polcies = () => {
       }
     }, 1000)
     }, [systemParams?.response])
-    
-  React.useEffect(() => {
-    
-  if (systemParams && 'totalCount' in systemParams) {
-    // Retrieve the value of the "X-Total-Count" header
-    const totalCount = systemParams.totalCount;
-
-    // Print the total count
-    console.log('cccxxxx',totalCount);
-  } else {
-    // If the "X-Total-Count" header is not present in the response
-    console.log('X-Total-Count header not found.', response);
-  }
-
-  }, [data,response])
   
- console.log('cccxxxx systemParams',systemParams);
- console.log('cccxxxx totalCount',response);
     const columns = React.useMemo(
     () => [
       {
@@ -680,16 +675,16 @@ const Polcies = () => {
     ),
       },
       {
-        Header: "Name",
-        accessor: "name",
+        Header: "Travel Duration Name",
+        accessor: "travelDurationName",
         maxWidth: 200,
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
       },
       {
-        Header: "Value",
-        accessor: "value",
+        Header: "Travel Duration Description",
+        accessor: "travelDurationDescription",
         maxWidth: 200,
         minWidth: 200,
         width: 200,
@@ -708,7 +703,7 @@ const Polcies = () => {
   );
 
     // const data = React.useMemo(() => tempList);
-    // console.log('ddd listParams', listParams)
+    console.log('ddd band types', systemParams)
   React.useEffect(() => {
     refetch({ page, size: 10 })
     

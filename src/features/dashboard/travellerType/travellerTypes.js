@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGetSystemParamsQuery } from "./systemParamsApiSlice"
+import { useGetTravellerTypesQuery } from "./travellerTypesApiSlice"
 import { Link, useNavigate } from "react-router-dom";
 import Table, { usePagination,useSortBy, useFilters, useColumnOrder } from "react-table";
 import PulseLoader from 'react-spinners/PulseLoader'
@@ -38,8 +38,8 @@ Link as Links,
 import matchSorter from 'match-sorter'
 import { Button } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
-import { listPolicy, listSelected, setStateSelectedt, setStatePolicyList } from '../policy/policySlice'
-import {setSystemParams,listSystemParam,setTotalCount} from './systemParamsSlice'
+// import { listPolicy, listSelected, setStateSelectedt, setStatePolicyList } from '../policy/policySlice'
+// import {setSystemParams,listSystemParam,setTotalCount} from './systemParamsSlice'
 import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
@@ -225,9 +225,6 @@ const Tables = ({
   loading,
   pageCount: controlledPageCount}) => {
     const dispatch = useDispatch()
-    const listuser = useSelector(listPolicy)
-    const selected = useSelector(listSelected)
-    const prevSelected = usePrevious(selected)
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const toast = useToast()
@@ -242,7 +239,7 @@ const Tables = ({
         refetch,
         response,
         extra
-    } = useGetSystemParamsQuery({ page:pages, size: 10 }, {
+    } = useGetTravellerTypesQuery({ page:pages, size: 10 }, {
       onSuccess: (response, { requestId }, meta) => {
         const totalCount = response.headers.get('X-Total-Count');
         console.log('ddddtot', totalCount)
@@ -279,18 +276,6 @@ const filterTypes = React.useMemo(
    const onOpenModal = () => {
         onOpen()
         // getSelectedRows()
- }
-    const onCloseModal = () => {
-        onClose()
-        dispatch(setStateSelectedt([]))
-        // resetSelectedRows: () => toggleAllRowsSelected(false)
-        // getSelectedRows()
-    }
-     const clearSelect = () => {
-     dispatch(setStateSelectedt([]))
-     onClose()
-     const rowIds = listuser?.map((item,i) =>i);
-     rowIds.forEach(id => toggleRowSelected(id, false));
  }
      const cancelDelete = () => {
      onClose()
@@ -349,36 +334,7 @@ const filterTypes = React.useMemo(
       toggleAllRowsSelected();
   }, []);
     
-  React.useEffect(() => {
-      if (JSON.stringify(prev) !== JSON.stringify(selectedRowIds)) {
-          getValues(selectedFlatRows)
-      }
-  }, [prev, selectedRowIds]);
-  
-  // Render the UI for your table
-    const getValues = (data) => {
-     let original = data.map((item) => item.original)
-     dispatch(setStateSelectedt(original))
-    }
-    
-    const deletedUserUpdate = (e) => {
-        e.preventDefault()
-        const nextState = listuser.filter(
-        item => !selected.some(({ id }) => item.id === id)
-        );
-        console.log('nextState',nextState)
-        dispatch(setStatePolicyList(nextState))
-        dispatch(setStateSelectedt([]))
-        onClose()
-        toast({
-                  title: `Deleted Success`,
-                  status:"success",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-                })
-  } 
+
   React.useEffect(() => {
     fetchData({ pageIndex, pageSize,pageOptions })
   }, [fetchData, pageIndex, pageSize,pageOptions])
@@ -419,10 +375,10 @@ const filterTypes = React.useMemo(
       <>
       <Box mb="2em" mt="2em">
         <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                <Heading as={'h6'} size={'sm'}>System Parameters</Heading>
+                <Heading as={'h6'} size={'sm'}>Traveller Type</Heading>
                 <Stack direction='row' spacing={4} m={'2.5'}>
                       <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
-                        Add System Params 
+                        Add Traveller Type 
                     </Button>
                     {/* <button onClick={refetch}>Refresh</button> */}
                 </Stack>
@@ -583,8 +539,6 @@ filterGreaterThan.autoRemove = val => typeof val !== 'number'
 const Polcies = () => {
     const [MasterChecked, setMasterChecked] = useState(false)
     const dispatch = useDispatch()
-    const tempList = useSelector(listPolicy);
-    const listParams = useSelector(listSystemParam);
     const [data, setData] = React.useState([])
     const [loading, setLoading] = React.useState(false)
     const [pageCount, setPageCount] = React.useState(0)
@@ -606,7 +560,7 @@ const Polcies = () => {
         extra,
         accessHeaders,
         totalCount
-    } = useGetSystemParamsQuery({ page, size: 10 })
+    } = useGetTravellerTypesQuery({ page, size: 10 })
   
     
     const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
@@ -640,23 +594,7 @@ const Polcies = () => {
     }, 1000)
     }, [systemParams?.response])
     
-  React.useEffect(() => {
-    
-  if (systemParams && 'totalCount' in systemParams) {
-    // Retrieve the value of the "X-Total-Count" header
-    const totalCount = systemParams.totalCount;
 
-    // Print the total count
-    console.log('cccxxxx',totalCount);
-  } else {
-    // If the "X-Total-Count" header is not present in the response
-    console.log('X-Total-Count header not found.', response);
-  }
-
-  }, [data,response])
-  
- console.log('cccxxxx systemParams',systemParams);
- console.log('cccxxxx totalCount',response);
     const columns = React.useMemo(
     () => [
       {
@@ -688,21 +626,13 @@ const Polcies = () => {
         filter: 'fuzzyText',
       },
       {
-        Header: "Value",
-        accessor: "value",
+        Header: "Description",
+        accessor: "description",
         maxWidth: 200,
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
       },
-      {
-        Header: "Create Date",
-        accessor: "createdDate",
-        maxWidth: 200,
-        minWidth: 200,
-        width: 200,
-        filter: 'fuzzyText',
-      }
     ],
     []
   );

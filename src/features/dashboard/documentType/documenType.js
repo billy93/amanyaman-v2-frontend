@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGetSystemParamsQuery } from "./docTypeApiSlice"
+import { useGetDocumentTypesQuery } from "./docTypeApiSlice"
 import { Link, useNavigate } from "react-router-dom";
 import Table, { usePagination,useSortBy, useFilters, useColumnOrder } from "react-table";
 import PulseLoader from 'react-spinners/PulseLoader'
@@ -242,7 +242,7 @@ const Tables = ({
         refetch,
         response,
         extra
-    } = useGetSystemParamsQuery({ page:pages, size: 10 }, {
+    } = useGetDocumentTypesQuery({ page:pages, size: 10 }, {
       onSuccess: (response, { requestId }, meta) => {
         const totalCount = response.headers.get('X-Total-Count');
         console.log('ddddtot', totalCount)
@@ -606,7 +606,7 @@ const Polcies = () => {
         extra,
         accessHeaders,
         totalCount
-    } = useGetSystemParamsQuery({ page, size: 10 })
+    } = useGetDocumentTypesQuery({ page, size: 10 })
   
     
     const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
@@ -688,21 +688,14 @@ const Polcies = () => {
         filter: 'fuzzyText',
       },
       {
-        Header: "Create Date",
-        accessor: "createdDate",
+        Header: "File Path",
+        accessor: "filepath",
         maxWidth: 200,
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
       },
-      {
-        Header: "Update Date",
-        accessor: "lastModifiedBy",
-        maxWidth: 200,
-        minWidth: 200,
-        width: 200,
-        filter: 'fuzzyText',
-      }
+      
     ],
     []
   );

@@ -3,11 +3,11 @@ import { apiSlice } from "../../../app/api/apiSlice"
 
 export const systemParamsApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-       getSystemParams: builder.query({
+       getDocumentTypes: builder.query({
             query: (data) => {
                 const { page, size } = data;
                 return {
-                url: `/app/system-parameters?page=${page}&size=${size}`,
+                url: `/app/document-types?page=${page}&size=${size}`,
                 method:"GET",
                 prepareHeaders: (headers) => {
                     headers.append('Accept', 'application/json');
@@ -68,6 +68,7 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
+    useGetDocumentTypesQuery,
     useGetSystemParamsQuery,
     useCreateParamsMutation,
     useUpdateParamsMutation,
