@@ -791,7 +791,7 @@ const columns = React.useMemo(
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Travel Agent Address</Text>
                                 </Box>
                                 <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >Travel Agent Address</Text>
+                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >{detail ? detail[0]?.travelAgentAddress : '-'}</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}}  display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
@@ -799,7 +799,7 @@ const columns = React.useMemo(
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Allow Credit Payments</Text>
                                 </Box>
                                 <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}}>True</Text>
+                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}}>{detail ? detail[0]?.allowCreditPayment ? 'True' : 'False' : '-'}</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}}  display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
@@ -807,7 +807,7 @@ const columns = React.useMemo(
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Cust Id</Text>
                                 </Box>
                                 <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >7</Text>
+                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >{detail ? detail[0]?.custid : '-'}</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}} display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
@@ -815,7 +815,7 @@ const columns = React.useMemo(
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Cust Code</Text>
                                 </Box>
                                 <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >WCAH0006</Text>
+                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >{detail ? detail[0]?.custcode : '-'}</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}}  display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
@@ -823,7 +823,7 @@ const columns = React.useMemo(
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Cgroup</Text>
                                 </Box>
                                 <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >WITA_T</Text>
+                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >{detail ? detail[0]?.cgroup : '-'}</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}}  display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
@@ -831,7 +831,7 @@ const columns = React.useMemo(
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>Proforma Invoice Recipients</Text>
                                 </Box>
                                 <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >itdevelopment@atibusinessgroup.com</Text>
+                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >{detail ? detail[0]?.proformaInvoiceRecipients : '-'}</Text>
                                 </Box>
                             </Box>
                             <Box w={{base:"100%"}}  display="flex" justifyContent="flex-start" alignItems="center" p={{base:"4px", md:"10px"}} borderBottom={'1px solid #ebebeb'}>     
@@ -839,7 +839,7 @@ const columns = React.useMemo(
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>City</Text>
                                 </Box>
                                 <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >JAKARTA PUSAT</Text>
+                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >{detail ? detail[0]?.city?.name : '-'}</Text>
                                 </Box>
                             </Box>
                             <Box>

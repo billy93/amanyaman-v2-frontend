@@ -116,9 +116,42 @@ const Login = () => {
     const token =  waitForToken();
     if (token !== null) {
     dispatch(saveToken(true));
-    navigate('/create-quota/search') 
+    // console.log('roles redirect', usersCurrent)
+      if (usersCurrent?.roles[0] === 'ROLE_TRAVEL_AGENT') {
+           navigate('/policy/list')  
+      } else if (usersCurrent?.roles[0] === 'ROLE_ADMIN') {
+          navigate('/master-data/master-user') 
+      } else if (usersCurrent?.roles[0] === 'ROLE_MANAGEMENT'){
+          navigate('/policy/list') 
     }
-  },[dispatch,navigate]);
+       else if (usersCurrent?.roles[0] === 'ROLE_FINANCE'){
+          navigate('/policy/list') 
+    }
+       else if (usersCurrent?.roles[0] === 'ROLE_CALL_CENTER'){
+          navigate('/policy/list') 
+    }
+       else if (usersCurrent?.roles[0] === 'ROLE_OPERATION_MANAGER'){
+          navigate('/policy/list') 
+    }
+       else if (usersCurrent?.roles[0] === 'ROLE_BUSINESS_EXECUTIVE'){
+          navigate('/policy/list') 
+    }
+       else if (usersCurrent?.roles[0] === 'ROLE_MARKETING'){
+          navigate('/policy/list') 
+    }
+       else if (usersCurrent?.roles[0] === 'ROLE_IBS'){
+          navigate('/policy/list') 
+    }
+       else if (usersCurrent?.roles[0] === 'ROLE_AZP'){
+          navigate('/reporting/list') 
+    }
+       else if (usersCurrent?.roles[0] === 'ROLE_ETIQA'){
+          navigate('/reporting/list') 
+      } else {
+         navigate('/policy/list') 
+    }
+    }
+  },[dispatch,navigate,usersCurrent]);
 
   React.useEffect(() => {
     if (loginSuccess) {

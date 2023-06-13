@@ -56,13 +56,13 @@ function App() {
         <Route path="reset-password" element={<ResetPassword />} />
       </Route>
       
-        <Route path="/create-quota" exact element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']}/>}>
+        <Route path="/create-quota" exact element={<LayoutDashboard allowedRoles={['ROLE_TRAVEL_AGENT']}/>}>
           <Route path="search" element={<QuotaSearch />} />
         </Route>
-        <Route path="/dashboard" exact element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']}/>}>
+        <Route path="/dashboard" exact element={<LayoutDashboard allowedRoles={['ROLE_TRAVEL_AGENT']}/>}>
           <Route path='chart' element={<Dashboards />} />
         </Route>
-        <Route path="/policies" exact element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}>
+        <Route path="/policies" exact element={<LayoutDashboard allowedRoles={['ROLE_TRAVEL_AGENT','ROLE_TRAVEL_AGENT','ROLE_FINANCE','ROLE_IBS','ROLE_MANAGEMENT','ROLE_CALL_CENTER','ROLE_OPERATION_MANAGER','ROLE_BUSINESS_EXECUTIVE','ROLE_FINANCE_STAFF']} />}>
           <Route path="list" element={<PolicyList />} />
           <Route path="policy-detail" element={<PolicyDetails />} />
         </Route>
@@ -72,7 +72,7 @@ function App() {
           <Route path="edit-user/:id" element={<EditUser />} />
           <Route path="detail-user/:id" element={<DetailMasterUser />} />
         </Route>
-        <Route path="/master-data" exact element={<LayoutDashboard allowedRoles={[ 'ROLE_ADMIN']}/>}>
+        <Route path="/master-data" exact element={<LayoutDashboard allowedRoles={[ 'ROLE_ADMIN','ROLE_IBS','ROLE_OPERATION_MANAGER']}/>}>
           <Route path="master-products" element={<MasterProduct />} />
           <Route path="create-product" element={<CreateProduct />} />
           <Route path="create-product-price" element={<CreateProductPrice />} />
@@ -101,10 +101,10 @@ function App() {
           <Route path="create" element={<CreateClaimPage />} />
           <Route path="emergency" element={<ClaimEmergency />} />
         </Route>
-        <Route path="/reporting" exact element={<LayoutDashboard />}>
+        <Route path="/reporting" exact element={<LayoutDashboard allowedRoles={['ROLE_TRAVEL_AGENT','ROLE_FINANCE_STAFF','ROLE_IBS','ROLE_BUSINESS_EXECUTIVE','ROLE_OPERATION_MANAGER','ROLE_CALL_CENTER','ROLE_FINANCE','ROLE_MANAGEMENT','ROLE_ETIQA']}/>}>
           <Route path="list" element={<Reporting />} />
         </Route>
-        <Route path="/products" exact element={<LayoutDashboard allowedRoles={['ROLE_SALE', 'ROLES_ADMIN']}/>}>
+        <Route path="/products" exact element={<LayoutDashboard allowedRoles={['ROLE_TRAVEL_AGENT','ROLE_MANAGEMENT','ROLE_FINANCE_STAFF','ROLE_CALL_CENTER','']}/>}>
           <Route path="list" element={<Product />} />
         </Route>
     </Routes>

@@ -655,8 +655,6 @@ const Polcies = () => {
 
   }, [data,response])
   
- console.log('cccxxxx systemParams',systemParams);
- console.log('cccxxxx totalCount',response);
     const columns = React.useMemo(
     () => [
       {

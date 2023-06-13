@@ -19,12 +19,6 @@ const authSlice = createSlice({
                 role: 'ROLE_ADMIN',
                 menu: [
                     {
-                        id: "1",
-                        name: "Dashboard",
-                        link:"/dashboard/chart",
-                        icon:""
-                    },
-                    {
                         id: "2",
                         name: "Users",
                         link: "/master-data/master-user",
@@ -53,7 +47,7 @@ const authSlice = createSlice({
                             },
                             {
                                 link: '/master-data/product-price',
-                                name: 'Master Price',
+                                name: 'Master Product Price',
                                 href: '#',
                             },
                             {
@@ -109,26 +103,240 @@ const authSlice = createSlice({
                            
                             ],
                     },
+                ]
+            },
+            {
+                role: "ROLE_TRAVEL_AGENT",
+                menu: [
                     {
-                        id: "4",
+                        id: "1",
+                        name: "Dashboard",
+                        link:"/dashboard/chart",
+                        icon:""
+                    },
+                    {
+                        id: "2",
                         name: "Policies",
                         link: "/policies/list",
                         icon:""
                     },
                     {
-                        id: "5",
-                        name: "Products",
+                        id: "3",
+                        name: "Travel Agent Product List",
                         link: "/products/list",
                         icon:""
                     },
                     {
-                        id: "6",
+                        id: "4",
                         name: "Travellers",
                         link: "/travellers",
                         icon:""
                     }
                 ]
-            }
+            },
+            {
+                role: "ROLE_MANAGEMENT",
+                menu: [
+                    {
+                        id: "1",
+                        name: "Policies",
+                        link: "/policies/list",
+                        icon:""
+                    },
+                    {
+                        id: "2",
+                        name: "Travel Agent Product List",
+                        link: "/products/list",
+                        icon:""
+                    },
+                    {
+                        id: "3",
+                        name: "Reporting",
+                        link: "/reporting/list",
+                        icon:""
+                    }
+                ]
+            },
+            {
+                role: "ROLE_FINANCE",
+                menu: [
+                    {
+                        id: "1",
+                        name: "Policies",
+                        link: "/policies/list",
+                        icon:""
+                    },
+                    {
+                        id: "2",
+                        name: "Refund",
+                        link: "/refund/list",
+                        icon:""
+                    },
+                    {
+                        id: "3",
+                        name: "Travel Agent",
+                        link: "/master-data/travel-agent",
+                        icon:""
+                    },
+                    {
+                        id: "4",
+                        name: "Master Product Price",
+                        link: "/master-data/product-price",
+                        icon:""
+                    },
+                ]
+            },
+            {
+                role: "ROLE_CALL_CENTER",
+                menu: [
+                    {
+                        id: "1",
+                        name: "Policies",
+                        link: "/policies/list",
+                        icon:""
+                    },
+                    {
+                        id: "2",
+                        name: "Travel Agent",
+                        link: "/product/list",
+                        icon:""
+                    },
+                    {
+                        id: "3",
+                        name: "Refund",
+                        link: "/refund/list",
+                        icon:""
+                    },
+                ]
+            },
+            {
+                role: "ROLE_OPERATION_MANAGER",
+                menu: [
+                    {
+                        id: "1",
+                        name: "Policies",
+                        link: "/policies/list",
+                        icon:""
+                    },
+                    {
+                        id: "2",
+                        name: "Refund",
+                        link: "/refund/list",
+                        icon:""
+                    },
+                    {
+                        id: "3",
+                        name: "Reporting",
+                        link: "/reporting/list",
+                        icon:""
+                    },
+                    {
+                        id: "4",
+                        name: "Travel Agent",
+                        link: "/master-data/travel-agent",
+                        icon:""
+                    },
+                    
+                ]
+            },
+            {
+                role: "ROLE_BUSINESS_EXECUTIVE",
+                menu: [
+                    {
+                        id: "1",
+                        name: "Policies",
+                        link: "/policies/list",
+                        icon:""
+                    },
+                    {
+                        id: "2",
+                        name: "Travel Agent Product List",
+                        link: "/product/list",
+                        icon:""
+                    },
+                    {
+                        id: "3",
+                        name: "Reporting",
+                        link: "/reporting/list",
+                        icon:""
+                    },
+                    
+                    
+                ]
+            },
+            {
+                role: "ROLE_MARKETING",
+                menu: [
+                    {
+                        id: "1",
+                        name: "News & Promo",
+                        link: "/news/list",
+                        icon:""
+                    },
+                ]
+            },
+            {
+                role: "ROLE_ETIQA",
+                menu: [
+                    {
+                        id: "1",
+                         name: "Reporting",
+                         link: "/reporting/list",
+                        icon:""
+                    },
+                ]
+            },
+            {
+                role: "ROLE_IBS",
+                menu: [
+                    {
+                        id: "1",
+                        name: "Policies",
+                        link: "/policies/list",
+                        icon:""
+                    },
+                    {
+                        id: "2",
+                        name: "Reporting",
+                        link: "/reporting/list",
+                        icon:""
+                    },
+                    {
+                        id: "3",
+                        name: "Master Data Product Price",
+                        link: "/master-data/product-price",
+                        icon:""
+                    },
+                    
+                    
+                ]
+            },
+            {
+                role: "ROLE_FINANCE_STAFF",
+                menu: [
+                    {
+                        id: "1",
+                        name: "Policies",
+                        link: "/policies/list",
+                        icon:""
+                    },
+                     {
+                        id: "2",
+                        name: "Travel Agent Product List",
+                        link: "/product/list",
+                        icon:""
+                    },
+                    {
+                        id: "3",
+                        name: "Reporting",
+                        link: "/reporting/list",
+                        icon:""
+                    },
+                   
+                    
+                    
+                ]
+            },
         ],
         userRole: [
         {

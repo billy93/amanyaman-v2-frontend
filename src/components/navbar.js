@@ -87,7 +87,9 @@ export default function Navbar({allowedRoles}) {
     localStorage.setItem("persist", null)
     localStorage.clear()
   }
-  console.log('menus', menus)
+ const userMenu = menus.find(menuItem => menuItem.role === allowedRoles[0]);
+ const menuItems = userMenu ? userMenu.menu : [];
+ 
   const NavLink = ({ children, ...rest }) => (
   <NewLink
     as={Nav}
@@ -251,7 +253,7 @@ const NavItem = ({ icon, children, ...rest }) => {
               {
                 // roles?.some(role => allowedRoles.includes(role.name)) &&(
                     // sortMenuRole()
-                  menus && menus[0] && menus[0].menu.map((link,i) => (
+                  menuItems.map((link,i) => (
                     // <NavLink key={i} {...link}>{link.name}</NavLink>
                     <>
                     <Popover trigger={'hover'} placement={'bottom-start'}>
