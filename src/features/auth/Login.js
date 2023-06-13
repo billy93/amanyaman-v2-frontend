@@ -118,29 +118,29 @@ const Login = () => {
     dispatch(saveToken(true));
     // console.log('roles redirect', usersCurrent)
       if (usersCurrent?.roles[0] === 'ROLE_TRAVEL_AGENT') {
-           navigate('/policy/list')  
+           navigate('/policies/list')  
       } else if (usersCurrent?.roles[0] === 'ROLE_ADMIN') {
           navigate('/master-data/master-user') 
       } else if (usersCurrent?.roles[0] === 'ROLE_MANAGEMENT'){
-          navigate('/policy/list') 
+          navigate('/policies/list') 
     }
        else if (usersCurrent?.roles[0] === 'ROLE_FINANCE'){
-          navigate('/policy/list') 
+          navigate('/policies/list') 
     }
        else if (usersCurrent?.roles[0] === 'ROLE_CALL_CENTER'){
-          navigate('/policy/list') 
+          navigate('/policies/list') 
     }
        else if (usersCurrent?.roles[0] === 'ROLE_OPERATION_MANAGER'){
-          navigate('/policy/list') 
+          navigate('/policies/list') 
     }
        else if (usersCurrent?.roles[0] === 'ROLE_BUSINESS_EXECUTIVE'){
-          navigate('/policy/list') 
+          navigate('/policies/list') 
     }
        else if (usersCurrent?.roles[0] === 'ROLE_MARKETING'){
-          navigate('/policy/list') 
+          navigate('/policies/list') 
     }
        else if (usersCurrent?.roles[0] === 'ROLE_IBS'){
-          navigate('/policy/list') 
+          navigate('/policies/list') 
     }
        else if (usersCurrent?.roles[0] === 'ROLE_AZP'){
           navigate('/reporting/list') 
@@ -148,7 +148,7 @@ const Login = () => {
        else if (usersCurrent?.roles[0] === 'ROLE_ETIQA'){
           navigate('/reporting/list') 
       } else {
-         navigate('/policy/list') 
+         navigate('/policies/list') 
     }
     }
   },[dispatch,navigate,usersCurrent]);
@@ -161,9 +161,9 @@ const Login = () => {
   
   React.useEffect(() => {
     if (isAuthenticated) {
-        navigate('/create-quota/search') 
+        handleRedirect()
    }
-  }, [navigate,isAuthenticated]);
+  }, [handleRedirect,isAuthenticated]);
 
   const handlelogin = async (e) => {
     try {

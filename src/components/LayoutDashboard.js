@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLocation, Navigate, Outlet } from "react-router-dom"
 import Navbar from "./navbar"
-import { Box } from '@chakra-ui/react'
+import { Box,useToast } from '@chakra-ui/react'
 import useAuth from "../features/hook/useAuth"
 import usePersist from "../features/hook/usePersist"
 import { useSelector,useDispatch } from 'react-redux'
@@ -10,6 +10,7 @@ import { logOut,isAuthenticate } from "../features/auth/authSlice"
 
 const LayoutDashboard = ({ allowedRoles }) => {
     const dispatch = useDispatch();
+    const toast = useToast()
     const isAuthenticated = useSelector(isAuthenticate);
     const token = useSelector(userLoginCurrent)
     const {role} = useAuth()
@@ -41,7 +42,23 @@ const LayoutDashboard = ({ allowedRoles }) => {
       window.removeEventListener('storage', handleStorageChange);
     };
     }, [dispatch]);
+  
+  const checkRole = allowedRoles.includes(token?.roles[0])
     
+  React.useEffect(() => {
+      if (!checkRole && isAuthenticated) {
+        toast({ 
+                            id:"checkauth",
+                            title: `Ooops...You can't Access this page`,
+                            status:"warning",
+                            position: 'top-right',
+                            duration:3000,
+                            isClosable: true,
+                            variant:"solid",
+                          })
+    }
+  }, [checkRole, toast,isAuthenticated])
+  
     const content = (
         isAuthenticated && role.some(role => allowedRoles.includes(role))
             ?
