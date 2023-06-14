@@ -201,6 +201,7 @@ const Tables = ({
   loading,
   setPageCount,
   pageCount: controlledPageCount,
+  totalCount
 }) => {
  const dispatch = useDispatch()
  const navigate = useNavigate()
@@ -655,8 +656,7 @@ const filterTypes = React.useMemo(
                 <td colSpan="10000">Loading...</td>
               ) : (
                 <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-                  results
+                  Showing {page.length} of {totalCount} results
                 </td>
               )}
             </tr>
@@ -680,7 +680,7 @@ const MasterUser = () => {
     const [size,setSize] = React.useState(10)
     const [page,setPage] = React.useState(0)
     const {
-        data: listUserAccount,
+        data : {response:listUserAccount, totalCount} = {},
         isLoading,
         isSuccess,
         isError,
@@ -730,8 +730,8 @@ const MasterUser = () => {
         PageInit(pageSize,pageIndex)
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(listUserAccount?.length / pageSize))
-
+        setPageCount(Math.ceil(totalCount / pageSize))
+        // setPageCount(100)
         setLoading(false)
       }
     }, 1000)
@@ -843,6 +843,7 @@ const MasterUser = () => {
                     loading={loading}
                     pageCount={pageCount}
                     setPageCount={setPageCount}
+                    totalCount={totalCount}
                     />
                  
                 }
@@ -874,7 +875,7 @@ const MasterUser = () => {
                     <Box>
                       Page{' '}
                       <strong>
-                        {page + 1} of {count.length}
+                        {page + 1} of {pageCount}
                       </strong>{' '}
                     </Box>
                     {/* <select

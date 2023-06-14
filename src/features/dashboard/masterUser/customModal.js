@@ -31,7 +31,7 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
         skip:true
       })
     const {
-        data: listUserAccount,
+        data : {response:listUserAccount, totalCount} = {},
         isLoading,
         isSuccess,
         isError,

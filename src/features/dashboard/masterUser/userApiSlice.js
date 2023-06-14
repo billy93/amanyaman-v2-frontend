@@ -8,16 +8,19 @@ export const getUserList = apiSlice.injectEndpoints({
                 const { page, size } = datas;
                 return {
                     url: `/app/users?page=${page}&size=${size}`,
-                    transformResponse(apiResponse, meta) {
-                            return { apiResponse, totalCount: Number(meta.response.headers.get('X-Total-Count')) }
-                    },
+                    // transformResponse(apiResponse, meta) {
+                    //         return { apiResponse, totalCount: Number(meta.response.headers.get('X-Total-Count')) }
+                    // },
                     providesTags: (result, error, arg) =>
                     result
                     ? [...result.map(({ id }) => ({ type: 'MasterUser', id })), 'MasterUser']
                     : ['MasterUser'],
                 }
             },
-           }),
+            transformResponse: (response, meta) => {
+                return {response, totalCount: Number(meta.response.headers.get('X-Total-Count'))};
+            }
+        }),
        getRole: builder.query({
             query: () => ({
                 url: `/app/authorities?page=0&size=999`,
