@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetUserQuery,useDeleteUserMutation } from "./userApiSlice"
+import { useGetUserQuery,useDeleteUserMutation,useGetUsersByIdQuery } from "./userApiSlice"
 import { NavLink, useParams, Link, Navigate, useNavigate } from "react-router-dom";
 import {listPolicy} from '../policy/policySlice'
 import Data from './list.json'
@@ -246,24 +246,26 @@ const DetailMasterUser = () => {
     const [isMobile] = useMediaQuery("(max-width: 768px)")
     const [onDelete,setOnDelete] = React.useState(false)
     const {
-        data: users,
+        data: user,
         isLoading,
         isSuccess,
         isError,
         error
-    } = useGetUserQuery({count:5}, { refetchOnMountOrArgChange: true })
+    } = useGetUsersByIdQuery(id)
   const [deleteUser, { isLoading: onLoading, isSuccess: onSuccess, isError: onError }] = useDeleteUserMutation()
   const data = React.useMemo(() => policyList?.listPolicy);
   const toast = useToast()
   const navigate = useNavigate()
-  const Prev = usePrevious(users)
-  React.useMemo(() => {
-      const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
-    if (dataUserDetail) {
-        dispatch(setDetailUser([...dataUserDetail]))
+  const Prev = usePrevious(user)
+  React.useEffect(() => {
+      // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
+    if (user) {
+      const data = [user]
+        dispatch(setDetailUser(data))
       }
-  }, users, dispatch, id)
+  }, user, dispatch, id)
  
+  console.log('users', detail)
   const handleEditUser = (e) => {
     e.preventDefault()
     const datas = {

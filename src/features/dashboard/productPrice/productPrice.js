@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import { useGetProductPriceQuery } from "./productPriceApi"
 import { Link, useNavigate } from "react-router-dom";
+import { useGetBandTypeQuery } from '../bandType/bandTypesApiSlice'
+import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice'
+import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice'
+import { useGetListAreaGroupQuery } from '../group-area/listApiSlice'
+import { useGetTravellerTypesQuery } from "../travellerType/travellerTypesApiSlice"
 import Table, { usePagination,useSortBy, useFilters, useColumnOrder } from "react-table";
 import PulseLoader from 'react-spinners/PulseLoader'
 import {FaChevronUp, FaSort} from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
+import { debounce } from 'lodash';
 import {
- useToast,
+  useToast,
+  Select,
   Modal,
 ModalOverlay,
 ModalContent,
@@ -221,6 +228,7 @@ const Tables = ({
   data,
   fetchData,
   loading,
+  totalCount,
   pageCount: controlledPageCount}) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -237,10 +245,9 @@ const Tables = ({
         refetch,
         response,
         extra
-    } = useGetProductPriceQuery({ page:pages, size: 10 }, {
+    } = useGetProductPriceQuery({ page:0, size: 10 }, {
       onSuccess: (response, { requestId }, meta) => {
         const totalCount = response.headers.get('X-Total-Count');
-        console.log('ddddtot', totalCount)
       // handleSuccess(totalCount); // Update the total count in the component state
       return response;
     },
@@ -349,6 +356,7 @@ const filterTypes = React.useMemo(
   // function fuzzyTextFilterFn(rows, id, filterValue) {
   // return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
   // }
+ 
     const handleAdd = (e) => {
         e.preventDefault()
         navigate('/master-data/create-product-price')
@@ -368,28 +376,10 @@ const filterTypes = React.useMemo(
     setExpandedRows(expandedRowsCopy);
   };
 
+
   const isRowExpanded = (rowIndex) => expandedRows.includes(rowIndex);
   return (
       <>
-      <Box mb="2em" mt="2em">
-        <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                <Heading as={'h6'} size={'sm'}>Product Price</Heading>
-                <Stack direction='row' spacing={4} m={'2.5'}>
-                      <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
-                        Add Product Price 
-                    </Button>
-                    {/* <button onClick={refetch}>Refresh</button> */}
-                </Stack>
-      </Box>
-      {/* <Box mb={'3'} bg={'#ffeccc'} border={'1px'} borderColor={'#ffa000'} width={'300px'} height={'100px'} p={'2'} display="flex" justifyContent={'center'} alignItems={'center'}>
-                <Box bg="#FFA00">
-                    <MdWarning size={'20px'} color="#FFA000"/>
-                </Box>
-                <Text as={'p'} fontSize='xs' color={'black.200'} p={'3'}>
-                        You can only claim policy of Success policy status with maximum 30 days from the end date and no ongoing/successful refund record
-                </Text>
-            </Box> */}
-      </Box>
       <Box bg="white" overflow={'scroll'} p="3">
       <table {...getTableProps()} className='my-table'>
         <thead>
@@ -458,7 +448,7 @@ const filterTypes = React.useMemo(
                 <td colSpan="10000">Loading...</td>
               ) : (
                 <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
+                    Showing {page.length} of ~{totalCount}{' '}
                   results
                 </td>
               )}
@@ -466,57 +456,7 @@ const filterTypes = React.useMemo(
         </tbody>
         </table>
         </Box>
-      {/* <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
-        <Box>
-          <Button onClick={() => previousPage()} disabled={!canPreviousPage} bg="white" border={'none'} _hover={{
-            bg: "#f0eeee",
-            borderRadius: "5px",
-            WebkitBorderRadius: "5px",
-            MozBorderRadius:"5px"
-        }}>
-            <BiSkipPreviousCircle size="25px" color="black" />
-            <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
-        </Button>{' | '}
-          <Button onClick={() => nextPage()} disabled={!canNextPage} bg="white" border={'none'}>
-            <BiSkipNextCircle size="25px" color="black" />
-            <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
-            Next
-            </Text>
-          </Button>{' '}
-        </Box>
-        <Box>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </Box> */}
-        {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
-      {/* </Box> */}
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedRowIds: selectedRowIds,
-              "selectedFlatRows[].original": selectedFlatRows.map(
-                (d) => d.original
-              )
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
+      
     </>
   );
 }
@@ -543,12 +483,26 @@ const Polcies = () => {
     const [count,setCount] = React.useState(0)
     const fetchIdRef = React.useRef(0)
     const [page,setPage] = React.useState(0)
+    const [showFilter,setShowFilter] = React.useState(false)
+    const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+    const {
+        data: travellerTypes,
+    } = useGetTravellerTypesQuery({ page:0, size: 9999 })
+    const [filterQuery, setFilterQuery] = React.useState({
+          productCode:'',
+          travellerType:'',
+          bandType:'',
+          areaGroup:'',
+          planType:'',
+          travelAgent:'',
+    })
     const [paginations,setPagination] = React.useState({
       page: 0,
       size:1000
     })
     const {
-        data: systemParams,
+        data: {response:systemParams, totalCount}={},
         isLoading,
         isSuccess,
         isError,
@@ -557,10 +511,39 @@ const Polcies = () => {
         response,
         extra,
         accessHeaders,
-        totalCount
-    } = useGetProductPriceQuery({ page, size: 10 })
+    } = useGetProductPriceQuery({ page:page, size: 10, ...filterQuery})
+        const {
+              data: bandTypes,
+      } = useGetBandTypeQuery({ page: 0, size: 9999 })
+      
+      const {
+              data: grouparea,
+      } = useGetListAreaGroupQuery({ page: 0, size: 9999 })
+
+      const {
+              data: planTypes,
+      } = useGetPlanTypesQuery({ page: 0, size: 9999 })
+      
+      const {
+        data: travelagents,
+      } = useGetTravelAgentQuery({ page: 0, size: 9999 })
   
-    
+    const showFilterBtn = () => {
+    setShowFilter(!showFilter)
+    }
+  React.useEffect(() => {
+      if(!showFilter){
+        setFilterQuery({
+          productCode:'',
+          travellerType:'',
+          bandType:'',
+          areaGroup:'',
+          planType:'',
+          travelAgent:'',
+        })
+      }
+    },[showFilter])
+  // console.log('travellerTypes', travellerTypes)
     const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
     // This will get called when the table needs new data
     // You could fetch your data from literally anywhere,
@@ -607,6 +590,14 @@ const Polcies = () => {
 
   }, [data,response])
   
+  const handleFilter = (e) => {
+    const filters = {
+      ...filterQuery,
+      [e.target.name]:e.target.value
+    }
+    setFilterQuery(filters)
+  }
+  console.log('query filter',travelagents)
     const columns = React.useMemo(
     () => [
       {
@@ -664,27 +655,166 @@ const Polcies = () => {
 
 
     // const data = React.useMemo(() => tempList);
-    // console.log('ddd listParams', listParams)
-  React.useEffect(() => {
-    refetch({ page, size: 10 })
+  //   console.log('ddd listParams', systemParams)
+  // React.useEffect(() => {
+  //   refetch({ page, size: 10, ...filterQuery })
     
-    },[page,refetch])
+  // }, [page, refetch, filterQuery])
+  
   const nextPages = () => {
     setPage(prevPage => prevPage+1)
   }
   const prevPages = () => {
     setPage(prevPage => prevPage-1)
   }
+  const handleSearch = () => {
+    refetch({page:page,size:10, ...filterQuery})
+  }
+  
+  React.useEffect(() => {
+    const debouncedRefetch = debounce(refetch, 500);
+    debouncedRefetch({page:page,size:10, ...filterQuery});
+
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [debouncedSearchTerm, refetch,filterQuery,page]);
+
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchTerm, filterQuery]);
+  
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterQuery({
+        ...filterQuery,
+        productCode:searchTerm
+      })
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchTerm]);
+
+  const handleSearchTermChange = (e) => {
+    const { value } = e.target;
+    setSearchTerm(value);
+  };
+
     let content;
     if (isLoading) {
         content = <Center h='50vh' color='#065BAA'>
                        <PulseLoader color={"#065BAA"} />
                    </Center>;
     } else if (systemParams) {
-      const totalCount = data;
-        content = (
-          <Box pl="2em" pr="2em" mt="3em"> 
-            {/* <div>{ console.log('celelng',totalCount)}</div> */}
+      content = (
+          <>
+          <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} mt="6em" ml="2em" mr="2em">
+                <Heading as={'h6'} size={'sm'}>Master Product Price</Heading>
+                <Stack direction='row' spacing={4} m={'2.5'}>
+                    <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
+                        Apply Filter
+                    </Button>
+                    {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+                        Export 
+                    </Button> */}
+                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white">
+                        Add Proudct Price 
+                    </Button>
+                </Stack>
+          </Box>
+            {
+              showFilter && (
+                <Box w={{ base: "100%", md: "70%" }} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px" mr="2em" ml="2em" mt="1em">
+                  <Input
+                    variant={'custom'}
+                    value={searchTerm}
+                    onChange={handleSearchTermChange}
+                    name="productCode"
+                    placeholder={"Search by product code"}
+                    bg="#ebebeb"
+                    borderRadius={'5px'}
+                    textTransform={'uppercase'}
+                    _placeholder={{textTransform:'lowercase'}}
+                  />
+                  <Select 
+                  placeholder='Select by Traveller Type'
+                  backgroundColor={filterQuery?.travellerType ==='' ? '#ebebeb' : '#e8f0fe'} 
+                  style={{ fontSize: "14px", fontFamily: "Mulish", fontWeight: "normal" }} _placeholder={{
+                    color:"grey"
+                  }} defaultValue={''}
+                  name="travellerType"
+                  onChange={handleFilter}>  
+                                  {
+                                    travellerTypes?.response.map((types, i) => {
+                                      return (
+                                        <option value={types.id} key={i}>{types.name}</option>
+                                      )
+                                    })
+                                  }
+                </Select>
+                <Select
+                  placeholder='Select by Plan Type'
+                  backgroundColor={filterQuery?.planType ==='' ? '#ebebeb' : '#e8f0fe'} 
+                  style={{ fontSize: "14px", fontFamily: "Mulish", fontWeight: "normal" }} _placeholder={{
+                    color:"grey"
+                  }} defaultValue={''}
+                  name="planType"
+                  onChange={handleFilter}>  
+                                  {
+                                    planTypes?.response.map((types, i) => {
+                                      return (
+                                        <option value={types.id} key={i}>{types.name}</option>
+                                      )
+                                    })
+                                  }
+                  </Select>
+                <Select
+                  placeholder='Select by Travel Duration'
+                  backgroundColor={filterQuery?.bandType ==='' ? '#ebebeb' : '#e8f0fe'} 
+                  style={{ fontSize: "14px", fontFamily: "Mulish", fontWeight: "normal" }} _placeholder={{
+                    color:"grey"
+                  }} defaultValue={''}
+                  name="bandType"
+                  onChange={handleFilter}>  
+                                  {
+                                    bandTypes?.response.map((types, i) => {
+                                      return (
+                                        <option value={types.id} key={i}>{types.travelDurationName}</option>
+                                      )
+                                    })
+                                  }
+                  </Select>
+                <Select
+                  placeholder='Select by Travel Agent'
+                  backgroundColor={filterQuery?.travelAgent ==='' ? '#ebebeb' : '#e8f0fe'} 
+                  style={{ fontSize: "14px", fontFamily: "Mulish", fontWeight: "normal" }} _placeholder={{
+                    color:"grey"
+                  }} defaultValue={''}
+                  name="travelAgent"
+                  onChange={handleFilter}>  
+                                  {
+                                    travelagents?.response.map((types, i) => {
+                                      return (
+                                        <option value={types.id} key={i}>{types.travelAgentName}</option>
+                                      )
+                                    })
+                                  }
+                  </Select>
+                  {/* <Button variant={'outline'} onClick={handleSearch}>Search</Button> */}
+                </Box>
+                )}
                 <Styles>
                 <Tables
                     columns={columns}
@@ -692,10 +822,11 @@ const Polcies = () => {
                     fetchData={fetchData}
                     loading={loading}
                     pageCount={pageCount}
+                    totalCount={totalCount}
                 />
                 </Styles>
             {/* <Link to="/welcome">Back to Welcome</Link> */}
-            <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
+            <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em" ml="2em" mr="2em">
         <Box>
           <Button onClick={prevPages} isDisabled={page ===0 ? true : false} bg="white" border={'none'} _hover={{
             bg: "#f0eeee",
@@ -706,7 +837,7 @@ const Polcies = () => {
             <BiSkipPreviousCircle size="25px" color="black" />
             <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
         </Button>{' | '}
-          <Button onClick={nextPages} bg="white" border={'none'}>
+          <Button onClick={nextPages} bg="white" border={'none'} isDisabled={Math.ceil(totalCount/10) ===page+1}>
             <BiSkipNextCircle size="25px" color="black" />
             <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
             Next
@@ -717,7 +848,7 @@ const Polcies = () => {
         <Box>
           Page{' '}
           <strong>
-            {page + 1} of {count?.length}
+            {page + 1} of {Math.ceil(totalCount/10)}
           </strong>{' '}
         </Box>
         {/* <select
@@ -732,8 +863,8 @@ const Polcies = () => {
             </option>
           ))}
         </select> */}
-      </Box>
-            </Box>
+          </Box>
+          </>
         )
     } else if (isError) {
         content = <p>{JSON.stringify(error)}</p>;

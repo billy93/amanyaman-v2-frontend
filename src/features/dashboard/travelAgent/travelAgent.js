@@ -39,7 +39,7 @@ Link as Links,
 } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
-import {listAgent,setMasterAgent,listAgentSelection,setListAgent, setFormAgent,formAgent,listRoleUsers} from './travelAgentSlice'
+import {totalCounts,listAgent,setMasterAgent,listAgentSelection,setListAgent, setFormAgent,formAgent,listRoleUsers} from './travelAgentSlice'
 import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
@@ -210,8 +210,8 @@ const Tables = ({
  const [filterName,setFilterName] = React.useState('')
  const [filterEmail,setFilterEmail] = React.useState('')
  const [filterRole,setFilterRole] = React.useState('')
-const [expandedCell, setExpandedCell] = useState(null);
-  
+ const [expandedCell, setExpandedCell] = useState(null);
+ const totalXcount = useSelector(totalCounts) 
   const handleCellClick = (columnId) => {
     setExpandedCell(columnId === expandedCell ? null : columnId);
   };
@@ -622,48 +622,7 @@ const handleRowClick = (rowIndex) => {
           </tbody>
           </table>
       </Box>
-      <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
-        <Box>
-          <Button onClick={() => previousPage()} disabled={!canPreviousPage} bg="white" border={'none'} _hover={{
-            bg: "#f0eeee",
-            borderRadius: "5px",
-            WebkitBorderRadius: "5px",
-            MozBorderRadius:"5px"
-        }}>
-            <BiSkipPreviousCircle size="25px" color="black" />
-            <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
-        </Button>{' | '}
-          <Button _hover={{
-            bg: "#f0eeee",
-            borderRadius: "5px",
-            WebkitBorderRadius: "5px",
-            MozBorderRadius:"5px"
-        }} onClick={() => nextPage()} disabled={!canNextPage} bg="white" border={'none'}>
-            <BiSkipNextCircle size="25px" color="black" />
-            <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
-            Next
-            </Text>
-          </Button>{' '}
-        </Box>
-        <Box>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </Box>
-        {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
-      </Box>
+      
       {/* <pre>
         <code>
           {JSON.stringify(
@@ -688,35 +647,30 @@ const MasterUser = () => {
     const tempList = useSelector(listAgent);
     const formuser = useSelector(formAgent);
     const selectedUser = useSelector(listAgentSelection);
-    const [paginations,setPagination] = React.useState({
-      page: 0,
-      size:10
-    })
     const [size,setSize] = React.useState(10)
+    const [page,setPage] = React.useState(0)
     const {
-        data: listUserAccount,
+        data : {response:listUserAccount, totalCount} = {},
         isLoading,
         isSuccess,
         isError,
-        error
-    } = useGetTravelAgentQuery({page:paginations?.page,size:paginations?.size}, { refetchOnMountOrArgChange: true })
+        error,
+        refetch
+    } = useGetTravelAgentQuery({page,size:10})
+    
     const tableRef = React.useRef(null)
     const [data, setData] = React.useState([])
     const prevData = usePrevious(listUserAccount)
+    const [changePage,setChangePage] = React.useState(false) 
     const [loading, setLoading] = React.useState(false)
+    const [count, setCount] = React.useState(false)
     const [pageCount, setPageCount] = React.useState(0)
-   const PageInit = React.useCallback((pageSize,pageIndex) => {
-    // console.log('page init', pageSize,pageIndex)
-     setPagination({
-       page: pageIndex,
-       size:pageSize
-      })
-   }, [paginations?.page, paginations?.size])
-  
+    
+    const refpage = React.useRef(null)
     const navigate = useNavigate()
     const fetchIdRef = React.useRef(0)
     // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
-    const fetchData = React.useCallback(({ pageSize, pageIndex }) => {
+    const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
     // This will get called when the table needs new data
     // You could fetch your data from literally anywhere,
     // even a server. But for this example, we'll just fake it.
@@ -732,17 +686,19 @@ const MasterUser = () => {
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
+        setCount(pageOptions)
         setData(listUserAccount?.slice(startRow, endRow))
-        PageInit(pageSize,pageIndex)
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(listUserAccount?.length / pageSize))
-
+        setPageCount(Math.ceil(totalCount / pageSize))
+        // setPageCount(100)
         setLoading(false)
       }
     }, 1000)
     }, [listUserAccount])
   
+  
+    // console.log('uploadFilesMessages 111', uploadFilesMessages ==='success')
     const newdata = React.useMemo(()=>{
       return tempList ? tempList : [{}]
     }, [tempList]);
@@ -752,8 +708,13 @@ const MasterUser = () => {
        dispatch(setListAgent([...listUserAccount]))
     }
     //  dispatch(setListUser([...listUserAccount]))
-  }, [listUserAccount,prevData])
-  console.log('new data', isSuccess)
+  }, [listUserAccount, prevData])
+  
+  React.useEffect(() => {
+   refetch({page,size:10})
+  }, [page])
+
+  // console.log('listUserAccount', listUserAccount)
     const columns = React.useMemo(
       () => [
        {
@@ -868,8 +829,17 @@ const MasterUser = () => {
 
     // const data = React.useMemo(() => tempList);
     
+const handleNexts = () => {
+    setPage(prevPage => prevPage + 1)
+    // setChangePage(true)
+  }
 
-    let content;
+  const previousPage = () => {
+    setPage(prevPage => prevPage - 1)
+    // setChangePage(true)
+  }
+
+   let content;
     if (isLoading) {
         content = <Center h='50vh' color='#065BAA'>
                        <PulseLoader color={"#065BAA"} />
@@ -883,15 +853,61 @@ const MasterUser = () => {
                   
                     <Tables
                     columns={columns}
-                    data={listUserAccount}
+                    data={data}
                     fetchData={fetchData}
                     loading={loading}
                     pageCount={pageCount}
+                    setPageCount={setPageCount}
+                    totalCount={totalCount}
                     />
                  
                 }
                 
                 </Styles>
+                  <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
+                    <Box>
+                      <Button isDisabled={page ===0 ? true : false} onClick={previousPage} bg="white" border={'none'} _hover={{
+                        bg: "#f0eeee",
+                        borderRadius: "5px",
+                        WebkitBorderRadius: "5px",
+                        MozBorderRadius:"5px"
+                    }}>
+                        <BiSkipPreviousCircle size="25px" color="black" />
+                        <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
+                    </Button>{' | '}
+                      <Button
+                      isDisabled={Math.ceil(totalCount/10) ===page+1}
+                      _hover={{
+                        bg: "#f0eeee",
+                        borderRadius: "5px",
+                        WebkitBorderRadius: "5px",
+                        MozBorderRadius:"5px"
+                    }} onClick={handleNexts}  bg="white" border={'none'}>
+                        <BiSkipNextCircle size="25px" color="black" />
+                        <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
+                        Next
+                        </Text>
+                      </Button>{' '}
+                    </Box>
+                    <Box>
+                      Page{' '}
+                      <strong>
+                        {page + 1} of {pageCount}
+                      </strong>{' '}
+                    </Box>
+                    {/* <select
+                      value={pageSize}
+                      onChange={e => {
+                        setPageSize(Number(e.target.value))
+                      }}
+                    >
+                      {[10, 20, 30, 40, 50].map(pageSize => (
+                        <option key={pageSize} value={pageSize}>
+                          Show {pageSize}
+                        </option>
+                      ))}
+                    </select> */}
+                  </Box>
                 {/* <Link to="/welcome">Back to Welcome</Link> */}
             </Box>
           </Box>

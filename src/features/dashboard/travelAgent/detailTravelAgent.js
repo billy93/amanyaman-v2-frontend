@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetTravelAgentQuery,useDeleteAgentMutation } from "./travelApiSlice"
+import { useGetTravelAgentQuery,useDeleteAgentMutation,useGetAgentByIdQuery } from "./travelApiSlice"
 import { NavLink, useParams, Link, Navigate, useNavigate } from "react-router-dom";
 import Table from "react-table";
 import { useTable, useRowSelect,useFilters,useSortBy,usePagination  } from "react-table";
@@ -30,7 +30,7 @@ import {useDispatch} from 'react-redux'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { useMediaQuery } from "@chakra-ui/media-query";
 import 'react-calendar/dist/Calendar.css';
-import {listAgent,listDetailAgent,setDetailAgent,formAgent,setFormAgent,setProductAgentSelection,setProductAgent,detailAgentProductaList,detailAgentProductSelection} from './travelAgentSlice'
+import {listAgent,listDetailAgent,setDetailAgent,formAgent,setFormAgent,setProductAgentSelection,setProductAgent,setEditAgent,detailAgentProductaList,detailAgentProductSelection} from './travelAgentSlice'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
 import {BsFillPencilFill} from 'react-icons/bs'
@@ -560,18 +560,33 @@ const DetailMasterUser = () => {
     const [isMobile] = useMediaQuery("(max-width: 768px)")
     const [onDelete,setOnDelete] = React.useState(false)
     const {
-        data: users,
+        data: user,
+        isLoading:loadings,
         isSuccess,
         isError,
         error
-    } = useGetTravelAgentQuery({count:5}, { refetchOnMountOrArgChange: true })
+    } = useGetAgentByIdQuery(id, { refetchOnMountOrArgChange: true })
   const toast = useToast()
   const navigate = useNavigate()
-  const Prev = usePrevious(users)
+  const Prev = usePrevious(user)
   const [data, setData] = React.useState([])
   const newData = useSelector(detailAgentProductaList)
   const [loading, setLoading] = React.useState(false)
   const [pageCount, setPageCount] = React.useState(0)
+  React.useEffect(() => {
+      // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
+    if (user) {
+      // const data = [user]
+      const datauser = {
+        ...user,
+        allowCreditPayment:user !==null && user?.allowCreditPayment ===false ? '' :'allowCreditPayment' ,   
+        city:user !==null ? [{...user?.city,'label': detail?.city?.name, 'value': detail?.city?.id}] : null
+        }
+       dispatch(setEditAgent(datauser))
+       dispatch(setDetailAgent(datauser))
+      }
+  }, user, dispatch, id)
+  console.log('users', user)
    const PageInit = React.useCallback((pageSize,pageIndex) => {
     // console.log('page init', pageSize,pageIndex)
      setPagination({
@@ -609,11 +624,11 @@ const DetailMasterUser = () => {
     }, [newData])
   
   React.useMemo(() => {
-      const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
+      const dataUserDetail = user?.filter((user) => user.id === parseInt(id))
     if (dataUserDetail) {
         dispatch(setDetailAgent([...dataUserDetail]))
       }
-  }, users, dispatch, id)
+  }, user, dispatch, id)
   
   const handleEditUser = (e) => {
     e.preventDefault()

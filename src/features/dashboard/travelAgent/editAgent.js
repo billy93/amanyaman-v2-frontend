@@ -33,7 +33,7 @@ useMultiStyleConfig
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux"
 import { useDispatch } from 'react-redux'
-import {useCreateAgentMutation,useGetRoleQuery,useUpdateAgentMutation,useGetTravelAgentQuery,useGetCitiesQuery} from './travelApiSlice'
+import {useCreateAgentMutation,useGetRoleQuery,useUpdateAgentMutation,useGetTravelAgentQuery,useGetCitiesQuery,useGetAgentByIdQuery} from './travelApiSlice'
 import {setListAgent,listAgent,formAgent,setFormAgent,listDetailAgent,setDetailAgent,setEditAgent,editAgentVal,setListCity,getlistcity} from './travelAgentSlice'
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
@@ -139,12 +139,12 @@ const CreateUser = () => {
   const group = getRootProps();
   const { data:cities} = useGetCitiesQuery({page:0,size:999}, { refetchOnMountOrArgChange: true })
   const {
-        data: users,
+        data: user,
         isLoading,
         isSuccess,
         isError,
         error
-    } = useGetTravelAgentQuery({count:5}, { refetchOnMountOrArgChange: true })
+    } = useGetAgentByIdQuery(id, { refetchOnMountOrArgChange: true })
   const [createAgent,{isSuccess:successCreateAgent}] = useCreateAgentMutation({
    skip:trigger === false 
   })
@@ -157,31 +157,45 @@ const CreateUser = () => {
     }
   }, [cities])
   
-React.useMemo(() => {
-      const detail = users?.filter((user) => user.id === parseInt(id))
-      // const detail = newDetail.map((agent)=>({...agent,'label':agent.name}))
-    if (detail) {
-        const datas = {
-            id:detail !==null ? detail[0]?.id : null,    
-            travelAgentName:detail !==null ? detail[0]?.travelAgentName : null,    
-            travelAgentEmail:detail !==null ? detail[0]?.travelAgentEmail : null,    
-            travelAgentAddress:detail !==null ? detail[0]?.travelAgentAddress : null,  
-            commission:detail !==null ? detail[0]?.commission : null,
-            paymentType:detail !==null ? detail[0]?.paymentType : null,
-            travelAgentPhone:detail !==null ? detail[0]?.travelAgentPhone : null,  
-            custcode:detail !==null ? detail[0]?.custcode : null,   
-            apiPassword:detail !==null ? detail[0]?.apiPassword : null,   
-            custid:detail !==null ? detail[0]?.custid : null,   
-            cgroup:detail !==null ? detail[0]?.cgroup : null,   
-            legalName:detail !==null ? detail[0]?.legalName : null,   
-            proformaInvoiceRecipients:detail !==null ? detail[0]?.proformaInvoiceRecipients : null,   
-            allowCreditPayment:detail !==null && detail[0]?.allowCreditPayment ===false ? '' :'allowCreditPayment' ,   
-            city:detail !==null ? [{...detail[0]?.city,'label': detail[0]?.city?.name, 'value': detail[0]?.city?.id}] : null
+React.useEffect(() => {
+      // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
+    if (user) {
+      // const data = [user]
+      const datauser = {
+        ...user,
+        allowCreditPayment:user !==null && user?.allowCreditPayment ===false ? '' :'allowCreditPayment' ,   
+        city:user !==null ? [{...user?.city,'label': detail?.city?.name, 'value': detail?.city?.id}] : null
         }
-        dispatch(setEditAgent(datas))
-        dispatch(setDetailAgent(datas))
+       dispatch(setEditAgent(datauser))
+       dispatch(setDetailAgent(datauser))
       }
-}, users, dispatch, id)
+}, user, dispatch, id)
+  console.log('user', user)
+// React.useMemo(() => {
+//       const detail = users?.filter((user) => user.id === parseInt(id))
+//       // const detail = newDetail.map((agent)=>({...agent,'label':agent.name}))
+//     if (detail) {
+//         const datas = {
+//             id:detail !==null ? detail[0]?.id : null,    
+//             travelAgentName:detail !==null ? detail[0]?.travelAgentName : null,    
+//             travelAgentEmail:detail !==null ? detail[0]?.travelAgentEmail : null,    
+//             travelAgentAddress:detail !==null ? detail[0]?.travelAgentAddress : null,  
+//             commission:detail !==null ? detail[0]?.commission : null,
+//             paymentType:detail !==null ? detail[0]?.paymentType : null,
+//             travelAgentPhone:detail !==null ? detail[0]?.travelAgentPhone : null,  
+//             custcode:detail !==null ? detail[0]?.custcode : null,   
+//             apiPassword:detail !==null ? detail[0]?.apiPassword : null,   
+//             custid:detail !==null ? detail[0]?.custid : null,   
+//             cgroup:detail !==null ? detail[0]?.cgroup : null,   
+//             legalName:detail !==null ? detail[0]?.legalName : null,   
+//             proformaInvoiceRecipients:detail !==null ? detail[0]?.proformaInvoiceRecipients : null,   
+//             allowCreditPayment:detail !==null && detail[0]?.allowCreditPayment ===false ? '' :'allowCreditPayment' ,   
+//             city:detail !==null ? [{...detail[0]?.city,'label': detail[0]?.city?.name, 'value': detail[0]?.city?.id}] : null
+//         }
+//         dispatch(setEditAgent(datas))
+//         dispatch(setDetailAgent(datas))
+//       }
+// }, users, dispatch, id)
   
   const onSelectAllowCredit = (e) => {
     e.preventDefault()

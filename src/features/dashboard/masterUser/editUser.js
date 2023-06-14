@@ -29,7 +29,7 @@ BreadcrumbLink,
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux"
 import { useDispatch } from 'react-redux'
-import {useCreateUserMutation,useGetRoleQuery,useUpdateUserMutation,useGetUserQuery} from './userApiSlice'
+import {useCreateUserMutation,useGetRoleQuery,useUpdateUserMutation,useGetUserQuery,useGetUsersByIdQuery} from './userApiSlice'
 import {setListUser,listUsers,listRoleUsers,setRoleUser,formUser,setFormUser,selectAgentList,setFormSelectAgent} from './masterUserSlice'
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
@@ -73,45 +73,42 @@ const CreateUser = () => {
         data: listAgent,
     } = useGetTravelAgentQuery({page:0,size:999}, { refetchOnMountOrArgChange: true })
   const {
-        data: users,
+        data: user,
         isLoading,
         isSuccess,
         isError,
-        error
-    } = useGetUserQuery({count:5}, { refetchOnMountOrArgChange: true })
+        error,refetch
+  } = useGetUsersByIdQuery(id,{refetchOnReconnect:true})
+  
   const [createUser] = useCreateUserMutation({
    skip:trigger === false 
   })
   React.useMemo(() => {
     if (listAgent) {
-      let city = listAgent?.map((obj,i) => ({ ...obj, 'label': obj.travelAgentName,'value':obj.id, idx:i }))
+      let city = listAgent?.response.map((obj,i) => ({ ...obj, 'label': obj.travelAgentName,'value':obj.id, idx:i }))
         dispatch(setFormSelectAgent(city))
     }
-  }, [listAgent])
+  }, [listAgent,dispatch])
 
   React.useMemo(() => {
     if (rolesData) {
-      let city = rolesData?.map((obj,i) => ({ ...obj, 'label': obj.name }))
+      let city = rolesData?.map((obj,i) => ({ ...obj, 'label': obj.name,'value':obj.name }))
         dispatch(setRoleUser(city))
     }
-  }, [rolesData])
+  }, [rolesData,dispatch])
 
-  React.useMemo(() => {
-      const dataUserDetail = users?.filter((user,i) => user.id === parseInt(id))
-      if (dataUserDetail) {
-          const editUser = {
-                id:dataUserDetail !==null ? dataUserDetail[0]?.id : null,
-                login:dataUserDetail !==null ? dataUserDetail[0]?.login : null,
-                firstName:dataUserDetail !==null ? dataUserDetail[0]?.firstName : null,
-                lastName:dataUserDetail !==null ? dataUserDetail[0]?.lastName : null,
-                email:dataUserDetail !==null ? dataUserDetail[0]?.email : null,
-                authorities: dataUserDetail !== null ? [{ 'label': dataUserDetail[0]?.authorities[0], 'name': dataUserDetail[0]?.authorities[0]}] : null,
-                travelAgent:dataUserDetail !==null ? [{'value' : dataUserDetail[0]?.travelAgent?.id, 'label':dataUserDetail[0]?.travelAgent?.travelAgentName}] : null
-          }
-         
-        dispatch(setFormUser(editUser))
+  React.useEffect(() => {
+      // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
+    if (user) {
+      // const data = [user]
+      const datauser = {
+        ...user,
+        authorities:[{authorities:user?.authorities[0],label:user?.authorities[0],value:user?.authorities[0]}],
+        travelAgent:[{id:user?.travelAgent?.id,travelAgentName:user?.travelAgent?.travelAgentName,label:user?.travelAgent?.travelAgentName,value:user?.travelAgent?.travelAgentName}]
+        }
+        dispatch(setFormUser(datauser))
       }
-  }, users, dispatch, id)
+  }, user, dispatch, id)
     
   const [updateUser] = useUpdateUserMutation()
   const toast = useToast()
@@ -216,8 +213,12 @@ const handleidentityCard = (e, i) => {
       label:"TEST GOLDEN RAMA 2",
     }
   ]
-  console.log('formuser', formuser)
-  console.log('selectListAgent', selectListAgent)
+  const HandleRefresh = () => {
+    refetch(id)
+    // useGetUsersByIdQuery(id, { refetchTag: 'getUserByIdRefresh' });
+  };
+  // console.log('formuser', formuser)
+  // console.log('selectListAgent', selectListAgent)
   return (
     <Stack mt={{base:"1em", md:"5em"}}>
       <Box p="12px" display="flex" justifyContent={'space-between'} alignItems="center">
@@ -247,6 +248,7 @@ const handleidentityCard = (e, i) => {
                     </Breadcrumb>
         </Box>
       </Box>
+      {/* <Button onClick={HandleRefresh}>refresh</Button> */}
       <Box border="1px" borderColor={'#ebebeb'} borderTop={'none'}>
         <Box>
             <Box width={{base:"100%",md:"540px"}} m="auto">

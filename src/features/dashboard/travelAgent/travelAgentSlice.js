@@ -3,7 +3,7 @@ import {apiSlice} from '../../../app/api/apiSlice'
 const createMasterAgentSlice = createSlice({
     name: 'masterAgent',
     initialState: { 
-        messages:null,
+        listCount:null,
         list:[],
         detail: null,
         editAgent: null,
@@ -102,7 +102,7 @@ const createMasterAgentSlice = createSlice({
       apiSlice.endpoints.getUser.matchFulfilled,
         (state, { payload }) => {
           console.log('extraa', payload, state)
-        state.messages = payload
+        state.listCount = payload
       }
     )
   },
@@ -120,3 +120,4 @@ export const formAgent = (state) => state.agent.formagent
 export const getlistcity = (state) => state.agent.citylist
 export const detailAgentProductaList = (state) => state.agent.detailAgent.productList
 export const detailAgentProductSelection = (state) => state.agent.detailAgent.selection
+export const totalCounts = (state) => state.agent.listCount

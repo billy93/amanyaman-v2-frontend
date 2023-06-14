@@ -42,7 +42,7 @@ const createSystemParamsSlice = createSlice({
     extraReducers: (builder) => {
             builder.addMatcher(apiSlice.endpoints.getSystemParams.matchFulfilled, (state, { meta }) => {
             const headers = meta.baseQueryMeta.response.headers; // this is a Headers {} object
-            state.totalCount = headers.get('X-Total-Count')
+            state.totalCount = Number(headers.get('X-Total-Count'))
             console.log('tesssss',Number(headers.get('Content-Type'))); // prints application/json; charset=utf-8
             console.log('tesssss meta',meta); // prints application/json; charset=utf-8
             console.log(headers.get('authorization')); // prints undefined

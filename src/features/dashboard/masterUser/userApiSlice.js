@@ -28,6 +28,17 @@ export const getUserList = apiSlice.injectEndpoints({
                 
             }),
         }),
+        getUsersById: builder.query({
+           prepareHeaders: (headers) => {
+            headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+            return headers;
+            },
+            query: (id) => ({
+                url: `/app/users/getById/${id}?cacheBuster=${Date.now()}`,
+                cachePolicy: 'no-cache',
+           }),
+           providesTags: ['MasterUser']
+        }),
        downloadTemplate: builder.query({
             query: () => ({
                 url: `/list/template/download`,
@@ -96,6 +107,7 @@ export const getUserList = apiSlice.injectEndpoints({
 })
 
 export const {
+    useGetUsersByIdQuery,
     useGetUserQuery,
     useCreateUserMutation,
     useGetRoleQuery,

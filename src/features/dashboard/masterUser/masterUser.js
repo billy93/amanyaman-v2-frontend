@@ -860,7 +860,9 @@ const MasterUser = () => {
                         <BiSkipPreviousCircle size="25px" color="black" />
                         <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
                     </Button>{' | '}
-                      <Button _hover={{
+                      <Button
+                      isDisabled={Math.ceil(totalCount/10) ===page+1}
+                      _hover={{
                         bg: "#f0eeee",
                         borderRadius: "5px",
                         WebkitBorderRadius: "5px",

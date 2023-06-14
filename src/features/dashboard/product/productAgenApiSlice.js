@@ -2,23 +2,24 @@ import { apiSlice } from "../../../app/api/apiSlice"
 
 export const policyApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getProductPrice: builder.query({
+        getProductsAgent: builder.query({
             query: (data) => {
-                let url ='/app/product-travel-agents'
-                const params = new URLSearchParams();
+                let url ='/app/product-travel-agents/agent'
+                const queryParams = [];
 
                  for (const filter in data) {
                     if (data[filter] !== '') {
                         if (filter === 'page' || filter === 'size' || filter === 'productCode' || filter === 'travellerType' || filter ==='travelAgent' || filter ==='bandType' || filter ==='areaGroup' || filter ==='planType') {
-                     params.append(filter, data[filter]);
+                       queryParams.push(`${filter}=${data[filter]}`);
                         } else {
-                       params.append(filter, encodeURIComponent(data[filter]));
+                        queryParams.push(`${filter}=${encodeURIComponent(data[filter])}`);
                         }
                     }
                  }
-                  if (params.toString() !== '') {
-                    url += `?${params.toString()}`;
+                 if (queryParams.length > 0) {
+                    url += `?${queryParams.join('&')}`;
                     }
+                
                 return {
                 url: url,
                 method:"GET",
@@ -27,15 +28,11 @@ export const policyApiSlice = apiSlice.injectEndpoints({
                     return headers;
                     },
                 };
-             },
-             transformResponse(response, meta) {
-                // console.log('resssssss', meta.response.headers.get('X-Total-Count'))
-                return {response,totalCount: Number(meta.response.headers.get('X-Total-Count')) }
-            },
+           },
             }),
     })
 })
 
 export const {
-    useGetProductPriceQuery
+    useGetProductsAgentQuery
 } = policyApiSlice 

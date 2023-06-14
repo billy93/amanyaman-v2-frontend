@@ -14,6 +14,9 @@ export const getAgentList = apiSlice.injectEndpoints({
                     : ['MasterAgent'],
                 }
             },
+            transformResponse: (response, meta) => {
+                return {response, totalCount: Number(meta.response.headers.get('X-Total-Count'))};
+            }
         }), 
        getTemplateFileAgent: builder.query({
             query: (url) => ({
@@ -32,6 +35,14 @@ export const getAgentList = apiSlice.injectEndpoints({
                     result
                     ? [...result.map(({ id }) => ({ type: 'cities', id })), 'cities']
                     : ['cities'],
+                }
+            },
+           }),       
+        getAgentById: builder.query({
+            query: (id) => {
+                // const { page, size } = datas;
+                return {
+                    url: `/app/travel-agent/getById/${id}`,
                 }
             },
            }),       
@@ -95,6 +106,7 @@ export const getAgentList = apiSlice.injectEndpoints({
 })
 
 export const {
+    useGetAgentByIdQuery,
     useGetTravelAgentQuery,
     useCreateAgentMutation,
     useUpdateAgentMutation,
