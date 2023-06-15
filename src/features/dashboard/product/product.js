@@ -77,6 +77,10 @@ const Form2 = ({}) => {
     const selectedInsurance = useSelector(selectedTravelInsurance)
     const [showFilter, setShowFilter] = React.useState(false)
     const [searchTerm, setSearchTerm] = useState('');
+    const [filterby,setFilterBy] = React.useState({
+      travelAgentName: '',
+      custCode :''
+    })
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
     const [filterQuery, setFilterQuery] = React.useState({
           productCode:'',
@@ -105,7 +109,7 @@ const Form2 = ({}) => {
             
             const {
                     data: travelagents,
-            } = useGetTravelAgentQuery({ page: 0, size: 9999 })
+            } = useGetTravelAgentQuery({ page: 0, size: 9999,...filterby })
     
         const {
                 data: products,

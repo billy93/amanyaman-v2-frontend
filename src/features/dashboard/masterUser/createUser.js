@@ -54,10 +54,14 @@ const CreateUser = () => {
   const [trigger, setTrigger] = React.useState(false)
   const { data: rolesData, isLoading, isError, isSuccess } = useGetRoleQuery()
   const prevListRoles = usePrevious(rolesData)
+  const [filterby,setFilterBy] = React.useState({
+      travelAgentName: '',
+      custCode :''
+    })
   const [selectFill, setSelectFille] = React.useState(false)
    const {
-        data: listAgent,
-    } = useGetTravelAgentQuery({page:0,size:999}, { refetchOnMountOrArgChange: true })
+        data: {response:listAgent, totalCount} ={},
+    } = useGetTravelAgentQuery({page:0,size:999,...filterby})
   const [createUser] = useCreateUserMutation({
    skip:trigger === false 
   })
@@ -127,7 +131,7 @@ const handleidentityCard = (e, i) => {
       dispatch(setRoleUser(rolesData))
     }
   }, [rolesData, prevListRoles, dispatch])
-  
+  // console.log('listAgent', listAgent)
   return (
     <Stack mt={{base:"1em", md:"5em"}}>
       <Box p="12px" display="flex" justifyContent={'space-between'} alignItems="center">
@@ -249,7 +253,7 @@ const handleidentityCard = (e, i) => {
                          )
                          }
                         {
-                          listAgent?.response?.map((role, i) => {
+                          listAgent?.map((role, i) => {
                             return (
                               <option value={role.id} key={i} fontFamily={'Mulish'} fontSize={'12px'}>{role.travelAgentName}</option>
                             )

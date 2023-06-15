@@ -501,6 +501,10 @@ const Polcies = () => {
       page: 0,
       size:1000
     })
+  const [filterby,setFilterBy] = React.useState({
+      travelAgentName: '',
+      custCode :''
+    })
     const {
         data: {response:systemParams, totalCount}={},
         isLoading,
@@ -525,8 +529,8 @@ const Polcies = () => {
       } = useGetPlanTypesQuery({ page: 0, size: 9999 })
       
       const {
-        data: travelagents,
-      } = useGetTravelAgentQuery({ page: 0, size: 9999 })
+        data: {response:travelagents} = {},
+      } = useGetTravelAgentQuery({ page: 0, size: 9999, ...filterby })
   
     const showFilterBtn = () => {
     setShowFilter(!showFilter)
@@ -543,7 +547,7 @@ const Polcies = () => {
         })
       }
     },[showFilter])
-  // console.log('travellerTypes', travellerTypes)
+  console.log('travellerTypes', travelagents)
     const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
     // This will get called when the table needs new data
     // You could fetch your data from literally anywhere,
@@ -805,7 +809,7 @@ const Polcies = () => {
                   name="travelAgent"
                   onChange={handleFilter}>  
                                   {
-                                    travelagents?.response.map((types, i) => {
+                                    travelagents?.map((types, i) => {
                                       return (
                                         <option value={types.id} key={i}>{types.travelAgentName}</option>
                                       )

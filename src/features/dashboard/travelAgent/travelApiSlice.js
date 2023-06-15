@@ -5,7 +5,8 @@ export const getAgentList = apiSlice.injectEndpoints({
    endpoints: builder => ({
         getTravelAgent: builder.query({
             query: (datas) => {
-                const { page, size,custCode,travelAgentName } = datas;
+                const { page, size, custCode, travelAgentName } = datas;
+                console.log('agens', datas)
                 let url ='/app/travel-agents'
                 const params = new URLSearchParams();
 

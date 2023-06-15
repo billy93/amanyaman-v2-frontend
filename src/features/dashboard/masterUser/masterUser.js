@@ -877,9 +877,15 @@ const MasterUser = () => {
   }
   
     // const data = React.useMemo(() => tempList);
+  // const handleNameDeb =  debounce((value) => {
+  //   // Perform filtering logic here
+  //   console.log('Filtering by name:', value);
+  // }, 00);
+
   const handleFilterByName = e => {
   const {value} = e.target;
-  setFilterName(value);
+    setFilterName(value);
+    // handleNameDeb(value)
 };
   const handleFilterByEmail = e => {
   const {value} = e.target;
@@ -889,7 +895,7 @@ const MasterUser = () => {
   const {value} = e.target
   setFilterRole(value);
   };  
-const handleDebounceName = debounce(handleFilterByName,1000)
+
 const handleAddUser = () => {
    const stateUser = {
         login:"",    

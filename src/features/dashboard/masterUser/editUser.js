@@ -372,7 +372,7 @@ const handleidentityCard = (e, i) => {
       <Box display={'flex'} justifyContent={'flex-end'} alignItems={'center'} p="9px" borderRadius={'5px'} border="1px" borderColor={'#ebebeb'}>
           <Button isDisabled={formuser?.login ==='' || formuser?.firstName ==='' || formuser?.email ===''
           || formuser?.lastName ===''
-            ? true : false} variant={'ClaimBtn'} style={{ textTransform: 'uppercase', fontSize: '14px' }} fontFamily="arial" fontWeight={'700'} onClick={handleNext}>Add</Button>
+            ? true : false} variant={'ClaimBtn'} style={{ textTransform: 'uppercase', fontSize: '14px' }} fontFamily="arial" fontWeight={'700'} onClick={handleNext}>Edit</Button>
       </Box>
       </Box>
     </Stack>

@@ -579,7 +579,7 @@ const handleidentityCard = (e, i) => {
       <Box display={'flex'} justifyContent={'flex-end'} alignItems={'center'} p="9px" borderRadius={'5px'} border="1px" borderColor={'#ebebeb'}>
           <Button isDisabled={detail?.travelAgentName  ==='' || detail?.travelAgentEmail === '' || detail?.travelAgentPhone ==='' || detail?.custid ==='' || detail?.proformaInvoiceRecipients ==='' || detail?.apiPassword ==='' || detail?.commission ==='' || detail?.legalName ==='' || detail?.paymentType ===''
           || detail?.custcode ==='' || detail?.city ==='' || detail?.allowCreditPayment ==='false' || detail?.cgroup ===''
-            ? true : false} variant={'ClaimBtn'} style={{ textTransform: 'uppercase', fontSize: '14px' }} fontFamily="arial" fontWeight={'700'} onClick={handleNext}>Add</Button>
+            ? true : false} variant={'ClaimBtn'} style={{ textTransform: 'uppercase', fontSize: '14px' }} fontFamily="arial" fontWeight={'700'} onClick={handleNext}>Edit</Button>
       </Box>
       </Box>
     </Stack>
