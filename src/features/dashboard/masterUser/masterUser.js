@@ -889,7 +889,7 @@ const MasterUser = () => {
   const {value} = e.target
   setFilterRole(value);
   };  
-  
+const handleDebounceName = debounce(handleFilterByName,1000)
 const handleAddUser = () => {
    const stateUser = {
         login:"",    

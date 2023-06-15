@@ -29,11 +29,7 @@ export const getUserList = apiSlice.injectEndpoints({
                 const encodedTravelAgent = name.replace('%', '%25');
                 params.append('name', encodedTravelAgent);
                 }
-                if (name !== '') {
-                const encodedTravelAgent = name.replace('%', '%25');
-                params.append('name', encodedTravelAgent);
-                }
-
+            
                 // Add other filter parameters if needed
 
                 if (params.toString() !== '') {
