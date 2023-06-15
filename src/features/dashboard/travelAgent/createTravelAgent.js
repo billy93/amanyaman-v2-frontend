@@ -34,7 +34,8 @@ import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
 import { Select } from 'chakra-react-select'
-console.log('formAgent', formAgent)
+import UseCustomToast from '../../../components/UseCustomToast';
+
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
   // ... and can hold any value, similar to an instance property on a class
@@ -98,6 +99,7 @@ function CustomRadio(props) {
 
 const CreateUser = () => {
   const dispatch = useDispatch()
+   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const listProducts = useSelector(listAgent)
   const detail = useSelector(listDetailAgent)
   const formuser = useSelector(formAgent)
@@ -175,28 +177,23 @@ const handleidentityCard = (e, i) => {
       
       try {
         let data = await createAgent(datas) 
-         dispatch(setListAgent([...listProducts, datas]));
-        toast({
-                  title: ` Created Travel Agent Success`,
-                  status:"success",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-      })
+          // console.log('dataa',data)
+           if (data?.data) {
+            showSuccessToast('Agent Edited successfully!');
+            dispatch(setListAgent([...listProducts, datas]));
+            navigate('/master-data/travel-agent')
+        } else {
+          // const statusCode = error?.response?.status || 'Unknown';
+          const errorMessage = `Failed to Edit agent. Status Code: ${data?.error?.status}`;
+          showErrorToast(errorMessage);
+         }
         
       } catch (err) {
-        toast({
-                  title: `${err?.originalStatus}`,
-                  status:"error",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-      })
+         const errorMessage = `Failed to Edit agent. Status Code: ${err?.error?.status}`;
+          showErrorToast(errorMessage);
       }
       setFields(null)
-      navigate('/master-data/travel-agent')
+      // navigate('/master-data/travel-agent')
     }
   
   const handleData = (e) => {

@@ -30,6 +30,8 @@ import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
 import { useGetTravelAgentQuery } from "../travelAgent/travelApiSlice"
+// import  OnQueryError  from '../../../components/UseCustomToast'
+import UseCustomToast from '../../../components/UseCustomToast'
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -43,9 +45,11 @@ function usePrevious(value) {
   return ref.current;
 }
 
+
 const CreateUser = () => {
   const dispatch = useDispatch()
   const listProducts = useSelector(listUsers)
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
   const listRoles = useSelector(listRoleUsers)
   const formuser = useSelector(formUser)
   const hiddenInputIdtty = React.useRef(null)
@@ -61,10 +65,15 @@ const CreateUser = () => {
   const [selectFill, setSelectFille] = React.useState(false)
    const {
         data: {response:listAgent, totalCount} ={},
-    } = useGetTravelAgentQuery({page:0,size:999,...filterby})
+   } = useGetTravelAgentQuery({ page: 0, size: 999, ...filterby })
+  
+
   const [createUser] = useCreateUserMutation({
-   skip:trigger === false 
+   skip:trigger === false
   })
+  
+  
+  
   const [updateUser] = useUpdateUserMutation()
   const toast = useToast()
   const handleUploadIdentity = (e) => {
@@ -93,29 +102,25 @@ const handleidentityCard = (e, i) => {
         }
       
       try {
-        let data = await createUser(datas)
-         dispatch(setListUser([...listProducts, datas]));
-        toast({
-                  title: ` Created User Success`,
-                  status:"success",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-      })
-        
-      } catch (err) {
-        toast({
-                  title: `${err?.originalStatus}`,
-                  status:"error",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-      })
+        let resp = await createUser(datas)
+        // console.log('ress', resp)
+        if (resp?.data) {
+           showSuccessToast('User created successfully!');
+           dispatch(setListUser([...listProducts, datas])); 
+           navigate('/master-data/master-user')
+        } else {
+          // const statusCode = error?.response?.status || 'Unknown';
+          const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+          showErrorToast(errorMessage);
+         }
+         
+      } catch (error) {
+       const statusCode = error?.response?.status || 'Unknown';
+       const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      showErrorToast(errorMessage);
       }
       setFields(null)
-      navigate('/master-data/master-user')
+      // navigate('/master-data/master-user')
     }
   
   const handleData = (e) => {

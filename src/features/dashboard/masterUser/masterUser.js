@@ -907,13 +907,14 @@ const handleAddUser = () => {
    }
    dispatch(setFormUser(stateUser))
     navigate('/master-data/create-user')
- }
+}
+  
     let content;
     if (isLoading) {
         content = <Center h='50vh' color='#065BAA'>
                        <PulseLoader color={"#065BAA"} />
                    </Center>;
-    } else if (isSuccess) {
+    } else if (listUserAccount) {
         content = (
           <Box pl="2em" pr="2em" mt="5em"> 
             <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>

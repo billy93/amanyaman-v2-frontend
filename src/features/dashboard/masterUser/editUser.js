@@ -6,24 +6,14 @@ import {
 Box,
 Stack,
 Text,
-Link,
-Heading,
 Button,
-Image,
 FormControl,
 Input,
 Select as SelectDef,
 FormLabel,
 useToast,
-InputGroup,
-InputRightElement,
-Divider,
-Textarea,
 useTheme,
-useColorMode,
 useColorModeValue,
-Center,
-Container,
 useMultiStyleConfig,
 Breadcrumb,
 BreadcrumbItem,
@@ -38,6 +28,7 @@ import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
 import { useGetTravelAgentQuery } from "../travelAgent/travelApiSlice"
 import { Select } from 'chakra-react-select'
+import UseCustomToast from '../../../components/UseCustomToast';
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -58,6 +49,11 @@ const CreateUser = () => {
   const listRoles = useSelector(listRoleUsers)
   const formuser = useSelector(formUser)
   const selectListAgent = useSelector(selectAgentList)
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+  const [filterby,setFilterBy] = React.useState({
+      travelAgentName: '',
+      custCode :''
+    })
   const hiddenInputIdtty = React.useRef(null)
   const navigate = useNavigate()
   const [fields, setFields] = React.useState(null)
@@ -67,13 +63,14 @@ const CreateUser = () => {
   const [selectFill, setSelectFille] = React.useState(false)
   const { th } = useMultiStyleConfig("Table", {});
   const theme = useTheme();
+
   const outlineColor = useColorModeValue(
     theme.colors.blue[500],
     theme.colors.blue[300]
   );
   const {
-        data: listAgent,
-    } = useGetTravelAgentQuery({page:0,size:999}, { refetchOnMountOrArgChange: true })
+        data: {response:listAgent} ={},
+    } = useGetTravelAgentQuery({page:0,size:999, ...filterby}, { refetchOnMountOrArgChange: true })
   const {
         data: user,
         isLoading,
@@ -88,14 +85,9 @@ const CreateUser = () => {
    skip:trigger === false 
   })
 
-// const handleInvalidateCache = async () => {
-//       invalidateGetUsersByIdCache(id);
-
-// };
-
   React.useMemo(() => {
     if (listAgent) {
-      let city = listAgent?.response.map((obj,i) => ({ ...obj, 'label': obj.travelAgentName,'value':obj.id, idx:i }))
+      let city = listAgent?.map((obj,i) => ({ ...obj, 'label': obj.travelAgentName,'value':obj.id, idx:i }))
         dispatch(setFormSelectAgent(city))
     }
   }, [listAgent,dispatch])
@@ -153,26 +145,21 @@ const handleidentityCard = (e, i) => {
         }
       
       try {
-        let data = await updateUser({...datas, id:formuser?.id})
-         dispatch(setListUser([...listProducts, datas]));
-        toast({
-                  title: `Edit User Success `,
-                  status:"success",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-      })
-        
+        let data = await updateUser({ ...datas, id: formuser?.id })
+        // console.log('data', data)
+        if (data?.data) {
+           showSuccessToast('User Edited successfully!');
+           dispatch(setListUser([...listProducts, datas]));
+           navigate('/master-data/master-user')
+        } else {
+          // const statusCode = error?.response?.status || 'Unknown';
+          const errorMessage = `Failed to Edit user. Status Code: ${data?.error?.status}`;
+          showErrorToast(errorMessage);
+         }
+         
       } catch (err) {
-        toast({
-                  title: `${err?.originalStatus}`,
-                  status:"error",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-      })
+         const errorMessage = `Failed to Edit user. Status Code: ${err?.error?.status}`;
+        showErrorToast(errorMessage);
       }
       setFields(null)
       navigate('/master-data/master-user')

@@ -1,5 +1,5 @@
 import { apiSlice } from "../../../app/api/apiSlice";
-import Toast from '../../../components/toast';
+// import OnQueryError from "../../../components/UseCustomToast";
 
 export const getUserList = apiSlice.injectEndpoints({
    endpoints: builder => ({
@@ -114,8 +114,13 @@ export const getUserList = apiSlice.injectEndpoints({
             query: (users) => ({
                 url: `/app/users`,
                 method: "POST",
-                body:{...users}
+                body: { ...users },
+                transformResponse: (response) => {
+                    // Custom response transformation logic here
+                    return response.data;
+                },
             }),
+                // OnQueryError
         }),
         updateUser: builder.mutation({
             query: (users) => ({

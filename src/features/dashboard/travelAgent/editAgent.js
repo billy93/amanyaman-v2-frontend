@@ -39,6 +39,8 @@ import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
 import { Select } from 'chakra-react-select'
+import UseCustomToast from '../../../components/UseCustomToast';
+import CustomRadio from '../../../components/customRadio';
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -51,7 +53,7 @@ function usePrevious(value) {
   // Return previous value (happens before update in useEffect above)
   return ref.current;
 }
-function CustomRadio(props) {
+function CustomRadios(props) {
   const dispatch = useDispatch()
   const { getInputProps, getCheckboxProps } = useRadio(props);
   const detail = useSelector(editAgentVal)
@@ -115,6 +117,7 @@ const CreateUser = () => {
   const [trigger, setTrigger] = React.useState(false)
   const [selectFill, setSelectFille] = React.useState(false)
   const [isChek, setIsChek] = React.useState('allowCreditPayment')
+   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const list = ['allowCreditPayment'];
   const { th } = useMultiStyleConfig("Table", {});
   const theme = useTheme();
@@ -130,13 +133,7 @@ const CreateUser = () => {
     }
   }, [detail?.allowCreditPayment, isChek])
   
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: "test",
-    defaultValue:`${detail?.allowCreditPayment}`,
-    onChange: console.log
-  });
-
-  const group = getRootProps();
+ 
   const { data:cities} = useGetCitiesQuery({page:0,size:999}, { refetchOnMountOrArgChange: true })
   const {
         data: user,
@@ -170,32 +167,18 @@ React.useEffect(() => {
       //  dispatch(setDetailAgent(datauser))
       }
 }, user, dispatch, id)
-  console.log('user', user)
-// React.useMemo(() => {
-//       const detail = users?.filter((user) => user.id === parseInt(id))
-//       // const detail = newDetail.map((agent)=>({...agent,'label':agent.name}))
-//     if (detail) {
-//         const datas = {
-//             id:detail !==null ? detail[0]?.id : null,    
-//             travelAgentName:detail !==null ? detail[0]?.travelAgentName : null,    
-//             travelAgentEmail:detail !==null ? detail[0]?.travelAgentEmail : null,    
-//             travelAgentAddress:detail !==null ? detail[0]?.travelAgentAddress : null,  
-//             commission:detail !==null ? detail[0]?.commission : null,
-//             paymentType:detail !==null ? detail[0]?.paymentType : null,
-//             travelAgentPhone:detail !==null ? detail[0]?.travelAgentPhone : null,  
-//             custcode:detail !==null ? detail[0]?.custcode : null,   
-//             apiPassword:detail !==null ? detail[0]?.apiPassword : null,   
-//             custid:detail !==null ? detail[0]?.custid : null,   
-//             cgroup:detail !==null ? detail[0]?.cgroup : null,   
-//             legalName:detail !==null ? detail[0]?.legalName : null,   
-//             proformaInvoiceRecipients:detail !==null ? detail[0]?.proformaInvoiceRecipients : null,   
-//             allowCreditPayment:detail !==null && detail[0]?.allowCreditPayment ===false ? '' :'allowCreditPayment' ,   
-//             city:detail !==null ? [{...detail[0]?.city,'label': detail[0]?.city?.name, 'value': detail[0]?.city?.id}] : null
-//         }
-//         dispatch(setEditAgent(datas))
-//         dispatch(setDetailAgent(datas))
-//       }
-// }, users, dispatch, id)
+
+  React.useEffect(() => {
+    
+  },[user])
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    name: "test",
+    defaultValue:'allowCreditPayment',
+    onChange: console.log
+  });
+   const group = getRootProps();
+  // console.log('user', user)
+
   
   const onSelectAllowCredit = (e) => {
     e.preventDefault()
@@ -229,28 +212,20 @@ const handleidentityCard = (e, i) => {
       }
       try {
         let data = await updateAgent(constData) 
-        dispatch(setListAgent([...listProducts, constData]));
-        if (successCreateAgent) {
-          dispatch(setEditAgent(null))
-        }
-        toast({
-                  title: `Edit Travel Agent Success`,
-                  status:"success",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-      })
-        
+        if (data?.data) {
+          showSuccessToast('Agent Edited successfully!');
+          dispatch(setListAgent([...listProducts, constData]));
+           navigate('/master-data/travel-agent')
+          if (successCreateAgent) {
+            dispatch(setEditAgent(null))
+          } 
+        }else {
+            const errorMessage = `Failed to Edit agent. Status Code: ${data?.error?.status}`;
+            showErrorToast(errorMessage);
+          }
       } catch (err) {
-        toast({
-                  title: `${err?.originalStatus}`,
-                  status:"error",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-      })
+        const errorMessage = `Failed to Edit agent. Status Code: ${err?.error?.status}`;
+            showErrorToast(errorMessage);
       }
       setFields(null)
       navigate('/master-data/travel-agent')
@@ -472,14 +447,8 @@ const handleidentityCard = (e, i) => {
               </RadioGroup> */}
               {/* <input type='radio' name="allowCreditPayment" value={detail?.allowCreditPayment ===true ? 'true' : 'false'} checked={detail?.allowCreditPayment ===true ? 'true' : 'false'} onClick={(e) => onSelectAllowCredit(e)}/> */}
                  {/* <Radio onChange={onSelectAllowCredit} value={detail?.allowCreditPayment} isChecked={detail?.allowCreditPayment ===1 ? true : false} ><Text as="p" fontSize={'sm'} fontFamily={'Mulish'}>Allow Credit Payment</Text></Radio> */}
-            <HStack {...group}>
-              {list.map((item) => (
-                <CustomRadio key={item} {...getRadioProps({ value: item })}>
-                  <Text as="p" fontsize="12px" style={{color: "#231F20",fontSize:"14px", fontFamily:'Mulish',paddingLeft:"5px" }}>
-                  {item}
-                  </Text>
-                </CustomRadio>
-              ))}
+            <HStack>
+               <CustomRadio />
             </HStack>  
             </Stack>
           </Box>
