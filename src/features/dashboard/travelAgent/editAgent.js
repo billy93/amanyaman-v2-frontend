@@ -164,10 +164,10 @@ React.useEffect(() => {
       const datauser = {
         ...user,
         allowCreditPayment:user !==null && user?.allowCreditPayment ===false ? '' :'allowCreditPayment' ,   
-        city:user !==null ? [{...user?.city,'label': detail?.city?.name, 'value': detail?.city?.id}] : null
+        city:user !==null ? [{...user?.city,'label': user?.city?.name, 'value': user?.city?.name}] : null
         }
        dispatch(setEditAgent(datauser))
-       dispatch(setDetailAgent(datauser))
+      //  dispatch(setDetailAgent(datauser))
       }
 }, user, dispatch, id)
   console.log('user', user)
@@ -224,7 +224,8 @@ const handleidentityCard = (e, i) => {
       e.preventDefault()  
       const constData = {
         ...detail,
-        allowCreditPayment:detail?.allowCreditPayment ==='allowCreditPayment' ? true : false
+        allowCreditPayment:detail?.allowCreditPayment ==='allowCreditPayment' ? true : false,
+        city:{id:detail?.city[0].id, name:detail?.city[0].name},
       }
       try {
         let data = await updateAgent(constData) 

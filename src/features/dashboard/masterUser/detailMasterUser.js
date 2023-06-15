@@ -251,7 +251,7 @@ const DetailMasterUser = () => {
         isSuccess,
         isError,
         error
-    } = useGetUsersByIdQuery(id)
+    } = useGetUsersByIdQuery(id,{refetchOnMountOrArgChange:true})
   const [deleteUser, { isLoading: onLoading, isSuccess: onSuccess, isError: onError }] = useDeleteUserMutation()
   const data = React.useMemo(() => policyList?.listPolicy);
   const toast = useToast()

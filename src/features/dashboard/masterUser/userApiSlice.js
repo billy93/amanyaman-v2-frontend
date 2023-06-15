@@ -5,9 +5,43 @@ export const getUserList = apiSlice.injectEndpoints({
    endpoints: builder => ({
         getUser: builder.query({
             query: (datas) => {
-                const { page, size } = datas;
+                // const { page, size } = datas;
+                const { page, size, name, email, role } = datas;
+                console.log('name', name, email)
+                let url ='/app/users'
+                const params = new URLSearchParams();
+
+                if (role !== '') {
+                params.append('role', role);
+                }
+                if (email !== '') {
+                params.append('email', email);
+                }
+                if (page !== '') {
+                params.append('page', page);
+                }
+                if (size !== '') {
+                params.append('size', size);
+                }
+
+                params.append('sort', 'createdDate,desc');
+                if (name !== '') {
+                const encodedTravelAgent = name.replace('%', '%25');
+                params.append('name', encodedTravelAgent);
+                }
+                if (name !== '') {
+                const encodedTravelAgent = name.replace('%', '%25');
+                params.append('name', encodedTravelAgent);
+                }
+
+                // Add other filter parameters if needed
+
+                if (params.toString() !== '') {
+                url += `?${params.toString()}`;
+                }
+                
                 return {
-                    url: `/app/users?page=${page}&size=${size}`,
+                    url: url,
                     // transformResponse(apiResponse, meta) {
                     //         return { apiResponse, totalCount: Number(meta.response.headers.get('X-Total-Count')) }
                     // },
@@ -34,10 +68,10 @@ export const getUserList = apiSlice.injectEndpoints({
             return headers;
             },
             query: (id) => ({
-                url: `/app/users/getById/${id}?cacheBuster=${Date.now()}`,
+                url: `/app/users/getById/${id}`,
                 cachePolicy: 'no-cache',
            }),
-           providesTags: ['MasterUser']
+           provideTags: (result, error, id) => (result ? [{ type: 'user', id }] : [])
         }),
        downloadTemplate: builder.query({
             query: () => ({

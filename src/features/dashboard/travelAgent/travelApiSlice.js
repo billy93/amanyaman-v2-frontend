@@ -5,9 +5,33 @@ export const getAgentList = apiSlice.injectEndpoints({
    endpoints: builder => ({
         getTravelAgent: builder.query({
             query: (datas) => {
-                const { page, size } = datas;
+                const { page, size,custCode,travelAgentName } = datas;
+                let url ='/app/travel-agents'
+                const params = new URLSearchParams();
+
+                if (custCode !== '') {
+                params.append('custcode', custCode);
+                }
+                if (page !== '') {
+                params.append('page', page);
+                }
+                if (size !== '') {
+                params.append('size', size);
+                }
+
+                if (travelAgentName !== '') {
+                const encodedTravelAgent = travelAgentName.replace('%', '%25');
+                params.append('travelAgentName', encodedTravelAgent);
+                }
+
+                // Add other filter parameters if needed
+
+                if (params.toString() !== '') {
+                url += `?${params.toString()}`;
+                }
+
                 return {
-                    url: `/app/travel-agents?page=${page}&size=${size}`,
+                    url: url,
                     providesTags: (result, error, arg) =>
                     result
                     ? [...result.map(({ id }) => ({ type: 'MasterAgent', id })), 'MasterAgent']
@@ -42,7 +66,7 @@ export const getAgentList = apiSlice.injectEndpoints({
             query: (id) => {
                 // const { page, size } = datas;
                 return {
-                    url: `/app/travel-agent/getById/${id}`,
+                    url: `/app/travel-agents/${id}`,
                 }
             },
            }),       

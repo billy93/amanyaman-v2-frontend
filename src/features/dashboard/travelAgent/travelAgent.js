@@ -7,6 +7,7 @@ import Table, { usePagination } from "react-table";
 import PulseLoader from 'react-spinners/PulseLoader'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaChevronUp, FaSort } from 'react-icons/fa'
+import { debounce } from 'lodash';
 import {
   useToast,
   Select,
@@ -215,23 +216,7 @@ const Tables = ({
   const handleCellClick = (columnId) => {
     setExpandedCell(columnId === expandedCell ? null : columnId);
   };
- const handleAddUser = (e) => {
-    e.preventDefault()
-    const datas = {
-            travelAgentName:'',    
-            travelAgentEmail:'',    
-            travelAgentAddress:'',  
-            travelAgentPhone:'',  
-            custcode:'',   
-            custid:'',   
-            cgroup:'',   
-            promoInvoiceRecipents:'',   
-            allowCreditPayment:'',   
-            city:''
-    }
-    dispatch(setFormAgent(datas))
-    navigate('/master-data/create-agent')
- }
+ 
 const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -468,27 +453,7 @@ const handleRowClick = (rowIndex) => {
                 </ModalContent>
       </Modal>
       
-      <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                <Heading as={'h6'} size={'sm'}>Travel Agent</Heading>
-                <Stack direction='row' spacing={4} m={'2.5'}>
-                    <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
-                        Apply Filter
-                    </Button>
-                    {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
-                        Export 
-                    </Button> */}
-                    <CustomModal
-                      showModalButtonText="Import"
-                      modalHeader="Import Excel File"
-                      modalBody="Import Excel File"
-                      
-                      />
-                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAddUser}>
-                        Add Agent 
-                    </Button>
-                </Stack>
-      </Box>
-      <Box mt="1em" mb="1em" display="flex" alignItems="center" gap="10px">
+      <Box display="flex" alignItems="center" gap="10px">
         
         {
              selected?.length > 0 && (
@@ -506,30 +471,6 @@ const handleRowClick = (rowIndex) => {
         }
         
       </Box>
-      {
-        showFilter ? (
-          <Box w={{base:"100%", md:"650px"}} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px">
-                <Input
-                  variant={'custom'}
-                  value={filterName}
-                  onChange={handleFilterByName}
-                  placeholder={"Search travel agent name"}
-                  bg="#ebebeb"
-                  borderRadius={'5px'}
-          />
-                <Input
-                  variant={'custom'}
-                  value={filterEmail}
-                  onChange={handleFilterByEmail}
-                  placeholder={"Search cust code"}
-                  bg="#ebebeb"
-                  borderRadius={'5px'}
-          />
-                  
-          </Box>
-        ): null
-      }
-      
       <Box bg="white" overflow={'scroll'} p="3">
 
         <table {...getTableProps()}>
@@ -649,6 +590,23 @@ const MasterUser = () => {
     const selectedUser = useSelector(listAgentSelection);
     const [size,setSize] = React.useState(10)
     const [page,setPage] = React.useState(0)
+    
+    
+    const tableRef = React.useRef(null)
+    const [data, setData] = React.useState([])
+    const [changePage,setChangePage] = React.useState(false) 
+    const [loading, setLoading] = React.useState(false)
+    const [count, setCount] = React.useState(false)
+    const [pageCount, setPageCount] = React.useState(0)
+    const [showFilter,setShowFilter] = React.useState(false)
+    const [searchAgent, setSearchAgent] = useState('');
+    const [debouncedSearchAgent, setDebouncedSearchAgent] = useState('');
+    const [searchCustCode, setSearchCustCode] = useState('');
+    const [debouncedSearchCustCode, setDebouncedSearchCustCode] = useState('');
+    const [filterby,setFilterBy] = React.useState({
+      travelAgentName: '',
+      custCode :''
+    })
     const {
         data : {response:listUserAccount, totalCount} = {},
         isLoading,
@@ -656,16 +614,8 @@ const MasterUser = () => {
         isError,
         error,
         refetch
-    } = useGetTravelAgentQuery({page,size:10})
-    
-    const tableRef = React.useRef(null)
-    const [data, setData] = React.useState([])
+    } = useGetTravelAgentQuery({page,size:10, ...filterby})
     const prevData = usePrevious(listUserAccount)
-    const [changePage,setChangePage] = React.useState(false) 
-    const [loading, setLoading] = React.useState(false)
-    const [count, setCount] = React.useState(false)
-    const [pageCount, setPageCount] = React.useState(0)
-    
     const refpage = React.useRef(null)
     const navigate = useNavigate()
     const fetchIdRef = React.useRef(0)
@@ -705,15 +655,44 @@ const MasterUser = () => {
   
   React.useEffect(() => {
     if (listUserAccount !== null && JSON.stringify(prevData) !== JSON.stringify(listUserAccount)) {
-       dispatch(setListAgent([...listUserAccount]))
+      // const startRow = page * 10
+      // const endRow = startRow + 10
+      // setData(listUserAccount?.slice(startRow, endRow)) 
+      dispatch(setListAgent([...listUserAccount]))
     }
     //  dispatch(setListUser([...listUserAccount]))
   }, [listUserAccount, prevData])
   
   React.useEffect(() => {
-   refetch({page,size:10})
-  }, [page])
+   refetch({page,size:10,...filterby})
+  }, [page,filterby])
 
+  const handleAddUser = (e) => {
+    e.preventDefault()
+    const datas = {
+            travelAgentName:'',    
+            travelAgentEmail:'',    
+            travelAgentAddress:'',  
+            travelAgentPhone:'',  
+            custcode:'',   
+            custid:'',   
+            cgroup:'',   
+            promoInvoiceRecipents:'',   
+            allowCreditPayment:'',   
+            city:''
+    }
+    dispatch(setFormAgent(datas))
+    navigate('/master-data/create-agent')
+  }
+  React.useEffect(() => {
+      if(!showFilter){
+        setFilterBy({
+          travelAgentName:'',
+          custCode:'',
+        })
+      }
+  }, [showFilter])
+  
   // console.log('listUserAccount', listUserAccount)
     const columns = React.useMemo(
       () => [
@@ -838,7 +817,87 @@ const handleNexts = () => {
     setPage(prevPage => prevPage - 1)
     // setChangePage(true)
   }
+  const handleFilter = (e) => {
+    setFilterBy({
+      ...filterby,
+      [e.target.name]:e.target.value
+  })
+  }
+  React.useEffect(() => {
+    const debouncedRefetch = debounce(refetch, 500);
+    debouncedRefetch({page:page,size:10, ...filterby});
 
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [debouncedSearchAgent,debouncedSearchCustCode, refetch,filterby,page]);
+
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setDebouncedSearchAgent(searchAgent);
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchAgent, filterby]);
+  
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setDebouncedSearchCustCode(searchCustCode);
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchCustCode, filterby]);
+  
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterBy({
+        ...filterby,
+        travelAgentName:searchAgent
+      })
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchAgent]);
+  
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterBy({
+        ...filterby,
+        custCode:searchCustCode
+      })
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchCustCode]);
+
+  const handleSearchAgentName = (e) => {
+    const { value } = e.target;
+    setSearchAgent(value);
+  };
+
+  const handleSearchCustCode = (e) => {
+    const { value } = e.target;
+    setSearchCustCode(value);
+  };
+  const showFilterBtn = () => {
+    setShowFilter(!showFilter)
+  }
    let content;
     if (isLoading) {
         content = <Center h='50vh' color='#065BAA'>
@@ -846,7 +905,55 @@ const handleNexts = () => {
                    </Center>;
     } else if (isSuccess) {
         content = (
-            <Box pl="2em" pr="2em" mt="5em"> 
+          <Box pl="2em" pr="2em" mt="5em"> 
+            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                <Heading as={'h6'} size={'sm'}>Travel Agent</Heading>
+                <Stack direction='row' spacing={4} m={'2.5'}>
+                    <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
+                        Apply Filter
+                    </Button>
+                    {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+                        Export 
+                    </Button> */}
+                    <CustomModal
+                      showModalButtonText="Import"
+                      modalHeader="Import Excel File"
+                      modalBody="Import Excel File"
+                      
+                      />
+                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAddUser}>
+                        Add Agent 
+                    </Button>
+                </Stack>
+          </Box>
+            {
+              showFilter && (
+                <Box w={{ base: "100%", md: "50%" }} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px" mr="2em" ml="2em" mt="2em">
+                  <Input
+                    variant={'custom'}
+                    value={searchAgent}
+                    onChange={handleSearchAgentName}
+                    name="travelAgentName"
+                    placeholder={"Search by agentname"}
+                    bg="#ebebeb"
+                    borderRadius={'5px'}
+                    textTransform={'uppercase'}
+                    _placeholder={{textTransform:'lowercase'}}
+              />
+                  <Input
+                    variant={'custom'}
+                    value={searchCustCode}
+                    onChange={handleSearchCustCode}
+                    name="custCode"
+                    placeholder={"Search by cust code"}
+                    bg="#ebebeb"
+                    borderRadius={'5px'}
+                    textTransform={'uppercase'}
+                    _placeholder={{textTransform:'lowercase'}}
+              />
+              </Box>
+              )
+            }
             <Box bg="white" overflow={'scroll'} p="3">
               <Styles>
                 {

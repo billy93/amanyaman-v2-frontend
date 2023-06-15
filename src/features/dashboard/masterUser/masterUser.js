@@ -10,6 +10,7 @@ import PulseLoader from 'react-spinners/PulseLoader'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaChevronUp, FaSort } from 'react-icons/fa'
 import ExportData from './export'
+import { debounce } from 'lodash';
 import {
   useToast,
   Select,
@@ -217,18 +218,7 @@ const Tables = ({
  const [exportUserdata, {isLoading:loadExport}] = useExportUserdataMutation()
  const { data: rolesData, isLoading, isError, isSuccess } = useGetRoleQuery()
  const listRoles = useSelector(listRoleUsers)
- const handleAddUser = () => {
-   const stateUser = {
-        login:"",    
-        firstName:"",    
-        lastName:"",  
-        area:"",  
-        authorities:[],
-        travelAgent:""
-   }
-   dispatch(setFormUser(stateUser))
-    navigate('/master-data/create-user')
- }
+ 
 const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -364,9 +354,7 @@ const filterTypes = React.useMemo(
       }
   }, [prev, selectedRowIds,getValues,selectedFlatRows]);
   
-  const showFilterBtn = () => {
-    setShowFilter(!showFilter)
-  }
+  
 
   // Render the UI for your table
    
@@ -404,21 +392,6 @@ const filterTypes = React.useMemo(
     }),
     []
   )
-  const handleFilterByName = e => {
-  const value = e.target.value || undefined;
-  setFilter("firstName", value); 
-  setFilterName(value);
-};
-  const handleFilterByEmail = e => {
-  const value = e.target.value || undefined;
-  setFilter("email", value); 
-  setFilterEmail(value);
-};
-  const handleFilterByRole = e => {
-  const value = e.target.value || undefined;
-  setFilter("authorities", value); 
-  setFilterRole(value);
-};
 
   const handleNext = () => {
     console.log('eee', pageIndex + 1)
@@ -488,28 +461,7 @@ const filterTypes = React.useMemo(
                 </ModalFooter>
                 </ModalContent>
       </Modal>
-      
-      <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                <Heading as={'h6'} size={'sm'}>User</Heading>
-                <Stack direction='row' spacing={4} m={'2.5'}>
-                    <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
-                        Apply Filter
-                    </Button>
-                    <ExportData />
-                    <CustomModal
-                      showModalButtonText="Import"
-                      modalHeader="Import Excel File"
-                      modalBody="Import Excel File"
-                    />
-                    {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
-                        Import 
-                    </Button> */}
-                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAddUser}>
-                        Add User 
-                    </Button>
-                </Stack>
-      </Box>
-      <Box mt="1em" mb="1em" display="flex" alignItems="center" gap="10px">
+      <Box display="flex" alignItems="center" gap="10px">
         
         {
              selected?.length > 0 && (
@@ -527,40 +479,6 @@ const filterTypes = React.useMemo(
         }
         
       </Box>
-      {
-        showFilter ? (
-          <Box w={{base:"100%", md:"650px"}} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px">
-                <Input
-                  value={filterName}
-                  onChange={handleFilterByName}
-                  placeholder={"Search by name"}
-                  bg="#ebebeb"
-                  borderRadius={'5px'}
-                  variant={'custom'}
-          />
-                <Input
-                  value={filterEmail}
-                  onChange={handleFilterByEmail}
-                  placeholder={"Search by email"}
-                  bg="#ebebeb"
-                  borderRadius={'5px'}
-                  variant={'custom'}
-          />
-            <Select placeholder='Select Role' style={{fontSize:"14px", fontFamily:"Mulish", fontWeight:"normal"}} _placeholder={{
-                    color:"grey"
-                  }} defaultValue={''}
-                  name="authorities" onChange={handleFilterByRole}>  
-                                  {
-                                    rolesData?.map((role, i) => {
-                                      return (
-                                        <option value={role.name} key={i}>{role.name}</option>
-                                      )
-                                    })
-                                  }
-                  </Select>
-          </Box>
-        ): null
-      }
       
       <Box bg="white" overflow={'scroll'} p="3">
 
@@ -679,6 +597,14 @@ const MasterUser = () => {
     })
     const [size,setSize] = React.useState(10)
     const [page,setPage] = React.useState(0)
+  const [sort] = React.useState({
+      
+    })
+    const [filterby,setFilterBy] = React.useState({
+      name: '',
+      email: '',
+      role:''
+    })
     const {
         data : {response:listUserAccount, totalCount} = {},
         isLoading,
@@ -686,7 +612,7 @@ const MasterUser = () => {
         isError,
         error,
         refetch
-    } = useGetUserQuery({page,size:10})
+    } = useGetUserQuery({page,size:10, ...filterby})
     
     const tableRef = React.useRef(null)
     const [data, setData] = React.useState([])
@@ -697,6 +623,15 @@ const MasterUser = () => {
     const [pageCount, setPageCount] = React.useState(0)
     const uploadFilesMessages = useSelector(uploadFilesMessage)
     const usePrevMessage = usePrevious(uploadFilesMessages)
+    const [showFilter,setShowFilter] = React.useState(false)
+    const [filterName,setFilterName] = React.useState('')
+    const [filterEmail,setFilterEmail] = React.useState('')
+    const [filterRole,setFilterRole] = React.useState('')
+    const [debounceName,setDebounceName] = React.useState('')
+    const [debounceEmail,setDebounceEmail] = React.useState('')
+    const [debounceRole,setDebounceRole] = React.useState('')
+    const [exportUserdata, {isLoading:loadExport}] = useExportUserdataMutation()
+    const { data: rolesData, isLoading:loadRole } = useGetRoleQuery()
     
    const PageInit = React.useCallback((pageSize,pageIndex) => {
     // console.log('page init', pageSize,pageIndex)
@@ -737,8 +672,22 @@ const MasterUser = () => {
     }, 1000)
     }, [listUserAccount])
   
-  
-    console.log('uploadFilesMessages 111', uploadFilesMessages ==='success')
+    const showFilterBtn = () => {
+    setShowFilter(!showFilter)
+    }
+  React.useEffect(() => {
+      if(!showFilter){
+        setFilterBy({
+          name:'',
+          email:'',
+          role:'',
+        })
+        setFilterRole('')
+        setFilterName('')
+        setFilterEmail('')
+      }
+  }, [showFilter])
+    // console.log('uploadFilesMessages 111', uploadFilesMessages ==='success')
     const newdata = React.useMemo(()=>{
       return tempList ? tempList : [{}]
     }, [tempList]);
@@ -750,11 +699,117 @@ const MasterUser = () => {
     //  dispatch(setListUser([...listUserAccount]))
   }, [listUserAccount, prevData])
   
+  // React.useEffect(() => {
+  //  refetch({page,size:10})
+  // }, [page])
+  
   React.useEffect(() => {
-   refetch({page,size:10})
-  }, [page])
+    const debouncedRefetch = debounce(refetch, 500);
+    debouncedRefetch({page:page,size:10, ...filterby});
+
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [debounceName, refetch,filterby,page]);
+
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setDebounceName(filterName);
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [filterName]);
   
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterBy({
+        ...filterby,
+        name:filterName
+      })
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [filterName]);
+
+  React.useEffect(() => {
+    const debouncedRefetch = debounce(refetch, 500);
+    debouncedRefetch({page:page,size:10, ...filterby});
+
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [debounceEmail, refetch,filterby,page]);
+
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setDebounceEmail(filterEmail);
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [filterEmail]);
   
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterBy({
+        ...filterby,
+        email:filterEmail
+      })
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [filterEmail]);
+
+  React.useEffect(() => {
+    const debouncedRefetch = debounce(refetch, 500);
+    debouncedRefetch({page:page,size:10, ...filterby});
+
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [debounceRole, refetch,filterby,page]);
+
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setDebounceRole(filterRole);
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [filterRole]);
+  
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterBy({
+        ...filterby,
+        role:filterRole
+      })
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [filterRole]);
   
     const columns = React.useMemo(
     () => [
@@ -822,8 +877,31 @@ const MasterUser = () => {
   }
   
     // const data = React.useMemo(() => tempList);
-    
-
+  const handleFilterByName = e => {
+  const {value} = e.target;
+  setFilterName(value);
+};
+  const handleFilterByEmail = e => {
+  const {value} = e.target;
+  setFilterEmail(value);
+};
+  const handleFilterByRole = e => {
+  const {value} = e.target
+  setFilterRole(value);
+  };  
+  
+const handleAddUser = () => {
+   const stateUser = {
+        login:"",    
+        firstName:"",    
+        lastName:"",  
+        area:"",  
+        authorities:[],
+        travelAgent:""
+   }
+   dispatch(setFormUser(stateUser))
+    navigate('/master-data/create-user')
+ }
     let content;
     if (isLoading) {
         content = <Center h='50vh' color='#065BAA'>
@@ -831,7 +909,62 @@ const MasterUser = () => {
                    </Center>;
     } else if (isSuccess) {
         content = (
-            <Box pl="2em" pr="2em" mt="5em"> 
+          <Box pl="2em" pr="2em" mt="5em"> 
+            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                <Heading as={'h6'} size={'sm'}>User</Heading>
+                <Stack direction='row' spacing={4} m={'2.5'}>
+                    <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
+                        Apply Filter
+                    </Button>
+                    <ExportData />
+                    <CustomModal
+                      showModalButtonText="Import"
+                      modalHeader="Import Excel File"
+                      modalBody="Import Excel File"
+                    />
+                    {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+                        Import 
+                    </Button> */}
+                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAddUser}>
+                        Add User 
+                    </Button>
+                </Stack>
+          </Box>
+            {
+                showFilter ? (
+                  <Box w={{base:"100%", md:"650px"}} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px" mt="1.5em">
+                        <Input
+                          value={filterName}
+                          onChange={handleFilterByName}
+                          placeholder={"Search by name"}
+                          bg="#ebebeb"
+                          borderRadius={'5px'}
+                          variant={'custom'}
+                  />
+                        <Input
+                          value={filterEmail}
+                          onChange={handleFilterByEmail}
+                          placeholder={"Search by email"}
+                          bg="#ebebeb"
+                          borderRadius={'5px'}
+                          variant={'custom'}
+                  />
+                    <Select placeholder='Select Role' style={{fontSize:"14px", fontFamily:"Mulish", fontWeight:"normal"}} _placeholder={{
+                            color:"grey"
+                  }}
+                    defaultValue={filterRole}
+                          name="authorities" onChange={handleFilterByRole}>  
+                                          {
+                                            rolesData?.map((role, i) => {
+                                              return (
+                                                <option value={role.name} key={i}>{role.name}</option>
+                                              )
+                                            })
+                                          }
+                          </Select>
+                  </Box>
+                ): null
+              }
             <Box bg="white" overflow={'scroll'} p="3">
               <Styles>
                 {

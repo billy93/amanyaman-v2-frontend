@@ -582,11 +582,11 @@ const DetailMasterUser = () => {
         allowCreditPayment:user !==null && user?.allowCreditPayment ===false ? '' :'allowCreditPayment' ,   
         city:user !==null ? [{...user?.city,'label': detail?.city?.name, 'value': detail?.city?.id}] : null
         }
-       dispatch(setEditAgent(datauser))
-       dispatch(setDetailAgent(datauser))
+      //  dispatch(setEditAgent(datauser))
+       dispatch(setDetailAgent([datauser]))
       }
   }, user, dispatch, id)
-  console.log('users', user)
+  // console.log('users', user)
    const PageInit = React.useCallback((pageSize,pageIndex) => {
     // console.log('page init', pageSize,pageIndex)
      setPagination({
@@ -623,12 +623,12 @@ const DetailMasterUser = () => {
     }, 1000)
     }, [newData])
   
-  React.useMemo(() => {
-      const dataUserDetail = user?.filter((user) => user.id === parseInt(id))
-    if (dataUserDetail) {
-        dispatch(setDetailAgent([...dataUserDetail]))
-      }
-  }, user, dispatch, id)
+  // React.useMemo(() => {
+  //     const dataUserDetail = user?.filter((user) => user.id === parseInt(id))
+  //   if (dataUserDetail) {
+  //       dispatch(setDetailAgent([...dataUserDetail]))
+  //     }
+  // }, user, dispatch, id)
   
   const handleEditUser = (e) => {
     e.preventDefault()
@@ -854,7 +854,7 @@ const columns = React.useMemo(
                                     <Text as="b" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} color={'#231F20'}>City</Text>
                                 </Box>
                                 <Box w={{md:"70%"}}>
-                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >{detail ? detail[0]?.city?.name : '-'}</Text>
+                                    <Text as="p" size="sm" fontFamily={'Mulish'} style={{fontSize:"14px"}} >{detail ? detail[0]?.city[0]?.name : '-'}</Text>
                                 </Box>
                             </Box>
                             <Box>

@@ -597,7 +597,7 @@ const Polcies = () => {
     }
     setFilterQuery(filters)
   }
-  console.log('query filter',travelagents)
+  // console.log('query filter',travelagents)
     const columns = React.useMemo(
     () => [
       {

@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { queryClient } from 'react-query';
+// import {invalidateGetUsersByIdCache } from '../../../app/api/apiSlice';
 import { NavLink,Navigate, useNavigate, useParams } from "react-router-dom";
 import {
 Box,
@@ -78,11 +80,19 @@ const CreateUser = () => {
         isSuccess,
         isError,
         error,refetch
-  } = useGetUsersByIdQuery(id,{refetchOnReconnect:true})
+  } = useGetUsersByIdQuery(id, {
+    refetchOnMountOrArgChange: true
+  })
   
   const [createUser] = useCreateUserMutation({
    skip:trigger === false 
   })
+
+// const handleInvalidateCache = async () => {
+//       invalidateGetUsersByIdCache(id);
+
+// };
+
   React.useMemo(() => {
     if (listAgent) {
       let city = listAgent?.response.map((obj,i) => ({ ...obj, 'label': obj.travelAgentName,'value':obj.id, idx:i }))
@@ -248,7 +258,7 @@ const handleidentityCard = (e, i) => {
                     </Breadcrumb>
         </Box>
       </Box>
-      {/* <Button onClick={HandleRefresh}>refresh</Button> */}
+      {/* <Button onClick={handleInvalidateCache}>refresh</Button> */}
       <Box border="1px" borderColor={'#ebebeb'} borderTop={'none'}>
         <Box>
             <Box width={{base:"100%",md:"540px"}} m="auto">

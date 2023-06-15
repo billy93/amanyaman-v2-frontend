@@ -92,7 +92,7 @@ const handleidentityCard = (e, i) => {
         let data = await createUser(datas)
          dispatch(setListUser([...listProducts, datas]));
         toast({
-                  title: `${formuser?.login !=='' ? 'Edit User Success' : 'Created User Success'}`,
+                  title: ` Created User Success`,
                   status:"success",
                   position: 'top-right',
                   duration:3000,
@@ -249,7 +249,7 @@ const handleidentityCard = (e, i) => {
                          )
                          }
                         {
-                          listAgent?.map((role, i) => {
+                          listAgent?.response?.map((role, i) => {
                             return (
                               <option value={role.id} key={i} fontFamily={'Mulish'} fontSize={'12px'}>{role.travelAgentName}</option>
                             )
