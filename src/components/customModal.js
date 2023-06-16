@@ -56,27 +56,47 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
     }
  };
   
-  const handleImport = async (e) => {
-    e.preventDefault()
-     const formData = new FormData();
-     formData.append('file',filesUpload);
-    //  formData.append('file', new Blob([filesUpload], { type: 'text/csv' }));
-    try {
-        const res = await uploadFileTravelAgent(formData)
-        console.log('ress', res)
-        if (res?.data===null) {
-          showSuccessToast('Upload file successfully!');
+  // const handleImport = async (e) => {
+  //   e.preventDefault()
+  //    const formData = new FormData();
+  //    formData.append('file',filesUpload);
+  //   //  formData.append('file', new Blob([filesUpload], { type: 'text/csv' }));
+  //   try {
+  //       const res = await uploadFileTravelAgent(formData)
+  //       console.log('ress', res)
+  //       if (res?.data===null) {
+  //         showSuccessToast('Upload file successfully!');
           
-        }else {
-            const errorMessage = `Failed to upload file. Status Code: ${res?.error?.status}`;
-            showErrorToast(errorMessage);
-          }
-    } catch (err) {
-         const errorMessage = `Failed to upload file. Status Code: ${err?.error?.status}`;
-         showErrorToast(errorMessage);
-        }
-  }
+  //       }else {
+  //           const errorMessage = `Failed to upload file. Status Code: ${res?.error?.status}`;
+  //           showErrorToast(errorMessage);
+  //         }
+  //   } catch (err) {
+  //        const errorMessage = `Failed to upload file. Status Code: ${err?.error?.status}`;
+  //        showErrorToast(errorMessage);
+  //       }
+  // }
 
+  const handleImport = async (e) => {
+  e.preventDefault();
+  try {
+    let response = await uploadFileTravelAgent(filesUpload).unwrap();
+    console.log('response', response);
+
+    if (response.ok) {
+      showSuccessToast('Upload file successfully!');
+    } else {
+      const statusCode = response.status;
+      const errorMessage = `Failed to upload file. Status Code: ${statusCode}`;
+      showErrorToast(errorMessage);
+    }
+  } catch (err) {
+    const statusCode = err.response?.status || 'Unknown';
+    const errorMessage = `Failed to upload file. Status Code: ${statusCode}`;
+    showErrorToast(errorMessage);
+    // settrigger(false);
+  }
+};
  React.useEffect(() => {
     if (success) {
       refetch({ page, size: 10 })

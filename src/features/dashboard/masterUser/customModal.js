@@ -55,21 +55,25 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
  };
 
   const handleImport = async (e) => {
-    e.preventDefault()
-    try {
-      let data =await uploadFile(filesUpload).unwrap()
-      if (data?.data ===null) {
-          showSuccessToast('Upload file successfully!');
-        }else {
-            const errorMessage = `Failed to upload file. Status Code: ${data?.error?.status}`;
-            showErrorToast(errorMessage);
-          }
-    } catch (err) {
-       const errorMessage = `Failed to upload file. Status Code: ${err?.error?.status}`;
-        showErrorToast(errorMessage);
-      settrigger(false)
-        }
+  e.preventDefault();
+  try {
+    let response = await uploadFile(filesUpload).unwrap();
+    console.log('response', response);
+
+    if (response.ok) {
+      showSuccessToast('Upload file successfully!');
+    } else {
+      const statusCode = response.status;
+      const errorMessage = `Failed to upload file. Status Code: ${statusCode}`;
+      showErrorToast(errorMessage);
+    }
+  } catch (err) {
+    const statusCode = err.response?.status || 'Unknown';
+    const errorMessage = `Failed to upload file. Status Code: ${statusCode}`;
+    showErrorToast(errorMessage);
+    settrigger(false);
   }
+};
   
   React.useEffect(() => {
     if (success) {
