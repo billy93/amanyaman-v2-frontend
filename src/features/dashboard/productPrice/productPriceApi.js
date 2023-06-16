@@ -33,9 +33,25 @@ export const policyApiSlice = apiSlice.injectEndpoints({
                 return {response,totalCount: Number(meta.response.headers.get('X-Total-Count')) }
             },
             }),
+            uploadFilePrice: builder.mutation({
+            query: (file) => {
+                return {
+                url: `/app/product-travel-agents/import`,
+                method: 'POST',
+                body:file,
+                formData: true,
+                
+                transform: response => {
+                        console.log('repso',response);
+                        return response;
+                    },
+                }
+        },
+        }),
     })
 })
 
 export const {
-    useGetProductPriceQuery
+    useGetProductPriceQuery,
+    useUploadFilePriceMutation
 } = policyApiSlice 

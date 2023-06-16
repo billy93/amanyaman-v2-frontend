@@ -524,9 +524,9 @@ const handleRowClick = (rowIndex) => {
                 {row.cells.map((cell) => (
                   <td
                     {...cell.getCellProps()}
-                    className={isExpanded ? 'expanded' : ''}
+                    className={isExpanded && isExpanded ? 'expanded' : ''}
                   >
-                    {cell.column.id === 'travelAgentAddress' && cell.value.length > 30
+                    {cell?.column.id === 'travelAgentAddress' && cell?.value?.length > 30
                       ? (isExpanded ? cell.value : cell.value.substring(0, 30) + '...')
                       : cell.render('Cell')}
                   </td>
@@ -685,7 +685,9 @@ const MasterUser = () => {
     navigate('/master-data/create-agent')
   }
   React.useEffect(() => {
-      if(!showFilter){
+    if (!showFilter) {
+        setSearchAgent('')
+        setSearchCustCode('')
         setFilterBy({
           travelAgentName:'',
           custCode:'',

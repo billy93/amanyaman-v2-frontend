@@ -35,6 +35,7 @@ import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
 import { Select } from 'chakra-react-select'
 import UseCustomToast from '../../../components/UseCustomToast';
+import CustomRadio from '../../../components/customRadioCreate';
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -47,7 +48,7 @@ function usePrevious(value) {
   // Return previous value (happens before update in useEffect above)
   return ref.current;
 }
-function CustomRadio(props) {
+function CustomRadios(props) {
   const dispatch = useDispatch()
   const { getInputProps, getCheckboxProps } = useRadio(props);
   const input = getInputProps();
@@ -169,7 +170,7 @@ const handleidentityCard = (e, i) => {
             cgroup:formuser?.cgroup,   
             legalName:formuser?.legalName,   
             proformaInvoiceRecipients:formuser?.proformaInvoiceRecipients,   
-            allowCreditPayment:formuser?.allowCreditPayment ==='allowCreditPayment' ? true : false,   
+            allowCreditPayment:formuser?.allowCreditPayment,   
             city: {
               ...formuser?.city
             }
@@ -179,12 +180,12 @@ const handleidentityCard = (e, i) => {
         let data = await createAgent(datas) 
           // console.log('dataa',data)
            if (data?.data) {
-            showSuccessToast('Agent Edited successfully!');
+            showSuccessToast('Agent Create successfully!');
             dispatch(setListAgent([...listProducts, datas]));
             navigate('/master-data/travel-agent')
         } else {
           // const statusCode = error?.response?.status || 'Unknown';
-          const errorMessage = `Failed to Edit agent. Status Code: ${data?.error?.status}`;
+          const errorMessage = `Failed to Create agent. Status Code: ${data?.error?.status}`;
           showErrorToast(errorMessage);
          }
         
@@ -383,15 +384,7 @@ const handleidentityCard = (e, i) => {
           </Box>
           <Box width={{base:"100%",md:"540px"}} m="auto" mt="15px">  
              <Stack spacing={4} direction='column'>
-                 <HStack {...group}>
-                  {list.map((item) => (
-                    <CustomRadio key={item} {...getRadioProps({ value: item })}>
-                      <Text as="p" fontsize="12px" style={{color: "#231F20",fontSize:"14px", fontFamily:'Mulish',paddingLeft:"5px" }}>
-                      {item}
-                      </Text>
-                    </CustomRadio>
-                  ))}
-                </HStack>  
+                 <CustomRadio />
               </Stack>
           </Box>
          <Box width={{base:"100%",md:"540px"}} m="auto" mt="1em" mb="1em">

@@ -4,7 +4,8 @@ const createMasterAgentSlice = createSlice({
     name: 'masterAgent',
     initialState: { 
         listCount:null,
-        list:[],
+        list: [],
+        listDropdown:[],
         detail: null,
         editAgent: null,
         citylist:null,
@@ -60,7 +61,7 @@ const createMasterAgentSlice = createSlice({
         cgroup:"",   
         legalName:"",   
         proformaInvoiceRecipients:"",   
-        allowCreditPayment:'',   
+        allowCreditPayment:false,   
         city:""
        }
     },
@@ -95,6 +96,9 @@ const createMasterAgentSlice = createSlice({
         setListCity: (state, action) => {
             state.citylist = action.payload
         },
+        setDropDownList: (state, action) => {
+            state.listDropdown = action.payload
+        },
         
     },
     extraReducers: (builder) => {
@@ -108,12 +112,13 @@ const createMasterAgentSlice = createSlice({
   },
 })
 
-export const {setListCity,setEditAgent,setProductAgentSelection,setProductAgent,setMasterAgent,setListAgent,setRoleUser,setDetailAgent,setFormAgent} = createMasterAgentSlice.actions
+export const {setDropDownList,setListCity,setEditAgent,setProductAgentSelection,setProductAgent,setMasterAgent,setListAgent,setRoleUser,setDetailAgent,setFormAgent} = createMasterAgentSlice.actions
 
 export default createMasterAgentSlice.reducer
 export const listRoleUsers = (state) => state.agent.roleUser
 export const listDetailAgent = (state) => state.agent.detail
 export const editAgentVal = (state) => state.agent.editAgent
+export const dropdownlist = (state) => state.agent.listDropdown
 export const listAgent = (state) => state.agent.list
 export const listAgentSelection = (state) => state.masterUser.selection
 export const formAgent = (state) => state.agent.formagent

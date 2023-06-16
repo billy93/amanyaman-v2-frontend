@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import { useRadioGroup, Radio,Checkbox } from '@chakra-ui/react';
-import { editAgentVal,setEditAgent } from '../features/dashboard/travelAgent/travelAgentSlice'
+import { formAgent,setFormAgent } from '../features/dashboard/travelAgent/travelAgentSlice'
 
-const CustomRadio = () => {
+const CustomRadioCreate = () => {
   const dispatch = useDispatch()
-  const defaultVal = useSelector(editAgentVal)
-  const [isAllowed, setIsAllowed] = useState(editAgentVal?.allowCreditPayment);
+  const defaultVal = useSelector(formAgent)
+  const [isAllowed, setIsAllowed] = useState(formAgent?.allowCreditPayment);
 
   const handleCheckboxChange = () => {
     const edit = {
       ...defaultVal,
       allowCreditPayment:!defaultVal?.allowCreditPayment
     }
-    dispatch(setEditAgent(edit))
+    dispatch(setFormAgent(edit))
   };
 console.log('isAllowed', defaultVal?.allowCreditPayment)
 console.log('isAllowed', isAllowed)
@@ -27,4 +27,4 @@ console.log('isAllowed', isAllowed)
   );
 };
 
-export default CustomRadio;
+export default CustomRadioCreate;

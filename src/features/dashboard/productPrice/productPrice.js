@@ -53,6 +53,7 @@ import {BiSkipPreviousCircle,BiSkipNextCircle} from 'react-icons/bi'
 import styled from "styled-components";
 import { useTable, useRowSelect } from "react-table";
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
+import CustomModal from './ModalImport';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -547,7 +548,7 @@ const Polcies = () => {
         })
       }
     },[showFilter])
-  console.log('travellerTypes', travelagents)
+  // console.log('travellerTypes', travelagents)
     const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
     // This will get called when the table needs new data
     // You could fetch your data from literally anywhere,
@@ -579,21 +580,6 @@ const Polcies = () => {
     }, 1000)
     }, [systemParams])
     
-  React.useEffect(() => {
-    
-  if (systemParams && 'totalCount' in systemParams) {
-    // Retrieve the value of the "X-Total-Count" header
-    const totalCount = systemParams.totalCount;
-
-    // Print the total count
-    console.log('cccxxxx',totalCount);
-  } else {
-    // If the "X-Total-Count" header is not present in the response
-    console.log('X-Total-Count header not found.', response);
-  }
-
-  }, [data,response])
-  
   const handleFilter = (e) => {
     const filters = {
       ...filterQuery,
@@ -650,7 +636,7 @@ const Polcies = () => {
       },
       {
         Header: "Net To Agent",
-        accessor: "netToAgent",
+        accessor: "afterCommisionPrice",
         enableGlobalFilter: true, 
       },
     ],
@@ -730,6 +716,12 @@ const Polcies = () => {
                     <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
                         Apply Filter
                     </Button>
+                    <CustomModal
+                      showModalButtonText="Import"
+                      modalHeader="Import Excel File"
+                      modalBody="Import Excel File"
+                      
+                      />
                     {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
                         Export 
                     </Button> */}

@@ -223,6 +223,7 @@ const Tables = ({
   data,
   fetchData,
   loading,
+  totalCount,
   pageCount: controlledPageCount}) => {
     const dispatch = useDispatch()
     const listuser = useSelector(listPolicy)
@@ -233,23 +234,7 @@ const Tables = ({
     const toast = useToast()
     const [showFilter,setShowFilter] = React.useState(false)
     const [pages]= React.useState(0)
-    const {
-        data: systemParams,
-        isLoading,
-        isSuccess,
-        isError,
-        error,
-        refetch,
-        response,
-        extra
-    } = useGetBandTypeQuery({ page:pages, size: 10 }, {
-      onSuccess: (response, { requestId }, meta) => {
-        const totalCount = response.headers.get('X-Total-Count');
-        console.log('ddddtot', totalCount)
-      // handleSuccess(totalCount); // Update the total count in the component state
-      return response;
-    },
-    })
+    
     const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -366,7 +351,7 @@ const filterTypes = React.useMemo(
         const nextState = listuser.filter(
         item => !selected.some(({ id }) => item.id === id)
         );
-        console.log('nextState',nextState)
+        // console.log('nextState',nextState)
         dispatch(setStatePolicyList(nextState))
         dispatch(setStateSelectedt([]))
         onClose()
@@ -421,9 +406,9 @@ const filterTypes = React.useMemo(
         <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                 <Heading as={'h6'} size={'sm'}>Band Types</Heading>
                 <Stack direction='row' spacing={4} m={'2.5'}>
-                      <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
+                      {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
                         Add Band Types 
-                    </Button>
+                    </Button> */}
                     {/* <button onClick={refetch}>Refresh</button> */}
                 </Stack>
       </Box>
@@ -516,7 +501,7 @@ const filterTypes = React.useMemo(
                 <td colSpan="10000">Loading...</td>
               ) : (
                 <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
+                  Showing {page.length} of ~{totalCount}{' '}
                   results
                 </td>
               )}
@@ -524,57 +509,6 @@ const filterTypes = React.useMemo(
         </tbody>
         </table>
         </Box>
-      {/* <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
-        <Box>
-          <Button onClick={() => previousPage()} disabled={!canPreviousPage} bg="white" border={'none'} _hover={{
-            bg: "#f0eeee",
-            borderRadius: "5px",
-            WebkitBorderRadius: "5px",
-            MozBorderRadius:"5px"
-        }}>
-            <BiSkipPreviousCircle size="25px" color="black" />
-            <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
-        </Button>{' | '}
-          <Button onClick={() => nextPage()} disabled={!canNextPage} bg="white" border={'none'}>
-            <BiSkipNextCircle size="25px" color="black" />
-            <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
-            Next
-            </Text>
-          </Button>{' '}
-        </Box>
-        <Box>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </Box> */}
-        {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
-      {/* </Box> */}
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedRowIds: selectedRowIds,
-              "selectedFlatRows[].original": selectedFlatRows.map(
-                (d) => d.original
-              )
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
     </>
   );
 }
@@ -608,16 +542,14 @@ const Polcies = () => {
       size:1000
     })
     const {
-        data: systemParams,
+        data: {response:systemParams,totalCount} ={},
         isLoading,
         isSuccess,
         isError,
         error,
         refetch,
-        response,
         extra,
         accessHeaders,
-        totalCount
     } = useGetBandTypeQuery({ page, size: 10 })
   
     
@@ -638,11 +570,11 @@ const Polcies = () => {
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
-        setData(systemParams?.response.slice(startRow, endRow))
+        setData(systemParams?.slice(startRow, endRow))
         setCount(pageOptions)
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(systemParams?.response?.length / pageSize))
+        setPageCount(Math.ceil(totalCount / pageSize))
           setPagination({
             page:pageIndex,
             size:pageSize
@@ -650,7 +582,7 @@ const Polcies = () => {
         setLoading(false)
       }
     }, 1000)
-    }, [systemParams?.response])
+    }, [systemParams,totalCount])
   
     const columns = React.useMemo(
     () => [
@@ -703,7 +635,7 @@ const Polcies = () => {
   );
 
     // const data = React.useMemo(() => tempList);
-    console.log('ddd band types', systemParams)
+    // console.log('ddd band types', systemParams)
   React.useEffect(() => {
     refetch({ page, size: 10 })
     
@@ -719,8 +651,7 @@ const Polcies = () => {
         content = <Center h='50vh' color='#065BAA'>
                        <PulseLoader color={"#065BAA"} />
                    </Center>;
-    } else if (systemParams?.response) {
-      const totalCount = data;
+    } else if (systemParams) {
         content = (
           <Box pl="2em" pr="2em" mt="3em"> 
             {/* <div>{ console.log('celelng',totalCount)}</div> */}
@@ -731,6 +662,7 @@ const Polcies = () => {
                     fetchData={fetchData}
                     loading={loading}
                     pageCount={pageCount}
+                    totalCount={totalCount}
                 />
                 </Styles>
             {/* <Link to="/welcome">Back to Welcome</Link> */}
@@ -745,7 +677,7 @@ const Polcies = () => {
             <BiSkipPreviousCircle size="25px" color="black" />
             <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
         </Button>{' | '}
-          <Button onClick={nextPages} bg="white" border={'none'}>
+          <Button onClick={nextPages} bg="white" border={'none'} isDisabled={Math.ceil(totalCount/10) ===page+1}>
             <BiSkipNextCircle size="25px" color="black" />
             <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
             Next
@@ -756,7 +688,7 @@ const Polcies = () => {
         <Box>
           Page{' '}
           <strong>
-            {page + 1} of {count?.length}
+            {page + 1} of {pageCount}
           </strong>{' '}
         </Box>
         {/* <select

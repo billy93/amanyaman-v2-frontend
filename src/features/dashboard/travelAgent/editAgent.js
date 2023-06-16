@@ -159,8 +159,7 @@ React.useEffect(() => {
     if (user) {
       // const data = [user]
       const datauser = {
-        ...user,
-        allowCreditPayment:user !==null && user?.allowCreditPayment ===false ? '' :'allowCreditPayment' ,   
+        ...user,  
         city:user !==null ? [{...user?.city,'label': user?.city?.name, 'value': user?.city?.name}] : null
         }
        dispatch(setEditAgent(datauser))
@@ -207,7 +206,7 @@ const handleidentityCard = (e, i) => {
       e.preventDefault()  
       const constData = {
         ...detail,
-        allowCreditPayment:detail?.allowCreditPayment ==='allowCreditPayment' ? true : false,
+        allowCreditPayment:detail?.allowCreditPayment,
         city:{id:detail?.city[0].id, name:detail?.city[0].name},
       }
       try {

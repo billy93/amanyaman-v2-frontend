@@ -7,33 +7,14 @@ import {FaChevronUp, FaSort} from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
  useToast,
-  Modal,
-ModalOverlay,
-ModalContent,
-ModalHeader,
-ModalFooter,
-ModalBody,
-ModalCloseButton,
 Link as Links,
   Box,
   Table as TableNew,
-  Thead,
-  Tbody,
-  Tfoot,
-  LinkOverlay,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
   Heading,
   Stack,
   Text,
   Center,
   useDisclosure,
-  IconButton,
-  AbsoluteCenter,
-  Input
 } from '@chakra-ui/react'
 import matchSorter from 'match-sorter'
 import { Button } from '@chakra-ui/react'
@@ -47,7 +28,6 @@ import {AiOutlinePlusCircle} from 'react-icons/ai'
 import {BiSkipPreviousCircle,BiSkipNextCircle} from 'react-icons/bi'
 import styled from "styled-components";
 import { useTable, useRowSelect } from "react-table";
-import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -223,6 +203,7 @@ const Tables = ({
   data,
   fetchData,
   loading,
+  totalCount,
   pageCount: controlledPageCount}) => {
     const dispatch = useDispatch()
     const listuser = useSelector(listPolicy)
@@ -233,23 +214,7 @@ const Tables = ({
     const toast = useToast()
     const [showFilter,setShowFilter] = React.useState(false)
     const [pages]= React.useState(0)
-    const {
-        data: systemParams,
-        isLoading,
-        isSuccess,
-        isError,
-        error,
-        refetch,
-        response,
-        extra
-    } = useGetPlanTypesQuery({ page:pages, size: 10 }, {
-      onSuccess: (response, { requestId }, meta) => {
-        const totalCount = response.headers.get('X-Total-Count');
-        console.log('ddddtot', totalCount)
-      // handleSuccess(totalCount); // Update the total count in the component state
-      return response;
-    },
-    })
+    
     const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -421,9 +386,9 @@ const filterTypes = React.useMemo(
         <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                 <Heading as={'h6'} size={'sm'}>Plan Type</Heading>
                 <Stack direction='row' spacing={4} m={'2.5'}>
-                      <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
+                      {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
                         Add Plan Type 
-                    </Button>
+                    </Button> */}
                     {/* <button onClick={refetch}>Refresh</button> */}
                 </Stack>
       </Box>
@@ -476,93 +441,65 @@ const filterTypes = React.useMemo(
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()} >
-           {rows.map((row, rowIndex) => {
-          prepareRow(row);
-          const isExpanded = isRowExpanded(rowIndex);
-
-          return (
-            <React.Fragment key={rowIndex}>
-              <tr {...row.getRowProps()} onClick={() => handleRowClick(rowIndex)}>
-                {row.cells.map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
-                    className={`${cell.column.id === 'value' && isExpanded ? 'expanded' : ''}`}
+            <tbody {...getTableBodyProps()}>
+            {/* {rows.slice(0, 10).map((row, i) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
+                </tr>
+              );
+            })} */}
+          <AnimatePresence>
+              {rows.slice(0, 10).map((row, i) => {
+                prepareRow(row)
+                return (
+                  <motion.tr
+                    {...row.getRowProps({
+                      layoutTransition: spring,
+                      exit: { opacity: 0, maxHeight: 0 },
+                    })}
                   >
-                    {cell.column.id === 'value' && cell.value.length > 30
-                      ? (isExpanded ? cell.value : cell.value.substring(0, 30) + '...')
-                      : cell.render('Cell')}
-                  </td>
-                ))}
-              </tr>
-            </React.Fragment>
-          );
-        })}
-        <tr>
+                    {row.cells.map((cell, i) => {
+                      return (
+                        <motion.td
+                          {...cell.getCellProps({
+                            layoutTransition: spring,
+                          })}
+                          style={{ 
+                            // backgroundColor: 'red',
+                            fontWeight: 'normal',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px'
+                          }}
+                        >
+                          {cell.render('Cell')}
+                        </motion.td>
+                      )
+                    })}
+                  </motion.tr>
+                )
+              })}
+            </AnimatePresence>
+            <tr>
               {loading ? (
                 // Use our custom loading state to show a loading indicator
                 <td colSpan="10000">Loading...</td>
               ) : (
                 <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-                  results
+                  Showing {page.length} of {totalCount} results
                 </td>
               )}
             </tr>
-        </tbody>
+          </tbody>
         </table>
         </Box>
-      {/* <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
-        <Box>
-          <Button onClick={() => previousPage()} disabled={!canPreviousPage} bg="white" border={'none'} _hover={{
-            bg: "#f0eeee",
-            borderRadius: "5px",
-            WebkitBorderRadius: "5px",
-            MozBorderRadius:"5px"
-        }}>
-            <BiSkipPreviousCircle size="25px" color="black" />
-            <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
-        </Button>{' | '}
-          <Button onClick={() => nextPage()} disabled={!canNextPage} bg="white" border={'none'}>
-            <BiSkipNextCircle size="25px" color="black" />
-            <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
-            Next
-            </Text>
-          </Button>{' '}
-        </Box>
-        <Box>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </Box> */}
-        {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
-      {/* </Box> */}
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedRowIds: selectedRowIds,
-              "selectedFlatRows[].original": selectedFlatRows.map(
-                (d) => d.original
-              )
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
     </>
   );
 }
@@ -580,7 +517,7 @@ function filterGreaterThan(rows, id, filterValue) {
 // check, but here, we want to remove the filter if it's not a number
 filterGreaterThan.autoRemove = val => typeof val !== 'number'
 
-const Polcies = () => {
+const PlanTypes = () => {
     const [MasterChecked, setMasterChecked] = useState(false)
     const dispatch = useDispatch()
     const tempList = useSelector(listPolicy);
@@ -596,16 +533,12 @@ const Polcies = () => {
       size:1000
     })
     const {
-        data: systemParams,
+        data: {response:planTypes,totalCount}={},
         isLoading,
         isSuccess,
         isError,
         error,
         refetch,
-        response,
-        extra,
-        accessHeaders,
-        totalCount
     } = useGetPlanTypesQuery({ page, size: 10 })
   
     
@@ -626,11 +559,11 @@ const Polcies = () => {
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex
         const endRow = startRow + pageSize
-        setData(systemParams?.response.slice(startRow, endRow))
+        setData(planTypes?.slice(startRow, endRow))
         setCount(pageOptions)
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(systemParams?.response?.length / pageSize))
+        setPageCount(Math.ceil(totalCount / pageSize))
           setPagination({
             page:pageIndex,
             size:pageSize
@@ -638,25 +571,8 @@ const Polcies = () => {
         setLoading(false)
       }
     }, 1000)
-    }, [systemParams?.response])
-    
-  React.useEffect(() => {
-    
-  if (systemParams && 'totalCount' in systemParams) {
-    // Retrieve the value of the "X-Total-Count" header
-    const totalCount = systemParams.totalCount;
-
-    // Print the total count
-    console.log('cccxxxx',totalCount);
-  } else {
-    // If the "X-Total-Count" header is not present in the response
-    console.log('X-Total-Count header not found.', response);
-  }
-
-  }, [data,response])
+    }, [planTypes,totalCount])
   
- console.log('cccxxxx systemParams',systemParams);
- console.log('cccxxxx totalCount',response);
     const columns = React.useMemo(
     () => [
       {
@@ -732,8 +648,8 @@ const Polcies = () => {
         content = <Center h='50vh' color='#065BAA'>
                        <PulseLoader color={"#065BAA"} />
                    </Center>;
-    } else if (systemParams?.response) {
-      const totalCount = data;
+    } else if (planTypes) {
+      // const totalCount = data;
         content = (
           <Box pl="2em" pr="2em" mt="3em"> 
             {/* <div>{ console.log('celelng',totalCount)}</div> */}
@@ -744,6 +660,7 @@ const Polcies = () => {
                     fetchData={fetchData}
                     loading={loading}
                     pageCount={pageCount}
+                    totalCount={totalCount}
                 />
                 </Styles>
             {/* <Link to="/welcome">Back to Welcome</Link> */}
@@ -758,7 +675,7 @@ const Polcies = () => {
             <BiSkipPreviousCircle size="25px" color="black" />
             <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
         </Button>{' | '}
-          <Button onClick={nextPages} bg="white" border={'none'}>
+          <Button onClick={nextPages} bg="white" border={'none'} isDisabled={Math.ceil(totalCount/10) ===page+1}>
             <BiSkipNextCircle size="25px" color="black" />
             <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
             Next
@@ -769,7 +686,7 @@ const Polcies = () => {
         <Box>
           Page{' '}
           <strong>
-            {page + 1} of {count?.length}
+            {page + 1} of {pageCount}
           </strong>{' '}
         </Box>
         {/* <select
@@ -793,4 +710,4 @@ const Polcies = () => {
 
     return content
 }
-export default Polcies
+export default PlanTypes

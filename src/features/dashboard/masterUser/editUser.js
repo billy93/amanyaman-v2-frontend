@@ -21,7 +21,8 @@ BreadcrumbLink,
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux"
 import { useDispatch } from 'react-redux'
-import {useCreateUserMutation,useGetRoleQuery,useUpdateUserMutation,useGetUserQuery,useGetUsersByIdQuery} from './userApiSlice'
+import { useCreateUserMutation, useGetRoleQuery, useUpdateUserMutation, useGetUserQuery, useGetUsersByIdQuery } from './userApiSlice'
+import {setDropDownList,dropdownlist} from '../../dashboard/travelAgent/travelAgentSlice'
 import {setListUser,listUsers,listRoleUsers,setRoleUser,formUser,setFormUser,selectAgentList,setFormSelectAgent} from './masterUserSlice'
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
@@ -48,6 +49,7 @@ const CreateUser = () => {
   const listProducts = useSelector(listUsers)
   const listRoles = useSelector(listRoleUsers)
   const formuser = useSelector(formUser)
+  const dropdowntravelagents = useSelector(dropdownlist)
   const selectListAgent = useSelector(selectAgentList)
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const [filterby,setFilterBy] = React.useState({
@@ -87,8 +89,11 @@ const CreateUser = () => {
 
   React.useMemo(() => {
     if (listAgent) {
-      let city = listAgent?.map((obj,i) => ({ ...obj, 'label': obj.travelAgentName,'value':obj.id, idx:i }))
-        dispatch(setFormSelectAgent(city))
+      let list = [
+        { label: "SELECT OPTION", value: "", id:"", name:"" },
+         ...listAgent?.map((obj, i) => ({ ...obj, 'travelAgentName': obj.travelAgentName,'label': obj.travelAgentName, 'name': obj.travelAgentName, 'value': obj.id, idx: i }))
+  ]
+         dispatch(setDropDownList(list))
     }
   }, [listAgent,dispatch])
 
@@ -139,9 +144,7 @@ const handleidentityCard = (e, i) => {
           lastName:formuser?.lastName,
           email:formuser?.email,
           authorities:[`${formuser?.authorities[0]?.label}`],
-          travelAgent:{
-            id: formuser && formuser?.travelAgent[0].id
-          }
+          travelAgent: formuser && formuser?.travelAgent[0].id !=='' ? {id: formuser && formuser?.travelAgent[0].id} : null
         }
       
       try {
@@ -330,12 +333,13 @@ const handleidentityCard = (e, i) => {
                     <Box className='floating-form'>
                       <Box className='floating-label'>
                         <Select
+                            defaultValue={null}
                             isMulti={false}
                             name="colors"
                             onChange={handleSelect}
                             value={formuser?.travelAgent}
                             classNamePrefix="chakra-react-select"
-                            options={selectListAgent}
+                            options={dropdowntravelagents}
                             placeholder="Select some colors..."
                             closeMenuOnSelect={true}
                             chakraStyles={{

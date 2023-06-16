@@ -16,7 +16,7 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
                 };
            },
             transformResponse(response, meta) {
-                console.log('resssssss', meta.response.headers.get('X-Total-Count'))
+                // console.log('resssssss', meta.response.headers.get('X-Total-Count'))
                 return {response,totalCount: Number(meta.response.headers.get('X-Total-Count')) }
             },
             // providesTags: (result, error, arg) =>
