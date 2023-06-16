@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 const createMasterProductPriceSlice = createSlice({
     name: 'masterProductPrice',
     initialState: {
+        isRefetch:false,
         list: [
             {
                 priceId: "1",
@@ -120,15 +121,19 @@ const createMasterProductPriceSlice = createSlice({
         setFormData: (state, action) => {
             state.formData = action.payload
         },
+        setRefetch: (state, action) => {
+            state.isRefetch = action.payload
+        },
         
     },
 })
 
-export const {setFormData,setMasterProduct,setListSelectProduct} = createMasterProductPriceSlice.actions
+export const {setRefetch,setFormData,setMasterProduct,setListSelectProduct} = createMasterProductPriceSlice.actions
 
 export default createMasterProductPriceSlice.reducer
 export const listProduct = (state) => state.productPrice.list
 export const listAgent = (state) => state.productPrice.travelAgent
+export const refetchdata = (state) => state.productPrice.isRefetch
 export const listProducts = (state) => state.productPrice.products
 export const formData = (state) => state.productPrice.formData
 export const listProductSelection = (state) => state.productPrice.selection

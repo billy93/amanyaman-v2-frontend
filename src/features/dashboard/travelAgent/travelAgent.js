@@ -40,7 +40,7 @@ Link as Links,
 } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
-import {totalCounts,listAgent,setMasterAgent,listAgentSelection,setListAgent, setFormAgent,formAgent,listRoleUsers} from './travelAgentSlice'
+import {totalCounts,isRefetch,setRefetch,listAgent,setMasterAgent,listAgentSelection,setListAgent, setFormAgent,formAgent,listRoleUsers} from './travelAgentSlice'
 import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
@@ -612,13 +612,16 @@ const MasterUser = () => {
         isLoading,
         isSuccess,
         isError,
+        isFetching,
         error,
         refetch
-    } = useGetTravelAgentQuery({page,size:10, ...filterby})
+    } = useGetTravelAgentQuery({ page, size: 10, ...filterby })
+    const fetchdata = useSelector(isRefetch)
     const prevData = usePrevious(listUserAccount)
     const refpage = React.useRef(null)
     const navigate = useNavigate()
     const fetchIdRef = React.useRef(0)
+    const [isFetchLoaded,setFetchLoaded] = React.useState(false)
     // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
     const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
     // This will get called when the table needs new data
@@ -900,12 +903,37 @@ const handleNexts = () => {
   const showFilterBtn = () => {
     setShowFilter(!showFilter)
   }
+
+  React.useEffect(() => {
+    refetch({ page: page, size: 10, ...filterby })
+    
+  }, [fetchdata])
+  
+
+  React.useEffect(() => {
+    let timer;
+    
+    if (fetchdata) {
+      timer = setTimeout(() => {
+        dispatch(setRefetch(false));
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [dispatch, fetchdata]);
+ 
+  const debouncedFunction = React.useMemo(() => debounce((value) => {
+    setFetchLoaded(value);
+  }, 500), []);
+ 
    let content;
     if (isLoading) {
         content = <Center h='50vh' color='#065BAA'>
                        <PulseLoader color={"#065BAA"} />
                    </Center>;
-    } else if (isSuccess) {
+    } else if (listUserAccount) {
         content = (
           <Box pl="2em" pr="2em" mt="5em"> 
             <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>

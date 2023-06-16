@@ -1,10 +1,9 @@
 import React from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import {Box,Input,useDisclosure,Button,Modal,ModalOverlay,ModalBody,ModalFooter,ModalContent, ModalHeader,ModalCloseButton } from '@chakra-ui/react'
-import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md'
+import { MdLogin } from 'react-icons/md'
 import { useUploadFileTravelAgentMutation,useGetTravelAgentQuery } from '../features/dashboard/travelAgent/travelApiSlice'
-// import { setUploadFile, uploadFiles } from './masterUserSlice'
-import { setListAgent } from '../features/dashboard/travelAgent/travelAgentSlice'
+import { isRefetch,setRefetch } from '../features/dashboard/travelAgent/travelAgentSlice'
 import UseCustomToast from './UseCustomToast'
 import DownloadBtn from '../features/dashboard/travelAgent/downloadBtn'
 
@@ -23,11 +22,13 @@ function usePrevious(value) {
 const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const dispatch= useDispatch()
-     const { showErrorToast, showSuccessToast } = UseCustomToast();
+    const isrefetch = useSelector(isRefetch)
+    const { showErrorToast, showSuccessToast } = UseCustomToast();
     const [download,setDowload] = React.useState(false)
     const [page,setPage] = React.useState(0)
+    const [toastId, setToastId] = React.useState(null);
     const [filesUpload,setFilesUpload] = React.useState(null)
-  const [uploadFileTravelAgent, { isLoading: loading, isSuccess: success }] = useUploadFileTravelAgentMutation({
+  const [uploadFileTravelAgent, { isLoading: loading, isSuccess: success, isError:errorUpload }] = useUploadFileTravelAgentMutation({
       skip:true
     })
     const {
@@ -56,61 +57,72 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
     }
  };
   
-  // const handleImport = async (e) => {
-  //   e.preventDefault()
-  //    const formData = new FormData();
-  //    formData.append('file',filesUpload);
-  //   //  formData.append('file', new Blob([filesUpload], { type: 'text/csv' }));
-  //   try {
-  //       const res = await uploadFileTravelAgent(formData)
-  //       console.log('ress', res)
-  //       if (res?.data===null) {
-  //         showSuccessToast('Upload file successfully!');
-          
-  //       }else {
-  //           const errorMessage = `Failed to upload file. Status Code: ${res?.error?.status}`;
-  //           showErrorToast(errorMessage);
-  //         }
-  //   } catch (err) {
-  //        const errorMessage = `Failed to upload file. Status Code: ${err?.error?.status}`;
-  //        showErrorToast(errorMessage);
-  //       }
-  // }
+  
+  React.useEffect(() => {
+    if (success) {
+       dispatch(setRefetch(true))
+    }
+    
+  }, [success, dispatch])
 
   const handleImport = async (e) => {
   e.preventDefault();
   try {
     let response = await uploadFileTravelAgent(filesUpload).unwrap();
     console.log('response', response);
-
-    if (response.ok) {
-      showSuccessToast('Upload file successfully!');
-    } else {
-      const statusCode = response.status;
-      const errorMessage = `Failed to upload file. Status Code: ${statusCode}`;
-      showErrorToast(errorMessage);
-    }
   } catch (err) {
-    const statusCode = err.response?.status || 'Unknown';
-    const errorMessage = `Failed to upload file. Status Code: ${statusCode}`;
-    showErrorToast(errorMessage);
-    // settrigger(false);
+    
   }
 };
  React.useEffect(() => {
+    let timeoutId;
+
     if (success) {
-      refetch({ page, size: 10 })
-      onClose()
-   }
- }, [success, page])
-  
-  React.useEffect(() => {
-    if (listUserAccount !== null && JSON.stringify(prevData) !== JSON.stringify(listUserAccount)) {
-       dispatch(setListAgent([...listUserAccount]))
+      // Clear any existing timeout
+      clearTimeout(timeoutId);
+
+      // Set a new timeout to delay showing the toast
+      timeoutId = setTimeout(() => {
+        const newToastId = showSuccessToast('Upload File successfully!', 'successuploaduser');
+        setToastId(newToastId);
+        onClose();
+        setToastId(null);
+        setFilesUpload(null)
+      }, 500); // Adjust the delay time as needed
+
+      // Cleanup function to clear the timeout if component unmounts or success state changes
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
-    //  dispatch(setListUser([...listUserAccount]))
-  }, [listUserAccount, prevData])
-  
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [success]);
+  // console.log('filesUpload', filesUpload)
+  React.useEffect(() => {
+    let timeoutId;
+
+    if (errorUpload) {
+      // Clear any existing timeout
+      clearTimeout(timeoutId);
+
+      // Set a new timeout to delay showing the toast
+      timeoutId = setTimeout(() => {
+        const newToastId = showErrorToast('Upload File fail!', 'failuploaduser');
+        setToastId(newToastId);
+        onClose();
+        setToastId(null);
+        setFilesUpload(null)
+      }, 500); // Adjust the delay time as needed
+
+      // Cleanup function to clear the timeout if component unmounts or success state changes
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorUpload]);
   return (
     <>
       <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20" onClick={onOpen}>
@@ -130,7 +142,7 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
               Cancel
             </Button>
             <DownloadBtn/>
-            <Button onClick={handleImport} isLoading={loading}>
+            <Button onClick={handleImport} isLoading={loading} isDisabled={filesUpload ===null ? true :false}>
               Import
             </Button>
           </ModalFooter>

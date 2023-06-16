@@ -45,6 +45,7 @@ Link as Links,
 import matchSorter from 'match-sorter'
 import { Button } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
+import {refetchdata,setRefetch} from './productPriceSlice'
 import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
@@ -483,6 +484,7 @@ const Polcies = () => {
     const [pageCount, setPageCount] = React.useState(0)
     const [count,setCount] = React.useState(0)
     const fetchIdRef = React.useRef(0)
+    const fetchdata = useSelector(refetchdata)
     const [page,setPage] = React.useState(0)
     const [showFilter,setShowFilter] = React.useState(false)
     const [searchTerm, setSearchTerm] = useState('');
@@ -701,6 +703,26 @@ const Polcies = () => {
     const { value } = e.target;
     setSearchTerm(value);
   };
+
+  React.useEffect(() => {
+    refetch({ page: page, size: 10, ...filterQuery })
+    
+  }, [fetchdata])
+  
+
+  React.useEffect(() => {
+    let timer;
+    
+    if (fetchdata) {
+      timer = setTimeout(() => {
+        dispatch(setRefetch(false));
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [dispatch, fetchdata]);
 
     let content;
     if (isLoading) {

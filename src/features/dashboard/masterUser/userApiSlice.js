@@ -3,7 +3,39 @@ import { apiSlice } from "../../../app/api/apiSlice";
 
 export const getUserList = apiSlice.injectEndpoints({
    endpoints: builder => ({
-        getUser: builder.query({
+       getRole: builder.query({
+            query: () => ({
+                url: `/app/authorities?page=0&size=999`,
+                providesTags: [ 'RoleUser' ]
+                
+            }),
+        }),
+        getUsersById: builder.query({
+           prepareHeaders: (headers) => {
+            headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+            return headers;
+            },
+            query: (id) => ({
+                url: `/app/users/getById/${id}`,
+                cachePolicy: 'no-cache',
+           }),
+           provideTags: (result, error, id) => (result ? [{ type: 'user', id }] : [])
+        }),
+       downloadTemplate: builder.query({
+            query: () => ({
+                url: `/list/template/download`,
+                
+            }),
+        }),
+       getTemplateFile: builder.query({
+            query: () => ({
+                url:"/app/users/list/template/download",
+                method: 'GET',
+                responseType: 'blob',
+                responseHandler: (response) => response.blob().then(blob => URL.createObjectURL(blob))
+            }),
+       }),
+       getUser: builder.query({
             query: (datas) => {
                 // const { page, size } = datas;
                 const { page, size, name, email, role } = datas;
@@ -51,44 +83,10 @@ export const getUserList = apiSlice.injectEndpoints({
                 return {response, totalCount: Number(meta.response.headers.get('X-Total-Count'))};
             }
         }),
-       getRole: builder.query({
-            query: () => ({
-                url: `/app/authorities?page=0&size=999`,
-                providesTags: [ 'RoleUser' ]
-                
-            }),
-        }),
-        getUsersById: builder.query({
-           prepareHeaders: (headers) => {
-            headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
-            return headers;
-            },
-            query: (id) => ({
-                url: `/app/users/getById/${id}`,
-                cachePolicy: 'no-cache',
-           }),
-           provideTags: (result, error, id) => (result ? [{ type: 'user', id }] : [])
-        }),
-       downloadTemplate: builder.query({
-            query: () => ({
-                url: `/list/template/download`,
-                
-            }),
-        }),
-       getTemplateFile: builder.query({
-            query: () => ({
-                url:"/app/users/list/template/download",
-                method: 'GET',
-                responseType: 'blob',
-                responseHandler: (response) => response.blob().then(blob => URL.createObjectURL(blob))
-            }),
-            }),
         uploadFile: builder.mutation({
             query: (file) => {
                 const formData = new FormData();
                 formData.append('file', file);
-                console.log('body file', file)
-                console.log('body', formData)
                 return {
                 url: `/app/users/list/import`,
                 method: 'POST',
@@ -96,7 +94,7 @@ export const getUserList = apiSlice.injectEndpoints({
                 // headers: { 'Content-Type': 'multipart/form-data' },
                 }
             },
-            invalidatesTags: ['MasterUser']
+             invalidatesTags: (result, error, arg) => [{ type: 'MasterUser', id: arg.id }],
             
         }),
         exportUserdata: builder.mutation({
@@ -137,8 +135,14 @@ export const getUserList = apiSlice.injectEndpoints({
             }),
         }),
         
-    })
-
+    }),
+    onError: (error) => {
+    // Modify the error response or handle it as needed
+    const statusCode = error?.response?.status;
+    const errorMessage = error?.response?.data?.message || 'An error occurred';
+    console.error(`Request failed with status code ${statusCode}: ${errorMessage}`);
+    throw error; // Re-throw the error to propagate to the query's onError handler
+  },
 })
 
 export const {

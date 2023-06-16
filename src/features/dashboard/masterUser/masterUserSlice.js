@@ -4,6 +4,7 @@ const createMasterUserSlice = createSlice({
     name: 'masterUser',
     initialState: { 
         messages: null,
+        refetchData:false,
         uploadMessage:'',
         list:[{
          id: "1",
@@ -69,6 +70,9 @@ const createMasterUserSlice = createSlice({
         setUploadMessage: (state, action) => {
             state.uploadMessage = action.payload
         },
+        setRefetch: (state, action) => {
+            state.refetchData = action.payload
+        },
         
     },
     extraReducers: (builder) => {
@@ -81,7 +85,7 @@ const createMasterUserSlice = createSlice({
   },
 })
 
-export const {setUploadMessage,setUploadFile,setFormSelectAgent,setMasterUser,setListUser,setRoleUser,setDetailUser,setFormUser} = createMasterUserSlice.actions
+export const {setRefetch,setUploadMessage,setUploadFile,setFormSelectAgent,setMasterUser,setListUser,setRoleUser,setDetailUser,setFormUser} = createMasterUserSlice.actions
 
 export default createMasterUserSlice.reducer
 export const listRoleUsers = (state) => state.masterUser.roleUser
@@ -92,3 +96,4 @@ export const formUser = (state) => state.masterUser.formuser
 export const selectAgentList = (state) => state.masterUser.listAgentSelect
 export const uploadFiles = (state) => state.masterUser.uploadFile
 export const uploadFilesMessage = (state) => state.masterUser.uploadMessage
+export const refetchdata = (state) => state.masterUser.refetchData

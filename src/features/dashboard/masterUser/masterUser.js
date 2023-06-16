@@ -43,7 +43,7 @@ Link as Links,
 } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
-import {listUsers,setMasterUser,listUsersSelection,setListUser, setFormUser,formUser,listRoleUsers,uploadFilesMessage} from './masterUserSlice'
+import {setRefetch,refetchdata,listUsers,setMasterUser,listUsersSelection,setListUser, setFormUser,formUser,listRoleUsers,uploadFilesMessage} from './masterUserSlice'
 import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
 import {AiOutlineClose} from 'react-icons/ai'
 import {BsFillTrashFill} from 'react-icons/bs'
@@ -52,6 +52,7 @@ import {BiSkipPreviousCircle,BiSkipNextCircle} from 'react-icons/bi'
 import styled from "styled-components";
 import { useTable, useRowSelect,useFilters,useSortBy } from "react-table";
 import CustomModal from './customModal';
+import UseCustomToast from '../../../components/UseCustomToast'
 
 const Styles = styled.div`
   padding: 1rem;
@@ -590,7 +591,9 @@ const MasterUser = () => {
     const dispatch = useDispatch()
     const tempList = useSelector(listUsers);
     const formuser = useSelector(formUser);
+    const fetchdata = useSelector(refetchdata);
     const selectedUser = useSelector(listUsersSelection);
+    const { showErrorToast, showSuccessToast } = UseCustomToast();
     const [paginations,setPagination] = React.useState({
       page: 0,
       size:10
@@ -632,7 +635,6 @@ const MasterUser = () => {
     const [debounceRole,setDebounceRole] = React.useState('')
     const [exportUserdata, {isLoading:loadExport}] = useExportUserdataMutation()
     const { data: rolesData, isLoading:loadRole } = useGetRoleQuery()
-    
    const PageInit = React.useCallback((pageSize,pageIndex) => {
     // console.log('page init', pageSize,pageIndex)
      setPagination({
@@ -810,6 +812,26 @@ const MasterUser = () => {
       debouncedSearch.cancel();
     };
   }, [filterRole]);
+  
+  React.useEffect(() => {
+    refetch({ page: page, size: 10, ...filterby })
+    
+  }, [fetchdata])
+  
+
+  React.useEffect(() => {
+    let timer;
+    
+    if (fetchdata) {
+      timer = setTimeout(() => {
+        dispatch(setRefetch(false));
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [dispatch, fetchdata]);
   
     const columns = React.useMemo(
     () => [

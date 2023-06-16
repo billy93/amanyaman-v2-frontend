@@ -3,7 +3,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import {Box,Input,useDisclosure,Button,Modal,ModalOverlay,ModalBody,ModalFooter,ModalContent, ModalHeader,ModalCloseButton } from '@chakra-ui/react'
 import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md'
 import { useGetTemplateFileQuery, useUploadFileMutation,useGetUserQuery } from './userApiSlice'
-import { setUploadFile, uploadFiles,setUploadMessage,uploadFilesMessage,setListUser } from './masterUserSlice'
+import { setRefetch,refetchdata,setUploadFile, uploadFiles,setUploadMessage,uploadFilesMessage,setListUser } from './masterUserSlice'
 import DownloadBtn from './download'
 import UseCustomToast from '../../../components/UseCustomToast'
 
@@ -24,12 +24,14 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
      const { showErrorToast, showSuccessToast } = UseCustomToast();
     const dispatch= useDispatch()
     const filecsv = useSelector(uploadFiles)
+    const isRefetch = useSelector(refetchdata)
     const [download,setDowload] = React.useState(false)
+    const [toastId, setToastId] = React.useState(null);
     const [page,setPage] = React.useState(0)
     const [filesUpload,setFilesUpload] = React.useState(null)
     const uploadFilesMessages = useSelector(uploadFilesMessage)
     const [trigger,settrigger] = React.useState(false)
-    const [uploadFile, { isLoading: loading, isSuccess: success }] = useUploadFileMutation({
+    const [uploadFile, { isLoading: loading, isSuccess: success,isError:errorUpload }] = useUploadFileMutation({
         skip:true
       })
     const {
@@ -56,39 +58,74 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
 
   const handleImport = async (e) => {
   e.preventDefault();
-  try {
-    let response = await uploadFile(filesUpload).unwrap();
-    console.log('response', response);
-
-    if (response.ok) {
-      showSuccessToast('Upload file successfully!');
-    } else {
-      const statusCode = response.status;
-      const errorMessage = `Failed to upload file. Status Code: ${statusCode}`;
-      showErrorToast(errorMessage);
+    try {
+      const response = await uploadFile(filesUpload).unwrap();
+      console.log('response', response);
+    } catch (err) {
+      console.log('err')
     }
-  } catch (err) {
-    const statusCode = err.response?.status || 'Unknown';
-    const errorMessage = `Failed to upload file. Status Code: ${statusCode}`;
-    showErrorToast(errorMessage);
-    settrigger(false);
-  }
 };
-  
+ 
   React.useEffect(() => {
     if (success) {
-      refetch({ page, size: 10 })
-      onClose()
-   }
-  }, [success,page])
+       dispatch(setRefetch(true))
+    }
+    
+  }, [success, dispatch])
+  const prevSuccess = usePrevious(success)
+  const prevErr = usePrevious(isError)
   
   React.useEffect(() => {
-    if (listUserAccount !== null && JSON.stringify(prevData) !== JSON.stringify(listUserAccount)) {
-       dispatch(setListUser([...listUserAccount]))
-    }
-    //  dispatch(setListUser([...listUserAccount]))
-  }, [listUserAccount, prevData,dispatch])
+    let timeoutId;
 
+    if (success) {
+      // Clear any existing timeout
+      clearTimeout(timeoutId);
+
+      // Set a new timeout to delay showing the toast
+      timeoutId = setTimeout(() => {
+        const newToastId = showSuccessToast('Upload File successfully!', 'successuploaduser');
+        setToastId(newToastId);
+        onClose();
+        setToastId(null);
+        setFilesUpload(null)
+      }, 500); // Adjust the delay time as needed
+
+      // Cleanup function to clear the timeout if component unmounts or success state changes
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [success]);
+  // console.log('filesUpload', filesUpload)
+  React.useEffect(() => {
+    let timeoutId;
+
+    if (errorUpload) {
+      // Clear any existing timeout
+      clearTimeout(timeoutId);
+
+      // Set a new timeout to delay showing the toast
+      timeoutId = setTimeout(() => {
+        const newToastId = showErrorToast('Upload File fail!', 'failuploaduser');
+        setToastId(newToastId);
+        onClose();
+        setToastId(null);
+        setFilesUpload(null)
+      }, 500); // Adjust the delay time as needed
+
+      // Cleanup function to clear the timeout if component unmounts or success state changes
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorUpload]);
+  
+  
   return (
     <>
       <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20" onClick={onOpen}>
@@ -111,7 +148,7 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
               refetch
             </Button> */}
             <DownloadBtn />
-            <Button onClick={handleImport} isLoading={loading}>
+            <Button onClick={handleImport} isLoading={loading} isDisabled={filesUpload ===null ? true : false}>
               Import
             </Button>
           </ModalFooter>

@@ -5,7 +5,8 @@ const createMasterAgentSlice = createSlice({
     initialState: { 
         listCount:null,
         list: [],
-        listDropdown:[],
+        listDropdown: [],
+        isRefetch:false,
         detail: null,
         editAgent: null,
         citylist:null,
@@ -99,6 +100,9 @@ const createMasterAgentSlice = createSlice({
         setDropDownList: (state, action) => {
             state.listDropdown = action.payload
         },
+        setRefetch: (state, action) => {
+            state.isRefetch = action.payload
+        },
         
     },
     extraReducers: (builder) => {
@@ -112,7 +116,7 @@ const createMasterAgentSlice = createSlice({
   },
 })
 
-export const {setDropDownList,setListCity,setEditAgent,setProductAgentSelection,setProductAgent,setMasterAgent,setListAgent,setRoleUser,setDetailAgent,setFormAgent} = createMasterAgentSlice.actions
+export const {setRefetch,setDropDownList,setListCity,setEditAgent,setProductAgentSelection,setProductAgent,setMasterAgent,setListAgent,setRoleUser,setDetailAgent,setFormAgent} = createMasterAgentSlice.actions
 
 export default createMasterAgentSlice.reducer
 export const listRoleUsers = (state) => state.agent.roleUser
@@ -126,3 +130,4 @@ export const getlistcity = (state) => state.agent.citylist
 export const detailAgentProductaList = (state) => state.agent.detailAgent.productList
 export const detailAgentProductSelection = (state) => state.agent.detailAgent.selection
 export const totalCounts = (state) => state.agent.listCount
+export const isRefetch = (state) => state.agent.isRefetch
