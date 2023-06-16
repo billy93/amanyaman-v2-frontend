@@ -5,6 +5,7 @@ import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md'
 import { useGetTemplateFileQuery, useUploadFileMutation,useGetUserQuery } from './userApiSlice'
 import { setUploadFile, uploadFiles,setUploadMessage,uploadFilesMessage,setListUser } from './masterUserSlice'
 import DownloadBtn from './download'
+import UseCustomToast from '../../../components/UseCustomToast'
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -20,6 +21,7 @@ function usePrevious(value) {
 
 const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+     const { showErrorToast, showSuccessToast } = UseCustomToast();
     const dispatch= useDispatch()
     const filecsv = useSelector(uploadFiles)
     const [download,setDowload] = React.useState(false)
@@ -55,9 +57,16 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
   const handleImport = async (e) => {
     e.preventDefault()
     try {
-      await uploadFile(filesUpload).unwrap()
+      let data =await uploadFile(filesUpload).unwrap()
+      if (data?.data ===null) {
+          showSuccessToast('Upload file successfully!');
+        }else {
+            const errorMessage = `Failed to upload file. Status Code: ${data?.error?.status}`;
+            showErrorToast(errorMessage);
+          }
     } catch (err) {
-      console.log('err', err)
+       const errorMessage = `Failed to upload file. Status Code: ${err?.error?.status}`;
+        showErrorToast(errorMessage);
       settrigger(false)
         }
   }

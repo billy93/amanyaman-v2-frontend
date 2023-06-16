@@ -5,7 +5,7 @@ import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md'
 import { useUploadFileTravelAgentMutation,useGetTravelAgentQuery } from '../features/dashboard/travelAgent/travelApiSlice'
 // import { setUploadFile, uploadFiles } from './masterUserSlice'
 import { setListAgent } from '../features/dashboard/travelAgent/travelAgentSlice'
-
+import UseCustomToast from './UseCustomToast'
 import DownloadBtn from '../features/dashboard/travelAgent/downloadBtn'
 
 function usePrevious(value) {
@@ -23,6 +23,7 @@ function usePrevious(value) {
 const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const dispatch= useDispatch()
+     const { showErrorToast, showSuccessToast } = UseCustomToast();
     const [download,setDowload] = React.useState(false)
     const [page,setPage] = React.useState(0)
     const [filesUpload,setFilesUpload] = React.useState(null)
@@ -61,10 +62,18 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
      formData.append('file',filesUpload);
     //  formData.append('file', new Blob([filesUpload], { type: 'text/csv' }));
     try {
-            const res = await uploadFileTravelAgent(formData)
-            console.log('ress', res)
+        const res = await uploadFileTravelAgent(formData)
+        console.log('ress', res)
+        if (res?.data===null) {
+          showSuccessToast('Upload file successfully!');
+          
+        }else {
+            const errorMessage = `Failed to upload file. Status Code: ${res?.error?.status}`;
+            showErrorToast(errorMessage);
+          }
     } catch (err) {
-     console.log('err', err)
+         const errorMessage = `Failed to upload file. Status Code: ${err?.error?.status}`;
+         showErrorToast(errorMessage);
         }
   }
 
