@@ -415,7 +415,7 @@ const filterTypes = React.useMemo(
 
     setExpandedRows(expandedRowsCopy);
   };
- console.log('totalCountsstotalCountss',totalCountss !==null ? totalCountss : null)
+ 
   const isRowExpanded = (rowIndex) => expandedRows.includes(rowIndex);
   return (
       <>
@@ -478,40 +478,48 @@ const filterTypes = React.useMemo(
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()} >
-           {rows.map((row, rowIndex) => {
-          prepareRow(row);
-          const isExpanded = isRowExpanded(rowIndex);
+            <tbody {...getTableBodyProps()}>
+              <AnimatePresence>
+                {rows.map((row, rowIndex) => {
+                  prepareRow(row);
+                  const isExpanded = isRowExpanded(rowIndex);
 
-          return (
-            <React.Fragment key={rowIndex}>
-              <tr {...row.getRowProps()} onClick={() => handleRowClick(rowIndex)}>
-                {row.cells.map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
-                    className={`${cell.column.id === 'value' && isExpanded ? 'expanded' : ''}`}
-                  >
-                    {cell.column.id === 'value' && cell.value.length > 30
-                      ? (isExpanded ? cell.value : cell.value.substring(0, 30) + '...')
-                      : cell.render('Cell')}
+                  return (
+                    <motion.tr
+                      key={rowIndex}
+                      {...row.getRowProps()}
+                      onClick={() => handleRowClick(rowIndex)}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      {row.cells.map((cell) => (
+                        <motion.td
+                          key={cell.getCellProps().key}
+                          {...cell.getCellProps()}
+                          className={`${cell.column.id === 'value' && isExpanded ? 'expanded' : ''}`}
+                        >
+                          {cell.column.id === 'value' && cell.value.length > 30
+                            ? isExpanded
+                              ? cell.value
+                              : cell.value.substring(0, 30) + '...'
+                            : cell.render('Cell')}
+                        </motion.td>
+                      ))}
+                    </motion.tr>
+                  );
+                })}
+              </AnimatePresence>
+              <tr>
+                {loading ? (
+                  <td colSpan="10000">Loading...</td>
+                ) : (
+                  <td colSpan="10000">
+                    Showing {page.length} of ~{Number(totalCount)} results
                   </td>
-                ))}
+                )}
               </tr>
-            </React.Fragment>
-          );
-        })}
-        <tr>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{Number(totalCount)}{' '}
-                  results
-                </td>
-              )}
-            </tr>
-        </tbody>
+            </tbody>
         </table>
         </Box>
       {/* <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">

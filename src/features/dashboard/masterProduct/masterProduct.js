@@ -9,6 +9,7 @@ import PulseLoader from 'react-spinners/PulseLoader'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaChevronUp, FaSort } from 'react-icons/fa'
 // import ExportData from './export'
+import { debounce } from 'lodash';
 import {
   useToast,
   Select,
@@ -50,9 +51,10 @@ import {BiSkipPreviousCircle,BiSkipNextCircle} from 'react-icons/bi'
 import styled from "styled-components";
 import { useTable, useRowSelect,useFilters,useSortBy } from "react-table";
 // import CustomModal from './customModal';
+import { useGetBandTypeQuery } from '../bandType/bandTypesApiSlice'
 
 const Styles = styled.div`
-  padding: 1rem;
+  
 
   table {
     width:100%;
@@ -199,6 +201,7 @@ const Tables = ({
   fetchData,
   loading,
   setPageCount,
+  totalCount,
   pageCount: controlledPageCount,
 }) => {
  const dispatch = useDispatch()
@@ -207,22 +210,10 @@ const Tables = ({
  const selected = useSelector(listProductSelection)
  const prevSelected = usePrevious(selected)
  const { isOpen, onOpen, onClose } = useDisclosure()
- const [showFilter,setShowFilter] = React.useState(false)
  const [productcode,setFilterName] = React.useState('')
  const [filterEmail,setFilterEmail] = React.useState('')
  const [filterRole,setFilterRole] = React.useState('')
- const handleAddUser = () => {
-  //  const stateUser = {
-  //       login:"",    
-  //       firstName:"",    
-  //       lastName:"",  
-  //       area:"",  
-  //       authorities:[],
-  //       travelAgent:""
-  //  }
-  //  dispatch(setFormUser(stateUser))
-    navigate('/master-data/create-master-product')
- }
+ 
 const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -358,9 +349,7 @@ const filterTypes = React.useMemo(
       }
   }, [prev, selectedRowIds,getValues,selectedFlatRows]);
   
-  const showFilterBtn = () => {
-    setShowFilter(!showFilter)
-  }
+ 
 
   // Render the UI for your table
    
@@ -418,14 +407,22 @@ const filterTypes = React.useMemo(
     console.log('eee', pageIndex + 1)
     setPageCount(pageIndex+1)
 }
+const [expandedRows, setExpandedRows] = useState([]);
+
+  const handleRowClick = (rowIndex) => {
+    const expandedRowsCopy = [...expandedRows];
+    const index = expandedRows.indexOf(rowIndex);
+
+    if (index > -1) {
+      expandedRowsCopy.splice(index, 1);
+    } else {
+      expandedRowsCopy.push(rowIndex);
+    }
+
+    setExpandedRows(expandedRowsCopy);
+  };
  
-//   const handleExportUser = async() => {
-//     try {
-//       await exportUserdata()
-//     } catch (error) {
-//       console.log(error)
-//     }
-// }
+  const isRowExpanded = (rowIndex) => expandedRows.includes(rowIndex);
   return (
       <>
           <Modal size="xl" blockScrollOnMount={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
@@ -482,24 +479,7 @@ const filterTypes = React.useMemo(
                 </ModalFooter>
                 </ModalContent>
       </Modal>
-      
-      <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                <Heading as={'h6'} size={'sm'}>Product</Heading>
-                <Stack direction='row' spacing={4} m={'2.5'}>
-                    <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
-                        Apply Filter
-                    </Button>
-                    {/* <ExportData /> */}
-                   
-                    {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
-                        Import 
-                    </Button> */}
-                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAddUser}>
-                        Add Product 
-                    </Button>
-                </Stack>
-      </Box>
-      <Box mt="1em" mb="1em" display="flex" alignItems="center" gap="10px">
+      <Box display="flex" alignItems="center" gap="10px">
         
         {
              selected?.length > 0 && (
@@ -517,31 +497,8 @@ const filterTypes = React.useMemo(
         }
         
       </Box>
-      {
-        showFilter ? (
-          <Box w={{base:"100%", md:"650px"}} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px">
-                <Input
-                  value={productcode}
-                  onChange={handleFilterByName}
-                  placeholder={"Search by product code"}
-                  bg="#ebebeb"
-                  borderRadius={'5px'}
-                  variant={'custom'}
-          />
-                <Input
-                  value={filterEmail}
-                  onChange={handleFilterByEmail}
-                  placeholder={"Search by email"}
-                  bg="#ebebeb"
-                  borderRadius={'5px'}
-                  variant={'custom'}
-          />
-            
-          </Box>
-        ): null
-      }
       
-      <Box bg="white" overflow={'scroll'} p="3">
+      <Box bg="white" overflow={'scroll'} pt="3">
 
         <table {...getTableProps()}>
           <thead>
@@ -583,64 +540,57 @@ const filterTypes = React.useMemo(
               </tr>
             ))}
           </thead>
-          <tbody {...getTableBodyProps()}>
-            {/* {rows.slice(0, 10).map((row, i) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })} */}
-          <AnimatePresence>
-              {rows.slice(0, 10).map((row, i) => {
-                prepareRow(row)
-                return (
-                  <motion.tr
-                    {...row.getRowProps({
-                      layoutTransition: spring,
-                      exit: { opacity: 0, maxHeight: 0 },
-                    })}
-                  >
-                    {row.cells.map((cell, i) => {
-                      return (
-                        <motion.td
-                          {...cell.getCellProps({
-                            layoutTransition: spring,
-                          })}
-                          style={{ 
-                            // backgroundColor: 'red',
-                            fontWeight: 'normal',
-                            textAlign: 'left',
-                            padding: '10px',
-                            fontFamily: 'Mulish',
-                            fontSize: '14px'
-                          }}
-                        >
-                          {cell.render('Cell')}
-                        </motion.td>
-                      )
-                    })}
-                  </motion.tr>
-                )
-              })}
-            </AnimatePresence>
-            <tr>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-                  results
-                </td>
-              )}
-            </tr>
-          </tbody>
+            <tbody {...getTableBodyProps()}>
+              <AnimatePresence>
+                {rows.map((row, rowIndex) => {
+                  prepareRow(row);
+                  const isExpanded = isRowExpanded(rowIndex);
+
+                  return (
+                    <motion.tr
+                      key={rowIndex}
+                      {...row.getRowProps()}
+                      onClick={() => handleRowClick(rowIndex)}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      {row.cells.map((cell) => {
+                        let cellContent;
+
+                        if (
+                          (cell.column.id === 'productPersonalAccidentCover' || cell.column.id === 'productDescription' || cell.column.id === 'productMedicalCover') &&
+                          cell.value.length > 20
+                        ) {
+                          cellContent = isExpanded ? cell.value : cell.value.substring(0, 20) + '...';
+                        } else {
+                          cellContent = cell.render('Cell');
+                        }
+
+                        return (
+                          <motion.td
+                            key={cell.getCellProps().key}
+                            {...cell.getCellProps()}
+                            className={`${(cell.column.id === 'productPersonalAccidentCover' || cell.column.id === 'productDescription' || cell.column.id === 'productMedicalCover') && isExpanded ? 'expanded' : ''}`}
+                          >
+                            {cellContent}
+                          </motion.td>
+                        );
+                      })}
+                    </motion.tr>
+                  );
+                })}
+              </AnimatePresence>
+              <tr>
+                {loading ? (
+                  <td colSpan="10000">Loading...</td>
+                ) : (
+                  <td colSpan="10000">
+                    Showing {page.length} of ~{Number(totalCount)} results
+                  </td>
+                )}
+              </tr>
+            </tbody>
           </table>
       </Box>
     </>
@@ -650,24 +600,26 @@ const filterTypes = React.useMemo(
 const MasterUser = () => {
     const [MasterChecked, setMasterChecked] = useState(false)
     const dispatch = useDispatch()
-    // const tempList = useSelector(listUsers);
-    // const formuser = useSelector(formUser);
-    // const selectedUser = useSelector(listUsersSelection);
-    const [paginations,setPagination] = React.useState({
-      page: 0,
-      size:10
-    })
+    const [filterQuery, setFilterQuery] = useState({
+      productCode: '',
+      bandType:''
+    });
     const [size,setSize] = React.useState(10)
     const [page,setPage] = React.useState(0)
+    
     const {
-        data: listUserAccount,
+        data: {response:listUserAccount, totalCount}={},
         isLoading,
         isSuccess,
         isError,
         error,
         refetch
-    } = useGetProductsQuery({page,size:10})
-    
+    } = useGetProductsQuery({ page, size: 10, ...filterQuery })
+  
+    const {
+        data: bandTypes,
+     } = useGetBandTypeQuery({ page: 0, size: 9999 })
+  
     const tableRef = React.useRef(null)
     const [data, setData] = React.useState([])
     const prevData = usePrevious(listUserAccount)
@@ -675,26 +627,20 @@ const MasterUser = () => {
     const [loading, setLoading] = React.useState(false)
     const [count, setCount] = React.useState(false)
     const [pageCount, setPageCount] = React.useState(0)
+    const [showFilter,setShowFilter] = React.useState(false)
+    const [searchName, setSearchName] = useState('');
+    const [searchBandType, setSearchBandType] = useState('');
+    const [debouncedSearchName, setDebouncedSearchName] = useState('');
+    const [debouncedSearchBandType, setDebouncedSearchBandType] = useState('');
+    
     // const uploadFilesMessages = useSelector(uploadFilesMessage)
     // const usePrevMessage = usePrevious(uploadFilesMessages)
     
-   const PageInit = React.useCallback((pageSize,pageIndex) => {
-    // console.log('page init', pageSize,pageIndex)
-     setPagination({
-       page: pageIndex,
-       size:pageSize
-      })
-   }, [paginations?.page, paginations?.size])
     const refpage = React.useRef(null)
     const navigate = useNavigate()
     const fetchIdRef = React.useRef(0)
     // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
     const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
-    // This will get called when the table needs new data
-    // You could fetch your data from literally anywhere,
-    // even a server. But for this example, we'll just fake it.
-    
-    // Give this fetch an ID
     const fetchId = ++fetchIdRef.current
 
     // Set the loading state
@@ -707,19 +653,19 @@ const MasterUser = () => {
         const endRow = startRow + pageSize
         setCount(pageOptions)
         setData(listUserAccount?.slice(startRow, endRow))
-        PageInit(pageSize,pageIndex)
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(listUserAccount?.length / pageSize))
+        setPageCount(Math.ceil(totalCount / pageSize))
 
         setLoading(false)
       }
     }, 1000)
     }, [listUserAccount])
   
-  
-    // console.log('uploadFilesMessages 111', uploadFilesMessages ==='success')
    
+   const showFilterBtn = () => {
+    setShowFilter(!showFilter)
+   }
   
   React.useEffect(() => {
     if (listUserAccount !== null && JSON.stringify(prevData) !== JSON.stringify(listUserAccount)) {
@@ -728,11 +674,21 @@ const MasterUser = () => {
     //  dispatch(setListUser([...listUserAccount]))
   }, [listUserAccount, prevData])
   
+  
+  const handleAddUser = () => {
+    navigate('/master-data/create-master-product')
+ }
+  
   React.useEffect(() => {
-   refetch({page,size:10})
-  }, [page])
-  
-  
+    if (!showFilter) {
+      setSearchBandType('')
+      setSearchName('')
+      setFilterQuery({
+        productCode:'',
+        bandType:''
+      })
+    }  
+  }, [showFilter])
   
     const columns = React.useMemo(
     () => [
@@ -810,23 +766,150 @@ const MasterUser = () => {
     // setChangePage(true)
   }
 
+
+  React.useEffect(() => {
+    const debouncedRefetch = debounce(refetch, 500);
+    debouncedRefetch({page:page,size:10, ...filterQuery});
+
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [debouncedSearchName, refetch,filterQuery,page]);
+
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setDebouncedSearchName(searchName);
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchName, filterQuery]);
+  
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterQuery({
+        ...filterQuery,
+        productCode:searchName
+      })
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchName]);
+  
+  React.useEffect(() => {
+    const debouncedRefetch = debounce(refetch, 500);
+    debouncedRefetch({page:page,size:10, ...filterQuery});
+
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [debouncedSearchBandType, refetch,filterQuery,page]);
+
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setDebouncedSearchBandType(searchBandType);
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchBandType, filterQuery]);
+  
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterQuery({
+        ...filterQuery,
+        bandType:searchBandType
+      })
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchBandType]);
+
+  const handleSearchTermChange = (e) => {
+    const { value } = e.target;
+    setSearchName(value);
+  };
+  
+  const handleSearchBandTypeChange = (e) => {
+    const { value } = e.target;
+    setSearchBandType(value);
+  };
+
   const previousPage = () => {
     setPage(prevPage => prevPage - 1)
     // setChangePage(true)
   }
   
-    // const data = React.useMemo(() => tempList);
-    
-
     let content;
     if (isLoading) {
         content = <Center h='50vh' color='#065BAA'>
                        <PulseLoader color={"#065BAA"} />
                    </Center>;
-    } else if (data) {
+    } else if (listUserAccount) {
         content = (
-            <Box pl="2em" pr="2em" mt="5em"> 
-            <Box bg="white" overflow={'scroll'} p="3">
+          <Box pl="2em" pr="2em" mt="5em"> 
+            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                <Heading as={'h6'} size={'sm'}>Product</Heading>
+                <Stack direction='row' spacing={4} m={'2.5'}>
+                    <Button leftIcon={<MdFilterList color={showFilter ? '#065BAA' : '' }/>} colorScheme='#231F20' variant='outline' size={'sm'} color={showFilter ? '#065BAA' : '' } onClick={showFilterBtn}>
+                        Apply Filter
+                    </Button>
+                    {/* <ExportData /> */}
+                   
+                    {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+                        Import 
+                    </Button> */}
+                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAddUser}>
+                        Add Product 
+                    </Button>
+                </Stack>
+          </Box>
+            {
+              showFilter ? (
+                <Box w={{base:"100%", md:"650px"}} display={'flex'} justifyContent={'space-around'} alignItems={'center'} gap="4px" mt="2em">
+                      <Input
+                        value={searchName}
+                        onChange={handleSearchTermChange}
+                        placeholder={"Search by product code"}
+                        bg="#ebebeb"
+                        borderRadius={'5px'}
+                        variant={'custom'}
+                        backgroundColor={searchName ==='' ? '#ebebeb' : '#e8f0fe'}
+                />
+                      <Select
+                        placeholder='Select by Travel Duration'
+                        backgroundColor={searchBandType ==='' ? '#ebebeb' : '#e8f0fe'} 
+                        style={{ fontSize: "14px", fontFamily: "Mulish", fontWeight: "normal" }} _placeholder={{
+                          color:"grey"
+                        }} defaultValue={''}
+                        name="bandType"
+                        onChange={handleSearchBandTypeChange}>  
+                                  {
+                                    bandTypes?.response.map((types, i) => {
+                                      return (
+                                        <option value={types.id} key={i}>{types.travelDurationName}</option>
+                                      )
+                                    })
+                                  }
+                  </Select>  
+                </Box>
+              ): null
+            }
+            <>
               <Styles>
                 {
                   
@@ -837,6 +920,7 @@ const MasterUser = () => {
                     loading={loading}
                     pageCount={pageCount}
                     setPageCount={setPageCount}
+                    totalCount={totalCount}
                     />
                  
                 }
@@ -858,7 +942,8 @@ const MasterUser = () => {
                         borderRadius: "5px",
                         WebkitBorderRadius: "5px",
                         MozBorderRadius:"5px"
-                    }} onClick={handleNexts}  bg="white" border={'none'}>
+                        
+                    }} onClick={handleNexts}  bg="white" border={'none'} isDisabled={pageCount === page +1}>
                         <BiSkipNextCircle size="25px" color="black" />
                         <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
                         Next
@@ -868,24 +953,13 @@ const MasterUser = () => {
                     <Box>
                       Page{' '}
                       <strong>
-                        {page + 1} of {count.length}
+                        {page + 1} of {pageCount}
                       </strong>{' '}
                     </Box>
-                    {/* <select
-                      value={pageSize}
-                      onChange={e => {
-                        setPageSize(Number(e.target.value))
-                      }}
-                    >
-                      {[10, 20, 30, 40, 50].map(pageSize => (
-                        <option key={pageSize} value={pageSize}>
-                          Show {pageSize}
-                        </option>
-                      ))}
-                    </select> */}
+                   
                   </Box>
                 {/* <Link to="/welcome">Back to Welcome</Link> */}
-            </Box>
+            </>
           </Box>
         )
     } else if (isError) {

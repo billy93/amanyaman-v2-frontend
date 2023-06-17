@@ -24,7 +24,8 @@ RadioGroup,
 Radio,
 useRadio,
 useRadioGroup,
-HStack
+HStack,
+chakra
 } from '@chakra-ui/react'
 import { useSelector } from "react-redux"
 import { useDispatch } from 'react-redux'
@@ -33,7 +34,7 @@ import {setListAgent,setEditAgent,listAgent,formAgent,setFormAgent,listDetailAge
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { MdAdd } from 'react-icons/md'
-import { Select } from 'chakra-react-select'
+import  { Select,components } from 'chakra-react-select'
 import UseCustomToast from '../../../components/UseCustomToast';
 import CustomRadio from '../../../components/customRadioCreate';
 
@@ -125,8 +126,8 @@ const CreateUser = () => {
 
   React.useMemo(() => {
     if (cities) {
-      let city = cities.map((obj) => ({ ...obj, 'label': obj.name }))
-        dispatch(setListCity(city))
+      let city = cities.map((obj) => ({ ...obj, 'label': obj.name,'value':obj.name }))
+        dispatch(setListCity([...city]))
     }
   }, [cities])
 
@@ -232,6 +233,18 @@ const handleidentityCard = (e, i) => {
     }
     dispatch(setFormAgent(forms))
   }
+  const customStyles = {
+  control: (provided) => ({
+    ...provided,
+    backgroundColor: '#f2f2f2', // Set the desired background color for the select control
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isSelected ? 'blue' : 'white', // Set the background color for selected and non-selected options
+    color: state.isSelected ? 'white' : 'black', // Set the text color for selected and non-selected options
+  }),
+  };
+  
   return (
     <Stack mt={{base:"1em", md:"5em"}}>
       <Box p="12px" display="flex" justifyContent={'space-between'} alignItems="center">
@@ -399,6 +412,7 @@ const handleidentityCard = (e, i) => {
                                       options={listCity}
                                       placeholder="Select some colors..."
                                       closeMenuOnSelect={true}
+                                      styles={customStyles}
                                       chakraStyles={{
                                         dropdownIndicator: (prev, { selectProps: { menuIsOpen } }) => ({
                                           ...prev,

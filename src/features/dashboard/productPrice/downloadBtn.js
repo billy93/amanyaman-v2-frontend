@@ -1,9 +1,9 @@
 
-import { useGetTemplateFileAgentQuery } from '../travelAgent/travelApiSlice'
+import { useGetTemplateFilePriceQuery } from './productPriceApi'
 import { Button } from '@chakra-ui/react'
 
 const DownloadXLSButton = (props) => {
-    const { data, error, isLoading } = useGetTemplateFileAgentQuery({
+    const { data, error, isLoading } = useGetTemplateFilePriceQuery({
       skip:true
   });
 
@@ -11,7 +11,7 @@ const DownloadXLSButton = (props) => {
     if (data) {
       const downloadLink = document.createElement('a');
       downloadLink.href = data;
-      downloadLink.download = 'templateAgent.xlsx'; // Set the desired file name and extension
+      downloadLink.download = 'templateProudctPrice.xlsx'; // Set the desired file name and extension
 
       // Append the link to the DOM
       document.body.appendChild(downloadLink);

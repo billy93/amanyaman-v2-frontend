@@ -198,6 +198,7 @@ const Tables = ({
   data,
   fetchData,
   loading,
+  load,
   pageCount: controlledPageCount,
 }) => {
  const dispatch = useDispatch()
@@ -550,7 +551,7 @@ const handleRowClick = (rowIndex) => {
           );
         })}
         <tr>
-              {loading ? (
+              {loading || load ? (
                 // Use our custom loading state to show a loading indicator
                 <td colSpan="10000">Loading...</td>
               ) : (
@@ -622,6 +623,7 @@ const MasterUser = () => {
     const navigate = useNavigate()
     const fetchIdRef = React.useRef(0)
     const [isFetchLoaded,setFetchLoaded] = React.useState(false)
+    const [load,setLoad] = React.useState(false)
     // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
     const fetchData = React.useCallback(({ pageSize, pageIndex,pageOptions }) => {
     // This will get called when the table needs new data
@@ -924,10 +926,20 @@ const handleNexts = () => {
     };
   }, [dispatch, fetchdata]);
  
-  const debouncedFunction = React.useMemo(() => debounce((value) => {
-    setFetchLoaded(value);
-  }, 500), []);
- 
+ const handleFetchLoad = (val) => {
+   setLoad(val)
+ }
+ const lazyLoad = debounce(handleFetchLoad,400)
+  React.useEffect(() => {
+  if (isFetching) {
+    lazyLoad(true)
+  } else {
+    lazyLoad(false);
+  }
+  }, [isFetching]);
+  
+  console.log('loaded', load)
+  console.log('isFetching', isFetching)
    let content;
     if (isLoading) {
         content = <Center h='50vh' color='#065BAA'>
@@ -993,6 +1005,7 @@ const handleNexts = () => {
                     data={data}
                     fetchData={fetchData}
                     loading={loading}
+                    load={load}
                     pageCount={pageCount}
                     setPageCount={setPageCount}
                     totalCount={totalCount}

@@ -202,6 +202,7 @@ const Tables = ({
   fetchData,
   loading,
   setPageCount,
+  isFetching,
   pageCount: controlledPageCount,
   totalCount
 }) => {
@@ -570,7 +571,7 @@ const filterTypes = React.useMemo(
               })}
             </AnimatePresence>
             <tr>
-              {loading ? (
+              {loading || isFetching? (
                 // Use our custom loading state to show a loading indicator
                 <td colSpan="10000">Loading...</td>
               ) : (
@@ -614,7 +615,8 @@ const MasterUser = () => {
         isSuccess,
         isError,
         error,
-        refetch
+        refetch,
+        isFetching
     } = useGetUserQuery({page,size:10, ...filterby})
     
     const tableRef = React.useRef(null)
@@ -1003,6 +1005,7 @@ const handleAddUser = () => {
                     data={data}
                     fetchData={fetchData}
                     loading={loading}
+                    isFetching={isFetching}
                     pageCount={pageCount}
                     setPageCount={setPageCount}
                     totalCount={totalCount}

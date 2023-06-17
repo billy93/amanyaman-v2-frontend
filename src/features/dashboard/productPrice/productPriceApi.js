@@ -33,6 +33,14 @@ export const policyApiSlice = apiSlice.injectEndpoints({
                 return {response,totalCount: Number(meta.response.headers.get('X-Total-Count')) }
             },
             }),
+            getTemplateFilePrice: builder.query({
+            query: (url) => ({
+                url:"/app/product-travel-agents/list/template/download",
+                method: 'GET',
+                responseType: 'blob',
+                responseHandler: (response) => response.blob().then(blob => URL.createObjectURL(blob))
+            }),
+            }), 
             uploadFilePrice: builder.mutation({
             query: (file) => {
                 return {
@@ -52,6 +60,7 @@ export const policyApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
+    useGetTemplateFilePriceQuery,
     useGetProductPriceQuery,
     useUploadFilePriceMutation
 } = policyApiSlice 

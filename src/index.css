@@ -19,7 +19,9 @@ body {
   background-color: #f7f7f7;
   color: #fff;
 }
-
+.chakra-react-select__control.chakra-react-select__value-container{
+  background: #e8f0fe;
+}
 input, button {
   font: inherit;
 }
