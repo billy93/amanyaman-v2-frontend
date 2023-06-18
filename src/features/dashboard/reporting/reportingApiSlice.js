@@ -1,14 +1,12 @@
-import { apiSlice } from "../../../app/api/apiSlice"
+import { apiSlice } from '../../../app/api/apiSlice';
 
 export const feedsApiSlice = apiSlice.injectEndpoints({
-    endpoints: builder => ({
-        getUsers: builder.query({
-            query: () => '/policy',
-            keepUnusedDataFor: 5,
-        })
-    })
-})
+  endpoints: (builder) => ({
+    getUsers: builder.query({
+      query: () => '/policy',
+      keepUnusedDataFor: 5,
+    }),
+  }),
+});
 
-export const {
-    useGetUsersQuery
-} = feedsApiSlice 
+export const { useGetUsersQuery } = feedsApiSlice;

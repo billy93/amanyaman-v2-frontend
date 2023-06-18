@@ -1,28 +1,35 @@
-import { Iterable } from 'immutable'
-import { configureStore,createSerializableStateInvariantMiddleware,isPlain,combineReducers } from "@reduxjs/toolkit"
-import { apiSlice } from "./api/apiSlice"
-import authReducer from '../features/auth/authSlice'
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { apiSlice } from './api/apiSlice';
+import authReducer from '../features/auth/authSlice';
 import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'reduxjs-toolkit-persist';
-import { setupListeners } from '@reduxjs/toolkit/dist/query'
-import createClaimReducer from '../features/dashboard/claim/createClaimSlice'
-import createSearchQuotaReducer from '../features/dashboard/quota-search/quotaSearchSlice'
-import policyList from '../features/dashboard/policy/policySlice'
-import masterUser from '../features/dashboard/masterUser/masterUserSlice'
-import masterProducts from '../features/dashboard/masterProduct/masterProductSlice'
-import travelAgent from '../features/dashboard/travelAgent/travelAgentSlice'
-import systemParams from '../features/dashboard/systemParameters/systemParamsSlice'
-import productPrice from '../features/dashboard/productPrice/productPriceSlice'
-import dashboards from '../features/dashboard/dashboards/dashboardSlice'
-import storageSession from 'reduxjs-toolkit-persist/lib/storage/session'
+import {
+  persistReducer,
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'reduxjs-toolkit-persist';
+import { setupListeners } from '@reduxjs/toolkit/dist/query';
+import createSearchQuotaReducer from '../features/dashboard/quota-search/quotaSearchSlice';
+import policyList from '../features/dashboard/policy/policySlice';
+import masterUser from '../features/dashboard/masterUser/masterUserSlice';
+import masterProducts from '../features/dashboard/masterProduct/masterProductSlice';
+import travelAgent from '../features/dashboard/travelAgent/travelAgentSlice';
+import systemParams from '../features/dashboard/systemParameters/systemParamsSlice';
+import productPrice from '../features/dashboard/productPrice/productPriceSlice';
+import dashboards from '../features/dashboard/dashboards/dashboardSlice';
+// import storageSession from 'reduxjs-toolkit-persist/lib/storage/session';
 // import { apiSlice } from './api/apiSlice';
-import { logOut } from '../features/auth/authSlice';
+// import { logOut } from '../features/auth/authSlice';
 
 const rootPersistConfig = {
   key: 'root',
   storage,
-  whitelist:['auth']
-}
+  whitelist: ['auth'],
+};
 
 const persistConfig = {
   key: 'root',
@@ -30,52 +37,34 @@ const persistConfig = {
   blacklist: ['apiSlice'], // Exclude the 'api' reducer from persisting
 };
 
-
-const isSerializable = (value) => Iterable.isIterable(value) || isPlain(value)
-
-const getEntries = (value) =>
-  Iterable.isIterable(value) ? value.entries() : Object.entries(value)
-
-const serializableMiddleware = createSerializableStateInvariantMiddleware({
-  isSerializable,
-  getEntries,
-})
-const persistAuth = persistReducer(persistConfig, authReducer)
+const persistAuth = persistReducer(persistConfig, authReducer);
 
 const rootReducer = combineReducers({
-       [apiSlice.reducerPath]: apiSlice.reducer,
-        auth: persistAuth,
-        createClaimForm: createClaimReducer,
-        quotaSearch: createSearchQuotaReducer,
-        policyList: policyList,
-        masterUser: masterUser,
-        masterProduct: masterProducts,
-        agent:travelAgent,
-        systemParams:systemParams,
-        productPrice:productPrice,
-        dashboards:dashboards,
-})
+  [apiSlice.reducerPath]: apiSlice.reducer,
+  auth: persistAuth,
+  quotaSearch: createSearchQuotaReducer,
+  policyList: policyList,
+  masterUser: masterUser,
+  masterProduct: masterProducts,
+  agent: travelAgent,
+  systemParams: systemParams,
+  productPrice: productPrice,
+  dashboards: dashboards,
+});
 
-const persistedReducer = persistReducer(rootPersistConfig, rootReducer)
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 export const store = configureStore({
-    reducer: persistedReducer,
-     middleware: getDefaultMiddleware =>
-       getDefaultMiddleware({
-        serializableCheck: {
-      /* ignore persistance actions */
-      ignoredActions: [
-        FLUSH,
-        REHYDRATE,
-        PAUSE,
-        PERSIST,
-        PURGE,
-        REGISTER
-      ],
-    },
-      }).concat(apiSlice.middleware),
-      devTools: true
-})
-setupListeners(store.dispatch)
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        /* ignore persistance actions */
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(apiSlice.middleware),
+  devTools: true,
+});
+setupListeners(store.dispatch);
 // console.log('tokens',JSON.parse(localStorage.getItem('persist')).token?.id_token )
 // const checkTokenInLocalStorage = () => {
 //   const token = JSON.parse(localStorage.getItem('persist')) && JSON.parse(localStorage.getItem('persist')).token?.id_token;
@@ -98,5 +87,4 @@ setupListeners(store.dispatch)
 //   }
 // });
 
-
-export const persistor = persistStore(store)
+export const persistor = persistStore(store);

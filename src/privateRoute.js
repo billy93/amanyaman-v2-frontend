@@ -1,6 +1,7 @@
+import React from 'react';
 import { Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import {isAuthenticate } from './features/auth/authSlice'
+import { isAuthenticate } from './features/auth/authSlice';
 
 const PrivateRoute = ({ path, ...props }) => {
   const isAuthenticated = useSelector(isAuthenticate);

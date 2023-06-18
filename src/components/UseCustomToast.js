@@ -4,29 +4,29 @@ import { useToast } from '@chakra-ui/react';
 const UseCustomToast = () => {
   const toast = useToast();
 
-  const showErrorToast = (message,id) => {
+  const showErrorToast = (message, id) => {
     toast({
-      id:id,
+      id: id,
       title: 'Error',
       position: 'top-right',
       description: message,
       status: 'error',
       duration: 5000,
       isClosable: true,
-      allowDuplicate: false
+      allowDuplicate: false,
     });
   };
 
-  const showSuccessToast = (message,id) => {
+  const showSuccessToast = (message, id) => {
     toast({
-      id:id,
+      id: id,
       title: 'Success',
       position: 'top-right',
       description: message,
       status: 'success',
       duration: 5000,
       isClosable: true,
-      allowDuplicate: false
+      allowDuplicate: false,
     });
   };
 

@@ -1,10 +1,10 @@
-
-import { useGetTemplateFileAgentQuery } from './travelApiSlice'
-import { Button } from '@chakra-ui/react'
+import React from 'react';
+import { useGetTemplateFileAgentQuery } from './travelApiSlice';
+import { Button } from '@chakra-ui/react';
 
 const DownloadXLSButton = (props) => {
-    const { data, error, isLoading } = useGetTemplateFileAgentQuery({
-      skip:true
+  const { data, error, isLoading } = useGetTemplateFileAgentQuery({
+    skip: true,
   });
 
   const handleDownload = () => {
@@ -42,4 +42,3 @@ const DownloadXLSButton = (props) => {
   );
 };
 export default DownloadXLSButton;
-

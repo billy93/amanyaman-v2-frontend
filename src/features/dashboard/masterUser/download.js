@@ -1,20 +1,20 @@
-import React from 'react'
-import { useGetTemplateFileQuery } from './userApiSlice'
-import { Button } from '@chakra-ui/react'
+import React from 'react';
+import { useGetTemplateFileQuery } from './userApiSlice';
+import { Button } from '@chakra-ui/react';
 
 const DownloadXLSButton = (props) => {
-    const [trigger, setTrigger] = React.useState(false)
-    const { data, error, isLoading } = useGetTemplateFileQuery({
-      skip: trigger ===false
+  const [trigger, setTrigger] = React.useState(false);
+  const { data, error, isLoading } = useGetTemplateFileQuery({
+    skip: trigger === false,
   });
   const handleClick = (e) => {
-    e.preventDefault()
-    setTrigger(!trigger)
-    handleDownload()
-  }
+    e.preventDefault();
+    setTrigger(!trigger);
+    handleDownload();
+  };
   const handleDownload = () => {
     if (data) {
-       console.log('dass', data)
+      console.log('dass', data);
       const downloadLink = document.createElement('a');
       downloadLink.href = data;
       downloadLink.download = 'templateUser.xlsx'; // Set the desired file name and extension
@@ -32,8 +32,8 @@ const DownloadXLSButton = (props) => {
         URL.revokeObjectURL(data);
       }, 1000);
     }
-  }
-  console.log('datadatadata', data)
+  };
+  console.log('datadatadata', data);
   return (
     <div>
       {isLoading ? (
@@ -48,4 +48,3 @@ const DownloadXLSButton = (props) => {
   );
 };
 export default DownloadXLSButton;
-
