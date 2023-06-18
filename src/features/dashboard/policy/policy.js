@@ -56,7 +56,7 @@ import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 
 const Styles = styled.div`
-  padding: 1rem;
+  // padding: 1rem;
 
   table {
     width: 100%;
@@ -252,7 +252,6 @@ const Tables = ({
   const selected = useSelector(listSelected);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const [showFilter, setShowFilter] = React.useState(false);
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -276,9 +275,6 @@ const Tables = ({
     }),
     []
   );
-  const showFilterBtn = () => {
-    setShowFilter(!showFilter);
-  };
 
   const clearSelect = () => {
     dispatch(setStateSelectedt([]));
@@ -308,7 +304,6 @@ const Tables = ({
     // which has only the rows for the active page
 
     // The rest of these things are super handy, too ;)
-    page,
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -542,14 +537,14 @@ const Tables = ({
           <Heading as={'h6'} size={'sm'}>
             Policies
           </Heading>
-          <Stack direction="row" spacing={4} m={'2.5'}>
+          <Stack direction="row" spacing={4}>
             <Button
-              onClick={showFilterBtn}
-              leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
+              // onClick={showFilterBtn}
+              // leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
               colorScheme="#231F20"
               variant="outline"
               size={'sm'}
-              color={showFilter ? '#065BAA' : ''}
+              // color={showFilter ? '#065BAA' : ''}
             >
               Apply Filter
             </Button>
@@ -573,7 +568,11 @@ const Tables = ({
                 </Text>
             </Box> */}
       </Box>
-      <Box bg="white" overflow={'scroll'} p="3">
+      <Box
+        bg="white"
+        overflow={'scroll'}
+        style={{ maxHeight: '400px', overflowY: 'auto' }}
+      >
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
@@ -621,10 +620,6 @@ const Tables = ({
                         )}
                       </Box>
                     </div>
-                    {/* <div>{column.canFilter ? column.render('Filter') : null} </div> */}
-                    {showFilter ? (
-                      <>{column.canFilter ? column.render('Filter') : null}</>
-                    ) : null}
                   </motion.th>
                 ))}
               </tr>
@@ -668,17 +663,6 @@ const Tables = ({
                 );
               })}
             </AnimatePresence>
-            <tr>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-                  results
-                </td>
-              )}
-            </tr>
           </tbody>
         </table>
       </Box>
@@ -907,7 +891,7 @@ const Polcies = () => {
     );
   } else if (Data) {
     content = (
-      <Box pl="2em" pr="2em" mt="3em">
+      <Box ml="2em" mr="2em" mt="5em">
         <Styles>
           <Tables
             columns={columns}

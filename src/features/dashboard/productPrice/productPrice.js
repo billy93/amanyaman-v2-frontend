@@ -40,7 +40,7 @@ import { useTable, useRowSelect } from 'react-table';
 import CustomModal from './ModalImport';
 
 const Styles = styled.div`
-  padding: 1rem;
+  // padding: 1rem;
 
   table {
     width: 100%;
@@ -256,7 +256,6 @@ const Tables = ({
     // which has only the rows for the active page
 
     // The rest of these things are super handy, too ;)
-    page,
     pageOptions,
     // Get the state from the instance
     state: { pageIndex, pageSize },
@@ -315,7 +314,13 @@ const Tables = ({
   const isRowExpanded = (rowIndex) => expandedRows.includes(rowIndex);
   return (
     <>
-      <Box bg="white" overflow={'scroll'} p="3">
+      <Box
+        bg="white"
+        overflow={'scroll'}
+        pl="2em"
+        pr="2em"
+        style={{ maxHeight: '400px', overflowY: 'auto' }}
+      >
         <table {...getTableProps()} className="my-table">
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -373,8 +378,6 @@ const Tables = ({
                       </Box>
                     </div>
                     {/* <div>{column.canFilter ? column.render('Filter') : null} </div> */}
-
-                    <>{column.canFilter ? column.render('Filter') : null}</>
                   </motion.th>
                 ))}
               </tr>
@@ -412,16 +415,6 @@ const Tables = ({
                 </React.Fragment>
               );
             })}
-            <tr>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{totalCount} results
-                </td>
-              )}
-            </tr>
           </tbody>
         </table>
       </Box>
@@ -443,6 +436,7 @@ function filterGreaterThan(rows, id, filterValue) {
 filterGreaterThan.autoRemove = (val) => typeof val !== 'number';
 
 const Polcies = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -474,6 +468,7 @@ const Polcies = () => {
     isLoading,
     isError,
     error,
+    isFetching,
     refetch,
   } = useGetProductPriceQuery({ page: page, size: 10, ...filterQuery });
   const { data: bandTypes } = useGetBandTypeQuery({ page: 0, size: 9999 });
@@ -525,7 +520,7 @@ const Polcies = () => {
           setData(systemParams.slice(startRow, endRow));
           // Your server could send back total page count.
           // For now we'll just fake it, too
-          setPageCount(Math.ceil(totalCount?.length / pageSize));
+          setPageCount(Math.ceil(totalCount / pageSize));
 
           setLoading(false);
         }
@@ -667,6 +662,22 @@ const Polcies = () => {
       clearTimeout(timer);
     };
   }, [dispatch, fetchdata]);
+  const handleNexts = () => {
+    setPage((prevPage) => prevPage + 1);
+    // setChangePage(true)
+  };
+
+  const previousPage = () => {
+    setPage((prevPage) => prevPage - 1);
+    // setChangePage(true)
+  };
+
+  const total = React.useMemo(() => {
+    return (page + 1) * 10;
+  }, [page]);
+  const handeADD = () => {
+    navigate('/master-data/create-product-price');
+  };
 
   let content;
   if (isLoading) {
@@ -685,11 +696,12 @@ const Polcies = () => {
           mt="6em"
           ml="2em"
           mr="2em"
+          mb={showFilter ? '1em' : '2em'}
         >
           <Heading as={'h6'} size={'sm'}>
             Master Product Price
           </Heading>
-          <Stack direction="row" spacing={4} m={'2.5'}>
+          <Stack direction="row" spacing={4} mr="0">
             <Button
               leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
               colorScheme="#231F20"
@@ -714,6 +726,7 @@ const Polcies = () => {
               colorScheme="#231F20"
               size={'sm'}
               color="white"
+              onClick={handeADD}
             >
               Add Proudct Price
             </Button>
@@ -728,7 +741,8 @@ const Polcies = () => {
             gap="4px"
             mr="2em"
             ml="2em"
-            mt="1em"
+            mb="1em"
+            mt={'1em'}
           >
             <Input
               variant={'custom'}
@@ -863,53 +877,72 @@ const Polcies = () => {
           ml="2em"
           mr="2em"
         >
-          <Box>
-            <Button
-              onClick={prevPages}
-              isDisabled={page === 0 ? true : false}
-              bg="white"
-              border={'none'}
-              _hover={{
-                bg: '#f0eeee',
-                borderRadius: '5px',
-                WebkitBorderRadius: '5px',
-                MozBorderRadius: '5px',
-              }}
-            >
-              <BiSkipPreviousCircle size="25px" color="black" />
-              <Text
-                as="p"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                color="#231F20"
-                pl="5px"
+          <Box
+            display={'flex'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            w="100%"
+          >
+            {loading || isFetching ? (
+              // Use our custom loading state to show a loading indicator
+              <td colSpan="10000">Loading...</td>
+            ) : (
+              <td colSpan="10000">
+                Showing {total} of {totalCount} results
+              </td>
+            )}
+            <Box>
+              <Button
+                isDisabled={page === 0 ? true : false}
+                onClick={previousPage}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
               >
-                Prev
-              </Text>
-            </Button>
-            {' | '}
-            <Button
-              onClick={nextPages}
-              bg="white"
-              border={'none'}
-              isDisabled={Math.ceil(totalCount / 10) === page + 1}
-            >
-              <BiSkipNextCircle size="25px" color="black" />
-              <Text
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                color="#231F20"
-                pl="5px"
+                <BiSkipPreviousCircle size="25px" color="black" />
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  Prev
+                </Text>
+              </Button>
+              {' | '}
+              <Button
+                isDisabled={Math.ceil(totalCount / 10) === page + 1}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+                onClick={handleNexts}
+                bg="white"
+                border={'none'}
               >
-                Next
-              </Text>
-            </Button>{' '}
-          </Box>
-          <Box>
-            Page{' '}
-            <strong>
-              {page + 1} of {Math.ceil(totalCount / 10)}
-            </strong>{' '}
+                <BiSkipNextCircle size="25px" color="black" />
+                <Text
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  Next
+                </Text>
+              </Button>{' '}
+              Page{' '}
+              <strong>
+                {page + 1} of {pageCount}
+              </strong>{' '}
+            </Box>
           </Box>
           {/* <select
           value={pageSize}

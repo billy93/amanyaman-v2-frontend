@@ -266,7 +266,6 @@ const Tables = ({
     // which has only the rows for the active page
 
     // The rest of these things are super handy, too ;)
-    page,
     pageOptions,
     setFilter,
     // Get the state from the instance
@@ -507,7 +506,11 @@ const Tables = ({
         )}
       </Box>
 
-      <Box bg="white" overflow={'scroll'} pt="3">
+      <Box
+        bg="white"
+        overflow={'scroll'}
+        style={{ maxHeight: '400px', overflowY: 'auto' }}
+      >
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -625,15 +628,6 @@ const Tables = ({
                 );
               })}
             </AnimatePresence>
-            <tr>
-              {loading ? (
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{Number(totalCount)} results
-                </td>
-              )}
-            </tr>
           </tbody>
         </table>
       </Box>
@@ -654,6 +648,7 @@ const MasterUser = () => {
     isLoading,
     isError,
     error,
+    isFetching,
     refetch,
   } = useGetProductsQuery({ page, size: 10, ...filterQuery });
 
@@ -884,6 +879,9 @@ const MasterUser = () => {
     setPage((prevPage) => prevPage - 1);
     // setChangePage(true)
   };
+  const total = React.useMemo(() => {
+    return (page + 1) * 10;
+  }, [page]);
 
   let content;
   if (isLoading) {
@@ -894,16 +892,17 @@ const MasterUser = () => {
     );
   } else if (listUserAccount) {
     content = (
-      <Box pl="2em" pr="2em" mt="5em">
+      <Box pl="2em" pr="2em" mt="6em">
         <Box
           display={'flex'}
           justifyContent={'space-between'}
           alignItems={'center'}
+          mb={showFilter ? '1.5em' : '2em'}
         >
           <Heading as={'h6'} size={'sm'}>
             Product
           </Heading>
-          <Stack direction="row" spacing={4} m={'2.5'}>
+          <Stack direction="row" spacing={4}>
             <Button
               leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
               colorScheme="#231F20"
@@ -938,7 +937,8 @@ const MasterUser = () => {
             justifyContent={'space-around'}
             alignItems={'center'}
             gap="4px"
-            mt="2em"
+            mt="1.5em"
+            mb="1.5em"
           >
             <Input
               value={searchName}
@@ -994,59 +994,72 @@ const MasterUser = () => {
             alignItems={'center'}
             mt="1em"
           >
-            <Box>
-              <Button
-                isDisabled={page === 0 ? true : false}
-                onClick={previousPage}
-                bg="white"
-                border={'none'}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-              >
-                <BiSkipPreviousCircle size="25px" color="black" />
-                <Text
-                  as="p"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
+            <Box
+              display={'flex'}
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              w="100%"
+            >
+              {loading || isFetching ? (
+                // Use our custom loading state to show a loading indicator
+                <td colSpan="10000">Loading...</td>
+              ) : (
+                <td colSpan="10000">
+                  Showing {total} of {totalCount} results
+                </td>
+              )}
+              <Box>
+                <Button
+                  isDisabled={page === 0 ? true : false}
+                  onClick={previousPage}
+                  bg="white"
+                  border={'none'}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
+                  }}
                 >
-                  Prev
-                </Text>
-              </Button>
-              {' | '}
-              <Button
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-                onClick={handleNexts}
-                bg="white"
-                border={'none'}
-                isDisabled={pageCount === page + 1}
-              >
-                <BiSkipNextCircle size="25px" color="black" />
-                <Text
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
+                  <BiSkipPreviousCircle size="25px" color="black" />
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    Prev
+                  </Text>
+                </Button>
+                {' | '}
+                <Button
+                  isDisabled={Math.ceil(totalCount / 10) === page + 1}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
+                  }}
+                  onClick={handleNexts}
+                  bg="white"
+                  border={'none'}
                 >
-                  Next
-                </Text>
-              </Button>{' '}
-            </Box>
-            <Box>
-              Page{' '}
-              <strong>
-                {page + 1} of {pageCount}
-              </strong>{' '}
+                  <BiSkipNextCircle size="25px" color="black" />
+                  <Text
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    Next
+                  </Text>
+                </Button>{' '}
+                Page{' '}
+                <strong>
+                  {page + 1} of {pageCount}
+                </strong>{' '}
+              </Box>
             </Box>
           </Box>
           {/* <Link to="/welcome">Back to Welcome</Link> */}

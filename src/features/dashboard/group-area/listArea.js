@@ -27,7 +27,7 @@ import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 
 const Styles = styled.div`
-  padding: 1rem;
+  // padding: 1rem;
 
   table {
     width: 100%;
@@ -321,7 +321,7 @@ const Tables = ({
   const isRowExpanded = (rowIndex) => expandedRows.includes(rowIndex);
   return (
     <>
-      <Box mb="2em" mt="2em">
+      <Box mb="1em">
         <Box
           display={'flex'}
           justifyContent={'space-between'}
@@ -330,7 +330,7 @@ const Tables = ({
           <Heading as={'h6'} size={'sm'}>
             List GroupArea
           </Heading>
-          <Stack direction="row" spacing={4} m={'2.5'}>
+          <Stack direction="row" spacing={4}>
             {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
                         Add System Params 
                     </Button> */}
@@ -338,7 +338,11 @@ const Tables = ({
           </Stack>
         </Box>
       </Box>
-      <Box bg="white" overflow={'scroll'} p="3">
+      <Box
+        bg="white"
+        overflow={'scroll'}
+        style={{ maxHeight: '400px', overflowY: 'auto' }}
+      >
         <table {...getTableProps()} className="my-table">
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -397,7 +401,7 @@ const Tables = ({
                     </div>
                     {/* <div>{column.canFilter ? column.render('Filter') : null} </div> */}
 
-                    <>{column.canFilter ? column.render('Filter') : null}</>
+                    {/* <>{column.canFilter ? column.render('Filter') : null}</> */}
                   </motion.th>
                 ))}
               </tr>
@@ -437,16 +441,6 @@ const Tables = ({
                 </React.Fragment>
               );
             })}
-            <tr>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{totalCount} results
-                </td>
-              )}
-            </tr>
           </tbody>
         </table>
       </Box>
@@ -473,6 +467,7 @@ const GroupArea = () => {
     isLoading,
     isError,
     error,
+    isFetching,
     refetch,
   } = useGetListAreaGroupQuery({ page, size: 10 });
 
@@ -490,7 +485,7 @@ const GroupArea = () => {
           const startRow = pageSize * pageIndex;
           const endRow = startRow + pageSize;
           setData(systemParams.slice(startRow, endRow));
-          setPageCount(Math.ceil(totalCount?.length / pageSize));
+          setPageCount(Math.ceil(totalCount / pageSize));
           setLoading(false);
         }
       }, 1000);
@@ -537,7 +532,13 @@ const GroupArea = () => {
   const prevPages = () => {
     setPage((prevPage) => prevPage - 1);
   };
+
   let content;
+
+  const total = React.useMemo(() => {
+    return (page + 1) * 10;
+  }, [page]);
+
   if (isLoading) {
     content = (
       <Center h="50vh" color="#065BAA">
@@ -547,7 +548,7 @@ const GroupArea = () => {
   } else if (systemParams) {
     // const totalCount = data;
     content = (
-      <Box pl="2em" pr="2em" mt="3em">
+      <Box mt="5.5em" ml="2em" mr="2em">
         {/* <div>{ console.log('celelng',totalCount)}</div> */}
         <Styles>
           <Tables
@@ -566,53 +567,72 @@ const GroupArea = () => {
           alignItems={'center'}
           mt="1em"
         >
-          <Box>
-            <Button
-              onClick={prevPages}
-              isDisabled={page === 0 ? true : false}
-              bg="white"
-              border={'none'}
-              _hover={{
-                bg: '#f0eeee',
-                borderRadius: '5px',
-                WebkitBorderRadius: '5px',
-                MozBorderRadius: '5px',
-              }}
-            >
-              <BiSkipPreviousCircle size="25px" color="black" />
-              <Text
-                as="p"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                color="#231F20"
-                pl="5px"
+          <Box
+            display={'flex'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            w="100%"
+          >
+            {loading || isFetching ? (
+              // Use our custom loading state to show a loading indicator
+              <td colSpan="10000">Loading...</td>
+            ) : (
+              <td colSpan="10000">
+                Showing {total} of {totalCount} results
+              </td>
+            )}
+            <Box>
+              <Button
+                isDisabled={page === 0 ? true : false}
+                onClick={prevPages}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
               >
-                Prev
-              </Text>
-            </Button>
-            {' | '}
-            <Button
-              onClick={nextPages}
-              bg="white"
-              border={'none'}
-              isDisabled={Math.ceil(totalCount / 10) === page + 1}
-            >
-              <BiSkipNextCircle size="25px" color="black" />
-              <Text
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                color="#231F20"
-                pl="5px"
+                <BiSkipPreviousCircle size="25px" color="black" />
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  Prev
+                </Text>
+              </Button>
+              {' | '}
+              <Button
+                isDisabled={Math.ceil(totalCount / 10) === page + 1}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+                onClick={nextPages}
+                bg="white"
+                border={'none'}
               >
-                Next
-              </Text>
-            </Button>{' '}
-          </Box>
-          <Box>
-            Page{' '}
-            <strong>
-              {page + 1} of {pageCount}
-            </strong>{' '}
+                <BiSkipNextCircle size="25px" color="black" />
+                <Text
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  Next
+                </Text>
+              </Button>{' '}
+              Page{' '}
+              <strong>
+                {page + 1} of {pageCount}
+              </strong>{' '}
+            </Box>
           </Box>
           {/* <select
           value={pageSize}

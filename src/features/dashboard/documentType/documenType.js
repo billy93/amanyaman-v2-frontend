@@ -36,7 +36,7 @@ import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 
 const Styles = styled.div`
-  padding: 1rem;
+  // padding: 1rem;
 
   table {
     width: 100%;
@@ -228,7 +228,6 @@ const Tables = ({
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const [showFilter, setShowFilter] = React.useState(false);
   const [pages] = React.useState(0);
   // const totalCountss = useSelector(totalCounts);
 
@@ -254,9 +253,6 @@ const Tables = ({
     }),
     []
   );
-  const showFilterBtn = () => {
-    setShowFilter(!showFilter);
-  };
 
   const onOpenModal = () => {
     onOpen();
@@ -296,7 +292,6 @@ const Tables = ({
     // which has only the rows for the active page
 
     // The rest of these things are super handy, too ;)
-    page,
     pageOptions,
 
     // Get the state from the instance
@@ -393,16 +388,16 @@ const Tables = ({
   const isRowExpanded = (rowIndex) => expandedRows.includes(rowIndex);
   return (
     <>
-      <Box mb="2em" mt="2em">
+      <Box mb="1em">
         <Box
           display={'flex'}
           justifyContent={'space-between'}
           alignItems={'center'}
         >
           <Heading as={'h6'} size={'sm'}>
-            List Country
+            List DocumentType
           </Heading>
-          <Stack direction="row" spacing={4} m={'2.5'}>
+          <Stack direction="row" spacing={4} mr="0">
             {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
                         Add Country 
                     </Button> */}
@@ -418,7 +413,7 @@ const Tables = ({
                 </Text>
             </Box> */}
       </Box>
-      <Box bg="white" overflow={'scroll'} p="3">
+      <Box bg="white" overflow={'scroll'} pt="2">
         <table {...getTableProps()} className="my-table">
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -476,9 +471,6 @@ const Tables = ({
                       </Box>
                     </div>
                     {/* <div>{column.canFilter ? column.render('Filter') : null} </div> */}
-                    {showFilter ? (
-                      <>{column.canFilter ? column.render('Filter') : null}</>
-                    ) : null}
                   </motion.th>
                 ))}
               </tr>
@@ -532,16 +524,6 @@ const Tables = ({
                 );
               })}
             </AnimatePresence>
-            <tr>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of {totalCount} results
-                </td>
-              )}
-            </tr>
           </tbody>
         </table>
       </Box>
@@ -580,12 +562,10 @@ const DocumentList = () => {
   const {
     data: { response: systemParams, totalCount } = {},
     isLoading,
-    isSuccess,
+    isFetching,
     isError,
     error,
     refetch,
-    extra,
-    accessHeaders,
   } = useGetDocumentTypesQuery({ page, size: 10 });
 
   const fetchData = React.useCallback(
@@ -610,7 +590,7 @@ const DocumentList = () => {
           setCount(totalCount);
           // Your server could send back total page count.
           // For now we'll just fake it, too
-          setPageCount(Math.ceil(totalCount?.length / pageSize));
+          setPageCount(Math.ceil(totalCount / pageSize));
           // setTotalCount(Math.ceil(totalCount?.length / pageSize))
           setPagination({
             page: pageIndex,
@@ -672,6 +652,10 @@ const DocumentList = () => {
   const prevPages = () => {
     setPage((prevPage) => prevPage - 1);
   };
+  const total = React.useMemo(() => {
+    return (page + 1) * 10;
+  }, [page]);
+
   let content;
   if (isLoading) {
     content = (
@@ -682,7 +666,7 @@ const DocumentList = () => {
   } else if (systemParams) {
     // const totalCount = data;
     content = (
-      <Box pl="2em" pr="2em" mt="3em">
+      <Box ml="2em" mr="2em" mt="6em">
         {/* <div>{ console.log('celelng',totalCount)}</div> */}
         <Styles>
           <Tables
@@ -701,53 +685,72 @@ const DocumentList = () => {
           alignItems={'center'}
           mt="1em"
         >
-          <Box>
-            <Button
-              onClick={prevPages}
-              isDisabled={page === 0 ? true : false}
-              bg="white"
-              border={'none'}
-              _hover={{
-                bg: '#f0eeee',
-                borderRadius: '5px',
-                WebkitBorderRadius: '5px',
-                MozBorderRadius: '5px',
-              }}
-            >
-              <BiSkipPreviousCircle size="25px" color="black" />
-              <Text
-                as="p"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                color="#231F20"
-                pl="5px"
+          <Box
+            display={'flex'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            w="100%"
+          >
+            {loading || isFetching ? (
+              // Use our custom loading state to show a loading indicator
+              <td colSpan="10000">Loading...</td>
+            ) : (
+              <td colSpan="10000">
+                Showing {total} of {totalCount} results
+              </td>
+            )}
+            <Box>
+              <Button
+                isDisabled={page === 0 ? true : false}
+                onClick={prevPages}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
               >
-                Prev
-              </Text>
-            </Button>
-            {' | '}
-            <Button
-              onClick={nextPages}
-              bg="white"
-              border={'none'}
-              isDisabled={Math.ceil(totalCount / 10) === page + 1}
-            >
-              <BiSkipNextCircle size="25px" color="black" />
-              <Text
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                color="#231F20"
-                pl="5px"
+                <BiSkipPreviousCircle size="25px" color="black" />
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  Prev
+                </Text>
+              </Button>
+              {' | '}
+              <Button
+                isDisabled={Math.ceil(totalCount / 10) === page + 1}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+                onClick={nextPages}
+                bg="white"
+                border={'none'}
               >
-                Next
-              </Text>
-            </Button>{' '}
-          </Box>
-          <Box>
-            Page{' '}
-            <strong>
-              {page + 1} of {Math.ceil(totalCount / 10)}
-            </strong>{' '}
+                <BiSkipNextCircle size="25px" color="black" />
+                <Text
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  Next
+                </Text>
+              </Button>{' '}
+              Page{' '}
+              <strong>
+                {page + 1} of {pageCount}
+              </strong>{' '}
+            </Box>
           </Box>
         </Box>
       </Box>

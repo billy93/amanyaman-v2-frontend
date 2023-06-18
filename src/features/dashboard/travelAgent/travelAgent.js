@@ -57,7 +57,7 @@ import CustomModal from '../../../components/customModal';
 // import 'react-table-6/react-table.css';
 
 const Styles = styled.div`
-  padding: 1rem;
+  // padding: 1rem;
 
   table {
     width: 100%;
@@ -236,7 +236,6 @@ const Tables = ({
     // which has only the rows for the active page
 
     // The rest of these things are super handy, too ;)
-    page,
 
     // Get the state from the instance
     state: { pageIndex, pageSize, selectedRowIds },
@@ -438,7 +437,11 @@ const Tables = ({
           </>
         )}
       </Box>
-      <Box bg="white" overflow={'scroll'} p="3">
+      <Box
+        bg="white"
+        overflow={'scroll'}
+        style={{ maxHeight: '400px', overflowY: 'auto' }}
+      >
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -553,17 +556,6 @@ const Tables = ({
                 </React.Fragment>
               );
             })}
-            <tr>
-              {loading || load ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-                  results
-                </td>
-              )}
-            </tr>
           </tbody>
         </table>
       </Box>
@@ -915,6 +907,10 @@ const MasterUser = () => {
     }
   }, [isFetching]);
 
+  const total = React.useMemo(() => {
+    return (page + 1) * 10;
+  }, [page]);
+
   let content;
   if (isLoading) {
     content = (
@@ -924,16 +920,17 @@ const MasterUser = () => {
     );
   } else if (listUserAccount) {
     content = (
-      <Box pl="2em" pr="2em" mt="5em">
+      <Box pl="2em" pr="2em" mt="6em">
         <Box
           display={'flex'}
           justifyContent={'space-between'}
           alignItems={'center'}
+          mb={showFilter ? '1.5em' : '2em'}
         >
           <Heading as={'h6'} size={'sm'}>
             Travel Agent
           </Heading>
-          <Stack direction="row" spacing={4} m={'2.5'}>
+          <Stack direction="row" spacing={4} mr="0">
             <Button
               leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
               colorScheme="#231F20"
@@ -972,8 +969,7 @@ const MasterUser = () => {
             alignItems={'center'}
             gap="4px"
             mr="2em"
-            ml="2em"
-            mt="2em"
+            mb="1em"
           >
             <Input
               variant={'custom'}
@@ -999,27 +995,40 @@ const MasterUser = () => {
             />
           </Box>
         )}
-        <Box bg="white" overflow={'scroll'} p="3">
-          <Styles>
-            {
-              <Tables
-                columns={columns}
-                data={data}
-                fetchData={fetchData}
-                loading={loading}
-                load={load}
-                pageCount={pageCount}
-                setPageCount={setPageCount}
-                totalCount={totalCount}
-              />
-            }
-          </Styles>
+        <Styles>
+          {
+            <Tables
+              columns={columns}
+              data={data}
+              fetchData={fetchData}
+              loading={loading}
+              load={load}
+              pageCount={pageCount}
+              setPageCount={setPageCount}
+              totalCount={totalCount}
+            />
+          }
+        </Styles>
+        <Box
+          display="flex"
+          justifyContent={'flex-end'}
+          alignItems={'center'}
+          mt="1em"
+        >
           <Box
-            display="flex"
-            justifyContent={'flex-end'}
+            display={'flex'}
+            justifyContent={'space-between'}
             alignItems={'center'}
-            mt="1em"
+            w="100%"
           >
+            {loading || isFetching ? (
+              // Use our custom loading state to show a loading indicator
+              <td colSpan="10000">Loading...</td>
+            ) : (
+              <td colSpan="10000">
+                Showing {total} of {totalCount} results
+              </td>
+            )}
             <Box>
               <Button
                 isDisabled={page === 0 ? true : false}
@@ -1067,14 +1076,13 @@ const MasterUser = () => {
                   Next
                 </Text>
               </Button>{' '}
-            </Box>
-            <Box>
               Page{' '}
               <strong>
                 {page + 1} of {pageCount}
               </strong>{' '}
             </Box>
-            {/* <select
+          </Box>
+          {/* <select
                       value={pageSize}
                       onChange={e => {
                         setPageSize(Number(e.target.value))
@@ -1086,9 +1094,8 @@ const MasterUser = () => {
                         </option>
                       ))}
                     </select> */}
-          </Box>
-          {/* <Link to="/welcome">Back to Welcome</Link> */}
         </Box>
+        {/* <Link to="/welcome">Back to Welcome</Link> */}
       </Box>
     );
   } else if (isError) {

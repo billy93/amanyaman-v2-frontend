@@ -1235,7 +1235,7 @@ const DetailMasterUser = () => {
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {detail ? detail[0]?.city[0]?.name : '-'}
+                  {detail && detail[0]?.city ? detail[0]?.city[0]?.name : '-'}
                 </Text>
               </Box>
             </Box>

@@ -58,7 +58,7 @@ import { useTable, useRowSelect, useFilters, useSortBy } from 'react-table';
 import CustomModal from './customModal';
 
 const Styles = styled.div`
-  padding: 1rem;
+  // padding: 1rem;
 
   table {
     width: 100%;
@@ -268,7 +268,6 @@ const Tables = ({
     // which has only the rows for the active page
 
     // The rest of these things are super handy, too ;)
-    page,
     pageOptions,
     // Get the state from the instance
     state: { pageIndex, pageSize, selectedRowIds },
@@ -491,7 +490,12 @@ const Tables = ({
         )}
       </Box>
 
-      <Box bg="white" overflow={'scroll'} p="3">
+      <Box
+        bg="white"
+        overflow={'scroll'}
+        mt="0.5em"
+        style={{ maxHeight: '400px', overflowY: 'auto' }}
+      >
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -604,16 +608,6 @@ const Tables = ({
                 );
               })}
             </AnimatePresence>
-            <tr>
-              {loading || isFetching ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of {totalCount} results
-                </td>
-              )}
-            </tr>
           </tbody>
         </table>
       </Box>
@@ -951,6 +945,9 @@ const MasterUser = () => {
     dispatch(setFormUser(stateUser));
     navigate('/master-data/create-user');
   };
+  const total = React.useMemo(() => {
+    return (page + 1) * 10;
+  }, [page]);
 
   let content;
   if (isLoading) {
@@ -961,11 +958,12 @@ const MasterUser = () => {
     );
   } else if (listUserAccount) {
     content = (
-      <Box pl="2em" pr="2em" mt="5em">
+      <Box pl="2em" pr="2em" mt="6em">
         <Box
           display={'flex'}
           justifyContent={'space-between'}
           alignItems={'center'}
+          mb={showFilter ? '' : '1em'}
         >
           <Heading as={'h6'} size={'sm'}>
             User
@@ -1009,7 +1007,8 @@ const MasterUser = () => {
             justifyContent={'space-around'}
             alignItems={'center'}
             gap="4px"
-            mt="1.5em"
+            mt="1em"
+            mb="1em"
           >
             <Input
               value={filterName}
@@ -1051,27 +1050,42 @@ const MasterUser = () => {
             </Select>
           </Box>
         ) : null}
-        <Box bg="white" overflow={'scroll'} p="3">
-          <Styles>
-            {
-              <Tables
-                columns={columns}
-                data={data}
-                fetchData={fetchData}
-                loading={loading}
-                isFetching={isFetching}
-                pageCount={pageCount}
-                setPageCount={setPageCount}
-                totalCount={totalCount}
-              />
-            }
-          </Styles>
+
+        <Styles>
+          {
+            <Tables
+              columns={columns}
+              data={data}
+              fetchData={fetchData}
+              loading={loading}
+              isFetching={isFetching}
+              pageCount={pageCount}
+              setPageCount={setPageCount}
+              totalCount={totalCount}
+            />
+          }
+        </Styles>
+        <Box
+          display="flex"
+          justifyContent={'flex-end'}
+          alignItems={'center'}
+          mt="1em"
+          w="100%"
+        >
           <Box
-            display="flex"
-            justifyContent={'flex-end'}
+            display={'flex'}
+            justifyContent={'space-between'}
             alignItems={'center'}
-            mt="1em"
+            w="100%"
           >
+            {loading || isFetching ? (
+              // Use our custom loading state to show a loading indicator
+              <td colSpan="10000">Loading...</td>
+            ) : (
+              <td colSpan="10000">
+                Showing {total} of {totalCount} results
+              </td>
+            )}
             <Box>
               <Button
                 isDisabled={page === 0 ? true : false}
@@ -1119,14 +1133,13 @@ const MasterUser = () => {
                   Next
                 </Text>
               </Button>{' '}
-            </Box>
-            <Box>
               Page{' '}
               <strong>
                 {page + 1} of {pageCount}
               </strong>{' '}
             </Box>
-            {/* <select
+          </Box>
+          {/* <select
                       value={pageSize}
                       onChange={e => {
                         setPageSize(Number(e.target.value))
@@ -1138,9 +1151,8 @@ const MasterUser = () => {
                         </option>
                       ))}
                     </select> */}
-          </Box>
-          {/* <Link to="/welcome">Back to Welcome</Link> */}
         </Box>
+        {/* <Link to="/welcome">Back to Welcome</Link> */}
       </Box>
     );
   } else if (isError) {
