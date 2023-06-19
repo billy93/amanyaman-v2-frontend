@@ -25,7 +25,8 @@ const CustomModal = ({ showModalButtonText, modalHeader, modalBody }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const dispatch = useDispatch();
-  const [setToastId] = React.useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [toastId, setToastId] = React.useState(null);
   const [filesUpload, setFilesUpload] = React.useState(null);
   const [
     uploadFilePrice,
