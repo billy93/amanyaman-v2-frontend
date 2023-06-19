@@ -259,18 +259,13 @@ const DetailMasterUser = () => {
   } = useGetUsersByIdQuery(id, { refetchOnMountOrArgChange: true });
   const data = React.useMemo(() => policyList?.listPolicy);
   const navigate = useNavigate();
-  React.useEffect(
-    () => {
-      // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
-      if (user) {
-        const data = [user];
-        dispatch(setDetailUser(data));
-      }
-    },
-    user,
-    dispatch,
-    id
-  );
+  React.useEffect(() => {
+    // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
+    if (user) {
+      const data = [user];
+      dispatch(setDetailUser(data));
+    }
+  }, [user, dispatch, id]);
 
   const handleEditUser = (e) => {
     e.preventDefault();
@@ -368,7 +363,6 @@ const DetailMasterUser = () => {
                     style={{ pointerEvents: 'none' }}
                   >
                     <Text as={'b'} fontSize={'sm'} color="#231F20">
-                      {'Mr.'}
                       {detail !== null ? detail[0].firstName : null}{' '}
                       {detail !== null ? detail && detail[0].lastName : null}
                     </Text>
