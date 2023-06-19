@@ -368,7 +368,6 @@ const DetailMasterUser = () => {
                     style={{ pointerEvents: 'none' }}
                   >
                     <Text as={'b'} fontSize={'sm'} color="#231F20">
-                      {'Mr.'}
                       {detail !== null ? detail[0].firstName : null}{' '}
                       {detail !== null ? detail && detail[0].lastName : null}
                     </Text>
