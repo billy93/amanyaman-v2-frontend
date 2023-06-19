@@ -78,6 +78,20 @@ export const getAgentList = apiSlice.injectEndpoints({
         };
       },
     }),
+    getListAgentDetail: builder.query({
+      query: (datas) => {
+        const { id } = datas;
+        return {
+          url: `/app/travel-agents/products/${id}?page=0&size=9999`,
+        };
+      },
+      transformResponse: (response, meta) => {
+        return {
+          response,
+          totalCount: Number(meta.response.headers.get('X-Total-Count')),
+        };
+      },
+    }),
     createAgent: builder.mutation({
       query: (users) => {
         return {
@@ -145,6 +159,7 @@ export const getAgentList = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetListAgentDetailQuery,
   useGetAgentByIdQuery,
   useGetTravelAgentQuery,
   useCreateAgentMutation,

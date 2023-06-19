@@ -377,7 +377,9 @@ const Tables = ({
                         )}
                       </Box>
                     </div>
-                    {/* <div>{column.canFilter ? column.render('Filter') : null} </div> */}
+                    <div>
+                      {/* {column.canFilter ? column.render('Filter') : null}{' '} */}
+                    </div>
                   </motion.th>
                 ))}
               </tr>
@@ -547,7 +549,7 @@ const Polcies = () => {
           <Link
             color="#065BAA"
             style={{ textDecoration: 'underline' }}
-            to={`/product-detail/${row.original.id}`}
+            to={`/master-data/detail-product-price/${row.original.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.id}

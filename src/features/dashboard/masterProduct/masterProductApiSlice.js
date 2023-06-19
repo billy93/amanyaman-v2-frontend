@@ -46,7 +46,33 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    getProductById: builder.query({
+      query: (id) => {
+        // const { page, size } = datas;
+        return {
+          url: `/app/products/${id}`,
+        };
+      },
+    }),
+    getProductTravelAgent: builder.query({
+      query: (id) => {
+        // const { page, size } = datas;
+        return {
+          url: `/app/products/travel-agents/${id}`,
+        };
+      },
+      transformResponse: (response, meta) => {
+        return {
+          response,
+          totalCount: Number(meta.response.headers.get('X-Total-Count')),
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetProductsQuery } = policyApiSlice;
+export const {
+  useGetProductTravelAgentQuery,
+  useGetProductsQuery,
+  useGetProductByIdQuery,
+} = policyApiSlice;

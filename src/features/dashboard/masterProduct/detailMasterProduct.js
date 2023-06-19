@@ -1,10 +1,10 @@
 /* eslint-disable indent */
 import React from 'react';
 import {
-  useGetAgentByIdQuery,
-  useGetListAgentDetailQuery,
-} from './travelApiSlice';
-import { NavLink, useParams, Link, useNavigate } from 'react-router-dom';
+  useGetProductByIdQuery,
+  useGetProductTravelAgentQuery,
+} from './masterProductApiSlice';
+import { NavLink, useParams, useNavigate, Link } from 'react-router-dom';
 import {
   useTable,
   useRowSelect,
@@ -14,32 +14,26 @@ import {
 } from 'react-table';
 import styled from 'styled-components';
 import matchSorter from 'match-sorter';
-import DeleteBtn from './deleteAgent';
+// import DeleteBtn from './deleteAgent';
 import {
   Box,
   Heading,
   Text,
   Center,
-  Button,
+  //   Button,
   IconButton,
-  Input,
 } from '@chakra-ui/react';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+// import { useSelector } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import 'react-calendar/dist/Calendar.css';
-import {
-  listDetailAgent,
-  setDetailAgent,
-  setFormAgent,
-  setProductAgentSelection,
-} from './travelAgentSlice';
+
 import { BsFillPencilFill } from 'react-icons/bs';
-import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
+
 const Styles = styled.div`
   padding-top: 1rem;
 
@@ -72,18 +66,6 @@ const Styles = styled.div`
     padding: 0.5rem;
   }
 `;
-
-function usePrevious(value) {
-  // The ref object is a generic container whose current property is mutable ...
-  // ... and can hold any value, similar to an instance property on a class
-  const ref = React.useRef();
-  // Store current value in ref
-  React.useEffect(() => {
-    ref.current = value;
-  }, [value]); // Only re-run if value changes
-  // Return previous value (happens before update in useEffect above)
-  return ref.current;
-}
 
 // eslint-disable-next-line react/display-name
 const IndeterminateCheckbox = React.forwardRef(
@@ -131,7 +113,6 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
   return matchSorter(rows, filterValue, { keys: [(row) => row.values[id]] });
 }
 
-// Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 const Tables = ({
@@ -139,17 +120,11 @@ const Tables = ({
   data,
   fetchData,
   loading,
+  setPageCount,
+  isFetching,
   pageCount: controlledPageCount,
+  totalCount,
 }) => {
-  const dispatch = useDispatch();
-  const [filterProductCode, setFilterProductCode] = React.useState('');
-  const [filterPremiumPrice, setFilterPremiumPrice] = React.useState('');
-  const [filterDiscont1, setFilterDiscount1] = React.useState('');
-  const [filterDiscont2, setFilterDiscount2] = React.useState('');
-  const [filterDiscont3, setFilterDiscount3] = React.useState('');
-  const [filterTotalComm, setFilterTotalComm] = React.useState('');
-  const [filterNet, setFilterNet] = React.useState('');
-
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -172,6 +147,7 @@ const Tables = ({
     }),
     []
   );
+
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -179,18 +155,25 @@ const Tables = ({
     headerGroups,
     rows,
     prepareRow,
-    selectedFlatRows,
     toggleAllRowsSelected,
+    // toggleRowSelected,
     // which has only the rows for the active page
-    setFilter,
-    // Get the state from the instance
-    state: { pageIndex, pageSize, selectedRowIds },
+
+    // The rest of these things are super handy, too ;)
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    state: { pageIndex, pageSize },
   } = useTable(
     {
       columns,
       data,
       defaultColumn,
-      initialState: { pageIndex: 0 }, // Pass our hoisted table state
+      initialState: { pageIndex: 0, pageSize: 10 }, // Pass our hoisted table state
       manualPagination: true, // Tell the usePagination
       pageCount: controlledPageCount,
       filterTypes,
@@ -239,28 +222,20 @@ const Tables = ({
       ]);
     }
   );
-  const prev = usePrevious(selectedRowIds);
+
   React.useEffect(() => {
     toggleAllRowsSelected();
-  }, []);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getValues = (data) => {
-    let original = data.map((item) => item.original);
-    dispatch(setProductAgentSelection(original));
-  };
-
-  React.useEffect(() => {
-    if (JSON.stringify(prev) !== JSON.stringify(selectedRowIds)) {
-      getValues(selectedFlatRows);
-    }
-  }, [prev, selectedRowIds, getValues, selectedFlatRows]);
+  }, [toggleAllRowsSelected]);
 
   // Render the UI for your table
 
   React.useEffect(() => {
-    fetchData({ pageIndex, pageSize });
-  }, [fetchData, pageIndex, pageSize]);
+    fetchData({ pageIndex, pageSize, pageOptions });
+    // setPageCount({pageIndex, pageSize})
+  }, [fetchData, pageIndex, pageSize, pageOptions]);
+
+  console.log('test', pageIndex);
+
   const spring = React.useMemo(
     () => ({
       type: 'spring',
@@ -269,143 +244,14 @@ const Tables = ({
     }),
     []
   );
-  const handleFilterByProductCode = (e) => {
-    const value = e.target.value || undefined;
-    setFilter('productMapping.productCode', value);
-    setFilterProductCode(value);
-  };
-  const handleFilterByPremiumPrice = (e) => {
-    const value = e.target.value || undefined;
-    setFilter('premiumPrice', value);
-    setFilterPremiumPrice(value);
-  };
-  const handleFilterByDisc1 = (e) => {
-    const value = e.target.value || undefined;
-    setFilter('commisionLv1', value);
-    setFilterDiscount1(value);
-  };
-  const handleFilterByDisc2 = (e) => {
-    const value = e.target.value || undefined;
-    setFilter('commisionLv2', value);
-    setFilterDiscount2(value);
-  };
-  const handleFilterByDisc3 = (e) => {
-    const value = e.target.value || undefined;
-    setFilter('commisionLv3', value);
-    setFilterDiscount3(value);
-  };
-  const handleFilterByTotComm = (e) => {
-    const value = e.target.value || undefined;
-    setFilter('ajiPrice', value);
-    setFilterTotalComm(value);
-  };
-  const handleFilterByNetoAgent = (e) => {
-    const value = e.target.value || undefined;
-    setFilter('afterCommisionPrice', value);
-    setFilterNet(value);
-  };
-
-  // console.log('filters', filters)
   return (
     <>
       <Box
-        w={{ base: '100%', md: '90%' }}
-        display={'flex'}
-        justifyContent={'space-around'}
-        alignItems={'center'}
-        gap="4px"
+        bg="white"
+        overflow={'scroll'}
+        mt="0.5em"
+        style={{ maxHeight: '400px', overflowY: 'auto' }}
       >
-        <Input
-          value={filterProductCode}
-          onChange={handleFilterByProductCode}
-          placeholder={'Search by product code'}
-          bg="#ebebeb"
-          borderRadius={'5px'}
-          _placeholder={{
-            color: 'black.500', // Replace with your desired color
-            fontStyle: 'italic', // Replace with your desired font style
-          }}
-        />
-        <Input
-          value={filterPremiumPrice}
-          onChange={handleFilterByPremiumPrice}
-          placeholder={'Search by premium price'}
-          bg="#ebebeb"
-          borderRadius={'5px'}
-          _placeholder={{
-            color: 'black.500', // Replace with your desired color
-            fontStyle: 'italic', // Replace with your desired font style
-          }}
-        />
-        <Input
-          value={filterDiscont1}
-          onChange={handleFilterByDisc1}
-          placeholder={'Search by discount lv 1'}
-          bg="#ebebeb"
-          borderRadius={'5px'}
-          _placeholder={{
-            color: 'black.500', // Replace with your desired color
-            fontStyle: 'italic', // Replace with your desired font style
-          }}
-        />
-        <Input
-          value={filterDiscont2}
-          onChange={handleFilterByDisc2}
-          placeholder={'Search by discount lv 2'}
-          bg="#ebebeb"
-          borderRadius={'5px'}
-          _placeholder={{
-            color: 'black.500', // Replace with your desired color
-            fontStyle: 'italic', // Replace with your desired font style
-          }}
-        />
-        <Input
-          value={filterDiscont2}
-          onChange={handleFilterByDisc2}
-          placeholder={'Search by discount lv 2'}
-          bg="#ebebeb"
-          borderRadius={'5px'}
-          _placeholder={{
-            color: 'black.500', // Replace with your desired color
-            fontStyle: 'italic', // Replace with your desired font style
-          }}
-        />
-        <Input
-          value={filterDiscont3}
-          onChange={handleFilterByDisc3}
-          placeholder={'Search by discount lv 3'}
-          bg="#ebebeb"
-          borderRadius={'5px'}
-          _placeholder={{
-            color: 'black.500', // Replace with your desired color
-            fontStyle: 'italic', // Replace with your desired font style
-          }}
-        />
-        <Input
-          value={filterTotalComm}
-          onChange={handleFilterByTotComm}
-          placeholder={'Search by total commision'}
-          bg="#ebebeb"
-          borderRadius={'5px'}
-          _placeholder={{
-            color: 'black.500', // Replace with your desired color
-            fontStyle: 'italic', // Replace with your desired font style
-          }}
-        />
-        <Input
-          value={filterNet}
-          onChange={handleFilterByNetoAgent}
-          placeholder={'Search by net to agenr'}
-          bg="#ebebeb"
-          borderRadius={'5px'}
-          _placeholder={{
-            color: 'black.500', // Replace with your desired color
-            fontStyle: 'italic', // Replace with your desired font style
-          }}
-        />
-      </Box>
-
-      <Box bg="white" overflow={'scroll'} p="3">
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -493,22 +339,22 @@ const Tables = ({
                       layoutTransition: spring,
                       exit: { opacity: 0, maxHeight: 0 },
                     })}
-                    style={{
-                      // backgroundColor: 'red',
-                      fontWeight: 'normal',
-                      textAlign: 'left',
-                      padding: '10px',
-                      fontFamily: 'Mulish',
-                      fontSize: '14px',
-                    }}
                   >
                     {row.cells.map((cell, i) => {
                       return (
                         <motion.td
-                          key={cell.id}
+                          key={i}
                           {...cell.getCellProps({
                             layoutTransition: spring,
                           })}
+                          style={{
+                            // backgroundColor: 'red',
+                            fontWeight: 'normal',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px',
+                          }}
                         >
                           {cell.render('Cell')}
                         </motion.td>
@@ -518,95 +364,66 @@ const Tables = ({
                 );
               })}
             </AnimatePresence>
-            {/* <tr>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-                  results
-                </td>
-              )}
-            </tr> */}
           </tbody>
         </table>
+        <Box
+          display={'flex'}
+          justifyContent={'flex-end'}
+          mt="1em"
+          mb="1em"
+          mr="10px"
+        >
+          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+            {'<<'}
+          </button>
+          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+            {'<'}
+          </button>
+          <button onClick={() => nextPage()} disabled={!canNextPage}>
+            {'>'}
+          </button>
+          <button
+            onClick={() => gotoPage(pageCount - 1)}
+            disabled={!canNextPage}
+          >
+            {'>>'}
+          </button>
+          <span>
+            Page{' '}
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}
+            </strong>{' '}
+          </span>
+          <span></span>
+        </Box>
       </Box>
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedRowIds: selectedRowIds,
-              "selectedFlatRows[].original": selectedFlatRows.map(
-                (d) => d.original
-              )
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
     </>
   );
 };
 
 const DetailMasterUser = () => {
   // const currentstep = useSelector()
-  const dispatch = useDispatch();
-  const detail = useSelector(listDetailAgent);
-  const [page, setPage] = React.useState(0);
   // const [deleteAgent] = useDeleteAgentMutation({
   //   skip: false,
   // });
   const { id } = useParams();
+  const [loading, setLoading] = React.useState(false);
+  const [data, setData] = React.useState([]);
+  const [pageCount, setPageCount] = React.useState(0);
   const {
     data: user,
     isLoading,
     isError,
     error,
-  } = useGetAgentByIdQuery(id, { refetchOnMountOrArgChange: true });
-  const {
-    data: { response: listTravell, totalCount } = {},
-    isLoading: loaded,
-    isFetching,
-    refetch,
-  } = useGetListAgentDetailQuery({ id }, { refetchOnMountOrArgChange: true });
+  } = useGetProductByIdQuery(id, { refetchOnMountOrArgChange: true });
+  const { data: { response: listTravell, totalCount } = {}, refetch } =
+    useGetProductTravelAgentQuery(id, { refetchOnMountOrArgChange: true });
   // const toast = useToast();
   const navigate = useNavigate();
-  const [data, setData] = React.useState([]);
-  const [pageCount, setPageCount] = React.useState(0);
-
-  React.useEffect(() => {
-    // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
-    if (user) {
-      // const data = [user]
-      const datauser = {
-        ...user,
-        allowCreditPayment:
-          user !== null && user?.allowCreditPayment === false
-            ? ''
-            : 'allowCreditPayment',
-        city:
-          user !== null
-            ? [
-                {
-                  ...user?.city,
-                  label: detail?.city?.name,
-                  value: detail?.city?.id,
-                },
-              ]
-            : null,
-      };
-      //  dispatch(setEditAgent(datauser))
-      dispatch(setDetailAgent([datauser]));
-    }
-  }, [user, dispatch, id]);
-
-  console.log('users', listTravell);
   const fetchIdRef = React.useRef(0);
   // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
   const fetchData = React.useCallback(
-    ({ pageSize, pageIndex }) => {
+    ({ pageSize, pageIndex, pageOptions }) => {
       // This will get called when the table needs new data
       // You could fetch your data from literally anywhere,
       // even a server. But for this example, we'll just fake it.
@@ -615,8 +432,8 @@ const DetailMasterUser = () => {
       const fetchId = ++fetchIdRef.current;
 
       // Set the loading state
-
       // We'll even set a delay to simulate a server here
+      setLoading(true);
       setTimeout(() => {
         // Only update the data if this is the latest fetch
         if (fetchId === fetchIdRef.current) {
@@ -626,97 +443,45 @@ const DetailMasterUser = () => {
           // Your server could send back total page count.
           // For now we'll just fake it, too
           setPageCount(Math.ceil(totalCount / pageSize));
+          // setPageCount(100)
+          setLoading(false);
         }
       }, 1000);
     },
     [listTravell, totalCount]
   );
-
-  // React.useMemo(() => {
-  //     const dataUserDetail = user?.filter((user) => user.id === parseInt(id))
-  //   if (dataUserDetail) {
-  //       dispatch(setDetailAgent([...dataUserDetail]))
-  //     }
-  // }, user, dispatch, id)
-
   const handleEditUser = (e) => {
     e.preventDefault();
-    const datas = {
-      travelAgentName: detail !== null ? detail[0]?.travelAgentName : null,
-      travelAgentEmail: detail !== null ? detail[0]?.travelAgentEmail : null,
-      travelAgentAddress:
-        detail !== null ? detail[0]?.travelAgentAddress : null,
-      travelAgentPhone: detail !== null ? detail[0]?.travelAgentPhone : null,
-      custcode: detail !== null ? detail[0]?.custcode : null,
-      custid: detail !== null ? detail[0]?.custid : null,
-      cgroup: detail !== null ? detail[0]?.cgroup : null,
-      promoInvoiceRecipents:
-        detail !== null ? detail[0]?.promoInvoiceRecipents : null,
-      allowCreditPayment:
-        detail !== null ? detail[0]?.allowCreditPayment : null,
-      city: detail !== null ? detail[0]?.city : null,
-    };
-    dispatch(setFormAgent(datas));
-    // dispatch(setDetailAgent([{...datas}]))
-    navigate(`/master-data/edit-agent/${id}`);
+    navigate(`/master-data/edit-master-product/${id}`);
   };
 
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Product',
-        accessor: 'productMapping.productCode',
+        Header: 'TravelAgent',
+        accessor: 'travelAgentName',
         Cell: ({ row }) => (
           <Link
             color="#065BAA"
             style={{ textDecoration: 'underline', color: '#065BAA' }}
-            to={`/policies/policy-detail/${row.original.productMapping.productCode}`}
+            to={`/policies/policy-detail/${row.original.travelAgentName}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.productMapping.productCode}
+            {row.original.travelAgentName}
           </Link>
         ),
       },
       {
-        Header: 'Premium Price',
-        accessor: 'premiumPrice',
+        Header: 'Cust Code',
+        accessor: 'custcode',
       },
       {
-        Header: 'Discount Lv1 (IDR)',
-        accessor: 'commisionLv1',
-      },
-      {
-        Header: 'Discount Lv2 (IDR)',
-        accessor: 'commisionLv2',
-      },
-      {
-        Header: 'Discount Lv3 (IDR)',
-        accessor: 'commisionLv3',
-      },
-      {
-        Header: 'Total Commision',
-        accessor: 'ajiPrice',
-      },
-      {
-        Header: 'Net to Agent',
-        accessor: 'afterCommisionPrice',
+        Header: 'CGroup',
+        accessor: 'cgroup',
       },
     ],
     []
   );
-  const handleNexts = () => {
-    setPage((prevPage) => prevPage + 1);
-    // setChangePage(true)
-  };
-
-  const previousPage = () => {
-    setPage((prevPage) => prevPage - 1);
-    // setChangePage(true)
-  };
-
-  const total = React.useMemo(() => {
-    return (page + 1) * 10;
-  }, [page]);
 
   React.useEffect(() => {
     refetch({ id });
@@ -729,7 +494,7 @@ const DetailMasterUser = () => {
         <PulseLoader color={'#065BAA'} />
       </Center>
     );
-  } else if (listTravell) {
+  } else if (user || listTravell) {
     content = (
       <Box pl="2em" pr="2em">
         <Box
@@ -774,7 +539,7 @@ const DetailMasterUser = () => {
                     style={{ pointerEvents: 'none' }}
                   >
                     <Text as={'b'} fontSize={'sm'} color="#231F20">
-                      {detail !== null ? detail[0]?.id : null}
+                      {user !== null ? user?.id : null}
                     </Text>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
@@ -789,11 +554,11 @@ const DetailMasterUser = () => {
                 onClick={handleEditUser}
               />
               {/* <IconButton _hover={{color:"white"}} icon={ <CiTrash color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleDeletAgent}/> */}
-              <DeleteBtn
+              {/* <DeleteBtn
                 showModalButtonText="Delete"
                 modalHeader="Delete Agent"
                 modalBody="Confirm delete Agent ?"
-              />
+              /> */}
             </Box>
           </Box>
         </Box>
@@ -819,7 +584,7 @@ const DetailMasterUser = () => {
                   style={{ fontSize: '17px' }}
                   color={'#231F20'}
                 >
-                  {detail !== null ? detail[0]?.id : null}{' '}
+                  {user !== null ? user?.id : null}{' '}
                 </Heading>
               </Box>
               <Box
@@ -842,7 +607,7 @@ const DetailMasterUser = () => {
                     style={{ fontSize: '14px' }}
                     color={'#231F20'}
                   >
-                    {'Travel Agent Name'}
+                    {'Product Name'}
                   </Text>
                   <Text
                     as="p"
@@ -850,7 +615,7 @@ const DetailMasterUser = () => {
                     style={{ fontSize: '14px' }}
                     fontWeight={'400'}
                   >
-                    {detail !== null ? detail[0]?.travelAgentName : null}
+                    {user !== null ? user?.productName : null}
                   </Text>
                 </Box>
                 <Box
@@ -868,7 +633,7 @@ const DetailMasterUser = () => {
                     style={{ fontSize: '14px' }}
                     color={'#231F20'}
                   >
-                    {'Travel Agent Phone'}
+                    {'Plan Type'}
                   </Text>
                   <Text
                     as="p"
@@ -877,7 +642,7 @@ const DetailMasterUser = () => {
                     color={'#231F20'}
                     fontWeight={'normal'}
                   >
-                    {detail !== null ? detail[0]?.travelAgentPhone : null}
+                    {user !== null ? user?.planType?.name : null}
                   </Text>
                 </Box>
                 <Box
@@ -895,7 +660,7 @@ const DetailMasterUser = () => {
                     style={{ fontSize: '14px' }}
                     color={'#231F20'}
                   >
-                    {'Trael Agent Email'}
+                    {'Product Detail Code'}
                   </Text>
                   <Text
                     as="p"
@@ -904,9 +669,61 @@ const DetailMasterUser = () => {
                     color={'#231F20'}
                     fontWeight={'normal'}
                   >
-                    {detail !== null
-                      ? detail && detail[0]?.travelAgentEmail
-                      : null}
+                    {user !== null ? user && user?.productCode : null}
+                  </Text>
+                </Box>
+                <Box
+                  pt="10px"
+                  pb="10px"
+                  borderBottom={'1px solid #ebebeb'}
+                  display={'flex'}
+                  flexDirection={'column'}
+                  alignItems={'flex-start'}
+                  justifyContent={'center'}
+                >
+                  <Text
+                    as="b"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                    color={'#231F20'}
+                  >
+                    {'Currency'}
+                  </Text>
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                    color={'#231F20'}
+                    fontWeight={'normal'}
+                  >
+                    {user !== null ? user && user?.currId : null}
+                  </Text>
+                </Box>
+                <Box
+                  pt="10px"
+                  pb="10px"
+                  borderBottom={'1px solid #ebebeb'}
+                  display={'flex'}
+                  flexDirection={'column'}
+                  alignItems={'flex-start'}
+                  justifyContent={'center'}
+                >
+                  <Text
+                    as="b"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                    color={'#231F20'}
+                  >
+                    {'Additional Week'}
+                  </Text>
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                    color={'#231F20'}
+                    fontWeight={'normal'}
+                  >
+                    {user !== null ? user && user?.productAdditionalWeek : null}
                   </Text>
                 </Box>
               </Box>
@@ -926,7 +743,7 @@ const DetailMasterUser = () => {
                 style={{ fontSize: '14px' }}
                 color={'#231F20'}
               >
-                Travel Agent Detail
+                Product Detail
               </Text>
             </Box>
             <Box
@@ -945,7 +762,7 @@ const DetailMasterUser = () => {
                   style={{ fontSize: '14px' }}
                   color={'#231F20'}
                 >
-                  Travel Agent Address
+                  Description
                 </Text>
               </Box>
               <Box w={{ md: '70%' }}>
@@ -955,7 +772,7 @@ const DetailMasterUser = () => {
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {detail ? detail[0]?.travelAgentAddress : '-'}
+                  {user ? user?.productDescription : '-'}
                 </Text>
               </Box>
             </Box>
@@ -975,7 +792,7 @@ const DetailMasterUser = () => {
                   style={{ fontSize: '14px' }}
                   color={'#231F20'}
                 >
-                  Allow Credit Payments
+                  Personal Accident Cover
                 </Text>
               </Box>
               <Box w={{ md: '70%' }}>
@@ -985,10 +802,158 @@ const DetailMasterUser = () => {
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {detail
-                    ? detail[0]?.allowCreditPayment
-                      ? 'True'
-                      : 'False'
+                  {user ? user?.productPersonalAccidentCover : '-'}
+                </Text>
+              </Box>
+            </Box>
+            <Box
+              w={{ base: '100%' }}
+              display="flex"
+              justifyContent="flex-start"
+              alignItems="center"
+              p={{ base: '4px', md: '10px' }}
+              borderBottom={'1px solid #ebebeb'}
+            >
+              <Box w={{ md: '30%' }}>
+                <Text
+                  as="b"
+                  size="sm"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                  color={'#231F20'}
+                >
+                  Medical Cover
+                </Text>
+              </Box>
+              <Box w={{ md: '70%' }}>
+                <Text
+                  as="p"
+                  size="sm"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                >
+                  {user ? user?.productMedicalCover : '-'}
+                </Text>
+              </Box>
+            </Box>
+            <Box
+              w={{ base: '100%' }}
+              display="flex"
+              justifyContent="flex-start"
+              alignItems="center"
+              p={{ base: '4px', md: '10px' }}
+              borderBottom={'1px solid #ebebeb'}
+            >
+              <Box w={{ md: '30%' }}>
+                <Text
+                  as="b"
+                  size="sm"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                  color={'#231F20'}
+                >
+                  Travel Cover
+                </Text>
+              </Box>
+              <Box w={{ md: '70%' }}>
+                <Text
+                  as="p"
+                  size="sm"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                >
+                  {user ? user?.productTravelCover : '-'}
+                </Text>
+              </Box>
+            </Box>
+            <Box
+              w={{ base: '100%' }}
+              display="flex"
+              justifyContent="flex-start"
+              alignItems="center"
+              p={{ base: '4px', md: '10px' }}
+              borderBottom={'1px solid #ebebeb'}
+            >
+              <Box w={{ md: '30%' }}>
+                <Text
+                  as="b"
+                  size="sm"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                  color={'#231F20'}
+                >
+                  Product Type
+                </Text>
+              </Box>
+              <Box w={{ md: '70%' }}>
+                <Text
+                  as="p"
+                  size="sm"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                >
+                  {user ? user?.travellerType.name : '-'}
+                </Text>
+              </Box>
+            </Box>
+            <Box
+              w={{ base: '100%' }}
+              display="flex"
+              justifyContent="flex-start"
+              alignItems="center"
+              p={{ base: '4px', md: '10px' }}
+              borderBottom={'1px solid #ebebeb'}
+            >
+              <Box w={{ md: '30%' }}>
+                <Text
+                  as="b"
+                  size="sm"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                  color={'#231F20'}
+                >
+                  Area
+                </Text>
+              </Box>
+              <Box w={{ md: '70%' }}>
+                <Text
+                  as="p"
+                  size="sm"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                >
+                  {user ? user?.areaGroup?.areaGroupName : '-'}
+                </Text>
+              </Box>
+            </Box>
+            <Box
+              w={{ base: '100%' }}
+              display="flex"
+              justifyContent="flex-start"
+              alignItems="center"
+              p={{ base: '4px', md: '10px' }}
+              borderBottom={'1px solid #ebebeb'}
+            >
+              <Box w={{ md: '30%' }}>
+                <Text
+                  as="b"
+                  size="sm"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                  color={'#231F20'}
+                >
+                  Travel Duration
+                </Text>
+              </Box>
+              <Box w={{ md: '70%' }}>
+                <Text
+                  as="p"
+                  size="sm"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                >
+                  {user && user?.bandType
+                    ? user?.bandType?.travelDurationName
                     : '-'}
                 </Text>
               </Box>
@@ -1009,7 +974,7 @@ const DetailMasterUser = () => {
                   style={{ fontSize: '14px' }}
                   color={'#231F20'}
                 >
-                  Cust Id
+                  Product Wording
                 </Text>
               </Box>
               <Box w={{ md: '70%' }}>
@@ -1019,127 +984,7 @@ const DetailMasterUser = () => {
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {detail ? detail[0]?.custid : '-'}
-                </Text>
-              </Box>
-            </Box>
-            <Box
-              w={{ base: '100%' }}
-              display="flex"
-              justifyContent="flex-start"
-              alignItems="center"
-              p={{ base: '4px', md: '10px' }}
-              borderBottom={'1px solid #ebebeb'}
-            >
-              <Box w={{ md: '30%' }}>
-                <Text
-                  as="b"
-                  size="sm"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                  color={'#231F20'}
-                >
-                  Cust Code
-                </Text>
-              </Box>
-              <Box w={{ md: '70%' }}>
-                <Text
-                  as="p"
-                  size="sm"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                >
-                  {detail ? detail[0]?.custcode : '-'}
-                </Text>
-              </Box>
-            </Box>
-            <Box
-              w={{ base: '100%' }}
-              display="flex"
-              justifyContent="flex-start"
-              alignItems="center"
-              p={{ base: '4px', md: '10px' }}
-              borderBottom={'1px solid #ebebeb'}
-            >
-              <Box w={{ md: '30%' }}>
-                <Text
-                  as="b"
-                  size="sm"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                  color={'#231F20'}
-                >
-                  Cgroup
-                </Text>
-              </Box>
-              <Box w={{ md: '70%' }}>
-                <Text
-                  as="p"
-                  size="sm"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                >
-                  {detail ? detail[0]?.cgroup : '-'}
-                </Text>
-              </Box>
-            </Box>
-            <Box
-              w={{ base: '100%' }}
-              display="flex"
-              justifyContent="flex-start"
-              alignItems="center"
-              p={{ base: '4px', md: '10px' }}
-              borderBottom={'1px solid #ebebeb'}
-            >
-              <Box w={{ md: '30%' }}>
-                <Text
-                  as="b"
-                  size="sm"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                  color={'#231F20'}
-                >
-                  Proforma Invoice Recipients
-                </Text>
-              </Box>
-              <Box w={{ md: '70%' }}>
-                <Text
-                  as="p"
-                  size="sm"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                >
-                  {detail ? detail[0]?.proformaInvoiceRecipients : '-'}
-                </Text>
-              </Box>
-            </Box>
-            <Box
-              w={{ base: '100%' }}
-              display="flex"
-              justifyContent="flex-start"
-              alignItems="center"
-              p={{ base: '4px', md: '10px' }}
-              borderBottom={'1px solid #ebebeb'}
-            >
-              <Box w={{ md: '30%' }}>
-                <Text
-                  as="b"
-                  size="sm"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                  color={'#231F20'}
-                >
-                  City
-                </Text>
-              </Box>
-              <Box w={{ md: '70%' }}>
-                <Text
-                  as="p"
-                  size="sm"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                >
-                  {detail && detail[0]?.city ? detail[0]?.city[0]?.name : '-'}
+                  {'download'}
                 </Text>
               </Box>
             </Box>
@@ -1174,97 +1019,11 @@ const DetailMasterUser = () => {
               columns={columns}
               data={data}
               fetchData={fetchData}
-              loading={loaded}
+              loading={loading}
               pageCount={pageCount}
               totalCount={totalCount}
             />
           </Styles>
-          <Box
-            display="flex"
-            justifyContent={'flex-end'}
-            alignItems={'center'}
-            mt="1em"
-          >
-            <Box
-              display={'flex'}
-              justifyContent={'space-between'}
-              alignItems={'center'}
-              w="100%"
-            >
-              {loaded || isFetching ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {total} of {totalCount} results
-                </td>
-              )}
-              <Box>
-                <Button
-                  isDisabled={page === 0 ? true : false}
-                  onClick={previousPage}
-                  bg="white"
-                  border={'none'}
-                  _hover={{
-                    bg: '#f0eeee',
-                    borderRadius: '5px',
-                    WebkitBorderRadius: '5px',
-                    MozBorderRadius: '5px',
-                  }}
-                >
-                  <BiSkipPreviousCircle size="25px" color="black" />
-                  <Text
-                    as="p"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
-                    color="#231F20"
-                    pl="5px"
-                  >
-                    Prev
-                  </Text>
-                </Button>
-                {' | '}
-                <Button
-                  isDisabled={Math.ceil(totalCount / 10) === page + 1}
-                  _hover={{
-                    bg: '#f0eeee',
-                    borderRadius: '5px',
-                    WebkitBorderRadius: '5px',
-                    MozBorderRadius: '5px',
-                  }}
-                  onClick={handleNexts}
-                  bg="white"
-                  border={'none'}
-                >
-                  <BiSkipNextCircle size="25px" color="black" />
-                  <Text
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
-                    color="#231F20"
-                    pl="5px"
-                  >
-                    Next
-                  </Text>
-                </Button>{' '}
-                Page{' '}
-                <strong>
-                  {page + 1} of {pageCount}
-                </strong>{' '}
-              </Box>
-            </Box>
-            {/* <select
-                      value={pageSize}
-                      onChange={e => {
-                        setPageSize(Number(e.target.value))
-                      }}
-                    >
-                      {[10, 20, 30, 40, 50].map(pageSize => (
-                        <option key={pageSize} value={pageSize}>
-                          Show {pageSize}
-                        </option>
-                      ))}
-                    </select> */}
-          </Box>
         </Box>
       </Box>
     );

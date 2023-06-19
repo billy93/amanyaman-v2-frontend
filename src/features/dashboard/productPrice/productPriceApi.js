@@ -45,6 +45,14 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    getById: builder.query({
+      query: (id) => {
+        // const { page, size } = datas;
+        return {
+          url: `/app/product-travel-agents/${id}`,
+        };
+      },
+    }),
     getTemplateFilePrice: builder.query({
       query: (url) => ({
         url: '/app/product-travel-agents/list/template/download',
@@ -74,6 +82,7 @@ export const policyApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetByIdQuery,
   useGetTemplateFilePriceQuery,
   useGetProductPriceQuery,
   useUploadFilePriceMutation,

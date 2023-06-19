@@ -36,6 +36,8 @@ import PlanType from './features/dashboard/planType/planType';
 import BandType from './features/dashboard/bandType/bandTypes';
 import TravellerType from './features/dashboard/travellerType/travellerTypes';
 import CreateProducts from './features/dashboard/masterProduct/createProduct';
+import DetailProductPrice from './features/dashboard/productPrice/detailProductPrice';
+import DetailMasterProduct from './features/dashboard/masterProduct/detailMasterProduct';
 
 function App() {
   return (
@@ -105,6 +107,14 @@ function App() {
         <Route path="master-products" element={<MasterProduct />} />
         <Route path="create-product" element={<CreateProduct />} />
         <Route path="create-product-price" element={<CreateProductPrice />} />
+        <Route
+          path="detail-product-price/:id"
+          element={<DetailProductPrice />}
+        />
+        <Route
+          path="detail-master-product/:id"
+          element={<DetailMasterProduct />}
+        />
         <Route
           path="product-price"
           element={<ProductPrice allowedRoles={['ROLE_ADMIN']} />}
