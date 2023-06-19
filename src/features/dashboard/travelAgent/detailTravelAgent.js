@@ -637,36 +637,32 @@ const DetailMasterUser = () => {
   const newData = useSelector(detailAgentProductaList);
   const [loading, setLoading] = React.useState(false);
   const [pageCount, setPageCount] = React.useState(0);
-  React.useEffect(
-    () => {
-      // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
-      if (user) {
-        // const data = [user]
-        const datauser = {
-          ...user,
-          allowCreditPayment:
-            user !== null && user?.allowCreditPayment === false
-              ? ''
-              : 'allowCreditPayment',
-          city:
-            user !== null
-              ? [
-                  {
-                    ...user?.city,
-                    label: detail?.city?.name,
-                    value: detail?.city?.id,
-                  },
-                ]
-              : null,
-        };
-        //  dispatch(setEditAgent(datauser))
-        dispatch(setDetailAgent([datauser]));
-      }
-    },
-    user,
-    dispatch,
-    id
-  );
+  React.useEffect(() => {
+    // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
+    if (user) {
+      // const data = [user]
+      const datauser = {
+        ...user,
+        allowCreditPayment:
+          user !== null && user?.allowCreditPayment === false
+            ? ''
+            : 'allowCreditPayment',
+        city:
+          user !== null
+            ? [
+                {
+                  ...user?.city,
+                  label: detail?.city?.name,
+                  value: detail?.city?.id,
+                },
+              ]
+            : null,
+      };
+      //  dispatch(setEditAgent(datauser))
+      dispatch(setDetailAgent([datauser]));
+    }
+  }, [user, dispatch, id]);
+
   // console.log('users', user)
   const PageInit = React.useCallback(
     (pageSize, pageIndex) => {

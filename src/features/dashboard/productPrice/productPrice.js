@@ -535,6 +535,7 @@ const Polcies = () => {
       [e.target.name]: e.target.value,
     };
     setFilterQuery(filters);
+    setPage(0);
   };
   // console.log('query filter',travelagents)
   const columns = React.useMemo(
@@ -643,6 +644,7 @@ const Polcies = () => {
   const handleSearchTermChange = (e) => {
     const { value } = e.target;
     setSearchTerm(value);
+    setPage(0);
   };
 
   React.useEffect(() => {

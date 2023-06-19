@@ -71,32 +71,27 @@ const CreateUser = () => {
     }
   }, [cities]);
 
-  React.useEffect(
-    () => {
-      // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
-      if (user) {
-        // const data = [user]
-        const datauser = {
-          ...user,
-          city:
-            user !== null
-              ? [
-                  {
-                    ...user?.city,
-                    label: user?.city?.name,
-                    value: user?.city?.name,
-                  },
-                ]
-              : null,
-        };
-        dispatch(setEditAgent(datauser));
-        //  dispatch(setDetailAgent(datauser))
-      }
-    },
-    user,
-    dispatch,
-    id
-  );
+  React.useEffect(() => {
+    // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
+    if (user) {
+      // const data = [user]
+      const datauser = {
+        ...user,
+        city:
+          user !== null
+            ? [
+                {
+                  ...user?.city,
+                  label: user?.city?.name,
+                  value: user?.city?.name,
+                },
+              ]
+            : null,
+      };
+      dispatch(setEditAgent(datauser));
+      //  dispatch(setDetailAgent(datauser))
+    }
+  }, [user, dispatch, id]);
 
   React.useEffect(() => {}, [user]);
 

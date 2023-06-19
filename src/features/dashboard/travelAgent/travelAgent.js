@@ -840,6 +840,7 @@ const MasterUser = () => {
         ...filterby,
         travelAgentName: searchAgent,
       });
+      setPage(0);
     }, 1000);
 
     debouncedSearch();
@@ -855,6 +856,7 @@ const MasterUser = () => {
         ...filterby,
         custCode: searchCustCode,
       });
+      setPage(0);
     }, 1000);
 
     debouncedSearch();
@@ -872,9 +874,11 @@ const MasterUser = () => {
   const handleSearchCustCode = (e) => {
     const { value } = e.target;
     setSearchCustCode(value);
+    setPage(0);
   };
   const showFilterBtn = () => {
     setShowFilter(!showFilter);
+    setPage(0);
   };
 
   React.useEffect(() => {

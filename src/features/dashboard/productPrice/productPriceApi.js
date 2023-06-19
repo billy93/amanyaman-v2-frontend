@@ -56,11 +56,12 @@ export const policyApiSlice = apiSlice.injectEndpoints({
     }),
     uploadFilePrice: builder.mutation({
       query: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
         return {
           url: '/app/product-travel-agents/import',
           method: 'POST',
-          body: file,
-          formData: true,
+          body: formData,
 
           transform: (response) => {
             console.log('repso', response);

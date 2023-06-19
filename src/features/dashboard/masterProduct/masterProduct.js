@@ -868,11 +868,13 @@ const MasterUser = () => {
   const handleSearchTermChange = (e) => {
     const { value } = e.target;
     setSearchName(value);
+    setPage(0);
   };
 
   const handleSearchBandTypeChange = (e) => {
     const { value } = e.target;
     setSearchBandType(value);
+    setPage(0);
   };
 
   const previousPage = () => {

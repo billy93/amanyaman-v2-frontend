@@ -922,15 +922,18 @@ const MasterUser = () => {
   const handleFilterByName = (e) => {
     const { value } = e.target;
     setFilterName(value);
+    setPage(0);
     // handleNameDeb(value)
   };
   const handleFilterByEmail = (e) => {
     const { value } = e.target;
     setFilterEmail(value);
+    setPage(0);
   };
   const handleFilterByRole = (e) => {
     const { value } = e.target;
     setFilterRole(value);
+    setPage(0);
   };
 
   const handleAddUser = () => {

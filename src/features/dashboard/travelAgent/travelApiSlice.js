@@ -112,11 +112,12 @@ export const getAgentList = apiSlice.injectEndpoints({
     }),
     uploadFileTravelAgent: builder.mutation({
       query: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
         return {
           url: '/app/travel-agents/list/import',
           method: 'POST',
-          body: file,
-          formData: true,
+          body: formData,
 
           transform: (response) => {
             console.log('repso', response);
