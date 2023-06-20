@@ -20,7 +20,7 @@ import {
   Heading,
   Text,
   Center,
-  //   Button,
+  Button,
   IconButton,
 } from '@chakra-ui/react';
 import PulseLoader from 'react-spinners/PulseLoader';
@@ -172,10 +172,10 @@ const Tables = ({
     {
       columns,
       data,
-      defaultColumn,
-      initialState: { pageIndex: 0, pageSize: 10 }, // Pass our hoisted table state
+      defaultColumn, // Pass our hoisted table state
       manualPagination: true, // Tell the usePagination
       pageCount: controlledPageCount,
+      autoResetPage: false,
       filterTypes,
       // hook that we'll handle our own data fetching
       // This means we'll also have to provide our own
@@ -373,27 +373,32 @@ const Tables = ({
           mb="1em"
           mr="10px"
         >
-          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          <Button
+            onClick={() => gotoPage(0)}
+            disabled={!canPreviousPage}
+            background="blue"
+          >
             {'<<'}
-          </button>
-          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'<'}
-          </button>
-          <button onClick={() => nextPage()} disabled={!canNextPage}>
-            {'>'}
-          </button>
-          <button
+          </Button>
+          <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
+            {'< '}
+          </Button>
+          <Button onClick={() => nextPage()} disabled={!canNextPage}>
+            {' >'}
+          </Button>
+          <Button
+            background="blue"
             onClick={() => gotoPage(pageCount - 1)}
             disabled={!canNextPage}
           >
             {'>>'}
-          </button>
-          <span>
+          </Button>
+          <Box display={'flex'} alignItems={'center'}>
             Page{' '}
             <strong>
               {pageIndex + 1} of {pageOptions.length}
             </strong>{' '}
-          </span>
+          </Box>
           <span></span>
         </Box>
       </Box>
@@ -482,7 +487,7 @@ const DetailMasterUser = () => {
     ],
     []
   );
-
+  console.log('productName', user);
   React.useEffect(() => {
     refetch({ id });
   }, [refetch, id]);
@@ -494,7 +499,7 @@ const DetailMasterUser = () => {
         <PulseLoader color={'#065BAA'} />
       </Center>
     );
-  } else if (user || listTravell) {
+  } else if (user !== null || listTravell) {
     content = (
       <Box pl="2em" pr="2em">
         <Box
@@ -723,7 +728,9 @@ const DetailMasterUser = () => {
                     color={'#231F20'}
                     fontWeight={'normal'}
                   >
-                    {user !== null ? user && user?.productAdditionalWeek : null}
+                    {user !== null
+                      ? user && user?.productAdditionalWeek?.productName
+                      : null}
                   </Text>
                 </Box>
               </Box>

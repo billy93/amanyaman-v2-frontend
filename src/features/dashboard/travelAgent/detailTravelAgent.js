@@ -22,6 +22,7 @@ import {
   Center,
   IconButton,
   Input,
+  Button,
 } from '@chakra-ui/react';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
@@ -133,7 +134,13 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
-const Tables = ({ columns, data, loading, pageCount: controlledPageCount }) => {
+const Tables = ({
+  columns,
+  data,
+  loading,
+  fetchData,
+  pageCount: controlledPageCount,
+}) => {
   const dispatch = useDispatch();
   const [filterProductCode, setFilterProductCode] = React.useState('');
   const [filterPremiumPrice, setFilterPremiumPrice] = React.useState('');
@@ -142,7 +149,6 @@ const Tables = ({ columns, data, loading, pageCount: controlledPageCount }) => {
   const [filterDiscont3, setFilterDiscount3] = React.useState('');
   const [filterTotalComm, setFilterTotalComm] = React.useState('');
   const [filterNet, setFilterNet] = React.useState('');
-
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -184,15 +190,15 @@ const Tables = ({ columns, data, loading, pageCount: controlledPageCount }) => {
     nextPage,
     previousPage,
     // Get the state from the instance
-    state: { pageIndex, selectedRowIds },
+    state: { pageIndex, selectedRowIds, pageSize },
   } = useTable(
     {
       columns,
       data,
-      defaultColumn,
-      initialState: { pageIndex: 0 }, // Pass our hoisted table state
+      defaultColumn, // Pass our hoisted table state
       manualPagination: true, // Tell the usePagination
       pageCount: controlledPageCount,
+      autoResetPage: false,
       filterTypes,
       // hook that we'll handle our own data fetching
       // This means we'll also have to provide our own
@@ -258,9 +264,18 @@ const Tables = ({ columns, data, loading, pageCount: controlledPageCount }) => {
 
   // Render the UI for your table
 
+  React.useEffect(() => {
+    fetchData({ pageIndex, pageSize });
+  }, [fetchData, pageIndex, pageSize]);
+
+  // console.log('pageIndex', pageIndex);
   // React.useEffect(() => {
-  //   fetchData({ pageIndex, pageSize });
-  // }, [fetchData, pageIndex, pageSize]);
+  //   const nextPage = () => {
+  //     if (canNextPage) {
+  //       gotoPage(pageIndex + 1);
+  //     }
+  //   };
+  // }, [canNextPage]);
   const spring = React.useMemo(
     () => ({
       type: 'spring',
@@ -538,27 +553,32 @@ const Tables = ({ columns, data, loading, pageCount: controlledPageCount }) => {
           mb="1em"
           mr="10px"
         >
-          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          <Button
+            onClick={() => gotoPage(0)}
+            disabled={!canPreviousPage}
+            background="blue"
+          >
             {'<<'}
-          </button>
-          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'<'}
-          </button>
-          <button onClick={() => nextPage()} disabled={!canNextPage}>
-            {'>'}
-          </button>
-          <button
+          </Button>
+          <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
+            {'< '}
+          </Button>
+          <Button onClick={() => nextPage()} disabled={!canNextPage}>
+            {' >'}
+          </Button>
+          <Button
+            background="blue"
             onClick={() => gotoPage(pageCount - 1)}
             disabled={!canNextPage}
           >
             {'>>'}
-          </button>
-          <span>
+          </Button>
+          <Box display={'flex'} alignItems={'center'}>
             Page{' '}
             <strong>
               {pageIndex + 1} of {pageOptions.length}
             </strong>{' '}
-          </span>
+          </Box>
           <span></span>
         </Box>
       </Box>
@@ -601,8 +621,8 @@ const DetailMasterUser = () => {
   } = useGetListAgentDetailQuery({ id }, { refetchOnMountOrArgChange: true });
   // const toast = useToast();
   const navigate = useNavigate();
-  // const [data, setData] = React.useState([]);
-  // const [pageCount, setPageCount] = React.useState(0);
+  const [data, setData] = React.useState([]);
+  const [pageCount, setPageCount] = React.useState(0);
 
   React.useEffect(() => {
     // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
@@ -630,35 +650,34 @@ const DetailMasterUser = () => {
     }
   }, [user, dispatch, id]);
 
-  console.log('users', listTravell);
-  // const fetchIdRef = React.useRef(0);
+  const fetchIdRef = React.useRef(0);
   // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
-  // const fetchData = React.useCallback(
-  //   ({ pageSize, pageIndex }) => {
-  //     // This will get called when the table needs new data
-  //     // You could fetch your data from literally anywhere,
-  //     // even a server. But for this example, we'll just fake it.
+  const fetchData = React.useCallback(
+    ({ pageSize, pageIndex }) => {
+      // This will get called when the table needs new data
+      // You could fetch your data from literally anywhere,
+      // even a server. But for this example, we'll just fake it.
 
-  //     // Give this fetch an ID
-  //     const fetchId = ++fetchIdRef.current;
+      // Give this fetch an ID
+      const fetchId = ++fetchIdRef.current;
 
-  //     // Set the loading state
+      // Set the loading state
 
-  //     // We'll even set a delay to simulate a server here
-  //     setTimeout(() => {
-  //       // Only update the data if this is the latest fetch
-  //       if (fetchId === fetchIdRef.current) {
-  //         const startRow = pageSize * pageIndex;
-  //         const endRow = startRow + pageSize;
-  //         // setData(listTravell?.slice(startRow, endRow));
-  //         // Your server could send back total page count.
-  //         // For now we'll just fake it, too
-  //         setPageCount(Math.ceil(totalCount / pageSize));
-  //       }
-  //     }, 1000);
-  //   },
-  //   [listTravell, totalCount]
-  // );
+      // We'll even set a delay to simulate a server here
+      setTimeout(() => {
+        // Only update the data if this is the latest fetch
+        if (fetchId === fetchIdRef.current) {
+          const startRow = pageSize * pageIndex;
+          const endRow = startRow + pageSize;
+          setData(listTravell?.slice(startRow, endRow));
+          // Your server could send back total page count.
+          // For now we'll just fake it, too
+          setPageCount(Math.ceil(totalCount / pageSize));
+        }
+      }, 1000);
+    },
+    [listTravell, totalCount]
+  );
 
   // React.useMemo(() => {
   //     const dataUserDetail = user?.filter((user) => user.id === parseInt(id))
@@ -1187,10 +1206,10 @@ const DetailMasterUser = () => {
           <Styles>
             <Tables
               columns={columns}
-              data={listTravell}
-              // fetchData={fetchData}
+              data={data}
+              fetchData={fetchData}
               loading={loaded}
-              // pageCount={pageCount}
+              pageCount={pageCount}
               totalCount={totalCount}
             />
           </Styles>
