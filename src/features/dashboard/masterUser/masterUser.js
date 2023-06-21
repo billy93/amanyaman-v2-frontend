@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
@@ -6,13 +7,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import matchSorter from 'match-sorter';
 import { usePagination } from 'react-table';
 import PulseLoader from 'react-spinners/PulseLoader';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
+// eslint-disable-next-line no-unused-vars
 import ExportData from './export';
 import { debounce } from 'lodash';
+
 import {
   useToast,
-  Select,
   Input,
   Modal,
   ModalOverlay,
@@ -27,7 +29,6 @@ import {
   Tbody,
   Tr,
   Th,
-  Td,
   TableCaption,
   TableContainer,
   Heading,
@@ -35,27 +36,23 @@ import {
   Text,
   Center,
   useDisclosure,
-  IconButton,
+  Select,
 } from '@chakra-ui/react';
 import { Button } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setRefetch,
   refetchdata,
-  listUsers,
-  setMasterUser,
-  listUsersSelection,
   setListUser,
   setFormUser,
 } from './masterUserSlice';
 import { MdFilterList } from 'react-icons/md';
-import { AiOutlineClose } from 'react-icons/ai';
-import { BsFillTrashFill } from 'react-icons/bs';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect, useFilters, useSortBy } from 'react-table';
 import CustomModal from './customModal';
+// import 'react-table-6/react-table.css';
 
 const Styles = styled.div`
   // padding: 1rem;
@@ -117,7 +114,7 @@ function usePrevious(value) {
   return ref.current;
 }
 
-// eslint-disable-next-line react/display-name
+// eslint-disable-next-line react/display-name, no-unused-vars
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
     const defaultRef = React.useRef();
@@ -169,51 +166,18 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
-// eslint-disable-next-line no-unused-vars
-function SelectColumnFilter({
-  column: { filterValue, setFilter, preFilteredRows, id },
-}) {
-  // Calculate the options for filtering
-  // using the preFilteredRows
-  const options = React.useMemo(() => {
-    const options = new Set();
-    preFilteredRows.forEach((row) => {
-      options.add(row.values[id]);
-    });
-    return [...options.values()];
-  }, [id, preFilteredRows]);
-
-  // Render a multi-select box
-  return (
-    <select
-      value={filterValue}
-      onChange={(e) => {
-        setFilter(e.target.value || undefined);
-      }}
-    >
-      <option value="">All</option>
-      {options.map((option, i) => (
-        <option key={i} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  );
-}
 const Tables = ({
   columns,
   data,
   fetchData,
   loading,
-  setPageCount,
-  isFetching,
+  load,
+  page,
+  size,
   pageCount: controlledPageCount,
-  totalCount,
 }) => {
-  const dispatch = useDispatch();
-  const listuser = useSelector(listUsers);
-  const selected = useSelector(listUsersSelection);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -237,8 +201,9 @@ const Tables = ({
     []
   );
   const toast = useToast();
+
   const clearSelect = () => {
-    dispatch(setMasterUser([]));
+    // dispatch(setMasterAgent([]));
     onClose();
 
     const rowIds = data && data?.map((item, i) => i);
@@ -268,9 +233,9 @@ const Tables = ({
     // which has only the rows for the active page
 
     // The rest of these things are super handy, too ;)
-    pageOptions,
+
     // Get the state from the instance
-    state: { pageIndex, pageSize, selectedRowIds },
+    state: { selectedRowIds, pageSize, pageIndex },
   } = useTable(
     {
       columns,
@@ -280,6 +245,7 @@ const Tables = ({
       manualPagination: true, // Tell the usePagination
       pageCount: controlledPageCount,
       filterTypes,
+      autorResetPagination: false,
       // hook that we'll handle our own data fetching
       // This means we'll also have to provide our own
       // pageCount.
@@ -332,7 +298,8 @@ const Tables = ({
 
   const getValues = (data) => {
     let original = data.map((item) => item.original);
-    dispatch(setMasterUser(original));
+    // dispatch(setMasterAgent(original));
+    console.log('aa', original);
   };
 
   React.useEffect(() => {
@@ -343,31 +310,34 @@ const Tables = ({
 
   // Render the UI for your table
 
-  const deletedUserUpdate = (e) => {
-    e.preventDefault();
-    const nextState = listuser?.filter(
-      (item) => !selected.some(({ id }) => item.id === id)
-    );
-    console.log('nextState', nextState);
-    dispatch(setListUser(nextState));
-    dispatch(setMasterUser([]));
-    onClose();
-    toast({
-      title: 'Deleted Success',
-      status: 'success',
-      position: 'top-right',
-      duration: 3000,
-      isClosable: true,
-      variant: 'solid',
-    });
-  };
+  // const deletedUserUpdate = (e) => {
+  //   e.preventDefault();
+  //   const nextState = listuser?.filter(
+  //     (item) => !selected.some(({ id }) => item.id === id)
+  //   );
+  //   console.log('nextState', nextState);
+  //   // dispatch(setListAgent(nextState));
+  //   // dispatch(setMasterAgent([]));
+  //   onClose();
+  //   toast({
+  //     title: 'Deleted Success',
+  //     status: 'success',
+  //     position: 'top-right',
+  //     duration: 3000,
+  //     isClosable: true,
+  //     variant: 'solid',
+  //   });
+  // };
+
   React.useEffect(() => {
-    fetchData({ pageIndex, pageSize, pageOptions });
-    // setPageCount({pageIndex, pageSize})
+    fetchData({ pageIndex, pageSize });
   }, [fetchData, pageIndex, pageSize]);
 
-  console.log('test', pageIndex);
+  React.useEffect(() => {}, [page, size]);
 
+  console.log('ddd', page);
+  console.log('ddd size', size);
+  console.log('ddd data', data);
   const spring = React.useMemo(
     () => ({
       type: 'spring',
@@ -376,6 +346,24 @@ const Tables = ({
     }),
     []
   );
+
+  const [expandedRows, setExpandedRows] = React.useState([]);
+
+  const handleRowClick = (rowIndex) => {
+    const expandedRowsCopy = [...expandedRows];
+    const index = expandedRows.indexOf(rowIndex);
+
+    if (index > -1) {
+      expandedRowsCopy.splice(index, 1);
+    } else {
+      expandedRowsCopy.push(rowIndex);
+    }
+
+    setExpandedRows(expandedRowsCopy);
+  };
+
+  const isRowExpanded = (rowIndex) => expandedRows.includes(rowIndex);
+  // console.log('filters', filters)
   return (
     <>
       <Modal
@@ -406,7 +394,7 @@ const Tables = ({
               style={{ fontSize: '14px' }}
               fontWeight={'normal'}
             >
-              You’re about to delete {selected?.length} users:
+              {/* You’re about to delete {selected?.length} users: */}
             </Text>
           </ModalHeader>
           <ModalCloseButton onClick={clearSelect} />
@@ -422,7 +410,7 @@ const Tables = ({
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {selected?.map((item, i) => {
+                  {/* {selected?.map((item, i) => {
                     return (
                       <Tr key={item.id}>
                         <Td>
@@ -433,7 +421,7 @@ const Tables = ({
                         <Td>{item.authorities}</Td>
                       </Tr>
                     );
-                  })}
+                  })} */}
                 </Tbody>
                 <TableCaption textAlign={'left'}>
                   <Text
@@ -452,57 +440,24 @@ const Tables = ({
 
           <ModalFooter>
             <Button onClick={cancelDelete}>Cancel</Button>
-            <Button colorScheme="blue" mr={3} onClick={deletedUserUpdate}>
+            <Button colorScheme="blue" mr={3} onClick={'deletedUserUpdate'}>
               Delete User
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <Box display="flex" alignItems="center" gap="10px">
-        {selected?.length > 0 && (
-          <>
-            <Text as="p" size="sm">
-              {Object.keys(selectedRowIds).length} Selected
-            </Text>
-            <IconButton
-              border="none"
-              bg={'white'}
-              onClick={clearSelect}
-              size="sm"
-              icon={<AiOutlineClose size="16px" color="black" />}
-            />
-            <Box display="flex" gap="5px" alignItems="center">
-              <IconButton
-                border="none"
-                bg={'white'}
-                size="sm"
-                icon={
-                  <BsFillTrashFill
-                    size="16px"
-                    color="black"
-                    onClick={deletedUser}
-                  />
-                }
-              />
-              {/* <Text as="p" size="sm">Delete</Text> */}
-            </Box>
-          </>
-        )}
-      </Box>
-
       <Box
         bg="white"
         overflow={'scroll'}
-        mt="0.5em"
         style={{ maxHeight: '400px', overflowY: 'auto' }}
       >
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
+                {headerGroup.headers.map((column, i) => (
                   <motion.th
-                    key={column.id}
+                    key={i}
                     {...column.getHeaderProps({
                       layoutTransition: spring,
                       style: {
@@ -561,68 +516,97 @@ const Tables = ({
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {/* {rows.slice(0, 10).map((row, i) => {
+            {rows.map((row, rowIndex) => {
               prepareRow(row);
+              const isExpanded = isRowExpanded(rowIndex);
+
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })} */}
-            <AnimatePresence>
-              {rows.slice(0, 10).map((row, i) => {
-                prepareRow(row);
-                return (
-                  <motion.tr
-                    key={i}
-                    {...row.getRowProps({
-                      layoutTransition: spring,
-                      exit: { opacity: 0, maxHeight: 0 },
-                    })}
+                <React.Fragment key={rowIndex}>
+                  <tr
+                    {...row.getRowProps()}
+                    // onClick={() => handleRowClick(rowIndex)}
                   >
-                    {row.cells.map((cell, i) => {
-                      return (
-                        <motion.td
-                          key={i}
-                          {...cell.getCellProps({
-                            layoutTransition: spring,
-                          })}
-                          style={{
-                            // backgroundColor: 'red',
-                            fontWeight: 'normal',
-                            textAlign: 'left',
-                            padding: '10px',
-                            fontFamily: 'Mulish',
-                            fontSize: '14px',
-                          }}
-                        >
-                          {cell.render('Cell')}
-                        </motion.td>
-                      );
-                    })}
-                  </motion.tr>
-                );
-              })}
-            </AnimatePresence>
+                    {row.cells.map((cell, i) => (
+                      <td
+                        key={i}
+                        {...cell.getCellProps()}
+                        className={isExpanded && isExpanded ? 'expanded' : ''}
+                      >
+                        {cell?.column.id === 'travelAgentAddress' &&
+                        cell?.value?.length > 30
+                          ? isExpanded
+                            ? cell.value
+                            : cell.value.substring(0, 30) + '...'
+                          : cell.render('Cell')}
+                      </td>
+                    ))}
+                    {isExpanded && (
+                      <tr>
+                        <td colSpan={columns.length}>
+                          <div>
+                            {
+                              row.cells.find(
+                                (cell) =>
+                                  cell.column.id === 'travelAgentAddress'
+                              ).value
+                            }
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </tr>
+                  {/* {isExpanded && (
+                <tr>
+                  <td colSpan={columns.length}>
+                    <div>{row.cells.find((cell) => cell.column.id === 'travelAgentAddress').value}</div>
+                  </td>
+                </tr>
+              )} */}
+                </React.Fragment>
+              );
+            })}
           </tbody>
         </table>
       </Box>
+
+      {/* <pre>
+        <code>
+          {JSON.stringify(
+            {
+              selectedRowIds: selectedRowIds,
+              "selectedFlatRows[].original": selectedFlatRows.map(
+                (d) => d.original
+              )
+            },
+            null,
+            2
+          )}
+        </code>
+      </pre> */}
     </>
   );
 };
 
 const MasterUser = () => {
   const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
+  const [data, setData] = React.useState([]);
+  const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
   const fetchdata = useSelector(refetchdata);
-  const [paginations, setPagination] = React.useState({
-    page: 0,
-    size: 10,
-  });
+  const [size, setSize] = React.useState(5);
+  const [loading, setLoading] = React.useState(false);
   const [page, setPage] = React.useState(0);
+  const [pageCount, setPageCount] = React.useState(0);
+  const [showFilter, setShowFilter] = React.useState(false);
+  const [filterName, setFilterName] = React.useState('');
+  const [filterEmail, setFilterEmail] = React.useState('');
+  const [filterRole, setFilterRole] = React.useState('');
+  const [debounceName, setDebounceName] = React.useState('');
+  const [debounceEmail, setDebounceEmail] = React.useState('');
+  const [debounceRole, setDebounceRole] = React.useState('');
+
+  const fetchIdRef = React.useRef(0);
   const [filterby, setFilterBy] = React.useState({
     name: '',
     email: '',
@@ -635,33 +619,8 @@ const MasterUser = () => {
     error,
     refetch,
     isFetching,
-  } = useGetUserQuery({ page, size: 10, ...filterby });
-
-  const [data, setData] = React.useState([]);
-  const prevData = usePrevious(listUserAccount);
-  const [loading, setLoading] = React.useState(false);
-  const [pageCount, setPageCount] = React.useState(0);
-  const [showFilter, setShowFilter] = React.useState(false);
-  const [filterName, setFilterName] = React.useState('');
-  const [filterEmail, setFilterEmail] = React.useState('');
-  const [filterRole, setFilterRole] = React.useState('');
-  const [debounceName, setDebounceName] = React.useState('');
-  const [debounceEmail, setDebounceEmail] = React.useState('');
-  const [debounceRole, setDebounceRole] = React.useState('');
-
+  } = useGetUserQuery({ page, size: size, ...filterby });
   const { data: rolesData } = useGetRoleQuery();
-  const PageInit = React.useCallback(
-    (pageSize, pageIndex) => {
-      // console.log('page init', pageSize,pageIndex)
-      setPagination({
-        page: pageIndex,
-        size: pageSize,
-      });
-    },
-    [paginations?.page, paginations?.size]
-  );
-  const navigate = useNavigate();
-  const fetchIdRef = React.useRef(0);
   // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
   const fetchData = React.useCallback(
     ({ pageSize, pageIndex, pageOptions }) => {
@@ -673,18 +632,23 @@ const MasterUser = () => {
       const fetchId = ++fetchIdRef.current;
 
       // Set the loading state
+      console.log('dddss', pageIndex, pageSize);
+      console.log('dddss2', page, size);
       setLoading(true);
       // We'll even set a delay to simulate a server here
       setTimeout(() => {
         // Only update the data if this is the latest fetch
         if (fetchId === fetchIdRef.current) {
+          // const startRow = size * page;
+          // const endRow = startRow + size;
           const startRow = pageSize * pageIndex;
           const endRow = startRow + pageSize;
+          console.log('test1', listUserAccount?.slice(startRow, endRow));
+          // console.log('test2', listUserAccount?.slice(startRow1, endRow1));
           setData(listUserAccount?.slice(startRow, endRow));
-          PageInit(pageSize, pageIndex);
           // Your server could send back total page count.
           // For now we'll just fake it, too
-          setPageCount(Math.ceil(totalCount / pageSize));
+          setPageCount(Math.ceil(totalCount / size));
           // setPageCount(100)
           setLoading(false);
         }
@@ -693,8 +657,18 @@ const MasterUser = () => {
     [listUserAccount]
   );
 
-  const showFilterBtn = () => {
-    setShowFilter(!showFilter);
+  React.useEffect(() => {
+    refetch({ page, size: size, ...filterby });
+  }, [page, filterby, size]);
+
+  React.useEffect(() => {
+    fetchData({ page, size: size });
+  }, [page, size]);
+
+  const handleAddUser = (e) => {
+    e.preventDefault();
+    // dispatch(setFormAgent(datas));
+    navigate('/master-data/create-master-user');
   };
   React.useEffect(() => {
     if (!showFilter) {
@@ -708,30 +682,14 @@ const MasterUser = () => {
       setFilterEmail('');
     }
   }, [showFilter]);
-  // console.log('uploadFilesMessages 111', uploadFilesMessages ==='success')
-
-  React.useEffect(() => {
-    if (
-      listUserAccount !== null &&
-      JSON.stringify(prevData) !== JSON.stringify(listUserAccount)
-    ) {
-      dispatch(setListUser([...listUserAccount]));
-    }
-    //  dispatch(setListUser([...listUserAccount]))
-  }, [listUserAccount, prevData]);
-
-  // React.useEffect(() => {
-  //  refetch({page,size:10})
-  // }, [page])
-
   React.useEffect(() => {
     const debouncedRefetch = debounce(refetch, 500);
-    debouncedRefetch({ page: page, size: 10, ...filterby });
+    debouncedRefetch({ page: page, size: size, ...filterby });
 
     return () => {
       debouncedRefetch.cancel();
     };
-  }, [debounceName, refetch, filterby, page]);
+  }, [debounceName, refetch, filterby, page, size]);
 
   React.useEffect(() => {
     const debouncedSearch = debounce(() => {
@@ -762,12 +720,12 @@ const MasterUser = () => {
 
   React.useEffect(() => {
     const debouncedRefetch = debounce(refetch, 500);
-    debouncedRefetch({ page: page, size: 10, ...filterby });
+    debouncedRefetch({ page: page, size: size, ...filterby });
 
     return () => {
       debouncedRefetch.cancel();
     };
-  }, [debounceEmail, refetch, filterby, page]);
+  }, [debounceEmail, refetch, filterby, page, size]);
 
   React.useEffect(() => {
     const debouncedSearch = debounce(() => {
@@ -798,12 +756,12 @@ const MasterUser = () => {
 
   React.useEffect(() => {
     const debouncedRefetch = debounce(refetch, 500);
-    debouncedRefetch({ page: page, size: 10, ...filterby });
+    debouncedRefetch({ page: page, size: size, ...filterby });
 
     return () => {
       debouncedRefetch.cancel();
     };
-  }, [debounceRole, refetch, filterby, page]);
+  }, [debounceRole, refetch, filterby, page, size]);
 
   React.useEffect(() => {
     const debouncedSearch = debounce(() => {
@@ -833,7 +791,7 @@ const MasterUser = () => {
   }, [filterRole]);
 
   React.useEffect(() => {
-    refetch({ page: page, size: 10, ...filterby });
+    refetch({ page: page, size: size, ...filterby });
   }, [fetchdata]);
 
   React.useEffect(() => {
@@ -903,6 +861,8 @@ const MasterUser = () => {
     []
   );
 
+  // const data = React.useMemo(() => tempList);
+
   const handleNexts = () => {
     setPage((prevPage) => prevPage + 1);
     // setChangePage(true)
@@ -913,11 +873,40 @@ const MasterUser = () => {
     // setChangePage(true)
   };
 
-  // const data = React.useMemo(() => tempList);
-  // const handleNameDeb =  debounce((value) => {
-  //   // Perform filtering logic here
-  //   console.log('Filtering by name:', value);
-  // }, 00);
+  const showFilterBtn = () => {
+    setShowFilter(!showFilter);
+    setPage(0);
+  };
+
+  React.useEffect(() => {
+    refetch({ page: page, size: 10, ...filterby });
+  }, [fetchdata]);
+
+  React.useEffect(() => {
+    let timer;
+
+    if (fetchdata) {
+      timer = setTimeout(() => {
+        dispatch(setRefetch(false));
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [dispatch, fetchdata]);
+
+  const goToPageLast = () => {
+    setPage(pageCount - 1);
+  };
+
+  const goToPageFirst = () => {
+    setPage(0);
+  };
+
+  const gotoPage = () => {
+    setPage(0);
+  };
 
   const handleFilterByName = (e) => {
     const { value } = e.target;
@@ -936,20 +925,9 @@ const MasterUser = () => {
     setPage(0);
   };
 
-  const handleAddUser = () => {
-    const stateUser = {
-      login: '',
-      firstName: '',
-      lastName: '',
-      area: '',
-      authorities: [],
-      travelAgent: '',
-    };
-    dispatch(setFormUser(stateUser));
-    navigate('/master-data/create-user');
-  };
+  // eslint-disable-next-line no-unused-vars
   const total = React.useMemo(() => {
-    return (page + 1) * 10;
+    return (page + 1) * size;
   }, [page]);
 
   let content;
@@ -966,12 +944,12 @@ const MasterUser = () => {
           display={'flex'}
           justifyContent={'space-between'}
           alignItems={'center'}
-          mb={showFilter ? '' : '1em'}
+          mb={showFilter ? '1.5em' : '2em'}
         >
           <Heading as={'h6'} size={'sm'}>
-            User
+            Travel Agent
           </Heading>
-          <Stack direction="row" spacing={4} m={'2.5'}>
+          <Stack direction="row" spacing={4} mr="0">
             <Button
               leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
               colorScheme="#231F20"
@@ -982,15 +960,14 @@ const MasterUser = () => {
             >
               Apply Filter
             </Button>
-            <ExportData />
+            {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+                        Export 
+                    </Button> */}
             <CustomModal
               showModalButtonText="Import"
               modalHeader="Import Excel File"
               modalBody="Import Excel File"
             />
-            {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
-                        Import 
-                    </Button> */}
             <Button
               variant="ClaimBtn"
               leftIcon={<AiOutlinePlusCircle />}
@@ -999,7 +976,7 @@ const MasterUser = () => {
               color="white"
               onClick={handleAddUser}
             >
-              Add User
+              Add Agent
             </Button>
           </Stack>
         </Box>
@@ -1058,38 +1035,96 @@ const MasterUser = () => {
           {
             <Tables
               columns={columns}
-              data={data}
+              data={listUserAccount}
               fetchData={fetchData}
               loading={loading}
-              isFetching={isFetching}
               pageCount={pageCount}
               setPageCount={setPageCount}
               totalCount={totalCount}
+              page={page}
+              size={size}
             />
           }
         </Styles>
         <Box
-          display="flex"
-          justifyContent={'flex-end'}
+          display={'flex'}
+          justifyContent={'space-between'}
           alignItems={'center'}
-          mt="1em"
           w="100%"
+          mt="15px"
         >
-          <Box
-            display={'flex'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            w="100%"
-          >
-            {loading || isFetching ? (
-              // Use our custom loading state to show a loading indicator
-              <td colSpan="10000">Loading...</td>
-            ) : (
-              <td colSpan="10000">
-                Showing {total} of {totalCount} results
-              </td>
-            )}
+          <Box>
             <Box>
+              {loading || isFetching ? (
+                // Use our custom loading state to show a loading indicator
+                <td colSpan="10000">Loading...</td>
+              ) : (
+                <td
+                  colSpan="10000"
+                  style={{ fontSize: '14px', fontFamily: 'Mulish' }}
+                >
+                  Showing {size} of {totalCount} results
+                </td>
+              )}
+            </Box>
+            <Box>
+              <Box
+                display={'flex'}
+                justifyContent={'start'}
+                alignItems={'center'}
+              >
+                <label
+                  htmlFor="select"
+                  style={{
+                    paddingRight: '5px',
+                    fontSize: '14px',
+                    fontFamily: 'Mulish',
+                  }}
+                >
+                  Per page
+                </label>
+                <Select
+                  id="pageSize"
+                  w="100px"
+                  value={size}
+                  onChange={(e) => {
+                    setSize(Number(e.target.value));
+                    gotoPage(0);
+                  }}
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  {/* Add more options as needed */}
+                </Select>
+              </Box>
+            </Box>
+          </Box>
+          <Box>
+            <Box display={'flex'} alignItems={'center'}>
+              <Button
+                isDisabled={page === 0 ? true : false}
+                onClick={goToPageFirst}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="2px"
+                >
+                  {'<<'}
+                </Text>
+              </Button>
               <Button
                 isDisabled={page === 0 ? true : false}
                 onClick={previousPage}
@@ -1110,7 +1145,7 @@ const MasterUser = () => {
                   color="#231F20"
                   pl="5px"
                 >
-                  Prev
+                  {'<'}
                 </Text>
               </Button>
               {' | '}
@@ -1133,29 +1168,40 @@ const MasterUser = () => {
                   color="#231F20"
                   pl="5px"
                 >
-                  Next
+                  {'>'}
                 </Text>
               </Button>{' '}
-              Page{' '}
-              <strong>
+              <Button
+                isDisabled={pageCount === page ? true : false}
+                onClick={goToPageLast}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  {'>>'}
+                </Text>
+              </Button>
+              <Text as="p" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                Page{' '}
+              </Text>
+              <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
                 {page + 1} of {pageCount}
-              </strong>{' '}
+              </Text>{' '}
             </Box>
           </Box>
-          {/* <select
-                      value={pageSize}
-                      onChange={e => {
-                        setPageSize(Number(e.target.value))
-                      }}
-                    >
-                      {[10, 20, 30, 40, 50].map(pageSize => (
-                        <option key={pageSize} value={pageSize}>
-                          Show {pageSize}
-                        </option>
-                      ))}
-                    </select> */}
         </Box>
-        {/* <Link to="/welcome">Back to Welcome</Link> */}
       </Box>
     );
   } else if (isError) {

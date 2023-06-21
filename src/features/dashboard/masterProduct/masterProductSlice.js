@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const createMasterProductSlice = createSlice({
   name: 'masterProduct',
   initialState: {
+    variant: [],
     list: [
       {
         id: '1',
@@ -332,9 +333,15 @@ const createMasterProductSlice = createSlice({
       productTravelCover: '',
       additionalWeek: '',
       planType: '',
+      travellerType: '',
       groupArea: '',
       travelDuration: '',
+      variant: '',
     },
+    listBandType: [],
+    listArea: [],
+    listPlanType: [],
+    listTravellerType: [],
     selection: [],
     planType: [
       {
@@ -447,11 +454,34 @@ const createMasterProductSlice = createSlice({
     setProductForm: (state, action) => {
       state.formProduct = action.payload;
     },
+    setListVariant: (state, action) => {
+      state.variant = action.payload;
+    },
+    setListBandType: (state, action) => {
+      state.listBandType = action.payload;
+    },
+    setListPlanType: (state, action) => {
+      state.listPlanType = action.payload;
+    },
+    setListArea: (state, action) => {
+      state.listArea = action.payload;
+    },
+    setListTravellerType: (state, action) => {
+      state.listTravellerType = action.payload;
+    },
   },
 });
 
-export const { setProductForm, setMasterProduct, setListSelectProduct } =
-  createMasterProductSlice.actions;
+export const {
+  setListTravellerType,
+  setListBandType,
+  setListPlanType,
+  setListArea,
+  setListVariant,
+  setProductForm,
+  setMasterProduct,
+  setListSelectProduct,
+} = createMasterProductSlice.actions;
 
 export default createMasterProductSlice.reducer;
 export const listProduct = (state) => state.masterProduct.list;
@@ -462,3 +492,9 @@ export const typeProd = (state) => state.masterProduct.productTypes;
 export const planTypes = (state) => state.masterProduct.planType;
 export const travelDurations = (state) => state.masterProduct.travelDurations;
 export const areaList = (state) => state.masterProduct.groupAreaList;
+export const listvariant = (state) => state.masterProduct.variant;
+export const listbandtype = (state) => state.masterProduct.listBandType;
+export const listarea = (state) => state.masterProduct.listArea;
+export const listplantype = (state) => state.masterProduct.listPlanType;
+export const listtravellertype = (state) =>
+  state.masterProduct.listTravellerType;

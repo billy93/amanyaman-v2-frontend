@@ -48,6 +48,7 @@ const createMasterAgentSlice = createSlice({
       ],
       selection: [],
     },
+    message: null,
     roleUser: [],
     selection: [],
     formagent: {
@@ -81,6 +82,9 @@ const createMasterAgentSlice = createSlice({
     },
     setListAgent: (state, action) => {
       state.list = action.payload;
+    },
+    setMessage: (state, action) => {
+      state.message = action.payload;
     },
     setDetailAgent: (state, action) => {
       // const { id, users } = action.payload
@@ -118,6 +122,7 @@ const createMasterAgentSlice = createSlice({
 });
 
 export const {
+  setMessage,
   setRefetch,
   setDropDownList,
   setListCity,
@@ -146,3 +151,4 @@ export const detailAgentProductSelection = (state) =>
   state.agent.detailAgent.selection;
 export const totalCounts = (state) => state.agent.listCount;
 export const isRefetch = (state) => state.agent.isRefetch;
+export const message = (state) => state.agent.message;

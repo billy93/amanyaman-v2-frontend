@@ -34,6 +34,7 @@ import {
   Center,
   useDisclosure,
   IconButton,
+  Select,
 } from '@chakra-ui/react';
 import { Button } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -174,6 +175,8 @@ const Tables = ({
   fetchData,
   loading,
   load,
+  page,
+  size,
   pageCount: controlledPageCount,
 }) => {
   const dispatch = useDispatch();
@@ -238,7 +241,7 @@ const Tables = ({
     // The rest of these things are super handy, too ;)
 
     // Get the state from the instance
-    state: { pageIndex, pageSize, selectedRowIds },
+    state: { selectedRowIds, pageSize, pageIndex },
   } = useTable(
     {
       columns,
@@ -248,6 +251,7 @@ const Tables = ({
       manualPagination: true, // Tell the usePagination
       pageCount: controlledPageCount,
       filterTypes,
+      autorResetPagination: false,
       // hook that we'll handle our own data fetching
       // This means we'll also have to provide our own
       // pageCount.
@@ -294,9 +298,16 @@ const Tables = ({
       variant: 'solid',
     });
   };
+
   React.useEffect(() => {
     fetchData({ pageIndex, pageSize });
   }, [fetchData, pageIndex, pageSize]);
+
+  React.useEffect(() => {}, [page, size]);
+
+  console.log('ddd', page);
+  console.log('ddd size', size);
+  console.log('ddd data', data);
   const spring = React.useMemo(
     () => ({
       type: 'spring',
@@ -582,6 +593,7 @@ const MasterUser = () => {
   const dispatch = useDispatch();
   const [page, setPage] = React.useState(0);
 
+  // eslint-disable-next-line no-unused-vars
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [pageCount, setPageCount] = React.useState(0);
@@ -589,6 +601,7 @@ const MasterUser = () => {
   const [searchAgent, setSearchAgent] = useState('');
   const [debouncedSearchAgent, setDebouncedSearchAgent] = useState('');
   const [searchCustCode, setSearchCustCode] = useState('');
+  const [size, setSize] = useState(5);
   const [debouncedSearchCustCode, setDebouncedSearchCustCode] = useState('');
   const [filterby, setFilterBy] = React.useState({
     travelAgentName: '',
@@ -601,7 +614,7 @@ const MasterUser = () => {
     isFetching,
     error,
     refetch,
-  } = useGetTravelAgentQuery({ page, size: 10, ...filterby });
+  } = useGetTravelAgentQuery({ page, size: size, ...filterby });
   const fetchdata = useSelector(isRefetch);
   const prevData = usePrevious(listUserAccount);
   const navigate = useNavigate();
@@ -618,17 +631,23 @@ const MasterUser = () => {
       const fetchId = ++fetchIdRef.current;
 
       // Set the loading state
+      console.log('dddss', pageIndex, pageSize);
+      console.log('dddss2', page, size);
       setLoading(true);
       // We'll even set a delay to simulate a server here
       setTimeout(() => {
         // Only update the data if this is the latest fetch
         if (fetchId === fetchIdRef.current) {
+          // const startRow = size * page;
+          // const endRow = startRow + size;
           const startRow = pageSize * pageIndex;
           const endRow = startRow + pageSize;
+          console.log('test1', listUserAccount?.slice(startRow, endRow));
+          // console.log('test2', listUserAccount?.slice(startRow1, endRow1));
           setData(listUserAccount?.slice(startRow, endRow));
           // Your server could send back total page count.
           // For now we'll just fake it, too
-          setPageCount(Math.ceil(totalCount / pageSize));
+          setPageCount(Math.ceil(totalCount / size));
           // setPageCount(100)
           setLoading(false);
         }
@@ -651,8 +670,12 @@ const MasterUser = () => {
   }, [listUserAccount, prevData]);
 
   React.useEffect(() => {
-    refetch({ page, size: 10, ...filterby });
-  }, [page, filterby]);
+    refetch({ page, size: size, ...filterby });
+  }, [page, filterby, size]);
+
+  React.useEffect(() => {
+    fetchData({ page, size: size });
+  }, [page, size]);
 
   const handleAddUser = (e) => {
     e.preventDefault();
@@ -803,12 +826,19 @@ const MasterUser = () => {
 
   React.useEffect(() => {
     const debouncedRefetch = debounce(refetch, 500);
-    debouncedRefetch({ page: page, size: 10, ...filterby });
+    debouncedRefetch({ page: page, size: size, ...filterby });
 
     return () => {
       debouncedRefetch.cancel();
     };
-  }, [debouncedSearchAgent, debouncedSearchCustCode, refetch, filterby, page]);
+  }, [
+    debouncedSearchAgent,
+    debouncedSearchCustCode,
+    refetch,
+    filterby,
+    page,
+    size,
+  ]);
 
   React.useEffect(() => {
     const debouncedSearch = debounce(() => {
@@ -902,6 +932,18 @@ const MasterUser = () => {
   const handleFetchLoad = (val) => {
     setLoad(val);
   };
+  const goToPageLast = () => {
+    setPage(pageCount - 1);
+  };
+
+  const goToPageFirst = () => {
+    setPage(0);
+  };
+
+  const gotoPage = () => {
+    setPage(0);
+  };
+
   const lazyLoad = debounce(handleFetchLoad, 400);
   React.useEffect(() => {
     if (isFetching) {
@@ -911,8 +953,9 @@ const MasterUser = () => {
     }
   }, [isFetching]);
 
+  // eslint-disable-next-line no-unused-vars
   const total = React.useMemo(() => {
-    return (page + 1) * 10;
+    return (page + 1) * size;
   }, [page]);
 
   let content;
@@ -1003,37 +1046,97 @@ const MasterUser = () => {
           {
             <Tables
               columns={columns}
-              data={data}
+              data={listUserAccount}
               fetchData={fetchData}
               loading={loading}
               load={load}
               pageCount={pageCount}
               setPageCount={setPageCount}
               totalCount={totalCount}
+              page={page}
+              size={size}
             />
           }
         </Styles>
         <Box
-          display="flex"
-          justifyContent={'flex-end'}
+          display={'flex'}
+          justifyContent={'space-between'}
           alignItems={'center'}
-          mt="1em"
+          w="100%"
+          mt="15px"
         >
-          <Box
-            display={'flex'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            w="100%"
-          >
-            {loading || isFetching ? (
-              // Use our custom loading state to show a loading indicator
-              <td colSpan="10000">Loading...</td>
-            ) : (
-              <td colSpan="10000">
-                Showing {total} of {totalCount} results
-              </td>
-            )}
+          <Box>
             <Box>
+              {loading || isFetching ? (
+                // Use our custom loading state to show a loading indicator
+                <td colSpan="10000">Loading...</td>
+              ) : (
+                <td
+                  colSpan="10000"
+                  style={{ fontSize: '14px', fontFamily: 'Mulish' }}
+                >
+                  Showing {size} of {totalCount} results
+                </td>
+              )}
+            </Box>
+            <Box>
+              <Box
+                display={'flex'}
+                justifyContent={'start'}
+                alignItems={'center'}
+              >
+                <label
+                  htmlFor="select"
+                  style={{
+                    paddingRight: '5px',
+                    fontSize: '14px',
+                    fontFamily: 'Mulish',
+                  }}
+                >
+                  Per page
+                </label>
+                <Select
+                  id="pageSize"
+                  w="100px"
+                  value={size}
+                  onChange={(e) => {
+                    setSize(Number(e.target.value));
+                    gotoPage(0);
+                  }}
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  {/* Add more options as needed */}
+                </Select>
+              </Box>
+            </Box>
+          </Box>
+          <Box>
+            <Box display={'flex'} alignItems={'center'}>
+              <Button
+                isDisabled={page === 0 ? true : false}
+                onClick={goToPageFirst}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="2px"
+                >
+                  {'<<'}
+                </Text>
+              </Button>
               <Button
                 isDisabled={page === 0 ? true : false}
                 onClick={previousPage}
@@ -1054,7 +1157,7 @@ const MasterUser = () => {
                   color="#231F20"
                   pl="5px"
                 >
-                  Prev
+                  {'<'}
                 </Text>
               </Button>
               {' | '}
@@ -1077,29 +1180,40 @@ const MasterUser = () => {
                   color="#231F20"
                   pl="5px"
                 >
-                  Next
+                  {'>'}
                 </Text>
               </Button>{' '}
-              Page{' '}
-              <strong>
+              <Button
+                isDisabled={pageCount === page ? true : false}
+                onClick={goToPageLast}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  {'>>'}
+                </Text>
+              </Button>
+              <Text as="p" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                Page{' '}
+              </Text>
+              <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
                 {page + 1} of {pageCount}
-              </strong>{' '}
+              </Text>{' '}
             </Box>
           </Box>
-          {/* <select
-                      value={pageSize}
-                      onChange={e => {
-                        setPageSize(Number(e.target.value))
-                      }}
-                    >
-                      {[10, 20, 30, 40, 50].map(pageSize => (
-                        <option key={pageSize} value={pageSize}>
-                          Show {pageSize}
-                        </option>
-                      ))}
-                    </select> */}
         </Box>
-        {/* <Link to="/welcome">Back to Welcome</Link> */}
       </Box>
     );
   } else if (isError) {

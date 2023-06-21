@@ -3,6 +3,7 @@ import React from 'react';
 import {
   useGetAgentByIdQuery,
   useGetListAgentDetailQuery,
+  useUpdateSelectProductMutation,
 } from './travelApiSlice';
 import { NavLink, useParams, Link, useNavigate } from 'react-router-dom';
 import {
@@ -22,6 +23,7 @@ import {
   Center,
   IconButton,
   Input,
+  Select,
   Button,
 } from '@chakra-ui/react';
 import PulseLoader from 'react-spinners/PulseLoader';
@@ -30,15 +32,18 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import 'react-calendar/dist/Calendar.css';
+import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import {
   listDetailAgent,
   setDetailAgent,
   setFormAgent,
   setProductAgentSelection,
+  setMessage,
+  message,
 } from './travelAgentSlice';
 import { BsFillPencilFill } from 'react-icons/bs';
 // import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
 const Styles = styled.div`
   padding-top: 1rem;
@@ -149,6 +154,10 @@ const Tables = ({
   const [filterDiscont3, setFilterDiscount3] = React.useState('');
   const [filterTotalComm, setFilterTotalComm] = React.useState('');
   const [filterNet, setFilterNet] = React.useState('');
+  // eslint-disable-next-line no-unused-vars
+  const [updateSelectProduct, { isSuccess, isError }] =
+    useUpdateSelectProductMutation();
+  // const [pageSize, setPageSize] = useState(5);
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -180,6 +189,7 @@ const Tables = ({
     prepareRow,
     selectedFlatRows,
     toggleAllRowsSelected,
+    toggleRowSelected,
     // which has only the rows for the active page
     setFilter,
     canPreviousPage,
@@ -189,6 +199,7 @@ const Tables = ({
     gotoPage,
     nextPage,
     previousPage,
+    setPageSize,
     // Get the state from the instance
     state: { pageIndex, selectedRowIds, pageSize },
   } = useTable(
@@ -250,10 +261,27 @@ const Tables = ({
     toggleAllRowsSelected();
   }, []);
 
+  React.useEffect(() => {
+    rows.forEach((row) => {
+      const rowData = row.original;
+      if (rowData.active) {
+        toggleRowSelected(row.id, true);
+      }
+    });
+  }, [rows, toggleRowSelected]);
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      dispatch(setMessage('Successfully'));
+    } else {
+      dispatch(setMessage('Error'));
+    }
+  }, [isSuccess, dispatch]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getValues = (data) => {
     let original = data.map((item) => item.original);
     dispatch(setProductAgentSelection(original));
+    console.log('test', original);
   };
 
   React.useEffect(() => {
@@ -267,6 +295,21 @@ const Tables = ({
   React.useEffect(() => {
     fetchData({ pageIndex, pageSize });
   }, [fetchData, pageIndex, pageSize]);
+
+  // eslint-disable-next-line no-unused-vars
+  const handleRowSelectionChange = (rowId, isSelected) => {
+    const selectedRow = rows.find((row) => row.id === rowId);
+    if (isSelected) {
+      console.log('Row selected:', selectedRow.original.id);
+      console.log('row ids', rowId);
+      // onRowSelectionChange(rowId, true);
+      updateData({ id: selectedRow?.original.id, active: true });
+    } else {
+      const selectedRow = rows.find((row) => row.id === rowId);
+      console.log('row id unselect', selectedRow?.original?.id);
+      updateData({ id: selectedRow?.original?.id, active: false });
+    }
+  };
 
   // console.log('pageIndex', pageIndex);
   // React.useEffect(() => {
@@ -320,14 +363,30 @@ const Tables = ({
     setFilterNet(value);
   };
 
-  // console.log('filters', filters)
+  // const selectedRowIds = selectedFlatRows.map((row) => row.original.id);
+  // React.useEffect(() => {
+  //   const selectedRowIds = selectedFlatRows.map((row) => row.original.id);
+  //   console.log('Selected row IDs:', selectedRowIds);
+  //   const unselectedRowIds = data
+  //     .map((row) => row.id)
+  //     .filter((id) => !selectedRowIds.includes(id));
+
+  // }, [selectedFlatRows, data]);
+
+  const updateData = async (unselectedRowIds) => {
+    const payload = {
+      ...unselectedRowIds,
+    };
+    await updateSelectProduct(payload);
+  };
+  // consoleunselectedRowIds
   return (
     <>
       <Box
         w={{ base: '100%', md: '90%' }}
         display={'flex'}
         justifyContent={'space-around'}
-        alignItems={'center'}
+        aligunselectedRowIds
         gap="4px"
       >
         <Input
@@ -486,98 +545,152 @@ const Tables = ({
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {/* {rows.slice(0, 10).map((row, i) => {
+            {rows.map((row) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
+                <tr
+                  key={row.id}
+                  {...row.getRowProps()}
+                  onClick={() => {
+                    toggleRowSelected(row?.id);
+                    handleRowSelectionChange(row?.id, !row.isSelected);
+                  }}
+                  style={{
+                    background: row.isSelected ? 'whitesmoke' : 'white',
+                  }}
+                >
+                  {row.cells.map((cell) => (
+                    <td key={cell.id} {...cell.getCellProps()}>
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
                 </tr>
               );
-            })} */}
-            <AnimatePresence>
-              {rows.slice(0, 10).map((row, i) => {
-                prepareRow(row);
-                return (
-                  <motion.tr
-                    key={i}
-                    {...row.getRowProps({
-                      layoutTransition: spring,
-                      exit: { opacity: 0, maxHeight: 0 },
-                    })}
-                    style={{
-                      // backgroundColor: 'red',
-                      fontWeight: 'normal',
-                      textAlign: 'left',
-                      padding: '10px',
-                      fontFamily: 'Mulish',
-                      fontSize: '14px',
-                    }}
-                  >
-                    {row.cells.map((cell, i) => {
-                      return (
-                        <motion.td
-                          key={cell.id}
-                          {...cell.getCellProps({
-                            layoutTransition: spring,
-                          })}
-                        >
-                          {cell.render('Cell')}
-                        </motion.td>
-                      );
-                    })}
-                  </motion.tr>
-                );
-              })}
-            </AnimatePresence>
-            {/* <tr>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-                  results
-                </td>
-              )}
-            </tr> */}
+            })}
           </tbody>
-        </table>
+        </table>{' '}
         <Box
           display={'flex'}
-          justifyContent={'flex-end'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
           mt="1em"
           mb="1em"
           mr="10px"
         >
-          <Button
-            onClick={() => gotoPage(0)}
-            disabled={!canPreviousPage}
-            background="blue"
-          >
-            {'<<'}
-          </Button>
-          <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'< '}
-          </Button>
-          <Button onClick={() => nextPage()} disabled={!canNextPage}>
-            {' >'}
-          </Button>
-          <Button
-            background="blue"
-            onClick={() => gotoPage(pageCount - 1)}
-            disabled={!canNextPage}
-          >
-            {'>>'}
-          </Button>
-          <Box display={'flex'} alignItems={'center'}>
-            Page{' '}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>{' '}
+          <Box display={'flex'} justifyContent={'start'} alignItems={'center'}>
+            <label htmlFor="select" style={{ paddingRight: '5px' }}>
+              Per page
+            </label>
+            <Select
+              id="pageSize"
+              w="100px"
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+                gotoPage(0);
+              }}
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+              {/* Add more options as needed */}
+            </Select>
+          </Box>
+          <Box display={'flex'} justifyContent={'end'}>
+            <Button
+              onClick={() => gotoPage(0)}
+              disabled={!canPreviousPage}
+              _hover={{
+                bg: '#f0eeee',
+                borderRadius: '5px',
+                WebkitBorderRadius: '5px',
+                MozBorderRadius: '5px',
+              }}
+              bg="white"
+              border={'none'}
+            >
+              <Text
+                fontFamily={'Mulish'}
+                style={{ fontSize: '12px' }}
+                color="#231F20"
+                pl="5px"
+              >
+                {'<< '}
+              </Text>
+            </Button>
+            <Button
+              onClick={() => previousPage()}
+              disabled={!canPreviousPage}
+              _hover={{
+                bg: '#f0eeee',
+                borderRadius: '5px',
+                WebkitBorderRadius: '5px',
+                MozBorderRadius: '5px',
+              }}
+              bg="white"
+              border={'none'}
+            >
+              <Text
+                fontFamily={'Mulish'}
+                style={{ fontSize: '12px' }}
+                color="#231F20"
+                pr="5px"
+              >
+                {'< '}
+              </Text>
+              <BiSkipPreviousCircle size="25px" color="black" />
+            </Button>
+            <Button
+              onClick={() => nextPage()}
+              disabled={!canNextPage}
+              _hover={{
+                bg: '#f0eeee',
+                borderRadius: '5px',
+                WebkitBorderRadius: '5px',
+                MozBorderRadius: '5px',
+              }}
+              bg="white"
+              border={'none'}
+            >
+              <BiSkipNextCircle size="25px" color="black" />
+              <Text
+                fontFamily={'Mulish'}
+                style={{ fontSize: '12px' }}
+                color="#231F20"
+                pl="5px"
+              >
+                {' >'}
+              </Text>
+            </Button>
+            <Button
+              _hover={{
+                bg: '#f0eeee',
+                borderRadius: '5px',
+                WebkitBorderRadius: '5px',
+                MozBorderRadius: '5px',
+                color: 'white.400',
+              }}
+              bg="white"
+              border={'none'}
+              onClick={() => gotoPage(pageCount - 1)}
+              disabled={!canNextPage}
+            >
+              <Text
+                fontFamily={'Mulish'}
+                style={{ fontSize: '12px' }}
+                color="#231F20"
+                pl="5px"
+              >
+                {' >> '}
+              </Text>
+            </Button>
+            <Box display={'flex'} alignItems={'center'}>
+              Page{' '}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>{' '}
+            </Box>
           </Box>
           <span></span>
         </Box>
@@ -604,6 +717,7 @@ const DetailMasterUser = () => {
   // const currentstep = useSelector()
   const dispatch = useDispatch();
   const detail = useSelector(listDetailAgent);
+  const msg = useSelector(message);
   // const [deleteAgent] = useDeleteAgentMutation({
   //   skip: false,
   // });
@@ -685,6 +799,24 @@ const DetailMasterUser = () => {
   //       dispatch(setDetailAgent([...dataUserDetail]))
   //     }
   // }, user, dispatch, id)
+
+  React.useEffect(() => {
+    refetch({ id });
+  }, [msg, id, refetch]);
+
+  React.useEffect(() => {
+    let timer;
+
+    if (msg) {
+      timer = setTimeout(() => {
+        dispatch(setMessage(null));
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [dispatch, msg]);
 
   const handleEditUser = (e) => {
     e.preventDefault();

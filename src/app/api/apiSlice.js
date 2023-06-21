@@ -12,6 +12,7 @@ const baseQuery = fetchBaseQuery(
       'MasterAgent',
       'cities',
       'MasterQuery',
+      'MasterProduct',
     ],
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
@@ -16,7 +17,15 @@ import {
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-
+import { useGetBandTypeQuery } from '../bandType/bandTypesApiSlice';
+import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
+import { useGetListAreaGroupQuery } from '../group-area/listApiSlice';
+import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSlice';
+import UseCustomToast from '../../../components/UseCustomToast';
+import {
+  useGetListVariantQuery,
+  useCreateMasterProductMutation,
+} from './masterProductApiSlice';
 // import { selectCurrentTraveller } from '../../auth/authSlice';
 import {
   areaList,
@@ -24,10 +33,20 @@ import {
   planTypes,
   typeProd,
   setMasterProduct,
+  setListBandType,
+  setListArea,
+  setListPlanType,
+  listarea,
+  listbandtype,
+  listplantype,
   listProduct,
   formProduct,
   setProductForm,
   listAdditonal,
+  listtravellertype,
+  setListTravellerType,
+  setListVariant,
+  listvariant,
 } from './masterProductSlice';
 
 // import { SlCalender } from 'react-icons/sl';
@@ -37,15 +56,20 @@ import { Select } from 'chakra-react-select';
 
 const CreateProduct = () => {
   const dispatch = useDispatch();
-  const listProducts = useSelector(listProduct);
-  const listPlanType = useSelector(planTypes);
-  const additonal = useSelector(listAdditonal);
-  const areaLists = useSelector(areaList);
+  const listProducts = useSelector(listtravellertype);
+  const travelertype = useSelector(listtravellertype);
+  const listPlanType = useSelector(listplantype);
+  const additonal = useSelector(listbandtype);
+  const areaLists = useSelector(listarea);
+  const listvariants = useSelector(listvariant);
   const formstate = useSelector(formProduct);
-  const typesProduct = useSelector(typeProd);
-  const listTravelDurations = useSelector(travelDurations);
+  const typesProduct = useSelector(listplantype);
+  const listTravelDurations = useSelector(listbandtype);
   const [isActive] = useState(false);
   const [isActiveDescLoc] = useState(false);
+  const { data: { response: variant } = {} } = useGetListVariantQuery();
+  const [toastId, setToastId] = React.useState(null);
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
   const [fields, setFields] = React.useState(null);
@@ -53,18 +77,134 @@ const CreateProduct = () => {
   const handleUploadIdentity = (e) => {
     hiddenInputIdtty.current.click();
   };
+  const [
+    createMasterProduct,
+    { isLoading, isSuccess: success, isError: errorUpload },
+  ] = useCreateMasterProductMutation();
+  const { data: bandTypes } = useGetBandTypeQuery({ page: 0, size: 9999 });
 
-  const handleNext = (e) => {
+  const { data: grouparea } = useGetListAreaGroupQuery({ page: 0, size: 9999 });
+
+  const { data: planTypes } = useGetPlanTypesQuery({ page: 0, size: 9999 });
+
+  const { data: travellerTypes } = useGetTravellerTypesQuery({
+    page: 0,
+    size: 9999,
+  });
+
+  React.useEffect(() => {
+    if (bandTypes) {
+      let duration = bandTypes?.response.map((obj) => ({
+        ...obj,
+        label: obj.travelDurationName,
+        value: obj.travelDurationName,
+      }));
+      dispatch(setListBandType(duration));
+    }
+  }, [bandTypes, dispatch]);
+
+  React.useEffect(() => {
+    if (grouparea) {
+      let area = grouparea?.response.map((obj) => ({
+        ...obj,
+        label: obj.areaGroupName,
+        value: obj.areaGroupName,
+      }));
+      dispatch(setListArea(area));
+    }
+  }, [grouparea, dispatch]);
+
+  console.log('variant', variant);
+
+  React.useEffect(() => {
+    if (planTypes) {
+      let plan = planTypes?.response.map((obj) => ({
+        ...obj,
+        label: obj.name,
+        value: obj.name,
+      }));
+      dispatch(setListPlanType(plan));
+    }
+  }, [planTypes, dispatch]);
+
+  React.useEffect(() => {
+    if (travellerTypes) {
+      let type = travellerTypes?.response.map((obj) => ({
+        ...obj,
+        label: obj.name,
+        value: obj.name,
+      }));
+      dispatch(setListTravellerType(type));
+    }
+  }, [travellerTypes, dispatch]);
+
+  React.useEffect(() => {
+    if (variant) {
+      let type = variant?.map((obj) => ({
+        ...obj,
+        label: obj.name,
+        value: obj.name,
+      }));
+      dispatch(setListVariant(type));
+    }
+  }, [variant, dispatch]);
+
+  const handleNext = async (e) => {
     e.preventDefault();
-    dispatch(setMasterProduct([...listProducts, fields]));
-    toast({
-      title: 'Created Product Success',
-      status: 'success',
-      position: 'top-right',
-      duration: 3000,
-      isClosable: true,
-      variant: 'solid',
-    });
+    const constData = {
+      productName: formstate?.productName,
+      code: '',
+      productCode: formstate?.productCode,
+      currId: formstate?.currId,
+      value: '',
+      productDescription: formstate?.productDescription,
+      productBrochure: null,
+      productPersonalAccidentCover: formstate?.personalAccidentCover,
+      productMedicalCover: formstate?.productMedicalCover,
+      productTravelCover: formstate?.productTravelCover,
+      travellerType: {
+        id: formstate?.travellerType[0]?.id,
+      },
+      bandType: {
+        id: formstate?.additionalWeek[0]?.id,
+      },
+      areaGroup: {
+        id: formstate?.groupArea[0]?.id,
+      },
+      planType: {
+        id: formstate?.planType[0]?.id,
+      },
+      productAdditionalWeek: formstate?.additionalWeek[0]?.travelDurationName,
+      benefitDoc: null,
+      wordingDoc: null,
+      covidDoc: null,
+      npwp: true,
+      premiumPrice: null,
+      commisionLv1: null,
+      commisionLv2: null,
+      commisionLv3: null,
+      totalCommision: null,
+      afterCommisionPrice: null,
+      ppn: null,
+      pph23: null,
+      ppnValue: null,
+      pph23Value: null,
+      ajiPrice: null,
+      variants: [{ id: formstate.variant[0].id }],
+    };
+    try {
+      let data = await createMasterProduct(constData);
+      if (data?.data) {
+        showSuccessToast('Created master product successfully!');
+        navigate('/master-data/master-products');
+      } else {
+        const errorMessage = `Failed to created master product. Status Code: ${data?.error?.status}`;
+        showErrorToast(errorMessage);
+      }
+    } catch (err) {
+      const errorMessage = `Failed to created master product. Status Code: ${err?.error?.status}`;
+      showErrorToast(errorMessage);
+    }
     setFields(null);
     navigate('/master-data/master-products');
   };
@@ -83,6 +223,23 @@ const CreateProduct = () => {
     };
     dispatch(setProductForm(forms));
   }
+
+  function handleVariant(data) {
+    const forms = {
+      ...formstate,
+      variant: [...data],
+    };
+    dispatch(setProductForm(forms));
+  }
+
+  function handletravellerType(data) {
+    const forms = {
+      ...formstate,
+      travellerType: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+
   function handleGroupArea(data) {
     const forms = {
       ...formstate,
@@ -172,6 +329,7 @@ const CreateProduct = () => {
               mt="14px"
             >
               <Input
+                id="inputs"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 value={formstate?.productCode}
@@ -201,6 +359,7 @@ const CreateProduct = () => {
               mt="14px"
             >
               <Input
+                id="inputs"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 value={formstate?.productName}
@@ -230,13 +389,16 @@ const CreateProduct = () => {
               mt="14px"
             >
               <Input
+                id="inputs"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 value={formstate?.currId}
                 name="currId"
                 onChange={handleData}
+                textTransform={'uppercase'}
                 h="48px"
                 variant={'custom'}
+                background={formstate?.currId !== '' ? '#e8f0fe' : '#ebebeb'}
               />
               <FormLabel
                 fontSize="12"
@@ -259,6 +421,7 @@ const CreateProduct = () => {
               mt="14px"
             >
               <Input
+                id="inputs"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 value={formstate?.productDetailCode}
@@ -348,6 +511,7 @@ const CreateProduct = () => {
               mt="14px"
             >
               <Textarea
+                id="myTextarea"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 value={formstate?.productDescription}
@@ -376,12 +540,16 @@ const CreateProduct = () => {
               mt="14px"
             >
               <Textarea
+                id="myTextarea"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 name="personalAccidentCover"
                 value={formstate?.personalAccidentCover}
                 onChange={handleData}
                 h="48px"
+                background={
+                  formstate?.personalAccidentCover !== '' ? '#e8f0fe' : ''
+                }
               />
               <FormLabel
                 fontSize="12"
@@ -404,12 +572,16 @@ const CreateProduct = () => {
               mt="14px"
             >
               <Textarea
+                id="myTextarea"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 value={formstate?.productMedicalCover}
                 name="productMedicalCover"
                 onChange={handleData}
                 h="48px"
+                background={
+                  formstate?.productMedicalCover !== '' ? '#e8f0fe' : ''
+                }
               />
               <FormLabel
                 fontSize="12"
@@ -432,21 +604,25 @@ const CreateProduct = () => {
               mt="14px"
             >
               <Textarea
+                id="myTextarea"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 value={formstate?.productTravelCover}
                 name="productTravelCover"
                 onChange={handleData}
+                background={
+                  formstate?.productTravelCover !== '' ? '#e8f0fe' : ''
+                }
               />
               <FormLabel
                 pt="1.5"
                 style={{
                   transform:
-                    formstate !== null && formstate?.travelCover !== ''
+                    formstate !== null && formstate?.productTravelCover !== ''
                       ? 'translate(0, -10px) scale(0.75)'
                       : 'translate(0, 4px) scale(0.75)',
                   color:
-                    formstate !== null && formstate?.travelCover !== ''
+                    formstate !== null && formstate?.productTravelCover !== ''
                       ? '#065baa'
                       : '#231F20',
                   fontSize: '14px',
@@ -636,28 +812,15 @@ const CreateProduct = () => {
                   <Select
                     isMulti={false}
                     name="colors"
-                    onChange={handleTravelDuration}
-                    value={formstate?.travelDuration}
+                    onChange={handletravellerType}
+                    value={formstate?.travellerType}
                     classNamePrefix="chakra-react-select"
-                    options={listTravelDurations}
-                    placeholder="Select some colors..."
+                    options={travelertype}
+                    placeholder=""
                     closeMenuOnSelect={true}
                     menuPortalTarget={document.body}
                     styles={{
                       menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
-                    }}
-                    components={{
-                      Placeholder: () => (
-                        <span
-                          style={{
-                            display: formstate?.travelDuration
-                              ? 'none'
-                              : 'none',
-                          }}
-                        >
-                          Select an option
-                        </span>
-                      ),
                     }}
                     chakraStyles={{
                       dropdownIndicator: (
@@ -678,19 +841,19 @@ const CreateProduct = () => {
                     style={{
                       transform:
                         formstate !== null &&
-                        formstate?.travelDuration?.length !== 0
+                        formstate?.travellerType?.length !== 0
                           ? 'translate(0, -10px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
                         formstate !== null &&
-                        formstate?.travelDuration?.length !== 0
+                        formstate?.travellerType?.length !== 0
                           ? '#065baa'
                           : '#231F20',
                       fontSize: '14px',
                     }}
                     fontFamily={'Mulish'}
                   >
-                    Travel Duration
+                    Traveller Type
                   </FormLabel>
                 </Box>
               </Box>
@@ -698,7 +861,7 @@ const CreateProduct = () => {
             </FormControl>
           </Box>
         </Box>
-        <Box width={{ base: '100%', md: '540px' }} m="auto">
+        <Box width={{ base: '100%', md: '540px' }} m="auto" mb="2em">
           <FormControl
             variant="floating"
             isRequired
@@ -765,7 +928,81 @@ const CreateProduct = () => {
             </Box>
             {/* It is important that the Label comes after the Control due to css selectors */}
           </FormControl>
+          <Box className="floating-form" mt="1em">
+            <Box className="react-select-container">
+              <FormControl
+                variant="floating"
+                isRequired
+                fontFamily={'Mulish'}
+                mt="14px"
+              >
+                <Box className="floating-form">
+                  <Box className="react-select-container">
+                    <Select
+                      isMulti
+                      name="colors"
+                      onChange={handleVariant}
+                      value={formstate?.variant}
+                      classNamePrefix="chakra-react-select"
+                      options={listvariants}
+                      closeMenuOnSelect={true}
+                      menuPortalTarget={document.body}
+                      styles={{
+                        menuPortal: (provided) => ({
+                          ...provided,
+                          zIndex: 100,
+                        }),
+                      }}
+                      components={{
+                        Placeholder: () => (
+                          <span
+                            style={{
+                              display: formstate?.planType ? 'none' : 'none',
+                            }}
+                          >
+                            Select an option
+                          </span>
+                        ),
+                      }}
+                      chakraStyles={{
+                        dropdownIndicator: (
+                          prev,
+                          { selectProps: { menuIsOpen } }
+                        ) => ({
+                          ...prev,
+                          '> svg': {
+                            transitionDuration: 'normal',
+                            transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                          },
+                        }),
+                      }}
+                    />
+                    <span className="highlight"></span>
+                    <FormLabel
+                      pt="1.5"
+                      style={{
+                        transform:
+                          formstate !== null && formstate?.variant?.length !== 0
+                            ? 'translate(0, -10px) scale(0.75)'
+                            : 'translate(0, 4px) scale(0.75)',
+                        color:
+                          formstate !== null && formstate?.variant?.length !== 0
+                            ? '#065baa'
+                            : '#231F20',
+                        fontSize: '14px',
+                      }}
+                      fontFamily={'Mulish'}
+                    >
+                      Variant
+                    </FormLabel>
+                  </Box>
+                </Box>
+                {/* It is important that the Label comes after the Control due to css selectors */}
+              </FormControl>
+            </Box>
+          </Box>
         </Box>
+
         <Box
           display={'flex'}
           justifyContent={'flex-end'}
@@ -777,13 +1014,17 @@ const CreateProduct = () => {
         >
           <Button
             isDisabled={
-              !fields?.productCode ||
-              !fields?.productName ||
-              !fields?.productDetailCode ||
-              !fields?.productDescription ||
-              !fields?.medicalCover ||
-              !fields?.travelCover ||
-              !fields?.productType
+              !formstate?.productCode ||
+              !formstate?.productName ||
+              !formstate?.productDetailCode ||
+              !formstate?.productDescription ||
+              !formstate?.productMedicalCover ||
+              !formstate?.productTravelCover ||
+              !formstate?.productType ||
+              !formstate?.variant ||
+              !formstate?.travellerType ||
+              !formstate?.groupArea ||
+              !formstate?.planType
                 ? true
                 : false
             }

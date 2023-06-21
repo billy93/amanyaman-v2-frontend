@@ -29,8 +29,53 @@ const authSlice = createSlice({
             icon: '',
             children: [
               {
+                link: '/master-data/list-area',
+                name: 'Area',
+                href: '#',
+              },
+              {
+                link: '/master-data/list-band-type',
+                name: 'Band Type',
+                href: '#',
+              },
+              {
+                link: '/master-data/list-city',
+                name: 'Cities',
+                href: '#',
+              },
+              {
+                link: '/master-data/list-country',
+                name: 'Countries',
+                href: '#',
+              },
+              {
+                link: '/master-data/list-document-type',
+                name: 'Document Type',
+                href: '#',
+              },
+              {
+                link: '/master-data/list-group-area',
+                name: 'Group Area',
+                href: '#',
+              },
+              {
                 link: '/master-data/master-products',
-                name: 'Master Products',
+                name: 'Products',
+                href: '#',
+              },
+              {
+                link: '/master-data/product-price',
+                name: 'Product Price',
+                href: '#',
+              },
+              {
+                link: '/master-data/list-plan-type',
+                name: 'Plan Type',
+                href: '#',
+              },
+              {
+                link: '/master-data/system-params',
+                name: 'System Parameters',
                 href: '#',
               },
               {
@@ -38,64 +83,15 @@ const authSlice = createSlice({
                 name: 'Travel Agent',
                 href: '#',
               },
-              {
-                link: '/master-data/system-params',
-                name: 'System Params',
-                href: '#',
-              },
-              {
-                link: '/master-data/product-price',
-                name: 'Master Product Price',
-                href: '#',
-              },
-              {
-                link: '/master-data/list-country',
-                name: 'List Country',
-                href: '#',
-              },
-              {
-                link: '/master-data/list-city',
-                name: 'List City',
-                href: '#',
-              },
-              {
-                link: '/master-data/list-area',
-                name: 'List Area',
-                href: '#',
-              },
-              {
-                link: '/master-data/list-group-area',
-                name: 'List Group Area',
-                href: '#',
-              },
-              {
-                link: '/master-data/list-document-type',
-                name: 'Document Type List',
-                href: '#',
-              },
-              {
-                link: '/master-data/list-plan-type',
-                name: 'Plan Type List',
-                href: '#',
-              },
+
               {
                 link: '/master-data/list-traveller-type',
-                name: 'Traveller Type List',
-                href: '#',
-              },
-              {
-                link: '/master-data/list-product-code',
-                name: 'Product Code List',
+                name: 'Traveller Type',
                 href: '#',
               },
               {
                 link: '/master-data/list-variant',
-                name: 'Variant List',
-                href: '#',
-              },
-              {
-                link: '/master-data/list-band-type',
-                name: 'Band Type List',
+                name: 'Variants',
                 href: '#',
               },
             ],

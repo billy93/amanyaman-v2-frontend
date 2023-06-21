@@ -124,6 +124,23 @@ export const getAgentList = apiSlice.injectEndpoints({
         };
       },
     }),
+    updateSelectProduct: builder.mutation({
+      query: (payload) => {
+        console.log('tesss', payload);
+        return {
+          url: '/app/product-travel-agents/active',
+          method: 'PUT',
+          body: { ...payload },
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterProduct', id })),
+                  'MasterProduct',
+                ]
+              : ['MasterProduct'],
+        };
+      },
+    }),
     uploadFileTravelAgent: builder.mutation({
       query: (file) => {
         const formData = new FormData();
@@ -159,6 +176,7 @@ export const getAgentList = apiSlice.injectEndpoints({
 });
 
 export const {
+  useUpdateSelectProductMutation,
   useGetListAgentDetailQuery,
   useGetAgentByIdQuery,
   useGetTravelAgentQuery,

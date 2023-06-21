@@ -46,6 +46,18 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    createMasterProduct: builder.mutation({
+      query: (payload) => ({
+        url: '/app/products',
+        method: 'POST',
+        body: { ...payload },
+        transformResponse: (response) => {
+          // Custom response transformation logic here
+          return response.data;
+        },
+      }),
+      // OnQueryError
+    }),
     getProductById: builder.query({
       query: (id) => {
         // const { page, size } = datas;
@@ -68,11 +80,28 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    getListVariant: builder.query({
+      query: () => {
+        // const { page, size } = datas;
+        return {
+          url: '/app/variants?page=0&size=9999',
+        };
+      },
+      transformResponse: (response, meta) => {
+        return {
+          response,
+          totalCount: Number(meta.response.headers.get('X-Total-Count')),
+        };
+      },
+    }),
   }),
 });
 
 export const {
+  useCreateMasterProductMutation,
+  useGetProductByIdMutation,
   useGetProductTravelAgentQuery,
   useGetProductsQuery,
   useGetProductByIdQuery,
+  useGetListVariantQuery,
 } = policyApiSlice;

@@ -21,6 +21,7 @@ import {
   Text,
   Center,
   useDisclosure,
+  Select,
 } from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
@@ -225,6 +226,7 @@ const Tables = ({
   fetchData,
   loading,
   totalCount,
+  size,
   pageCount: controlledPageCount,
 }) => {
   const dispatch = useDispatch();
@@ -433,7 +435,7 @@ const Tables = ({
               );
             })} */}
             <AnimatePresence>
-              {rows.slice(0, 10).map((row, i) => {
+              {rows.slice(0, size).map((row, i) => {
                 prepareRow(row);
                 return (
                   <motion.tr
@@ -493,6 +495,7 @@ const CountryList = () => {
   const [pageCount, setPageCount] = React.useState(0);
   const fetchIdRef = React.useRef(0);
   const [page, setPage] = React.useState(0);
+  const [size, setSize] = React.useState(5);
   const {
     data: { response: systemParams, totalCount } = {},
     isLoading,
@@ -500,7 +503,7 @@ const CountryList = () => {
     error,
     isFetching,
     refetch,
-  } = useGetListCountryQuery({ page, size: 10 });
+  } = useGetListCountryQuery({ page, size: size });
 
   const fetchData = React.useCallback(
     ({ pageSize, pageIndex, pageOptions }) => {
@@ -579,8 +582,8 @@ const CountryList = () => {
   );
 
   React.useEffect(() => {
-    refetch({ page, size: 10 });
-  }, [page, refetch]);
+    refetch({ page, size: size });
+  }, [page, refetch, size]);
   const nextPages = () => {
     setPage((prevPage) => prevPage + 1);
   };
@@ -590,7 +593,17 @@ const CountryList = () => {
   const total = React.useMemo(() => {
     return (page + 1) * 10;
   }, [page]);
+  const goToPageLast = () => {
+    setPage(pageCount - 1);
+  };
 
+  const goToPageFirst = () => {
+    setPage(0);
+  };
+
+  const gotoPage = () => {
+    setPage(0);
+  };
   let content;
   if (isLoading) {
     content = (
@@ -606,35 +619,94 @@ const CountryList = () => {
         <Styles>
           <Tables
             columns={columns}
-            data={data}
+            data={systemParams}
             fetchData={fetchData}
             loading={loading}
             pageCount={pageCount}
             totalCount={totalCount}
+            size={size}
           />
         </Styles>
         {/* <Link to="/welcome">Back to Welcome</Link> */}
         <Box
-          display="flex"
-          justifyContent={'flex-end'}
+          display={'flex'}
+          justifyContent={'space-between'}
           alignItems={'center'}
-          mt="1em"
+          w="100%"
+          mt="15px"
         >
-          <Box
-            display={'flex'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            w="100%"
-          >
-            {loading || isFetching ? (
-              // Use our custom loading state to show a loading indicator
-              <td colSpan="10000">Loading...</td>
-            ) : (
-              <td colSpan="10000">
-                Showing {total} of {totalCount} results
-              </td>
-            )}
+          <Box>
             <Box>
+              {loading || isFetching ? (
+                // Use our custom loading state to show a loading indicator
+                <td colSpan="10000">Loading...</td>
+              ) : (
+                <td
+                  colSpan="10000"
+                  style={{ fontSize: '14px', fontFamily: 'Mulish' }}
+                >
+                  Showing {size} of {totalCount} results
+                </td>
+              )}
+            </Box>
+            <Box>
+              <Box
+                display={'flex'}
+                justifyContent={'start'}
+                alignItems={'center'}
+              >
+                <label
+                  htmlFor="select"
+                  style={{
+                    paddingRight: '5px',
+                    fontSize: '14px',
+                    fontFamily: 'Mulish',
+                  }}
+                >
+                  Per page
+                </label>
+                <Select
+                  id="pageSize"
+                  w="100px"
+                  value={size}
+                  onChange={(e) => {
+                    setSize(Number(e.target.value));
+                    gotoPage(0);
+                  }}
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  {/* Add more options as needed */}
+                </Select>
+              </Box>
+            </Box>
+          </Box>
+          <Box>
+            <Box display={'flex'} alignItems={'center'}>
+              <Button
+                isDisabled={page === 0 ? true : false}
+                onClick={goToPageFirst}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="2px"
+                >
+                  {'<<'}
+                </Text>
+              </Button>
               <Button
                 isDisabled={page === 0 ? true : false}
                 onClick={prevPages}
@@ -655,7 +727,7 @@ const CountryList = () => {
                   color="#231F20"
                   pl="5px"
                 >
-                  Prev
+                  {'<'}
                 </Text>
               </Button>
               {' | '}
@@ -678,27 +750,39 @@ const CountryList = () => {
                   color="#231F20"
                   pl="5px"
                 >
-                  Next
+                  {'>'}
                 </Text>
               </Button>{' '}
-              Page{' '}
-              <strong>
+              <Button
+                isDisabled={pageCount === page ? true : false}
+                onClick={goToPageLast}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  {'>>'}
+                </Text>
+              </Button>
+              <Text as="p" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                Page{' '}
+              </Text>
+              <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
                 {page + 1} of {pageCount}
-              </strong>{' '}
+              </Text>{' '}
             </Box>
           </Box>
-          {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
         </Box>
       </Box>
     );
