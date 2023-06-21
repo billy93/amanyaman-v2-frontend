@@ -469,7 +469,7 @@ const DetailMasterUser = () => {
           <Link
             color="#065BAA"
             style={{ textDecoration: 'underline', color: '#065BAA' }}
-            to={`/policies/policy-detail/${row.original.travelAgentName}`}
+            to={`/master-data/detail-product-price/${id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.travelAgentName}
