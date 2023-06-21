@@ -597,7 +597,7 @@ const Tables = ({
               {/* Add more options as needed */}
             </Select>
           </Box>
-          <Box display={'flex'} justifyContent={'end'}>
+          <Box display={'flex'} justifyContent={'end'} w="80%">
             <Button
               onClick={() => gotoPage(0)}
               disabled={!canPreviousPage}
