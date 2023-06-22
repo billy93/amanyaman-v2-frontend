@@ -4,6 +4,7 @@ import {
   useGetProductByIdQuery,
   useGetProductTravelAgentQuery,
 } from './masterProductApiSlice';
+import { useUpdateSelectProductMutation } from '../travelAgent/travelApiSlice';
 import { NavLink, useParams, useNavigate, Link } from 'react-router-dom';
 import {
   useTable,
@@ -12,6 +13,7 @@ import {
   useSortBy,
   usePagination,
 } from 'react-table';
+import { setMessage, message } from '../travelAgent/travelAgentSlice';
 import styled from 'styled-components';
 import matchSorter from 'match-sorter';
 // import DeleteBtn from './deleteAgent';
@@ -31,8 +33,9 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 import 'react-calendar/dist/Calendar.css';
 
 import { BsFillPencilFill } from 'react-icons/bs';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Styles = styled.div`
   padding-top: 1rem;
@@ -125,6 +128,8 @@ const Tables = ({
   pageCount: controlledPageCount,
   totalCount,
 }) => {
+  const [updateSelectProduct, { isSuccess }] = useUpdateSelectProductMutation();
+  const dispatch = useDispatch();
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -156,7 +161,7 @@ const Tables = ({
     rows,
     prepareRow,
     toggleAllRowsSelected,
-    // toggleRowSelected,
+    toggleRowSelected,
     // which has only the rows for the active page
 
     // The rest of these things are super handy, too ;)
@@ -228,7 +233,45 @@ const Tables = ({
   }, [toggleAllRowsSelected]);
 
   // Render the UI for your table
+  React.useEffect(() => {
+    rows.forEach((row) => {
+      const rowData = row.original;
+      // console.log('rowdata', rowData);
+      if (rowData?.productTravelAgent.active) {
+        toggleRowSelected(row.id, true);
+      }
+    });
+  }, [rows, toggleRowSelected]);
 
+  React.useEffect(() => {
+    if (isSuccess) {
+      dispatch(setMessage('Successfully'));
+    } else {
+      dispatch(setMessage('Error'));
+    }
+  }, [isSuccess, dispatch]);
+
+  // eslint-disable-next-line no-unused-vars
+  const handleRowSelectionChange = (rowId, isSelected) => {
+    const selectedRow = rows.find((row) => row.id === rowId);
+    if (isSelected) {
+      console.log('Row selected:', selectedRow.original.id);
+      console.log('row ids', rowId);
+      // onRowSelectionChange(rowId, true);
+      updateData({ id: selectedRow?.original.id, active: true });
+    } else {
+      const selectedRow = rows.find((row) => row.id === rowId);
+      console.log('row id unselect', selectedRow?.original?.id);
+      updateData({ id: selectedRow?.original?.id, active: false });
+    }
+  };
+
+  const updateData = async (unselectedRowIds) => {
+    const payload = {
+      ...unselectedRowIds,
+    };
+    await updateSelectProduct(payload);
+  };
   React.useEffect(() => {
     fetchData({ pageIndex, pageSize, pageOptions });
     // setPageCount({pageIndex, pageSize})
@@ -317,53 +360,28 @@ const Tables = ({
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {/* {rows.slice(0, 10).map((row, i) => {
+            {rows.map((row) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
+                <tr
+                  key={row.id}
+                  {...row.getRowProps()}
+                  onClick={() => {
+                    toggleRowSelected(row?.id);
+                    handleRowSelectionChange(row?.id, !row.isSelected);
+                  }}
+                  style={{
+                    background: row.isSelected ? 'whitesmoke' : 'white',
+                  }}
+                >
+                  {row.cells.map((cell) => (
+                    <td key={cell.id} {...cell.getCellProps()}>
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
                 </tr>
               );
-            })} */}
-            <AnimatePresence>
-              {rows.slice(0, 10).map((row, i) => {
-                prepareRow(row);
-                return (
-                  <motion.tr
-                    key={i}
-                    {...row.getRowProps({
-                      layoutTransition: spring,
-                      exit: { opacity: 0, maxHeight: 0 },
-                    })}
-                  >
-                    {row.cells.map((cell, i) => {
-                      return (
-                        <motion.td
-                          key={i}
-                          {...cell.getCellProps({
-                            layoutTransition: spring,
-                          })}
-                          style={{
-                            // backgroundColor: 'red',
-                            fontWeight: 'normal',
-                            textAlign: 'left',
-                            padding: '10px',
-                            fontFamily: 'Mulish',
-                            fontSize: '14px',
-                          }}
-                        >
-                          {cell.render('Cell')}
-                        </motion.td>
-                      );
-                    })}
-                  </motion.tr>
-                );
-              })}
-            </AnimatePresence>
+            })}
           </tbody>
         </table>
         <Box
@@ -407,7 +425,8 @@ const Tables = ({
 };
 
 const DetailMasterUser = () => {
-  // const currentstep = useSelector()
+  const dispatch = useDispatch();
+  const msg = useSelector(message);
   // const [deleteAgent] = useDeleteAgentMutation({
   //   skip: false,
   // });
@@ -459,6 +478,24 @@ const DetailMasterUser = () => {
     e.preventDefault();
     navigate(`/master-data/edit-master-product/${id}`);
   };
+
+  React.useEffect(() => {
+    refetch({ id });
+  }, [msg, refetch, id]);
+
+  React.useEffect(() => {
+    let timer;
+
+    if (msg) {
+      timer = setTimeout(() => {
+        dispatch(setMessage(null));
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [dispatch, msg]);
 
   const columns = React.useMemo(
     () => [
