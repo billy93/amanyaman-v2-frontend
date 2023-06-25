@@ -21,9 +21,11 @@ const DetailMasterUser = () => {
   const navigate = useNavigate();
 
   const handleEditUser = () => {
-    navigate(`/master-data/edit-product-price/${id}`, { replace: true });
+    navigate(`/master-data/edit-master-product/${id}`, { replace: true });
   };
-
+  const handleGoBack = () => {
+    navigate(-1);
+  };
   let content;
   if (isLoading) {
     content = (
@@ -52,8 +54,27 @@ const DetailMasterUser = () => {
                 spacing="8px"
                 separator={<ChevronRightIcon color="gray.500" />}
               >
+                <BreadcrumbItem>
+                  <BreadcrumbLink onClick={handleGoBack}>
+                    <Text
+                      as="b"
+                      ml="4"
+                      fontSize="sm"
+                      color="#065BAA"
+                      _hover={{
+                        borderBottom: '#065BAA',
+                        border: '1 px solid',
+                      }}
+                    >
+                      Detail Master Product
+                    </Text>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink as={NavLink} to="/master-data/product-price">
+                  <BreadcrumbLink
+                    as={NavLink}
+                    to="/master-data/master-product-price"
+                  >
                     <Text
                       as="b"
                       ml="4"

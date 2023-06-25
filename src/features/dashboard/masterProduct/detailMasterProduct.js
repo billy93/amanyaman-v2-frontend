@@ -4,7 +4,10 @@ import {
   useGetProductByIdQuery,
   useGetProductTravelAgentQuery,
 } from './masterProductApiSlice';
-import { useUpdateSelectProductMutation } from '../travelAgent/travelApiSlice';
+import {
+  useUpdateSelectProductMutation,
+  useUpdateSelectProductMultpleMutation,
+} from '../travelAgent/travelApiSlice';
 import { NavLink, useParams, useNavigate, Link } from 'react-router-dom';
 import {
   useTable,
@@ -17,6 +20,7 @@ import { setMessage, message } from '../travelAgent/travelAgentSlice';
 import styled from 'styled-components';
 import matchSorter from 'match-sorter';
 // import DeleteBtn from './deleteAgent';
+import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import {
   Box,
   Heading,
@@ -24,6 +28,7 @@ import {
   Center,
   Button,
   IconButton,
+  Select,
 } from '@chakra-ui/react';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
@@ -33,8 +38,6 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 import 'react-calendar/dist/Calendar.css';
 
 import { BsFillPencilFill } from 'react-icons/bs';
-import { motion } from 'framer-motion';
-import { FaSort } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Styles = styled.div`
@@ -129,6 +132,8 @@ const Tables = ({
   totalCount,
 }) => {
   const [updateSelectProduct, { isSuccess }] = useUpdateSelectProductMutation();
+  const [updateSelectProductMultple, { isSuccess: success }] =
+    useUpdateSelectProductMultpleMutation();
   const dispatch = useDispatch();
   const defaultColumn = React.useMemo(
     () => ({
@@ -172,7 +177,8 @@ const Tables = ({
     gotoPage,
     nextPage,
     previousPage,
-    state: { pageIndex, pageSize },
+    setPageSize,
+    state: { pageIndex, pageSize, selectedRowIds },
   } = useTable(
     {
       columns,
@@ -228,15 +234,10 @@ const Tables = ({
     }
   );
 
-  React.useEffect(() => {
-    toggleAllRowsSelected();
-  }, [toggleAllRowsSelected]);
-
   // Render the UI for your table
   React.useEffect(() => {
     rows.forEach((row) => {
       const rowData = row.original;
-      // console.log('rowdata', rowData);
       if (rowData?.productTravelAgent.active) {
         toggleRowSelected(row.id, true);
       }
@@ -244,27 +245,37 @@ const Tables = ({
   }, [rows, toggleRowSelected]);
 
   React.useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess || success) {
       dispatch(setMessage('Successfully'));
     } else {
       dispatch(setMessage('Error'));
     }
-  }, [isSuccess, dispatch]);
+  }, [isSuccess, dispatch, success]);
 
   // eslint-disable-next-line no-unused-vars
   const handleRowSelectionChange = (rowId, isSelected) => {
     const selectedRow = rows.find((row) => row.id === rowId);
     if (isSelected) {
-      console.log('Row selected:', selectedRow.original.id);
-      console.log('row ids', rowId);
-      // onRowSelectionChange(rowId, true);
-      updateData({ id: selectedRow?.original.id, active: true });
+      updateData({
+        id: selectedRow?.original?.productTravelAgent?.id,
+        active: true,
+      });
     } else {
       const selectedRow = rows.find((row) => row.id === rowId);
-      console.log('row id unselect', selectedRow?.original?.id);
-      updateData({ id: selectedRow?.original?.id, active: false });
+
+      updateData({
+        id: selectedRow?.original?.productTravelAgent?.id,
+        active: false,
+      });
     }
   };
+
+  const updateDataMulti = React.useCallback(
+    async (select) => {
+      await updateSelectProductMultple(select);
+    },
+    [updateSelectProductMultple]
+  );
 
   const updateData = async (unselectedRowIds) => {
     const payload = {
@@ -277,16 +288,23 @@ const Tables = ({
     // setPageCount({pageIndex, pageSize})
   }, [fetchData, pageIndex, pageSize, pageOptions]);
 
-  console.log('test', pageIndex);
-
-  const spring = React.useMemo(
-    () => ({
-      type: 'spring',
-      damping: 50,
-      stiffness: 100,
-    }),
-    []
-  );
+  const handleToggleAllRows = (event) => {
+    let idSlect = [];
+    const original = rows.map((row) => row.original);
+    // console.log('ori', original);
+    toggleAllRowsSelected(event.target.checked);
+    original.forEach((row) => {
+      if (row?.productTravelAgent?.id) {
+        idSlect.push(row?.productTravelAgent?.id);
+      }
+    });
+    // console.log('rowIdUnSelect', idSlect);
+    if (event.target.checked) {
+      updateDataMulti({ ids: idSlect, active: event.target.checked });
+    } else {
+      updateDataMulti({ ids: idSlect, active: event.target.checked });
+    }
+  };
   return (
     <>
       <Box
@@ -300,61 +318,19 @@ const Tables = ({
             {headerGroups.map((headerGroup, i) => (
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <motion.th
-                    key={column.id}
-                    {...column.getHeaderProps({
-                      layoutTransition: spring,
-                      style: {
-                        minWidth: column.minWidth,
-                      },
-                    })}
-                    style={{
-                      // backgroundColor: 'red',
-                      fontWeight: 'bold',
-                      textAlign: 'left',
-                      padding: '10px',
-                      fontFamily: 'Mulish',
-                      fontSize: '14px',
-                    }}
-                  >
-                    <div
-                      {...column.getSortByToggleProps()}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {column.render('Header')}
-                      <Box>
-                        {column.isSorted ? (
-                          column.isSortedDesc ? (
-                            <Box>
-                              <FaSort
-                                color="#065BAA"
-                                size="14px"
-                                style={{ paddingLeft: '4px' }}
-                              />
-                            </Box>
-                          ) : (
-                            <Box>
-                              <FaSort
-                                color="#065BAA"
-                                size="14px"
-                                style={{ paddingLeft: '4px' }}
-                              />
-                            </Box>
-                          )
-                        ) : (
-                          ''
-                        )}
-                      </Box>
-                    </div>
-                    {/* <div>{column.canFilter ? column.render('Filter') : null} </div> */}
-                    {/* {column.canFilter ? column.render('Filter') : null} */}
-                    {/* {column.canFilter ? column.render('Filter') : null} */}
-                  </motion.th>
+                  <th key={column.id} {...column.getHeaderProps()}>
+                    {column.id !== 'selection' ? (
+                      column.render('Header')
+                    ) : (
+                      <input
+                        type="checkbox"
+                        checked={
+                          Object.keys(selectedRowIds).length === rows.length
+                        }
+                        onChange={handleToggleAllRows}
+                      />
+                    )}
+                  </th>
                 ))}
               </tr>
             ))}
@@ -363,22 +339,51 @@ const Tables = ({
             {rows.map((row) => {
               prepareRow(row);
               return (
-                <tr
-                  key={row.id}
-                  {...row.getRowProps()}
-                  onClick={() => {
-                    toggleRowSelected(row?.id);
-                    handleRowSelectionChange(row?.id, !row.isSelected);
-                  }}
-                  style={{
-                    background: row.isSelected ? 'whitesmoke' : 'white',
-                  }}
-                >
-                  {row.cells.map((cell) => (
-                    <td key={cell.id} {...cell.getCellProps()}>
-                      {cell.render('Cell')}
-                    </td>
-                  ))}
+                // <tr
+                //   key={row.id}
+                //   {...row.getRowProps()}
+                //   onClick={() => {
+                //     toggleRowSelected(row?.id);
+                //     handleRowSelectionChange(row?.id, !row.isSelected);
+                //   }}
+                //   style={{
+                //     background: row.isSelected ? 'whitesmoke' : 'white',
+                //   }}
+                // >
+                //   {row.cells.map((cell) => (
+                //     <td key={cell.id} {...cell.getCellProps()}>
+                //       {cell.render('Cell')}
+                //     </td>
+                //   ))}
+                // </tr>
+                <tr key={row.id} {...row.getRowProps()}>
+                  {row.cells.map((cell, index) => {
+                    if (index === 0) {
+                      return (
+                        <td
+                          key={cell.id}
+                          {...cell.getCellProps()}
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            toggleRowSelected(row?.id);
+                            handleRowSelectionChange(row?.id, !row.isSelected);
+                          }}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={row.isSelected}
+                            onChange={() => {}}
+                          />
+                        </td>
+                      );
+                    } else {
+                      return (
+                        <td key={index} {...cell.getCellProps()}>
+                          {cell.render('Cell')}
+                        </td>
+                      );
+                    }
+                  })}
                 </tr>
               );
             })}
@@ -386,36 +391,126 @@ const Tables = ({
         </table>
         <Box
           display={'flex'}
-          justifyContent={'flex-end'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
           mt="1em"
           mb="1em"
           mr="10px"
         >
-          <Button
-            onClick={() => gotoPage(0)}
-            disabled={!canPreviousPage}
-            background="blue"
-          >
-            {'<<'}
-          </Button>
-          <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'< '}
-          </Button>
-          <Button onClick={() => nextPage()} disabled={!canNextPage}>
-            {' >'}
-          </Button>
-          <Button
-            background="blue"
-            onClick={() => gotoPage(pageCount - 1)}
-            disabled={!canNextPage}
-          >
-            {'>>'}
-          </Button>
-          <Box display={'flex'} alignItems={'center'}>
-            Page{' '}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>{' '}
+          <Box display={'flex'} justifyContent={'start'} alignItems={'center'}>
+            <label htmlFor="select" style={{ paddingRight: '5px' }}>
+              Per page
+            </label>
+            <Select
+              id="pageSize"
+              w="100px"
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+                gotoPage(0);
+              }}
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+              {/* Add more options as needed */}
+            </Select>
+          </Box>
+          <Box display={'flex'} justifyContent={'end'} w="80%">
+            <Button
+              onClick={() => gotoPage(0)}
+              disabled={!canPreviousPage}
+              _hover={{
+                bg: '#f0eeee',
+                borderRadius: '5px',
+                WebkitBorderRadius: '5px',
+                MozBorderRadius: '5px',
+              }}
+              bg="white"
+              border={'none'}
+            >
+              <Text
+                fontFamily={'Mulish'}
+                style={{ fontSize: '12px' }}
+                color="#231F20"
+                pl="5px"
+              >
+                {'<< '}
+              </Text>
+            </Button>
+            <Button
+              onClick={() => previousPage()}
+              disabled={!canPreviousPage}
+              _hover={{
+                bg: '#f0eeee',
+                borderRadius: '5px',
+                WebkitBorderRadius: '5px',
+                MozBorderRadius: '5px',
+              }}
+              bg="white"
+              border={'none'}
+            >
+              <Text
+                fontFamily={'Mulish'}
+                style={{ fontSize: '12px' }}
+                color="#231F20"
+                pr="5px"
+              >
+                {'< '}
+              </Text>
+              <BiSkipPreviousCircle size="25px" color="black" />
+            </Button>
+            <Button
+              onClick={() => nextPage()}
+              disabled={!canNextPage}
+              _hover={{
+                bg: '#f0eeee',
+                borderRadius: '5px',
+                WebkitBorderRadius: '5px',
+                MozBorderRadius: '5px',
+              }}
+              bg="white"
+              border={'none'}
+            >
+              <BiSkipNextCircle size="25px" color="black" />
+              <Text
+                fontFamily={'Mulish'}
+                style={{ fontSize: '12px' }}
+                color="#231F20"
+                pl="5px"
+              >
+                {' >'}
+              </Text>
+            </Button>
+            <Button
+              _hover={{
+                bg: '#f0eeee',
+                borderRadius: '5px',
+                WebkitBorderRadius: '5px',
+                MozBorderRadius: '5px',
+                color: 'white.400',
+              }}
+              bg="white"
+              border={'none'}
+              onClick={() => gotoPage(pageCount - 1)}
+              disabled={!canNextPage}
+            >
+              <Text
+                fontFamily={'Mulish'}
+                style={{ fontSize: '12px' }}
+                color="#231F20"
+                pl="5px"
+              >
+                {' >> '}
+              </Text>
+            </Button>
+            <Box display={'flex'} alignItems={'center'}>
+              Page{' '}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>{' '}
+            </Box>
           </Box>
           <span></span>
         </Box>
@@ -506,7 +601,7 @@ const DetailMasterUser = () => {
           <Link
             color="#065BAA"
             style={{ textDecoration: 'underline', color: '#065BAA' }}
-            to={`/master-data/detail-product-price/${id}`}
+            to={`/master-data/detail-product-price/${row.original?.productTravelAgent?.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.travelAgentName}
@@ -524,7 +619,7 @@ const DetailMasterUser = () => {
     ],
     []
   );
-  console.log('productName', user);
+  // console.log('productName', user);
   React.useEffect(() => {
     refetch({ id });
   }, [refetch, id]);
@@ -558,7 +653,7 @@ const DetailMasterUser = () => {
                 separator={<ChevronRightIcon color="gray.500" />}
               >
                 <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink as={NavLink} to="/master-data/master-user">
+                  <BreadcrumbLink as={NavLink} to="/master-data/master-product">
                     <Text
                       as="b"
                       ml="4"
@@ -569,7 +664,7 @@ const DetailMasterUser = () => {
                         border: '1 px solid',
                       }}
                     >
-                      Travel Agent
+                      Detail Master Proudct
                     </Text>
                   </BreadcrumbLink>
                 </BreadcrumbItem>

@@ -200,7 +200,7 @@ function App() {
           allowedRoles={['ROLE_ADMIN']}
         />
         <Route
-          path="create-master-product"
+          path="edit-master-product/:id"
           element={<CreateProducts />}
           allowedRoles={['ROLE_ADMIN']}
         />

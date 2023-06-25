@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 import React from 'react';
 import {
   useGetAgentByIdQuery,
   useGetListAgentDetailQuery,
   useUpdateSelectProductMutation,
+  useUpdateSelectProductMultpleMutation,
 } from './travelApiSlice';
 import { NavLink, useParams, Link, useNavigate } from 'react-router-dom';
 import {
@@ -154,9 +156,12 @@ const Tables = ({
   const [filterDiscont3, setFilterDiscount3] = React.useState('');
   const [filterTotalComm, setFilterTotalComm] = React.useState('');
   const [filterNet, setFilterNet] = React.useState('');
+  const [selectAll, setSelectAll] = React.useState(false);
   // eslint-disable-next-line no-unused-vars
   const [updateSelectProduct, { isSuccess, isError }] =
     useUpdateSelectProductMutation();
+  const [updateSelectProductMultple, { isSuccess: success, isError: error }] =
+    useUpdateSelectProductMultpleMutation();
   // const [pageSize, setPageSize] = useState(5);
   const defaultColumn = React.useMemo(
     () => ({
@@ -200,6 +205,7 @@ const Tables = ({
     nextPage,
     previousPage,
     setPageSize,
+    setHiddenColumns,
     // Get the state from the instance
     state: { pageIndex, selectedRowIds, pageSize },
   } = useTable(
@@ -235,7 +241,12 @@ const Tables = ({
                 alignItems: 'center',
               }}
             >
-              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+              <IndeterminateCheckbox
+                {...getToggleAllRowsSelectedProps()}
+                onClick={() => {
+                  toggleAllRowsSelected(true);
+                }}
+              />
             </div>
           ),
           // The cell can use the individual row's getToggleRowSelectedProps method
@@ -257,13 +268,11 @@ const Tables = ({
     }
   );
   const prev = usePrevious(selectedRowIds);
-  React.useEffect(() => {
-    toggleAllRowsSelected();
-  }, []);
 
   React.useEffect(() => {
     rows.forEach((row) => {
       const rowData = row.original;
+      console.log('rowData', rowData);
       if (rowData.active) {
         toggleRowSelected(row.id, true);
       }
@@ -271,26 +280,21 @@ const Tables = ({
   }, [rows, toggleRowSelected]);
 
   React.useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess || success) {
       dispatch(setMessage('Successfully'));
     } else {
       dispatch(setMessage('Error'));
     }
-  }, [isSuccess, dispatch]);
+  }, [isSuccess, dispatch, success]);
+
+  const updateDataMulti = React.useCallback(
+    async (select) => {
+      await updateSelectProductMultple(select);
+    },
+    [updateSelectProductMultple]
+  );
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getValues = (data) => {
-    let original = data.map((item) => item.original);
-    dispatch(setProductAgentSelection(original));
-    console.log('test', original);
-  };
-
-  React.useEffect(() => {
-    if (JSON.stringify(prev) !== JSON.stringify(selectedRowIds)) {
-      getValues(selectedFlatRows);
-    }
-  }, [prev, selectedRowIds, getValues, selectedFlatRows]);
-
-  // Render the UI for your table
 
   React.useEffect(() => {
     fetchData({ pageIndex, pageSize });
@@ -300,25 +304,31 @@ const Tables = ({
   const handleRowSelectionChange = (rowId, isSelected) => {
     const selectedRow = rows.find((row) => row.id === rowId);
     if (isSelected) {
-      console.log('Row selected:', selectedRow.original.id);
-      console.log('row ids', rowId);
       // onRowSelectionChange(rowId, true);
       updateData({ id: selectedRow?.original.id, active: true });
     } else {
       const selectedRow = rows.find((row) => row.id === rowId);
-      console.log('row id unselect', selectedRow?.original?.id);
       updateData({ id: selectedRow?.original?.id, active: false });
     }
   };
+  const handleToggleAllRows = (event) => {
+    let idSlect = [];
+    const original = rows.map((row) => row.original);
+    console.log('ori', rows);
+    toggleAllRowsSelected(event.target.checked);
+    original.forEach((row) => {
+      if (row.id) {
+        idSlect.push(row.id);
+      }
+    });
+    console.log('rowIdUnSelect', idSlect);
+    if (event.target.checked) {
+      updateDataMulti({ ids: idSlect, active: event.target.checked });
+    } else {
+      updateDataMulti({ ids: idSlect, active: event.target.checked });
+    }
+  };
 
-  // console.log('pageIndex', pageIndex);
-  // React.useEffect(() => {
-  //   const nextPage = () => {
-  //     if (canNextPage) {
-  //       gotoPage(pageIndex + 1);
-  //     }
-  //   };
-  // }, [canNextPage]);
   const spring = React.useMemo(
     () => ({
       type: 'spring',
@@ -372,6 +382,21 @@ const Tables = ({
   //     .filter((id) => !selectedRowIds.includes(id));
 
   // }, [selectedFlatRows, data]);
+
+  const handleSelectAllRows = (e) => {
+    console.log('e', e);
+    toggleAllRowsSelected();
+    // getValues(rows);
+  };
+
+  const checkSelectAll = (arr) => {
+    return arr.reduce((count, value) => {
+      if (!value) {
+        count++;
+      }
+      return count;
+    }, 0);
+  };
 
   const updateData = async (unselectedRowIds) => {
     const payload = {
@@ -485,61 +510,19 @@ const Tables = ({
             {headerGroups.map((headerGroup, i) => (
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <motion.th
-                    key={column.id}
-                    {...column.getHeaderProps({
-                      layoutTransition: spring,
-                      style: {
-                        minWidth: column.minWidth,
-                      },
-                    })}
-                    style={{
-                      // backgroundColor: 'red',
-                      fontWeight: 'bold',
-                      textAlign: 'left',
-                      padding: '10px',
-                      fontFamily: 'Mulish',
-                      fontSize: '14px',
-                    }}
-                  >
-                    <div
-                      {...column.getSortByToggleProps()}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {column.render('Header')}
-                      <Box>
-                        {column.isSorted ? (
-                          column.isSortedDesc ? (
-                            <Box>
-                              <FaSort
-                                color="#065BAA"
-                                size="14px"
-                                style={{ paddingLeft: '4px' }}
-                              />
-                            </Box>
-                          ) : (
-                            <Box>
-                              <FaSort
-                                color="#065BAA"
-                                size="14px"
-                                style={{ paddingLeft: '4px' }}
-                              />
-                            </Box>
-                          )
-                        ) : (
-                          ''
-                        )}
-                      </Box>
-                    </div>
-                    {/* <div>{column.canFilter ? column.render('Filter') : null} </div> */}
-                    {/* {column.canFilter ? column.render('Filter') : null} */}
-                    {/* {column.canFilter ? column.render('Filter') : null} */}
-                  </motion.th>
+                  <th key={column.id} {...column.getHeaderProps()}>
+                    {column.id !== 'selection' ? (
+                      column.render('Header')
+                    ) : (
+                      <input
+                        type="checkbox"
+                        checked={
+                          Object.keys(selectedRowIds).length === rows.length
+                        }
+                        onChange={handleToggleAllRows}
+                      />
+                    )}
+                  </th>
                 ))}
               </tr>
             ))}
@@ -548,22 +531,34 @@ const Tables = ({
             {rows.map((row) => {
               prepareRow(row);
               return (
-                <tr
-                  key={row.id}
-                  {...row.getRowProps()}
-                  onClick={() => {
-                    toggleRowSelected(row?.id);
-                    handleRowSelectionChange(row?.id, !row.isSelected);
-                  }}
-                  style={{
-                    background: row.isSelected ? 'whitesmoke' : 'white',
-                  }}
-                >
-                  {row.cells.map((cell) => (
-                    <td key={cell.id} {...cell.getCellProps()}>
-                      {cell.render('Cell')}
-                    </td>
-                  ))}
+                <tr key={row.id} {...row.getRowProps()}>
+                  {row.cells.map((cell, index) => {
+                    if (index === 0) {
+                      return (
+                        <td
+                          key={cell.id}
+                          {...cell.getCellProps()}
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            toggleRowSelected(row?.id);
+                            handleRowSelectionChange(row?.id, !row.isSelected);
+                          }}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={row.isSelected}
+                            onChange={() => {}}
+                          />
+                        </td>
+                      );
+                    } else {
+                      return (
+                        <td key={index} {...cell.getCellProps()}>
+                          {cell.render('Cell')}
+                        </td>
+                      );
+                    }
+                  })}
                 </tr>
               );
             })}
