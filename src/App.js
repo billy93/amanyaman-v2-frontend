@@ -11,7 +11,6 @@ import Product from './features/dashboard/product/product';
 import MasterUser from './features/dashboard/masterUser/masterUser';
 import MasterProduct from './features/dashboard/masterProduct/masterProduct';
 import PolicyDetails from './features/dashboard/policy/policyDetail';
-import CreateProduct from './features/dashboard/masterProduct/createProduct';
 import CreateUser from './features/dashboard/masterUser/createUser';
 import TravelAgent from './features/dashboard/travelAgent/travelAgent';
 import SystemParams from './features/dashboard/systemParameters/systemParameters';
@@ -35,7 +34,9 @@ import DocumentType from './features/dashboard/documentType/documenType';
 import PlanType from './features/dashboard/planType/planType';
 import BandType from './features/dashboard/bandType/bandTypes';
 import TravellerType from './features/dashboard/travellerType/travellerTypes';
-import CreateProducts from './features/dashboard/masterProduct/createProduct';
+// import CreateProducts from './features/dashboard/masterProduct/createProducts';
+import CreateMasterProduct from './features/dashboard/masterProduct/createProducts';
+import EditProducts from './features/dashboard/masterProduct/editProduct';
 import DetailProductPrice from './features/dashboard/productPrice/detailProductPrice';
 import DetailMasterProduct from './features/dashboard/masterProduct/detailMasterProduct';
 
@@ -105,7 +106,6 @@ function App() {
         }
       >
         <Route path="master-products" element={<MasterProduct />} />
-        <Route path="create-product" element={<CreateProduct />} />
         <Route path="create-product-price" element={<CreateProductPrice />} />
         <Route
           path="detail-product-price/:id"
@@ -201,7 +201,12 @@ function App() {
         />
         <Route
           path="edit-master-product/:id"
-          element={<CreateProducts />}
+          element={<EditProducts />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+        <Route
+          path="create-master-product"
+          element={<CreateMasterProduct />}
           allowedRoles={['ROLE_ADMIN']}
         />
       </Route>

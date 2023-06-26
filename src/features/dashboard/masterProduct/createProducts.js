@@ -5,7 +5,7 @@ import React from 'react';
 import { Stack } from '@chakra-ui/react';
 
 // import { SlCalender } from 'react-icons/sl';
-import CommisionFormComponent from './commissiForm';
+import CommisionFormComponent from './createCommisionForm';
 
 const CreateProduct = () => {
   return (

@@ -169,20 +169,11 @@ const CommisionForm = () => {
             value: products?.productMapping?.travellerType?.name,
           },
         ],
-        variant:
-          products &&
-          products?.productMapping?.variants?.map((obj) => ({
-            id: obj.variant,
-            label: 'R',
-            name: 'R',
-            value: 'R',
-          })),
       };
-
+      console.log('form', form);
       dispatch(setProductForm(form));
     }
   }, [products, dispatch]);
-  console.log('products', products);
   React.useEffect(() => {
     if (bandTypes) {
       let duration = bandTypes?.response.map((obj) => ({
@@ -251,6 +242,19 @@ const CommisionForm = () => {
     }
   }, [variant, dispatch]);
 
+  const total = React.useMemo(() => {
+    let tot;
+    tot =
+      parseInt(formstate?.commissionlvl1) +
+      parseInt(formstate?.commissionlvl2) +
+      parseInt(formstate?.commissionlvl3);
+    return tot;
+  }, [
+    formstate?.commissionlvl1,
+    formstate?.commissionlvl2,
+    formstate?.commissionlvl3,
+  ]);
+
   const handleNext = async (e) => {
     e.preventDefault();
     const constData = {
@@ -296,7 +300,7 @@ const CommisionForm = () => {
       ppnValue: 8.25,
       pph23Value: 1.65,
       ajiPrice: 92.4,
-      variants: formstate?.variant.map((v) => {
+      variant: formstate?.variant.map((v) => {
         return { id: v.id };
       }),
     };
@@ -336,7 +340,7 @@ const CommisionForm = () => {
             ppnValue: 0,
             pph23Value: 0,
             ajiPrice: 0,
-            variants: null,
+            variant: null,
           })
         );
         navigate('/master-data/master-products');
@@ -411,19 +415,6 @@ const CommisionForm = () => {
     };
     dispatch(setProductForm(forms));
   }
-
-  const total = React.useMemo(() => {
-    let tot;
-    tot =
-      parseInt(formstate?.commissionlvl1) +
-      parseInt(formstate?.commissionlvl2) +
-      parseInt(formstate?.commissionlvl3);
-    return tot;
-  }, [
-    formstate?.commissionlvl1,
-    formstate?.commissionlvl2,
-    formstate?.commissionlvl3,
-  ]);
 
   function handleSelectAgent(data) {
     console.log('data', data);
@@ -602,6 +593,190 @@ const CommisionForm = () => {
                 Product Detail Code
               </FormLabel>
               {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Input
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                name="premiumPrice"
+                value={formstate?.premiumPrice}
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
+              {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                zIndex={'0'}
+                style={{
+                  zIndex: 0,
+                  color:
+                    formstate !== null && formstate?.premiumPrice !== ''
+                      ? '#065baa'
+                      : '#171923',
+                  fontWeight: 'normal',
+                  paddingBottom: '4px',
+                }}
+              >
+                Premium Price
+              </FormLabel>
+              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+            </FormControl>
+          </Box>
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Stack>
+                <InputGroup size="sm">
+                  <Input
+                    type="number"
+                    placeholder=" "
+                    _placeholder={{ opacity: 1, color: 'gray.500' }}
+                    name="commissionlvl1"
+                    value={formstate?.commissionlvl1}
+                    onChange={handleData}
+                    h="48px"
+                    variant={'custom'}
+                  />
+                  <InputRightAddon children="%" h="48px" />
+                  <FormLabel
+                    fontSize="12"
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate?.commissionlvl2 !== ''
+                          ? 'translate(-3px, -8px) scale(0.75)'
+                          : 'translate(0px, 2px) scale(0.75)',
+                      fontSize: '14px',
+                      background: 'transparent',
+                      color:
+                        formstate !== null && formstate?.commissionlvl1 !== ''
+                          ? '#065baa'
+                          : '#171923',
+                      zIndex: '0',
+                      fontWeight: 'normal',
+                    }}
+                  >
+                    Commission Level 1
+                  </FormLabel>
+                </InputGroup>
+              </Stack>
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Input
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                name="commissionlvl2"
+                value={formstate?.commissionlvl2}
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
+              {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                zIndex={'0'}
+                style={{
+                  zIndex: 0,
+                  color:
+                    formstate !== null && formstate?.commissionlvl2 !== ''
+                      ? '#065baa'
+                      : '#171923',
+                  fontWeight: 'normal',
+                  paddingBottom: '4px',
+                }}
+              >
+                Commission Level 2
+              </FormLabel>
+              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+            </FormControl>
+          </Box>
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Stack>
+                <InputGroup size="sm">
+                  <Input
+                    type="number"
+                    placeholder=" "
+                    _placeholder={{ opacity: 1, color: 'gray.500' }}
+                    name="commissionlvl3"
+                    value={formstate?.commissionlvl3}
+                    onChange={handleData}
+                    h="48px"
+                    variant={'custom'}
+                  />
+                  <InputRightAddon children="%" h="48px" />
+                  <FormLabel
+                    fontSize="12"
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate?.commissionlvl3 !== ''
+                          ? 'translate(-3px, -8px) scale(0.75)'
+                          : 'translate(0px, 2px) scale(0.75)',
+                      fontSize: '14px',
+                      background: 'transparent',
+                      color:
+                        formstate !== null && formstate?.commissionlvl3 !== ''
+                          ? '#065baa'
+                          : '#171923',
+                      zIndex: '0',
+                      fontWeight: 'normal',
+                    }}
+                  >
+                    Commission Level 3
+                  </FormLabel>
+                </InputGroup>
+              </Stack>
             </FormControl>
           </Box>
         </Flex>
@@ -1147,6 +1322,129 @@ const CommisionForm = () => {
             </FormControl>
           </Box>
         </Flex>
+      </Flex>
+      <Flex
+        mt="1em"
+        width={{ base: '100%' }}
+        gridTemplateColumns={{
+          base: 'repeat(1, 1fr)',
+          sm: 'repeat(2, 1fr)',
+          md: 'repeat(3, 1fr)',
+          lg: 'repeat(4, 1fr)',
+        }}
+        justifyContent="center"
+        alignItems="center"
+        gap="20px"
+        flexWrap="wrap"
+        mx="auto"
+      >
+        <Box
+          border="1px solid #ebebeb"
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          fontSize="14px"
+          fontFamily="Mulish"
+        >
+          Total Commission
+        </Box>
+        <Box
+          border="1px solid #ebebeb"
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          fontSize="14px"
+          fontFamily="Mulish"
+        >
+          {'Rp '}
+          {(Math.ceil(total * formstate?.premiumPrice) / 100).toFixed(0)}
+        </Box>
+        <Box
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          border="none"
+        >
+          <Flex alignItems="center" gap="5px">
+            <RiErrorWarningLine size="25px" color="blue" />
+            <Box display="flex" flexDirection="column">
+              <Text
+                as="b"
+                fontSize="sm"
+                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              >
+                {' '}
+                Total commission:
+              </Text>
+              <Text
+                as="p"
+                fontSize="sm"
+                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              >
+                Calculated from commission level 1, 2 & 3
+              </Text>
+            </Box>
+          </Flex>
+        </Box>
+      </Flex>
+      <Flex
+        width={{ base: '100%' }}
+        gridTemplateColumns={{
+          base: 'repeat(1, 1fr)',
+          sm: 'repeat(2, 1fr)',
+          md: 'repeat(3, 1fr)',
+          lg: 'repeat(4, 1fr)',
+        }}
+        justifyContent="center"
+        alignItems="center"
+        gap="20px"
+        flexWrap="wrap"
+        mx="auto"
+      >
+        <Box
+          border="1px solid #ebebeb"
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          fontSize="14px"
+          fontFamily="Mulish"
+        >
+          After Commision
+        </Box>
+        <Box
+          border="1px solid #ebebeb"
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          fontSize="14px"
+          fontFamily="Mulish"
+        >
+          {'Rp '}
+          {Math.ceil(
+            formstate?.premiumPrice - (total * formstate?.premiumPrice) / 100
+          ).toFixed(0)}
+        </Box>
+        <Box
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          border="none"
+        >
+          <Flex alignItems="center" gap="5px">
+            <RiErrorWarningLine size="25px" color="blue" />
+            <Box display="flex" flexDirection="column">
+              <Text
+                as="b"
+                fontSize="sm"
+                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              >
+                {' '}
+                After commission price:
+              </Text>
+              <Text
+                as="p"
+                fontSize="sm"
+                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              >
+                Premium price - total commission
+              </Text>
+            </Box>
+          </Flex>
+        </Box>
       </Flex>
       <Box
         display={'flex'}
