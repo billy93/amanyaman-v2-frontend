@@ -184,7 +184,8 @@ const CommisionForm = () => {
           },
         ],
         variants: products?.variants.map((v) => {
-          return { id: v.id, label: 'R', name: 'R' };
+          let variant = listvariants.filter((e) => {return e.id == v.id;})[0];
+          return variant;
         }),
       };
 
@@ -1374,7 +1375,7 @@ const CommisionForm = () => {
                     isMulti
                     name="colors"
                     onChange={handleVariant}
-                    value={formstate?.variant}
+                    value={formstate?.variants}
                     classNamePrefix="chakra-react-select"
                     options={listvariants}
                     closeMenuOnSelect={true}
