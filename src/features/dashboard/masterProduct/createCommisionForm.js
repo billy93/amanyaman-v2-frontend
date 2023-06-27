@@ -300,7 +300,7 @@ const CommisionForm = () => {
       ppnValue: 8.25,
       pph23Value: 1.65,
       ajiPrice: 92.4,
-      variant: formstate?.variant.map((v) => {
+      variants: formstate?.variant.map((v) => {
         return { id: v.id };
       }),
     };

@@ -30,7 +30,7 @@ import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSli
 import UseCustomToast from '../../../components/UseCustomToast';
 import {
   useGetListVariantQuery,
-  useCreateMasterProductMutation,
+  useUpdateMasterProductMutation,
 } from './masterProductApiSlice';
 // import { selectCurrentTraveller } from '../../auth/authSlice';
 import {
@@ -89,9 +89,9 @@ const CommisionForm = () => {
     hiddenInputIdtty.current.click();
   };
   const [
-    createMasterProduct,
+    updateMasterProduct,
     { isLoading, isSuccess: success, isError: errorUpload },
-  ] = useCreateMasterProductMutation();
+  ] = useUpdateMasterProductMutation();
   const { data: bandTypes } = useGetBandTypeQuery({ page: 0, size: 9999 });
 
   const { data: grouparea } = useGetListAreaGroupQuery({ page: 0, size: 9999 });
@@ -301,7 +301,7 @@ const CommisionForm = () => {
       }),
     };
     try {
-      let data = await createMasterProduct(constData);
+      let data = await updateMasterProduct(constData);
       if (data?.data) {
         showSuccessToast('Created master product successfully!');
         dispatch(

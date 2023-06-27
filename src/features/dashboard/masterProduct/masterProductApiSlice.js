@@ -58,6 +58,18 @@ export const policyApiSlice = apiSlice.injectEndpoints({
       }),
       // OnQueryError
     }),
+    updateMasterProduct: builder.mutation({
+      query: (payload) => ({
+        url: '/app/products',
+        method: 'PUT',
+        body: { ...payload },
+        transformResponse: (response) => {
+          // Custom response transformation logic here
+          return response.data;
+        },
+      }),
+      // OnQueryError
+    }),
     getProductById: builder.query({
       query: (id) => {
         // const { page, size } = datas;
@@ -98,6 +110,7 @@ export const policyApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useUpdateMasterProductMutation,
   useCreateMasterProductMutation,
   useGetProductByIdMutation,
   useGetProductTravelAgentQuery,
