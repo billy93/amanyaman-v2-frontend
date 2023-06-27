@@ -26,6 +26,7 @@ import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
 import { useGetListAreaGroupQuery } from '../group-area/listApiSlice';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
 import { useGetByIdQuery } from '../productPrice/productPriceApi';
+import { useGetProductByIdQuery } from './masterProductApiSlice';
 import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSlice';
 import UseCustomToast from '../../../components/UseCustomToast';
 import {
@@ -82,7 +83,7 @@ const CommisionForm = () => {
   const [fields, setFields] = React.useState(null);
   const toast = useToast();
 
-  const { data: products } = useGetByIdQuery(id, {
+  const { data: products } = useGetProductByIdQuery(id, {
     refetchOnMountOrArgChange: true,
   });
   const handleUploadIdentity = (e) => {
@@ -116,73 +117,58 @@ const CommisionForm = () => {
     if (products) {
       const form = {
         ...formstate,
-        productCode: products?.productMapping?.productCode,
+        id: products.id,
+        productCode: products?.productCode,
+        code: products?.code,
+        value: products?.value,
         productDetailCode: products?.id,
-        productName: products?.productMapping?.productName,
-        productDescription: products?.productMapping?.productDescription,
-        productMedicalCover: products?.productMapping?.productMedicalCover,
-        personalAccidentCover:
-          products?.productMapping?.productPersonalAccidentCover,
-        afterCommisionPrice: products?.afterCommisionPrice,
-        productTravelCover: products?.productMapping?.productTravelCover,
-        ajiPrice: products?.ajiPrice,
-        currId: products?.productMapping?.currId,
-        commisionLv1: products?.commisionLv1,
-        commisionLv2: products?.commisionLv2,
-        commisionLv3: products?.commisionLv3,
-        npwp: products?.npwp,
-        pph23: products?.pph23,
-        benefitDoc: products?.productMapping?.benefitDoc?.name,
-        covidDoc: products?.productMapping?.covidDoc?.name,
+        productName: products?.productName,
+        productDescription: products?.productDescription,
+        productMedicalCover: products?.productMedicalCover,
+        personalAccidentCover: products?.productPersonalAccidentCover,
+        productTravelCover: products?.productTravelCover,
+        currId: products?.currId,
+        benefitDoc: products?.benefitDoc?.name,
+        covidDoc: products?.covidDoc?.name,
         productBrochure: products?.productMapping?.productBrochure,
-        wordingDoc: products?.productMapping?.wordingDoc?.name,
-        pph23Value: products?.pph23Value,
-        ppn: products?.ppn,
-        ppnValue: products?.ppnValue,
-        premiumPrice: products?.premiumPrice,
-        totalCommision: products?.totalCommision,
+        wordingDoc: products?.wordingDoc?.name,
         planType: [
           {
-            ...products?.productMapping?.planType,
-            label: products?.productMapping?.planType?.name,
-            value: products?.productMapping?.planType?.name,
+            ...products?.planType,
+            label: products?.planType?.name,
+            value: products?.planType?.name,
           },
         ],
         additionalWeek: [
           {
-            ...products?.productMapping?.bandType,
-            label: products?.productMapping?.bandType?.travelDurationName,
-            value: products?.productMapping?.bandType?.travelDurationName,
+            ...products?.bandType,
+            label: products?.bandType?.travelDurationName,
+            value: products?.bandType?.travelDurationName,
           },
         ],
         groupArea: [
           {
-            ...products?.productMapping?.areaGroup,
-            label: products?.productMapping?.areaGroup?.areaGroupName,
-            value: products?.productMapping?.areaGroup?.areaGroupName,
+            ...products?.areaGroup,
+            label: products?.areaGroup?.areaGroupName,
+            value: products?.areaGroup?.areaGroupName,
           },
         ],
         travellerType: [
           {
-            ...products?.productMapping?.travellerType,
-            label: products?.productMapping?.travellerType?.name,
-            value: products?.productMapping?.travellerType?.name,
+            ...products?.travellerType,
+            label: products?.travellerType?.name,
+            value: products?.travellerType?.name,
           },
         ],
-        variant:
-          products &&
-          products?.productMapping?.variants?.map((obj) => ({
-            id: obj.variant,
-            label: 'R',
-            name: 'R',
-            value: 'R',
-          })),
+        variants: products?.variants.map((v) => {
+          return { id: v.id, label: 'R', name: 'R' };
+        }),
       };
 
       dispatch(setProductForm(form));
     }
   }, [products, dispatch]);
-  console.log('products', products);
+  console.log('product formstate', formstate);
   React.useEffect(() => {
     if (bandTypes) {
       let duration = bandTypes?.response.map((obj) => ({
@@ -254,11 +240,12 @@ const CommisionForm = () => {
   const handleNext = async (e) => {
     e.preventDefault();
     const constData = {
+      id: formstate.id,
       productName: formstate?.productName,
-      code: formstate?.productCode,
+      code: formstate?.code,
       productCode: formstate?.productCode,
       currId: formstate?.currId,
-      value: '100',
+      value: formstate?.value,
       productDescription: formstate?.productDescription,
       productBrochure: 'http://example.com/brochure.pdf',
       productPersonalAccidentCover: formstate?.personalAccidentCover,
@@ -276,27 +263,11 @@ const CommisionForm = () => {
       planType: {
         id: formstate?.planType[0]?.id,
       },
-      productAdditionalWeek: null,
-      benefitDoc: null,
-      wordingDoc: null,
-      covidDoc: null,
-      npwp: true,
-      premiumPrice: Number(formstate?.premiumPrice),
-      commisionLv1: Number(formstate?.commissionlvl1),
-      commisionLv2: Number(formstate?.commissionlvl2),
-      commisionLv3: Number(formstate?.commissionlvl3),
-      totalCommision: (
-        Math.ceil(total * formstate?.premiumPrice) / 100
-      ).toFixed(0),
-      afterCommisionPrice: Math.ceil(
-        formstate?.premiumPrice - (total * formstate?.premiumPrice) / 100
-      ).toFixed(0),
-      ppn: 10.0,
-      pph23: 2.0,
-      ppnValue: 8.25,
-      pph23Value: 1.65,
-      ajiPrice: 92.4,
-      variants: formstate?.variant.map((v) => {
+      productAdditionalWeek: formstate?.productAdditionalWeek,
+      benefitDoc: formstate?.benefitDoc,
+      wordingDoc: formstate?.wordingDoc,
+      covidDoc: formstate?.covidDoc,
+      variants: formstate?.variants.map((v) => {
         return { id: v.id };
       }),
     };

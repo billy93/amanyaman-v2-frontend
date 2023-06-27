@@ -336,7 +336,7 @@ const createMasterProductSlice = createSlice({
       travellerType: '',
       groupArea: '',
       travelDuration: '',
-      variant: '',
+      variants: '',
       productBrochure: '',
       benefitDoc: null,
       wordingDoc: null,

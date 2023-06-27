@@ -1,23 +1,14 @@
-import React, { useState } from 'react';
-import { NavLink, Navigate, useNavigate, useParams } from 'react-router-dom';
+import React from 'react';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
   Stack,
   Text,
-  Link,
-  Heading,
   Button,
-  Image,
   FormControl,
   Input,
   FormLabel,
   useToast,
-  InputGroup,
-  InputRightElement,
-  Select,
-  Divider,
-  Textarea,
-  Center,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -26,19 +17,14 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import {
   setSystemParamsFieldValue,
-  setSystemParamsFieldName,
   systemParamsValues,
-  systemParamsNames,
-  setFields,
   listFields,
   editParams,
   setEdit,
 } from './systemParamsSlice';
-import { differenceInCalendarDays } from 'date-fns';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { MdAdd } from 'react-icons/md';
 import {
-  useCreateParamsMutation,
   useGetSystemParamsQuery,
   useUpdateParamsMutation,
 } from './systemParamsApiSlice';
