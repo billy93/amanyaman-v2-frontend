@@ -1263,7 +1263,7 @@ const CommisionForm = () => {
                     isMulti
                     name="colors"
                     onChange={handleVariant}
-                    value={formstate?.variant}
+                    value={formstate?.variants}
                     classNamePrefix="chakra-react-select"
                     options={listvariants}
                     closeMenuOnSelect={true}

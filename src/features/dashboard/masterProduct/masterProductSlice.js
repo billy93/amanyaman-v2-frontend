@@ -4,6 +4,7 @@ const createMasterProductSlice = createSlice({
   name: 'masterProduct',
   initialState: {
     variant: [],
+    documentTypeList: [],
     list: [
       {
         id: '1',
@@ -486,10 +487,14 @@ const createMasterProductSlice = createSlice({
     setListTravellAgents: (state, action) => {
       state.listTravelAgents = action.payload;
     },
+    setListDoctType: (state, action) => {
+      state.documentTypeList = action.payload;
+    },
   },
 });
 
 export const {
+  setListDoctType,
   setListTravellAgents,
   setListTravellerType,
   setListBandType,
@@ -515,5 +520,6 @@ export const listbandtype = (state) => state.masterProduct.listBandType;
 export const listarea = (state) => state.masterProduct.listArea;
 export const listtravelagents = (state) => state.masterProduct.listTravelAgents;
 export const listplantype = (state) => state.masterProduct.listPlanType;
+export const listdocstype = (state) => state.masterProduct.documentTypeList;
 export const listtravellertype = (state) =>
   state.masterProduct.listTravellerType;

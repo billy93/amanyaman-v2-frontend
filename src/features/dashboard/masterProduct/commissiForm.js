@@ -25,8 +25,8 @@ import { useGetBandTypeQuery } from '../bandType/bandTypesApiSlice';
 import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
 import { useGetListAreaGroupQuery } from '../group-area/listApiSlice';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
-import { useGetByIdQuery } from '../productPrice/productPriceApi';
 import { useGetProductByIdQuery } from './masterProductApiSlice';
+import { useGetDocumentTypesQuery } from '../documentType/docTypeApiSlice';
 import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSlice';
 import UseCustomToast from '../../../components/UseCustomToast';
 import {
@@ -35,6 +35,8 @@ import {
 } from './masterProductApiSlice';
 // import { selectCurrentTraveller } from '../../auth/authSlice';
 import {
+  listdocstype,
+  setListDoctType,
   areaList,
   travelDurations,
   planTypes,
@@ -64,6 +66,7 @@ const CommisionForm = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const listProducts = useSelector(listtravellertype);
+  const listdocstypes = useSelector(listdocstype);
   const listAgents = useSelector(listtravelagents);
   const travelertype = useSelector(listtravellertype);
   const listPlanType = useSelector(listplantype);
@@ -94,6 +97,7 @@ const CommisionForm = () => {
     { isLoading, isSuccess: success, isError: errorUpload },
   ] = useUpdateMasterProductMutation();
   const { data: bandTypes } = useGetBandTypeQuery({ page: 0, size: 9999 });
+  const { data: docTypes } = useGetDocumentTypesQuery({ page: 0, size: 9999 });
 
   const { data: grouparea } = useGetListAreaGroupQuery({ page: 0, size: 9999 });
 
@@ -128,15 +132,34 @@ const CommisionForm = () => {
         personalAccidentCover: products?.productPersonalAccidentCover,
         productTravelCover: products?.productTravelCover,
         currId: products?.currId,
-        benefitDoc: products?.benefitDoc?.name,
-        covidDoc: products?.covidDoc?.name,
         productBrochure: products?.productMapping?.productBrochure,
-        wordingDoc: products?.wordingDoc?.name,
+
         planType: [
           {
             ...products?.planType,
             label: products?.planType?.name,
             value: products?.planType?.name,
+          },
+        ],
+        benefitDoc: [
+          {
+            ...products?.benefitDoc,
+            label: products?.benefitDoc?.name,
+            value: products?.benefitDoc?.name,
+          },
+        ],
+        wordingDoc: [
+          {
+            ...products?.wordingDoc,
+            label: products?.wordingDoc?.name,
+            value: products?.wordingDoc?.name,
+          },
+        ],
+        covidDoc: [
+          {
+            ...products?.covidDoc,
+            label: products?.covidDoc?.name,
+            value: products?.covidDoc?.name,
           },
         ],
         additionalWeek: [
@@ -190,6 +213,17 @@ const CommisionForm = () => {
       dispatch(setListTravellAgents(agents));
     }
   }, [travelagents, dispatch]);
+
+  React.useEffect(() => {
+    if (docTypes) {
+      let docsType = docTypes?.response?.map((obj) => ({
+        ...obj,
+        label: obj.name,
+        value: obj.name,
+      }));
+      dispatch(setListDoctType(docsType));
+    }
+  }, [docTypes, dispatch]);
 
   React.useEffect(() => {
     if (grouparea) {
@@ -263,10 +297,18 @@ const CommisionForm = () => {
       planType: {
         id: formstate?.planType[0]?.id,
       },
-      productAdditionalWeek: formstate?.productAdditionalWeek,
-      benefitDoc: formstate?.benefitDoc,
-      wordingDoc: formstate?.wordingDoc,
-      covidDoc: formstate?.covidDoc,
+      benefitDoc: {
+        id: formstate?.benefitDoc[0]?.id,
+      },
+      wordingDoc: {
+        id: formstate?.wordingDoc[0]?.id,
+      },
+      covidDoc: {
+        id: formstate?.covidDoc[0]?.id,
+      },
+      productAdditionalWeek: {
+        id: formstate?.additionalWeek[0].id,
+      },
       variants: formstate?.variants.map((v) => {
         return { id: v.id };
       }),
@@ -314,6 +356,41 @@ const CommisionForm = () => {
       } else {
         const errorMessage = `Failed to created master product. Status Code: ${data?.error?.status}`;
         showErrorToast(errorMessage);
+        dispatch(
+          setProductForm({
+            productName: '',
+            code: '',
+            productCode: '',
+            currId: '',
+            value: '',
+            productDescription: '',
+            productBrochure: '',
+            productPersonalAccidentCover: '',
+            productMedicalCover: '',
+            productTravelCover: '',
+            travellerType: '',
+            bandType: '',
+            areaGroup: '',
+            planType: '',
+            productAdditionalWeek: null,
+            benefitDoc: null,
+            wordingDoc: null,
+            covidDoc: null,
+            npwp: false,
+            premiumPrice: '',
+            commisionLv1: '',
+            commisionLv2: '',
+            commisionLv3: '',
+            totalCommision: 0,
+            afterCommisionPrice: 0,
+            ppn: 0,
+            pph23: 0,
+            ppnValue: 0,
+            pph23Value: 0,
+            ajiPrice: 0,
+            variants: null,
+          })
+        );
       }
     } catch (err) {
       const errorMessage = `Failed to created master product. Status Code: ${err?.error?.status}`;
@@ -361,10 +438,31 @@ const CommisionForm = () => {
     };
     dispatch(setProductForm(forms));
   }
+  function handleWordingDoc(data) {
+    const forms = {
+      ...formstate,
+      wordingDoc: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+  function handleBenefitDoc(data) {
+    const forms = {
+      ...formstate,
+      benefitDoc: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
   function handleSelectPlanType(data) {
     const forms = {
       ...formstate,
       planType: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+  function handleCovidDoc(data) {
+    const forms = {
+      ...formstate,
+      covidDoc: [{ ...data }],
     };
     dispatch(setProductForm(forms));
   }
@@ -898,7 +996,7 @@ const CommisionForm = () => {
               {/* It is important that the Label comes after the Control due to css selectors */}
             </FormControl>
           </Box>
-          <Box width={{ base: '100%', md: '260px' }} m="auto">
+          <Box width={{ base: '100%', md: '260px' }} mt="1em">
             <FormControl variant="floating" isRequired fontFamily={'Mulish'}>
               <Box>
                 <Box className="floating-label">
@@ -947,6 +1045,139 @@ const CommisionForm = () => {
                     fontFamily={'Mulish'}
                   >
                     Traveller Type
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box width={{ base: '100%', md: '260px' }} m="auto">
+            <FormControl
+              variant="floating"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Box>
+                <Box className="floating-label">
+                  <Select
+                    isMulti={false}
+                    name="colors"
+                    onChange={handleBenefitDoc}
+                    value={formstate?.benefitDoc}
+                    classNamePrefix="chakra-react-select"
+                    options={listdocstypes}
+                    placeholder="Select some colors..."
+                    closeMenuOnSelect={true}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                    }}
+                    chakraStyles={{
+                      dropdownIndicator: (
+                        prev,
+                        { selectProps: { menuIsOpen } }
+                      ) => ({
+                        ...prev,
+                        '> svg': {
+                          transitionDuration: 'normal',
+                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                        },
+                      }),
+                    }}
+                  />
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate !== null &&
+                        formstate?.benefitDoc?.length !== 0
+                          ? 'translate(0, -10px) scale(0.75)'
+                          : 'translate(0, 4px) scale(0.75)',
+                      color:
+                        formstate !== null &&
+                        formstate?.benefitDoc?.length !== 0
+                          ? '#065baa'
+                          : '#231F20',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Benefit Doc
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+          <Box width={{ base: '100%', md: '260px' }} mt="1em">
+            <FormControl variant="floating" isRequired fontFamily={'Mulish'}>
+              <Box>
+                <Box className="floating-label">
+                  <Select
+                    isMulti={false}
+                    name="colors"
+                    onChange={handleWordingDoc}
+                    value={formstate?.wordingDoc}
+                    classNamePrefix="chakra-react-select"
+                    options={listdocstypes}
+                    placeholder=""
+                    closeMenuOnSelect={true}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                    }}
+                    chakraStyles={{
+                      dropdownIndicator: (
+                        prev,
+                        { selectProps: { menuIsOpen } }
+                      ) => ({
+                        ...prev,
+                        '> svg': {
+                          transitionDuration: 'normal',
+                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                        },
+                      }),
+                    }}
+                  />
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate !== null &&
+                        formstate?.wordingDoc?.length !== 0
+                          ? 'translate(0, -10px) scale(0.75)'
+                          : 'translate(0, 4px) scale(0.75)',
+                      color:
+                        formstate !== null &&
+                        formstate?.wordingDoc?.length !== 0
+                          ? '#065baa'
+                          : '#231F20',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Wording Doc
                   </FormLabel>
                 </Box>
               </Box>
@@ -1028,6 +1259,90 @@ const CommisionForm = () => {
                   fontFamily={'Mulish'}
                 >
                   Plan Type
+                </FormLabel>
+              </Box>
+            </Box>
+            {/* It is important that the Label comes after the Control due to css selectors */}
+          </FormControl>
+        </Flex>
+      </Flex>
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <FormControl
+            variant="floating"
+            isRequired
+            fontFamily={'Mulish'}
+            mt="1em"
+          >
+            <Box w="540px">
+              <Box className="react-select-container">
+                <Select
+                  isMulti={false}
+                  name="colors"
+                  onChange={handleCovidDoc}
+                  value={formstate?.covidDoc}
+                  classNamePrefix="chakra-react-select"
+                  options={listdocstypes}
+                  closeMenuOnSelect={true}
+                  menuPortalTarget={document.body}
+                  styles={{
+                    menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                  }}
+                  components={{
+                    Placeholder: () => (
+                      <span
+                        style={{
+                          display: formstate?.planType ? 'none' : 'none',
+                        }}
+                      >
+                        Select an option
+                      </span>
+                    ),
+                  }}
+                  chakraStyles={{
+                    dropdownIndicator: (
+                      prev,
+                      { selectProps: { menuIsOpen } }
+                    ) => ({
+                      ...prev,
+                      '> svg': {
+                        transitionDuration: 'normal',
+                        transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                      },
+                    }),
+                  }}
+                />
+                <span className="highlight"></span>
+                <FormLabel
+                  pt="1.5"
+                  style={{
+                    transform:
+                      formstate !== null && formstate?.covidDoc?.length !== 0
+                        ? 'translate(0, -10px) scale(0.75)'
+                        : 'translate(0, 4px) scale(0.75)',
+                    color:
+                      formstate !== null && formstate?.covidDoc?.length !== 0
+                        ? '#065baa'
+                        : '#231F20',
+                    fontSize: '14px',
+                  }}
+                  fontFamily={'Mulish'}
+                >
+                  Covid Doc
                 </FormLabel>
               </Box>
             </Box>
