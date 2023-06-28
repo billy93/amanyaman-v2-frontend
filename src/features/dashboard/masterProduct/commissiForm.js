@@ -141,27 +141,36 @@ const CommisionForm = () => {
             value: products?.planType?.name,
           },
         ],
-        benefitDoc: [
-          {
-            ...products?.benefitDoc,
-            label: products?.benefitDoc?.name,
-            value: products?.benefitDoc?.name,
-          },
-        ],
-        wordingDoc: [
-          {
-            ...products?.wordingDoc,
-            label: products?.wordingDoc?.name,
-            value: products?.wordingDoc?.name,
-          },
-        ],
-        covidDoc: [
-          {
-            ...products?.covidDoc,
-            label: products?.covidDoc?.name,
-            value: products?.covidDoc?.name,
-          },
-        ],
+        benefitDoc:
+          products?.benefitDoc !== null
+            ? [
+                {
+                  ...products?.benefitDoc,
+                  label: products?.benefitDoc?.name,
+                  value: products?.benefitDoc?.name,
+                },
+              ]
+            : null,
+        wordingDoc:
+          products?.wordingDoc !== null
+            ? [
+                {
+                  ...products?.wordingDoc,
+                  label: products?.wordingDoc?.name,
+                  value: products?.wordingDoc?.name,
+                },
+              ]
+            : null,
+        covidDoc:
+          products?.covidDoc !== null
+            ? [
+                {
+                  ...products?.covidDoc,
+                  label: products?.covidDoc?.name,
+                  value: products?.covidDoc?.name,
+                },
+              ]
+            : null,
         additionalWeek: [
           {
             ...products?.bandType,
@@ -183,12 +192,15 @@ const CommisionForm = () => {
             value: products?.travellerType?.name,
           },
         ],
-        variants: products?.variants.map((v) => {
-          let variant = listvariants.filter((e) => {return e.id == v.id;})[0];
-          return variant;
-        }),
+        variants: products?.variants
+          .map((variant, index) => {
+            const filteredVariants = listvariants.filter(
+              (item, i) => variant.id === item.id
+            );
+            return filteredVariants;
+          })
+          .reduce((prev, curr) => prev.concat(curr), []),
       };
-
       dispatch(setProductForm(form));
     }
   }, [products, dispatch]);
@@ -419,7 +431,7 @@ const CommisionForm = () => {
   function handleVariant(data) {
     const forms = {
       ...formstate,
-      variant: [...data],
+      variants: [...data],
     };
     dispatch(setProductForm(forms));
   }
@@ -1110,13 +1122,11 @@ const CommisionForm = () => {
                     pt="1.5"
                     style={{
                       transform:
-                        formstate !== null &&
-                        formstate?.benefitDoc?.length !== 0
+                        formstate !== null && formstate?.benefitDoc?.length > 0
                           ? 'translate(0, -10px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
-                        formstate !== null &&
-                        formstate?.benefitDoc?.length !== 0
+                        formstate !== null && formstate?.benefitDoc?.length > 0
                           ? '#065baa'
                           : '#231F20',
                       fontSize: '14px',
@@ -1165,13 +1175,11 @@ const CommisionForm = () => {
                     pt="1.5"
                     style={{
                       transform:
-                        formstate !== null &&
-                        formstate?.wordingDoc?.length !== 0
+                        formstate !== null && formstate?.wordingDoc?.length > 0
                           ? 'translate(0, -10px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
-                        formstate !== null &&
-                        formstate?.wordingDoc?.length !== 0
+                        formstate !== null && formstate?.wordingDoc?.length > 0
                           ? '#065baa'
                           : '#231F20',
                       fontSize: '14px',
@@ -1248,11 +1256,11 @@ const CommisionForm = () => {
                   pt="1.5"
                   style={{
                     transform:
-                      formstate !== null && formstate?.planType?.length !== 0
+                      formstate !== null && formstate?.planType?.length > 0
                         ? 'translate(0, -10px) scale(0.75)'
                         : 'translate(0, 4px) scale(0.75)',
                     color:
-                      formstate !== null && formstate?.planType?.length !== 0
+                      formstate !== null && formstate?.planType?.length > 0
                         ? '#065baa'
                         : '#231F20',
                     fontSize: '14px',
@@ -1332,11 +1340,11 @@ const CommisionForm = () => {
                   pt="1.5"
                   style={{
                     transform:
-                      formstate !== null && formstate?.covidDoc?.length !== 0
+                      formstate !== null && formstate?.covidDoc?.length > 0
                         ? 'translate(0, -10px) scale(0.75)'
                         : 'translate(0, 4px) scale(0.75)',
                     color:
-                      formstate !== null && formstate?.covidDoc?.length !== 0
+                      formstate !== null && formstate?.covidDoc?.length > 0
                         ? '#065baa'
                         : '#231F20',
                     fontSize: '14px',

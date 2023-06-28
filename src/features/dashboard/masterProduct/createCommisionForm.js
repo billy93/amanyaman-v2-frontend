@@ -374,7 +374,7 @@ const CommisionForm = () => {
   function handleVariant(data) {
     const forms = {
       ...formstate,
-      variant: [...data],
+      variants: [...data],
     };
     dispatch(setProductForm(forms));
   }
