@@ -340,13 +340,48 @@ const CommisionForm = () => {
             ppnValue: 0,
             pph23Value: 0,
             ajiPrice: 0,
-            variant: null,
+            variant: [],
           })
         );
         navigate('/master-data/master-products');
       } else {
         const errorMessage = `Failed to created master product. Status Code: ${data?.error?.status}`;
         showErrorToast(errorMessage);
+        dispatch(
+          setProductForm({
+            productName: '',
+            code: '',
+            productCode: '',
+            currId: '',
+            value: '',
+            productDescription: '',
+            productBrochure: '',
+            productPersonalAccidentCover: '',
+            productMedicalCover: '',
+            productTravelCover: '',
+            travellerType: '',
+            bandType: '',
+            areaGroup: '',
+            planType: '',
+            productAdditionalWeek: null,
+            benefitDoc: null,
+            wordingDoc: null,
+            covidDoc: null,
+            npwp: false,
+            premiumPrice: '',
+            commisionLv1: '',
+            commisionLv2: '',
+            commisionLv3: '',
+            totalCommision: 0,
+            afterCommisionPrice: 0,
+            ppn: 0,
+            pph23: 0,
+            ppnValue: 0,
+            pph23Value: 0,
+            ajiPrice: 0,
+            variant: [],
+          })
+        );
       }
     } catch (err) {
       const errorMessage = `Failed to created master product. Status Code: ${err?.error?.status}`;

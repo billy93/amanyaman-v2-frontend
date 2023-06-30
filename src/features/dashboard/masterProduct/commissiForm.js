@@ -29,6 +29,7 @@ import { useGetProductByIdQuery } from './masterProductApiSlice';
 import { useGetDocumentTypesQuery } from '../documentType/docTypeApiSlice';
 import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSlice';
 import UseCustomToast from '../../../components/UseCustomToast';
+import { useGetProductsQuery } from './masterProductApiSlice';
 import {
   useGetListVariantQuery,
   useUpdateMasterProductMutation,
@@ -89,6 +90,21 @@ const CommisionForm = () => {
   const { data: products } = useGetProductByIdQuery(id, {
     refetchOnMountOrArgChange: true,
   });
+  const [filterQuery, setFilterQuery] = useState({
+    productCode: '',
+    bandType: '',
+  });
+  const [page, setPage] = React.useState(0);
+
+  const {
+    data: { response: listproducts, totalCount } = {},
+    isLoading: loading,
+    isError,
+    error,
+    isFetching,
+    refetch,
+  } = useGetProductsQuery({ page, size: 9999, ...filterQuery });
+
   const handleUploadIdentity = (e) => {
     hiddenInputIdtty.current.click();
   };
@@ -171,13 +187,7 @@ const CommisionForm = () => {
                 },
               ]
             : null,
-        additionalWeek: [
-          {
-            ...products?.bandType,
-            label: products?.bandType?.travelDurationName,
-            value: products?.bandType?.travelDurationName,
-          },
-        ],
+        additionalWeek: products?.productAdditionalWeek,
         groupArea: [
           {
             ...products?.areaGroup,
@@ -195,7 +205,7 @@ const CommisionForm = () => {
         variants: products?.variants
           .map((variant, index) => {
             const filteredVariants = listvariants.filter(
-              (item, i) => variant.id === item.id
+              (item, i) => variant.variant === item.id
             );
             return filteredVariants;
           })
@@ -204,6 +214,7 @@ const CommisionForm = () => {
       dispatch(setProductForm(form));
     }
   }, [products, dispatch]);
+
   console.log('product formstate', formstate);
   React.useEffect(() => {
     if (bandTypes) {
@@ -215,6 +226,17 @@ const CommisionForm = () => {
       dispatch(setListBandType(duration));
     }
   }, [bandTypes, dispatch]);
+
+  React.useEffect(() => {
+    if (listproducts) {
+      let additionalWeek = listproducts?.map((obj) => ({
+        ...obj,
+        label: obj.travelDurationName,
+        value: obj.travelDurationName,
+      }));
+      dispatch(setListBandType(additionalWeek));
+    }
+  }, [listproducts, dispatch]);
 
   React.useEffect(() => {
     if (travelagents) {
@@ -362,7 +384,7 @@ const CommisionForm = () => {
             ppnValue: 0,
             pph23Value: 0,
             ajiPrice: 0,
-            variants: null,
+            variants: [],
           })
         );
         navigate('/master-data/master-products');
@@ -401,7 +423,7 @@ const CommisionForm = () => {
             ppnValue: 0,
             pph23Value: 0,
             ajiPrice: 0,
-            variants: null,
+            variants: [],
           })
         );
       }
