@@ -641,8 +641,8 @@ const MasterUser = () => {
         if (fetchId === fetchIdRef.current) {
           // const startRow = size * page;
           // const endRow = startRow + size;
-          const startRow = pageSize * pageIndex;
-          const endRow = startRow + pageSize;
+          const startRow = size * page;
+          const endRow = startRow + size;
           console.log('test1', listUserAccount?.slice(startRow, endRow));
           // console.log('test2', listUserAccount?.slice(startRow1, endRow1));
           setData(listUserAccount?.slice(startRow, endRow));
@@ -879,7 +879,7 @@ const MasterUser = () => {
   };
 
   React.useEffect(() => {
-    refetch({ page: page, size: 10, ...filterby });
+    refetch({ page: page, size: size, ...filterby });
   }, [fetchdata]);
 
   React.useEffect(() => {
@@ -1150,7 +1150,7 @@ const MasterUser = () => {
               </Button>
               {' | '}
               <Button
-                isDisabled={Math.ceil(totalCount / 10) === page + 1}
+                isDisabled={Math.ceil(totalCount / size) === page + 1}
                 _hover={{
                   bg: '#f0eeee',
                   borderRadius: '5px',

@@ -497,15 +497,15 @@ const CityList = () => {
       setTimeout(() => {
         // Only update the data if this is the latest fetch
         if (fetchId === fetchIdRef.current) {
-          const startRow = pageSize * pageIndex;
+          const startRow = size * page;
           const endRow = startRow + pageSize;
           setData(systemParams.slice(startRow, endRow));
-          setPageCount(Math.ceil(totalCount / pageSize));
+          setPageCount(Math.ceil(totalCount / size));
           setLoading(false);
         }
       }, 1000);
     },
-    [systemParams, totalCount]
+    [systemParams, totalCount, page, size]
   );
 
   const columns = React.useMemo(
@@ -549,8 +549,8 @@ const CityList = () => {
   };
   // eslint-disable-next-line no-unused-vars
   const total = React.useMemo(() => {
-    return (page + 1) * 10;
-  }, [page]);
+    return (page + 1) * size;
+  }, [page, size]);
   const goToPageLast = () => {
     setPage(pageCount - 1);
   };
@@ -690,7 +690,7 @@ const CityList = () => {
               </Button>
               {' | '}
               <Button
-                isDisabled={Math.ceil(totalCount / 10) === page + 1}
+                isDisabled={Math.ceil(totalCount / size) === page + 1}
                 _hover={{
                   bg: '#f0eeee',
                   borderRadius: '5px',

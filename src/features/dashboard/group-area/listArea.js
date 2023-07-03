@@ -484,15 +484,15 @@ const GroupArea = () => {
       setTimeout(() => {
         // Only update the data if this is the latest fetch
         if (fetchId === fetchIdRef.current) {
-          const startRow = pageSize * pageIndex;
-          const endRow = startRow + pageSize;
+          const startRow = size * page;
+          const endRow = startRow + size;
           setData(systemParams.slice(startRow, endRow));
-          setPageCount(Math.ceil(totalCount / pageSize));
+          setPageCount(Math.ceil(totalCount / size));
           setLoading(false);
         }
       }, 1000);
     },
-    [systemParams, totalCount]
+    [systemParams, totalCount, page, size]
   );
 
   const columns = React.useMemo(
@@ -548,8 +548,8 @@ const GroupArea = () => {
   let content;
 
   const total = React.useMemo(() => {
-    return (page + 1) * 10;
-  }, [page]);
+    return (page + 1) * size;
+  }, [page, size]);
 
   if (isLoading) {
     content = (
@@ -677,7 +677,7 @@ const GroupArea = () => {
               </Button>
               {' | '}
               <Button
-                isDisabled={Math.ceil(totalCount / 10) === page + 1}
+                isDisabled={Math.ceil(totalCount / size) === page + 1}
                 _hover={{
                   bg: '#f0eeee',
                   borderRadius: '5px',

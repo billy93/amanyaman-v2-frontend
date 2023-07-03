@@ -255,6 +255,7 @@ const Tables = ({
   fetchData,
   loading,
   totalCount,
+  size,
   pageCount: controlledPageCount,
 }) => {
   const dispatch = useDispatch();
@@ -442,7 +443,7 @@ const Tables = ({
           </thead>
           <tbody {...getTableBodyProps()}>
             <AnimatePresence>
-              {rows.slice(0, 10).map((row, i) => {
+              {rows.slice(0, size).map((row, i) => {
                 prepareRow(row);
                 return (
                   <motion.tr
@@ -533,17 +534,17 @@ const Polcies = () => {
       setTimeout(() => {
         // Only update the data if this is the latest fetch
         if (fetchId === fetchIdRef.current) {
-          const startRow = pageSize * pageIndex;
-          const endRow = startRow + pageSize;
+          const startRow = size * page;
+          const endRow = startRow + size;
           setData(systemParams?.slice(startRow, endRow));
           // Your server could send back total page count.
           // For now we'll just fake it, too
-          setPageCount(Math.ceil(totalCount / pageSize));
+          setPageCount(Math.ceil(totalCount / size));
           setLoading(false);
         }
       }, 1000);
     },
-    [systemParams, totalCount]
+    [systemParams, totalCount, page, size]
   );
 
   const columns = React.useMemo(
@@ -631,11 +632,12 @@ const Polcies = () => {
         <Styles>
           <Tables
             columns={columns}
-            data={data}
+            data={systemParams}
             fetchData={fetchData}
             loading={loading}
             pageCount={pageCount}
             totalCount={totalCount}
+            size={size}
           />
         </Styles>
         {/* <Link to="/welcome">Back to Welcome</Link> */}
@@ -743,7 +745,7 @@ const Polcies = () => {
               </Button>
               {' | '}
               <Button
-                isDisabled={Math.ceil(totalCount / 10) === page + 1}
+                isDisabled={Math.ceil(totalCount / size) === page + 1}
                 _hover={{
                   bg: '#f0eeee',
                   borderRadius: '5px',

@@ -678,12 +678,12 @@ const MasterUser = () => {
       setTimeout(() => {
         // Only update the data if this is the latest fetch
         if (fetchId === fetchIdRef.current) {
-          const startRow = pageSize * pageIndex;
-          const endRow = startRow + pageSize;
+          const startRow = size * page;
+          const endRow = startRow + size;
           setData(listUserAccount?.slice(startRow, endRow));
           // Your server could send back total page count.
           // For now we'll just fake it, too
-          setPageCount(Math.ceil(totalCount / pageSize));
+          setPageCount(Math.ceil(totalCount / size));
 
           setLoading(false);
         }
@@ -1104,7 +1104,7 @@ const MasterUser = () => {
                 </Button>
                 {' | '}
                 <Button
-                  isDisabled={Math.ceil(totalCount / 10) === page + 1}
+                  isDisabled={Math.ceil(totalCount / size) === page + 1}
                   _hover={{
                     bg: '#f0eeee',
                     borderRadius: '5px',
