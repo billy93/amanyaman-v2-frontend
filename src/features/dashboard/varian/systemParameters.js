@@ -2,7 +2,6 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import { useGetVariantsQuery } from './systemParamsApiSlice';
-import { Link } from 'react-router-dom';
 import {
   usePagination,
   useSortBy,
@@ -566,19 +565,9 @@ const Polcies = () => {
         Header: 'ID',
         accessor: 'id',
         maxWidth: 200,
-        minWidth: 140,
-        width: 100,
+        minWidth: 200,
+        width: 200,
         filter: 'fuzzyText',
-        Cell: ({ row }) => (
-          <Link
-            color="#065BAA"
-            style={{ textDecoration: 'underline' }}
-            to={`/master-data/detail-system-params/${row.original.id}`}
-          >
-            {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.id}
-          </Link>
-        ),
       },
       {
         Header: 'Name',
