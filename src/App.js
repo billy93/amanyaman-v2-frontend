@@ -25,6 +25,7 @@ import ProductPrice from './features/dashboard/productPrice/productPrice';
 import ListCountry from './features/dashboard/country/listCountry';
 import ListCity from './features/dashboard/city/listCity';
 import ListArea from './features/dashboard/area/listArea';
+import ListVariants from './features/dashboard/varian/systemParameters';
 import ListGroupArea from './features/dashboard/group-area/listArea';
 import Dashboards from './features/dashboard/dashboards/dashboard';
 import CreateProductPrice from './features/dashboard/productPrice/createProductPrice';
@@ -192,6 +193,11 @@ function App() {
         <Route
           path="list-band-type"
           element={<BandType />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+        <Route
+          path="list-variant"
+          element={<ListVariants />}
           allowedRoles={['ROLE_ADMIN']}
         />
         <Route

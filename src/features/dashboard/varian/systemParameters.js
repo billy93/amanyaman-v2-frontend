@@ -1,67 +1,30 @@
-import React, { useState } from 'react';
-import { useGetSystemParamsQuery } from './systemParamsApiSlice';
-import { Link, useNavigate } from 'react-router-dom';
-import Table, {
+/* eslint-disable indent */
+/* eslint-disable react/display-name */
+import React from 'react';
+import { useGetVariantsQuery } from './systemParamsApiSlice';
+import { Link } from 'react-router-dom';
+import {
   usePagination,
   useSortBy,
   useFilters,
   useColumnOrder,
 } from 'react-table';
 import PulseLoader from 'react-spinners/PulseLoader';
-import { FaChevronUp, FaSort } from 'react-icons/fa';
+import { FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  useToast,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Link as Links,
   Box,
-  Table as TableNew,
-  Thead,
-  Tbody,
-  Tfoot,
-  LinkOverlay,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
   Heading,
-  Stack,
   Text,
   Center,
   useDisclosure,
-  IconButton,
-  AbsoluteCenter,
-  Input,
+  Select,
 } from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  listPolicy,
-  listSelected,
-  setStateSelectedt,
-  setStatePolicyList,
-} from '../policy/policySlice';
-import {
-  setSystemParams,
-  listSystemParam,
-  setTotalCount,
-} from './systemParamsSlice';
-import { MdLogin, MdFilterList, MdWarning } from 'react-icons/md';
-import { AiOutlineClose } from 'react-icons/ai';
-import { BsFillTrashFill } from 'react-icons/bs';
-import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
-import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -130,6 +93,7 @@ function DefaultColumnFilter({
       onChange={(e) => {
         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
       }}
+      // eslint-disable-next-line react/no-unknown-property
       _placeholder={{ opacity: 1, color: '#231F20' }}
       fontFamily={'Mulish'}
       fontWeight={'500'}
@@ -143,6 +107,7 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
+// eslint-disable-next-line no-unused-vars
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
   // ... and can hold any value, similar to an instance property on a class
@@ -155,6 +120,7 @@ function usePrevious(value) {
   return ref.current;
 }
 
+// eslint-disable-next-line no-unused-vars
 function SelectColumnFilter({
   column: { filterValue, setFilter, preFilteredRows, id },
 }) {
@@ -191,11 +157,13 @@ function SelectColumnFilter({
 //     return `${initState?.startDate?.day} ${getMonthName(initState?.startDate?.month)} ${initState?.startDate?.year}`;
 // };
 
+// eslint-disable-next-line no-unused-vars
 function SelectDateColumnFilter({
   column: { filterValue, setFilter, preFilteredRows, id },
 }) {
   // Calculate the options for filtering
   // using the preFilteredRows
+  // eslint-disable-next-line no-unused-vars
   const options = React.useMemo(() => {
     const options = new Set();
     preFilteredRows.forEach((row) => {
@@ -217,6 +185,7 @@ function SelectDateColumnFilter({
   );
 }
 
+// eslint-disable-next-line no-unused-vars
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
     const defaultRef = React.useRef();
@@ -233,6 +202,7 @@ const IndeterminateCheckbox = React.forwardRef(
     );
   }
 );
+// eslint-disable-next-line no-unused-vars
 function shuffle(arr) {
   arr = [...arr];
   const shuffled = [];
@@ -249,37 +219,14 @@ const Tables = ({
   data,
   fetchData,
   loading,
+  size,
   pageCount: controlledPageCount,
 }) => {
-  const dispatch = useDispatch();
-  const listuser = useSelector(listPolicy);
-  const selected = useSelector(listSelected);
-  const prevSelected = usePrevious(selected);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
   const [showFilter, setShowFilter] = React.useState(false);
-  const [pages] = React.useState(0);
-  const {
-    data: systemParams,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-    refetch,
-    response,
-    extra,
-  } = useGetSystemParamsQuery(
-    { page: pages, size: 10 },
-    {
-      onSuccess: (response, { requestId }, meta) => {
-        const totalCount = response.headers.get('X-Total-Count');
-        console.log('ddddtot', totalCount);
-        // handleSuccess(totalCount); // Update the total count in the component state
-        return response;
-      },
-    }
-  );
+
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -295,6 +242,7 @@ const Tables = ({
           return rowValue !== undefined
             ? String(rowValue)
                 .toLowerCase()
+                // eslint-disable-next-line indent
                 .startsWith(String(filterValue).toLowerCase())
             : true;
         });
@@ -302,35 +250,11 @@ const Tables = ({
     }),
     []
   );
+  // eslint-disable-next-line no-unused-vars
   const showFilterBtn = () => {
     setShowFilter(!showFilter);
   };
 
-  const onOpenModal = () => {
-    onOpen();
-    // getSelectedRows()
-  };
-  const onCloseModal = () => {
-    onClose();
-    dispatch(setStateSelectedt([]));
-    // resetSelectedRows: () => toggleAllRowsSelected(false)
-    // getSelectedRows()
-  };
-  const clearSelect = () => {
-    dispatch(setStateSelectedt([]));
-    onClose();
-    const rowIds = listuser?.map((item, i) => i);
-    rowIds.forEach((id) => toggleRowSelected(id, false));
-  };
-  const cancelDelete = () => {
-    onClose();
-  };
-  const deletedUser = () => {
-    //  dispatch(setMasterUser([]))
-    onOpen();
-    //  const rowIds = listuser?.map((item,i) =>i);
-    //  rowIds.forEach(id => toggleRowSelected(id, false));
-  };
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -338,23 +262,13 @@ const Tables = ({
     headerGroups,
     rows,
     prepareRow,
-    selectedFlatRows,
     toggleAllRowsSelected,
-    toggleRowSelected,
     // which has only the rows for the active page
 
     // The rest of these things are super handy, too ;)
-    page,
-    canPreviousPage,
-    canNextPage,
     pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
     // Get the state from the instance
-    state: { pageIndex, pageSize, selectedRowIds },
+    state: { pageIndex, pageSize },
   } = useTable(
     {
       columns,
@@ -374,41 +288,10 @@ const Tables = ({
     usePagination,
     useRowSelect
   );
-  const prev = usePrevious(selectedRowIds);
   React.useEffect(() => {
     toggleAllRowsSelected();
   }, []);
 
-  React.useEffect(() => {
-    if (JSON.stringify(prev) !== JSON.stringify(selectedRowIds)) {
-      getValues(selectedFlatRows);
-    }
-  }, [prev, selectedRowIds]);
-
-  // Render the UI for your table
-  const getValues = (data) => {
-    let original = data.map((item) => item.original);
-    dispatch(setStateSelectedt(original));
-  };
-
-  const deletedUserUpdate = (e) => {
-    e.preventDefault();
-    const nextState = listuser.filter(
-      (item) => !selected.some(({ id }) => item.id === id)
-    );
-    console.log('nextState', nextState);
-    dispatch(setStatePolicyList(nextState));
-    dispatch(setStateSelectedt([]));
-    onClose();
-    toast({
-      title: 'Deleted Success',
-      status: 'success',
-      position: 'top-right',
-      duration: 3000,
-      isClosable: true,
-      variant: 'solid',
-    });
-  };
   React.useEffect(() => {
     fetchData({ pageIndex, pageSize, pageOptions });
   }, [fetchData, pageIndex, pageSize, pageOptions]);
@@ -425,26 +308,7 @@ const Tables = ({
   // function fuzzyTextFilterFn(rows, id, filterValue) {
   // return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
   // }
-  const handleAdd = (e) => {
-    e.preventDefault();
-    navigate('/master-data/create-system-params');
-  };
-  const [expandedRows, setExpandedRows] = useState([]);
 
-  const handleRowClick = (rowIndex) => {
-    const expandedRowsCopy = [...expandedRows];
-    const index = expandedRows.indexOf(rowIndex);
-
-    if (index > -1) {
-      expandedRowsCopy.splice(index, 1);
-    } else {
-      expandedRowsCopy.push(rowIndex);
-    }
-
-    setExpandedRows(expandedRowsCopy);
-  };
-
-  const isRowExpanded = (rowIndex) => expandedRows.includes(rowIndex);
   return (
     <>
       <Box mb="2em" mt="2em">
@@ -454,21 +318,8 @@ const Tables = ({
           alignItems={'center'}
         >
           <Heading as={'h6'} size={'sm'}>
-            System Parameters
+            Variants
           </Heading>
-          <Stack direction="row" spacing={4} m={'2.5'}>
-            <Button
-              variant="ClaimBtn"
-              leftIcon={<AiOutlinePlusCircle />}
-              colorScheme="#231F20"
-              size={'sm'}
-              color="white"
-              onClick={handleAdd}
-            >
-              Add System Params
-            </Button>
-            {/* <button onClick={refetch}>Refresh</button> */}
-          </Stack>
         </Box>
         {/* <Box mb={'3'} bg={'#ffeccc'} border={'1px'} borderColor={'#ffa000'} width={'300px'} height={'100px'} p={'2'} display="flex" justifyContent={'center'} alignItems={'center'}>
                 <Box bg="#FFA00">
@@ -482,10 +333,11 @@ const Tables = ({
       <Box bg="white" overflow={'scroll'} p="3">
         <table {...getTableProps()} className="my-table">
           <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroups.map((headerGroup, i) => (
+              <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <motion.th
+                    key={column.id}
                     {...column.getHeaderProps({
                       layoutTransition: spring,
                       style: {
@@ -536,56 +388,62 @@ const Tables = ({
                       </Box>
                     </div>
                     {/* <div>{column.canFilter ? column.render('Filter') : null} </div> */}
-                    {showFilter ? (
+                    {/* {showFilter ? (
                       <>{column.canFilter ? column.render('Filter') : null}</>
-                    ) : null}
+                    ) : null} */}
                   </motion.th>
                 ))}
               </tr>
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {rows.map((row, rowIndex) => {
+            {/* {rows.slice(0, 10).map((row, i) => {
               prepareRow(row);
-              const isExpanded = isRowExpanded(rowIndex);
-
               return (
-                <React.Fragment key={rowIndex}>
-                  <tr
-                    {...row.getRowProps()}
-                    onClick={() => handleRowClick(rowIndex)}
-                  >
-                    {row.cells.map((cell) => (
-                      <td
-                        {...cell.getCellProps()}
-                        className={`${
-                          cell.column.id === 'value' && isExpanded
-                            ? 'expanded'
-                            : ''
-                        }`}
-                      >
-                        {cell.column.id === 'value' && cell.value.length > 30
-                          ? isExpanded
-                            ? cell.value
-                            : cell.value.substring(0, 30) + '...'
-                          : cell.render('Cell')}
-                      </td>
-                    ))}
-                  </tr>
-                </React.Fragment>
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
+                </tr>
               );
-            })}
-            <tr>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td colSpan="10000">
-                  Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-                  results
-                </td>
-              )}
-            </tr>
+            })} */}
+            <AnimatePresence>
+              {rows.slice(0, size).map((row, i) => {
+                prepareRow(row);
+                return (
+                  <motion.tr
+                    key={i}
+                    {...row.getRowProps({
+                      layoutTransition: spring,
+                      exit: { opacity: 0, maxHeight: 0 },
+                    })}
+                  >
+                    {row.cells.map((cell, i) => {
+                      return (
+                        <motion.td
+                          key={i}
+                          {...cell.getCellProps({
+                            layoutTransition: spring,
+                          })}
+                          style={{
+                            // backgroundColor: 'red',
+                            fontWeight: 'normal',
+                            textAlign: 'left',
+                            padding: '10px',
+                            fontFamily: 'Mulish',
+                            fontSize: '14px',
+                          }}
+                        >
+                          {cell.render('Cell')}
+                        </motion.td>
+                      );
+                    })}
+                  </motion.tr>
+                );
+              })}
+            </AnimatePresence>
           </tbody>
         </table>
       </Box>
@@ -658,32 +516,20 @@ function filterGreaterThan(rows, id, filterValue) {
 filterGreaterThan.autoRemove = (val) => typeof val !== 'number';
 
 const Polcies = () => {
-  const [MasterChecked, setMasterChecked] = useState(false);
-  const dispatch = useDispatch();
-  const tempList = useSelector(listPolicy);
-  const listParams = useSelector(listSystemParam);
+  // eslint-disable-next-line no-unused-vars
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [pageCount, setPageCount] = React.useState(0);
-  const [count, setCount] = React.useState(0);
   const fetchIdRef = React.useRef(0);
+  const [size, setSize] = React.useState(5);
   const [page, setPage] = React.useState(0);
-  const [paginations, setPagination] = React.useState({
-    page: 0,
-    size: 1000,
-  });
   const {
-    data: systemParams,
+    data: { response: systemParams, totalCount } = {},
     isLoading,
-    isSuccess,
     isError,
     error,
     refetch,
-    response,
-    extra,
-    accessHeaders,
-    totalCount,
-  } = useGetSystemParamsQuery({ page, size: 10 });
+  } = useGetVariantsQuery({ page, size: size });
 
   const fetchData = React.useCallback(
     ({ pageSize, pageIndex, pageOptions }) => {
@@ -701,39 +547,19 @@ const Polcies = () => {
       setTimeout(() => {
         // Only update the data if this is the latest fetch
         if (fetchId === fetchIdRef.current) {
-          const startRow = pageSize * pageIndex;
-          const endRow = startRow + pageSize;
-          setData(systemParams?.response.slice(startRow, endRow));
-          setCount(pageOptions);
+          const startRow = size * page;
+          const endRow = startRow + size;
+          setData(systemParams.slice(startRow, endRow));
           // Your server could send back total page count.
           // For now we'll just fake it, too
-          setPageCount(Math.ceil(systemParams?.response?.length / pageSize));
-          setPagination({
-            page: pageIndex,
-            size: pageSize,
-          });
+          setPageCount(Math.ceil(totalCount / size));
           setLoading(false);
         }
       }, 1000);
     },
-    [systemParams?.response]
+    [systemParams, page, size, totalCount]
   );
 
-  React.useEffect(() => {
-    if (systemParams && 'totalCount' in systemParams) {
-      // Retrieve the value of the "X-Total-Count" header
-      const totalCount = systemParams.totalCount;
-
-      // Print the total count
-      console.log('cccxxxx', totalCount);
-    } else {
-      // If the "X-Total-Count" header is not present in the response
-      console.log('X-Total-Count header not found.', response);
-    }
-  }, [data, response]);
-
-  console.log('cccxxxx systemParams', systemParams);
-  console.log('cccxxxx totalCount', response);
   const columns = React.useMemo(
     () => [
       {
@@ -762,22 +588,6 @@ const Polcies = () => {
         width: 200,
         filter: 'fuzzyText',
       },
-      {
-        Header: 'Value',
-        accessor: 'value',
-        maxWidth: 200,
-        minWidth: 200,
-        width: 200,
-        filter: 'fuzzyText',
-      },
-      {
-        Header: 'Create Date',
-        accessor: 'createdDate',
-        maxWidth: 200,
-        minWidth: 200,
-        width: 200,
-        filter: 'fuzzyText',
-      },
     ],
     []
   );
@@ -793,6 +603,17 @@ const Polcies = () => {
   const prevPages = () => {
     setPage((prevPage) => prevPage - 1);
   };
+  const goToPageLast = () => {
+    setPage(pageCount - 1);
+  };
+
+  const goToPageFirst = () => {
+    setPage(0);
+  };
+
+  const gotoPage = () => {
+    setPage(0);
+  };
   let content;
   if (isLoading) {
     content = (
@@ -800,82 +621,176 @@ const Polcies = () => {
         <PulseLoader color={'#065BAA'} />
       </Center>
     );
-  } else if (systemParams?.response) {
-    const totalCount = data;
+  } else if (systemParams) {
     content = (
       <Box pl="2em" pr="2em" mt="3em">
         {/* <div>{ console.log('celelng',totalCount)}</div> */}
         <Styles>
           <Tables
             columns={columns}
-            data={data}
+            data={systemParams}
             fetchData={fetchData}
             loading={loading}
             pageCount={pageCount}
+            size={size}
           />
         </Styles>
         {/* <Link to="/welcome">Back to Welcome</Link> */}
         <Box
-          display="flex"
-          justifyContent={'flex-end'}
+          display={'flex'}
+          justifyContent={'space-between'}
           alignItems={'center'}
-          mt="1em"
+          w="100%"
+          mt="15px"
         >
           <Box>
-            <Button
-              onClick={prevPages}
-              isDisabled={page === 0 ? true : false}
-              bg="white"
-              border={'none'}
-              _hover={{
-                bg: '#f0eeee',
-                borderRadius: '5px',
-                WebkitBorderRadius: '5px',
-                MozBorderRadius: '5px',
-              }}
-            >
-              <BiSkipPreviousCircle size="25px" color="black" />
-              <Text
-                as="p"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                color="#231F20"
-                pl="5px"
+            <Box>
+              {loading ? (
+                // Use our custom loading state to show a loading indicator
+                <td colSpan="10000">Loading...</td>
+              ) : (
+                <td
+                  colSpan="10000"
+                  style={{ fontSize: '14px', fontFamily: 'Mulish' }}
+                >
+                  Showing {size} of {totalCount} results
+                </td>
+              )}
+            </Box>
+            <Box>
+              <Box
+                display={'flex'}
+                justifyContent={'start'}
+                alignItems={'center'}
               >
-                Prev
-              </Text>
-            </Button>
-            {' | '}
-            <Button onClick={nextPages} bg="white" border={'none'}>
-              <BiSkipNextCircle size="25px" color="black" />
-              <Text
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                color="#231F20"
-                pl="5px"
-              >
-                Next
-              </Text>
-            </Button>{' '}
+                <label
+                  htmlFor="select"
+                  style={{
+                    paddingRight: '5px',
+                    fontSize: '14px',
+                    fontFamily: 'Mulish',
+                  }}
+                >
+                  Per page
+                </label>
+                <Select
+                  id="pageSize"
+                  w="100px"
+                  value={size}
+                  onChange={(e) => {
+                    setSize(Number(e.target.value));
+                    gotoPage(0);
+                  }}
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  {/* Add more options as needed */}
+                </Select>
+              </Box>
+            </Box>
           </Box>
           <Box>
-            Page{' '}
-            <strong>
-              {page + 1} of {count?.length}
-            </strong>{' '}
+            <Box display={'flex'} alignItems={'center'}>
+              <Button
+                isDisabled={page === 0 ? true : false}
+                onClick={goToPageFirst}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="2px"
+                >
+                  {'<<'}
+                </Text>
+              </Button>
+              <Button
+                isDisabled={page === 0 ? true : false}
+                onClick={prevPages}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <BiSkipPreviousCircle size="25px" color="black" />
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  {'<'}
+                </Text>
+              </Button>
+              {' | '}
+              <Button
+                isDisabled={Math.ceil(totalCount / size) === page + 1}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+                onClick={nextPages}
+                bg="white"
+                border={'none'}
+              >
+                <BiSkipNextCircle size="25px" color="black" />
+                <Text
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  {'>'}
+                </Text>
+              </Button>{' '}
+              <Button
+                isDisabled={pageCount === page ? true : false}
+                onClick={goToPageLast}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  {'>>'}
+                </Text>
+              </Button>
+              <Text as="p" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                Page{' '}
+              </Text>
+              <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                {page + 1} of {pageCount}
+              </Text>{' '}
+            </Box>
           </Box>
-          {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
         </Box>
       </Box>
     );
