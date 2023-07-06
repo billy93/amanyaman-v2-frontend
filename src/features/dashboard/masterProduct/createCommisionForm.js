@@ -222,7 +222,7 @@ const CommisionForm = () => {
         id: formstate?.planType[0]?.id,
       },
       bandType: {
-        id: formstate?.additionalWeek[0]?.id,
+        id: formstate?.bandType[0]?.id,
       },
       areaGroup: {
         id: formstate?.groupArea[0]?.id,
