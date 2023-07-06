@@ -78,6 +78,20 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    getProductAdditional: builder.query({
+      query: () => {
+        // const { page, size } = datas;
+        return {
+          url: '/app/products/additional-week?page=0&size=9999',
+        };
+      },
+      transformResponse: (response, meta) => {
+        return {
+          response,
+          totalCount: Number(meta.response.headers.get('X-Total-Count')),
+        };
+      },
+    }),
     getProductTravelAgent: builder.query({
       query: (id) => {
         // const { page, size } = datas;
@@ -110,6 +124,7 @@ export const policyApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetProductAdditionalQuery,
   useUpdateMasterProductMutation,
   useCreateMasterProductMutation,
   useGetProductByIdMutation,

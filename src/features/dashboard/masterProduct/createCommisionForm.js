@@ -25,15 +25,16 @@ import { useGetBandTypeQuery } from '../bandType/bandTypesApiSlice';
 import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
 import { useGetListAreaGroupQuery } from '../group-area/listApiSlice';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
-import { useGetByIdQuery } from '../productPrice/productPriceApi';
 import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSlice';
 import UseCustomToast from '../../../components/UseCustomToast';
 import {
   useGetListVariantQuery,
   useCreateMasterProductMutation,
+  useGetProductAdditionalQuery,
 } from './masterProductApiSlice';
 // import { selectCurrentTraveller } from '../../auth/authSlice';
 import {
+  listAdditonalWeeks,
   areaList,
   travelDurations,
   planTypes,
@@ -55,14 +56,15 @@ import {
   listvariant,
   listtravelagents,
   setListTravellAgents,
+  setListAdditionalWeeks,
 } from './masterProductSlice';
 import { MdAdd } from 'react-icons/md';
 import { Select } from 'chakra-react-select';
 
 const CommisionForm = () => {
-  const { id } = useParams();
   const dispatch = useDispatch();
   const listProducts = useSelector(listtravellertype);
+  const listAddWeeks = useSelector(listAdditonalWeeks);
   const listAgents = useSelector(listtravelagents);
   const travelertype = useSelector(listtravellertype);
   const listPlanType = useSelector(listplantype);
@@ -75,6 +77,8 @@ const CommisionForm = () => {
   const [isActive] = useState(false);
   const [isActiveDescLoc] = useState(false);
   const { data: { response: variant } = {} } = useGetListVariantQuery();
+  const { data: { response: additionalWeeks } = {} } =
+    useGetProductAdditionalQuery();
   const [toastId, setToastId] = React.useState(null);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const hiddenInputIdtty = React.useRef(null);
@@ -82,9 +86,6 @@ const CommisionForm = () => {
   const [fields, setFields] = React.useState(null);
   const toast = useToast();
 
-  const { data: products } = useGetByIdQuery(id, {
-    refetchOnMountOrArgChange: true,
-  });
   const handleUploadIdentity = (e) => {
     hiddenInputIdtty.current.click();
   };
@@ -113,68 +114,6 @@ const CommisionForm = () => {
   });
 
   React.useEffect(() => {
-    if (products) {
-      const form = {
-        ...formstate,
-        productCode: products?.productMapping?.productCode,
-        productDetailCode: products?.id,
-        productName: products?.productMapping?.productName,
-        productDescription: products?.productMapping?.productDescription,
-        productMedicalCover: products?.productMapping?.productMedicalCover,
-        personalAccidentCover:
-          products?.productMapping?.productPersonalAccidentCover,
-        afterCommisionPrice: products?.afterCommisionPrice,
-        productTravelCover: products?.productMapping?.productTravelCover,
-        ajiPrice: products?.ajiPrice,
-        currId: products?.productMapping?.currId,
-        commisionLv1: products?.commisionLv1,
-        commisionLv2: products?.commisionLv2,
-        commisionLv3: products?.commisionLv3,
-        npwp: products?.npwp,
-        pph23: products?.pph23,
-        benefitDoc: products?.productMapping?.benefitDoc?.name,
-        covidDoc: products?.productMapping?.covidDoc?.name,
-        productBrochure: products?.productMapping?.productBrochure,
-        wordingDoc: products?.productMapping?.wordingDoc?.name,
-        pph23Value: products?.pph23Value,
-        ppn: products?.ppn,
-        ppnValue: products?.ppnValue,
-        premiumPrice: products?.premiumPrice,
-        totalCommision: products?.totalCommision,
-        planType: [
-          {
-            ...products?.productMapping?.planType,
-            label: products?.productMapping?.planType?.name,
-            value: products?.productMapping?.planType?.name,
-          },
-        ],
-        additionalWeek: [
-          {
-            ...products?.productMapping?.bandType,
-            label: products?.productMapping?.bandType?.travelDurationName,
-            value: products?.productMapping?.bandType?.travelDurationName,
-          },
-        ],
-        groupArea: [
-          {
-            ...products?.productMapping?.areaGroup,
-            label: products?.productMapping?.areaGroup?.areaGroupName,
-            value: products?.productMapping?.areaGroup?.areaGroupName,
-          },
-        ],
-        travellerType: [
-          {
-            ...products?.productMapping?.travellerType,
-            label: products?.productMapping?.travellerType?.name,
-            value: products?.productMapping?.travellerType?.name,
-          },
-        ],
-      };
-      console.log('form', form);
-      dispatch(setProductForm(form));
-    }
-  }, [products, dispatch]);
-  React.useEffect(() => {
     if (bandTypes) {
       let duration = bandTypes?.response.map((obj) => ({
         ...obj,
@@ -195,6 +134,17 @@ const CommisionForm = () => {
       dispatch(setListTravellAgents(agents));
     }
   }, [travelagents, dispatch]);
+
+  React.useEffect(() => {
+    if (additionalWeeks) {
+      let additional = additionalWeeks?.map((obj) => ({
+        ...obj,
+        label: obj.productCode,
+        value: obj.productCode,
+      }));
+      dispatch(setListAdditionalWeeks(additional));
+    }
+  }, [additionalWeeks, dispatch]);
 
   React.useEffect(() => {
     if (grouparea) {
@@ -280,7 +230,9 @@ const CommisionForm = () => {
       planType: {
         id: formstate?.planType[0]?.id,
       },
-      productAdditionalWeek: null,
+      productAdditionalWeek: {
+        id: formstate?.additionalWeek[0]?.id,
+      },
       benefitDoc: null,
       wordingDoc: null,
       covidDoc: null,
@@ -402,6 +354,13 @@ const CommisionForm = () => {
     const forms = {
       ...formstate,
       additionalWeek: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+  function handleSelectBandType(data) {
+    const forms = {
+      ...formstate,
+      bandType: [{ ...data }],
     };
     dispatch(setProductForm(forms));
   }
@@ -840,7 +799,7 @@ const CommisionForm = () => {
                     onChange={handleSelectAdditional}
                     value={formstate?.additionalWeek}
                     classNamePrefix="chakra-react-select"
-                    options={additonal}
+                    options={listAddWeeks}
                     placeholder=""
                     closeMenuOnSelect={true}
                     menuPortalTarget={document.body}
@@ -866,12 +825,12 @@ const CommisionForm = () => {
                     style={{
                       transform:
                         formstate !== null &&
-                        formstate?.additionalWeek?.length > 0
+                        formstate?.additionalWeek?.length !== 0
                           ? 'translate(-1px, -7px) scale(0.75)'
-                          : 'translate(-2px, -8px) scale(0.75)',
+                          : 'translate(0px, 3px) scale(0.75)',
                       color:
                         formstate !== null &&
-                        formstate?.additionalWeek?.length > 0
+                        formstate?.additionalWeek?.length !== 0
                           ? '#065baa'
                           : '#231F20',
                       fontSize: '14px',
@@ -879,6 +838,75 @@ const CommisionForm = () => {
                     fontFamily={'Mulish'}
                   >
                     Additional Week
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+        >
+          <Box width={{ base: '100%', md: '540px' }}>
+            <FormControl
+              variant="floating"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Box>
+                <Box className="floating-label">
+                  <Select
+                    isMulti={false}
+                    name="colors"
+                    onChange={handleSelectBandType}
+                    value={formstate?.bandType}
+                    classNamePrefix="chakra-react-select"
+                    options={additonal}
+                    placeholder=""
+                    closeMenuOnSelect={true}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                    }}
+                    chakraStyles={{
+                      dropdownIndicator: (
+                        prev,
+                        { selectProps: { menuIsOpen } }
+                      ) => ({
+                        ...prev,
+                        '> svg': {
+                          transitionDuration: 'normal',
+                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                        },
+                      }),
+                    }}
+                  />
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate !== null && formstate?.bandType?.length !== 0
+                          ? 'translate(-1px, -7px) scale(0.75)'
+                          : 'translate(0px, 3px) scale(0.75)',
+                      color:
+                        formstate !== null && formstate?.bandType?.length !== 0
+                          ? '#065baa'
+                          : '#231F20',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Band Type
                   </FormLabel>
                 </Box>
               </Box>

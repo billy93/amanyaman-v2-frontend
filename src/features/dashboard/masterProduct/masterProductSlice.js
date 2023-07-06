@@ -5,6 +5,7 @@ const createMasterProductSlice = createSlice({
   initialState: {
     variant: [],
     documentTypeList: [],
+    additonalWeeks: [],
     list: [
       {
         id: '1',
@@ -334,6 +335,7 @@ const createMasterProductSlice = createSlice({
       productTravelCover: '',
       additionalWeek: '',
       planType: '',
+      bandType: '',
       travellerType: '',
       groupArea: '',
       travelDuration: '',
@@ -463,6 +465,9 @@ const createMasterProductSlice = createSlice({
     setMasterProduct: (state, action) => {
       state.list = action.payload;
     },
+    setListAdditionalWeeks: (state, action) => {
+      state.additonalWeeks = action.payload;
+    },
     setListSelectProduct: (state, action) => {
       state.selection = action.payload;
     },
@@ -494,6 +499,7 @@ const createMasterProductSlice = createSlice({
 });
 
 export const {
+  setListAdditionalWeeks,
   setListDoctType,
   setListTravellAgents,
   setListTravellerType,
@@ -521,5 +527,6 @@ export const listarea = (state) => state.masterProduct.listArea;
 export const listtravelagents = (state) => state.masterProduct.listTravelAgents;
 export const listplantype = (state) => state.masterProduct.listPlanType;
 export const listdocstype = (state) => state.masterProduct.documentTypeList;
+export const listAdditonalWeeks = (state) => state.masterProduct.additonalWeeks;
 export const listtravellertype = (state) =>
   state.masterProduct.listTravellerType;
