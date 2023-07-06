@@ -200,13 +200,16 @@ const CommisionForm = () => {
                 },
               ]
             : null,
-        additionalWeek: [
-          {
-            ...products?.productAdditionalWeek,
-            label: products?.productAdditionalWeek.productCode,
-            value: products?.productAdditionalWeek.productCode,
-          },
-        ],
+        additionalWeek:
+          products?.productAdditionalWeek !== null
+            ? [
+                {
+                  ...products?.productAdditionalWeek,
+                  label: products?.productAdditionalWeek.productCode,
+                  value: products?.productAdditionalWeek.productCode,
+                },
+              ]
+            : null,
         groupArea: [
           {
             ...products?.areaGroup,
@@ -246,14 +249,21 @@ const CommisionForm = () => {
     }
   }, [bandTypes, dispatch]);
 
-  React.useEffect(() => {
+  React.useMemo(() => {
     if (additonalWeek) {
-      let additional = additonalWeek?.map((obj) => ({
-        ...obj,
-        label: obj.productCode,
-        value: obj.productCode,
-      }));
-      dispatch(setListAdditionalWeeks(additional));
+      let list = [
+        { label: 'SELECT OPTION', value: '', id: '', name: '' },
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        ...additonalWeek?.map((obj, i) => ({
+          ...obj,
+          productCode: obj.productCode,
+          label: obj.productCode,
+          name: obj.productCode,
+          value: obj.id,
+          idx: i,
+        })),
+      ];
+      dispatch(setListAdditionalWeeks(list));
     }
   }, [additonalWeek, dispatch]);
 
@@ -758,12 +768,7 @@ const CommisionForm = () => {
           }}
         >
           <Box width={{ base: '100%', md: '540px' }}>
-            <FormControl
-              variant="floating"
-              isRequired
-              fontFamily={'Mulish'}
-              mt="14px"
-            >
+            <FormControl variant="floating" fontFamily={'Mulish'} mt="14px">
               <Box>
                 <Box className="floating-label">
                   <Select
@@ -1585,7 +1590,7 @@ const CommisionForm = () => {
           fontFamily="arial"
           fontWeight={'700'}
         >
-          ADD
+          Edit
         </Button>
       </Box>
     </Box>

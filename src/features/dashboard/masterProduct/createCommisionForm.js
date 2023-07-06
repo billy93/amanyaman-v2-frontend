@@ -136,17 +136,6 @@ const CommisionForm = () => {
   }, [travelagents, dispatch]);
 
   React.useEffect(() => {
-    if (additionalWeeks) {
-      let additional = additionalWeeks?.map((obj) => ({
-        ...obj,
-        label: obj.productCode,
-        value: obj.productCode,
-      }));
-      dispatch(setListAdditionalWeeks(additional));
-    }
-  }, [additionalWeeks, dispatch]);
-
-  React.useEffect(() => {
     if (grouparea) {
       let area = grouparea?.response.map((obj) => ({
         ...obj,
@@ -434,6 +423,24 @@ const CommisionForm = () => {
 
     dispatch(setProductForm(newData));
   };
+
+  React.useMemo(() => {
+    if (additionalWeeks) {
+      let list = [
+        { label: 'SELECT OPTION', value: '', id: '', name: '' },
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        ...additionalWeeks?.map((obj, i) => ({
+          ...obj,
+          productCode: obj.productCode,
+          label: obj.productCode,
+          name: obj.productCode,
+          value: obj.id,
+          idx: i,
+        })),
+      ];
+      dispatch(setListAdditionalWeeks(list));
+    }
+  }, [additionalWeeks, dispatch]);
 
   return (
     <Box>
@@ -785,12 +792,7 @@ const CommisionForm = () => {
           }}
         >
           <Box width={{ base: '100%', md: '540px' }}>
-            <FormControl
-              variant="floating"
-              isRequired
-              fontFamily={'Mulish'}
-              mt="14px"
-            >
+            <FormControl variant="floating" fontFamily={'Mulish'} mt="14px">
               <Box>
                 <Box className="floating-label">
                   <Select
