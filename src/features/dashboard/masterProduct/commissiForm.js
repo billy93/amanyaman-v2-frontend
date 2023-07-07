@@ -255,7 +255,7 @@ const CommisionForm = () => {
         id: products.id,
         productCode: products?.productCode,
         value: products?.value,
-        productDetailCode: products?.code,
+        code: products?.code,
         productName: products?.productName,
         productDescription: products?.productDescription,
         productMedicalCover: products?.productMedicalCover,
@@ -356,7 +356,7 @@ const CommisionForm = () => {
     const constData = {
       id: formstate.id,
       productName: formstate?.productName,
-      code: formstate?.code,
+      productDetailCode: formstate?.code,
       productCode: formstate?.productCode,
       currId: formstate?.currId,
       value: formstate?.value,
@@ -776,7 +776,12 @@ const CommisionForm = () => {
           }}
         >
           <Box width={{ base: '100%', md: '540px' }}>
-            <FormControl variant="floating" fontFamily={'Mulish'} mt="14px">
+            <FormControl
+              variant="floating"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
               <Box>
                 <Box className="floating-label">
                   <Select
@@ -840,12 +845,7 @@ const CommisionForm = () => {
           }}
         >
           <Box width={{ base: '100%', md: '540px' }}>
-            <FormControl
-              variant="floating"
-              isRequired
-              fontFamily={'Mulish'}
-              mt="14px"
-            >
+            <FormControl variant="floating" fontFamily={'Mulish'} mt="14px">
               <Box>
                 <Box className="floating-label">
                   <Select
