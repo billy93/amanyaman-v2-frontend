@@ -36,7 +36,8 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 // import { useDispatch } from 'react-redux';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import 'react-calendar/dist/Calendar.css';
-
+// eslint-disable-next-line no-unused-vars
+import UseCustomToast from '../../../components/UseCustomToast';
 import { BsFillPencilFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -132,9 +133,12 @@ const Tables = ({
   totalCount,
 }) => {
   const [updateSelectProduct, { isSuccess }] = useUpdateSelectProductMutation();
+
   const [updateSelectProductMultple, { isSuccess: success }] =
     useUpdateSelectProductMultpleMutation();
   const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -249,6 +253,7 @@ const Tables = ({
       dispatch(setMessage('Successfully'));
     } else {
       dispatch(setMessage('Error'));
+      // showErrorToast('Failed', 'detailMasterFailSelect');
     }
   }, [isSuccess, dispatch, success]);
 
@@ -272,7 +277,13 @@ const Tables = ({
 
   const updateDataMulti = React.useCallback(
     async (select) => {
-      await updateSelectProductMultple(select);
+      let res = await updateSelectProductMultple(select);
+      console.log('res', res);
+      if (res.data && res.data) {
+        showSuccessToast('Success ', `${res.data.id}`);
+      } else {
+        showErrorToast('Fail', 'failsselect');
+      }
     },
     [updateSelectProductMultple]
   );
@@ -281,7 +292,15 @@ const Tables = ({
     const payload = {
       ...unselectedRowIds,
     };
-    await updateSelectProduct(payload);
+    const res = await updateSelectProduct(payload);
+    // console.log('res', res);
+    if (res.data && res.data.active === true) {
+      showSuccessToast('Success to select a product', `${res.data.id}`);
+    } else if (res.data && res.data.active === false) {
+      showSuccessToast('Success to unselect a product', `${res.data.id}`);
+    } else {
+      showErrorToast('Fail to select a product', 'failsselect');
+    }
   };
   React.useEffect(() => {
     fetchData({ pageIndex, pageSize, pageOptions });
@@ -806,7 +825,7 @@ const DetailMasterUser = () => {
                     color={'#231F20'}
                     fontWeight={'normal'}
                   >
-                    {user !== null ? user && user?.productCode : null}
+                    {user !== null ? user && user?.code : null}
                   </Text>
                 </Box>
                 <Box
