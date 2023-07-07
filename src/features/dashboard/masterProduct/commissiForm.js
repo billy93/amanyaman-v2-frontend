@@ -139,105 +139,7 @@ const CommisionForm = () => {
     ...filterby,
   });
 
-  React.useEffect(() => {
-    if (products) {
-      const form = {
-        ...formstate,
-        id: products.id,
-        productCode: products?.productCode,
-        code: products?.code,
-        value: products?.value,
-        productDetailCode: products?.id,
-        productName: products?.productName,
-        productDescription: products?.productDescription,
-        productMedicalCover: products?.productMedicalCover,
-        personalAccidentCover: products?.productPersonalAccidentCover,
-        productTravelCover: products?.productTravelCover,
-        currId: products?.currId,
-        productBrochure: products?.productMapping?.productBrochure,
-
-        planType: [
-          {
-            ...products?.planType,
-            label: products?.planType?.name,
-            value: products?.planType?.name,
-          },
-        ],
-        bandType: [
-          {
-            ...products?.bandType,
-            label: products?.bandType?.travelDurationName,
-            value: products?.bandType?.travelDurationName,
-          },
-        ],
-        benefitDoc:
-          products?.benefitDoc !== null
-            ? [
-                {
-                  ...products?.benefitDoc,
-                  label: products?.benefitDoc?.name,
-                  value: products?.benefitDoc?.name,
-                },
-              ]
-            : null,
-        wordingDoc:
-          products?.wordingDoc !== null
-            ? [
-                {
-                  ...products?.wordingDoc,
-                  label: products?.wordingDoc?.name,
-                  value: products?.wordingDoc?.name,
-                },
-              ]
-            : null,
-        covidDoc:
-          products?.covidDoc !== null
-            ? [
-                {
-                  ...products?.covidDoc,
-                  label: products?.covidDoc?.name,
-                  value: products?.covidDoc?.name,
-                },
-              ]
-            : null,
-        additionalWeek:
-          products?.productAdditionalWeek !== null
-            ? [
-                {
-                  ...products?.productAdditionalWeek,
-                  label: products?.productAdditionalWeek.productCode,
-                  value: products?.productAdditionalWeek.productCode,
-                },
-              ]
-            : null,
-        groupArea: [
-          {
-            ...products?.areaGroup,
-            label: products?.areaGroup?.areaGroupName,
-            value: products?.areaGroup?.areaGroupName,
-          },
-        ],
-        travellerType: [
-          {
-            ...products?.travellerType,
-            label: products?.travellerType?.name,
-            value: products?.travellerType?.name,
-          },
-        ],
-        variants: products?.variants
-          .map((variant, index) => {
-            const filteredVariants = listvariants.filter(
-              (item, i) => variant.variant === item.id
-            );
-            return filteredVariants;
-          })
-          .reduce((prev, curr) => prev.concat(curr), []),
-      };
-      dispatch(setProductForm(form));
-    }
-  }, [products, dispatch]);
-
-  console.log('product formstate', formstate);
+  console.log('product formstate', listvariants);
   React.useEffect(() => {
     if (bandTypes) {
       let duration = bandTypes?.response.map((obj) => ({
@@ -345,6 +247,110 @@ const CommisionForm = () => {
       dispatch(setListVariant(type));
     }
   }, [variant, dispatch]);
+
+  React.useEffect(() => {
+    if (products) {
+      const form = {
+        ...formstate,
+        id: products.id,
+        productCode: products?.productCode,
+        code: products?.code,
+        value: products?.value,
+        productDetailCode: products?.id,
+        productName: products?.productName,
+        productDescription: products?.productDescription,
+        productMedicalCover: products?.productMedicalCover,
+        personalAccidentCover: products?.productPersonalAccidentCover,
+        productTravelCover: products?.productTravelCover,
+        currId: products?.currId,
+        productBrochure: products?.productMapping?.productBrochure,
+
+        planType: [
+          {
+            ...products?.planType,
+            label: products?.planType?.name,
+            value: products?.planType?.name,
+          },
+        ],
+        bandType: [
+          {
+            ...products?.bandType,
+            label: products?.bandType?.travelDurationName,
+            value: products?.bandType?.travelDurationName,
+          },
+        ],
+        benefitDoc:
+          products?.benefitDoc !== null
+            ? [
+                {
+                  ...products?.benefitDoc,
+                  label: products?.benefitDoc?.name,
+                  value: products?.benefitDoc?.name,
+                },
+              ]
+            : null,
+        wordingDoc:
+          products?.wordingDoc !== null
+            ? [
+                {
+                  ...products?.wordingDoc,
+                  label: products?.wordingDoc?.name,
+                  value: products?.wordingDoc?.name,
+                },
+              ]
+            : null,
+        covidDoc:
+          products?.covidDoc !== null
+            ? [
+                {
+                  ...products?.covidDoc,
+                  label: products?.covidDoc?.name,
+                  value: products?.covidDoc?.name,
+                },
+              ]
+            : null,
+        additionalWeek:
+          products?.productAdditionalWeek !== null
+            ? [
+                {
+                  ...products?.productAdditionalWeek,
+                  label: products?.productAdditionalWeek.productCode,
+                  value: products?.productAdditionalWeek.productCode,
+                },
+              ]
+            : null,
+        groupArea: [
+          {
+            ...products?.areaGroup,
+            label: products?.areaGroup?.areaGroupName,
+            value: products?.areaGroup?.areaGroupName,
+          },
+        ],
+        travellerType: [
+          {
+            ...products?.travellerType,
+            label: products?.travellerType?.name,
+            value: products?.travellerType?.name,
+          },
+        ],
+        variants: products?.variants
+          .filter((element1) =>
+            listvariants.some((element2) => element2.id === element1.variant)
+          )
+          .map((element1) => {
+            const matchingElement = listvariants.find(
+              (element2) => element2.id === element1.variant
+            );
+            return {
+              ...element1,
+              label: matchingElement.name,
+              value: matchingElement.name,
+            };
+          }),
+      };
+      dispatch(setProductForm(form));
+    }
+  }, [products, dispatch, listvariants]);
 
   const handleNext = async (e) => {
     e.preventDefault();
