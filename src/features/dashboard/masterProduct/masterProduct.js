@@ -768,14 +768,7 @@ const MasterUser = () => {
       },
       {
         Header: 'Additional Week',
-        accessor: 'productAdditionalWeek',
-        Cell: ({ row }) => (
-          <span>
-            {row.original.productAdditionalWeek === null
-              ? row.original.productAdditionalWeek
-              : ''}
-          </span>
-        ),
+        accessor: 'productAdditionalWeek.productCode',
       },
       // {
       //   Header: "Additional Week",

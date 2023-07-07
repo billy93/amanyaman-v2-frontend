@@ -861,7 +861,7 @@ const DetailMasterUser = () => {
                     fontWeight={'normal'}
                   >
                     {user !== null
-                      ? user && user?.productAdditionalWeek?.productName
+                      ? user && user?.productAdditionalWeek?.productCode
                       : null}
                   </Text>
                 </Box>

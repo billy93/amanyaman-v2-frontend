@@ -219,9 +219,12 @@ const CommisionForm = () => {
       planType: {
         id: formstate?.planType[0]?.id,
       },
-      productAdditionalWeek: {
-        id: formstate?.additionalWeek[0]?.id,
-      },
+      productAdditionalWeek:
+        formstate?.additionalWeek === ''
+          ? null
+          : {
+              id: formstate?.additionalWeek[0].id,
+            },
       benefitDoc: null,
       wordingDoc: null,
       covidDoc: null,
