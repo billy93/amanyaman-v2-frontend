@@ -44,7 +44,7 @@ const DetailMasterUser = () => {
   const [deleteParams] = useDeleteParamsMutation();
 
   const {
-    data: systemParams,
+    data: { response: systemParams } = {},
     isLoading,
     isSuccess,
     isError,

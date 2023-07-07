@@ -41,7 +41,7 @@ const CreateParams = () => {
   const editParam = useSelector(editParams);
   const [updateParams, { isLoading }] = useUpdateParamsMutation();
 
-  const { data: systemParams } = useGetSystemParamsQuery({
+  const { data: { response: systemParams } = {} } = useGetSystemParamsQuery({
     refetchOnMountOrArgChange: true,
   });
   const prev = usePrevious(systemParams);
