@@ -1,13 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { useGetUsersQuery } from './policyApiSlice';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../auth/authSlice';
-import Data from './list.json';
+import { userLoginCurrent } from '../../auth/authSlice';
 import Forms from './form/form';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { Box, Flex, Text, Center } from '@chakra-ui/react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
-
 import React from 'react';
 
 const steps = [
@@ -26,7 +23,7 @@ function usePrevious(value) {
 }
 
 const QuotaSearch = () => {
-  const user = useSelector(selectCurrentUser);
+  const user = useSelector(userLoginCurrent);
   const { nextStep, prevStep, reset, activeStep } = useSteps({
     initialStep: 0,
   });
@@ -45,10 +42,9 @@ const QuotaSearch = () => {
     }
   }, [user, prevUser]);
 
-  const { data: users, isLoading, isError, error } = useGetUsersQuery();
-
+  console.log('user', user);
   let content;
-  if (isLoading) {
+  if (!user) {
     content = (
       <Center h="50vh" color="#065BAA">
         <Text as={'p'} size="xs">
@@ -56,7 +52,7 @@ const QuotaSearch = () => {
         </Text>
       </Center>
     );
-  } else if (Data) {
+  } else if (user) {
     content = (
       <Box pl="4" pr="4" mt="5em">
         <Box m={{ base: '0', md: '4em' }}>
@@ -107,8 +103,6 @@ const QuotaSearch = () => {
         </Box>
       </Box>
     );
-  } else if (isError) {
-    content = <p>{JSON.stringify(error)}</p>;
   }
 
   return content;

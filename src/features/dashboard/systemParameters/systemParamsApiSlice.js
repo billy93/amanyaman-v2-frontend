@@ -23,6 +23,26 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    getSystemParam: builder.query({
+      query: () => {
+        // const { page, size } = data;
+        return {
+          url: '/app/system-parameters?page=0&size=1000',
+          method: 'GET',
+          prepareHeaders: (headers) => {
+            headers.append('Accept', 'application/json');
+            return headers;
+          },
+        };
+      },
+      transformResponse(response, meta) {
+        console.log('resssssss', meta.response.headers.get('X-Total-Count'));
+        return {
+          response,
+          totalCount: Number(meta.response.headers.get('X-Total-Count')),
+        };
+      },
+    }),
     createParams: builder.mutation({
       query: (data) => {
         return {
@@ -75,6 +95,7 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetSystemParamQuery,
   useGetSystemParamsQuery,
   useCreateParamsMutation,
   useUpdateParamsMutation,

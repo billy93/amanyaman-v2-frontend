@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  useGetSystemParamsQuery,
+  useGetSystemParamQuery,
   useDeleteParamsMutation,
 } from './systemParamsApiSlice';
 import { NavLink, useParams, useNavigate } from 'react-router-dom';
@@ -22,6 +22,7 @@ import 'react-calendar/dist/Calendar.css';
 import { BsFillPencilFill } from 'react-icons/bs';
 import { CiTrash } from 'react-icons/ci';
 
+// eslint-disable-next-line no-unused-vars
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
   // ... and can hold any value, similar to an instance property on a class
@@ -49,17 +50,14 @@ const DetailMasterUser = () => {
     isSuccess,
     isError,
     error,
-  } = useGetSystemParamsQuery({ refetchOnMountOrArgChange: true });
-  const prev = usePrevious(systemParams);
+  } = useGetSystemParamQuery({ refetchOnMountOrArgChange: true });
+  // const prev = usePrevious(systemParams);
   React.useEffect(() => {
-    if (
-      systemParams != null &&
-      JSON.stringify(prev) !== JSON.stringify(systemParams)
-    ) {
+    if (systemParams) {
       let data = systemParams?.filter((param) => param.id === parseInt(id));
       dispatch(setDetail(data));
     }
-  }, [prev, systemParams, id, dispatch]);
+  }, [id, dispatch, systemParams]);
 
   const handleEdit = (e) => {
     e.preventDefault();
@@ -163,7 +161,7 @@ const DetailMasterUser = () => {
                     style={{ pointerEvents: 'none' }}
                   >
                     <Text as={'b'} fontSize={'sm'} color="#231F20">
-                      {detail !== null ? detail[0].id : null}
+                      {detail !== null ? detail[0]?.id : null}
                     </Text>
                   </BreadcrumbLink>
                 </BreadcrumbItem>

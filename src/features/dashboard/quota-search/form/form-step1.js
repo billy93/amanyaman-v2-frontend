@@ -13,6 +13,8 @@ import {
   setFormStateDestinationCountry,
   setFormStateStartDate,
   setFormEndDate,
+  setListCountries,
+  listcountries,
 } from '../quotaSearchSlice';
 import {
   Text,
@@ -35,7 +37,7 @@ import {
 import { Select } from 'chakra-react-select';
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 import { SlCalender } from 'react-icons/sl';
-
+import { useGetListCountriesQuery } from '../policyApiSlice';
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
   // ... and can hold any value, similar to an instance property on a class
@@ -59,6 +61,8 @@ const Form1 = ({
   const initState = useSelector(selectManualInput);
   const dispatch = useDispatch();
   const [isActive] = useState(false);
+  const listCountries = useSelector(listcountries);
+  const { data: { response: countries } = {} } = useGetListCountriesQuery();
   const [isActives, setActives] = useState(false);
   // console.log('compre', hasCompletedAllSteps)
   // const [ManualInput, setManualInput] = React.useState({
@@ -97,6 +101,18 @@ const Form1 = ({
       })
     );
   }
+
+  React.useEffect(() => {
+    if (countries) {
+      let countriesList = countries?.map((obj) => ({
+        ...obj,
+        label: obj.countryName,
+        value: obj.countryName,
+      }));
+      dispatch(setListCountries(countriesList));
+    }
+  }, [countries, dispatch]);
+
   function getMonthName(monthNumber) {
     const date = new Date();
     date.setMonth(monthNumber - 1);
@@ -201,7 +217,10 @@ const Form1 = ({
     );
     dispatch(
       setFormEndDate({
-        endDate: date,
+        endDate: {
+          ...date,
+          day: date.day + 1,
+        },
       })
     );
     if (date !== null) {
@@ -248,7 +267,7 @@ const Form1 = ({
   const startToEndDate = {
     year: initState?.startDate.year,
     month: initState?.startDate.month,
-    day: initState?.startDate.day,
+    day: initState?.startDate.day + 1,
   };
   //  const tomorrow = utils().getRelativeDate(utils().getToday(), 1);
   const endDate = new Date();
@@ -679,21 +698,7 @@ const Form1 = ({
                       styles={{
                         menuPortal: (provided) => ({ ...provided }),
                       }}
-                      options={[
-                        {
-                          label: 'Japanese',
-                          value: 'Japanese',
-                          variant: 'outline', // The option variant overrides the global
-                        },
-                        {
-                          label: 'Korea',
-                          value: 'Korea',
-                        },
-                        {
-                          label: 'Singapore',
-                          value: 'Singapore',
-                        },
-                      ]}
+                      options={listCountries}
                     />
                     <FormLabel
                       fontSize="12"

@@ -99,7 +99,7 @@ const Login = () => {
       dispatch(saveToken(true));
       // console.log('roles redirect', usersCurrent)
       if (usersCurrent?.roles[0] === 'ROLE_TRAVEL_AGENT') {
-        navigate('/policies/list');
+        navigate('/create-quota/search');
       } else if (usersCurrent?.roles[0] === 'ROLE_ADMIN') {
         navigate('/master-data/master-user');
       } else if (usersCurrent?.roles[0] === 'ROLE_MANAGEMENT') {
@@ -121,7 +121,7 @@ const Login = () => {
       } else if (usersCurrent?.roles[0] === 'ROLE_ETIQA') {
         navigate('/reporting/list');
       } else {
-        navigate('/policies/list');
+        navigate('/create-quota/search');
       }
     }
   }, [dispatch, navigate, usersCurrent]);

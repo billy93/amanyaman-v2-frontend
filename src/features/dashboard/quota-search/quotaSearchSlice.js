@@ -19,7 +19,7 @@ const createSearchSlice = createSlice({
           year: date.getFullYear(),
         },
         endDate: {
-          day: date.getDate(),
+          day: date.getDate() + 1,
           month: date.getMonth() + 1,
           year: date.getFullYear(),
         },
@@ -43,6 +43,8 @@ const createSearchSlice = createSlice({
           },
         ],
       },
+      countries: null,
+      lists: [],
       listProduct: [
         {
           id: 1,
@@ -125,10 +127,14 @@ const createSearchSlice = createSlice({
     setPaymentMethod: (state, action) => {
       state.formState.selectPaymentMethod = action.data;
     },
+    setListCountries: (state, action) => {
+      state.formState.countries = [...action.payload];
+    },
   },
 });
 
 export const {
+  setListCountries,
   setFormStateAdult,
   setFormStateCoverageChild,
   setFormEndDate,
@@ -153,3 +159,4 @@ export const FillTravellersData = (state) =>
   state.quotaSearch?.formState?.travellersData;
 export const selectPaymentMethod = (state) =>
   state.quotaSearch?.formState?.selectPaymentMethod;
+export const listcountries = (state) => state.quotaSearch?.formState?.countries;
