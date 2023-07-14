@@ -15,6 +15,7 @@ import {
   setFormEndDate,
   setListCountries,
   listcountries,
+  setListProducts,
 } from '../quotaSearchSlice';
 import {
   Text,
@@ -37,7 +38,10 @@ import {
 import { Select } from 'chakra-react-select';
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 import { SlCalender } from 'react-icons/sl';
-import { useGetListCountriesQuery } from '../policyApiSlice';
+import {
+  useGetListCountriesQuery,
+  useSearchproductsMutation,
+} from '../policyApiSlice';
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
   // ... and can hold any value, similar to an instance property on a class
@@ -63,6 +67,7 @@ const Form1 = ({
   const [isActive] = useState(false);
   const listCountries = useSelector(listcountries);
   const { data: { response: countries } = {} } = useGetListCountriesQuery();
+  const [searchproducts, { isLoading }] = useSearchproductsMutation();
   const [isActives, setActives] = useState(false);
   // console.log('compre', hasCompletedAllSteps)
   // const [ManualInput, setManualInput] = React.useState({
@@ -101,6 +106,44 @@ const Form1 = ({
       })
     );
   }
+
+  const paddedDay = initState?.startDate?.day.toString().padStart(2, '0');
+  const paddedMonth = initState?.startDate?.month.toString().padStart(2, '0');
+  const paddedEndDay = initState?.endDate?.day.toString().padStart(2, '0');
+  const paddedEndMonth = initState?.endDate?.month.toString().padStart(2, '0');
+  const handleNext = async () => {
+    const payload = {
+      coverType:
+        initState.coverageType === 'Single Trip' ? 'SINGLE_TRIP' : 'ANNUAL',
+      travellerType:
+        initState.travellerType === 'Individual'
+          ? {
+              id: 1,
+            }
+          : initState.travellerType === 'Group'
+          ? { id: 2 }
+          : { id: 3 },
+      from: `${initState?.startDate.year}-${paddedMonth}-${paddedDay}`,
+      to: `${initState?.endDate.year}-${paddedEndMonth}-${paddedEndDay}`,
+      destinations: initState?.destinationCountry.map((v) => {
+        return { id: v.id };
+      }),
+      adt: initState.adult,
+    };
+
+    try {
+      const res = await searchproducts(
+        initState?.travellerType === 'Family'
+          ? { ...payload, chd: initState.child }
+          : payload
+      );
+      // console.log('res', res);
+      dispatch(setListProducts(res.data));
+    } catch (error) {
+      console.log(error);
+    }
+    nextStep();
+  };
 
   React.useEffect(() => {
     if (countries) {
@@ -819,7 +862,7 @@ const Form1 = ({
                     <>
                       <Button
                         size="sm"
-                        onClick={nextStep}
+                        onClick={handleNext}
                         w={{ base: '100%', md: '270px' }}
                         h="48px"
                         isDisabled={

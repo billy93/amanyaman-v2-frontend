@@ -132,7 +132,7 @@ const Form2 = ({
                   size="md"
                   style={{ fontSize: '18px' }}
                 >
-                  {products.cost}
+                  {products.finalPrice}
                 </Heading>
               </Box>
               <Box display={'flex'} justifyContent={'space-between'}>
@@ -145,7 +145,7 @@ const Form2 = ({
                       style={{ fontSize: '12px' }}
                       fontFamily={'Mulish'}
                     >
-                      {products.cover?.personalAccidentCover?.title}
+                      {'Personal Accident Cover'}
                     </Text>
                     <Text
                       as="p"
@@ -153,7 +153,7 @@ const Form2 = ({
                       style={{ fontSize: '12px' }}
                       fontFamily={'Mulish'}
                     >
-                      {products.cover?.personalAccidentCover?.desc}
+                      {products?.productPersonalAccidentCover}
                     </Text>
                   </Box>
                 </Box>
@@ -166,7 +166,7 @@ const Form2 = ({
                       style={{ fontSize: '12px' }}
                       fontFamily={'Mulish'}
                     >
-                      {products.cover?.medicalCover?.title}
+                      {'Medical Cover'}
                     </Text>
                     <Text
                       as="p"
@@ -174,7 +174,7 @@ const Form2 = ({
                       style={{ fontSize: '12px' }}
                       fontFamily={'Mulish'}
                     >
-                      {products.cover?.medicalCover?.desc}
+                      {products.productMedicalCover}
                     </Text>
                   </Box>
                 </Box>
@@ -187,7 +187,7 @@ const Form2 = ({
                       style={{ fontSize: '12px' }}
                       fontFamily={'Mulish'}
                     >
-                      {products.cover?.travellerCover?.title}
+                      {'Travel Cover'}
                     </Text>
                     <Text
                       as="p"
@@ -195,7 +195,7 @@ const Form2 = ({
                       style={{ fontSize: '12px' }}
                       fontFamily={'Mulish'}
                     >
-                      {products.cover?.travellerCover?.desc}
+                      {products.productTravelCover}
                     </Text>
                   </Box>
                 </Box>
@@ -252,7 +252,7 @@ const Form2 = ({
                   Travel Insurance Selected :
                 </Text>
                 <Text as="b" fontFamily={'Mulish'} pl="5px">
-                  {selectedInsurance?.titleProduct}
+                  {selectedInsurance?.productName}
                 </Text>
               </Box>
               <ButtonGroup>

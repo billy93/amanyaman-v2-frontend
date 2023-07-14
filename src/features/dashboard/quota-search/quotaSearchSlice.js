@@ -45,46 +45,7 @@ const createSearchSlice = createSlice({
       },
       countries: null,
       lists: [],
-      listProduct: [
-        {
-          id: 1,
-          titleProduct: 'Amanyaman Asia 50',
-          cost: 400000,
-          cover: {
-            personalAccidentCover: {
-              title: 'Personal Accident Cover',
-              desc: 'Coverage up to IDR 50.000.000',
-            },
-            medicalCover: {
-              title: 'Medical Cover',
-              desc: 'Coverage up to IDR 50.000.000',
-            },
-            travellerCover: {
-              title: 'Travel Cover',
-              desc: 'Coverage up to IDR 50.000.000',
-            },
-          },
-        },
-        {
-          id: 2,
-          titleProduct: 'Amanyaman Asia 150',
-          cost: 600000,
-          cover: {
-            personalAccidentCover: {
-              title: 'Personal Accident Cover',
-              desc: 'Coverage up to IDR 50.000.000',
-            },
-            medicalCover: {
-              title: 'Medical Cover',
-              desc: 'Coverage up to IDR 50.000.000',
-            },
-            travellerCover: {
-              title: 'Travel Cover',
-              desc: 'Coverage up to IDR 50.000.000',
-            },
-          },
-        },
-      ],
+      listProduct: [],
     },
     step: 1,
   },
@@ -130,10 +91,14 @@ const createSearchSlice = createSlice({
     setListCountries: (state, action) => {
       state.formState.countries = [...action.payload];
     },
+    setListProducts: (state, action) => {
+      state.formState.listProduct = [...action.payload];
+    },
   },
 });
 
 export const {
+  setListProducts,
   setListCountries,
   setFormStateAdult,
   setFormStateCoverageChild,

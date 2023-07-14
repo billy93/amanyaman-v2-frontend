@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { apiSlice } from '../../../app/api/apiSlice';
 
 export const quotSearch = apiSlice.injectEndpoints({
@@ -25,7 +26,24 @@ export const quotSearch = apiSlice.injectEndpoints({
       //         ? [...result.map(({ id }) => ({ type: 'MasterQuery', id })), 'MasterQuery']
       //        : ['MasterQuery'],
     }),
+    searchproducts: builder.mutation({
+      query: (params) => {
+        return {
+          url: '/app/bookings/search-product',
+          method: 'POST',
+          body: { ...params },
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetListCountriesQuery } = quotSearch;
+export const { useGetListCountriesQuery, useSearchproductsMutation } =
+  quotSearch;

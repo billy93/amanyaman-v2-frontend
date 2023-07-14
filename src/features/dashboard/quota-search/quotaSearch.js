@@ -5,6 +5,7 @@ import Forms from './form/form';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { Box, Flex, Text, Center } from '@chakra-ui/react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
+// import { useSearchproductsMutation } from './policyApiSlice';
 import React from 'react';
 
 const steps = [
@@ -27,6 +28,7 @@ const QuotaSearch = () => {
   const { nextStep, prevStep, reset, activeStep } = useSteps({
     initialStep: 0,
   });
+  // const [searchproducts, { isLoading }] = useSearchproductsMutation();
   const isLastStep = activeStep === steps.length - 1;
   const hasCompletedAllSteps = activeStep === steps.length;
   const prevUser = usePrevious(user);
@@ -42,7 +44,6 @@ const QuotaSearch = () => {
     }
   }, [user, prevUser]);
 
-  console.log('user', user);
   let content;
   if (!user) {
     content = (
