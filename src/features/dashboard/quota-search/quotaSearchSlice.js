@@ -8,7 +8,7 @@ const createSearchSlice = createSlice({
     formState: {
       manualInput: {
         coverageType: 'Single Trip',
-        travellerType: '',
+        travellerType: 'Individual',
         totalPass: 1,
         destinationCountry: [],
         adult: 1,
