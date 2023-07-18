@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-children-prop */
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
@@ -125,9 +126,12 @@ const Form1 = ({
           : { id: 2 },
       from: `${initState?.startDate.year}-${paddedMonth}-${paddedDay}`,
       to: `${initState?.endDate.year}-${paddedEndMonth}-${paddedEndDay}`,
-      destinations: initState?.destinationCountry.map((v) => {
-        return { id: v.id };
-      }),
+      destinations:
+        initState?.coverageType === 'Single Trip'
+          ? initState?.destinationCountry.map((v) => {
+              return { id: v.id };
+            })
+          : [],
       adt: initState.adult,
     };
 
@@ -258,14 +262,18 @@ const Form1 = ({
         startDate: date,
       })
     );
-    dispatch(
-      setFormEndDate({
-        endDate: {
-          ...date,
-          day: date.day + 1,
-        },
-      })
-    );
+    if (initState?.coverageType === 'Single Trip') {
+      dispatch(
+        setFormEndDate({
+          endDate: {
+            ...date,
+            day: date.day + 1,
+          },
+        })
+      );
+    } else {
+      addOneYear(date);
+    }
     if (date !== null) {
       //   setActive(true)
     } else {
@@ -285,7 +293,36 @@ const Form1 = ({
     }
   };
 
+  const addOneYear = () => {
+    // Increment the year value by 1
+    const updatedYear = initState?.startDate?.year + 1;
+
+    // Check if the resulting year is a leap year
+    const isLeapYear =
+      (updatedYear % 4 === 0 && updatedYear % 100 !== 0) ||
+      updatedYear % 400 === 0;
+    let updatedDay = initState?.startDate?.day - 1;
+    if (
+      isLeapYear &&
+      initState?.startDate?.month === 2 &&
+      initState?.startDate?.day === 29
+    ) {
+      updatedDay = 28;
+    }
+
+    // Update the state with the new date
+    dispatch(
+      setFormEndDate({
+        endDate: {
+          ...initState?.endDate,
+          day: updatedDay,
+          year: updatedYear,
+        },
+      })
+    );
+  };
   const prevType = usePrevious(initState?.travellerType);
+  const prevTypeCov = usePrevious(initState?.coverageType);
   // const prevstartdate = usePrevious(initState?.startDate)
 
   React.useEffect(() => {
@@ -298,6 +335,30 @@ const Form1 = ({
       dispatch(setFormStateCoverageChild(1));
     }
   }, [initState?.travellerType, prevType, dispatch]);
+
+  React.useEffect(() => {
+    if (prevTypeCov !== initState?.coverageType) {
+      if (initState?.coverageType === 'Single Trip') {
+        const date = { ...initState?.endDate };
+        dispatch(
+          setFormEndDate({
+            endDate: {
+              ...initState?.startDate,
+              day: initState?.startDate.day + 1,
+            },
+          })
+        );
+      } else if (initState?.coverageType === 'Anual Trip') {
+        addOneYear();
+      }
+    }
+  }, [
+    initState?.coverageType,
+    prevTypeCov,
+    dispatch,
+    initState?.endDate,
+    addOneYear,
+  ]);
 
   const currentDate = new Date();
 
@@ -460,7 +521,7 @@ const Form1 = ({
                       }}
                       onClick={() => handleTypeTrip('Anual Trip')}
                     >
-                      Anual Trip
+                      Annual Trip
                     </Button>
                     {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"14px" }}>Select Coverage Type</FormLabel> */}
                   </FormControl>
@@ -720,44 +781,47 @@ const Form1 = ({
                   )}
                 </Box>
 
-                <Box
-                  mt="2em"
-                  w={{ base: '100%', md: '520px' }}
-                  h={{ sm: '48px' }}
-                >
-                  <FormControl
-                    variant="floating"
-                    fontFamily={'Mulish'}
-                    isRequired
-                    h="48px"
+                {initState?.coverageType === '' ||
+                initState?.coverageType === 'Single Trip' ? (
+                  <Box
+                    mt="2em"
+                    w={{ base: '100%', md: '520px' }}
+                    h={{ sm: '48px' }}
                   >
-                    <Select
-                      size="lg"
-                      isMulti
-                      variant="outline"
-                      onChange={handleSelect}
-                      value={initState?.destinationCountry}
-                      isSearchable={true}
-                      styles={{
-                        menuPortal: (provided) => ({ ...provided }),
-                      }}
-                      options={listCountries}
-                    />
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
+                    <FormControl
+                      variant="floating"
                       fontFamily={'Mulish'}
-                      style={{
-                        transform: 'translate(-12px, -40px) scale(0.75)',
-                        fontSize: '18px',
-                        color: '#171923',
-                        zIndex: '0',
-                      }}
+                      isRequired
+                      h="48px"
                     >
-                      Select Destination Country
-                    </FormLabel>
-                  </FormControl>
-                </Box>
+                      <Select
+                        size="lg"
+                        isMulti
+                        variant="outline"
+                        onChange={handleSelect}
+                        value={initState?.destinationCountry}
+                        isSearchable={true}
+                        styles={{
+                          menuPortal: (provided) => ({ ...provided }),
+                        }}
+                        options={listCountries}
+                      />
+                      <FormLabel
+                        fontSize="12"
+                        pt="1.5"
+                        fontFamily={'Mulish'}
+                        style={{
+                          transform: 'translate(-12px, -40px) scale(0.75)',
+                          fontSize: '18px',
+                          color: '#171923',
+                          zIndex: '0',
+                        }}
+                      >
+                        Select Destination Country
+                      </FormLabel>
+                    </FormControl>
+                  </Box>
+                ) : null}
                 <Box
                   mt="1em"
                   position={'relative'}
@@ -808,45 +872,86 @@ const Form1 = ({
                       />
                     </FormControl>
                   </Box>
-                  <Box
-                    width={{ base: '100%', md: '250px' }}
-                    mt="1.5em"
-                    h="48px"
-                  >
-                    <FormControl
-                      mt="10px"
-                      variant="floating"
-                      id="first-name"
-                      isRequired
-                      fontFamily={'Mulish'}
+                  {initState.coverageType === '' ||
+                  initState.coverageType === 'Single Trip' ? (
+                    <Box
+                      width={{ base: '100%', md: '250px' }}
+                      mt="1.5em"
+                      h="48px"
                     >
-                      <FormLabel
-                        fontSize="12"
-                        pt="1.5"
+                      <FormControl
+                        mt="10px"
+                        variant="floating"
+                        id="first-name"
+                        isRequired
                         fontFamily={'Mulish'}
-                        style={{
-                          transform: 'translate(16px, 2px) scale(0.75)',
-                          fontSize: '18px',
-                          background: '#ebebeb',
-                          color: '#171923',
-                        }}
                       >
-                        End Date
-                      </FormLabel>
-                      <DatePicker
-                        value={initState?.endDate}
-                        onChange={selectEndDate}
-                        inputPlaceholder="Select a date" // placeholder
-                        formatInputText={formatInputValues}
-                        inputClassName="my-custom-inputs" // custom class
-                        renderInput={renderCustomInputs}
-                        shouldHighlightWeekends
-                        wrapperClassName={'calendarClassName'}
-                        minimumDate={startToEndDate}
-                        maximumDate={endDateObj}
-                      />
-                    </FormControl>
-                  </Box>
+                        <FormLabel
+                          fontSize="12"
+                          pt="1.5"
+                          fontFamily={'Mulish'}
+                          style={{
+                            transform: 'translate(16px, 2px) scale(0.75)',
+                            fontSize: '18px',
+                            background: '#ebebeb',
+                            color: '#171923',
+                          }}
+                        >
+                          End Date
+                        </FormLabel>
+                        <DatePicker
+                          value={initState?.endDate}
+                          onChange={selectEndDate}
+                          inputPlaceholder="Select a date" // placeholder
+                          formatInputText={formatInputValues}
+                          inputClassName="my-custom-inputs" // custom class
+                          renderInput={renderCustomInputs}
+                          shouldHighlightWeekends
+                          wrapperClassName={'calendarClassName'}
+                          minimumDate={startToEndDate}
+                          maximumDate={endDateObj}
+                        />
+                      </FormControl>
+                    </Box>
+                  ) : (
+                    <Box
+                      width={{ base: '100%', md: '250px' }}
+                      mt="1.5em"
+                      h="48px"
+                    >
+                      <FormControl
+                        mt="10px"
+                        variant="floating"
+                        id="first-name"
+                        isRequired
+                        fontFamily={'Mulish'}
+                      >
+                        <FormLabel
+                          fontSize="12"
+                          pt="1.5"
+                          fontFamily={'Mulish'}
+                          style={{
+                            transform: 'translate(-11px, -32px) scale(0.75)',
+                            fontSize: '15px',
+                            background: 'white',
+                            color: '#171923',
+                          }}
+                        >
+                          End Date
+                        </FormLabel>
+                        <Box
+                          style={{
+                            background: 'white',
+                            padding: '0.7em',
+                          }}
+                        >
+                          {`${initState?.endDate?.day} ${getMonthName(
+                            initState?.endDate?.month
+                          )} ${initState?.endDate?.year}`}
+                        </Box>
+                      </FormControl>
+                    </Box>
+                  )}
                 </Box>
                 {hasCompletedAllSteps !== undefined && (
                   <Box>
@@ -860,23 +965,42 @@ const Form1 = ({
                     <></>
                   ) : (
                     <>
-                      <Button
-                        size="sm"
-                        onClick={handleNext}
-                        w={{ base: '100%', md: '270px' }}
-                        h="48px"
-                        isDisabled={
-                          initState?.coverageType === '' ||
-                          initState?.travellerType === '' ||
-                          initState?.destinationCountry?.length === 0 ||
-                          initState?.startDate === null ||
-                          initState?.endDate === null
-                            ? true
-                            : false
-                        }
-                      >
-                        {isLastStep ? 'Finish' : 'Continue'}
-                      </Button>
+                      {initState?.coverageType === 'Single Trip' ? (
+                        <Button
+                          size="sm"
+                          onClick={handleNext}
+                          w={{ base: '100%', md: '270px' }}
+                          h="48px"
+                          isDisabled={
+                            initState?.coverageType === '' ||
+                            initState?.travellerType === '' ||
+                            initState?.destinationCountry?.length === 0 ||
+                            initState?.startDate === null ||
+                            initState?.endDate === null
+                              ? true
+                              : false
+                          }
+                        >
+                          {isLastStep ? 'Finish' : 'Continue'}
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          onClick={handleNext}
+                          w={{ base: '100%', md: '270px' }}
+                          h="48px"
+                          isDisabled={
+                            initState?.coverageType === '' ||
+                            initState?.travellerType === '' ||
+                            initState?.startDate === null ||
+                            initState?.endDate === null
+                              ? true
+                              : false
+                          }
+                        >
+                          {isLastStep ? 'Finish' : 'Continue'}
+                        </Button>
+                      )}
                     </>
                   )}
                 </Flex>
