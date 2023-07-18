@@ -42,8 +42,27 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
+    booksProducts: builder.mutation({
+      query: (params) => {
+        return {
+          url: '/app/bookings',
+          method: 'POST',
+          body: { ...params },
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetListCountriesQuery, useSearchproductsMutation } =
-  quotSearch;
+export const {
+  useBooksProductsMutation,
+  useGetListCountriesQuery,
+  useSearchproductsMutation,
+} = quotSearch;

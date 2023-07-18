@@ -1,9 +1,11 @@
+/* eslint-disable indent */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectedTravelInsurance,
   setSelectTravelInsurancePlan,
   selectTravelInsurance,
+  selectManualInput,
 } from '../quotaSearchSlice';
 import {
   Text,
@@ -14,7 +16,7 @@ import {
   Button,
   ButtonGroup,
 } from '@chakra-ui/react';
-
+import { useBooksProductsMutation } from '../policyApiSlice';
 import Hospital from '../../../../img/images/Hospital.png';
 import Medicine from '../../../../img/images/Medicine.png';
 import TravelCaover from '../../../../img/images/Plane.png';
@@ -29,7 +31,9 @@ const Form2 = ({
   nextStep,
   isLastStep,
 }) => {
+  const [booksProducts, { isLoading }] = useBooksProductsMutation();
   const initState = useSelector(selectTravelInsurance);
+  const stateInt = useSelector(selectManualInput);
   const selectedInsurance = useSelector(selectedTravelInsurance);
   const dispatch = useDispatch();
   const selectProduct = (data) => {
@@ -48,6 +52,45 @@ const Form2 = ({
         // travelInsurancePlan:data
       })
     );
+  };
+  // console.log('stateInt', stateInt);
+  const paddedDay = stateInt?.startDate?.day.toString().padStart(2, '0');
+  const paddedMonth = stateInt?.startDate?.month.toString().padStart(2, '0');
+  const paddedEndDay = stateInt?.endDate?.day.toString().padStart(2, '0');
+  const paddedEndMonth = stateInt?.endDate?.month.toString().padStart(2, '0');
+  const handleNext = async (e) => {
+    const payload = {
+      coverType:
+        stateInt.coverageType === 'Single Trip' ? 'SINGLE_TRIP' : 'ANNUAL',
+      travellerType:
+        stateInt.travellerType === 'Individual'
+          ? {
+              id: 1,
+            }
+          : stateInt.travellerType === 'Group'
+          ? { id: 3 }
+          : { id: 2 },
+      from: `${stateInt?.startDate.year}-${paddedMonth}-${paddedDay}`,
+      to: `${stateInt?.endDate.year}-${paddedEndMonth}-${paddedEndDay}`,
+      destinations: stateInt?.destinationCountry.map((v) => {
+        return { id: v.id };
+      }),
+      adt: stateInt.adult,
+      product: selectedInsurance.id,
+    };
+    console.log('payload', payload);
+    try {
+      const res = await booksProducts(
+        stateInt?.travellerType === 'Family'
+          ? { ...payload, chd: stateInt.child }
+          : { ...payload, chd: 0 }
+      );
+      console.log('res', res);
+      nextStep();
+      // dispatch(setListProducts(res.data));
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Box border={'1px'} borderColor="#ebebeb">
@@ -99,6 +142,10 @@ const Form2 = ({
         borderRadius={'5px'}
         textAlign={'left'}
         border="2px #ebebeb"
+        style={{
+          overflowY: 'auto',
+          height: '400px',
+        }}
       >
         {initState?.map((products, i) => {
           return (
@@ -124,7 +171,7 @@ const Form2 = ({
                 alignItems={'center'}
               >
                 <Heading as="h4" size="md" style={{ fontSize: '18px' }}>
-                  {products.product}
+                  {products.productName}
                 </Heading>
                 <Heading
                   variant="primary"
@@ -229,7 +276,14 @@ const Form2 = ({
           </Heading>
         </Box>
       )}
-      <Flex width="100%" justify="space-between" gap={6} mt="2em" mb="2em">
+      <Flex
+        width="100%"
+        justify="space-between"
+        gap={6}
+        mt="2em"
+        mb="2em"
+        position={'relative'}
+      >
         {hasCompletedAllSteps !== undefined ? (
           <Button size="sm" onClick={reset}>
             Reset
@@ -242,6 +296,10 @@ const Form2 = ({
               justifyContent={'space-between'}
               alignItems={'center'}
               p="1em"
+              style={{
+                position: 'absolute',
+                bottom: '-28px',
+              }}
             >
               <Box
                 display={'flex'}
@@ -257,8 +315,9 @@ const Form2 = ({
               </Box>
               <ButtonGroup>
                 <Button
+                  isLoading={isLoading}
                   size="sm"
-                  onClick={nextStep}
+                  onClick={handleNext}
                   w={{ base: '100%', md: '270px' }}
                   h="48px"
                   isDisabled={selectedInsurance !== null ? false : true}

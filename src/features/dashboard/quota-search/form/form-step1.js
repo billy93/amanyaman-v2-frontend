@@ -121,8 +121,8 @@ const Form1 = ({
               id: 1,
             }
           : initState.travellerType === 'Group'
-          ? { id: 2 }
-          : { id: 3 },
+          ? { id: 3 }
+          : { id: 2 },
       from: `${initState?.startDate.year}-${paddedMonth}-${paddedDay}`,
       to: `${initState?.endDate.year}-${paddedEndMonth}-${paddedEndDay}`,
       destinations: initState?.destinationCountry.map((v) => {
