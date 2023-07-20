@@ -263,16 +263,7 @@ const Form1 = ({
       })
     );
     if (initState?.coverageType === 'Single Trip') {
-      dispatch(
-        setFormEndDate({
-          endDate: {
-            ...date,
-            day: date.day + 1,
-          },
-        })
-      );
-    } else {
-      addOneYear(date);
+      addOneDayLater(date);
     }
     if (date !== null) {
       //   setActive(true)
@@ -293,34 +284,105 @@ const Form1 = ({
     }
   };
 
-  const addOneYear = () => {
-    // Increment the year value by 1
-    const updatedYear = initState?.startDate?.year + 1;
+  // const addOneYear = () => {
+  //   // Increment the year value by 1
+  //   const updatedYear = initState?.endDate?.year + 1;
 
-    // Check if the resulting year is a leap year
-    const isLeapYear =
-      (updatedYear % 4 === 0 && updatedYear % 100 !== 0) ||
-      updatedYear % 400 === 0;
-    let updatedDay = initState?.startDate?.day - 1;
-    if (
-      isLeapYear &&
-      initState?.startDate?.month === 2 &&
-      initState?.startDate?.day === 29
-    ) {
-      updatedDay = 28;
+  //   // Check if the resulting year is a leap year
+  //   const isLeapYear =
+  //     (updatedYear % 4 === 0 && updatedYear % 100 !== 0) ||
+  //     updatedYear % 400 === 0;
+  //   let updatedDay = initState?.endDate?.day - 1;
+  //   if (
+  //     isLeapYear &&
+  //     initState?.startDate?.month === 2 &&
+  //     initState?.startDate?.day === 29
+  //   ) {
+  //     updatedDay = 28;
+  //   }
+
+  //   // Update the state with the new date
+  //   dispatch(
+  //     setFormEndDate({
+  //       endDate: {
+  //         ...initState?.endDate,
+  //         day: updatedDay,
+  //         year: updatedYear,
+  //       },
+  //     })
+  //   );
+  // };
+
+  // Function to handle adding 1 day to the selected date
+  const addOneDayLater = (date) => {
+    const { year, month, day } = date;
+
+    // Get the number of days in the selected month
+    const lastDayOfMonth = new Date(year, month, 0).getDate();
+
+    // Calculate the new day value
+    let newDay = day + 1;
+
+    // Check if the new day exceeds the last day of the month
+    if (newDay > lastDayOfMonth) {
+      // Increment the month and set the new day to 1
+      const newMonth = month + 1;
+      const newYear = year + (newMonth > 12 ? 1 : 0);
+      newDay = 1;
+      dispatch(
+        setFormEndDate({
+          ...initState.endDate,
+          endDate: {
+            year: newYear,
+            month: newMonth > 12 ? 1 : newMonth,
+            day: newDay,
+          },
+        })
+      );
+    } else {
+      dispatch(
+        setFormEndDate({
+          ...initState?.endDate,
+          endDate: {
+            year: year,
+            month: month,
+            day: newDay,
+          },
+        })
+      );
+    }
+  };
+
+  function addOneYear(dates) {
+    // Create a new Date object with the given date values
+    const date = { ...initState?.startDate };
+    var currentDate = new Date(dates.year, dates.month - 1, dates.day);
+
+    // Add 1 year
+    currentDate.setFullYear(currentDate.getFullYear() + 1);
+
+    // Subtract less than 1 day
+    currentDate.setDate(currentDate.getDate() - 1);
+
+    // Check if the updated date is later than the given date
+    if (currentDate > new Date(dates.year, dates.month - 1, dates.day)) {
+      // Subtract 2 days to ensure it's earlier by less than 1 day
+      currentDate.setDate(currentDate.getDate() - 1);
     }
 
-    // Update the state with the new date
+    // Obtain the updated date values
+    var updatedDate = {
+      day: currentDate.getDate(),
+      month: currentDate.getMonth() + 1,
+      year: currentDate.getFullYear(),
+    };
     dispatch(
       setFormEndDate({
-        endDate: {
-          ...initState?.endDate,
-          day: updatedDay,
-          year: updatedYear,
-        },
+        endDate: updatedDate,
       })
     );
-  };
+    return updatedDate;
+  }
   const prevType = usePrevious(initState?.travellerType);
   const prevTypeCov = usePrevious(initState?.coverageType);
   // const prevstartdate = usePrevious(initState?.startDate)
@@ -349,7 +411,7 @@ const Form1 = ({
           })
         );
       } else if (initState?.coverageType === 'Anual Trip') {
-        addOneYear();
+        addOneYear({ ...initState?.startDate });
       }
     }
   }, [
@@ -357,6 +419,24 @@ const Form1 = ({
     prevTypeCov,
     dispatch,
     initState?.endDate,
+    initState?.startDate,
+    addOneYear,
+  ]);
+  const prevDate = usePrevious(initState?.startDate?.day);
+  React.useEffect(() => {
+    if (
+      prevDate !== initState?.startDate?.day &&
+      initState?.coverageType === 'Anual Trip'
+    ) {
+      addOneYear({ ...initState?.startDate });
+    }
+  }, [
+    initState?.coverageType,
+    initState?.startDate,
+    prevDate,
+    dispatch,
+    initState?.endDate,
+    initState?.startDate,
     addOneYear,
   ]);
 
