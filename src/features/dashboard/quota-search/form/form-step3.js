@@ -3,12 +3,14 @@
 /* eslint-disable react/no-children-prop */
 /* eslint-disable indent */
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setHistoryForm, historyForm } from '../../../auth/authSlice';
 import {
   setMessage,
   setEditTraveller,
   EditTravellers,
+  setListProducts,
   listTravellers,
   FillTravellersData,
   setTravellersData,
@@ -19,6 +21,8 @@ import {
   useAddTravellerDataMutation,
   useEditTravellerDataMutation,
   useSearchproductsMutation,
+  useGetBookingSearchQuery,
+  useBooksProductsMutation,
 } from '../policyApiSlice';
 import {
   RadioGroup,
@@ -72,11 +76,14 @@ const Form3 = ({
   const initStateTraveller = useSelector(selectManualInput);
   const selectedInsurance = useSelector(selectedTravelInsurance);
   const listTravellers = useSelector(FillTravellersData);
-
+  const { id } = useParams();
   const EditTraveller = useSelector(EditTravellers);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [booksProducts, { isLoading: onsubmitloading }] =
+    useBooksProductsMutation();
   const dispatch = useDispatch();
   const [searchproducts, { isLoading }] = useSearchproductsMutation();
+  const { data: payload } = useGetBookingSearchQuery(id);
   const [type, setType] = useState('Adult');
   const [typeStatus, setTypeStatus] = useState('Mr');
   const [select, setSelect] = useState('new');
@@ -190,8 +197,21 @@ const Form3 = ({
   const handlePrev = () => {
     dispatch(setHistoryForm(historyform - 1));
     prevStep();
+    handlePrevState();
   };
 
+  const handlePrevState = async (e) => {
+    try {
+      const res = await searchproducts(payload);
+      if (res?.data) {
+        console.log('res', res);
+        dispatch(setListProducts(res.data));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // console.log('searchproducts', payload);
   const handleNexts = () => {
     dispatch(setHistoryForm(historyform + 1));
     nextStep();

@@ -103,7 +103,7 @@ const Form2 = ({
           ...list,
           bookingId: res?.data?.id,
         };
-        console.log('test', list);
+        // console.log('test', list);
         dispatch(setBookingId(travellersData));
         dispatch(setId(res?.data?.id));
         dispatch(setGetById(res));

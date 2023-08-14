@@ -87,6 +87,7 @@ const QuotaSearchById = () => {
     if (id) {
       let coverType =
         data?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Anual Trip';
+      console.log('coverType', coverType);
       dispatch(setFormStateCoverageType(coverType));
 
       dispatch(setFormStateTravellerType(data?.travellerType?.name));
@@ -134,7 +135,7 @@ const QuotaSearchById = () => {
     }
   }, [id, dispatch, data, listTravellers]);
 
-  console.log('listTravellers', listTravellers);
+  console.log('listTravellers data', data);
   const isLastStep = activeStep === steps.length - 1;
   const hasCompletedAllSteps = activeStep === steps.length;
   const prevUser = usePrevious(user);
@@ -158,7 +159,7 @@ const QuotaSearchById = () => {
     if (id) {
       setStepActive(persistedQuotaSearch);
       dispatch(setHistoryForm(historysbumit));
-      dispatch(setFormStateCoverageType(historysbumit));
+      // dispatch(setFormStateCoverageType(historysbumit));
     }
   }, [id, persistedQuotaSearch, dispatch, historysbumit]);
 
