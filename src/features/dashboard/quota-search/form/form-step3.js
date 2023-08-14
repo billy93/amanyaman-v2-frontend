@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setHistoryForm, historyForm } from '../../../auth/authSlice';
 import {
+  messages,
   setMessage,
   setEditTraveller,
   EditTravellers,
@@ -18,6 +19,7 @@ import {
   selectedTravelInsurance,
 } from '../quotaSearchSlice';
 import {
+  useGetTemplateQuery,
   useAddTravellerDataMutation,
   useEditTravellerDataMutation,
   useSearchproductsMutation,
@@ -63,6 +65,7 @@ import { SlCalender } from 'react-icons/sl';
 import Umbrella from '../../../../img/Umbrella.png';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { MdCreate } from 'react-icons/md';
+import CustomModal from './import';
 
 const Form3 = ({
   label,
@@ -76,6 +79,7 @@ const Form3 = ({
   const initStateTraveller = useSelector(selectManualInput);
   const selectedInsurance = useSelector(selectedTravelInsurance);
   const listTravellers = useSelector(FillTravellersData);
+  const message = useSelector(messages);
   const { id } = useParams();
   const EditTraveller = useSelector(EditTravellers);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -84,6 +88,7 @@ const Form3 = ({
   const dispatch = useDispatch();
   const [searchproducts, { isLoading }] = useSearchproductsMutation();
   const { data: payload } = useGetBookingSearchQuery(id);
+  const { data } = useGetTemplateQuery();
   const [type, setType] = useState('Adult');
   const [typeStatus, setTypeStatus] = useState('Mr');
   const [select, setSelect] = useState('new');
@@ -475,6 +480,21 @@ const Form3 = ({
       console.log('error adding');
     }
   };
+
+  React.useEffect(() => {
+    let timer;
+
+    if (message) {
+      timer = setTimeout(() => {
+        dispatch(setMessage(false));
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [dispatch, message]);
+
   console.log('test', loadingEdit);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
@@ -1291,9 +1311,14 @@ const Form3 = ({
             alignItems={'center'}
             w="100%"
           >
-            <Button variant="base" w={{ base: '100%', md: '50%' }} h="48px">
+            <CustomModal
+              showModalButtonText="Import"
+              modalHeader="Import Excel File"
+              modalBody="Import Excel File"
+            />
+            {/* <Button variant="base" w={{ base: '100%', md: '50%' }} h="48px">
               Import Excel File
-            </Button>
+            </Button> */}
           </Box>
         </Box>
       </Box>

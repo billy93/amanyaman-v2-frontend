@@ -113,6 +113,15 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
+    getTemplate: builder.query({
+      query: (url) => ({
+        url: '/app/bookings/travellers/template/download',
+        method: 'GET',
+        responseType: 'blob',
+        responseHandler: (response) =>
+          response.blob().then((blob) => URL.createObjectURL(blob)),
+      }),
+    }),
     getListTraveller: builder.query({
       query: (id) => {
         return {
@@ -128,10 +137,30 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
+    importFile: builder.mutation({
+      query: (file) => {
+        const formData = new FormData();
+        console.log('file', file);
+        console.log('file id', file?.id);
+        formData.append('file', file.filesUpload);
+        return {
+          url: `/app/bookings/travellers/import/${file.id}`,
+          method: 'POST',
+          body: formData,
+
+          transform: (response) => {
+            console.log('repso', response);
+            return response;
+          },
+        };
+      },
+    }),
   }),
 });
 
 export const {
+  useImportFileMutation,
+  useGetTemplateQuery,
   useGetListTravellerQuery,
   useDeleteTravellerDataMutation,
   useEditTravellerDataMutation,
