@@ -46,7 +46,7 @@ const MainQuotSearch = () => {
       dispatch(setFormStateCoverageType(coverType));
     }
   }, [id, dispatch, searchById?.data?.coverType]);
-
+  console.log('cover red', id ? 're' : 'no');
   return id ? (
     <QuotaSearchById step={stateFormHistory} />
   ) : (

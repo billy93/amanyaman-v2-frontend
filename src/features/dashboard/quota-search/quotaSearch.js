@@ -36,19 +36,29 @@ const QuotaSearch = ({ step }) => {
   const isLastStep = activeStep === steps.length - 1;
   const hasCompletedAllSteps = activeStep === steps.length;
   const prevUser = usePrevious(user);
+  const idFromLocalStorage = JSON.parse(
+    localStorage.getItem('persist:root')
+  ).id;
 
   React.useEffect(() => {
-    const idFromLocalStorage = JSON.parse(
-      localStorage.getItem('persist:root')
-    ).id;
-
+    console.log('sus', idFromLocalStorage !== '');
+    console.log('sus', idFromLocalStorage === '');
+    // eslint-disable-next-line quotes
+    console.log('susu', idFromLocalStorage?.replace(/"/g, "'") === '');
+    // eslint-disable-next-line quotes
+    console.log('susu', idFromLocalStorage?.replace(/"/g, "'"));
     // Remove double quotes from the ID if present
     const cleanedId = idFromLocalStorage?.replace(/^"(.*)"$/, '$1');
-    if (JSON.parse(localStorage.getItem('persist:root')).id !== '') {
+    console.log('cleanedId', cleanedId);
+    if (
+      // eslint-disable-next-line quotes
+      idFromLocalStorage?.replace(/"/g, "'") !== undefined
+    ) {
       navigate(`/create-quota/search/${encodeURI(cleanedId)}`);
     }
-  }, [navigate]);
+  }, [navigate, idFromLocalStorage]);
 
+  console.log('id', JSON.parse(localStorage.getItem('persist:root')).id);
   React.useEffect(() => {
     if (user !== null && user !== prevUser) {
       //  Toast({

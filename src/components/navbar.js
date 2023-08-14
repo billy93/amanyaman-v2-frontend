@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import React from 'react';
-import storage from 'redux-persist/lib/storage';
+// import storage from 'redux-persist/lib/storage';
 import {
   Box,
   Flex,
@@ -66,8 +66,8 @@ export default function Navbar({ allowedRoles }) {
   const handleLogout = () => {
     dispatch(logOut());
     // setPersist(null)
-    storage.removeItem('persist:root');
-    storage.removeItem('persist');
+    // storage.removeItem('persist:root');
+    // storage.removeItem('persist');
 
     const persistedStateJSON = localStorage.getItem('persist:root');
 
