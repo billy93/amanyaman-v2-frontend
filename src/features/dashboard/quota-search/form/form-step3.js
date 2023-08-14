@@ -95,8 +95,10 @@ const Form3 = ({
   const [dateBirth, setDateBirth] = useState('');
   const toast = useToast();
   const historyform = useSelector(historyForm);
-  const [addTravellerData, { isSuccess }] = useAddTravellerDataMutation();
-  const [editTravellerData] = useEditTravellerDataMutation();
+  const [addTravellerData, { isSuccess, isLoading: loadingAdd }] =
+    useAddTravellerDataMutation();
+  const [editTravellerData, { isLoading: loadingEdit }] =
+    useEditTravellerDataMutation();
   // const handleUserChange = (e) => {};
   const setPhoneNumbers = (e) => {
     setPhoneNumber(e.target.value);
@@ -242,7 +244,7 @@ const Form3 = ({
     }
   }, [EditTraveller]);
 
-  console.log('lastName', lastName);
+  // console.log('lastName', lastName);
   const renderCustomInput = ({ ref }) => (
     <>
       <FormControl
@@ -453,6 +455,7 @@ const Form3 = ({
       console.log('error adding');
     }
   };
+  console.log('test', loadingEdit);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Modal
@@ -764,14 +767,17 @@ const Form3 = ({
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onClose} disabled={loadingEdit || loadingAdd}>
+              Cancel
+            </Button>
             <Button
               colorScheme="blue"
               mr={3}
               onClick={EditTraveller !== null ? onEdit : onSave}
-              isLoading={isLoading}
+              disabled={loadingEdit || loadingAdd}
+              isLoading={loadingEdit || loadingAdd}
             >
-              Add
+              {EditTraveller !== null ? 'Edit' : 'Add'}
             </Button>
           </ModalFooter>
         </ModalContent>
