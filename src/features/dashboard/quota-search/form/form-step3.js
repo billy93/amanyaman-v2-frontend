@@ -1,13 +1,25 @@
+/* eslint-disable no-unsafe-optional-chaining */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-children-prop */
 /* eslint-disable indent */
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { setHistoryForm, historyForm } from '../../../auth/authSlice';
 import {
+  setMessage,
+  setEditTraveller,
+  EditTravellers,
+  listTravellers,
   FillTravellersData,
   setTravellersData,
   selectManualInput,
   selectedTravelInsurance,
 } from '../quotaSearchSlice';
+import {
+  useAddTravellerDataMutation,
+  useEditTravellerDataMutation,
+  useSearchproductsMutation,
+} from '../policyApiSlice';
 import {
   RadioGroup,
   Radio,
@@ -60,8 +72,11 @@ const Form3 = ({
   const initStateTraveller = useSelector(selectManualInput);
   const selectedInsurance = useSelector(selectedTravelInsurance);
   const listTravellers = useSelector(FillTravellersData);
+
+  const EditTraveller = useSelector(EditTravellers);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
+  const [searchproducts, { isLoading }] = useSearchproductsMutation();
   const [type, setType] = useState('Adult');
   const [typeStatus, setTypeStatus] = useState('Mr');
   const [select, setSelect] = useState('new');
@@ -79,7 +94,9 @@ const Form3 = ({
   const [searchTraveller, setSearchTraveller] = useState('');
   const [dateBirth, setDateBirth] = useState('');
   const toast = useToast();
-
+  const historyform = useSelector(historyForm);
+  const [addTravellerData, { isSuccess }] = useAddTravellerDataMutation();
+  const [editTravellerData] = useEditTravellerDataMutation();
   // const handleUserChange = (e) => {};
   const setPhoneNumbers = (e) => {
     setPhoneNumber(e.target.value);
@@ -93,13 +110,12 @@ const Form3 = ({
   const setSearchTravellers = (e) => {
     setSearchTraveller(e.target.value);
   };
-  const handleEditTravellersData = (e) => {
-    e.preventDefault();
+  const handleEditTravellersData = (data) => {
+    // e.preventDefault();
+    // console.log('travellers', data);
     // eslint-disable-next-line no-unused-vars
-    const data = {
-      step: 1,
-    };
-    // dispatch((data))
+    dispatch(setEditTraveller(data));
+    onOpen();
   };
 
   const setFirstNames = (e) => {
@@ -168,6 +184,65 @@ const Form3 = ({
       dateBirth?.year
     }`;
   };
+
+  const handlePrev = () => {
+    dispatch(setHistoryForm(historyform - 1));
+    prevStep();
+  };
+
+  const handleNexts = () => {
+    dispatch(setHistoryForm(historyform + 1));
+    nextStep();
+  };
+
+  function formatDates(dateString) {
+    // console.log('format dates', dateString);
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    const [year, month, day] = dateString.split('-');
+    const formattedMonth = months[parseInt(month) - 1]; // Adjust for 0-based index
+    console.log('year', year, month, day);
+    return {
+      day: parseInt(day),
+      month: parseInt(month),
+      year: parseInt(year),
+    };
+  }
+
+  React.useEffect(() => {
+    if (EditTraveller) {
+      let dates;
+      if (EditTraveller?.dateOfBirth) {
+        formatDates(EditTraveller?.dateOfBirth);
+      }
+      // console.log('dates', formatDates(EditTraveller?.dateOfBirth));
+      setPhoneNumber(EditTraveller?.phone);
+      setFirstName(EditTraveller?.firstName);
+      setLastName(EditTraveller?.lastName);
+      setAddress(EditTraveller?.address);
+      setPlaceOfBirth(EditTraveller?.placeOfBirth);
+      setDateOfBirth(formatDates(EditTraveller?.dateOfBirth));
+      setEmail(EditTraveller?.email);
+      setPasportNumber(EditTraveller?.passport);
+      setTypeStatus(EditTraveller?.title);
+      setType(EditTraveller?.travellerType);
+    }
+  }, [EditTraveller]);
+
+  console.log('lastName', lastName);
   const renderCustomInput = ({ ref }) => (
     <>
       <FormControl
@@ -242,25 +317,43 @@ const Form3 = ({
       </FormControl>
     </>
   );
-  const onSave = (e) => {
+  function formatDate(inputDate) {
+    const parts = inputDate.split('-');
+    const year = parts[0];
+    const month = parts[1].length === 1 ? '0' + parts[1] : parts[1];
+    const day = parts[2].length === 1 ? '0' + parts[2] : parts[2];
+
+    return `${year}-${month}-${day}`;
+  }
+  const onSave = async (e) => {
     e.preventDefault();
     let i = listTravellers?.listTravellers?.length;
-    let dates = `${dateOfBirth?.day} ${getMonthName(dateOfBirth?.month)} ${
-      dateOfBirth?.year
-    }`;
+    let dates = formatDate(
+      `${dateOfBirth?.year}-${dateOfBirth?.month}-${dateOfBirth?.day}`
+    );
+    const now = new Date();
     const newAdd = {
-      id: i + 1,
-      typeStatus: typeStatus,
+      bookingId: listTravellers?.bookingId,
+      firstName: firstName,
+      lastName: lastName,
+      title: typeStatus,
+      travellerType: type,
       fullName: `${firstName}${lastName}`,
-      emailAddress: email,
-      phoneNumber: phoneNumber,
-      pasportNumber: pasportNumber,
+      email: email,
+      phone: phoneNumber,
+      address: address,
+      passport: pasportNumber,
       dateOfBirth: dates,
       placeOfBirth: placeOfBirth,
+      ticketFlightNumber: 'FLIGHT789',
+      flightItinerary: 'New York to London',
+      endorsement: 'Some endorsement text',
+      refundEndorsement: 'Refund endorsement text',
+      beneficiary: 'Jane Doe',
     };
-    // eslint-disable-next-line no-unsafe-optional-chaining
-    let travellersData = [...listTravellers?.listTravellers, newAdd];
-    dispatch(setTravellersData(travellersData));
+    // // eslint-disable-next-line no-unsafe-optional-chaining
+    // let travellersData = [...listTravellers?.listTravellers, newAdd];
+    // dispatch(setTravellersData(travellersData));
     setFirstName('');
     setLastName('');
     setPasportNumber('');
@@ -268,7 +361,9 @@ const Form3 = ({
     setEmail('');
     setDateOfBirth(null);
     setPlaceOfBirth('');
+    setAddress('');
     toast({
+      id: 'addTraveller',
       title: 'Add Traveller Success',
       status: 'success',
       position: 'top-right',
@@ -276,7 +371,87 @@ const Form3 = ({
       isClosable: true,
       variant: 'solid',
     });
-    onClose();
+    try {
+      const res = await addTravellerData(newAdd);
+      if (res.data) {
+        dispatch(
+          setTravellersData([...listTravellers?.listTravellers, res?.data])
+        );
+      }
+      onClose();
+    } catch (error) {
+      console.log('error adding');
+    }
+  };
+  const onEdit = async (e) => {
+    e.preventDefault();
+    let i = listTravellers?.listTravellers?.length;
+    let dates = formatDate(
+      `${dateOfBirth?.year}-${dateOfBirth?.month}-${dateOfBirth?.day}`
+    );
+    const now = new Date();
+    const newAdd = {
+      id: EditTraveller?.id,
+      bookingId: listTravellers?.bookingId,
+      firstName: firstName,
+      lastName: lastName,
+      title: typeStatus,
+      travellerType: type,
+      fullName: `${firstName}${lastName}`,
+      email: email,
+      phone: phoneNumber,
+      address: address,
+      passport: pasportNumber,
+      dateOfBirth: dates,
+      placeOfBirth: placeOfBirth,
+      ticketFlightNumber: 'FLIGHT789',
+      flightItinerary: 'New York to London',
+      endorsement: 'Some endorsement text',
+      refundEndorsement: 'Refund endorsement text',
+      beneficiary: 'Jane Doe',
+    };
+    // // eslint-disable-next-line no-unsafe-optional-chaining
+    // let travellersData = [...listTravellers?.listTravellers, newAdd];
+    // dispatch(setTravellersData(travellersData));
+    setFirstName('');
+    setLastName('');
+    setPasportNumber('');
+    setPhoneNumber('');
+    setEmail('');
+    setDateOfBirth(null);
+    setPlaceOfBirth('');
+    setAddress('');
+    toast({
+      id: 'editTraveller',
+      title: 'Edit Traveller Success',
+      status: 'success',
+      position: 'top-right',
+      duration: 3000,
+      isClosable: true,
+      variant: 'solid',
+    });
+    try {
+      const res = await editTravellerData(newAdd);
+      if (res.data) {
+        dispatch(setEditTraveller(null));
+        let travellersData = listTravellers?.listTravellers.map((traveller) => {
+          if (traveller.id === res.data.id) {
+            return traveller;
+          }
+        });
+        dispatch(setMessage(true));
+        // console.log('tra', travellersData);
+        // dispatch(
+        //   setTravellersData([
+        //     ...listTravellers?.listTravellers,
+        //     ...travellersData,
+        //   ])
+        // );
+      }
+      onClose();
+    } catch (error) {
+      console.log('error adding');
+    }
   };
   return (
     <Box border={'1px'} borderColor="#ebebeb">
@@ -449,6 +624,12 @@ const Form3 = ({
                     inputClassName="my-custom-input" // custom class
                     renderInput={renderCustomInput}
                     shouldHighlightWeekends
+                    style={{
+                      fontSize: '12px',
+                      fontfamily: 'Mulish',
+                      marginTop: '1em',
+                      color: '#000000ad',
+                    }}
                   />
                   <FormControl variant="floating" id="first-name" isRequired>
                     <Input
@@ -457,6 +638,12 @@ const Form3 = ({
                       value={placeOfBirth}
                       onChange={setPlaceOfBirths}
                       h="48px"
+                      style={{
+                        fontSize: '12px',
+                        fontfamily: 'Mulish',
+                        marginTop: '1em',
+                        color: '#000000ad',
+                      }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
                     <FormLabel fontSize="12" pt="1.5">
@@ -478,6 +665,12 @@ const Form3 = ({
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
                       value={address}
+                      style={{
+                        fontSize: '12px',
+                        fontfamily: 'Mulish',
+                        marginTop: '1em',
+                        color: '#000000ad',
+                      }}
                       onChange={setAddresss}
                       h="48px"
                     />
@@ -572,7 +765,12 @@ const Form3 = ({
 
           <ModalFooter>
             <Button onClick={onClose}>Cancel</Button>
-            <Button colorScheme="blue" mr={3} onClick={onSave}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={EditTraveller !== null ? onEdit : onSave}
+              isLoading={isLoading}
+            >
               Add
             </Button>
           </ModalFooter>
@@ -589,7 +787,7 @@ const Form3 = ({
         <Box
           as="button"
           isDisabled={activeStep === 0}
-          onClick={prevStep}
+          onClick={handlePrev}
           display="flex"
           textAlign="left"
         >
@@ -859,8 +1057,15 @@ const Form3 = ({
                               }}
                               bg="white"
                               icon={<MdCreate size="1em" />}
-                              onClick={handleEditTravellersData}
-                            />
+                              onClick={() =>
+                                handleEditTravellersData(travellers)
+                              }
+                            >
+                              {/* <Button
+                                key={i}
+                                onClick={handleEditTravellersData(i)}
+                              /> */}
+                            </IconButton>
                           </Box>
                         </AccordionButton>
                       </Box>
@@ -918,7 +1123,7 @@ const Form3 = ({
                               style={{ fontSize: '12px' }}
                               pl="5px"
                             >
-                              {travellers.emailAddress}
+                              {travellers.email}
                             </Text>
                           </Box>
                           <Box
@@ -944,7 +1149,7 @@ const Form3 = ({
                               style={{ fontSize: '12px' }}
                               pl="5px"
                             >
-                              {travellers.phoneNumber}
+                              {travellers.phone}
                             </Text>
                           </Box>
                           <Box
@@ -970,7 +1175,9 @@ const Form3 = ({
                               style={{ fontSize: '12px' }}
                               pl="5px"
                             >
-                              {travellers.pasportNumber}
+                              {travellers.passport === null
+                                ? '-'
+                                : travellers.passport}
                             </Text>
                           </Box>
                           <Box
@@ -1100,7 +1307,7 @@ const Form3 = ({
               <ButtonGroup>
                 <Button
                   size="sm"
-                  onClick={nextStep}
+                  onClick={handleNexts}
                   w={{ base: '100%', md: '270px' }}
                   h="48px"
                 >

@@ -31,6 +31,12 @@ const rootPersistConfig = {
   whitelist: ['auth'],
 };
 
+const rootPersistForm = {
+  key: 'root-form',
+  storage,
+  whitelist: ['quotaSearch'],
+};
+
 const persistConfig = {
   key: 'root',
   storage,
@@ -38,11 +44,12 @@ const persistConfig = {
 };
 
 const persistAuth = persistReducer(persistConfig, authReducer);
+const persistForm = persistReducer(rootPersistForm, createSearchQuotaReducer);
 
 const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
   auth: persistAuth,
-  quotaSearch: createSearchQuotaReducer,
+  quotaSearch: persistForm,
   policyList: policyList,
   masterUser: masterUser,
   masterProduct: masterProducts,

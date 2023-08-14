@@ -6,7 +6,9 @@ import { AiFillCheckCircle } from 'react-icons/ai';
 import { Box, Flex, Text, Center } from '@chakra-ui/react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 // import { useSearchproductsMutation } from './policyApiSlice';
+// import { step } from './quotaSearchSlice';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const steps = [
   { title: '1', description: 'Search' },
@@ -23,16 +25,30 @@ function usePrevious(value) {
   return ref.current;
 }
 
-const QuotaSearch = () => {
+const QuotaSearch = ({ step }) => {
   const user = useSelector(userLoginCurrent);
+  const navigate = useNavigate();
+  // const steps = useSelector(step);
   const { nextStep, prevStep, reset, activeStep } = useSteps({
-    initialStep: 0,
+    initialStep: step,
   });
   // const [searchproducts, { isLoading }] = useSearchproductsMutation();
   const isLastStep = activeStep === steps.length - 1;
   const hasCompletedAllSteps = activeStep === steps.length;
   const prevUser = usePrevious(user);
-  console.log('has', hasCompletedAllSteps);
+
+  React.useEffect(() => {
+    const idFromLocalStorage = JSON.parse(
+      localStorage.getItem('persist:root')
+    ).id;
+
+    // Remove double quotes from the ID if present
+    const cleanedId = idFromLocalStorage?.replace(/^"(.*)"$/, '$1');
+    if (JSON.parse(localStorage.getItem('persist:root')).id !== '') {
+      navigate(`/create-quota/search/${encodeURI(cleanedId)}`);
+    }
+  }, [navigate]);
+
   React.useEffect(() => {
     if (user !== null && user !== prevUser) {
       //  Toast({
@@ -84,11 +100,11 @@ const QuotaSearch = () => {
                 },
               }}
             >
-              {steps.map(({ label }, index) => (
+              {steps.map(({ label }, step) => (
                 <Step label={label} key={label} bg="white">
                   <Box sx={{ p: 8, my: 0, rounded: 'sm', bg: 'white', mt: 0 }}>
                     <Forms
-                      label={index}
+                      label={step}
                       hasCompletedAllSteps={hasCompletedAllSteps}
                       activeStep={activeStep}
                       reset={reset}

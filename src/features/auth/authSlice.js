@@ -8,7 +8,9 @@ const authSlice = createSlice({
       password: null,
       role: null,
     },
+    historyFormSubmit: 0,
     isAuthenticated: false,
+    id: '',
     resetPassword: null,
     userLogin: null,
     tokenAccess: null,
@@ -345,12 +347,20 @@ const authSlice = createSlice({
     setCredentials: (state, action) => {
       state.userLogin = action.payload;
     },
+    setHistoryForm: (state, action) => {
+      state.historyFormSubmit = action.payload;
+    },
+    setId: (state, action) => {
+      state.id = action.payload;
+    },
     saveToken: (state, action) => {
       state.isAuthenticated = action.payload;
     },
     logOut: (state, action) => {
       state.userLogin = null;
       state.isAuthenticated = false;
+      state.historyFormSubmit = 0;
+      state.id = '';
     },
     setAuth: (state, action) => {
       console.log('isAuthenticated', action.payload);
@@ -362,13 +372,21 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAuth, saveToken, setCredentials, logOut, resetPassword } =
-  authSlice.actions;
+export const {
+  setId,
+  setHistoryForm,
+  setAuth,
+  saveToken,
+  setCredentials,
+  logOut,
+  resetPassword,
+} = authSlice.actions;
 
 export default authSlice.reducer;
 
 export const selectCurrentUser = (state) => state.auth.otherLogin.username;
 export const roleUser = (state) => state.auth.otherLogin.role;
+export const historyForm = (state) => state.auth.historyFormSubmit;
 export const selectCurrentToken = (state) => state.auth.otherLogin.password;
 export const selectCurrentTraveller = (state) =>
   state.auth.traveller.insuredName;
@@ -378,3 +396,4 @@ export const userLoginCurrent = (state) => state.auth.userLogin;
 export const tokenLoginCurrent = (state) => state.auth.tokenAccess;
 export const userResetPassword = (state) => state.auth.resetPassword;
 export const isAuthenticate = (state) => state.auth.isAuthenticated;
+export const idBook = (state) => state.auth.id;

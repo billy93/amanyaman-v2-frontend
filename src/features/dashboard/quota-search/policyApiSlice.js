@@ -58,10 +58,85 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
+    addTravellerData: builder.mutation({
+      query: (params) => {
+        return {
+          url: '/app/bookings/fill-traveler-data/single',
+          method: 'POST',
+          body: { ...params },
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
+    editTravellerData: builder.mutation({
+      query: (params) => {
+        return {
+          url: '/app/bookings/travellers/edit',
+          method: 'PUT',
+          body: { ...params },
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
+    deleteTravellerData: builder.mutation({
+      query: (id) => {
+        return {
+          url: `/app/bookings/travellers/${id}`,
+          method: 'Delete',
+        };
+      },
+    }),
+    getBookingSearch: builder.query({
+      query: (id) => {
+        return {
+          url: `/app/bookings/search/${id}`,
+          method: 'GET',
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
+    getListTraveller: builder.query({
+      query: (id) => {
+        return {
+          url: `/app/bookings/travellers/${id}`,
+          method: 'GET',
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
   }),
 });
 
 export const {
+  useGetListTravellerQuery,
+  useDeleteTravellerDataMutation,
+  useEditTravellerDataMutation,
+  useAddTravellerDataMutation,
+  useGetBookingSearchQuery,
   useBooksProductsMutation,
   useGetListCountriesQuery,
   useSearchproductsMutation,

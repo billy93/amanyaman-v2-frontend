@@ -1,11 +1,17 @@
 /* eslint-disable indent */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setHistoryForm, historyForm, setId } from '../../../auth/authSlice';
 import {
+  setBookingId,
   selectedTravelInsurance,
   setSelectTravelInsurancePlan,
   selectTravelInsurance,
   selectManualInput,
+  setStepActive,
+  setGetById,
+  FillTravellersData,
 } from '../quotaSearchSlice';
 import {
   Text,
@@ -34,8 +40,12 @@ const Form2 = ({
   const [booksProducts, { isLoading }] = useBooksProductsMutation();
   const initState = useSelector(selectTravelInsurance);
   const stateInt = useSelector(selectManualInput);
+  const list = useSelector(FillTravellersData);
   const selectedInsurance = useSelector(selectedTravelInsurance);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const historyForms = useSelector(historyForm);
+  console.log('activeStep', activeStep);
   const selectProduct = (data) => {
     dispatch(
       setSelectTravelInsurancePlan({
@@ -85,13 +95,35 @@ const Form2 = ({
           ? { ...payload, chd: stateInt.child }
           : { ...payload, chd: 0 }
       );
-      console.log('res', res);
-      nextStep();
+      if (res?.data?.id) {
+        dispatch(setStepActive(activeStep + 1));
+        dispatch(setHistoryForm(activeStep + 1));
+        navigate(`/create-quota/search/${res?.data?.id}`);
+        let travellersData = {
+          ...list,
+          bookingId: res?.data?.id,
+        };
+        console.log('test', list);
+        dispatch(setBookingId(travellersData));
+        dispatch(setId(res?.data?.id));
+        dispatch(setGetById(res));
+      }
+      handleNexts();
       // dispatch(setListProducts(res.data));
     } catch (error) {
       console.log(error);
     }
   };
+  const handlePrev = () => {
+    dispatch(setHistoryForm(historyForms - 1));
+    prevStep();
+  };
+
+  const handleNexts = () => {
+    dispatch(setHistoryForm(historyForms + 1));
+    nextStep();
+  };
+
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Box
@@ -105,7 +137,7 @@ const Form2 = ({
         <Box
           as="button"
           isDisabled={activeStep === 0}
-          onClick={prevStep}
+          onClick={handlePrev}
           display="flex"
           textAlign="left"
         >

@@ -4,6 +4,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { setHistoryForm, historyForm } from '../../../auth/authSlice';
 import {
   setFormStateAdult,
   setFormStateCoverageChild,
@@ -66,6 +67,7 @@ const Form1 = ({
   const initState = useSelector(selectManualInput);
   const dispatch = useDispatch();
   const [isActive] = useState(false);
+  const historyFormS = useSelector(historyForm);
   const listCountries = useSelector(listcountries);
   const { data: { response: countries } = {} } = useGetListCountriesQuery();
   const [searchproducts, { isLoading }] = useSearchproductsMutation();
@@ -142,6 +144,7 @@ const Form1 = ({
           : payload
       );
       // console.log('res', res);
+      dispatch(setHistoryForm(historyFormS + 1));
       dispatch(setListProducts(res.data));
     } catch (error) {
       console.log(error);

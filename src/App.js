@@ -6,7 +6,8 @@ import Login from './features/auth/Login';
 import PolicyList from './features/dashboard/policy/policy';
 import Reporting from './features/dashboard/reporting/reporting';
 import ForgotPass from './features/auth/forgotPassword';
-import QuotaSearch from './features/dashboard/quota-search/quotaSearch';
+import QuotaSearch from './features/dashboard/quota-search/mainQuotSearch';
+import QuotaSearchId from './features/dashboard/quota-search/quotaSearchById';
 import Product from './features/dashboard/product/product';
 import MasterUser from './features/dashboard/masterUser/masterUser';
 import MasterProduct from './features/dashboard/masterProduct/masterProduct';
@@ -57,6 +58,7 @@ function App() {
         element={<LayoutDashboard allowedRoles={['ROLE_TRAVEL_AGENT']} />}
       >
         <Route path="search" element={<QuotaSearch />} />
+        <Route path="search/:id" element={<QuotaSearchId />} />
       </Route>
       <Route
         path="/dashboard"

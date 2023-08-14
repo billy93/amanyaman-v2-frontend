@@ -30,28 +30,30 @@ const createSearchSlice = createSlice({
       travellersData: {
         fullName: '',
         Nik: '',
-        listTravellers: [
-          {
-            id: 1,
-            typeStatus: 'Mrs',
-            fullName: 'Andrea Pirlo',
-            emailAddress: 'andrea@gmail.com',
-            phoneNumber: '02138499',
-            pasportNumber: '76542662',
-            dateOfBirth: '23 juli 1967',
-            placeOfBirth: 'Roma',
-          },
-        ],
+        bookingId: '',
+        success: false,
+        listTravellers: [],
+        editTraveller: null,
       },
       countries: null,
       lists: [],
       listProduct: [],
+      step: 0,
+      getById: null,
     },
-    step: 1,
   },
   reducers: {
     setFormStateCoverageType: (state, action) => {
       state.formState.manualInput.coverageType = action.payload;
+    },
+    setEditTraveller: (state, action) => {
+      state.formState.travellersData.editTraveller = action.payload;
+    },
+    setGetById: (state, action) => {
+      state.formState.getById = action.payload;
+    },
+    setStepActive: (state, action) => {
+      state.formState.step = action.payload;
     },
     setFormStateCoverageChild: (state, action) => {
       state.formState.manualInput.child = action.payload;
@@ -83,13 +85,21 @@ const createSearchSlice = createSlice({
       state.formState.selectInsurancePlan = travelInsurancePlan;
     },
     setTravellersData: (state, action) => {
+      console.log('action', action.payload);
       state.formState.travellersData.listTravellers = [...action.payload];
+    },
+    setBookingId: (state, action) => {
+      console.log('action', action.payload);
+      state.formState.travellersData = action.payload;
     },
     setPaymentMethod: (state, action) => {
       state.formState.selectPaymentMethod = action.data;
     },
     setListCountries: (state, action) => {
       state.formState.countries = [...action.payload];
+    },
+    setMessage: (state, action) => {
+      state.formState.travellersData.success = action.payload;
     },
     setListProducts: (state, action) => {
       state.formState.listProduct = [...action.payload];
@@ -98,6 +108,11 @@ const createSearchSlice = createSlice({
 });
 
 export const {
+  setMessage,
+  setEditTraveller,
+  setGetById,
+  setBookingId,
+  setStepActive,
   setListProducts,
   setListCountries,
   setFormStateAdult,
@@ -116,12 +131,18 @@ export const {
 export default createSearchSlice.reducer;
 export const selectManualInput = (state) =>
   state.quotaSearch?.formState?.manualInput;
+export const quotState = (state) => state.quotaSearch?.formState;
+export const getSearchById = (state) => state.quotaSearch?.formState?.getById;
 export const selectTravelInsurance = (state) =>
   state.quotaSearch?.formState?.listProduct;
 export const selectedTravelInsurance = (state) =>
   state.quotaSearch?.formState?.selectInsurancePlan;
 export const FillTravellersData = (state) =>
   state.quotaSearch?.formState?.travellersData;
+export const EditTravellers = (state) =>
+  state.quotaSearch?.formState?.travellersData.editTraveller;
+export const messages = (state) =>
+  state.quotaSearch?.formState?.travellersData.success;
 export const selectPaymentMethod = (state) =>
   state.quotaSearch?.formState?.selectPaymentMethod;
 export const listcountries = (state) => state.quotaSearch?.formState?.countries;

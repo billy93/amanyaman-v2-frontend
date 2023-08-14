@@ -1,5 +1,6 @@
 /* eslint-disable indent */
 import React from 'react';
+import storage from 'redux-persist/lib/storage';
 import {
   Box,
   Flex,
@@ -65,9 +66,23 @@ export default function Navbar({ allowedRoles }) {
   const handleLogout = () => {
     dispatch(logOut());
     // setPersist(null)
-    localStorage.removeItem('persist');
-    localStorage.setItem('persist', null);
-    localStorage.clear();
+    storage.removeItem('persist:root');
+    storage.removeItem('persist');
+
+    const persistedStateJSON = localStorage.getItem('persist:root');
+
+    if (persistedStateJSON) {
+      const persistedState = JSON.parse(persistedStateJSON);
+      const del = persistedState.quotaSearch;
+      console.log('testPersistedState', del);
+      // Step 3: Save the updated persisted state back to localStorage
+      const updatedPersistedStateJSON = JSON.stringify(persistedState);
+      localStorage.setItem('persist:root', updatedPersistedStateJSON);
+
+      console.log('Persisted state after logout:', updatedPersistedStateJSON);
+    } else {
+      console.log('No persisted state found in localStorage');
+    }
   };
   const userMenu = menus.find((menuItem) => menuItem.role === allowedRoles[0]);
   const menuItems = userMenu ? userMenu.menu : [];

@@ -101,7 +101,7 @@ const Form3 = ({
             // eslint-disable-next-line no-undef
             onChange={(index) => setTabIndex(index)}
             // eslint-disable-next-line no-undef
-            index={tabIndex}
+            index={index}
           >
             <TabList mb="1em">
               <Tab
