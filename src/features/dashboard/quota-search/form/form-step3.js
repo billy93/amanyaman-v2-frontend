@@ -17,15 +17,20 @@ import {
   setTravellersData,
   selectManualInput,
   selectedTravelInsurance,
+  setSelectTravelInsurancePlan,
 } from '../quotaSearchSlice';
 import {
+  useGetListTravellerQuery,
   useGetTemplateQuery,
   useAddTravellerDataMutation,
   useEditTravellerDataMutation,
   useSearchproductsMutation,
   useGetBookingSearchQuery,
   useBooksProductsMutation,
+  useCheckAvailabilityCreditMutation,
+  useDeleteTravellerDataMutation,
 } from '../policyApiSlice';
+
 import {
   RadioGroup,
   Radio,
@@ -66,6 +71,7 @@ import Umbrella from '../../../../img/Umbrella.png';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { MdCreate } from 'react-icons/md';
 import CustomModal from './import';
+import { CiTrash } from 'react-icons/ci';
 
 const Form3 = ({
   label,
@@ -78,15 +84,19 @@ const Form3 = ({
 }) => {
   const initStateTraveller = useSelector(selectManualInput);
   const selectedInsurance = useSelector(selectedTravelInsurance);
+  const { id } = useParams();
+  const { data: newlistTravellers, refetch } = useGetListTravellerQuery(id);
   const listTravellers = useSelector(FillTravellersData);
   const message = useSelector(messages);
-  const { id } = useParams();
   const EditTraveller = useSelector(EditTravellers);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [booksProducts, { isLoading: onsubmitloading }] =
     useBooksProductsMutation();
   const dispatch = useDispatch();
   const [searchproducts, { isLoading }] = useSearchproductsMutation();
+  const [deleteTravellerData, { isSuccess: deleted, isError: deleteFail }] =
+    useDeleteTravellerDataMutation();
+  const [checkAvailabilityCredit] = useCheckAvailabilityCreditMutation();
   const { data: payload } = useGetBookingSearchQuery(id);
   const { data } = useGetTemplateQuery();
   const [type, setType] = useState('Adult');
@@ -103,6 +113,9 @@ const Form3 = ({
   const [dateOfBirth, setDateOfBirth] = useState(null);
   const [address, setAddress] = useState('');
   const [pasportNumber, setPasportNumber] = useState('');
+  const [ticketNumber, setTicketsNumber] = useState('');
+  const [beneficiary, setBeneficiary] = useState('');
+  const [relationship, setRelationship] = useState('');
   const [searchTraveller, setSearchTraveller] = useState('');
   const [dateBirth, setDateBirth] = useState('');
   const toast = useToast();
@@ -140,6 +153,15 @@ const Form3 = ({
   };
   const setPasportNumbers = (e) => {
     setPasportNumber(e.target.value);
+  };
+  const setTicketNumbers = (e) => {
+    setTicketsNumber(e.target.value);
+  };
+  const setRelationships = (e) => {
+    setRelationship(e.target.value);
+  };
+  const setBeneficiaries = (e) => {
+    setBeneficiary(e.target.value);
   };
   const handleSelectType = (e) => {
     const text = e.target.value;
@@ -209,17 +231,53 @@ const Form3 = ({
     try {
       const res = await searchproducts(payload);
       if (res?.data) {
-        console.log('res', res);
+        // console.log('res', res);
+        // console.log('res', payload);
         dispatch(setListProducts(res.data));
+        const updatestateselectProduct = res.data.filter(
+          (item) => item.id === parseInt(payload.product)
+        );
+        const objProuduct = updatestateselectProduct[0];
+        // console.log('ss', objProuduct);
+        // console.log('updatestateselectProduct', updatestateselectProduct);
+        dispatch(
+          setSelectTravelInsurancePlan({
+            travelInsurancePlan: { ...objProuduct },
+          })
+        );
       }
     } catch (error) {
       console.log(error);
     }
   };
-  // console.log('searchproducts', payload);
+  // console.log('payload', payload);
   const handleNexts = () => {
     dispatch(setHistoryForm(historyform + 1));
     nextStep();
+    // PaymentBtn(pay);
+  };
+
+  React.useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = 'Are you sure you want to leave?'; // Display a confirmation message
+      // handlePrev(); // Call your handlePrev function
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  const PaymentBtn = async (payload) => {
+    try {
+      let res = await checkAvailabilityCredit({ payload });
+      console.log('res', res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   function formatDates(dateString) {
@@ -266,10 +324,13 @@ const Form3 = ({
       setPasportNumber(EditTraveller?.passport);
       setTypeStatus(EditTraveller?.title);
       setType(EditTraveller?.travellerType);
+      setBeneficiary(EditTraveller?.beneficiary);
+      setTicketsNumber(EditTraveller?.ticketFlightNumber);
+      setRelationship(EditTraveller?.relationship);
     }
   }, [EditTraveller]);
 
-  // console.log('lastName', lastName);
+  // console.log('EditTraveller', EditTraveller);
   const renderCustomInput = ({ ref }) => (
     <>
       <FormControl
@@ -352,6 +413,20 @@ const Form3 = ({
 
     return `${year}-${month}-${day}`;
   }
+  const handleCloseModal = () => {
+    onClose();
+    setFirstName('');
+    setLastName('');
+    setPasportNumber('');
+    setPhoneNumber('');
+    setEmail('');
+    setDateOfBirth(null);
+    setPlaceOfBirth('');
+    setAddress('');
+    setBeneficiary('');
+    setRelationship('');
+    setTicketsNumber('');
+  };
   const onSave = async (e) => {
     e.preventDefault();
     let i = listTravellers?.listTravellers?.length;
@@ -372,11 +447,12 @@ const Form3 = ({
       passport: pasportNumber,
       dateOfBirth: dates,
       placeOfBirth: placeOfBirth,
-      ticketFlightNumber: 'FLIGHT789',
+      ticketFlightNumber: ticketNumber,
       flightItinerary: 'New York to London',
       endorsement: 'Some endorsement text',
       refundEndorsement: 'Refund endorsement text',
-      beneficiary: 'Jane Doe',
+      beneficiary: beneficiary !== '' ? beneficiary : '',
+      relationship: relationship !== '' ? relationship : '',
     };
     // // eslint-disable-next-line no-unsafe-optional-chaining
     // let travellersData = [...listTravellers?.listTravellers, newAdd];
@@ -389,6 +465,9 @@ const Form3 = ({
     setDateOfBirth(null);
     setPlaceOfBirth('');
     setAddress('');
+    setBeneficiary('');
+    setRelationship('');
+    setTicketsNumber('');
     toast({
       id: 'addTraveller',
       title: 'Add Traveller Success',
@@ -431,11 +510,12 @@ const Form3 = ({
       passport: pasportNumber,
       dateOfBirth: dates,
       placeOfBirth: placeOfBirth,
-      ticketFlightNumber: 'FLIGHT789',
+      ticketFlightNumber: ticketNumber,
       flightItinerary: 'New York to London',
       endorsement: 'Some endorsement text',
       refundEndorsement: 'Refund endorsement text',
-      beneficiary: 'Jane Doe',
+      beneficiary: beneficiary !== '' ? beneficiary : '',
+      relationship: relationship !== '' ? relationship : '',
     };
     // // eslint-disable-next-line no-unsafe-optional-chaining
     // let travellersData = [...listTravellers?.listTravellers, newAdd];
@@ -448,6 +528,9 @@ const Form3 = ({
     setDateOfBirth(null);
     setPlaceOfBirth('');
     setAddress('');
+    setBeneficiary('');
+    setRelationship('');
+    setTicketsNumber('');
     toast({
       id: 'editTraveller',
       title: 'Edit Traveller Success',
@@ -495,7 +578,59 @@ const Form3 = ({
     };
   }, [dispatch, message]);
 
-  console.log('test', loadingEdit);
+  console.log('newlistTravellers', newlistTravellers);
+  React.useEffect(() => {
+    if (newlistTravellers) {
+      dispatch(setTravellersData([...newlistTravellers]));
+    }
+  }, [dispatch, newlistTravellers]);
+
+  const handleAddTraveller = () => {
+    dispatch(setEditTraveller(null));
+    onOpen();
+  };
+
+  const handleDelete = async (id) => {
+    console.log('idd', id);
+    // e.preventDefault();
+    try {
+      const res = await deleteTravellerData(id.id);
+      const idx = 'deletetraveller';
+      // console.log('red del', res);
+      if (res.data === null) {
+        if (!toast.isActive(idx)) {
+          toast({
+            id: 'deletetraveller',
+            title: 'Delete Success',
+            status: 'success',
+            position: 'top-right',
+            duration: 3000,
+            isClosable: true,
+            variant: 'solid',
+          });
+        }
+        refetch(id.id);
+        // navigate('/master-data/travel-agent');
+      }
+    } catch (err) {
+      toast({
+        id: 'deletetraveller',
+        title: `${err?.originalStatus}`,
+        status: 'error',
+        position: 'top-right',
+        duration: 3000,
+        isClosable: true,
+        variant: 'solid',
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    if (deleted) {
+      dispatch(setTravellersData([...newlistTravellers]));
+    }
+  }, [deleted, newlistTravellers, dispatch]);
+
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Modal
@@ -503,7 +638,7 @@ const Form3 = ({
         blockScrollOnMount={false}
         closeOnOverlayClick={false}
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={handleCloseModal}
       >
         <ModalOverlay />
         <ModalContent>
@@ -759,7 +894,7 @@ const Form3 = ({
                     {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                   </FormControl>
                 </Box>
-                <Box mt="1em">
+                <Box display={'flex'} gap="5px" mt="1em">
                   <FormControl variant="floating" id="first-name" isRequired>
                     <Input
                       placeholder=" "
@@ -772,6 +907,85 @@ const Form3 = ({
                     <FormLabel fontSize="12" pt="1.5">
                       Pasport Number
                     </FormLabel>
+                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                  </FormControl>
+                  <FormControl variant="floating" id="first-name">
+                    <Input
+                      placeholder=" "
+                      _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      value={ticketNumber}
+                      onChange={setTicketNumbers}
+                      h="48px"
+                    />
+                    {/* It is important that the Label comes after the Control due to css selectors */}
+                    <FormLabel fontSize="12" pt="1.5">
+                      Ticket Number
+                    </FormLabel>
+                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                  </FormControl>
+                </Box>
+                <Box display={'flex'} gap="5px" mt="1em">
+                  <FormControl variant="floating" id="first-name">
+                    <Input
+                      placeholder=" "
+                      _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      value={beneficiary}
+                      onChange={setBeneficiaries}
+                      h="48px"
+                    />
+                    {/* It is important that the Label comes after the Control due to css selectors */}
+                    <FormLabel fontSize="12" pt="1.5">
+                      Beneficiary
+                    </FormLabel>
+                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                  </FormControl>
+                  <FormControl>
+                    <Box className="floating-form">
+                      <Box>
+                        <Select
+                          style={{
+                            fontFamily: 'Mulish',
+                            color: '#232934eb',
+                            fontSize: '14px',
+                            fontWeight: '500',
+                          }}
+                          // className="floating-select"
+                          placeholder=""
+                          defaultValue={relationship}
+                          h="48px"
+                          onChange={setRelationships}
+                        >
+                          <option value="" className="">
+                            Relationship
+                          </option>
+                          <option value="parent">Parent</option>
+                          <option value="child">Child</option>
+                          <option value="close-family">Close Family</option>
+                        </Select>
+                        <span className="highlight"></span>
+                        <FormLabel
+                          pt="1.5"
+                          style={{
+                            transform:
+                              relationship !== ''
+                                ? 'translate(-21px, -54px) scale(0.75)'
+                                : 'translate(-21px, -40px) scale(0.75)',
+                            background: relationship === '' ? 'white' : '',
+                            fontSize: '14px',
+                            fontFamily: 'Mulish',
+                            fontWeight: '600',
+                            color:
+                              relationship === '' ? '#000000c9' : '#065baa',
+                          }}
+                          _hover={{
+                            backgroundColor: 'none',
+                          }}
+                          fontFamily={'Mulish'}
+                        >
+                          Relationship
+                        </FormLabel>
+                      </Box>
+                    </Box>
                     {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                   </FormControl>
                 </Box>
@@ -890,7 +1104,7 @@ const Form3 = ({
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {selectedInsurance?.titleProduct}
+                  {payload?.bookingProduct?.productName}
                 </Text>
                 <Text
                   as="b"
@@ -899,7 +1113,7 @@ const Form3 = ({
                   color="#065BAA"
                   style={{ fontSize: '14px' }}
                 >
-                  {selectedInsurance?.cost} {'-/perorang'}
+                  {payload?.bookingProduct?.finalPrice} {'-/perorang'}
                 </Text>
               </Box>
             </Box>
@@ -1112,6 +1326,21 @@ const Form3 = ({
                                 onClick={handleEditTravellersData(i)}
                               /> */}
                             </IconButton>
+                            <IconButton
+                              _groupHover={{
+                                color: '#3182ce',
+                              }}
+                              bg="white"
+                              icon={<CiTrash size="1em" />}
+                              onClick={() =>
+                                handleDelete({ id: travellers.id })
+                              }
+                            >
+                              {/* <Button
+                                key={i}
+                                onClick={handleEditTravellersData(i)}
+                              /> */}
+                            </IconButton>
                           </Box>
                         </AccordionButton>
                       </Box>
@@ -1297,7 +1526,7 @@ const Form3 = ({
               variant="base"
               w={{ base: '100%', md: '50%' }}
               h="48px"
-              onClick={onOpen}
+              onClick={handleAddTraveller}
             >
               Add Travellers
             </Button>

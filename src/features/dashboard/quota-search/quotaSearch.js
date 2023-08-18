@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { userLoginCurrent } from '../../auth/authSlice';
+import { historyForm, setHistoryForm } from '../../auth/authSlice';
+import { selectTravelInsurance } from './quotaSearchSlice';
 import Forms from './form/form';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { Box, Flex, Text, Center } from '@chakra-ui/react';
@@ -26,8 +29,12 @@ function usePrevious(value) {
 }
 
 const QuotaSearch = ({ step }) => {
+  const { id } = useParams();
   const user = useSelector(userLoginCurrent);
+  const historyform = useSelector(historyForm);
+  // const initState = useSelector(selectTravelInsurance);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   // const steps = useSelector(step);
   const { nextStep, prevStep, reset, activeStep } = useSteps({
     initialStep: step,
@@ -70,6 +77,16 @@ const QuotaSearch = ({ step }) => {
     }
   }, [user, prevUser]);
 
+  React.useEffect(() => {
+    if (!id) {
+      dispatch(setHistoryForm(0));
+      reset();
+      // prevStep(activeStep - 1);
+    }
+  }, [dispatch, id]);
+
+  console.log('step', step);
+  console.log('step activeStep', activeStep);
   let content;
   if (!user) {
     content = (
@@ -88,7 +105,7 @@ const QuotaSearch = ({ step }) => {
               checkIcon={AiFillCheckCircle}
               variant={'circles-alt'}
               colorScheme="blue"
-              activeStep={activeStep}
+              activeStep={step}
               bg="white"
               size="sm"
               sx={{
@@ -116,7 +133,7 @@ const QuotaSearch = ({ step }) => {
                     <Forms
                       label={step}
                       hasCompletedAllSteps={hasCompletedAllSteps}
-                      activeStep={activeStep}
+                      activeStep={historyform}
                       reset={reset}
                       prevStep={prevStep}
                       nextStep={nextStep}

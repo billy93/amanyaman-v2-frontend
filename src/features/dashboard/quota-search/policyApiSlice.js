@@ -74,6 +74,22 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
+    checkAvailabilityCredit: builder.mutation({
+      query: (params) => {
+        return {
+          url: '/app/top/check-credit-limit',
+          method: 'POST',
+          body: { ...params },
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
     editTravellerData: builder.mutation({
       query: (params) => {
         return {
@@ -140,8 +156,8 @@ export const quotSearch = apiSlice.injectEndpoints({
     importFile: builder.mutation({
       query: (file) => {
         const formData = new FormData();
-        console.log('file', file);
-        console.log('file id', file?.id);
+        // console.log('file', file);
+        // console.log('file id', file?.id);
         formData.append('file', file.filesUpload);
         return {
           url: `/app/bookings/travellers/import/${file.id}`,
@@ -159,6 +175,7 @@ export const quotSearch = apiSlice.injectEndpoints({
 });
 
 export const {
+  useCheckAvailabilityCreditMutation,
   useImportFileMutation,
   useGetTemplateQuery,
   useGetListTravellerQuery,

@@ -1,5 +1,6 @@
 /* eslint-disable indent */
 import React from 'react';
+// import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setHistoryForm, historyForm, setId } from '../../../auth/authSlice';
@@ -39,13 +40,14 @@ const Form2 = ({
 }) => {
   const [booksProducts, { isLoading }] = useBooksProductsMutation();
   const initState = useSelector(selectTravelInsurance);
+  // const { id } = useParams();
   const stateInt = useSelector(selectManualInput);
   const list = useSelector(FillTravellersData);
   const selectedInsurance = useSelector(selectedTravelInsurance);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const historyForms = useSelector(historyForm);
-  console.log('activeStep', activeStep);
+  // console.log('activeStep', activeStep);
   const selectProduct = (data) => {
     dispatch(
       setSelectTravelInsurancePlan({
@@ -114,16 +116,46 @@ const Form2 = ({
       console.log(error);
     }
   };
-  const handlePrev = () => {
-    dispatch(setHistoryForm(historyForms - 1));
-    prevStep();
-  };
 
   const handleNexts = () => {
     dispatch(setHistoryForm(historyForms + 1));
     nextStep();
   };
 
+  const handlePrev = () => {
+    dispatch(setHistoryForm(historyForms - 1));
+    prevStep();
+  };
+
+  React.useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = 'Are you sure you want to leave?'; // Display a confirmation message
+
+      if (window.confirm('Are you sure you want to leave?')) {
+        handlePrev(); // Call your handlePrev function
+
+        // Clear service workers cache (if applicable)
+        if (
+          'serviceWorker' in navigator &&
+          navigator.serviceWorker.controller
+        ) {
+          navigator.serviceWorker.controller.postMessage({
+            action: 'clearCache',
+          });
+        }
+
+        window.location.reload(true); // Force a hard refresh
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+  // console.log('initstate', initState);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Box

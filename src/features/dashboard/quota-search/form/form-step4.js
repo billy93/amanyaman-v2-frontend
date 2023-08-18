@@ -47,7 +47,7 @@ const Form3 = ({
   const initManual = useSelector(selectManualInput);
   const selectedInsurance = useSelector(selectedTravelInsurance);
   const listTravellers = useSelector(FillTravellersData);
-
+  const [tabIndex, setTabIndex] = React.useState(0);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Box
@@ -101,7 +101,7 @@ const Form3 = ({
             // eslint-disable-next-line no-undef
             onChange={(index) => setTabIndex(index)}
             // eslint-disable-next-line no-undef
-            index={index}
+            defaultValue={tabIndex}
           >
             <TabList mb="1em">
               <Tab

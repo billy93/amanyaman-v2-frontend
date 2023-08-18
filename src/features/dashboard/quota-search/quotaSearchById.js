@@ -61,7 +61,7 @@ const QuotaSearchById = () => {
   const { data: listTravellers, refetch } = useGetListTravellerQuery(id);
   // const { step } = useSelector(quotState);
   const history = localStorage.getItem('persist:root');
-  console.log('hisstory', history);
+  // console.log('hisstory', history);
   const { nextStep, prevStep, reset, activeStep } = useSteps({
     initialStep: historysbumit,
   });
@@ -87,7 +87,7 @@ const QuotaSearchById = () => {
     if (id) {
       let coverType =
         data?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Anual Trip';
-      console.log('coverType', coverType);
+      // console.log('coverType', coverType);
       dispatch(setFormStateCoverageType(coverType));
 
       dispatch(setFormStateTravellerType(data?.travellerType?.name));
@@ -96,7 +96,7 @@ const QuotaSearchById = () => {
 
       if (data?.from) {
         let from = formatDate(data?.from);
-        console.log('from', from);
+        // console.log('from', from);
         dispatch(
           setFormStateStartDate({
             startDate: from,
@@ -237,7 +237,7 @@ const QuotaSearchById = () => {
                     <Forms
                       label={step}
                       hasCompletedAllSteps={hasCompletedAllSteps}
-                      activeStep={activeStep}
+                      activeStep={historysbumit}
                       reset={reset}
                       prevStep={handlePrev}
                       nextStep={handleNext}
