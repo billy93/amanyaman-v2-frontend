@@ -90,6 +90,16 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
+    paymentProcced: builder.mutation({
+      query: (params) => {
+        return {
+          url: '/app/bookings/payment',
+          method: 'POST',
+          body: { ...params },
+          
+        };
+      },
+    }),
     editTravellerData: builder.mutation({
       query: (params) => {
         return {
@@ -175,6 +185,7 @@ export const quotSearch = apiSlice.injectEndpoints({
 });
 
 export const {
+  usePaymentProccedMutation,
   useCheckAvailabilityCreditMutation,
   useImportFileMutation,
   useGetTemplateQuery,

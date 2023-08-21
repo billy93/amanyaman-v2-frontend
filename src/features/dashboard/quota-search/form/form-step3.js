@@ -85,7 +85,10 @@ const Form3 = ({
   const initStateTraveller = useSelector(selectManualInput);
   const selectedInsurance = useSelector(selectedTravelInsurance);
   const { id } = useParams();
-  const { data: newlistTravellers, refetch } = useGetListTravellerQuery(id);
+  const [triggerGetList, setTriggerGetList] = React.useState(false);
+  const { data: newlistTravellers, refetch } = useGetListTravellerQuery(id, {
+    skip: triggerGetList === false ? true : false,
+  });
   const listTravellers = useSelector(FillTravellersData);
   const message = useSelector(messages);
   const EditTraveller = useSelector(EditTravellers);
@@ -97,7 +100,10 @@ const Form3 = ({
   const [deleteTravellerData, { isSuccess: deleted, isError: deleteFail }] =
     useDeleteTravellerDataMutation();
   const [checkAvailabilityCredit] = useCheckAvailabilityCreditMutation();
-  const { data: payload } = useGetBookingSearchQuery(id);
+  const [triggered, settriggered] = React.useState(false);
+  const { data: payload } = useGetBookingSearchQuery(id, {
+    skip: triggered === false ? true : false,
+  });
   const { data } = useGetTemplateQuery();
   const [type, setType] = useState('Adult');
   const [typeStatus, setTypeStatus] = useState('Mr');
@@ -224,6 +230,7 @@ const Form3 = ({
   const handlePrev = () => {
     dispatch(setHistoryForm(historyform - 1));
     prevStep();
+    settriggered(false);
     handlePrevState();
   };
 
@@ -271,14 +278,14 @@ const Form3 = ({
     };
   }, []);
 
-  const PaymentBtn = async (payload) => {
-    try {
-      let res = await checkAvailabilityCredit({ payload });
-      console.log('res', res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const PaymentBtn = async (payload) => {
+  //   try {
+  //     let res = await checkAvailabilityCredit({ payload });
+  //     console.log('res', res);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   function formatDates(dateString) {
     // console.log('format dates', dateString);
@@ -578,7 +585,7 @@ const Form3 = ({
     };
   }, [dispatch, message]);
 
-  console.log('newlistTravellers', newlistTravellers);
+  // console.log('newlistTravellers', newlistTravellers);
   React.useEffect(() => {
     if (newlistTravellers) {
       dispatch(setTravellersData([...newlistTravellers]));
@@ -609,6 +616,7 @@ const Form3 = ({
             variant: 'solid',
           });
         }
+        setTriggerGetList(true);
         refetch(id.id);
         // navigate('/master-data/travel-agent');
       }
@@ -1590,6 +1598,9 @@ const Form3 = ({
                   onClick={handleNexts}
                   w={{ base: '100%', md: '270px' }}
                   h="48px"
+                  isDisabled={
+                    listTravellers?.listTravellers?.length === 0 ? true : false
+                  }
                 >
                   {isLastStep ? 'Finish' : 'CONTINUE PAYMENT'}
                 </Button>

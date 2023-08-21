@@ -43,9 +43,10 @@ const QuotaSearch = ({ step }) => {
   const isLastStep = activeStep === steps.length - 1;
   const hasCompletedAllSteps = activeStep === steps.length;
   const prevUser = usePrevious(user);
-  const idFromLocalStorage = JSON.parse(
-    localStorage.getItem('persist:root')
-  ).id;
+  const idFromLocalStorage =
+    JSON.parse(localStorage.getItem('persist:root')).id !== null
+      ? JSON.parse(localStorage.getItem('persist:root')).id
+      : '';
 
   React.useEffect(() => {
     console.log('sus', idFromLocalStorage !== '');
@@ -65,7 +66,7 @@ const QuotaSearch = ({ step }) => {
     }
   }, [navigate, idFromLocalStorage]);
 
-  console.log('id', JSON.parse(localStorage.getItem('persist:root')).id);
+  // console.log('id', JSON.parse(localStorage.getItem('persist:root')).id);
   React.useEffect(() => {
     if (user !== null && user !== prevUser) {
       //  Toast({

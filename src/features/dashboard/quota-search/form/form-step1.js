@@ -458,7 +458,7 @@ const Form1 = ({
   };
   //  const tomorrow = utils().getRelativeDate(utils().getToday(), 1);
   const endDate = new Date();
-  endDate.setDate(currentDate.getDate() + 30);
+  endDate.setDate(currentDate.getDate() + 180);
 
   const endDateObj = {
     year: endDate.getFullYear(),

@@ -1,12 +1,14 @@
 /* eslint-disable indent */
 /* eslint-disable no-undef */
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
-  FillTravellersData,
-  selectManualInput,
-  selectedTravelInsurance,
-} from '../quotaSearchSlice';
+  useGetListTravellerQuery,
+  useGetBookingSearchQuery,
+  usePaymentProccedMutation,
+} from '../policyApiSlice';
+import UseCustomToast from '../../../../components/UseCustomToast';
 import {
   Center,
   Accordion,
@@ -34,7 +36,7 @@ import Pasport from '../../../../img/images/Passport.png';
 import Umbrella from '../../../../img/Umbrella.png';
 import Payment from '../../../../img/Payment.png';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-
+// import { setTravellersData } from '../quotaSearchSlice';
 const Form3 = ({
   label,
   hasCompletedAllSteps,
@@ -44,10 +46,69 @@ const Form3 = ({
   nextStep,
   isLastStep,
 }) => {
-  const initManual = useSelector(selectManualInput);
-  const selectedInsurance = useSelector(selectedTravelInsurance);
-  const listTravellers = useSelector(FillTravellersData);
+  // const initManual = useSelector(selectManualInput);
+  const dispatch = useDispatch();
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+  const [paymentProcced, { isLoading }] = usePaymentProccedMutation();
+  const { id } = useParams();
+  // const selectedInsurance = useSelector(selectedTravelInsurance);
+  // const listTravellers = useSelector(FillTravellersData);
+  const { data: newlistTravellers, refetch } = useGetListTravellerQuery(id);
+
+  const { data: payload, refetch: refetchBooking } =
+    useGetBookingSearchQuery(id);
   const [tabIndex, setTabIndex] = React.useState(0);
+  const handlePrev = () => {
+    refetch(id);
+    prevStep();
+  };
+
+  React.useEffect(() => {
+    if (newlistTravellers) {
+      refetch();
+      // dispatch(setTravellersData([...newlistTravellers]));
+    }
+  }, [dispatch, newlistTravellers, refetch]);
+
+  React.useEffect(() => {
+    if (payload) {
+      refetchBooking();
+      // dispatch(setTravellersData([...newlistTravellers]));
+    }
+  }, [dispatch, payload, refetchBooking]);
+
+  const continuePay = async () => {
+    const payloadData = {
+      bookingId: payload.id,
+      paymentMethod: 'BANK_TRANSFER_BCA',
+    };
+    try {
+      const res = await paymentProcced(payloadData);
+      if (res?.data?.paymentLink) {
+        window.location.replace(res?.data?.paymentLink);
+      }
+      console.log('res', res);
+    } catch (error) {
+      console.log('err', error);
+    }
+  };
+
+  const continuePayCredit = async () => {
+    try {
+      const res = await paymentProcced();
+      showSuccessToast('Payment successfully!');
+      if (res?.data) {
+        console.log('res?.data?.paymentLink', res?.data?.paymentLink);
+        window.location.replace(res?.data?.paymentLink);
+      }
+    } catch (error) {
+      console.log('err', error);
+      const errorMessage = `Failed to payment procced. Status Code: ${data?.error?.status}`;
+      showErrorToast(errorMessage);
+    }
+  };
+  console.log('payload', payload);
+  console.log('newlistTravellers', newlistTravellers);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Box
@@ -61,7 +122,7 @@ const Form3 = ({
         <Box
           as="button"
           isDisabled={activeStep === 0}
-          onClick={prevStep}
+          onClick={handlePrev}
           display="flex"
           textAlign="left"
         >
@@ -109,28 +170,15 @@ const Form3 = ({
                 style={{ fontSize: '14px' }}
                 fontWeight={'900'}
               >
-                Credit Card
+                Prepayment
               </Tab>
-              <Tab
-                fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
-                fontWeight={'900'}
-              >
-                Bank Transfer
-              </Tab>
+
               <Tab
                 fontFamily={'Mulish'}
                 style={{ fontSize: '14px' }}
                 fontWeight={'900'}
               >
                 Credit
-              </Tab>
-              <Tab
-                fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
-                fontWeight={'900'}
-              >
-                Deposit Top Up
               </Tab>
             </TabList>
             <TabIndicator
@@ -140,46 +188,6 @@ const Form3 = ({
               borderRadius="1px"
             />
             <TabPanels>
-              <TabPanel>
-                <Center
-                  display={'flex'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  h={{ base: 'auto', md: '400px' }}
-                >
-                  <Text
-                    as="b"
-                    size={'sm'}
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
-                    textAlign={'center'}
-                    fontWeight={'900'}
-                  >
-                    You will be redirected to our payment page to continue the
-                    payment. Click the continue button to proceed.
-                  </Text>
-                </Center>
-              </TabPanel>
-              <TabPanel>
-                <Center
-                  display={'flex'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  h={{ base: 'auto', md: '400px' }}
-                >
-                  <Text
-                    as="b"
-                    size={'sm'}
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
-                    textAlign={'center'}
-                    fontWeight={'900'}
-                  >
-                    You will be redirected to our payment page to continue the
-                    payment. Click the continue button to proceed.
-                  </Text>
-                </Center>
-              </TabPanel>
               <TabPanel>
                 <Center
                   display={'flex'}
@@ -310,11 +318,13 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                     gap="1em"
                   >
-                    {initManual.coverageType}
+                    {payload.coverType === 'SINGLE_TRIP'
+                      ? 'Single Trip'
+                      : 'Annual Trip'}
                   </Text>
                 </Box>
                 <Box display={'flex'} gap="2px" flexWrap={'nowrap'}>
-                  {initManual.destinationCountry?.map((country, i) => {
+                  {payload.destinations?.map((country, i) => {
                     return (
                       <Text
                         key={i}
@@ -324,7 +334,7 @@ const Form3 = ({
                         color="#065BAA"
                         style={{ fontSize: '12px' }}
                       >
-                        {country.label}
+                        {country.countryName}
                       </Text>
                     );
                   })}
@@ -362,7 +372,7 @@ const Form3 = ({
                   color="#065BAA"
                   style={{ fontSize: '12px' }}
                 >
-                  {selectedInsurance?.titleProduct}
+                  {payload?.bookingProduct?.productName}
                 </Text>
               </Box>
             </Box>
@@ -401,7 +411,7 @@ const Form3 = ({
                   <Box>
                     <AccordionPanel pb={4}>
                       {/* <Box> */}
-                      {listTravellers?.listTravellers.map((list, i) => {
+                      {newlistTravellers?.map((list, i) => {
                         return (
                           <Box display={'flex'} key={i} gap="2px">
                             <Text
@@ -477,7 +487,7 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {selectedInsurance?.cost}
+                    {payload?.bookingProduct?.finalPrice}
                   </Text>
                 </Box>
                 <Box
@@ -505,7 +515,7 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     {'x'}
-                    {listTravellers?.listTravellers?.length}
+                    {newlistTravellers?.length}
                   </Text>
                 </Box>
                 <Box
@@ -533,8 +543,8 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     {'Rp'}
-                    {listTravellers?.listTravellers?.length *
-                      parseInt(selectedInsurance?.cost)}
+                    {newlistTravellers?.length *
+                      parseInt(payload?.bookingProduct?.finalPrice)}
                   </Text>
                 </Box>
               </Box>
@@ -572,21 +582,17 @@ const Form3 = ({
                   Select Method :
                 </Text>
                 <Text as="b" fontFamily={'Mulish'} pl="5px">
-                  {tabIndex === 0
-                    ? 'Credit Card'
-                    : tabIndex === 1
-                    ? 'Bank Transfer'
-                    : tabIndex === 2
-                    ? 'Credit'
-                    : 'Deposit Top Up'}
+                  {tabIndex === 0 ? 'Prepayment' : 'Credit'};
                 </Text>
               </Box>
               <ButtonGroup>
                 <Button
                   size="sm"
-                  onClick={nextStep}
+                  onClick={tabIndex === 0 ? continuePay : continuePayCredit}
                   w={{ base: '100%', md: '270px' }}
                   h="48px"
+                  isLoading={isLoading}
+                  disabled={isLoading ? true : false}
                 >
                   {isLastStep ? 'Finish' : 'CONTINUE PAYMENT'}
                 </Button>
