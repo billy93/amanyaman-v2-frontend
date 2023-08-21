@@ -7,6 +7,7 @@ import {
   useGetListTravellerQuery,
   useGetBookingSearchQuery,
   usePaymentProccedMutation,
+  useCheckAvailabilityCreditMutation,
 } from '../policyApiSlice';
 import UseCustomToast from '../../../../components/UseCustomToast';
 import {
@@ -50,6 +51,8 @@ const Form3 = ({
   const dispatch = useDispatch();
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const [paymentProcced, { isLoading }] = usePaymentProccedMutation();
+  const [checkAvailabilityCredit, { isLoading: loading }] =
+    useCheckAvailabilityCreditMutation();
   const { id } = useParams();
   // const selectedInsurance = useSelector(selectedTravelInsurance);
   // const listTravellers = useSelector(FillTravellersData);
@@ -94,12 +97,15 @@ const Form3 = ({
   };
 
   const continuePayCredit = async () => {
+    const payloadData = {
+      amount: payload?.bookingProduct.finalPrice,
+    };
     try {
-      const res = await paymentProcced();
+      const res = await checkAvailabilityCredit(payloadData);
       showSuccessToast('Payment successfully!');
       if (res?.data) {
-        console.log('res?.data?.paymentLink', res?.data?.paymentLink);
-        window.location.replace(res?.data?.paymentLink);
+        console.log('res?.data?.paymentLinks', res?.data);
+        // window.location.replace(res?.data?.paymentLink);
       }
     } catch (error) {
       console.log('err', error);
@@ -108,6 +114,7 @@ const Form3 = ({
     }
   };
   console.log('payload', payload);
+  console.log('payload inde', tabIndex === 1);
   console.log('newlistTravellers', newlistTravellers);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
@@ -223,8 +230,9 @@ const Form3 = ({
                     textAlign={'center'}
                     fontWeight={'900'}
                   >
-                    You will be redirected to our payment page to continue the
-                    payment. Click the continue button to proceed.
+                    <Button variant="outline" onClick={continuePayCredit}>
+                      Re-check Availability Credit
+                    </Button>
                   </Text>
                 </Center>
               </TabPanel>
@@ -588,11 +596,11 @@ const Form3 = ({
               <ButtonGroup>
                 <Button
                   size="sm"
-                  onClick={tabIndex === 0 ? continuePay : continuePayCredit}
+                  onClick={tabIndex === 0 ? continuePay : null}
                   w={{ base: '100%', md: '270px' }}
                   h="48px"
-                  isLoading={isLoading}
-                  disabled={isLoading ? true : false}
+                  isLoading={isLoading || loading}
+                  disabled={isLoading || tabIndex === 1 ? true : false}
                 >
                   {isLastStep ? 'Finish' : 'CONTINUE PAYMENT'}
                 </Button>
