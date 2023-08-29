@@ -332,6 +332,7 @@ const PaymentSuccessPage = () => {
                   display={'flex'}
                   justifyContent={'center'}
                   flexDirection={'column'}
+                  w="100%"
                 >
                   <Text
                     as="b"
