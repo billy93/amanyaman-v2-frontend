@@ -4,11 +4,13 @@ import {
   userLoginCurrent,
   historyForm,
   setHistoryForm,
+  setCredentials,
 } from '../../auth/authSlice';
 import Forms from './form/form';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { Box, Flex, Text, Center } from '@chakra-ui/react';
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
+import usePersist from '../../../features/hook/usePersist';
 import {
   useGetBookingSearchQuery,
   useGetListTravellerQuery,
@@ -51,6 +53,7 @@ function usePrevious(value) {
 const QuotaSearchById = () => {
   const user = useSelector(userLoginCurrent);
   const historysbumit = useSelector(historyForm);
+  const [persist] = usePersist();
   const messagesTraveller = useSelector(messages);
   const list = useSelector(FillTravellersData);
   const prevListTraveller = usePrevious(list?.listTravellers);
@@ -63,7 +66,7 @@ const QuotaSearchById = () => {
   const history = localStorage.getItem('persist:root');
   // console.log('hisstory', history);
   const { nextStep, prevStep, reset, activeStep } = useSteps({
-    initialStep: historysbumit,
+    initialStep: user?.historyStep,
   });
   // const [searchproducts, { isLoading }] = useSearchproductsMutation();
   function formatDate(dateString) {
@@ -74,13 +77,22 @@ const QuotaSearchById = () => {
 
     return { day, month, year };
   }
+  console.log('persist', persist);
   const handlePrev = () => {
-    dispatch(setHistoryForm(historysbumit - 1));
+    const addStep = {
+      ...user,
+      historyStep: user?.historyStep - 1,
+    };
+    dispatch(setCredentials({ ...addStep }));
     prevStep();
   };
 
   const handleNext = () => {
-    dispatch(setHistoryForm(historysbumit + 1));
+    const addStep = {
+      ...user,
+      historyStep: user?.historyStep + 1,
+    };
+    dispatch(setCredentials({ ...addStep }));
     nextStep();
   };
   React.useEffect(() => {
@@ -135,7 +147,6 @@ const QuotaSearchById = () => {
     }
   }, [id, dispatch, data, listTravellers]);
 
-  console.log('listTravellers data', data);
   const isLastStep = activeStep === steps.length - 1;
   const hasCompletedAllSteps = activeStep === steps.length;
   const prevUser = usePrevious(user);
@@ -237,7 +248,7 @@ const QuotaSearchById = () => {
                     <Forms
                       label={step}
                       hasCompletedAllSteps={hasCompletedAllSteps}
-                      activeStep={historysbumit}
+                      activeStep={user?.historyStep}
                       reset={reset}
                       prevStep={handlePrev}
                       nextStep={handleNext}

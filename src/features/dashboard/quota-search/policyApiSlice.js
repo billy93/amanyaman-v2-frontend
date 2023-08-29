@@ -96,7 +96,6 @@ export const quotSearch = apiSlice.injectEndpoints({
           url: '/app/bookings/payment',
           method: 'POST',
           body: { ...params },
-          
         };
       },
     }),
@@ -148,10 +147,31 @@ export const quotSearch = apiSlice.injectEndpoints({
           response.blob().then((blob) => URL.createObjectURL(blob)),
       }),
     }),
+    getCheckPayment: builder.query({
+      query: (id) => ({
+        url: `/app/payment/check/${id.id}`,
+        method: 'GET',
+      }),
+    }),
     getListTraveller: builder.query({
       query: (id) => {
         return {
           url: `/app/bookings/travellers/${id}`,
+          method: 'GET',
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
+    getBookingsQuotation: builder.query({
+      query: (id) => {
+        return {
+          url: `/app/bookings/quotation/${id}`,
           method: 'GET',
           invalidatesTags: (result, error, arg) =>
             result
@@ -185,6 +205,8 @@ export const quotSearch = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetBookingsQuotationQuery,
+  useGetCheckPaymentQuery,
   usePaymentProccedMutation,
   useCheckAvailabilityCreditMutation,
   useImportFileMutation,

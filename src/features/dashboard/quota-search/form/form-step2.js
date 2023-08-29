@@ -3,7 +3,14 @@ import React from 'react';
 // import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setHistoryForm, historyForm, setId } from '../../../auth/authSlice';
+// import usePersist from '../../../../features/hook/usePersist';
+import {
+  setHistoryForm,
+  historyForm,
+  setId,
+  userLoginCurrent,
+  setCredentials,
+} from '../../../auth/authSlice';
 import {
   setBookingId,
   selectedTravelInsurance,
@@ -40,6 +47,8 @@ const Form2 = ({
 }) => {
   const [booksProducts, { isLoading }] = useBooksProductsMutation();
   const initState = useSelector(selectTravelInsurance);
+  const login = useSelector(userLoginCurrent);
+  // const [persist] = usePersist();
   // const { id } = useParams();
   const stateInt = useSelector(selectManualInput);
   const list = useSelector(FillTravellersData);
@@ -118,12 +127,23 @@ const Form2 = ({
   };
 
   const handleNexts = () => {
+    const addStep = {
+      ...login,
+      historyStep: 2,
+    };
+
+    dispatch(setCredentials({ ...addStep }));
     dispatch(setHistoryForm(historyForms + 1));
     nextStep();
   };
 
   const handlePrev = () => {
-    dispatch(setHistoryForm(historyForms - 1));
+    const addStep = {
+      ...login,
+      historyStep: login?.historyStep - 1,
+    };
+    console.log('res', addStep);
+    dispatch(setCredentials({ ...addStep }));
     prevStep();
   };
 

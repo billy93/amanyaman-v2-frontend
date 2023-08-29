@@ -28,7 +28,7 @@ import dashboards from '../features/dashboard/dashboards/dashboardSlice';
 const rootPersistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth'],
+  whitelist: ['auth.userLogin'],
 };
 
 const rootPersistForm = {

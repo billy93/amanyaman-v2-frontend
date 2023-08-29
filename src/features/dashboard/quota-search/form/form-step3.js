@@ -5,7 +5,13 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { setHistoryForm, historyForm } from '../../../auth/authSlice';
+import {
+  setHistoryForm,
+  historyForm,
+  userLoginCurrent,
+  setCredentials,
+} from '../../../auth/authSlice';
+import usePersist from '../../../../features/hook/usePersist';
 import {
   messages,
   setMessage,
@@ -89,7 +95,9 @@ const Form3 = ({
   const { data: newlistTravellers, refetch } = useGetListTravellerQuery(id, {
     skip: triggerGetList === false ? true : false,
   });
+  const [persist] = usePersist();
   const listTravellers = useSelector(FillTravellersData);
+  const login = useSelector(userLoginCurrent);
   const message = useSelector(messages);
   const EditTraveller = useSelector(EditTravellers);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -124,6 +132,7 @@ const Form3 = ({
   const [relationship, setRelationship] = useState('');
   const [searchTraveller, setSearchTraveller] = useState('');
   const [dateBirth, setDateBirth] = useState('');
+
   const toast = useToast();
   const historyform = useSelector(historyForm);
   const [addTravellerData, { isSuccess, isLoading: loadingAdd }] =
@@ -228,12 +237,18 @@ const Form3 = ({
   };
 
   const handlePrev = () => {
+    const addStep = {
+      ...login,
+      historyStep: login?.historyStep - 1,
+    };
+    console.log('ad', addStep);
+    dispatch(setCredentials({ ...addStep }));
     dispatch(setHistoryForm(historyform - 1));
     prevStep();
     settriggered(false);
     handlePrevState();
   };
-
+  console.log('loginss', login);
   const handlePrevState = async (e) => {
     try {
       const res = await searchproducts(payload);
@@ -257,11 +272,21 @@ const Form3 = ({
       console.log(error);
     }
   };
-  // console.log('payload', payload);
+
+  // console.log('payload', JSON.parse(localStorage.getItem('persist:root')));
   const handleNexts = () => {
-    dispatch(setHistoryForm(historyform + 1));
+    const addStep = {
+      ...login,
+      historyStep: 3,
+    };
+
+    dispatch(setCredentials({ ...addStep }));
+    localStorage.setItem(
+      'persist:root',
+      JSON.stringify(localStorage.getItem('persist:root'))
+    );
+    // dispatch(setHistoryForm(historyForms + 1));
     nextStep();
-    // PaymentBtn(pay);
   };
 
   React.useEffect(() => {

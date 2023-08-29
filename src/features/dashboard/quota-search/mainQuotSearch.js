@@ -3,9 +3,10 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import QuotaSearch from './quotaSearch';
-import { historyForm } from '../../auth/authSlice';
+import { historyForm, userLoginCurrent } from '../../auth/authSlice';
 import QuotaSearchById from './quotaSearchById';
 import { useGetBookingSearchQuery } from './policyApiSlice';
+import usePersist from '../../hook/usePersist';
 import {
   quotState,
   getSearchById,
@@ -30,7 +31,9 @@ import { useSelector } from 'react-redux';
 const MainQuotSearch = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [persist, setPersist] = usePersist();
   const stateFormHistory = useSelector(historyForm);
+  const login = useSelector(userLoginCurrent);
 
   const { data: searchById } = useGetBookingSearchQuery(id, {
     skip: id === undefined ? true : false,
@@ -46,11 +49,11 @@ const MainQuotSearch = () => {
       dispatch(setFormStateCoverageType(coverType));
     }
   }, [id, dispatch, searchById?.data?.coverType]);
-  console.log('cover red', id ? 're' : 'no');
+  // console.log('cover red', localStorage.getItem('persist').token);
   return id ? (
-    <QuotaSearchById step={stateFormHistory} />
+    <QuotaSearchById step={login?.historyStep} />
   ) : (
-    <QuotaSearch step={stateFormHistory} />
+    <QuotaSearch step={login?.historyStep} />
   );
 };
 export default MainQuotSearch;

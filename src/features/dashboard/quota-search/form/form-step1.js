@@ -4,7 +4,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setHistoryForm, historyForm } from '../../../auth/authSlice';
+import {
+  setHistoryForm,
+  historyForm,
+  userLoginCurrent,
+  setCredentials,
+} from '../../../auth/authSlice';
+import usePersist from '../../../../features/hook/usePersist';
 import {
   setFormStateAdult,
   setFormStateCoverageChild,
@@ -67,7 +73,9 @@ const Form1 = ({
   const initState = useSelector(selectManualInput);
   const dispatch = useDispatch();
   const [isActive] = useState(false);
-  const historyFormS = useSelector(historyForm);
+  const [persist, setPersist] = usePersist();
+  const historyForms = useSelector(historyForm);
+  const login = useSelector(userLoginCurrent);
   const listCountries = useSelector(listcountries);
   const { data: { response: countries } = {} } = useGetListCountriesQuery();
   const [searchproducts, { isLoading }] = useSearchproductsMutation();
@@ -144,14 +152,22 @@ const Form1 = ({
           : payload
       );
       // console.log('res', res);
-      dispatch(setHistoryForm(historyFormS + 1));
-      dispatch(setListProducts(res.data));
+      if (res.data) {
+        const addStep = {
+          ...login,
+          historyStep: 1,
+        };
+        nextStep();
+        dispatch(setCredentials({ ...addStep }));
+        // localStorage.setItem('persist', JSON.stringify(addStep));
+        dispatch(setListProducts(res.data));
+      }
     } catch (error) {
       console.log(error);
     }
-    nextStep();
   };
 
+  console.log('login', login);
   React.useEffect(() => {
     if (countries) {
       let countriesList = countries?.map((obj) => ({
@@ -184,7 +200,7 @@ const Form1 = ({
       initState?.endDate?.month
     )} ${initState?.endDate?.year}`;
   };
-  // console.log('manual cover', ManualInput)
+  // console.log('manual cover', activeStep);
   const renderCustomInput = ({ ref }) => (
     <>
       <FormControl

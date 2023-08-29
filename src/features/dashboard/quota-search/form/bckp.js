@@ -114,7 +114,7 @@ const Form3 = ({
         res?.data?.paymentMethod === 'CREDIT_LIMIT' &&
         res?.data?.paymentStatus === 'SUCCESS'
       ) {
-        navigate(`/payment/success/${res?.data?.id}`);
+        navigate(`/payment/success/${id}`);
       }
       console.log('res', res);
     } catch (error) {
@@ -124,10 +124,6 @@ const Form3 = ({
 
   console.log('login', login);
   console.log('login persist', persist);
-  console.log(
-    'login persist',
-    JSON.parse(localStorage.getItem('persist')).isAuthenticated
-  );
   const continuePayCredit = async () => {
     const payloadData = {
       amount: payload?.bookingProduct.finalPrice,
@@ -391,13 +387,13 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                     gap="1em"
                   >
-                    {payload?.coverType === 'SINGLE_TRIP'
+                    {payload.coverType === 'SINGLE_TRIP'
                       ? 'Single Trip'
                       : 'Annual Trip'}
                   </Text>
                 </Box>
                 <Box display={'flex'} gap="2px" flexWrap={'nowrap'}>
-                  {payload?.destinations?.map((country, i) => {
+                  {payload.destinations?.map((country, i) => {
                     return (
                       <Text
                         key={i}

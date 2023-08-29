@@ -145,7 +145,20 @@ const Login = () => {
         password: fields?.password,
         rememberMe: fields?.rememberMe,
       }).unwrap();
-      dispatch(setCredentials({ ...userData }));
+      console.log('trave', userData);
+      if (userData) {
+        if (userData.roles[0] === 'ROLE_TRAVEL_AGENT') {
+          dispatch(
+            setCredentials({
+              ...userData,
+              historyStep: 0,
+              isAuthenticated: true,
+            })
+          );
+        } else {
+          dispatch(setCredentials({ ...userData, isAuthenticated: true }));
+        }
+      }
       // navigate('/create-quota/search')
       const id = 'test-toast';
       if (!toast.isActive(id)) {

@@ -41,6 +41,8 @@ import CreateMasterProduct from './features/dashboard/masterProduct/createProduc
 import EditProducts from './features/dashboard/masterProduct/editProduct';
 import DetailProductPrice from './features/dashboard/productPrice/detailProductPrice';
 import DetailMasterProduct from './features/dashboard/masterProduct/detailMasterProduct';
+import PaymentSuccess from './features/dashboard/paymentSuccess/paymentSuccess';
+import PaymentLoader from './components/loaderComponent';
 
 function App() {
   return (
@@ -66,6 +68,14 @@ function App() {
         element={<LayoutDashboard allowedRoles={['ROLE_TRAVEL_AGENT']} />}
       >
         <Route path="chart" element={<Dashboards />} />
+      </Route>
+      <Route
+        path="/payment"
+        exact
+        element={<LayoutDashboard allowedRoles={['ROLE_TRAVEL_AGENT']} />}
+      >
+        <Route path="success/:id" element={<PaymentSuccess />} />
+        <Route path="payment-confirmation" element={<PaymentLoader />} />
       </Route>
       <Route
         path="/policies"
