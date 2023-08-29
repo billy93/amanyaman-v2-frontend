@@ -169,7 +169,7 @@ const PaymentSuccessPage = () => {
             display={'flex'}
             flexDirection={'column'}
             border={'1px solid #ebebeb'}
-            mt="10px"
+            mt="15px"
             mr="10px"
             w="100%"
           >
@@ -393,7 +393,9 @@ const PaymentSuccessPage = () => {
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
                     >
-                      {'AMYSCUE33DDJDD'}
+                      {quotation?.paymentData?.paymentId
+                        ? quotation?.paymentData?.paymentId
+                        : '-'}
                     </Text>
                   </Box>
                   <Box
@@ -529,7 +531,7 @@ const PaymentSuccessPage = () => {
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
                     >
-                      {'ABABIL'}
+                      {quotation?.salesId?.firstName}
                     </Text>
                   </Box>
                   <Box
@@ -566,11 +568,11 @@ const PaymentSuccessPage = () => {
             </Box>
           </Box>
         </Box>
-        <Box w="70%" p="1em">
+        <Box w="70%" pl="1em">
           {quotation?.travellers.map((travellers, i) => {
             return (
               <Box key={i} mt="1em">
-                <Accordion allowMultiple>
+                <Accordion allowMultiple defaultIndex={[0]}>
                   <AccordionItem
                     border={'1px solid #ebebeb'}
                     borderRadius={'5px'}
