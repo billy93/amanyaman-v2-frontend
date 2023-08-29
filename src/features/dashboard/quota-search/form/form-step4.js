@@ -114,7 +114,7 @@ const Form3 = ({
         res?.data?.paymentMethod === 'CREDIT_LIMIT' &&
         res?.data?.paymentStatus === 'SUCCESS'
       ) {
-        navigate(`/payment/success/${res?.data?.id}`);
+        navigate(`/payment/success/${payload?.transactionId}`);
       }
       console.log('res', res);
     } catch (error) {
@@ -122,7 +122,7 @@ const Form3 = ({
     }
   };
 
-  console.log('login', login);
+  console.log('login', payload);
   console.log('login persist', persist);
   console.log(
     'login persist',
