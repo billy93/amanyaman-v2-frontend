@@ -84,7 +84,6 @@ function App() {
           <LayoutDashboard
             allowedRoles={[
               'ROLE_TRAVEL_AGENT',
-              'ROLE_TRAVEL_AGENT',
               'ROLE_FINANCE',
               'ROLE_IBS',
               'ROLE_MANAGEMENT',

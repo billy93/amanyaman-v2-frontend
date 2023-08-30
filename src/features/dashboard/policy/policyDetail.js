@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { useGetUsersQuery } from './policyApiSlice';
+import { useGetUsersQuery, useGetPolicyListQuery } from './policyApiSlice';
 import { NavLink, Link } from 'react-router-dom';
 import { listPolicy } from '../policy/policySlice';
 import Data from './list.json';
@@ -218,7 +218,7 @@ const DetailPolcy = () => {
   // const currentstep = useSelector()
   const policyList = useSelector(listPolicy);
 
-  const { data: users, isLoading, isError, error } = useGetUsersQuery();
+  const { data: users, isLoading, isError, error } = useGetPolicyListQuery();
   const data = React.useMemo(() => policyList?.listPolicy);
 
   const columns = React.useMemo(

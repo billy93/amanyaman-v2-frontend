@@ -2,7 +2,7 @@
 /* eslint-disable indent */
 /* eslint-disable react/jsx-key */
 import React, { useState } from 'react';
-import { useGetUsersQuery } from './policyApiSlice';
+import { useGetPolicyListQuery } from './policyApiSlice';
 import { Link } from 'react-router-dom';
 import Data from './list.json';
 import {
@@ -42,7 +42,7 @@ import {
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
+import policySlice, {
   listPolicy,
   listSelected,
   setStateSelectedt,
@@ -328,42 +328,7 @@ const Tables = ({
     useFilters,
     useSortBy,
     usePagination,
-    useRowSelect,
-    (hooks) => {
-      hooks.visibleColumns.push((columns) => [
-        // Let's make a column for selection
-        {
-          id: 'selection',
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
-          Header: ({ getToggleAllRowsSelectedProps }) => (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-            </div>
-          ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
-          Cell: ({ row }) => (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          ),
-        },
-        ...columns,
-      ]);
-    }
+    useRowSelect
   );
   const prev = usePrevious(selectedRowIds);
   React.useEffect(() => {
@@ -770,7 +735,15 @@ const Polcies = () => {
   const [loading, setLoading] = React.useState(false);
   const [pageCount, setPageCount] = React.useState(0);
   const fetchIdRef = React.useRef(0);
-
+  const [page, setPage] = React.useState(0);
+  const [size, setSize] = React.useState(5);
+  const {
+    data: { response: listpolicies, totalCount } = {},
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetPolicyListQuery({ page, size: size });
   const fetchData = React.useCallback(({ pageSize, pageIndex }) => {
     // This will get called when the table needs new data
     // You could fetch your data from literally anywhere,
@@ -798,6 +771,33 @@ const Polcies = () => {
       }
     }, 1000);
   }, []);
+
+  function formatDateToLong(dateString) {
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    const dateObj = new Date(dateString);
+    const day = dateObj.getDate();
+    const monthIndex = dateObj.getMonth();
+    const year = dateObj.getFullYear();
+    const monthName = monthNames[monthIndex];
+
+    const formattedDate = `${day} ${monthName} ${year}`;
+    return formattedDate;
+  }
+
   const columns = React.useMemo(
     () => [
       {
@@ -810,7 +810,7 @@ const Polcies = () => {
         Cell: ({ row }) => (
           <Link
             color="#065BAA"
-            style={{ textDecoration: 'underline' }}
+            style={{ textDecoration: 'underline', color: '#065BAA' }}
             to={`/policies/policy-detail/${row.original.policyNumber}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
@@ -825,6 +825,15 @@ const Polcies = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ row }) => (
+          <Link
+            color="#065BAA"
+            style={{ textDecoration: 'underline', color: '#065BAA' }}
+          >
+            {/* <AiOutlineFileDone size={25} /> */}
+            {`${row.original.title} ${row.original.travellerFirstName} ${row.original.travellerLastName}`}
+          </Link>
+        ),
       },
       {
         Header: 'Booking ID',
@@ -835,29 +844,71 @@ const Polcies = () => {
         filter: 'fuzzyText',
       },
       {
-        Header: 'Product',
-        accessor: 'product',
+        Header: 'Premium Price',
+        accessor: 'totalPrice',
         maxWidth: 400,
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
       },
       {
-        Header: 'Status',
-        accessor: 'status',
+        Header: 'Plan',
+        accessor: 'productName',
+        maxWidth: 400,
+        minWidth: 200,
+        width: 200,
+        filter: 'fuzzyText',
+      },
+      {
+        Header: 'Policy Status',
+        accessor: 'statusSales',
+        maxWidth: 400,
+        minWidth: 200,
+        width: 200,
+        filter: 'fuzzyText',
+        Cell: ({ row }) => (
+          <Box>
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.statusSales ? row.original.statusSales : '-'}
+          </Box>
+        ),
+      },
+      {
+        Header: 'Payment Status',
+        accessor: 'paymentStatus',
         maxWidth: 400,
         minWidth: 200,
         width: 200,
         Filter: SelectColumnFilter,
         filter: 'includes',
+        Cell: ({ row }) => (
+          <Box>
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.paymentStatus ? (
+              <Button variant={'outline'} colorScheme="teal">
+                {row.original.statusSales}
+              </Button>
+            ) : (
+              <Button variant={'outline'} colorScheme="red">
+                {row.original.statusSales}
+              </Button>
+            )}
+          </Box>
+        ),
       },
       {
         Header: 'Issued By',
-        accessor: 'issuedBy',
+        accessor: 'issuedByFirstName',
         maxWidth: 400,
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ row }) => (
+          <Box>
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.issuedByFirstName} {row.original.issuedByLastName}
+          </Box>
+        ),
       },
       {
         Header: 'Purchase Date',
@@ -867,20 +918,23 @@ const Polcies = () => {
         width: 200,
         Filter: SelectDateColumnFilter,
         filter: 'date',
+        Cell: ({ row }) => (
+          <Box>
+            {/* <AiOutlineFileDone size={25} /> */}
+            {formatDateToLong(row.original.purchaseDate)}
+          </Box>
+        ),
       },
     ],
     []
   );
 
   // const data = React.useMemo(() => tempList);
-  // console.log('ddd', data)
-  const {
-    data: users,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetUsersQuery();
+  console.log('ddd', listpolicies);
+
+  React.useEffect(() => {
+    refetch({ page, size: size });
+  }, [page, size, refetch]);
 
   let content;
   if (isLoading) {
@@ -895,7 +949,7 @@ const Polcies = () => {
         <Styles>
           <Tables
             columns={columns}
-            data={data}
+            data={listpolicies}
             fetchData={fetchData}
             loading={loading}
             pageCount={pageCount}
