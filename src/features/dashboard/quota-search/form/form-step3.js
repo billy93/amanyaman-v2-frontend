@@ -248,7 +248,7 @@ const Form3 = ({
     settriggered(false);
     handlePrevState();
   };
-  console.log('loginss', login);
+  console.log('loginss', payload);
   const handlePrevState = async (e) => {
     try {
       const res = await searchproducts(payload);
@@ -664,6 +664,7 @@ const Form3 = ({
     }
   }, [deleted, newlistTravellers, dispatch]);
 
+  console.log('payload', payload);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Modal
@@ -852,7 +853,6 @@ const Form3 = ({
                       style={{
                         fontSize: '12px',
                         fontfamily: 'Mulish',
-                        marginTop: '1em',
                         color: '#000000ad',
                       }}
                     />

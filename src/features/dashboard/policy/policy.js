@@ -5,17 +5,21 @@ import React, { useState } from 'react';
 import { useGetPolicyListQuery } from './policyApiSlice';
 import { Link } from 'react-router-dom';
 import Data from './list.json';
+import { debounce } from 'lodash';
 import {
   usePagination,
   useSortBy,
   useFilters,
   useColumnOrder,
 } from 'react-table';
+import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   useToast,
+  Input,
+  Select,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -493,46 +497,6 @@ const Tables = ({
           </>
         )}
       </Box>
-      <Box mb="2em">
-        <Box
-          display={'flex'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-        >
-          <Heading as={'h6'} size={'sm'}>
-            Policies
-          </Heading>
-          <Stack direction="row" spacing={4}>
-            <Button
-              // onClick={showFilterBtn}
-              // leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
-              colorScheme="#231F20"
-              variant="outline"
-              size={'sm'}
-              // color={showFilter ? '#065BAA' : ''}
-            >
-              Apply Filter
-            </Button>
-            <Button
-              leftIcon={<MdLogin />}
-              colorScheme="#231F20"
-              variant="outline"
-              size={'sm'}
-              color="#231F20"
-            >
-              Export All
-            </Button>
-          </Stack>
-        </Box>
-        {/* <Box mb={'3'} bg={'#ffeccc'} border={'1px'} borderColor={'#ffa000'} width={'300px'} height={'100px'} p={'2'} display="flex" justifyContent={'center'} alignItems={'center'}>
-                <Box bg="#FFA00">
-                    <MdWarning size={'20px'} color="#FFA000"/>
-                </Box>
-                <Text as={'p'} fontSize='xs' color={'black.200'} p={'3'}>
-                        You can only claim policy of Success policy status with maximum 30 days from the end date and no ongoing/successful refund record
-                </Text>
-            </Box> */}
-      </Box>
       <Box
         bg="white"
         overflow={'scroll'}
@@ -737,13 +701,31 @@ const Polcies = () => {
   const fetchIdRef = React.useRef(0);
   const [page, setPage] = React.useState(0);
   const [size, setSize] = React.useState(5);
+  const { data: planTypes } = useGetPlanTypesQuery({ page: 0, size: 9999 });
+  const [filterQuery, setFilterQuery] = React.useState({
+    policyNumber: '',
+    traveller: '',
+    bookingNumber: '',
+    planType: '',
+    policyStatus: '',
+    purchaseDate: '',
+  });
+  const [filterQueryDebounce, setFilterQueryDebounce] = React.useState({
+    policyNumber: '',
+    traveller: '',
+    bookingNumber: '',
+    planType: '',
+    policyStatus: '',
+    purchaseDate: '',
+  });
+  const [showFilter, setShowFilter] = React.useState(false);
   const {
     data: { response: listpolicies, totalCount } = {},
     isLoading,
     isError,
     error,
     refetch,
-  } = useGetPolicyListQuery({ page, size: size });
+  } = useGetPolicyListQuery({ page, size: size, ...filterQuery });
   const fetchData = React.useCallback(({ pageSize, pageIndex }) => {
     // This will get called when the table needs new data
     // You could fetch your data from literally anywhere,
@@ -797,6 +779,9 @@ const Polcies = () => {
     const formattedDate = `${day} ${monthName} ${year}`;
     return formattedDate;
   }
+  const showFilterBtn = () => {
+    setShowFilter(!showFilter);
+  };
 
   const columns = React.useMemo(
     () => [
@@ -884,13 +869,17 @@ const Polcies = () => {
         Cell: ({ row }) => (
           <Box>
             {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.paymentStatus ? (
+            {row.original.paymentStatus === 'SUCCESS' ? (
               <Button variant={'outline'} colorScheme="teal">
-                {row.original.statusSales}
+                {'Success'}
+              </Button>
+            ) : row.original.paymentStatus === 'FAIL' ? (
+              <Button variant={'outline'} colorScheme="red">
+                {'Success'}
               </Button>
             ) : (
-              <Button variant={'outline'} colorScheme="red">
-                {row.original.statusSales}
+              <Button variant={'outline'} colorScheme="yellow">
+                {'Pending'}
               </Button>
             )}
           </Box>
@@ -936,6 +925,55 @@ const Polcies = () => {
     refetch({ page, size: size });
   }, [page, size, refetch]);
 
+  const handleFilter = (e) => {
+    const filters = {
+      ...filterQuery,
+      [e.target.name]: e.target.value,
+    };
+    // console.log('fil', filters);
+    setFilterQuery(filters);
+    setPage(0);
+  };
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterQueryDebounce(filterQuery);
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [filterQuery]);
+
+  React.useEffect(() => {
+    const debouncedRefetch = debounce(refetch, 500);
+    debouncedRefetch({ page: page, size: size, ...filterQuery });
+
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [refetch, filterQuery, page, size]);
+
+  React.useEffect(() => {
+    if (!showFilter) {
+      setFilterQuery({
+        policyNumber: '',
+        traveller: '',
+        policyStatus: '',
+        planType: '',
+        bookingNumber: '',
+        purchaseDate: '',
+      });
+    }
+  }, [showFilter]);
+
+  // const handleSearchTermChange = (e) => {
+  //   const { value } = e.target;
+  //   setSearchTerm(value);
+  //   setPage(0);
+  // };
+  // console.log('filter', filterQuery);
   let content;
   if (isLoading) {
     content = (
@@ -946,6 +984,134 @@ const Polcies = () => {
   } else if (Data) {
     content = (
       <Box ml="2em" mr="2em" mt="5em">
+        <Box
+          display={'flex'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          mt="6em"
+          ml="2em"
+          mr="2em"
+          mb={showFilter ? '1em' : '2em'}
+        >
+          <Heading as={'h6'} size={'sm'}>
+            Policies
+          </Heading>
+          <Stack direction="row" spacing={4} mr="0">
+            <Button
+              leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
+              colorScheme="#231F20"
+              variant="outline"
+              size={'sm'}
+              color={showFilter ? '#065BAA' : ''}
+              onClick={showFilterBtn}
+            >
+              Apply Filter
+            </Button>
+
+            <Button
+              leftIcon={<MdLogin />}
+              colorScheme="#231F20"
+              variant="outline"
+              size={'sm'}
+              color="#231F20"
+            >
+              Export All
+            </Button>
+          </Stack>
+        </Box>
+        {showFilter && (
+          <Box
+            w={{ base: '100%', md: '70%' }}
+            display={'flex'}
+            justifyContent={'space-around'}
+            alignItems={'center'}
+            gap="4px"
+            mr="1em"
+            ml="1em"
+            mb="1em"
+            mt={'1em'}
+          >
+            <Input
+              variant={'custom'}
+              // value={filterQuery?.policyNumber}
+              onChange={handleFilter}
+              name="policyNumber"
+              placeholder={'Search by policy number'}
+              bg="#ebebeb"
+              borderRadius={'5px'}
+              _placeholder={{ textTransform: 'lowercase' }}
+            />
+            <Input
+              variant={'custom'}
+              value={filterQuery?.traveller}
+              onChange={handleFilter}
+              name="traveller"
+              placeholder={'Search by traveller'}
+              bg="#ebebeb"
+              borderRadius={'5px'}
+              _placeholder={{ textTransform: 'lowercase' }}
+            />
+            <Input
+              variant={'custom'}
+              value={filterQuery?.bookingNumber}
+              onChange={handleFilter}
+              name="bookingNumber"
+              placeholder={'Search by booking number'}
+              bg="#ebebeb"
+              borderRadius={'5px'}
+              _placeholder={{ textTransform: 'lowercase' }}
+            />
+
+            <Select
+              placeholder="Select by Policy status"
+              backgroundColor={
+                filterQuery?.policyStatus === '' ? '#ebebeb' : '#e8f0fe'
+              }
+              style={{
+                fontSize: '14px',
+                fontFamily: 'Mulish',
+                fontWeight: 'normal',
+              }}
+              _placeholder={{
+                color: 'grey',
+              }}
+              defaultValue={''}
+              name="policyStatus"
+              onChange={handleFilter}
+            >
+              <option value={''}>{'All Policy Status'}</option>
+              <option value={'SUCCESS'}>{'Success'}</option>
+              <option value={'WAITING_FOR_PAYMENT'}>{'Pending'}</option>
+            </Select>
+            <Select
+              placeholder="Select by Plan Type"
+              backgroundColor={
+                filterQuery?.planType === '' ? '#ebebeb' : '#e8f0fe'
+              }
+              style={{
+                fontSize: '14px',
+                fontFamily: 'Mulish',
+                fontWeight: 'normal',
+              }}
+              _placeholder={{
+                color: 'grey',
+              }}
+              defaultValue={''}
+              name="planType"
+              onChange={handleFilter}
+            >
+              {planTypes?.response.map((types, i) => {
+                return (
+                  <option value={types.id} key={i}>
+                    {types.name}
+                  </option>
+                );
+              })}
+            </Select>
+
+            {/* <Button variant={'outline'} onClick={handleSearch}>Search</Button> */}
+          </Box>
+        )}
         <Styles>
           <Tables
             columns={columns}
