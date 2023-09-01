@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 import React from 'react';
 import {
@@ -22,12 +23,16 @@ import matchSorter from 'match-sorter';
 // import DeleteBtn from './deleteAgent';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import {
+  Input,
   Box,
   Heading,
   Text,
   Center,
   Button,
   IconButton,
+  Stack,
+  Radio,
+  RadioGroup,
   Select,
 } from '@chakra-ui/react';
 import PulseLoader from 'react-spinners/PulseLoader';
@@ -40,6 +45,18 @@ import 'react-calendar/dist/Calendar.css';
 import UseCustomToast from '../../../components/UseCustomToast';
 import { BsFillPencilFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
+
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef();
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
+}
 
 const Styles = styled.div`
   padding-top: 1rem;
@@ -146,6 +163,7 @@ const Tables = ({
     }),
     []
   );
+
   const filterTypes = React.useMemo(
     () => ({
       text: (rows, id, filterValue) => {
@@ -349,6 +367,9 @@ const Tables = ({
                         onChange={handleToggleAllRows}
                       />
                     )}
+                    {/* <div>
+                      {column.canFilter ? column.render('Filter') : null}{' '}
+                    </div> */}
                   </th>
                 ))}
               </tr>
@@ -547,7 +568,11 @@ const DetailMasterUser = () => {
   const { id } = useParams();
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState([]);
+  const [defaultSelected, setDefaultSelected] = React.useState('all');
   const [pageCount, setPageCount] = React.useState(0);
+  const [searchAgent, setSearchAgent] = React.useState('');
+  const [searchCGroup, setSearchCGroup] = React.useState('');
+  const [searchCustCode, setSearchCustCode] = React.useState('');
   const {
     data: user,
     isLoading,
@@ -577,7 +602,23 @@ const DetailMasterUser = () => {
         if (fetchId === fetchIdRef.current) {
           const startRow = pageSize * pageIndex;
           const endRow = startRow + pageSize;
-          setData(listTravell?.slice(startRow, endRow));
+          // console.log('select', defaultSelected);
+          if (defaultSelected === 'unselected') {
+            const filteredData = listTravell.filter(
+              (item) => item.productTravelAgent.active === false
+            );
+            // setData(filteredData);
+            setData(filteredData?.slice(startRow, endRow));
+          } else if (defaultSelected === 'selected') {
+            const filteredData = listTravell.filter(
+              (item) => item.productTravelAgent.active === true
+            );
+            setData(filteredData?.slice(startRow, endRow));
+            // setData(filteredData);
+          } else {
+            setData(listTravell?.slice(startRow, endRow));
+          }
+
           // Your server could send back total page count.
           // For now we'll just fake it, too
           setPageCount(Math.ceil(totalCount / pageSize));
@@ -586,7 +627,7 @@ const DetailMasterUser = () => {
         }
       }, 1000);
     },
-    [listTravell, totalCount]
+    [listTravell, totalCount, defaultSelected]
   );
   const handleEditUser = (e) => {
     e.preventDefault();
@@ -596,6 +637,26 @@ const DetailMasterUser = () => {
   React.useEffect(() => {
     refetch({ id });
   }, [msg, refetch, id]);
+
+  // const prevSelect = usePrevious(defaultSelected);
+  // React.useEffect(() => {
+  //   // if (prevSelect !== defaultSelected) {
+  //   // const nextSelect = listTravell;
+  //   if (defaultSelected === 'unselected') {
+  //     const filteredData = listTravell.filter(
+  //       (item) => item.productTravelAgent.active === false
+  //     );
+  //     setData(filteredData);
+  //   } else if (defaultSelected === 'selected') {
+  //     const filteredData = listTravell.filter(
+  //       (item) => item.productTravelAgent.active === true
+  //     );
+  //     setData(filteredData);
+  //   } else {
+  //     setData(listTravell);
+  //   }
+  //   // }
+  // }, [defaultSelected, prevSelect, listTravell]);
 
   React.useEffect(() => {
     let timer;
@@ -642,6 +703,22 @@ const DetailMasterUser = () => {
   React.useEffect(() => {
     refetch({ id });
   }, [refetch, id]);
+
+  const handleSearchAgentName = (e) => {
+    const { value } = e.target;
+    setSearchAgent(value);
+  };
+
+  const handleSearchCustCode = (e) => {
+    const { value } = e.target;
+    setSearchCustCode(value);
+    // setPage(0);
+  };
+  const handleSearchCGroup = (e) => {
+    const { value } = e.target;
+    setSearchCGroup(value);
+    // setPage(0);
+  };
 
   let content;
   if (isLoading) {
@@ -1171,6 +1248,61 @@ const DetailMasterUser = () => {
             >
               Product
             </Text>
+          </Box>
+          <RadioGroup
+            onChange={setDefaultSelected}
+            value={defaultSelected}
+            style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+          >
+            <Stack direction="row" pl="0.5em" pt="1em">
+              <Radio value="all">Show All</Radio>
+              <Radio value="selected">Show Only Selected</Radio>
+              <Radio value="unselected">Show Only Unselected</Radio>
+            </Stack>
+          </RadioGroup>
+          <Box
+            w={{ base: '100%', md: '50%' }}
+            display={'flex'}
+            justifyContent={'space-around'}
+            alignItems={'center'}
+            gap="4px"
+            mr="2em"
+            pl="0.5em"
+            pt="1em"
+          >
+            <Input
+              variant={'custom'}
+              value={searchAgent}
+              onChange={handleSearchAgentName}
+              name="travelAgentName"
+              placeholder={'Search by Agentname'}
+              bg="#ebebeb"
+              borderRadius={'5px'}
+              textTransform={'uppercase'}
+              _placeholder={{ textTransform: 'lowercase' }}
+            />
+            <Input
+              variant={'custom'}
+              value={searchCustCode}
+              onChange={handleSearchCustCode}
+              name="custCode"
+              placeholder={'Search by Cust Code'}
+              bg="#ebebeb"
+              borderRadius={'5px'}
+              textTransform={'uppercase'}
+              _placeholder={{ textTransform: 'lowercase' }}
+            />
+            <Input
+              variant={'custom'}
+              value={searchCGroup}
+              onChange={handleSearchCGroup}
+              name="group"
+              placeholder={'Search by CGroup'}
+              bg="#ebebeb"
+              borderRadius={'5px'}
+              textTransform={'uppercase'}
+              _placeholder={{ textTransform: 'lowercase' }}
+            />
           </Box>
           <Styles>
             <Tables
