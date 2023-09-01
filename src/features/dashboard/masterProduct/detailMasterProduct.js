@@ -704,19 +704,37 @@ const DetailMasterUser = () => {
     refetch({ id });
   }, [refetch, id]);
 
+  const prevSelect = usePrevious(defaultSelected);
+  React.useEffect(() => {
+    if (prevSelect !== defaultSelected) {
+      setSearchAgent('');
+      setSearchCustCode('');
+      setSearchCGroup('');
+    }
+  }, [prevSelect, defaultSelected]);
+
   const handleSearchAgentName = (e) => {
     const { value } = e.target;
     setSearchAgent(value);
+    const strgval = value.toUpperCase();
+    const dataf = data.filter((data) => data.travelAgentName.includes(strgval));
+    setData(dataf);
   };
 
   const handleSearchCustCode = (e) => {
     const { value } = e.target;
     setSearchCustCode(value);
+    const strgval = value.toUpperCase();
+    const dataf = data.filter((data) => data.custcode.includes(strgval));
+    setData(dataf);
     // setPage(0);
   };
   const handleSearchCGroup = (e) => {
     const { value } = e.target;
     setSearchCGroup(value);
+    const strgval = value.toUpperCase();
+    const dataf = data.filter((data) => data.cgroup.includes(strgval));
+    setData(dataf);
     // setPage(0);
   };
 
