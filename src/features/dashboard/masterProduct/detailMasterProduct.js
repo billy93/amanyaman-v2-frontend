@@ -767,7 +767,10 @@ const DetailMasterUser = () => {
                 separator={<ChevronRightIcon color="gray.500" />}
               >
                 <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink as={NavLink} to="/master-data/master-product">
+                  <BreadcrumbLink
+                    as={NavLink}
+                    to="/master-data/master-products"
+                  >
                     <Text
                       as="b"
                       ml="4"

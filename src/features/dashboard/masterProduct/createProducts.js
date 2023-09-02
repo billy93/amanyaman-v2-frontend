@@ -9,7 +9,7 @@ import CommisionFormComponent from './createCommisionForm';
 
 const CreateProduct = () => {
   return (
-    <Stack mt={{ base: '1em', md: '5em' }}>
+    <Stack mt={{ base: '1em', md: '4em' }}>
       <CommisionFormComponent />
     </Stack>
   );

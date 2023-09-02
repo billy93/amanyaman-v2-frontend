@@ -3,7 +3,7 @@
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import {
   Box,
   Text,
@@ -17,7 +17,11 @@ import {
   Stack,
   InputGroup,
   InputRightAddon,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
 } from '@chakra-ui/react';
+import { ChevronRightIcon } from '@chakra-ui/icons';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -447,6 +451,54 @@ const CommisionForm = () => {
 
   return (
     <Box>
+      <Box
+        display={'flex'}
+        justifyContent={'space-between'}
+        alignItems={'center'}
+      >
+        <Box
+          display="flex"
+          justifyContent={'space-between'}
+          w="100%"
+          borderBottom="1px"
+          borderColor={'#ebebeb'}
+        >
+          <Box w="100%" pt="15px" pl="1em" pr="1em">
+            <Breadcrumb
+              spacing="8px"
+              separator={<ChevronRightIcon color="gray.500" />}
+            >
+              <BreadcrumbItem isCurrentPage>
+                <BreadcrumbLink as={NavLink} to="/master-data/master-products">
+                  <Text
+                    as="b"
+                    ml="4"
+                    fontSize="sm"
+                    color="#065BAA"
+                    _hover={{
+                      borderBottom: '#065BAA',
+                      border: '1 px solid',
+                    }}
+                  >
+                    Proudcts
+                  </Text>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem>
+                <BreadcrumbLink
+                  as={NavLink}
+                  to="#"
+                  style={{ pointerEvents: 'none' }}
+                >
+                  <Text as={'b'} fontSize={'sm'} color="#231F20">
+                    create product
+                  </Text>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </Breadcrumb>
+          </Box>
+        </Box>
+      </Box>
       <Flex
         width="100%"
         justifyContent="center"
@@ -596,256 +648,6 @@ const CommisionForm = () => {
               >
                 Product Detail Code
               </FormLabel>
-              {/* It is important that the Label comes after the Control due to css selectors */}
-            </FormControl>
-          </Box>
-        </Flex>
-      </Flex>
-      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
-        <Flex
-          gridTemplateColumns={{
-            base: 'repeat(1, 1fr)',
-            sm: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-            lg: 'repeat(2, 1fr)',
-          }}
-          gap="20px"
-        >
-          <Box w="260px">
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              mt="14px"
-            >
-              <Input
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="premiumPrice"
-                value={formstate?.premiumPrice}
-                onChange={handleData}
-                h="48px"
-                variant={'custom'}
-              />
-              {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
-                zIndex={'0'}
-                style={{
-                  zIndex: 0,
-                  color:
-                    formstate !== null && formstate?.premiumPrice !== ''
-                      ? '#065baa'
-                      : '#171923',
-                  fontWeight: 'normal',
-                  paddingBottom: '4px',
-                }}
-              >
-                Premium Price
-              </FormLabel>
-              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-            </FormControl>
-          </Box>
-          <Box w="260px">
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              mt="14px"
-            >
-              <Stack>
-                <InputGroup size="sm">
-                  <Input
-                    type="number"
-                    placeholder=" "
-                    _placeholder={{ opacity: 1, color: 'gray.500' }}
-                    name="commissionlvl1"
-                    value={formstate?.commissionlvl1}
-                    onChange={handleData}
-                    h="48px"
-                    variant={'custom'}
-                  />
-                  <InputRightAddon children="%" h="48px" />
-                  <FormLabel
-                    fontSize="12"
-                    pt="1.5"
-                    style={{
-                      transform:
-                        formstate?.commissionlvl2 !== ''
-                          ? 'translate(-3px, -8px) scale(0.75)'
-                          : 'translate(0px, 2px) scale(0.75)',
-                      fontSize: '14px',
-                      background: 'transparent',
-                      color:
-                        formstate !== null && formstate?.commissionlvl1 !== ''
-                          ? '#065baa'
-                          : '#171923',
-                      zIndex: '0',
-                      fontWeight: 'normal',
-                    }}
-                  >
-                    Commission Level 1
-                  </FormLabel>
-                </InputGroup>
-              </Stack>
-            </FormControl>
-          </Box>
-        </Flex>
-      </Flex>
-      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
-        <Flex
-          gridTemplateColumns={{
-            base: 'repeat(1, 1fr)',
-            sm: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-            lg: 'repeat(2, 1fr)',
-          }}
-          gap="20px"
-        >
-          <Box w="260px">
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              mt="14px"
-            >
-              <Input
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="commissionlvl2"
-                value={formstate?.commissionlvl2}
-                onChange={handleData}
-                h="48px"
-                variant={'custom'}
-              />
-              {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
-                zIndex={'0'}
-                style={{
-                  zIndex: 0,
-                  color:
-                    formstate !== null && formstate?.commissionlvl2 !== ''
-                      ? '#065baa'
-                      : '#171923',
-                  fontWeight: 'normal',
-                  paddingBottom: '4px',
-                }}
-              >
-                Commission Level 2
-              </FormLabel>
-              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-            </FormControl>
-          </Box>
-          <Box w="260px">
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              mt="14px"
-            >
-              <Stack>
-                <InputGroup size="sm">
-                  <Input
-                    type="number"
-                    placeholder=" "
-                    _placeholder={{ opacity: 1, color: 'gray.500' }}
-                    name="commissionlvl3"
-                    value={formstate?.commissionlvl3}
-                    onChange={handleData}
-                    h="48px"
-                    variant={'custom'}
-                  />
-                  <InputRightAddon children="%" h="48px" />
-                  <FormLabel
-                    fontSize="12"
-                    pt="1.5"
-                    style={{
-                      transform:
-                        formstate?.commissionlvl3 !== ''
-                          ? 'translate(-3px, -8px) scale(0.75)'
-                          : 'translate(0px, 2px) scale(0.75)',
-                      fontSize: '14px',
-                      background: 'transparent',
-                      color:
-                        formstate !== null && formstate?.commissionlvl3 !== ''
-                          ? '#065baa'
-                          : '#171923',
-                      zIndex: '0',
-                      fontWeight: 'normal',
-                    }}
-                  >
-                    Commission Level 3
-                  </FormLabel>
-                </InputGroup>
-              </Stack>
-            </FormControl>
-          </Box>
-        </Flex>
-      </Flex>
-      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
-        <Flex
-          gridTemplateColumns={{
-            base: 'repeat(1, 1fr)',
-            sm: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-            lg: 'repeat(2, 1fr)',
-          }}
-        >
-          <Box width={{ base: '100%', md: '540px' }}>
-            <FormControl variant="floating" fontFamily={'Mulish'} mt="14px">
-              <Box>
-                <Box className="floating-label">
-                  <Select
-                    isMulti={false}
-                    name="colors"
-                    onChange={handleSelectAdditional}
-                    value={formstate?.additionalWeek}
-                    classNamePrefix="chakra-react-select"
-                    options={listAddWeeks}
-                    placeholder=""
-                    closeMenuOnSelect={true}
-                    menuPortalTarget={document.body}
-                    styles={{
-                      menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
-                    }}
-                    chakraStyles={{
-                      dropdownIndicator: (
-                        prev,
-                        { selectProps: { menuIsOpen } }
-                      ) => ({
-                        ...prev,
-                        '> svg': {
-                          transitionDuration: 'normal',
-                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
-                        },
-                      }),
-                    }}
-                  />
-                  <span className="highlight"></span>
-                  <FormLabel
-                    pt="1.5"
-                    style={{
-                      transform:
-                        formstate !== null &&
-                        formstate?.additionalWeek?.length !== 0
-                          ? 'translate(-1px, -7px) scale(0.75)'
-                          : 'translate(0px, 3px) scale(0.75)',
-                      color:
-                        formstate !== null &&
-                        formstate?.additionalWeek?.length !== 0
-                          ? '#065baa'
-                          : '#231F20',
-                      fontSize: '14px',
-                    }}
-                    fontFamily={'Mulish'}
-                  >
-                    Additional Week
-                  </FormLabel>
-                </Box>
-              </Box>
               {/* It is important that the Label comes after the Control due to css selectors */}
             </FormControl>
           </Box>
@@ -1128,7 +930,7 @@ const CommisionForm = () => {
                     value={formstate?.groupArea}
                     classNamePrefix="chakra-react-select"
                     options={areaLists}
-                    placeholder="Select some colors..."
+                    placeholder=""
                     closeMenuOnSelect={true}
                     menuPortalTarget={document.body}
                     styles={{
@@ -1171,7 +973,12 @@ const CommisionForm = () => {
             </FormControl>
           </Box>
           <Box width={{ base: '100%', md: '260px' }} m="auto">
-            <FormControl variant="floating" isRequired fontFamily={'Mulish'}>
+            <FormControl
+              variant="floating"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
               <Box>
                 <Box className="floating-label">
                   <Select
@@ -1387,6 +1194,190 @@ const CommisionForm = () => {
                 </Box>
               </Box>
               {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Input
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                name="premiumPrice"
+                value={formstate?.premiumPrice}
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
+              {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                zIndex={'0'}
+                style={{
+                  zIndex: 0,
+                  color:
+                    formstate !== null && formstate?.premiumPrice !== ''
+                      ? '#065baa'
+                      : '#171923',
+                  fontWeight: 'normal',
+                  paddingBottom: '4px',
+                }}
+              >
+                Premium Price
+              </FormLabel>
+              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+            </FormControl>
+          </Box>
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Stack>
+                <InputGroup size="sm">
+                  <Input
+                    type="number"
+                    placeholder=" "
+                    _placeholder={{ opacity: 1, color: 'gray.500' }}
+                    name="commissionlvl1"
+                    value={formstate?.commissionlvl1}
+                    onChange={handleData}
+                    h="48px"
+                    variant={'custom'}
+                  />
+                  <InputRightAddon children="%" h="48px" />
+                  <FormLabel
+                    fontSize="12"
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate?.commissionlvl2 !== ''
+                          ? 'translate(-3px, -8px) scale(0.75)'
+                          : 'translate(0px, 2px) scale(0.75)',
+                      fontSize: '14px',
+                      background: 'transparent',
+                      color:
+                        formstate !== null && formstate?.commissionlvl1 !== ''
+                          ? '#065baa'
+                          : '#171923',
+                      zIndex: '0',
+                      fontWeight: 'normal',
+                    }}
+                  >
+                    Commission Level 1
+                  </FormLabel>
+                </InputGroup>
+              </Stack>
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Input
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                name="commissionlvl2"
+                value={formstate?.commissionlvl2}
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
+              {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                zIndex={'0'}
+                style={{
+                  zIndex: 0,
+                  color:
+                    formstate !== null && formstate?.commissionlvl2 !== ''
+                      ? '#065baa'
+                      : '#171923',
+                  fontWeight: 'normal',
+                  paddingBottom: '4px',
+                }}
+              >
+                Commission Level 2
+              </FormLabel>
+              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+            </FormControl>
+          </Box>
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Stack>
+                <InputGroup size="sm">
+                  <Input
+                    type="number"
+                    placeholder=" "
+                    _placeholder={{ opacity: 1, color: 'gray.500' }}
+                    name="commissionlvl3"
+                    value={formstate?.commissionlvl3}
+                    onChange={handleData}
+                    h="48px"
+                    variant={'custom'}
+                  />
+                  <InputRightAddon children="%" h="48px" />
+                  <FormLabel
+                    fontSize="12"
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate?.commissionlvl3 !== ''
+                          ? 'translate(-3px, -8px) scale(0.75)'
+                          : 'translate(0px, 2px) scale(0.75)',
+                      fontSize: '14px',
+                      background: 'transparent',
+                      color:
+                        formstate !== null && formstate?.commissionlvl3 !== ''
+                          ? '#065baa'
+                          : '#171923',
+                      zIndex: '0',
+                      fontWeight: 'normal',
+                    }}
+                  >
+                    Commission Level 3
+                  </FormLabel>
+                </InputGroup>
+              </Stack>
             </FormControl>
           </Box>
         </Flex>

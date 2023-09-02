@@ -19,6 +19,9 @@ import styled from 'styled-components';
 import matchSorter from 'match-sorter';
 import DeleteBtn from './deleteAgent';
 import {
+  Radio,
+  RadioGroup,
+  Stack,
   Box,
   Heading,
   Text,
@@ -48,7 +51,7 @@ import { BsFillPencilFill } from 'react-icons/bs';
 import { motion } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
 const Styles = styled.div`
-  padding-top: 1rem;
+  // padding-top: 1rem;
 
   table {
     width: 100%;
@@ -343,6 +346,7 @@ const Tables = ({
     setFilter('productMapping.productCode', value);
     setFilterProductCode(value);
   };
+
   const handleFilterByPremiumPrice = (e) => {
     const value = e.target.value || undefined;
     setFilter('premiumPrice', value);
@@ -409,11 +413,13 @@ const Tables = ({
   return (
     <>
       <Box
-        w={{ base: '100%', md: '90%' }}
+        w={{ base: '100%', md: '100%' }}
         display={'flex'}
         justifyContent={'space-around'}
         aligunselectedRowIds
         gap="4px"
+        pl="0.5em"
+        pr="0.5em"
       >
         <Input
           value={filterProductCode}
@@ -441,17 +447,6 @@ const Tables = ({
           value={filterDiscont1}
           onChange={handleFilterByDisc1}
           placeholder={'Search by discount lv 1'}
-          bg="#ebebeb"
-          borderRadius={'5px'}
-          _placeholder={{
-            color: 'black.500', // Replace with your desired color
-            fontStyle: 'italic', // Replace with your desired font style
-          }}
-        />
-        <Input
-          value={filterDiscont2}
-          onChange={handleFilterByDisc2}
-          placeholder={'Search by discount lv 2'}
           bg="#ebebeb"
           borderRadius={'5px'}
           _placeholder={{
@@ -714,6 +709,7 @@ const DetailMasterUser = () => {
   const dispatch = useDispatch();
   const detail = useSelector(listDetailAgent);
   const msg = useSelector(message);
+  const [defaultSelected, setDefaultSelected] = React.useState('all');
   // const [deleteAgent] = useDeleteAgentMutation({
   //   skip: false,
   // });
@@ -779,15 +775,32 @@ const DetailMasterUser = () => {
         if (fetchId === fetchIdRef.current) {
           const startRow = pageSize * pageIndex;
           const endRow = startRow + pageSize;
-          setData(listTravell?.slice(startRow, endRow));
+          if (defaultSelected === 'unselected') {
+            const filteredData = listTravell.filter(
+              (item) => item.active === false
+            );
+            // setData(filteredData);
+            setData(filteredData?.slice(startRow, endRow));
+          } else if (defaultSelected === 'selected') {
+            const filteredData = listTravell.filter(
+              (item) => item.active === true
+            );
+            setData(filteredData?.slice(startRow, endRow));
+            // setData(filteredData);
+          } else {
+            setData(listTravell?.slice(startRow, endRow));
+          }
+          // setData(listTravell?.slice(startRow, endRow));
           // Your server could send back total page count.
           // For now we'll just fake it, too
           setPageCount(Math.ceil(totalCount / pageSize));
         }
       }, 1000);
     },
-    [listTravell, totalCount]
+    [listTravell, totalCount, defaultSelected]
   );
+
+  const prevSelect = usePrevious(defaultSelected);
 
   // React.useMemo(() => {
   //     const dataUserDetail = user?.filter((user) => user.id === parseInt(id))
@@ -883,6 +896,11 @@ const DetailMasterUser = () => {
   React.useEffect(() => {
     refetch({ id });
   }, [refetch, id]);
+
+  const handleFilterBySelected = (e) => {
+    console.log('ee', e);
+    setDefaultSelected(e);
+  };
 
   let content;
   if (isLoading) {
@@ -1330,6 +1348,19 @@ const DetailMasterUser = () => {
             >
               Product
             </Text>
+          </Box>
+          <Box pt="1em">
+            <RadioGroup
+              onChange={handleFilterBySelected}
+              value={defaultSelected}
+              style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+            >
+              <Stack direction="row" pl="0.5em" pb="1em">
+                <Radio value="all">Show All</Radio>
+                <Radio value="selected">Show Only Selected</Radio>
+                <Radio value="unselected">Show Only Unselected</Radio>
+              </Stack>
+            </RadioGroup>
           </Box>
           <Styles>
             <Tables

@@ -11,7 +11,7 @@ import CommisionFormComponent from './commissiForm';
 const EditProduct = () => {
   const listvariants = useSelector(listvariant);
   return (
-    <Stack mt={{ base: '1em', md: '5em' }}>
+    <Stack mt={{ base: '1em', md: '4em' }}>
       <CommisionFormComponent />
     </Stack>
   );

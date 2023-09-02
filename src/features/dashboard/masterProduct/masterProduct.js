@@ -51,11 +51,14 @@ import { MdFilterList } from 'react-icons/md';
 import { AiOutlineClose } from 'react-icons/ai';
 import { BsFillTrashFill } from 'react-icons/bs';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
+import { useGetListAreaGroupQuery } from '../group-area/listApiSlice';
+import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect, useFilters, useSortBy } from 'react-table';
 // import CustomModal from './customModal';
 import { useGetBandTypeQuery } from '../bandType/bandTypesApiSlice';
+import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSlice';
 
 const Styles = styled.div`
   table {
@@ -641,6 +644,9 @@ const MasterUser = () => {
   const [filterQuery, setFilterQuery] = useState({
     productCode: '',
     bandType: '',
+    productType: '',
+    areaGroup: '',
+    planType: '',
   });
   const [page, setPage] = React.useState(0);
 
@@ -662,9 +668,17 @@ const MasterUser = () => {
   const [showFilter, setShowFilter] = React.useState(false);
   const [searchName, setSearchName] = useState('');
   const [searchBandType, setSearchBandType] = useState('');
+  const [searchPlanType, setSearchPlanType] = useState('');
+  const [searchProductType, setSearchProductType] = useState('');
+  const [searchArea, setSearchArea] = useState('');
   const [debouncedSearchName, setDebouncedSearchName] = useState('');
   const [debouncedSearchBandType, setDebouncedSearchBandType] = useState('');
-
+  const { data: planTypes } = useGetPlanTypesQuery({ page: 0, size: 9999 });
+  const { data: grouparea } = useGetListAreaGroupQuery({ page: 0, size: 9999 });
+  const { data: travellerTypes } = useGetTravellerTypesQuery({
+    page: 0,
+    size: 9999,
+  });
   const navigate = useNavigate();
   const fetchIdRef = React.useRef(0);
   // const {data:listUserAccount,isLoading,isSuccess,isError} = useGetUsersQuery()
@@ -713,10 +727,16 @@ const MasterUser = () => {
   React.useEffect(() => {
     if (!showFilter) {
       setSearchBandType('');
+      setSearchPlanType('');
+      setSearchProductType('');
+      setSearchArea('');
       setSearchName('');
       setFilterQuery({
         productCode: '',
         bandType: '',
+        planType: '',
+        productType: '',
+        areaGroup: '',
       });
     }
   }, [showFilter]);
@@ -750,25 +770,57 @@ const MasterUser = () => {
         accessor: 'productDescription',
       },
       {
-        Header: 'Personal Accident Cover',
-        accessor: 'productPersonalAccidentCover',
+        Header: 'Plan Type',
+        accessor: 'planType',
+        Cell: ({ row }) => (
+          <Box>
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.planType?.name}
+          </Box>
+        ),
       },
       {
-        Header: 'Medical Cover',
-        accessor: 'productMedicalCover',
+        Header: 'Area Group',
+        accessor: 'areaGroup',
+        Cell: ({ row }) => (
+          <Box>
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.areaGroup?.areaGroupName}
+          </Box>
+        ),
       },
       {
-        Header: 'Travel Cover',
-        accessor: 'productTravelCover',
+        Header: 'Travel Duration',
+        accessor: 'bandType',
+        Cell: ({ row }) => (
+          <Box>
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.bandType?.travelDurationName}
+          </Box>
+        ),
       },
       {
         Header: 'Product Type',
-        accessor: 'planType.name',
+        accessor: 'travellerType',
         enableGlobalFilter: true,
+        Cell: ({ row }) => (
+          <Box>
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.travellerType?.name}
+          </Box>
+        ),
       },
       {
         Header: 'Additional Week',
         accessor: 'productAdditionalWeek.productCode',
+        Cell: ({ row }) => (
+          <Box>
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.productAdditionalWeek
+              ? row.original.productAdditionalWeek
+              : '-'}
+          </Box>
+        ),
       },
       // {
       //   Header: "Additional Week",
@@ -824,6 +876,51 @@ const MasterUser = () => {
   }, [searchName]);
 
   React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterQuery({
+        ...filterQuery,
+        planType: searchPlanType,
+      });
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchPlanType]);
+
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterQuery({
+        ...filterQuery,
+        productType: searchProductType,
+      });
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchProductType]);
+
+  React.useEffect(() => {
+    const debouncedSearch = debounce(() => {
+      setFilterQuery({
+        ...filterQuery,
+        areaGroup: searchArea,
+      });
+    }, 1000);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchArea]);
+
+  React.useEffect(() => {
     const debouncedRefetch = debounce(refetch, 500);
     debouncedRefetch({ page: page, size: size, ...filterQuery });
 
@@ -870,6 +967,23 @@ const MasterUser = () => {
     setSearchBandType(value);
     setPage(0);
   };
+  const handleSearchProductTypeChange = (e) => {
+    const { value } = e.target;
+    setSearchProductType(value);
+    setPage(0);
+  };
+
+  const handleSearchPlanTypeChange = (e) => {
+    const { value } = e.target;
+    setSearchPlanType(value);
+    setPage(0);
+  };
+
+  const handleSearchAreaChange = (e) => {
+    const { value } = e.target;
+    setSearchArea(value);
+    setPage(0);
+  };
 
   const previousPage = () => {
     setPage((prevPage) => prevPage - 1);
@@ -887,6 +1001,7 @@ const MasterUser = () => {
   const gotoPage = () => {
     setPage(0);
   };
+  // console.log('filter', filterQuery);
   let content;
   if (isLoading) {
     content = (
@@ -904,7 +1019,7 @@ const MasterUser = () => {
           mb={showFilter ? '1.5em' : '2em'}
         >
           <Heading as={'h6'} size={'sm'}>
-            Product
+            Products
           </Heading>
           <Stack direction="row" spacing={4}>
             <Button
@@ -936,7 +1051,7 @@ const MasterUser = () => {
         </Box>
         {showFilter ? (
           <Box
-            w={{ base: '100%', md: '650px' }}
+            w={{ base: '100%', md: '70%' }}
             display={'flex'}
             justifyContent={'space-around'}
             alignItems={'center'}
@@ -972,6 +1087,75 @@ const MasterUser = () => {
                 return (
                   <option value={types.id} key={i}>
                     {types.travelDurationName}
+                  </option>
+                );
+              })}
+            </Select>
+            <Select
+              placeholder="Select by Plan Type"
+              backgroundColor={searchPlanType === '' ? '#ebebeb' : '#e8f0fe'}
+              style={{
+                fontSize: '14px',
+                fontFamily: 'Mulish',
+                fontWeight: 'normal',
+              }}
+              _placeholder={{
+                color: 'grey',
+              }}
+              defaultValue={''}
+              name="planType"
+              onChange={handleSearchPlanTypeChange}
+            >
+              {planTypes?.response.map((types, i) => {
+                return (
+                  <option value={types.id} key={i}>
+                    {types.name}
+                  </option>
+                );
+              })}
+            </Select>
+            <Select
+              placeholder="Select by Area"
+              backgroundColor={searchArea === '' ? '#ebebeb' : '#e8f0fe'}
+              style={{
+                fontSize: '14px',
+                fontFamily: 'Mulish',
+                fontWeight: 'normal',
+              }}
+              _placeholder={{
+                color: 'grey',
+              }}
+              defaultValue={''}
+              name="areaGroup"
+              onChange={handleSearchAreaChange}
+            >
+              {grouparea?.response.map((types, i) => {
+                return (
+                  <option value={types.id} key={i}>
+                    {types.areaGroupName}
+                  </option>
+                );
+              })}
+            </Select>
+            <Select
+              placeholder="Select by product type"
+              backgroundColor={searchProductType === '' ? '#ebebeb' : '#e8f0fe'}
+              style={{
+                fontSize: '14px',
+                fontFamily: 'Mulish',
+                fontWeight: 'normal',
+              }}
+              _placeholder={{
+                color: 'grey',
+              }}
+              defaultValue={''}
+              name="areaGroup"
+              onChange={handleSearchProductTypeChange}
+            >
+              {travellerTypes?.response.map((types, i) => {
+                return (
+                  <option value={types.id} key={i}>
+                    {types.name}
                   </option>
                 );
               })}

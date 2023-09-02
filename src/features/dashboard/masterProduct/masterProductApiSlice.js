@@ -4,7 +4,15 @@ export const policyApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (data) => {
-        const { page, size, productCode, bandType } = data;
+        const {
+          page,
+          size,
+          productCode,
+          bandType,
+          planType,
+          productType,
+          areaGroup,
+        } = data;
         let url = '/app/products';
         const params = new URLSearchParams();
 
@@ -13,6 +21,15 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         }
         if (bandType !== '') {
           params.append('bandType', bandType);
+        }
+        if (planType !== '') {
+          params.append('planType', planType);
+        }
+        if (areaGroup !== '') {
+          params.append('areaGroup', areaGroup);
+        }
+        if (productType !== '') {
+          params.append('productType', productType);
         }
         if (page !== '') {
           params.append('page', page);
