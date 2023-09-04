@@ -1354,8 +1354,7 @@ const Form3 = ({
                           <AccordionIcon />
                           <Box as="span" flex="1" textAlign="left">
                             <Text as="b" fontSize={'sm'}>
-                              {'Adult'}
-                              {i + 1}
+                              {`${travellers?.firstName} ${travellers?.lastName}`}
                             </Text>
                           </Box>
                           <Box
@@ -1424,6 +1423,33 @@ const Form3 = ({
                               fontFamily={'Mulish'}
                               style={{ fontSize: '14px' }}
                             >
+                              Title
+                            </Text>
+                            <Text
+                              as="p"
+                              w={'50%'}
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '12px' }}
+                              pl="5px"
+                            >
+                              {travellers.title}
+                            </Text>
+                          </Box>
+                          <Box
+                            display={'flex'}
+                            justifyContent={'flex-start'}
+                            alignItems={'center'}
+                            boxSizing="borderBox"
+                            borderBottom={'1px solid #ebebeb'}
+                            pb="10px"
+                            pt="10px"
+                          >
+                            <Text
+                              as="b"
+                              w={'50%'}
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
                               Full Name
                             </Text>
                             <Text
@@ -1434,6 +1460,33 @@ const Form3 = ({
                               pl="5px"
                             >
                               {travellers.fullName}
+                            </Text>
+                          </Box>
+                          <Box
+                            display={'flex'}
+                            justifyContent={'flex-start'}
+                            alignItems={'center'}
+                            boxSizing="borderBox"
+                            borderBottom={'1px solid #ebebeb'}
+                            pb="10px"
+                            pt="10px"
+                          >
+                            <Text
+                              as="b"
+                              w={'50%'}
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              Traveller Type
+                            </Text>
+                            <Text
+                              as="p"
+                              w={'50%'}
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '12px' }}
+                              pl="5px"
+                            >
+                              {travellers.travellerType}
                             </Text>
                           </Box>
                           <Box
@@ -1566,6 +1619,88 @@ const Form3 = ({
                               pl="5px"
                             >
                               {travellers.placeOfBirth}
+                            </Text>
+                          </Box>
+                          <Box
+                            display={'flex'}
+                            justifyContent={'lex-start'}
+                            alignItems={'center'}
+                            borderBottom={'1px solid #ebebeb'}
+                            pb="10px"
+                            pt="10px"
+                          >
+                            <Text
+                              as="b"
+                              w="50%"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              Address
+                            </Text>
+                            <Text
+                              as="p"
+                              w="50%"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '12px' }}
+                              pl="5px"
+                            >
+                              {travellers.address}
+                            </Text>
+                          </Box>
+                          <Box
+                            display={'flex'}
+                            justifyContent={'lex-start'}
+                            alignItems={'center'}
+                            borderBottom={'1px solid #ebebeb'}
+                            pb="10px"
+                            pt="10px"
+                          >
+                            <Text
+                              as="b"
+                              w="50%"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              Beneficiary
+                            </Text>
+                            <Text
+                              as="p"
+                              w="50%"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '12px' }}
+                              pl="5px"
+                            >
+                              {travellers.beneficiary
+                                ? travellers.beneficiary
+                                : '-'}
+                            </Text>
+                          </Box>
+                          <Box
+                            display={'flex'}
+                            justifyContent={'lex-start'}
+                            alignItems={'center'}
+                            borderBottom={'1px solid #ebebeb'}
+                            pb="10px"
+                            pt="10px"
+                          >
+                            <Text
+                              as="b"
+                              w="50%"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              Realtionship
+                            </Text>
+                            <Text
+                              as="p"
+                              w="50%"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '12px' }}
+                              pl="5px"
+                            >
+                              {travellers.relationship
+                                ? travellers.relationship
+                                : '-'}
                             </Text>
                           </Box>
                         </Box>
