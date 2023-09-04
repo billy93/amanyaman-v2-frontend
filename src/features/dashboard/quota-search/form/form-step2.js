@@ -35,6 +35,7 @@ import Hospital from '../../../../img/images/Hospital.png';
 import Medicine from '../../../../img/images/Medicine.png';
 import TravelCaover from '../../../../img/images/Plane.png';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+import CurrencyFormatter from '../../../../components/formatCurrency';
 
 const Form2 = ({
   label,
@@ -263,7 +264,7 @@ const Form2 = ({
                   size="md"
                   style={{ fontSize: '18px' }}
                 >
-                  {products.finalPrice}
+                  {<CurrencyFormatter amount={products.finalPrice} />}
                 </Heading>
               </Box>
               <Box display={'flex'} justifyContent={'space-between'}>

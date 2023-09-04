@@ -8,6 +8,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import 'react-calendar/dist/Calendar.css';
 import { BsFillPencilFill } from 'react-icons/bs';
+import CurrencyFormatter from '../../../components/formatCurrency';
 
 const DetailMasterUser = () => {
   const { id } = useParams();
@@ -278,7 +279,11 @@ const DetailMasterUser = () => {
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {user ? user?.premiumPrice : '-'}
+                  {user ? (
+                    <CurrencyFormatter amount={user.premiumPrice} />
+                  ) : (
+                    '-'
+                  )}
                 </Text>
               </Box>
             </Box>
@@ -398,7 +403,7 @@ const DetailMasterUser = () => {
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {user ? user?.ajiPrice : '-'}
+                  {user ? <CurrencyFormatter amount={user.ajiPrice} /> : '-'}
                 </Text>
               </Box>
             </Box>
@@ -428,7 +433,11 @@ const DetailMasterUser = () => {
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {user ? user?.afterCommisionPrice : '-'}
+                  {user ? (
+                    <CurrencyFormatter amount={user.afterCommisionPrice} />
+                  ) : (
+                    '-'
+                  )}
                 </Text>
               </Box>
             </Box>

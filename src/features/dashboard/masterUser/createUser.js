@@ -53,6 +53,7 @@ const CreateUser = () => {
   const [trigger] = React.useState(false);
   const { data: rolesData } = useGetRoleQuery();
   const prevListRoles = usePrevious(rolesData);
+  // const [isValid,setIsvalid] = React.useState(true);
   const [filterby] = React.useState({
     travelAgentName: '',
     custCode: '',

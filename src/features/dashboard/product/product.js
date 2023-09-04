@@ -29,6 +29,7 @@ import Hospital from '../../../img/images/Hospital.png';
 import Medicine from '../../../img/images/Medicine.png';
 import TravelCaover from '../../../img/images/Plane.png';
 import { MdLogin, MdFilterList } from 'react-icons/md';
+import CurrencyFormatter from '../../../components/formatCurrency';
 
 export const useInfiniteLoading = (props) => {
   const { getItems } = props;
@@ -402,7 +403,7 @@ const Form2 = () => {
                   size="md"
                   style={{ fontSize: '18px' }}
                 >
-                  {products.premiumPrice}
+                  {<CurrencyFormatter amount={products.premiumPrice} />}
                 </Heading>
               </Box>
               <Box display={'flex'} justifyContent={'space-between'}>

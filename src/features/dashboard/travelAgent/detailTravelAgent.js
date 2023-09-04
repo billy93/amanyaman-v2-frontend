@@ -50,6 +50,8 @@ import { BsFillPencilFill } from 'react-icons/bs';
 // import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import { motion } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
+import CurrencyFormatter from '../../../components/formatCurrency';
+
 const Styles = styled.div`
   // padding-top: 1rem;
 
@@ -868,6 +870,15 @@ const DetailMasterUser = () => {
       {
         Header: 'Premium Price',
         accessor: 'premiumPrice',
+        Cell: ({ row }) => (
+          <Box>
+            {row?.original?.premiumPrice !== null ? (
+              <CurrencyFormatter amount={row.original.premiumPrice} />
+            ) : (
+              '-'
+            )}
+          </Box>
+        ),
       },
       {
         Header: 'Discount Lv1 (IDR)',
@@ -884,10 +895,28 @@ const DetailMasterUser = () => {
       {
         Header: 'Total Commision',
         accessor: 'ajiPrice',
+        Cell: ({ row }) => (
+          <Box>
+            {row?.original?.ajiPrice !== null ? (
+              <CurrencyFormatter amount={row.original.ajiPrice} />
+            ) : (
+              '-'
+            )}
+          </Box>
+        ),
       },
       {
         Header: 'Net to Agent',
         accessor: 'afterCommisionPrice',
+        Cell: ({ row }) => (
+          <Box>
+            {row?.original?.afterCommisionPrice !== null ? (
+              <CurrencyFormatter amount={row.original.afterCommisionPrice} />
+            ) : (
+              '-'
+            )}
+          </Box>
+        ),
       },
     ],
     []

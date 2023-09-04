@@ -38,6 +38,7 @@ import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 import CustomModal from './ModalImport';
+import CurrencyFormatter from '../../../components/formatCurrency';
 
 const Styles = styled.div`
   // padding: 1rem;
@@ -568,6 +569,15 @@ const Polcies = () => {
       {
         Header: 'Premium Price',
         accessor: 'premiumPrice',
+        Cell: ({ row }) => (
+          <Box>
+            {row?.original?.premiumPrice !== null ? (
+              <CurrencyFormatter amount={row.original.premiumPrice} />
+            ) : (
+              '-'
+            )}
+          </Box>
+        ),
       },
       {
         Header: 'Discount Lvl 1',
@@ -584,11 +594,29 @@ const Polcies = () => {
       {
         Header: 'Total Commission',
         accessor: 'totalCommision',
+        Cell: ({ row }) => (
+          <Box>
+            {row?.original?.totalCommision !== null ? (
+              <CurrencyFormatter amount={row.original.totalCommision} />
+            ) : (
+              '-'
+            )}
+          </Box>
+        ),
       },
       {
         Header: 'Net To Agent',
         accessor: 'afterCommisionPrice',
         enableGlobalFilter: true,
+        Cell: ({ row }) => (
+          <Box>
+            {row?.original?.afterCommisionPrice !== null ? (
+              <CurrencyFormatter amount={row.original.afterCommisionPrice} />
+            ) : (
+              '-'
+            )}
+          </Box>
+        ),
       },
     ],
     []

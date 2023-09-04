@@ -96,7 +96,7 @@ function App() {
         }
       >
         <Route path="list" element={<PolicyList />} />
-        <Route path="policy-detail" element={<PolicyDetails />} />
+        <Route path="detail" element={<PolicyDetails />} />
       </Route>
       <Route
         path="/master-data"

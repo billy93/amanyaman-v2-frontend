@@ -68,6 +68,7 @@ import {
   useToast,
   Box,
   Button,
+  FormErrorMessage,
   FormControl,
   FormLabel,
   ButtonGroup,
@@ -80,6 +81,7 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import { MdCreate } from 'react-icons/md';
 import CustomModal from './import';
 import { CiTrash } from 'react-icons/ci';
+import CurrencyFormatter from '../../../../components/formatCurrency';
 
 const Form3 = ({
   label,
@@ -132,6 +134,8 @@ const Form3 = ({
   const [relationship, setRelationship] = useState('');
   const [searchTraveller, setSearchTraveller] = useState('');
   const [dateBirth, setDateBirth] = useState('');
+  const [isValid, setIsValid] = useState(true);
+  const [isValidPhone, setIsValidPhone] = useState(true);
 
   const toast = useToast();
   const historyform = useSelector(historyForm);
@@ -140,15 +144,35 @@ const Form3 = ({
   const [editTravellerData, { isLoading: loadingEdit }] =
     useEditTravellerDataMutation();
   // const handleUserChange = (e) => {};
+
   const setPhoneNumbers = (e) => {
-    setPhoneNumber(e.target.value);
+    const inputValue = e.target.value;
+    setPhoneNumber(inputValue);
+
+    // Regular expression for phone number format validation
+    const phoneNumberRegex = /^[0-9]{10}$/;
+
+    // Check if the input matches the phone number format
+    setIsValidPhone(phoneNumberRegex.test(inputValue));
   };
+
+  console.log('isValidPhone', isValidPhone);
   const setAddresss = (e) => {
     setAddress(e.target.value);
   };
   const setEmailAddress = (e) => {
+    const inputValue = e.target.value;
+    setEmail(inputValue);
+
+    // Regular expression for email format validation
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+    // Check if the input matches the email format
+    setIsValid(emailRegex.test(inputValue));
     setEmail(e.target.value);
+    // validateEmail(e.target.value);
   };
+
   const setSearchTravellers = (e) => {
     setSearchTraveller(e.target.value);
   };
@@ -924,22 +948,34 @@ const Form3 = ({
                   </FormControl>
                 </Box>
                 <Box display={'flex'} gap="5px">
-                  <FormControl variant="floating" id="first-name" isRequired>
+                  <FormControl
+                    variant="floating"
+                    id="first-name"
+                    isRequired
+                    isInvalid={!isValid}
+                  >
                     <Input
-                      placeholder=" "
-                      _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      type="email"
+                      placeholder=""
                       value={email}
                       onChange={setEmailAddress}
                       h="48px"
                     />
-                    {/* It is important that the Label comes after the Control due to css selectors */}
                     <FormLabel fontSize="12" pt="1.5">
-                      Email Address
+                      Email
                     </FormLabel>
-                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                    <FormErrorMessage>
+                      {!isValid && 'Invalid email address format'}
+                    </FormErrorMessage>
                   </FormControl>
-                  <FormControl variant="floating" id="first-name" isRequired>
+                  <FormControl
+                    variant="floating"
+                    id="first-name"
+                    isRequired
+                    isInvalid={!isValidPhone}
+                  >
                     <Input
+                      type="tel"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
                       value={phoneNumber}
@@ -950,6 +986,9 @@ const Form3 = ({
                     <FormLabel fontSize="12" pt="1.5">
                       Phone Number
                     </FormLabel>
+                    <FormErrorMessage>
+                      {!isValidPhone && 'Invalid phone number format'}
+                    </FormErrorMessage>
                     {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                   </FormControl>
                 </Box>
@@ -1178,7 +1217,12 @@ const Form3 = ({
                       color="#065BAA"
                       style={{ fontSize: '14px' }}
                     >
-                      {payload?.bookingProduct?.finalPrice} {'-/perorang'}
+                      {
+                        <CurrencyFormatter
+                          amount={payload?.bookingProduct?.finalPrice}
+                        />
+                      }{' '}
+                      {'-/ per orang'}
                     </Text>
                   </Box>
                 </Box>

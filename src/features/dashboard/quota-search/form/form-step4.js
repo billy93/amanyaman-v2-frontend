@@ -39,6 +39,7 @@ import Pasport from '../../../../img/images/Passport.png';
 import Umbrella from '../../../../img/Umbrella.png';
 import Payment from '../../../../img/Payment.png';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+import CurrencyFormatter from '../../../../components/formatCurrency';
 // import usePersist from '../../../../features/hook/usePersist';
 // import { setTravellersData } from '../quotaSearchSlice';
 
@@ -370,7 +371,7 @@ const Form3 = ({
                   color="#065BAA"
                   style={{ fontSize: '12px' }}
                 >
-                  {'12345677'}
+                  {payload?.transactionId}
                 </Text>
               </Box>
             </Box>
@@ -576,7 +577,9 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {payload?.bookingProduct?.finalPrice}
+                    <CurrencyFormatter
+                      amount={payload?.bookingProduct?.finalPrice}
+                    />
                   </Text>
                 </Box>
                 <Box
@@ -631,9 +634,12 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {'Rp'}
-                    {newlistTravellers?.length *
-                      parseInt(payload?.bookingProduct?.finalPrice)}
+                    <CurrencyFormatter
+                      amount={
+                        newlistTravellers?.length *
+                        parseInt(payload?.bookingProduct?.finalPrice)
+                      }
+                    />
                   </Text>
                 </Box>
               </Box>

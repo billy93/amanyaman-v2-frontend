@@ -64,6 +64,7 @@ import { BsFillTrashFill } from 'react-icons/bs';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
+import CurrencyFormatter from '../../../components/formatCurrency';
 
 const Styles = styled.div`
   // padding: 1rem;
@@ -814,7 +815,7 @@ const Polcies = () => {
           <Link
             color="#065BAA"
             style={{ textDecoration: 'underline', color: '#065BAA' }}
-            to={`/policies/policy-detail/${row.original.policyNumber}`}
+            to={`/policies/detail/${row.original.policyNumber}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.policyNumber}
@@ -864,6 +865,15 @@ const Polcies = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ row }) => (
+          <Box>
+            {row?.original?.totalPrice !== null ? (
+              <CurrencyFormatter amount={row.original.totalPrice} />
+            ) : (
+              '-'
+            )}
+          </Box>
+        ),
       },
       {
         Header: 'Plan',
