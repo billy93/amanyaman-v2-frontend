@@ -98,6 +98,8 @@ export default function Navbar({ allowedRoles }) {
   const userMenu = menus.find((menuItem) => menuItem.role === allowedRoles[0]);
   const menuItems = userMenu ? userMenu.menu : [];
 
+  // console.log('userMenu', userMenu);
+  // console.log('userMenu', menuItems);
   const NavItem = ({ icon, children, ...rest }) => {
     return (
       <Link
@@ -323,9 +325,12 @@ export default function Navbar({ allowedRoles }) {
             </HStack>
           </HStack>
           <Spacer />
-          <Button variant="outline" onClick={handleCreatePolicy}>
-            Create Policy
-          </Button>
+          {userMenu?.role === 'ROLE_TRAVEL_AGENT' && (
+            <Button variant="outline" onClick={handleCreatePolicy}>
+              Create Policy
+            </Button>
+          )}
+
           <Flex alignItems={'center'} display={{ base: 'none', md: 'flex' }}>
             <Menu>
               <MenuButton
