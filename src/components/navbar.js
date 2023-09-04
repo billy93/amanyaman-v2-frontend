@@ -30,7 +30,7 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import Logo from '../img/logo.svg';
-import { Link, NavLink as Nav } from 'react-router-dom';
+import { Link, NavLink as Nav, useNavigate } from 'react-router-dom';
 import { MdLogout, MdArrowDropDown } from 'react-icons/md';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -38,6 +38,7 @@ import {
   Menulist,
   userLoginCurrent,
   logOut,
+  setCredentials,
 } from '../features/auth/authSlice';
 import { FiHome, FiEdit, FiBell, FiFileText } from 'react-icons/fi';
 // import { BsFillPencilFill } from 'react-icons/bs';
@@ -54,6 +55,7 @@ const LinkItemsUser = [
 ];
 
 export default function Navbar({ allowedRoles }) {
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
   const username = useSelector(userLoginCurrent);
@@ -83,6 +85,15 @@ export default function Navbar({ allowedRoles }) {
     } else {
       console.log('No persisted state found in localStorage');
     }
+  };
+
+  const handleCreatePolicy = () => {
+    const addStep = {
+      ...username,
+      historyStep: 0,
+    };
+    dispatch(setCredentials({ ...addStep }));
+    navigate('/create-quota/search');
   };
   const userMenu = menus.find((menuItem) => menuItem.role === allowedRoles[0]);
   const menuItems = userMenu ? userMenu.menu : [];
@@ -312,6 +323,9 @@ export default function Navbar({ allowedRoles }) {
             </HStack>
           </HStack>
           <Spacer />
+          <Button variant="outline" onClick={handleCreatePolicy}>
+            Create Policy
+          </Button>
           <Flex alignItems={'center'} display={{ base: 'none', md: 'flex' }}>
             <Menu>
               <MenuButton
