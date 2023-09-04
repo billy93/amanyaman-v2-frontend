@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import usePersist from '../../../hook/usePersist';
+// import usePersist from '../../../hook/usePersist';
 import { useParams, useNavigate } from 'react-router-dom';
 import { userLoginCurrent, setCredentials } from '../../../auth/authSlice';
 import {
@@ -41,6 +41,19 @@ import Payment from '../../../../img/Payment.png';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 // import usePersist from '../../../../features/hook/usePersist';
 // import { setTravellersData } from '../quotaSearchSlice';
+
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef();
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
+}
+
 const Form3 = ({
   label,
   hasCompletedAllSteps,
@@ -53,7 +66,7 @@ const Form3 = ({
   // const initManual = useSelector(selectManualInput);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [persist] = usePersist();
+  // const [persist] = usePersist();
   // const checkToken = localStorage.getItem('persist').token;
   const login = useSelector(userLoginCurrent);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
@@ -116,18 +129,12 @@ const Form3 = ({
       ) {
         navigate(`/payment/success/${payload?.transactionId}`);
       }
-      console.log('res', res);
+      // console.log('res', res);
     } catch (error) {
       console.log('err', error);
     }
   };
 
-  console.log('login', payload);
-  console.log('login persist', persist);
-  console.log(
-    'login persist',
-    JSON.parse(localStorage.getItem('persist')).isAuthenticated
-  );
   const continuePayCredit = async () => {
     const payloadData = {
       amount: payload?.bookingProduct.finalPrice,
@@ -136,7 +143,7 @@ const Form3 = ({
       const res = await checkAvailabilityCredit(payloadData);
       showSuccessToast('Check Credit limit successfully!');
       if (res?.data) {
-        console.log('CHECK LIMIT', res?.data);
+        // console.log('CHECK LIMIT', res?.data);
         setCreditLimit(res?.data);
         // window.location.replace(res?.data?.paymentLink);
       }
@@ -146,6 +153,15 @@ const Form3 = ({
       showErrorToast(errorMessage);
     }
   };
+
+  const prevTab = usePrevious(tabIndex);
+  React.useEffect(() => {
+    if (prevTab !== tabIndex && tabIndex === 1) {
+      continuePayCredit();
+    }
+  }, [tabIndex, prevTab]);
+
+  console.log('credit limit', creditLimit);
 
   return (
     <Box border={'1px'} borderColor="#ebebeb">
@@ -666,7 +682,8 @@ const Form3 = ({
                   h="48px"
                   isLoading={isLoading || loading}
                   disabled={
-                    isLoading || (tabIndex === 1 && creditLimit === null)
+                    isLoading ||
+                    (tabIndex === 1 && creditLimit?.status !== 'OK')
                       ? true
                       : false
                   }

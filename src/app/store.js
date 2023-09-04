@@ -21,14 +21,42 @@ import travelAgent from '../features/dashboard/travelAgent/travelAgentSlice';
 import systemParams from '../features/dashboard/systemParameters/systemParamsSlice';
 import productPrice from '../features/dashboard/productPrice/productPriceSlice';
 import dashboards from '../features/dashboard/dashboards/dashboardSlice';
+// import { enc, AES } from 'crypto-js';
 // import storageSession from 'reduxjs-toolkit-persist/lib/storage/session';
 // import { apiSlice } from './api/apiSlice';
 // import { logOut } from '../features/auth/authSlice';
-
+// const secretKey = 'amanyaman-v2-2023';
 const rootPersistConfig = {
   key: 'root',
   storage,
   whitelist: ['auth.userLogin'],
+  // transforms: [
+  //   {
+  //     in: (state) => {
+  //       try {
+  //         const encryptedState = AES.encrypt(
+  //           JSON.stringify(state),
+  //           secretKey
+  //         ).toString();
+  //         return encryptedState;
+  //       } catch (error) {
+  //         console.error('Encryption error:', error);
+  //         return state; // Return the original state on error
+  //       }
+  //     },
+  //     out: (state) => {
+  //       try {
+  //         const decryptedState = AES.decrypt(state, secretKey).toString(
+  //           enc.Utf8
+  //         );
+  //         return JSON.parse(decryptedState);
+  //       } catch (error) {
+  //         console.error('Decryption error:', error);
+  //         return state; // Return the original state on error
+  //       }
+  //     },
+  //   },
+  // ],
 };
 
 const rootPersistForm = {

@@ -3,7 +3,7 @@
 /* eslint-disable react/jsx-key */
 import React, { useState } from 'react';
 import { useGetPolicyListQuery } from './policyApiSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Data from './list.json';
 import { debounce } from 'lodash';
 import {
@@ -12,6 +12,12 @@ import {
   useFilters,
   useColumnOrder,
 } from 'react-table';
+import {
+  setHistoryForm,
+  historyForm,
+  userLoginCurrent,
+  setCredentials,
+} from '../../auth/authSlice';
 import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
@@ -356,7 +362,7 @@ const Tables = ({
     const nextState = listuser.filter(
       (item) => !selected.some(({ id }) => item.id === id)
     );
-    console.log('nextState', nextState);
+    // console.log('nextState', nextState);
     dispatch(setStatePolicyList(nextState));
     dispatch(setStateSelectedt([]));
     onClose();
@@ -694,7 +700,10 @@ function filterGreaterThan(rows, id, filterValue) {
 filterGreaterThan.autoRemove = (val) => typeof val !== 'number';
 
 const Polcies = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const tempList = useSelector(listPolicy);
+  const login = useSelector(userLoginCurrent);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [pageCount, setPageCount] = React.useState(0);
@@ -783,6 +792,15 @@ const Polcies = () => {
     setShowFilter(!showFilter);
   };
 
+  const handleRedirect = (bookingId) => {
+    const addStep = {
+      ...login,
+      historyStep: 3,
+    };
+    dispatch(setCredentials({ ...addStep }));
+    navigate(`/create-quota/search/${bookingId}`);
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -811,18 +829,29 @@ const Polcies = () => {
         width: 200,
         filter: 'fuzzyText',
         Cell: ({ row }) => (
-          <Link
+          <Box
+            onClick={
+              row.original.paymentStatus === 'WAITING_FOR_PAYMENT' ||
+              row.original.paymentStatus === null
+                ? () => handleRedirect(row.original.bookingId)
+                : null
+            }
+            // to={`/create-quota/search/${row.original.bookingId}`}
             color="#065BAA"
-            style={{ textDecoration: 'underline', color: '#065BAA' }}
+            style={{
+              textDecoration: 'underline',
+              color: '#065BAA',
+              cursor: 'pointer',
+            }}
           >
             {/* <AiOutlineFileDone size={25} /> */}
             {`${row.original.title} ${row.original.travellerFirstName} ${row.original.travellerLastName}`}
-          </Link>
+          </Box>
         ),
       },
       {
         Header: 'Booking ID',
-        accessor: 'bookingId',
+        accessor: 'transactionId',
         maxWidth: 400,
         minWidth: 200,
         width: 200,
@@ -917,9 +946,6 @@ const Polcies = () => {
     ],
     []
   );
-
-  // const data = React.useMemo(() => tempList);
-  console.log('ddd', listpolicies);
 
   React.useEffect(() => {
     refetch({ page, size: size });

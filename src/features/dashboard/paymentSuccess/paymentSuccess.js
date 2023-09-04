@@ -4,7 +4,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import {
   Text,
   Flex,
@@ -55,6 +55,7 @@ function usePrevious(value) {
 }
 const PaymentSuccessPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [isActive] = useState(false);
   // const { data: checkstatus, refetch, isSuccess } = useGetCheckPaymentQuery(id);
@@ -101,6 +102,10 @@ const PaymentSuccessPage = () => {
       refetch(id);
     }
   }, [id]);
+
+  const handleRedirect = () => {
+    navigate('/policies/list');
+  };
   console.log('quotation', quotation);
   // console.log('isSuccess', isSuccess);
   return (
@@ -149,18 +154,22 @@ const PaymentSuccessPage = () => {
           >
             Email Booking Details
           </Button>
-          <Text
-            as={'p'}
-            fontSize="xs"
-            color={'black.200'}
-            style={{
-              color: '#000015',
-              fontFamily: 'Mulish',
-              fontWeight: 'bold',
-            }}
-          >
-            Go to Policy Directory
-          </Text>
+          <Box onClick={handleRedirect}>
+            <Text
+              as={'p'}
+              fontSize="xs"
+              color={'black.200'}
+              style={{
+                color: '#000015',
+                cursor: 'pointer',
+                fontFamily: 'Mulish',
+                fontWeight: 'bold',
+                textDecoration: 'underline',
+              }}
+            >
+              Go to Policy Directory
+            </Text>
+          </Box>
         </Box>
       </Box>
       <Box display={'flex'} justifyContent={'space-between'} m="1em">
@@ -169,7 +178,7 @@ const PaymentSuccessPage = () => {
             display={'flex'}
             flexDirection={'column'}
             border={'1px solid #ebebeb'}
-            mt="15px"
+            mt="15 px"
             mr="10px"
             w="100%"
           >

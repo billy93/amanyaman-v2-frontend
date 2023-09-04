@@ -40,7 +40,7 @@ import {
   logOut,
 } from '../features/auth/authSlice';
 import { FiHome, FiEdit, FiBell, FiFileText } from 'react-icons/fi';
-
+// import { BsFillPencilFill } from 'react-icons/bs';
 const LinkItems = [
   { name: 'Policy', icon: FiHome },
   { name: 'Claim', icon: FiEdit },

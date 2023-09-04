@@ -668,7 +668,7 @@ const MasterUser = () => {
   const handleAddUser = (e) => {
     e.preventDefault();
     // dispatch(setFormAgent(datas));
-    navigate('/master-data/create-master-user');
+    navigate('/master-data/create-user');
   };
   React.useEffect(() => {
     if (!showFilter) {
@@ -976,7 +976,7 @@ const MasterUser = () => {
               color="white"
               onClick={handleAddUser}
             >
-              Add Agent
+              Add User
             </Button>
           </Stack>
         </Box>

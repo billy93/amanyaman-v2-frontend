@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import PulseLoader from 'react-spinners/PulseLoader';
 import {
   setHistoryForm,
   historyForm,
@@ -70,6 +71,7 @@ import {
   FormControl,
   FormLabel,
   ButtonGroup,
+  Center,
 } from '@chakra-ui/react';
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 import { SlCalender } from 'react-icons/sl';
@@ -109,9 +111,7 @@ const Form3 = ({
     useDeleteTravellerDataMutation();
   const [checkAvailabilityCredit] = useCheckAvailabilityCreditMutation();
   const [triggered, settriggered] = React.useState(false);
-  const { data: payload } = useGetBookingSearchQuery(id, {
-    skip: triggered === false ? true : false,
-  });
+  const { data: payload, isLoading: loading } = useGetBookingSearchQuery(id);
   const { data } = useGetTemplateQuery();
   const [type, setType] = useState('Adult');
   const [typeStatus, setTypeStatus] = useState('Mr');
@@ -241,7 +241,7 @@ const Form3 = ({
       ...login,
       historyStep: login?.historyStep - 1,
     };
-    console.log('ad', addStep);
+    // console.log('ad', addStep);
     dispatch(setCredentials({ ...addStep }));
     dispatch(setHistoryForm(historyform - 1));
     prevStep();
@@ -622,6 +622,32 @@ const Form3 = ({
     onOpen();
   };
 
+  function formatDateToLong(dateString) {
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    const dateObj = new Date(dateString);
+    const day = dateObj.getDate();
+    const monthIndex = dateObj.getMonth();
+    const year = dateObj.getFullYear();
+    const monthName = monthNames[monthIndex];
+
+    const formattedDate = `${day} ${monthName} ${year}`;
+    return formattedDate;
+  }
+
   const handleDelete = async (id) => {
     console.log('idd', id);
     // e.preventDefault();
@@ -664,7 +690,7 @@ const Form3 = ({
     }
   }, [deleted, newlistTravellers, dispatch]);
 
-  console.log('payload', payload);
+  console.log('payload initStateTraveller', initStateTraveller);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Modal
@@ -1118,191 +1144,193 @@ const Form3 = ({
           border={'1px solid #ebebeb'}
           m="1em"
         >
-          <Box bg="#F0F3F8" p="15px">
-            <Box
-              display="flex"
-              justifyContent={'flex-start'}
-              alignItems={'center'}
-              pt="15px"
-            >
-              <Image src={Umbrella} alt="insurance" />
-              <Box
-                display={'flex'}
-                justifyContent={'center'}
-                flexDirection={'column'}
-              >
-                <Text
-                  as="b"
-                  size={'sm'}
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
+          {loading ? (
+            <Center h="50vh">
+              <PulseLoader color={'#FFF'} />
+            </Center>
+          ) : (
+            <Box>
+              <Box bg="#F0F3F8" p="15px">
+                <Box
+                  display="flex"
+                  justifyContent={'flex-start'}
+                  alignItems={'center'}
+                  pt="15px"
                 >
-                  {payload?.bookingProduct?.productName}
-                </Text>
-                <Text
-                  as="b"
-                  size={'sm'}
-                  fontFamily={'Mulish'}
-                  color="#065BAA"
-                  style={{ fontSize: '14px' }}
+                  <Image src={Umbrella} alt="insurance" />
+                  <Box
+                    display={'flex'}
+                    justifyContent={'center'}
+                    flexDirection={'column'}
+                  >
+                    <Text
+                      as="b"
+                      size={'sm'}
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '14px' }}
+                    >
+                      {payload?.bookingProduct?.productName}
+                    </Text>
+                    <Text
+                      as="b"
+                      size={'sm'}
+                      fontFamily={'Mulish'}
+                      color="#065BAA"
+                      style={{ fontSize: '14px' }}
+                    >
+                      {payload?.bookingProduct?.finalPrice} {'-/perorang'}
+                    </Text>
+                  </Box>
+                </Box>
+              </Box>
+              <Box bg="white" p="10px">
+                <Box
+                  display={'flex'}
+                  justifyContent={'flex-start'}
+                  alignItems={'center'}
+                  boxSizing="borderBox"
+                  borderBottom={'1px solid #ebebeb'}
+                  pb="10px"
+                  pt="10px"
                 >
-                  {payload?.bookingProduct?.finalPrice} {'-/perorang'}
-                </Text>
+                  <Text
+                    as="b"
+                    w={'50%'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                  >
+                    Plan Type
+                  </Text>
+                  <Text
+                    as="p"
+                    w={'50%'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    pl="5px"
+                  >
+                    {payload?.coverType}
+                  </Text>
+                </Box>
+                <Box
+                  display={'flex'}
+                  justifyContent={'lex-start'}
+                  alignItems={'center'}
+                  borderBottom={'1px solid #ebebeb'}
+                  pb="10px"
+                  pt="10px"
+                >
+                  <Text
+                    as="b"
+                    w="50%"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                  >
+                    Travellers Type
+                  </Text>
+                  <Text
+                    as="p"
+                    w="50%"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    pl="5px"
+                  >
+                    {payload?.travellerType?.name} -{` ${payload?.adt} adult `}
+                    {`${
+                      parseInt(payload?.chd) > 0 ? `${payload?.chd} child` : ''
+                    }`}
+                  </Text>
+                </Box>
+                <Box
+                  display={'flex'}
+                  justifyContent={'lex-start'}
+                  alignItems={'center'}
+                  borderBottom={'1px solid #ebebeb'}
+                  pb="10px"
+                  pt="10px"
+                >
+                  <Text
+                    as="b"
+                    w="50%"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                  >
+                    Destination
+                  </Text>
+                  <Text
+                    as="p"
+                    w="50%"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    pl="5px"
+                  >
+                    {payload?.destinations.length > 0 &&
+                      payload?.destinations.map((item, i) => {
+                        return (
+                          <span key={i}>
+                            {(i ? ', ' : '') + item.countryName}
+                          </span>
+                        );
+                      })}
+                  </Text>
+                </Box>
+                <Box
+                  display={'flex'}
+                  justifyContent={'lex-start'}
+                  alignItems={'center'}
+                  borderBottom={'1px solid #ebebeb'}
+                  pb="10px"
+                  pt="10px"
+                >
+                  <Text
+                    as="b"
+                    w="50%"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                  >
+                    Start Date
+                  </Text>
+                  <Text
+                    as="p"
+                    w="50%"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    pl="5px"
+                  >
+                    {formatDateToLong(payload?.from)}
+                  </Text>
+                </Box>
+                <Box
+                  display={'flex'}
+                  justifyContent={'lex-start'}
+                  alignItems={'center'}
+                  borderBottom={'1px solid #ebebeb'}
+                  pb="10px"
+                  pt="10px"
+                >
+                  <Text
+                    as="b"
+                    w="50%"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                  >
+                    End Date
+                  </Text>
+
+                  <Text
+                    as="p"
+                    w="50%"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    pl="5px"
+                  >
+                    {formatDateToLong(payload?.to)}
+                  </Text>
+                </Box>
               </Box>
             </Box>
-          </Box>
-          <Box bg="white" p="10px">
-            <Box
-              display={'flex'}
-              justifyContent={'flex-start'}
-              alignItems={'center'}
-              boxSizing="borderBox"
-              borderBottom={'1px solid #ebebeb'}
-              pb="10px"
-              pt="10px"
-            >
-              <Text
-                as="b"
-                w={'50%'}
-                fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
-              >
-                Plan Type
-              </Text>
-              <Text
-                as="p"
-                w={'50%'}
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                pl="5px"
-              >
-                {initStateTraveller?.coverageType}
-              </Text>
-            </Box>
-            <Box
-              display={'flex'}
-              justifyContent={'lex-start'}
-              alignItems={'center'}
-              borderBottom={'1px solid #ebebeb'}
-              pb="10px"
-              pt="10px"
-            >
-              <Text
-                as="b"
-                w="50%"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
-              >
-                Travellers Type
-              </Text>
-              <Text
-                as="p"
-                w="50%"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                pl="5px"
-              >
-                {initStateTraveller?.travellerType} -
-                {` ${initStateTraveller?.adult} adult `}
-                {`${
-                  parseInt(initStateTraveller?.child) > 0
-                    ? `${initStateTraveller?.child} child`
-                    : ''
-                }`}
-              </Text>
-            </Box>
-            <Box
-              display={'flex'}
-              justifyContent={'lex-start'}
-              alignItems={'center'}
-              borderBottom={'1px solid #ebebeb'}
-              pb="10px"
-              pt="10px"
-            >
-              <Text
-                as="b"
-                w="50%"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
-              >
-                Destination
-              </Text>
-              <Text
-                as="p"
-                w="50%"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                pl="5px"
-              >
-                {initStateTraveller?.destinationCountry.length > 0 &&
-                  initStateTraveller?.destinationCountry.map((item, i) => {
-                    return <span key={i}>{(i ? ', ' : '') + item.value}</span>;
-                  })}
-              </Text>
-            </Box>
-            <Box
-              display={'flex'}
-              justifyContent={'lex-start'}
-              alignItems={'center'}
-              borderBottom={'1px solid #ebebeb'}
-              pb="10px"
-              pt="10px"
-            >
-              <Text
-                as="b"
-                w="50%"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
-              >
-                Start Date
-              </Text>
-              <Text
-                as="p"
-                w="50%"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                pl="5px"
-              >
-                {initStateTraveller?.startDate
-                  ? `${initStateTraveller?.startDate?.day} ${getMonthName(
-                      initStateTraveller?.startDate?.month
-                    )} ${initStateTraveller?.startDate?.year}`
-                  : null}
-              </Text>
-            </Box>
-            <Box
-              display={'flex'}
-              justifyContent={'lex-start'}
-              alignItems={'center'}
-              borderBottom={'1px solid #ebebeb'}
-              pb="10px"
-              pt="10px"
-            >
-              <Text
-                as="b"
-                w="50%"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
-              >
-                End Date
-              </Text>
-
-              <Text
-                as="p"
-                w="50%"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '12px' }}
-                pl="5px"
-              >
-                {initStateTraveller?.endDate
-                  ? `${initStateTraveller?.endDate?.day} ${getMonthName(
-                      initStateTraveller?.endDate?.month
-                    )} ${initStateTraveller?.endDate?.year}`
-                  : null}{' '}
-              </Text>
-            </Box>
-          </Box>
+          )}
         </Box>
+
         <Box w="70%" p="1em">
           {listTravellers?.listTravellers.map((travellers, i) => {
             return (
