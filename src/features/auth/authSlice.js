@@ -360,6 +360,7 @@ const authSlice = createSlice({
       state.userLogin = null;
       state.isAuthenticated = false;
       state.historyFormSubmit = 0;
+      state.historyStep = 0;
       state.id = '';
     },
     setAuth: (state, action) => {
