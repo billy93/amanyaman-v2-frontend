@@ -149,6 +149,7 @@ fuzzyTextFilterFn.autoRemove = (val) => !val;
 const Tables = ({
   columns,
   data,
+  getSelectAll,
   loading,
   fetchData,
   pageCount: controlledPageCount,
@@ -322,7 +323,7 @@ const Tables = ({
     const original = rows.map((row) => row.original);
     console.log('ori', rows);
     toggleAllRowsSelected(event.target.checked);
-    original.forEach((row) => {
+    getSelectAll().forEach((row) => {
       if (row.id) {
         idSlect.push(row.id);
       }
@@ -931,6 +932,10 @@ const DetailMasterUser = () => {
     setDefaultSelected(e);
   };
 
+  const getSelectAll = () => {
+    return listTravell;
+  };
+
   let content;
   if (isLoading) {
     content = (
@@ -1399,6 +1404,7 @@ const DetailMasterUser = () => {
               loading={loaded}
               pageCount={pageCount}
               totalCount={totalCount}
+              getSelectAll={getSelectAll}
             />
           </Styles>
           <Box

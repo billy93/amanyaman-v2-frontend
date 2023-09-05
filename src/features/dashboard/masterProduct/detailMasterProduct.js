@@ -143,6 +143,7 @@ const Tables = ({
   columns,
   data,
   fetchData,
+  getSelectAll,
   loading,
   setPageCount,
   isFetching,
@@ -328,9 +329,11 @@ const Tables = ({
   const handleToggleAllRows = (event) => {
     let idSlect = [];
     const original = rows.map((row) => row.original);
-    // console.log('ori', original);
+    console.log('ori', getSelectAll());
+    // alert('click uncheck all rows');
+
     toggleAllRowsSelected(event.target.checked);
-    original.forEach((row) => {
+    getSelectAll().forEach((row) => {
       if (row?.productTravelAgent?.id) {
         idSlect.push(row?.productTravelAgent?.id);
       }
@@ -342,6 +345,7 @@ const Tables = ({
       updateDataMulti({ ids: idSlect, active: event.target.checked });
     }
   };
+  console.log('data table', rows);
   return (
     <>
       <Box
@@ -548,7 +552,7 @@ const Tables = ({
             <Box display={'flex'} alignItems={'center'}>
               Page{' '}
               <strong>
-                {pageIndex + 1} of {pageOptions.length}
+                {pageIndex + 1} of {getSelectAll().length / pageSize}
               </strong>{' '}
             </Box>
           </Box>
@@ -737,7 +741,9 @@ const DetailMasterUser = () => {
     setData(dataf);
     // setPage(0);
   };
-
+  const getSelectAll = () => {
+    return listTravell;
+  };
   let content;
   if (isLoading) {
     content = (
@@ -1333,6 +1339,7 @@ const DetailMasterUser = () => {
               loading={loading}
               pageCount={pageCount}
               totalCount={totalCount}
+              getSelectAll={getSelectAll}
             />
           </Styles>
         </Box>

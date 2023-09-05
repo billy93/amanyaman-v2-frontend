@@ -138,6 +138,17 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
+    getDetailBenefit: builder.query({
+      query: (id) => {
+        return {
+          url: `/app/file-upload/product/brochure/files/brochure/${id}`,
+          method: 'GET',
+          responseType: 'blob',
+          responseHandler: (response) =>
+            response.blob().then((blob) => URL.createObjectURL(blob)),
+        };
+      },
+    }),
     getTemplate: builder.query({
       query: (url) => ({
         url: '/app/bookings/travellers/template/download',
@@ -205,6 +216,7 @@ export const quotSearch = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetDetailBenefitQuery,
   useGetBookingsQuotationQuery,
   useGetCheckPaymentQuery,
   usePaymentProccedMutation,

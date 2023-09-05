@@ -6,14 +6,21 @@ import useAuth from '../features/hook/useAuth';
 import { useSelector, useDispatch } from 'react-redux';
 import { userLoginCurrent } from '../features/auth/authSlice';
 import { logOut, isAuthenticate } from '../features/auth/authSlice';
+// import { decryptData } from '../app/encrypt';
 
 const LayoutDashboard = ({ allowedRoles }) => {
   const dispatch = useDispatch();
   const toast = useToast();
+  // const encryptedData = useSelector((state) => state);
+  // const test = decryptData(encryptedData);
   const isAuthenticated = useSelector(isAuthenticate);
+  // const state = useSelector((state) => state);
+  // const { auth } = state;
   const token = useSelector(userLoginCurrent);
   const { role } = useAuth();
   const location = useLocation();
+
+  // console.log('test key', test);
 
   React.useEffect(() => {
     const checkLocalStorage = setInterval(() => {

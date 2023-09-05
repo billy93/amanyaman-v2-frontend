@@ -21,6 +21,7 @@ import travelAgent from '../features/dashboard/travelAgent/travelAgentSlice';
 import systemParams from '../features/dashboard/systemParameters/systemParamsSlice';
 import productPrice from '../features/dashboard/productPrice/productPriceSlice';
 import dashboards from '../features/dashboard/dashboards/dashboardSlice';
+// import { encryptData, decryptData } from './encrypt';
 // import { enc, AES } from 'crypto-js';
 // import storageSession from 'reduxjs-toolkit-persist/lib/storage/session';
 // import { apiSlice } from './api/apiSlice';
@@ -33,27 +34,15 @@ const rootPersistConfig = {
   // transforms: [
   //   {
   //     in: (state) => {
-  //       try {
-  //         const encryptedState = AES.encrypt(
-  //           JSON.stringify(state),
-  //           secretKey
-  //         ).toString();
-  //         return encryptedState;
-  //       } catch (error) {
-  //         console.error('Encryption error:', error);
-  //         return state; // Return the original state on error
-  //       }
+  //       // Encrypt the state when persisting
+  //       // console.log('testtt', state);
+  //       const encryptedState = encryptData(state?.userLogin);
+  //       return encryptedState;
   //     },
   //     out: (state) => {
-  //       try {
-  //         const decryptedState = AES.decrypt(state, secretKey).toString(
-  //           enc.Utf8
-  //         );
-  //         return JSON.parse(decryptedState);
-  //       } catch (error) {
-  //         console.error('Decryption error:', error);
-  //         return state; // Return the original state on error
-  //       }
+  //       // Decrypt the state when rehydrating
+  //       const decryptedState = decryptData(state);
+  //       return decryptedState;
   //     },
   //   },
   // ],

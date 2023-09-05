@@ -30,7 +30,10 @@ import {
   Button,
   ButtonGroup,
 } from '@chakra-ui/react';
-import { useBooksProductsMutation } from '../policyApiSlice';
+import {
+  useBooksProductsMutation,
+  useGetDetailBenefitQuery,
+} from '../policyApiSlice';
 import Hospital from '../../../../img/images/Hospital.png';
 import Medicine from '../../../../img/images/Medicine.png';
 import TravelCaover from '../../../../img/images/Plane.png';
@@ -47,6 +50,11 @@ const Form2 = ({
   isLastStep,
 }) => {
   const [booksProducts, { isLoading }] = useBooksProductsMutation();
+  const [triggers, setTriggers] = React.useState(false);
+  const [ids, setIds] = React.useState('');
+  const { data } = useGetDetailBenefitQuery(ids, {
+    skip: triggers === false ? true : false,
+  });
   const initState = useSelector(selectTravelInsurance);
   const login = useSelector(userLoginCurrent);
   // const [persist] = usePersist();
@@ -75,7 +83,7 @@ const Form2 = ({
       })
     );
   };
-  // console.log('stateInt', stateInt);
+  // console.log('detailBenefit', detailBenefit);
   const paddedDay = stateInt?.startDate?.day.toString().padStart(2, '0');
   const paddedMonth = stateInt?.startDate?.month.toString().padStart(2, '0');
   const paddedEndDay = stateInt?.endDate?.day.toString().padStart(2, '0');
@@ -177,6 +185,35 @@ const Form2 = ({
     };
   }, []);
   // console.log('initstate', initState);
+  const handleViewBenefit = (id) => {
+    setIds(id);
+    setTriggers(true);
+    handleDownload();
+  };
+
+  const handleDownload = () => {
+    if (data) {
+      console.log('dass', data);
+      const downloadLink = document.createElement('a');
+      downloadLink.href = data;
+      downloadLink.download = 'benefit.pdf'; // Set the desired file name and extension
+
+      // Append the link to the DOM
+      document.body.appendChild(downloadLink);
+
+      // Trigger the download
+      downloadLink.click();
+
+      // Remove the link element from the DOM after a short delay
+      setTimeout(() => {
+        document.body.removeChild(downloadLink);
+        // Clean up the blob URL
+        URL.revokeObjectURL(data);
+      }, 1000);
+    }
+  };
+
+  console.log('blob download complete', data);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Box
@@ -347,7 +384,12 @@ const Form2 = ({
                   With Additional benefits and Assistance Cover.
                 </Heading>
                 <ButtonGroup gap="5px">
-                  <Button variant="base">View Benefits</Button>
+                  <Button
+                    variant="base"
+                    onClick={() => handleViewBenefit(products.productId)}
+                  >
+                    View Benefits
+                  </Button>
                 </ButtonGroup>
               </Box>
             </Box>
