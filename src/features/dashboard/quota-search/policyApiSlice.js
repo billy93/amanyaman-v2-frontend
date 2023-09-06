@@ -143,6 +143,7 @@ export const quotSearch = apiSlice.injectEndpoints({
         return {
           url: `/app/file-upload/product/brochure/files/brochure/${id}`,
           method: 'GET',
+          // responseType: 'arrayBuffer',
           responseType: 'blob',
           responseHandler: (response) =>
             response.blob().then((blob) => URL.createObjectURL(blob)),

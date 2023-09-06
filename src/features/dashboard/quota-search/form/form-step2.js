@@ -1,8 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 import React from 'react';
 // import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import ModalForm from '../form/modal';
+
 // import usePersist from '../../../../features/hook/usePersist';
 import {
   setHistoryForm,
@@ -28,6 +31,7 @@ import {
   Heading,
   Box,
   Button,
+  useDisclosure,
   ButtonGroup,
 } from '@chakra-ui/react';
 import {
@@ -57,6 +61,7 @@ const Form2 = ({
   });
   const initState = useSelector(selectTravelInsurance);
   const login = useSelector(userLoginCurrent);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   // const [persist] = usePersist();
   // const { id } = useParams();
   const stateInt = useSelector(selectManualInput);
@@ -185,37 +190,57 @@ const Form2 = ({
     };
   }, []);
   // console.log('initstate', initState);
-  const handleViewBenefit = (id) => {
-    setIds(id);
-    setTriggers(true);
-    handleDownload();
-  };
 
-  const handleDownload = () => {
-    if (data) {
-      console.log('dass', data);
-      const downloadLink = document.createElement('a');
-      downloadLink.href = data;
-      downloadLink.download = 'benefit.pdf'; // Set the desired file name and extension
-
-      // Append the link to the DOM
-      document.body.appendChild(downloadLink);
-
-      // Trigger the download
-      downloadLink.click();
-
-      // Remove the link element from the DOM after a short delay
-      setTimeout(() => {
-        document.body.removeChild(downloadLink);
-        // Clean up the blob URL
-        URL.revokeObjectURL(data);
-      }, 1000);
+  const openNewTab = async (url) => {
+    const newTab = window.open('', '_blank');
+    if (newTab) {
+      newTab.location.href = url;
+      return newTab;
+    } else {
+      console.error('Failed to open a new tab.');
+      return null;
     }
   };
 
-  console.log('blob download complete', data);
+  const downloadAndOpenPdfInNewTab = async (pdfData) => {
+    if (!pdfData) {
+      console.error('PDF data is missing.');
+      return;
+    }
+
+    const newTab = await openNewTab(pdfData);
+
+    if (newTab) {
+      // Create an iframe in the new tab and set its source to the PDF data URL
+      const iframe = document.createElement('iframe');
+      iframe.src = pdfData;
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      newTab.document.body.appendChild(iframe);
+
+      // Clean up the blob URL when the new tab is closed
+      newTab.addEventListener('beforeunload', () => {
+        URL.revokeObjectURL(pdfData);
+      });
+    }
+  };
+
+  const handleViewBenefit = (id) => {
+    setIds(id);
+    setTriggers(true);
+    downloadAndOpenPdfInNewTab(data, 'benefit.pdf');
+    // onOpen();
+  };
+
   return (
     <Box border={'1px'} borderColor="#ebebeb">
+      {/* <ModalForm
+        blockScrollOnMount={false}
+        closeOnOverlayClick={false}
+        isOpen={isOpen}
+        onClose={onClose}
+        id={ids}
+      /> */}
       <Box
         border={'1px'}
         borderColor="#ebebeb"
