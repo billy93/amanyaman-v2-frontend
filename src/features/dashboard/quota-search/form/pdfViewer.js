@@ -1,38 +1,65 @@
-import React from 'react';
-import { Document, Page } from 'react-pdf';
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css'; // Import styles for annotations (optional)
 
-const PdfViewer = ({ pdfArrayBuffer }) => {
-  const [uint8Arr, setUint8Arr] = React.useState();
-  // Ensure that pdfArrayBuffer is a valid ArrayBuffer
-  if (!(pdfArrayBuffer instanceof ArrayBuffer)) {
-    return <div>Invalid PDF data</div>;
-  }
-  function getUint8Array() {
-    let reader = new FileReader();
+// Configure the PDF.js worker
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-    // reader.readAsDataURL(selectedFile); base64
-    reader.readAsArrayBuffer(pdfArrayBuffer);
-    reader.onloadend = async (e) => {
-      if (e.target?.result instanceof ArrayBuffer) {
-        const uint8Array = new Uint8Array(e.target.result);
-        setUint8Arr(uint8Array);
+const PdfViewer = ({ blobUrl }) => {
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pdfBlobUrl, setPdfBlobUrl] = useState(null);
 
-        // more callbacks(file.name, Buffer.from(new Uint8Array(target.result)));
+  useEffect(() => {
+    // Fetch the PDF blob data and create a blob URL
+    const fetchPdfBlob = async () => {
+      try {
+        const response = await fetch('/path-to-your-pdf-blob-data'); // Replace with the URL or data of your PDF blob
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        setPdfBlobUrl(blobUrl);
+      } catch (error) {
+        console.error('Error fetching PDF blob:', error);
       }
     };
-  }
-  getUint8Array();
+
+    fetchPdfBlob();
+  }, []);
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+
+  const goToPreviousPage = () => {
+    if (pageNumber > 1) {
+      setPageNumber(pageNumber - 1);
+    }
+  };
+
+  const goToNextPage = () => {
+    if (pageNumber < numPages) {
+      setPageNumber(pageNumber + 1);
+    }
+  };
 
   return (
-    <div className="pdf-container">
-      <Document
-        file={{
-          data: uint8Arr, // Pass the Uint8Array containing the PDF data
-        }}
-      >
-        <Page pageNumber={1} /> {/* Display the first page */}
+    <>
+      <Document file={blobUrl} onLoadSuccess={onDocumentLoadSuccess}>
+        <Page pageNumber={pageNumber} />
       </Document>
-    </div>
+      <div>
+        <p>
+          Page {pageNumber} of {numPages}
+        </p>
+        <button onClick={goToPreviousPage} disabled={pageNumber <= 1}>
+          Previous
+        </button>
+        <button onClick={goToNextPage} disabled={pageNumber >= numPages}>
+          Next
+        </button>
+      </div>
+    </>
   );
 };
 

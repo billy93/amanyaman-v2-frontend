@@ -311,7 +311,11 @@ const Form3 = ({
                       textAlign={'center'}
                       fontWeight={'900'}
                     >
-                      <Button variant="outline" onClick={continuePayCredit}>
+                      <Button
+                        variant="outline"
+                        onClick={continuePayCredit}
+                        isLoading={loading}
+                      >
                         Re-check Availability Credit
                       </Button>
                     </Text>
@@ -686,7 +690,7 @@ const Form3 = ({
                   onClick={continuePay}
                   w={{ base: '100%', md: '270px' }}
                   h="48px"
-                  isLoading={isLoading || loading}
+                  isLoading={isLoading}
                   disabled={
                     isLoading ||
                     (tabIndex === 1 && creditLimit?.status !== 'OK')

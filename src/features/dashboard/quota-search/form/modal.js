@@ -1,73 +1,102 @@
-/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
-  ModalBody,
   ModalCloseButton,
+  ModalBody,
+  ModalFooter,
   Button,
 } from '@chakra-ui/react';
-import PdfViewer from './pdfViewer';
+import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import { useGetDetailBenefitQuery } from '../policyApiSlice';
 
-const ModalForm = ({ isOpen, onClose, id }) => {
+// Configure the PDF.js worker
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
+const PdfModal = ({ isOpen, onClose, id, download }) => {
   const { data } = useGetDetailBenefitQuery(id);
+  const [numPages, setNumPages] = React.useState(null);
+  const [width, setWidth] = React.useState(500); // Default width
 
-  const downloadAndOpenPdfInNewTab = (pdfData) => {
-    // Create a blob URL for the PDF data
-    // const blob = new Blob([pdfData], { type: 'application/pdf' });
-    // const data = URL.createObjectURL(blob);
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+  const iframeRef = React.useRef(null);
 
-    // Create a new tab
-    const newTab = window.open();
+  const handleIframeLoad = () => {
+    // Access the iframe's contentDocument and body
+    const iframeDoc = iframeRef.current.contentDocument;
+    const iframeBody = iframeDoc.body;
 
-    if (newTab) {
-      // Create an iframe in the new tab and set its source to the PDF data URL
-      const iframe = document.createElement('iframe');
-      iframe.src = pdfData;
-      iframe.style.width = '100%';
-      iframe.style.height = '100%';
-      newTab.document.body.appendChild(iframe);
+    // Add your custom iframe styles here if needed
+    iframeRef.current.style.width = '100vw';
+    iframeRef.current.style.height = '100vh';
 
-      // Clean up the blob URL when the new tab is closed
-      newTab.addEventListener('beforeunload', () => {
-        URL.revokeObjectURL(data);
-      });
-    } else {
-      // Handle cases where the new tab couldn't be opened (e.g., due to popup blockers)
-      console.error('Failed to open a new tab.');
-    }
+    // Clean up the iframe when the modal is closed
+    // onClose && onClose();
+
+    // Clean up any event listeners or resources as needed
+    // You can use the 'beforeunload' event if required
   };
 
-  downloadAndOpenPdfInNewTab(data, 'benefit.pdf');
-  return (
-    <>
-      <Modal
-        closeOnOverlayClick={false}
-        isOpen={isOpen}
-        onClose={onClose}
-        size="md"
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create your account</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <PdfViewer pdfArrayBuffer={data} />
-          </ModalBody>
+  // Calculate responsive width based on the modal content width
+  const modalContentWidth = 60; // Percentage of modal width
+  React.useEffect(() => {
+    const maxWidth = window.innerWidth * (modalContentWidth / 100);
+    setWidth(maxWidth);
+  }, [isOpen]);
 
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
-              Save
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} size="full">
+      <ModalOverlay />
+      <ModalContent maxW={`${modalContentWidth}vw`}>
+        <ModalHeader>PDF Viewer</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody overflowY="auto" maxH="80vh">
+          {/* {data ? (
+            <Document
+              file={data}
+              onLoadSuccess={onDocumentLoadSuccess}
+              width={width}
+            >
+              {Array.from(new Array(numPages), (el, index) => (
+                <Page
+                  key={`page_${index + 1}`}
+                  pageNumber={index + 1}
+                  width={width}
+                />
+              ))}
+            </Document>
+          ) : (
+            <p>Loading PDF...</p>
+          )} */}
+          <iframe
+            ref={iframeRef}
+            src={data}
+            title="Embedded Content"
+            width="800px"
+            height="600px"
+            frameBorder="0"
+            onLoad={handleIframeLoad}
+          ></iframe>
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme="blue" mr={3} onClick={onClose}>
+            Close
+          </Button>
+          {data && (
+            <Button colorScheme="green" onClick={() => download(data)}>
+              Download
             </Button>
-            <Button onClick={onClose}>Cancel</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+          )}
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
-export default ModalForm;
+
+export default PdfModal;

@@ -56,9 +56,9 @@ const Form2 = ({
   const [booksProducts, { isLoading }] = useBooksProductsMutation();
   const [triggers, setTriggers] = React.useState(false);
   const [ids, setIds] = React.useState('');
-  const { data } = useGetDetailBenefitQuery(ids, {
-    skip: triggers === false ? true : false,
-  });
+  // const { data } = useGetDetailBenefitQuery(ids, {
+  //   skip: triggers === false ? true : false,
+  // });
   const initState = useSelector(selectTravelInsurance);
   const login = useSelector(userLoginCurrent);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -227,20 +227,21 @@ const Form2 = ({
 
   const handleViewBenefit = (id) => {
     setIds(id);
-    setTriggers(true);
-    downloadAndOpenPdfInNewTab(data, 'benefit.pdf');
-    // onOpen();
+    // setTriggers(true);
+    // downloadAndOpenPdfInNewTab(data, 'benefit.pdf');
+    onOpen();
   };
 
   return (
     <Box border={'1px'} borderColor="#ebebeb">
-      {/* <ModalForm
+      <ModalForm
         blockScrollOnMount={false}
         closeOnOverlayClick={false}
         isOpen={isOpen}
         onClose={onClose}
         id={ids}
-      /> */}
+        download={downloadAndOpenPdfInNewTab}
+      />
       <Box
         border={'1px'}
         borderColor="#ebebeb"

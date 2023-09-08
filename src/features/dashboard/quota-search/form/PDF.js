@@ -1,12 +1,12 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 // Import the PDF.js library
-importScripts('pdfjs-dist/build/pdf.js');
-importScripts('pdfjs-dist/build/pdf.worker.js');
+importScripts('./pdf.worker.js');
+importScripts('./pdf.worker.js');
 
 // Initialize PDF.js
 const { PDFWorker } = pdfjsLib;
-PDFWorker.workerSrc = 'pdfjs-dist/build/pdf.worker.js';
+PDFWorker.workerSrc = './pdf.worker.js';
 
 // Create a message handler to process PDF tasks
 self.addEventListener('message', (event) => {
