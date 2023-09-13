@@ -679,6 +679,45 @@ const PolicyDetail = () => {
                 </Text>
               </Box>
             </Box>
+            <Box
+              pb="10px"
+              pt="10px"
+              borderBottom={'1px solid #ebebeb'}
+              display={'flex'}
+              flexDirection={'row'}
+              alignItems={'center'}
+              justifyContent={'space-between'}
+            >
+              <Text
+                as="b"
+                fontFamily={'Mulish'}
+                style={{ fontSize: '14px' }}
+                color={'#231F20'}
+              >
+                {'Policy History'}
+              </Text>
+              <Box
+                bg="#f0f3f8"
+                p="2px"
+                display={'flex'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                gap="5px"
+              >
+                <Box w="8px" h="8px" bg="green" borderRadius={'full'}></Box>
+                {quotation?.histories.map((history, i) => (
+                  <Text
+                    key={i}
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    fontWeight={'400'}
+                  >
+                    {history.message}
+                  </Text>
+                ))}
+              </Box>
+            </Box>
           </Box>
           {quotation?.travellerType?.name === 'Individual'
             ? quotation?.travellers
