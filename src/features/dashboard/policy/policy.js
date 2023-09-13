@@ -256,6 +256,7 @@ const Tables = ({
   data,
   fetchData,
   loading,
+  size,
   pageCount: controlledPageCount,
 }) => {
   const dispatch = useDispatch();
@@ -575,7 +576,7 @@ const Tables = ({
             );
           })} */}
             <AnimatePresence>
-              {rows.slice(0, 10).map((row, i) => {
+              {rows.slice(0, size).map((row, i) => {
                 prepareRow(row);
                 return (
                   <motion.tr
@@ -601,73 +602,6 @@ const Tables = ({
             </AnimatePresence>
           </tbody>
         </table>
-      </Box>
-      <Box
-        display="flex"
-        justifyContent={'flex-end'}
-        alignItems={'center'}
-        mt="1em"
-      >
-        <Box>
-          <Button
-            onClick={() => previousPage()}
-            disabled={!canPreviousPage}
-            bg="white"
-            border={'none'}
-            _hover={{
-              bg: '#f0eeee',
-              borderRadius: '5px',
-              WebkitBorderRadius: '5px',
-              MozBorderRadius: '5px',
-            }}
-          >
-            <BiSkipPreviousCircle size="25px" color="black" />
-            <Text
-              as="p"
-              fontFamily={'Mulish'}
-              style={{ fontSize: '12px' }}
-              color="#231F20"
-              pl="5px"
-            >
-              Prev
-            </Text>
-          </Button>
-          {' | '}
-          <Button
-            onClick={() => nextPage()}
-            disabled={!canNextPage}
-            bg="white"
-            border={'none'}
-          >
-            <BiSkipNextCircle size="25px" color="black" />
-            <Text
-              fontFamily={'Mulish'}
-              style={{ fontSize: '12px' }}
-              color="#231F20"
-              pl="5px"
-            >
-              Next
-            </Text>
-          </Button>{' '}
-        </Box>
-        <Box>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </Box>
-        {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
       </Box>
       {/* <pre>
         <code>
@@ -815,7 +749,11 @@ const Polcies = () => {
           <Link
             color="#065BAA"
             style={{ textDecoration: 'underline', color: '#065BAA' }}
-            to={`/policies/detail/${row.original.policyNumber}`}
+            to={
+              row.original.planType === 'Individual'
+                ? `/policies/detail/${row.original.policyNumber}/${row.original.bookingId}`
+                : `/policies/detail/${row.original.bookingId}`
+            }
           >
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.policyNumber}
@@ -1004,12 +942,33 @@ const Polcies = () => {
     }
   }, [showFilter]);
 
+  const handleNexts = () => {
+    setPage((prevPage) => prevPage + 1);
+    // setChangePage(true)
+  };
+
+  const previousPage = () => {
+    setPage((prevPage) => prevPage - 1);
+    // setChangePage(true)
+  };
+
+  const goToPageLast = () => {
+    setPage(pageCount - 1);
+  };
+
+  const goToPageFirst = () => {
+    setPage(0);
+  };
+
+  const gotoPage = () => {
+    setPage(0);
+  };
   // const handleSearchTermChange = (e) => {
   //   const { value } = e.target;
   //   setSearchTerm(value);
   //   setPage(0);
   // };
-  // console.log('filter', filterQuery);
+  // console.log('filter listpolicies', listpolicies);
   let content;
   if (isLoading) {
     content = (
@@ -1027,7 +986,7 @@ const Polcies = () => {
           mt="6em"
           ml="2em"
           mr="2em"
-          mb={showFilter ? '1em' : '2em'}
+          mb={showFilter ? '1em' : '1em'}
         >
           <Heading as={'h6'} size={'sm'}>
             Policies
@@ -1155,8 +1114,165 @@ const Polcies = () => {
             fetchData={fetchData}
             loading={loading}
             pageCount={pageCount}
+            size={size}
           />
         </Styles>
+        <Box
+          display={'flex'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          w="100%"
+          mt="15px"
+        >
+          <Box>
+            <Box>
+              {loading ? (
+                // Use our custom loading state to show a loading indicator
+                <td colSpan="10000">Loading...</td>
+              ) : (
+                <td
+                  colSpan="10000"
+                  style={{ fontSize: '14px', fontFamily: 'Mulish' }}
+                >
+                  Showing {size} of {totalCount} results
+                </td>
+              )}
+            </Box>
+            <Box>
+              <Box
+                display={'flex'}
+                justifyContent={'start'}
+                alignItems={'center'}
+              >
+                <label
+                  htmlFor="select"
+                  style={{
+                    paddingRight: '5px',
+                    fontSize: '14px',
+                    fontFamily: 'Mulish',
+                  }}
+                >
+                  Per page
+                </label>
+                <Select
+                  id="pageSize"
+                  w="100px"
+                  value={size}
+                  onChange={(e) => {
+                    setSize(Number(e.target.value));
+                    gotoPage(0);
+                  }}
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                  {/* Add more options as needed */}
+                </Select>
+              </Box>
+            </Box>
+          </Box>
+          <Box>
+            <Box display={'flex'} alignItems={'center'}>
+              <Button
+                isDisabled={page === 0 ? true : false}
+                onClick={goToPageFirst}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="2px"
+                >
+                  {'<<'}
+                </Text>
+              </Button>
+              <Button
+                isDisabled={page === 0 ? true : false}
+                onClick={previousPage}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <BiSkipPreviousCircle size="25px" color="black" />
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  {'<'}
+                </Text>
+              </Button>
+              {' | '}
+              <Button
+                isDisabled={Math.ceil(totalCount / size) === page + 1}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+                onClick={handleNexts}
+                bg="white"
+                border={'none'}
+              >
+                <BiSkipNextCircle size="25px" color="black" />
+                <Text
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  {'>'}
+                </Text>
+              </Button>{' '}
+              <Button
+                isDisabled={pageCount === page ? true : false}
+                onClick={goToPageLast}
+                bg="white"
+                border={'none'}
+                _hover={{
+                  bg: '#f0eeee',
+                  borderRadius: '5px',
+                  WebkitBorderRadius: '5px',
+                  MozBorderRadius: '5px',
+                }}
+              >
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                  color="#231F20"
+                  pl="5px"
+                >
+                  {'>>'}
+                </Text>
+              </Button>
+              <Text as="p" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                Page{' '}
+              </Text>
+              <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                {page + 1} of {pageCount}
+              </Text>{' '}
+            </Box>
+          </Box>
+        </Box>
         {/* <Link to="/welcome">Back to Welcome</Link> */}
       </Box>
     );

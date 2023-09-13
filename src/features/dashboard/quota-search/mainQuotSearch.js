@@ -38,7 +38,7 @@ const MainQuotSearch = () => {
   const { data: searchById } = useGetBookingSearchQuery(id, {
     skip: id === undefined ? true : false,
   });
-  const { step } = useSelector(quotState);
+  // const { step } = useSelector(quotState);
   // const getById = useSelector(getSearchById);
 
   React.useEffect(() => {

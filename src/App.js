@@ -96,7 +96,11 @@ function App() {
         }
       >
         <Route path="list" element={<PolicyList />} />
-        <Route path="detail" element={<PolicyDetails />} />
+        <Route path="detail/:id" element={<PolicyDetails />} />
+        <Route
+          path="detail/:policyNumberString/:id"
+          element={<PolicyDetails />}
+        />
       </Route>
       <Route
         path="/master-data"

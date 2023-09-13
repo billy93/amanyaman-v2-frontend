@@ -45,7 +45,15 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    getBookingById: builder.query({
+      query: (id) => {
+        // const { page, size } = datas;
+        return {
+          url: `/app/bookings/${id}`,
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetPolicyListQuery } = policyApiSlice;
+export const { useGetPolicyListQuery, useGetBookingByIdQuery } = policyApiSlice;

@@ -82,6 +82,7 @@ const PdfModal = ({ isOpen, onClose, id, download }) => {
             height="600px"
             frameBorder="0"
             onLoad={handleIframeLoad}
+            scrolling="no"
           ></iframe>
         </ModalBody>
         <ModalFooter>

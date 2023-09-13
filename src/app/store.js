@@ -21,16 +21,19 @@ import travelAgent from '../features/dashboard/travelAgent/travelAgentSlice';
 import systemParams from '../features/dashboard/systemParameters/systemParamsSlice';
 import productPrice from '../features/dashboard/productPrice/productPriceSlice';
 import dashboards from '../features/dashboard/dashboards/dashboardSlice';
+// import { encryptTransform } from 'redux-persist-transform-encrypt';
 // import { encryptData, decryptData } from './encrypt';
 // import { enc, AES } from 'crypto-js';
 // import storageSession from 'reduxjs-toolkit-persist/lib/storage/session';
 // import { apiSlice } from './api/apiSlice';
 // import { logOut } from '../features/auth/authSlice';
 // const secretKey = 'amanyaman-v2-2023';
+
 const rootPersistConfig = {
   key: 'root',
   storage,
   whitelist: ['auth.userLogin'],
+
   // transforms: [
   //   {
   //     in: (state) => {
