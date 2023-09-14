@@ -540,7 +540,7 @@ const PaymentSuccessPage = () => {
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
                     >
-                      {quotation?.salesId?.firstName}
+                      {`${quotation?.salesId?.firstName} ${quotation?.salesId?.lastName}`}
                     </Text>
                   </Box>
                   <Box
@@ -600,8 +600,7 @@ const PaymentSuccessPage = () => {
                           <AccordionIcon />
                           <Box as="span" flex="1" textAlign="left">
                             <Text as="b" fontSize={'sm'}>
-                              {'Traveller'}
-                              {i + 1}
+                              {`${travellers?.firstName} ${travellers?.lastName}`}
                             </Text>
                           </Box>
                         </AccordionButton>

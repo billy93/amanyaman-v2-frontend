@@ -514,15 +514,15 @@ const Form3 = ({
                               fontFamily={'Mulish'}
                               style={{ fontSize: '12px' }}
                             >
-                              {`Adult${i + 1} -  `}
+                              {`Traveller ${i + 1} `}
                             </Text>
                             <Text
-                              as="p"
+                              as="b"
                               size="sm"
                               fontFamily={'Mulish'}
                               style={{ fontSize: '12px' }}
                             >
-                              {list.fullName}
+                              {`${list?.firstName} ${list?.lastName} `}
                             </Text>
                           </Box>
                         );

@@ -133,7 +133,7 @@ const PolicyDetail = () => {
               separator={<ChevronRightIcon color="gray.500" />}
             >
               <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink as={NavLink} to="/master-data/master-user">
+                <BreadcrumbLink as={NavLink} to="/policies/list">
                   <Text
                     as="b"
                     ml="4"
@@ -582,7 +582,7 @@ const PolicyDetail = () => {
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
                     >
-                      {quotation?.salesId?.firstName}
+                      {`${quotation?.sales?.firstName}``${quotation?.sales?.lastName}`}
                     </Text>
                   </Box>
                   <Box
