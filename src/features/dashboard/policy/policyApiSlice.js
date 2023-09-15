@@ -53,7 +53,27 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    resendEmails: builder.mutation({
+      query: (params) => {
+        return {
+          url: '/app/bookings/resend/policy',
+          method: 'POST',
+          body: { ...params },
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetPolicyListQuery, useGetBookingByIdQuery } = policyApiSlice;
+export const {
+  useGetPolicyListQuery,
+  useGetBookingByIdQuery,
+  useResendEmailsMutation,
+} = policyApiSlice;

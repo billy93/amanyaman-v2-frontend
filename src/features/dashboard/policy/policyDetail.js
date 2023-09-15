@@ -8,6 +8,10 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Navigate, useNavigate, useParams, NavLink } from 'react-router-dom';
 import {
   Text,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   BreadcrumbItem,
   BreadcrumbLink,
   Breadcrumb,
@@ -33,6 +37,14 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Select } from 'chakra-react-select';
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
@@ -46,6 +58,16 @@ import Payment from '../../../img/Payment.png';
 import PaymentSuccessBg from '../../../img/images/Naturescape.png';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { FiMoreVertical } from 'react-icons/fi';
+import {
+  AiOutlineDownload,
+  AiOutlineUpload,
+  AiOutlineMail,
+  AiOutlineFolderView,
+} from 'react-icons/ai';
+import { BiRefresh } from 'react-icons/bi';
+import { BsCreditCard2Front } from 'react-icons/bs';
+import EmailInput from './emailForm';
+import { message, setStateMessage } from './policySlice';
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -61,8 +83,16 @@ function usePrevious(value) {
 const PolicyDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const messages = useSelector((state) => state.PolicyList);
   const { id, policyNumberString } = useParams();
+  const [emails, setEmails] = useState([]);
+  const [currentEmail, setCurrentEmail] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+  });
   const [isActive] = useState(false);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
   // const { data: checkstatus, refetch, isSuccess } = useGetCheckPaymentQuery(id);
   const { data: quotation, refetch } = useGetBookingByIdQuery(id);
   // const [searchproducts, { isLoading }] = useSearchproductsMutation();
@@ -76,6 +106,22 @@ const PolicyDetail = () => {
   //    startDate:"",
   //    endDate:"",
   // })
+  const handleEmailChange = (e) => {
+    setCurrentEmail(e.target.value);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && currentEmail.trim() !== '') {
+      setEmails([...emails, currentEmail.trim()]);
+      setCurrentEmail('');
+    }
+  };
+
+  const handleRemoveEmail = (index) => {
+    const updatedEmails = [...emails];
+    updatedEmails.splice(index, 1);
+    setEmails(updatedEmails);
+  };
   function formatDateToLong(dateString) {
     const monthNames = [
       'January',
@@ -113,6 +159,36 @@ const PolicyDetail = () => {
     navigate('/policies/list');
   };
 
+  const addEmail = () => {
+    onOpen();
+  };
+
+  const prevMessage = usePrevious(messages);
+  React.useEffect(() => {
+    if (prevMessage !== messages) {
+      if (messages === 'fulfilled') {
+        onClose();
+      }
+    }
+  }, [messages, prevMessage]);
+
+  React.useEffect(() => {
+    let timer;
+
+    if (messages) {
+      timer = setTimeout(() => {
+        dispatch(setStateMessage(null));
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [dispatch, messages]);
+
+  const handleClose = () => {
+    onClose();
+  };
   return (
     <Box border={'1px'} borderColor="#ebebeb" mt="5em" ml="2em" mr="2em">
       <Box
@@ -165,17 +241,98 @@ const PolicyDetail = () => {
             </Breadcrumb>
           </Box>
           <Box display={'flex'} alignItems={'center'} gap="5px">
-            <IconButton
+            <Menu>
+              <MenuButton as={Button} colorScheme="white">
+                <FiMoreVertical color="#065BAA" size={'16px'} />
+              </MenuButton>
+              <MenuList>
+                <MenuItem>
+                  <Box gap="5px" display={'flex'} alignItems="center">
+                    <AiOutlineUpload color="#065BAA" size={'16px'} />
+                    <Text as="p" fontSize="xs">
+                      Upgrade
+                    </Text>
+                  </Box>
+                </MenuItem>
+                <MenuItem>
+                  <Box gap="5px" display={'flex'} alignItems="center">
+                    <BiRefresh color="#065BAA" size={'16px'} />
+                    <Text as="p" fontSize="xs">
+                      Update
+                    </Text>
+                  </Box>
+                </MenuItem>
+                <MenuItem>
+                  <Box
+                    gap="5px"
+                    display={'flex'}
+                    alignItems="center"
+                    onClick={addEmail}
+                  >
+                    <AiOutlineMail color="#065BAA" size={'16px'} />
+                    <Text as="p" fontSize="xs">
+                      Email
+                    </Text>
+                  </Box>
+                </MenuItem>
+                <MenuItem>
+                  <Box gap="5px" display={'flex'} alignItems="center">
+                    <AiOutlineFolderView color="#065BAA" size={'16px'} />
+                    <Text as="p" fontSize="xs">
+                      View
+                    </Text>
+                  </Box>
+                </MenuItem>
+                <MenuItem>
+                  <Box gap="5px" display={'flex'} alignItems="center">
+                    <AiOutlineDownload color="#065BAA" size={'16px'} />
+                    <Text as="p" fontSize="xs">
+                      Download
+                    </Text>
+                  </Box>
+                </MenuItem>
+                <MenuItem>
+                  <Box gap="5px" display={'flex'} alignItems="center">
+                    <AiOutlineDownload color="#065BAA" size={'16px'} />
+                    <Text as="p" fontSize="xs">
+                      Download Proforma Invoice
+                    </Text>
+                  </Box>
+                </MenuItem>
+                <MenuItem>
+                  <Box gap="5px" display={'flex'} alignItems="center">
+                    <BsCreditCard2Front color="#065BAA" size={'16px'} />
+                    <Text as="p" fontSize="xs">
+                      Edit Ticket Number
+                    </Text>
+                  </Box>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            {/* <IconButton
               _hover={{ color: 'white' }}
               icon={<FiMoreVertical color="#065BAA" size={'16px'} />}
               bg="white"
               onClick={handleMenu}
-            />
+            /> */}
             {/* <IconButton _hover={{color:"white"}} icon={ <CiTrash color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleDeletAgent}/> */}
           </Box>
         </Box>
       </Box>
       <Box display={'flex'} justifyContent={'space-between'} m="1em">
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              <ModalCloseButton />
+            </ModalHeader>
+            <ModalBody>
+              <Box>
+                <EmailInput quotation={quotation} handleClose={handleClose} />
+              </Box>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
         <Box w={{ base: '100%', md: '30%' }}>
           <Box
             display={'flex'}
@@ -582,7 +739,7 @@ const PolicyDetail = () => {
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
                     >
-                      {`${quotation?.sales?.firstName}``${quotation?.sales?.lastName}`}
+                      {`${quotation?.sales?.firstName} ${quotation?.sales?.lastName}`}
                     </Text>
                   </Box>
                   <Box

@@ -5,6 +5,7 @@ const createPolicySlice = createSlice({
   initialState: {
     policy: {
       masterChecked: false,
+      message: null,
       listPolicy: [
         {
           id: 1,
@@ -39,12 +40,16 @@ const createPolicySlice = createSlice({
     setStateSelectedt: (state, action) => {
       state.policy.selectedPolicy = action.payload;
     },
+    setStateMessage: (state, action) => {
+      state.policy.message = action.payload;
+    },
   },
 });
 
-export const { setStatePolicyList, setStateSelectedt } =
+export const { setStatePolicyList, setStateSelectedt, setStateMessage } =
   createPolicySlice.actions;
 
 export default createPolicySlice.reducer;
 export const listPolicy = (state) => state.policyList.policy;
+export const message = (state) => state.policyList.message;
 export const listSelected = (state) => state.policyList.policy?.selectedPolicy;
