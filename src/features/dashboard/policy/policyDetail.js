@@ -49,7 +49,10 @@ import {
 import { Select } from 'chakra-react-select';
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 import { SlCalender } from 'react-icons/sl';
-import { useGetBookingByIdQuery } from './policyApiSlice';
+import {
+  useGetBookingByIdQuery,
+  useDownloadPolicyQuery,
+} from './policyApiSlice';
 import Files from '../../../img/images/Files.png';
 import Plan from '../../../img/images/Plane.png';
 import Pasport from '../../../img/images/Passport.png';
@@ -95,17 +98,79 @@ const PolicyDetail = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const { data: checkstatus, refetch, isSuccess } = useGetCheckPaymentQuery(id);
   const { data: quotation, refetch } = useGetBookingByIdQuery(id);
-  // const [searchproducts, { isLoading }] = useSearchproductsMutation();
+  const [onTrigger, setOnTrigger] = useState(true);
+
+  const getTravellerId = React.useCallback(
+    (type) => {
+      let idTraveller;
+      if (type) {
+        let data = quotation?.travellers.filter(
+          (quotation) => quotation.policyNumber === type
+        );
+        // console.log('ddddd', data);
+        idTraveller = `${id}/${data && data[0]?.id}`;
+      } else {
+        idTraveller = `${id}/${quotation && quotation[0]?.travellers[0].id}`;
+      }
+      return idTraveller;
+    },
+    [quotation]
+  );
+
+  const { data: downloadPolicy } = useDownloadPolicyQuery(
+    getTravellerId(policyNumberString),
+    {
+      skip: onTrigger,
+    }
+  );
+  const handleDownload = () => {
+    setOnTrigger(false);
+  };
+
   const [isActives, setActives] = useState(false);
-  // console.log('compre', hasCompletedAllSteps)
-  // const [ManualInput, setManualInput] = React.useState({
-  //    coverageType:"",
-  //    travellerType:"",
-  //    amount:"",
-  //    destinationCountry:"",
-  //    startDate:"",
-  //    endDate:"",
-  // })
+
+  const openNewTab = async (url) => {
+    const newTab = window.open('', '_blank');
+    if (newTab) {
+      newTab.location.href = url;
+      return newTab;
+    } else {
+      console.error('Failed to open a new tab.');
+      return null;
+    }
+  };
+
+  React.useEffect(() => {
+    downloadAndOpenPdfInNewTab(downloadPolicy);
+  }, [downloadPolicy]);
+
+  const downloadAndOpenPdfInNewTab = async (downloadPolicy) => {
+    if (!downloadPolicy) {
+      console.error('PDF data is missing.');
+      return;
+    }
+
+    const newTab = await openNewTab(downloadPolicy);
+
+    if (newTab) {
+      // Create an iframe in the new tab and set its source to the PDF data URL
+      const iframe = document.createElement('iframe');
+      iframe.src = downloadPolicy;
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      newTab.document.body.appendChild(iframe);
+
+      // Clean up the blob URL when the new tab is closed
+      newTab.addEventListener('beforeunload', () => {
+        URL.revokeObjectURL(downloadPolicy);
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    getTravellerId(policyNumberString);
+  }, [policyNumberString, getTravellerId]);
+
   const handleEmailChange = (e) => {
     setCurrentEmail(e.target.value);
   };
@@ -284,7 +349,12 @@ const PolicyDetail = () => {
                   </Box>
                 </MenuItem>
                 <MenuItem>
-                  <Box gap="5px" display={'flex'} alignItems="center">
+                  <Box
+                    gap="5px"
+                    display={'flex'}
+                    alignItems="center"
+                    onClick={handleDownload}
+                  >
                     <AiOutlineDownload color="#065BAA" size={'16px'} />
                     <Text as="p" fontSize="xs">
                       Download

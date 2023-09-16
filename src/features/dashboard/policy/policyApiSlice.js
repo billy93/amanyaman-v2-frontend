@@ -53,6 +53,19 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    downloadPolicy: builder.query({
+      query: (id) => {
+        console.log('Downloading', id);
+        // const { page, size } = datas;
+        return {
+          url: `/app/file-upload/policy/files/download/${id}`,
+          method: 'GET',
+          responseType: 'blob',
+          responseHandler: (response) =>
+            response.blob().then((blob) => URL.createObjectURL(blob)),
+        };
+      },
+    }),
     resendEmails: builder.mutation({
       query: (params) => {
         return {
@@ -73,6 +86,7 @@ export const policyApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useDownloadPolicyQuery,
   useGetPolicyListQuery,
   useGetBookingByIdQuery,
   useResendEmailsMutation,

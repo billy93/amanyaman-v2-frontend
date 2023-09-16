@@ -14,6 +14,7 @@ const EmailForm = ({ quotation, handleClose }) => {
   const [sendEmails, { isLoading, status }] = useResendEmailsMutation();
   const { id, policyNumberString } = useParams();
   const { showErrorToast, showSuccessToast } = UseCustomToast();
+
   const handleSendEmails = async () => {
     const data = {
       bookingId: id,
