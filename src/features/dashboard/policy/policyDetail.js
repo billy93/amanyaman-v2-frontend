@@ -73,6 +73,7 @@ import { BiRefresh } from 'react-icons/bi';
 import { BsCreditCard2Front } from 'react-icons/bs';
 import EmailInput from './emailForm';
 import { message, setStateMessage } from './policySlice';
+import View from './view';
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -92,9 +93,39 @@ const PolicyDetail = () => {
   const { id, policyNumberString } = useParams();
   const [emails, setEmails] = useState([]);
   const [currentEmail, setCurrentEmail] = useState('');
+  const [viewModal, setViewModal] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
   });
+  const [width, setWidth] = React.useState(500); // Default width
+  const [numPages, setNumPages] = React.useState(null);
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+  const iframeRef = React.useRef(null);
+
+  const handleIframeLoad = () => {
+    // Access the iframe's contentDocument and body
+    const iframeDoc = iframeRef.current.contentDocument;
+    const iframeBody = iframeDoc.body;
+
+    // Add your custom iframe styles here if needed
+    iframeRef.current.style.width = '100%';
+    iframeRef.current.style.height = '100vh';
+
+    // Clean up the iframe when the modal is closed
+    // onClose && onClose();
+
+    // Clean up any event listeners or resources as needed
+    // You can use the 'beforeunload' event if required
+  };
+
+  // Calculate responsive width based on the modal content width
+  const modalContentWidth = 60; // Percentage of modal width
+  React.useEffect(() => {
+    const maxWidth = window.innerWidth * (modalContentWidth / 100);
+    setWidth(maxWidth);
+  }, [setViewModal]);
   const [isActive] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -107,6 +138,7 @@ const PolicyDetail = () => {
     isSuccess,
   } = useGetBookingByIdQuery(id);
   const [onTrigger, setOnTrigger] = useState(true);
+  const [onTriggerView, setOnTriggerView] = useState(true);
 
   const getTravellerId = React.useCallback(
     (type) => {
@@ -132,6 +164,14 @@ const PolicyDetail = () => {
     isSuccess: isSuccessDownload,
   } = useDownloadPolicyQuery(getTravellerId(policyNumberString), {
     skip: onTrigger,
+  });
+  const {
+    data: viewPolicy,
+    isLoading: loadingView,
+    isError: isErrorView,
+    isSuccess: isSuccessView,
+  } = useDownloadPolicyQuery(getTravellerId(policyNumberString), {
+    skip: onTriggerView,
   });
   const handleDownload = () => {
     setOnTrigger(false);
@@ -264,14 +304,27 @@ const PolicyDetail = () => {
   const handleClose = () => {
     onClose();
   };
+
+  const handleView = () => {
+    setOnTriggerView(false);
+    setViewModal(!viewModal);
+    // setOnTrigger(true);
+  };
+
+  React.useEffect(() => {
+    const maxWidth = window.innerWidth * (modalContentWidth / 100);
+    setWidth(maxWidth);
+  }, [viewModal]);
+
+  console.log('view closed', viewModal);
   let content;
-  if (isLoading || loadingDownload) {
+  if (isLoading || loadingDownload || loadingView) {
     content = (
       <Center h="50vh" color="#065BAA">
         <PulseLoader color={'#065BAA'} />
       </Center>
     );
-  } else if (isSuccess || isSuccessDownload) {
+  } else if (isSuccess || isSuccessDownload || isSuccessView) {
     content = (
       <Box border={'1px'} borderColor="#ebebeb" mt="5em" ml="2em" mr="2em">
         <Box
@@ -359,7 +412,12 @@ const PolicyDetail = () => {
                     </Box>
                   </MenuItem>
                   <MenuItem>
-                    <Box gap="5px" display={'flex'} alignItems="center">
+                    <Box
+                      gap="5px"
+                      display={'flex'}
+                      alignItems="center"
+                      onClick={handleView}
+                    >
                       <AiOutlineFolderView color="#065BAA" size={'16px'} />
                       <Text as="p" fontSize="xs">
                         View
@@ -421,6 +479,28 @@ const PolicyDetail = () => {
               </ModalBody>
             </ModalContent>
           </Modal>
+          <Modal isOpen={viewModal} onClose={setViewModal} size="full">
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>
+                <ModalCloseButton />
+              </ModalHeader>
+              <ModalBody>
+                <Box>
+                  <iframe
+                    ref={iframeRef}
+                    src={viewPolicy}
+                    title="Embedded Content"
+                    width="800px"
+                    height="600px"
+                    frameBorder="0"
+                    onLoad={handleIframeLoad}
+                    scrolling="no"
+                  ></iframe>
+                </Box>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
           <Box w={{ base: '100%', md: '30%' }}>
             <Box
               display={'flex'}
@@ -468,10 +548,9 @@ const PolicyDetail = () => {
                       {'Booking Code'}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
-                      color="#065BAA"
                       style={{ fontSize: '12px' }}
                     >
                       {quotation?.transactionId}
@@ -503,10 +582,9 @@ const PolicyDetail = () => {
                       {'Travel Details'}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
-                      color="#065BAA"
                       style={{ fontSize: '12px' }}
                     >
                       {`${
@@ -516,19 +594,17 @@ const PolicyDetail = () => {
                       }`}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
-                      color="#065BAA"
                       style={{ fontSize: '12px' }}
                     >
                       {'Singapore'}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
-                      color="#065BAA"
                       style={{ fontSize: '12px' }}
                     >
                       {`${formatDateToLong(
@@ -566,7 +642,6 @@ const PolicyDetail = () => {
                         as="p"
                         size={'sm'}
                         fontFamily={'Mulish'}
-                        color="#065BAA"
                         style={{ fontSize: '12px' }}
                         gap="1em"
                       >
@@ -604,7 +679,6 @@ const PolicyDetail = () => {
                         as="p"
                         size={'sm'}
                         fontFamily={'Mulish'}
-                        color="#065BAA"
                         style={{ fontSize: '12px' }}
                         gap="1em"
                       >
@@ -657,7 +731,7 @@ const PolicyDetail = () => {
                         {'Status'}
                       </Text>
                       <Text
-                        as="b"
+                        as="p"
                         size={'sm'}
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
@@ -684,7 +758,7 @@ const PolicyDetail = () => {
                         {'Payment Code'}
                       </Text>
                       <Text
-                        as="b"
+                        as="p"
                         size={'sm'}
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
@@ -713,7 +787,7 @@ const PolicyDetail = () => {
                         {'Payment Method'}
                       </Text>
                       <Text
-                        as="b"
+                        as="p"
                         size={'sm'}
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
@@ -740,7 +814,7 @@ const PolicyDetail = () => {
                         {'Premium price'}
                       </Text>
                       <Text
-                        as="b"
+                        as="p"
                         size={'sm'}
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
@@ -767,7 +841,7 @@ const PolicyDetail = () => {
                         {'Quantity'}
                       </Text>
                       <Text
-                        as="b"
+                        as="p"
                         size={'sm'}
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
@@ -795,7 +869,7 @@ const PolicyDetail = () => {
                         {'Stamp Duty'}
                       </Text>
                       <Text
-                        as="b"
+                        as="p"
                         size={'sm'}
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
@@ -822,7 +896,7 @@ const PolicyDetail = () => {
                         {'Issued by'}
                       </Text>
                       <Text
-                        as="b"
+                        as="p"
                         size={'sm'}
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
@@ -849,7 +923,7 @@ const PolicyDetail = () => {
                         {'Purchase Date'}
                       </Text>
                       <Text
-                        as="b"
+                        as="p"
                         size={'sm'}
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
@@ -1843,7 +1917,7 @@ const PolicyDetail = () => {
         </Box>
       </Box>
     );
-  } else if (isError || isErrorDownload) {
+  } else if (isError || isErrorDownload || isErrorView) {
     content = <p>{'Something Wrong'}</p>;
   }
   return content;
