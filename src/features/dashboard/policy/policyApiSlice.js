@@ -66,6 +66,22 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    updateDataPolicy: builder.mutation({
+      query: (data) => {
+        return {
+          url: '/app/bookings/update-policy',
+          method: 'POST',
+          body: { ...data },
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
     resendEmails: builder.mutation({
       query: (params) => {
         return {
@@ -90,4 +106,5 @@ export const {
   useGetPolicyListQuery,
   useGetBookingByIdQuery,
   useResendEmailsMutation,
+  useUpdateDataPolicyMutation,
 } = policyApiSlice;

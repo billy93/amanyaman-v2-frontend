@@ -74,6 +74,7 @@ import { BsCreditCard2Front } from 'react-icons/bs';
 import EmailInput from './emailForm';
 import { message, setStateMessage } from './policySlice';
 import View from './view';
+import { setHistoryForm } from '../../auth/authSlice';
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -139,7 +140,12 @@ const PolicyDetail = () => {
   } = useGetBookingByIdQuery(id);
   const [onTrigger, setOnTrigger] = useState(true);
   const [onTriggerView, setOnTriggerView] = useState(true);
-
+  const prevId = usePrevious(id);
+  React.useEffect(() => {
+    if (prevId !== id) {
+      dispatch(setHistoryForm(0));
+    }
+  }, [id]);
   const getTravellerId = React.useCallback(
     (type) => {
       let idTraveller;
@@ -225,6 +231,7 @@ const PolicyDetail = () => {
     setCurrentEmail(e.target.value);
   };
 
+  // console.log('policyNumberString', policyNumberString);
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && currentEmail.trim() !== '') {
       setEmails([...emails, currentEmail.trim()]);
@@ -316,6 +323,18 @@ const PolicyDetail = () => {
     setWidth(maxWidth);
   }, [viewModal]);
 
+  const handleEditPolicy = () => {
+    if (policyNumberString !== undefined) {
+      navigate(`/policies/detail/update/${policyNumberString}/${id}`);
+    } else {
+      navigate(`/policies/detail/update/${id}`);
+    }
+  };
+
+  const handleUpgrade = () => {
+    navigate(`/upgrade-quote/search/${id}`);
+  };
+
   console.log('view closed', viewModal);
   let content;
   if (isLoading || loadingDownload || loadingView) {
@@ -368,7 +387,7 @@ const PolicyDetail = () => {
                     style={{ pointerEvents: 'none' }}
                   >
                     <Text as={'b'} fontSize={'sm'} color="#231F20">
-                      {policyNumberString !== undefined
+                      {policyNumberString === undefined
                         ? quotation?.travellers[0]?.policyNumber
                         : policyNumberString}
                     </Text>
@@ -383,7 +402,12 @@ const PolicyDetail = () => {
                 </MenuButton>
                 <MenuList>
                   <MenuItem>
-                    <Box gap="5px" display={'flex'} alignItems="center">
+                    <Box
+                      gap="5px"
+                      display={'flex'}
+                      alignItems="center"
+                      onClick={handleUpgrade}
+                    >
                       <AiOutlineUpload color="#065BAA" size={'16px'} />
                       <Text as="p" fontSize="xs">
                         Upgrade
@@ -391,7 +415,12 @@ const PolicyDetail = () => {
                     </Box>
                   </MenuItem>
                   <MenuItem>
-                    <Box gap="5px" display={'flex'} alignItems="center">
+                    <Box
+                      gap="5px"
+                      display={'flex'}
+                      alignItems="center"
+                      onClick={handleEditPolicy}
+                    >
                       <BiRefresh color="#065BAA" size={'16px'} />
                       <Text as="p" fontSize="xs">
                         Update
@@ -517,7 +546,7 @@ const PolicyDetail = () => {
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {policyNumberString !== undefined
+                  {policyNumberString === undefined
                     ? quotation?.travellers[0]?.policyNumber
                     : policyNumberString}
                 </Text>
@@ -964,7 +993,7 @@ const PolicyDetail = () => {
                     style={{ fontSize: '14px' }}
                     fontWeight={'400'}
                   >
-                    {policyNumberString !== undefined
+                    {policyNumberString === undefined
                       ? quotation?.travellers[0]?.policyNumber
                       : policyNumberString}
                   </Text>

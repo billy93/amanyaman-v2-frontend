@@ -484,6 +484,9 @@ p{
 .my-custom-input{
   margin-bottom: 20px;
 }
+.my-custom-inputs{
+  padding:1em 0.8em;
+}
 
 /* active state */
 
@@ -619,4 +622,5 @@ p{
 .calendarClassName{
   position: relative;
   z-index: 9999;
+  width: 100%;
 }

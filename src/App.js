@@ -43,6 +43,9 @@ import DetailProductPrice from './features/dashboard/productPrice/detailProductP
 import DetailMasterProduct from './features/dashboard/masterProduct/detailMasterProduct';
 import PaymentSuccess from './features/dashboard/paymentSuccess/paymentSuccess';
 import PaymentLoader from './components/loaderComponent';
+import UpdatePolicyPage from './features/dashboard/policy/updatePolicy';
+import UpgradePolicyPage from './features/dashboard/upgradePoicy/mainQuotSearch';
+import UpgradePolicyPageId from './features/dashboard/upgradePoicy/quotaSearchById';
 
 function App() {
   return (
@@ -61,6 +64,15 @@ function App() {
       >
         <Route path="search" element={<QuotaSearch />} />
         <Route path="search/:id" element={<QuotaSearchId />} />
+      </Route>
+      <Route
+        path="/upgrade-quote"
+        exact
+        element={<LayoutDashboard allowedRoles={['ROLE_TRAVEL_AGENT']} />}
+      >
+        <Route path="search" element={<UpgradePolicyPage />} />
+        <Route path="search/:id" element={<UpgradePolicyPageId />} />
+        {/* <Route path="search/:id" element={<QuotaSearchId />} /> */}
       </Route>
       <Route
         path="/dashboard"
@@ -97,6 +109,11 @@ function App() {
       >
         <Route path="list" element={<PolicyList />} />
         <Route path="detail/:id" element={<PolicyDetails />} />
+        <Route path="detail/update/:id" element={<UpdatePolicyPage />} />
+        <Route
+          path="detail/update/:policyNumberString/:id"
+          element={<UpdatePolicyPage />}
+        />
         <Route
           path="detail/:policyNumberString/:id"
           element={<PolicyDetails />}
