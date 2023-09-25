@@ -1032,9 +1032,9 @@ const PolicyDetail = () => {
                 pt="10px"
                 borderBottom={'1px solid #ebebeb'}
                 display={'flex'}
-                flexDirection={'row'}
-                alignItems={'center'}
-                justifyContent={'space-between'}
+                flexDirection={'column'}
+                alignItems={'flex-start'}
+                justifyContent={'center'}
               >
                 <Text
                   as="b"
@@ -1045,24 +1045,39 @@ const PolicyDetail = () => {
                   {'Policy History'}
                 </Text>
                 <Box
-                  bg="#f0f3f8"
                   p="2px"
                   display={'flex'}
                   justifyContent={'space-between'}
                   alignItems={'center'}
                   gap="5px"
+                  flexDirection="column"
                 >
-                  <Box w="8px" h="8px" bg="green" borderRadius={'full'}></Box>
                   {quotation?.histories.map((history, i) => (
-                    <Text
+                    <Box
+                      bg="#f0f3f8"
+                      p={'0.2em'}
                       key={i}
-                      as="p"
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '12px' }}
-                      fontWeight={'400'}
+                      display={'flex'}
+                      justifyContent={'space-between'}
+                      alignItems={'center'}
                     >
-                      {history.message}
-                    </Text>
+                      <Box
+                        w="8px"
+                        h="8px"
+                        bg="green"
+                        borderRadius={'full'}
+                        display="flex"
+                      />
+                      <Text
+                        p="10px"
+                        as="p"
+                        fontFamily={'Mulish'}
+                        style={{ fontSize: '12px' }}
+                        fontWeight={'400'}
+                      >
+                        {history.message}
+                      </Text>
+                    </Box>
                   ))}
                 </Box>
               </Box>
