@@ -40,6 +40,7 @@ import Umbrella from '../../../../img/Umbrella.png';
 import Payment from '../../../../img/Payment.png';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import CurrencyFormatter from '../../../../components/formatCurrency';
+import { BsWallet2 } from 'react-icons/bs';
 // import usePersist from '../../../../features/hook/usePersist';
 // import { setTravellersData } from '../quotaSearchSlice';
 
@@ -274,18 +275,45 @@ const Form3 = ({
                     {creditLimit?.limitEnough &&
                     creditLimit?.status === 'OK' ? (
                       <Box
-                        style={{
-                          marginBottom: '1em',
-                          justifyContent: 'center',
-                          display: 'flex',
-                          alignItems: 'center',
-                          padding: '1em',
-                          background: '#50b84857',
-                          border: '1px solid #50b848',
-                          borderRadius: '5px',
-                        }}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
                       >
-                        Credit Limit Enough
+                        <Box
+                          style={{
+                            marginBottom: '1em',
+                            justifyContent: 'center',
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: '1em',
+                            background: '#50b84857',
+                            border: '1px solid #50b848',
+                            borderRadius: '5px',
+                          }}
+                        >
+                          <Text asp="p" fontSize="sm">
+                            Credit Limit Enough
+                          </Text>
+                        </Box>
+
+                        <Box>
+                          <BsWallet2 size="2em" />
+                        </Box>
+                        <Box
+                          display={'flex'}
+                          alignItems={'center'}
+                          flexDirection={'column'}
+                          pb="1em"
+                        >
+                          <Text as="p" fontSize="sm">
+                            Current Balance
+                          </Text>
+                          <Text as="b" fontSize="sm">
+                            <CurrencyFormatter
+                              amount={creditLimit?.amountResponse}
+                            />
+                          </Text>
+                        </Box>
                       </Box>
                     ) : (
                       <Box
