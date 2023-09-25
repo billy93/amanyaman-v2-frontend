@@ -1355,8 +1355,8 @@ const PolicyDetail = () => {
                                         fontFamily={'Mulish'}
                                         style={{ fontSize: '14px' }}
                                       >
-                                        {travellers?.ticketFlightNumber
-                                          ? travellers?.ticketFlightNumber
+                                        {travellers?.ticket
+                                          ? travellers?.ticket
                                           : '-'}
                                       </Text>
                                     </Box>
@@ -1792,7 +1792,7 @@ const PolicyDetail = () => {
                                     fontFamily={'Mulish'}
                                     style={{ fontSize: '14px' }}
                                   >
-                                    {travellers?.ticketFlightNumber}
+                                    {travellers?.ticket}
                                   </Text>
                                 </Box>
                               </Box>

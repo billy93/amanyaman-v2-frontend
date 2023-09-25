@@ -831,7 +831,15 @@ const Polcies = () => {
         Cell: ({ row }) => (
           <Box>
             {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.statusSales ? row.original.statusSales : '-'}
+            {row.original.statusSales === 'SUCCESS' ? (
+              <Button variant={'outline'} colorScheme="teal">
+                {'Success'}
+              </Button>
+            ) : (
+              <Button variant={'outline'} colorScheme="yellow">
+                {'Pending'}
+              </Button>
+            )}
           </Box>
         ),
       },
@@ -877,6 +885,21 @@ const Polcies = () => {
         ),
       },
       {
+        Header: 'Start Date',
+        accessor: 'startDate',
+        maxWidth: 400,
+        minWidth: 200,
+        width: 200,
+        Filter: SelectDateColumnFilter,
+        filter: 'date',
+        Cell: ({ row }) => (
+          <Box>
+            {/* <AiOutlineFileDone size={25} /> */}
+            {formatDateToLong(row.original.startDate)}
+          </Box>
+        ),
+      },
+      {
         Header: 'Purchase Date',
         accessor: 'purchaseDate',
         maxWidth: 400,
@@ -889,6 +912,14 @@ const Polcies = () => {
             {/* <AiOutlineFileDone size={25} /> */}
             {formatDateToLong(row.original.purchaseDate)}
           </Box>
+        ),
+      },
+      {
+        Header: 'Action',
+        Cell: ({ row }) => (
+          <Button variant={'outline'} colorScheme="teal">
+            {'Active'}
+          </Button>
         ),
       },
     ],

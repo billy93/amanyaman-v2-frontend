@@ -469,7 +469,7 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {'Product Price'}
+                    {'Premium Price'}
                   </Text>
                   <Text
                     as="b"
@@ -526,7 +526,7 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {'Total Payment'}
+                    {'Stamp Duty'}
                   </Text>
                   <Text
                     as="b"
@@ -534,12 +534,11 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    <CurrencyFormatter
-                      amount={
-                        newlistTravellers?.length *
-                        parseInt(payload?.bookingProduct?.finalPrice)
-                      }
-                    />
+                    {payload?.stampDuty > 0 ? (
+                      <CurrencyFormatter amount={payload?.stampDuty} />
+                    ) : (
+                      'IDR 0'
+                    )}
                   </Text>
                 </Box>
               </Box>

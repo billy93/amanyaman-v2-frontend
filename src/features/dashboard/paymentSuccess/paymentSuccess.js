@@ -218,10 +218,9 @@ const PaymentSuccessPage = () => {
                     {'Travel Details'}
                   </Text>
                   <Text
-                    as="b"
+                    as="p"
                     size={'sm'}
                     fontFamily={'Mulish'}
-                    color="#065BAA"
                     style={{ fontSize: '12px' }}
                   >
                     {`${
@@ -231,7 +230,7 @@ const PaymentSuccessPage = () => {
                     }`}
                   </Text>
                   <Text
-                    as="b"
+                    as="p"
                     size={'sm'}
                     fontFamily={'Mulish'}
                     color="#065BAA"
@@ -240,7 +239,7 @@ const PaymentSuccessPage = () => {
                     {'Singapore'}
                   </Text>
                   <Text
-                    as="b"
+                    as="p"
                     size={'sm'}
                     fontFamily={'Mulish'}
                     color="#065BAA"
@@ -315,10 +314,9 @@ const PaymentSuccessPage = () => {
                     {'Number of Travellers'}
                   </Text>
                   <Text
-                    as="b"
+                    as="p"
                     size={'sm'}
                     fontFamily={'Mulish'}
-                    color="#065BAA"
                     style={{ fontSize: '12px' }}
                   >
                     {`${quotation?.travellers?.length}`}
@@ -370,7 +368,7 @@ const PaymentSuccessPage = () => {
                       {'Status'}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
@@ -397,7 +395,7 @@ const PaymentSuccessPage = () => {
                       {'Payment Code'}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
@@ -426,7 +424,7 @@ const PaymentSuccessPage = () => {
                       {'Payment Method'}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
@@ -453,7 +451,7 @@ const PaymentSuccessPage = () => {
                       {'Premium price'}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
@@ -480,7 +478,7 @@ const PaymentSuccessPage = () => {
                       {'Quantity'}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
@@ -508,7 +506,7 @@ const PaymentSuccessPage = () => {
                       {'Stamp Duty'}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
@@ -535,7 +533,7 @@ const PaymentSuccessPage = () => {
                       {'Issued by'}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
@@ -562,7 +560,7 @@ const PaymentSuccessPage = () => {
                       {'Purchase Date'}
                     </Text>
                     <Text
-                      as="b"
+                      as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
                       style={{ fontSize: '12px' }}
@@ -725,7 +723,7 @@ const PaymentSuccessPage = () => {
                               fontFamily={'Mulish'}
                               style={{ fontSize: '14px' }}
                             >
-                              {travellers?.fullName}
+                              {`${travellers?.firstName} ${travellers?.lastName}`}
                             </Text>
                           </Box>
                         </Box>
@@ -845,7 +843,7 @@ const PaymentSuccessPage = () => {
                               fontFamily={'Mulish'}
                               style={{ fontSize: '14px' }}
                             >
-                              {travellers?.ticketFlightNumber}
+                              {travellers?.ticket}
                             </Text>
                           </Box>
                         </Box>
