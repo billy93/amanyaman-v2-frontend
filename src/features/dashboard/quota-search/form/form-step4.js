@@ -724,6 +724,7 @@ const Form3 = ({
                   isLoading={isLoading}
                   disabled={
                     isLoading ||
+                    loading ||
                     (tabIndex === 1 && creditLimit?.status !== 'OK')
                       ? true
                       : false

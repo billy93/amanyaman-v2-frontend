@@ -149,6 +149,14 @@ const Form3 = ({
     }
   };
 
+  const checkCallbacks = React.useCallback((creditLimit) => {
+    setCreditLimit(creditLimit);
+  }, []);
+  React.useEffect(() => {
+    if (creditLimit) {
+      checkCallbacks(creditLimit);
+    }
+  }, [creditLimit, checkCallbacks]);
   const prevTab = usePrevious(tabIndex);
   React.useEffect(() => {
     if (prevTab !== tabIndex && tabIndex === 1) {
@@ -156,7 +164,7 @@ const Form3 = ({
     }
   }, [tabIndex, prevTab]);
 
-  // console.log('credit payload', payload);
+  // console.log('credit creditLimit', creditLimit);
 
   return (
     <Box border={'1px'} borderColor="#ebebeb">
@@ -609,8 +617,7 @@ const Form3 = ({
                   disabled={
                     isLoading ||
                     loading ||
-                    creditLimit === null ||
-                    creditLimit(tabIndex === 1 && creditLimit?.status !== 'OK')
+                    (tabIndex === 1 && creditLimit?.status !== 'OK')
                       ? true
                       : false
                   }

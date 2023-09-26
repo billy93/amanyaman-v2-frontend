@@ -113,34 +113,61 @@ const Form1 = ({
   //    endDate:"",
   // })
 
+  console.log('quotation', quotation);
+  function formatDateObject(date) {
+    if (!(date instanceof Date)) {
+      throw new Error('Invalid date object');
+    }
+
+    const year = date.getFullYear();
+    // Add 1 to the month because getMonth() returns values from 0 to 11
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return { year, month, day };
+  }
+
   function convertDateToObject(dateString) {
     const [year, month, day] = dateString.split('-').map(Number);
     return { year, month, day };
   }
-  React.useEffect(() => {
-    if (quotation) {
-      const type =
-        quotation?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Annual Trip';
-      dispatch(setFormStateTravellerType(type));
-      if (quotation?.from) {
-        dispatch(
-          setFormStateStartDate({
-            startDate: convertDateToObject(quotation.from),
-          })
-        );
-      }
-      if (quotation?.to) {
-        dispatch(
-          setFormEndDate({
-            endDate: convertDateToObject(quotation.to),
-          })
-        );
-      }
-      if (initState?.coverageType === 'Single Trip') {
-        addOneDayLater(quotation.from);
-      }
+
+  const setDataFromResponse = React.useCallback((quotation) => {
+    const type =
+      quotation?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Annual Trip';
+    dispatch(setFormStateTravellerType(type));
+    if (quotation?.from) {
+      dispatch(
+        setFormStateStartDate({
+          startDate: convertDateToObject(quotation.from),
+        })
+      );
     }
-  }, [quotation, quotation?.to, quotation?.from, dispatch]);
+    if (quotation?.to !== undefined) {
+      dispatch(
+        setFormEndDate({
+          endDate: {
+            day: 1,
+            month: 12,
+            year: 2000,
+          },
+        })
+      );
+    } else {
+      const date = new Date();
+      dispatch(
+        setFormEndDate({
+          endDate: formatDateObject(date),
+        })
+      );
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (quotation !== undefined) {
+      setDataFromResponse(quotation);
+    }
+  }, [quotation, setDataFromResponse]);
 
   const handleTypeTrip = (type) => {
     dispatch(setFormStateCoverageType(type));
@@ -564,633 +591,601 @@ const Form1 = ({
           </Heading>
         </Box>
       </Box>
-      <Tabs position="relative" variant="unstyled">
-        <TabList>
-          <Tab
-            h={{ base: 'auto', md: '48px' }}
-            width={{ base: '100%', md: '251px' }}
+      <Box
+        position={'relative'}
+        w={{ base: '100%' }}
+        display="flex"
+        justifyContent="space-between"
+        // alignItems="center"
+        // bg="red"
+        top={{ base: '0' }}
+        p="10px 20px"
+      >
+        <Box
+          position={'relative'}
+          zIndex={'1'}
+          w={{ base: '60%' }}
+          bg="white"
+          mt="1em"
+          // boxShadow={'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'}
+        >
+          <Box
+            mt="1em"
+            display="flex"
+            justifyContent="flext-start"
+            width={{ base: '100%' }}
+            gap="4px"
           >
-            Manual Input
-          </Tab>
-          <Tab
-            h={{ base: 'auto', md: '48px' }}
-            width={{ base: '100%', md: '251px' }}
-          >
-            Use Galileo PNR
-          </Tab>
-        </TabList>
-        <TabIndicator
-          mt="-1.5px"
-          height="2px"
-          width={{ base: '100%', md: '251px' }}
-          bg="blue.500"
-          borderRadius="1px"
-        />
-        <TabPanels>
-          <TabPanel mt="1em">
-            <Box
-              position={'relative'}
-              w={{ base: '100%' }}
-              display="flex"
-              justifyContent="space-between"
-              // alignItems="center"
-              // bg="red"
-              top={{ base: '0' }}
-              p="10px 20px"
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              fontFamily={'Mulish'}
             >
-              <Box
-                position={'relative'}
-                zIndex={'1'}
-                w={{ base: '60%' }}
-                bg="white"
-                // boxShadow={'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'}
+              <Button
+                bg="#ebebeb"
+                w={{ base: '100%' }}
+                border={
+                  initState?.coverageType === 'Single Trip'
+                    ? '2px solid #065BAA'
+                    : ''
+                }
+                h="48px"
+                aria-label="Search database"
+                color={
+                  initState?.coverageType === 'Single Trip'
+                    ? '#065BAA'
+                    : '#231F20'
+                }
+                _hover={{
+                  bg: '#ebebeb',
+                }}
+                onClick={() => handleTypeTrip('Single Trip')}
               >
-                <Box
-                  mt="1em"
-                  display="flex"
-                  justifyContent="flext-start"
-                  width={{ base: '100%' }}
-                  gap="4px"
+                Single Trip
+              </Button>
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                fontFamily={'Mulish'}
+                style={{
+                  transform: 'translate(-12px, -40px) scale(0.75)',
+                  fontSize: '18px',
+                  zIndex: '0',
+                }}
+              >
+                Select Coverage Type
+              </FormLabel>
+            </FormControl>
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              fontFamily={'Mulish'}
+            >
+              <Button
+                bg="#ebebeb"
+                border={
+                  initState?.coverageType === 'Anual Trip'
+                    ? '2px solid #065BAA'
+                    : ''
+                }
+                w={{ base: '100%' }}
+                h="48px"
+                aria-label="Search database"
+                color={
+                  initState?.coverageType === 'Anual Trip'
+                    ? '#065BAA'
+                    : '#231F20'
+                }
+                _hover={{
+                  bg: '#ebebeb',
+                }}
+                onClick={() => handleTypeTrip('Anual Trip')}
+              >
+                Annual Trip
+              </Button>
+              {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"14px" }}>Select Coverage Type</FormLabel> */}
+            </FormControl>
+          </Box>
+          {initState?.coverageType === '' ||
+          initState?.coverageType === 'Single Trip' ? (
+            <Box mt="2em" w={{ base: '100%' }} h={{ sm: '48px' }}>
+              <FormControl
+                variant="floating"
+                fontFamily={'Mulish'}
+                isRequired
+                h="48px"
+              >
+                <Select
+                  size="lg"
+                  isMulti
+                  variant="outline"
+                  onChange={handleSelect}
+                  value={initState?.destinationCountry}
+                  isSearchable={true}
+                  styles={{
+                    menuPortal: (provided) => ({ ...provided }),
+                  }}
+                  options={listCountries}
+                />
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  fontFamily={'Mulish'}
+                  style={{
+                    transform: 'translate(-12px, -40px) scale(0.75)',
+                    fontSize: '18px',
+                    color: '#171923',
+                    zIndex: '0',
+                  }}
                 >
-                  <FormControl
-                    variant="floating"
-                    id="first-name"
-                    isRequired
-                    fontFamily={'Mulish'}
-                  >
-                    <Button
-                      bg="#ebebeb"
-                      w={{ base: '100%' }}
-                      border={
-                        initState?.coverageType === 'Single Trip'
-                          ? '2px solid #065BAA'
-                          : ''
-                      }
-                      h="48px"
-                      aria-label="Search database"
-                      color={
-                        initState?.coverageType === 'Single Trip'
-                          ? '#065BAA'
-                          : '#231F20'
-                      }
-                      _hover={{
-                        bg: '#ebebeb',
-                      }}
-                      onClick={() => handleTypeTrip('Single Trip')}
-                    >
-                      Single Trip
-                    </Button>
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      fontFamily={'Mulish'}
-                      style={{
-                        transform: 'translate(-12px, -40px) scale(0.75)',
-                        fontSize: '18px',
-                        zIndex: '0',
-                      }}
-                    >
-                      Select Coverage Type
-                    </FormLabel>
-                  </FormControl>
-                  <FormControl
-                    variant="floating"
-                    id="first-name"
-                    isRequired
-                    fontFamily={'Mulish'}
-                  >
-                    <Button
-                      bg="#ebebeb"
-                      border={
-                        initState?.coverageType === 'Anual Trip'
-                          ? '2px solid #065BAA'
-                          : ''
-                      }
-                      w={{ base: '100%' }}
-                      h="48px"
-                      aria-label="Search database"
-                      color={
-                        initState?.coverageType === 'Anual Trip'
-                          ? '#065BAA'
-                          : '#231F20'
-                      }
-                      _hover={{
-                        bg: '#ebebeb',
-                      }}
-                      onClick={() => handleTypeTrip('Anual Trip')}
-                    >
-                      Annual Trip
-                    </Button>
-                    {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"14px" }}>Select Coverage Type</FormLabel> */}
-                  </FormControl>
-                </Box>
-                {initState?.coverageType === '' ||
-                initState?.coverageType === 'Single Trip' ? (
-                  <Box mt="2em" w={{ base: '100%' }} h={{ sm: '48px' }}>
-                    <FormControl
-                      variant="floating"
-                      fontFamily={'Mulish'}
-                      isRequired
-                      h="48px"
-                    >
-                      <Select
-                        size="lg"
-                        isMulti
-                        variant="outline"
-                        onChange={handleSelect}
-                        value={initState?.destinationCountry}
-                        isSearchable={true}
-                        styles={{
-                          menuPortal: (provided) => ({ ...provided }),
-                        }}
-                        options={listCountries}
-                      />
-                      <FormLabel
-                        fontSize="12"
-                        pt="1.5"
-                        fontFamily={'Mulish'}
-                        style={{
-                          transform: 'translate(-12px, -40px) scale(0.75)',
-                          fontSize: '18px',
-                          color: '#171923',
-                          zIndex: '0',
-                        }}
-                      >
-                        Select Destination Country
-                      </FormLabel>
-                    </FormControl>
-                  </Box>
-                ) : null}
-                <Box
-                  mt="1em"
-                  position={'relative'}
-                  zIndex={'0'}
-                  display={'flex'}
-                  justifyContent={'flex-start'}
-                  alignItems={'center'}
-                  gap="4px"
-                  width={{ base: '100%' }}
+                  Select Destination Country
+                </FormLabel>
+              </FormControl>
+            </Box>
+          ) : null}
+          <Box
+            mt="1em"
+            position={'relative'}
+            zIndex={'0'}
+            display={'flex'}
+            justifyContent={'flex-start'}
+            alignItems={'center'}
+            gap="4px"
+            width={{ base: '100%' }}
+          >
+            <Box mt="1.5em" h="48px" width={{ base: '100%' }}>
+              <FormControl
+                mt="10px"
+                variant="floating"
+                id="first-name"
+                isRequired
+                fontFamily={'Mulish'}
+              >
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  fontFamily={'Mulish'}
+                  style={{
+                    transform: 'translate(16px, 2px) scale(0.75)',
+                    fontSize: '18px',
+                    background: '#ebebeb',
+                    color: '#171923',
+                  }}
                 >
-                  <Box mt="1.5em" h="48px" width={{ base: '100%' }}>
-                    <FormControl
-                      mt="10px"
-                      variant="floating"
-                      id="first-name"
-                      isRequired
-                      fontFamily={'Mulish'}
-                    >
-                      <FormLabel
-                        fontSize="12"
-                        pt="1.5"
-                        fontFamily={'Mulish'}
-                        style={{
-                          transform: 'translate(16px, 2px) scale(0.75)',
-                          fontSize: '18px',
-                          background: '#ebebeb',
-                          color: '#171923',
-                        }}
-                      >
-                        Start Date
-                      </FormLabel>
-                      <DatePicker
-                        width="100%"
-                        value={initState?.startDate}
-                        onChange={selectDate}
-                        inputPlaceholder="Select a date" // placeholder
-                        formatInputText={formatInputValue}
-                        inputClassName="my-custom-inputs" // custom class
-                        renderInput={renderCustomInput}
-                        wrapperClassName={'calendarClassName'}
-                        shouldHighlightWeekends
-                        minimumDate={startDate}
-                        // maximumDate={endDateObj}
-                      />
-                    </FormControl>
-                  </Box>
-                  {initState.coverageType === '' ||
-                  initState.coverageType === 'Single Trip' ? (
-                    <Box width={{ base: '100%' }} mt="1.5em" h="48px">
-                      <FormControl
-                        mt="10px"
-                        variant="floating"
-                        id="first-name"
-                        isRequired
-                        fontFamily={'Mulish'}
-                      >
-                        <FormLabel
-                          fontSize="12"
-                          pt="1.5"
-                          fontFamily={'Mulish'}
-                          style={{
-                            transform: 'translate(16px, 2px) scale(0.75)',
-                            fontSize: '18px',
-                            background: '#ebebeb',
-                            color: '#171923',
-                          }}
-                        >
-                          End Date
-                        </FormLabel>
-                        <DatePicker
-                          width="100%"
-                          value={initState?.endDate}
-                          onChange={selectEndDate}
-                          inputPlaceholder="Select a date" // placeholder
-                          formatInputText={formatInputValues}
-                          inputClassName="my-custom-inputs" // custom class
-                          renderInput={renderCustomInputs}
-                          shouldHighlightWeekends
-                          wrapperClassName={'calendarClassName'}
-                          minimumDate={startToEndDate}
-                          maximumDate={endDateObj}
-                        />
-                      </FormControl>
-                    </Box>
-                  ) : (
-                    <Box width={{ base: '100%' }} mt="1.5em" h="48px">
-                      <FormControl
-                        mt="10px"
-                        variant="floating"
-                        id="first-name"
-                        isRequired
-                        fontFamily={'Mulish'}
-                      >
-                        <FormLabel
-                          fontSize="12"
-                          pt="1.5"
-                          fontFamily={'Mulish'}
-                          style={{
-                            transform: 'translate(-11px, -32px) scale(0.75)',
-                            fontSize: '15px',
-                            background: 'white',
-                            color: '#171923',
-                          }}
-                        >
-                          End Date
-                        </FormLabel>
-                        <Box
-                          style={{
-                            background: 'white',
-                            padding: '0.7em',
-                          }}
-                        >
-                          {`${initState?.endDate?.day} ${getMonthName(
-                            initState?.endDate?.month
-                          )} ${initState?.endDate?.year}`}
-                        </Box>
-                      </FormControl>
-                    </Box>
-                  )}
-                </Box>
-                <Box pt="2em">
-                  <Box
+                  Start Date
+                </FormLabel>
+                <DatePicker
+                  width="100%"
+                  value={initState?.startDate}
+                  onChange={selectDate}
+                  inputPlaceholder="Select a date" // placeholder
+                  formatInputText={formatInputValue}
+                  inputClassName="my-custom-inputs" // custom class
+                  renderInput={renderCustomInput}
+                  wrapperClassName={'calendarClassName'}
+                  shouldHighlightWeekends
+                  minimumDate={startDate}
+                  // maximumDate={endDateObj}
+                />
+              </FormControl>
+            </Box>
+            {initState.coverageType === '' ||
+            initState.coverageType === 'Single Trip' ? (
+              <Box width={{ base: '100%' }} mt="1.5em" h="48px">
+                <FormControl
+                  mt="10px"
+                  variant="floating"
+                  id="first-name"
+                  isRequired
+                  fontFamily={'Mulish'}
+                >
+                  <FormLabel
+                    fontSize="12"
+                    pt="1.5"
+                    fontFamily={'Mulish'}
                     style={{
-                      backgroundColor: 'rgba(255, 160, 0, 0.2)',
-                      border: '1px solid #ffa000',
-                      // margin: '0.2em',
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'flex-start',
-                      padding: '0.2em',
+                      transform: 'translate(16px, 2px) scale(0.75)',
+                      fontSize: '18px',
+                      background: '#ebebeb',
+                      color: '#171923',
                     }}
                   >
-                    <Text as={'p'} fontSize="xs" color={'black.200'} p={'3'}>
-                      <AiOutlineWarning size="16px" />
-                    </Text>
-                    <Text as={'p'} fontSize="xs" color={'black.200'} p={'3'}>
-                      This policy number will be updated once you upgrade the
-                      policy.
-                    </Text>
-                  </Box>
-                </Box>
-                {hasCompletedAllSteps !== undefined && (
-                  <Box>
-                    <Heading fontSize="xl" textAlign={'center'}>
-                      Woohoo! All steps completed! 🎉
-                    </Heading>
-                  </Box>
-                )}
+                    End Date
+                  </FormLabel>
+                  <DatePicker
+                    width="100%"
+                    value={initState?.endDate}
+                    onChange={selectEndDate}
+                    inputPlaceholder="Select a date" // placeholder
+                    formatInputText={formatInputValues}
+                    inputClassName="my-custom-inputs" // custom class
+                    renderInput={renderCustomInputs}
+                    shouldHighlightWeekends
+                    wrapperClassName={'calendarClassName'}
+                    minimumDate={startToEndDate}
+                    maximumDate={endDateObj}
+                  />
+                </FormControl>
               </Box>
+            ) : (
+              <Box width={{ base: '100%' }} mt="1.5em" h="48px">
+                <FormControl
+                  mt="10px"
+                  variant="floating"
+                  id="first-name"
+                  isRequired
+                  fontFamily={'Mulish'}
+                >
+                  <FormLabel
+                    fontSize="12"
+                    pt="1.5"
+                    fontFamily={'Mulish'}
+                    style={{
+                      transform: 'translate(-11px, -32px) scale(0.75)',
+                      fontSize: '15px',
+                      background: 'white',
+                      color: '#171923',
+                    }}
+                  >
+                    End Date
+                  </FormLabel>
+                  <Box
+                    style={{
+                      background: 'white',
+                      padding: '0.7em',
+                    }}
+                  >
+                    {`${initState?.endDate?.day} ${getMonthName(
+                      initState?.endDate?.month
+                    )} ${initState?.endDate?.year}`}
+                  </Box>
+                </FormControl>
+              </Box>
+            )}
+          </Box>
+          <Box pt="2em">
+            <Box
+              style={{
+                backgroundColor: 'rgba(255, 160, 0, 0.2)',
+                border: '1px solid #ffa000',
+                // margin: '0.2em',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                padding: '0.2em',
+              }}
+            >
+              <Text as={'p'} fontSize="xs" color={'black.200'} p={'3'}>
+                <AiOutlineWarning size="16px" />
+              </Text>
+              <Text as={'p'} fontSize="xs" color={'black.200'} p={'3'}>
+                This policy number will be updated once you upgrade the policy.
+              </Text>
+            </Box>
+          </Box>
+          {hasCompletedAllSteps !== undefined && (
+            <Box>
+              <Heading fontSize="xl" textAlign={'center'}>
+                Woohoo! All steps completed! 🎉
+              </Heading>
+            </Box>
+          )}
+        </Box>
+        <Box
+          display={'flex'}
+          flexDirection={'column'}
+          w={{ base: '33%' }}
+          border={'1px solid #ebebeb'}
+          mr="10px"
+          position={'relative'}
+          // top="-33"
+        >
+          <Box bg="#F0F3F8" p="10px">
+            <Text
+              as="b"
+              size={'sm'}
+              fontFamily={'Mulish'}
+              style={{ fontSize: '14px' }}
+            >
+              {'Current Summary'}
+            </Text>
+          </Box>
+          <Box bg="white" p="10px">
+            <Box
+              display={'flex'}
+              justifyContent={'flex-start'}
+              alignItems={'center'}
+              boxSizing="borderBox"
+              borderBottom={'1px solid #ebebeb'}
+              pb="10px"
+              pt="10px"
+              gap="1em"
+            >
+              <Image src={Files} alt="insurance" />
               <Box
                 display={'flex'}
+                justifyContent={'center'}
                 flexDirection={'column'}
-                w={{ base: '33%' }}
-                border={'1px solid #ebebeb'}
-                mr="10px"
-                position={'relative'}
-                // top="-33"
               >
-                <Box bg="#F0F3F8" p="10px">
+                <Text
+                  as="b"
+                  size={'sm'}
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                >
+                  {'Booking Code'}
+                </Text>
+                <Text
+                  as="b"
+                  size={'sm'}
+                  fontFamily={'Mulish'}
+                  color="#065BAA"
+                  style={{ fontSize: '12px' }}
+                >
+                  {quotation?.transactionId}
+                </Text>
+              </Box>
+            </Box>
+            <Box
+              display={'flex'}
+              justifyContent={'flex-start'}
+              alignItems={'center'}
+              boxSizing="borderBox"
+              borderBottom={'1px solid #ebebeb'}
+              pb="10px"
+              pt="10px"
+              gap="1em"
+            >
+              <Image src={Plan} alt="insurance" />
+              <Box
+                display={'flex'}
+                justifyContent={'center'}
+                flexDirection={'column'}
+              >
+                <Text
+                  as="b"
+                  size={'sm'}
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                >
+                  {'Travel Details'}
+                </Text>
+                <Box>
+                  <Text
+                    as="p"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    color="#065BAA"
+                    style={{ fontSize: '12px' }}
+                    gap="1em"
+                  >
+                    {initState?.coverageType}
+                  </Text>
+                </Box>
+                <Box
+                  display={'flex'}
+                  gap="2px"
+                  flexWrap={'nowrap'}
+                  flexDirection={'column'}
+                >
+                  {initState?.destinationCountry?.map((country, i) => (
+                    <Text
+                      key={i}
+                      as="p"
+                      size={'sm'}
+                      fontFamily={'Mulish'}
+                      color="#065BAA"
+                      style={{ fontSize: '12px' }}
+                    >
+                      {country?.countryName}
+                      {i < initState.destinationCountry.length - 1 ? ', ' : ''}
+                    </Text>
+                  ))}
+                </Box>
+              </Box>
+            </Box>
+            <Box
+              display={'flex'}
+              justifyContent={'flex-start'}
+              alignItems={'center'}
+              boxSizing="borderBox"
+              borderBottom={'1px solid #ebebeb'}
+              pb="10px"
+              pt="10px"
+              gap="1em"
+            >
+              <Image src={Umbrella} alt="insurance" />
+              <Box
+                display={'flex'}
+                justifyContent={'center'}
+                flexDirection={'column'}
+              >
+                <Text
+                  as="b"
+                  size={'sm'}
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                >
+                  {'Select Product'}
+                </Text>
+                <Text
+                  as="b"
+                  size={'sm'}
+                  fontFamily={'Mulish'}
+                  color="#065BAA"
+                  style={{ fontSize: '12px' }}
+                >
+                  {quotation?.selectProduct?.productName}
+                </Text>
+              </Box>
+            </Box>
+
+            <Box
+              display={'flex'}
+              justifyContent={'flex-start'}
+              alignItems={'center'}
+              boxSizing="borderBox"
+              borderBottom={'1px solid #ebebeb'}
+              pb="10px"
+              pt="10px"
+              gap="1em"
+            >
+              <Image src={Payment} alt="insurance" />
+              <Box
+                display={'flex'}
+                justifyContent={'center'}
+                flexDirection={'column'}
+                width={'100%'}
+              >
+                <Text
+                  as="b"
+                  size={'sm'}
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '12px' }}
+                >
+                  {'Payment Summary'}
+                </Text>
+                <Box
+                  w="100%"
+                  display={'flex'}
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                  gap="1em"
+                  borderBottom="1px solid #ebebeb"
+                  pb="10px"
+                  pt="5px"
+                >
                   <Text
                     as="b"
                     size={'sm'}
                     fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
+                    style={{ fontSize: '12px' }}
                   >
-                    {'Current Summary'}
+                    {'Product Price'}
+                  </Text>
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                  >
+                    <CurrencyFormatter
+                      amount={quotation?.selectProduct?.finalPrice}
+                    />
                   </Text>
                 </Box>
-                <Box bg="white" p="10px">
-                  <Box
-                    display={'flex'}
-                    justifyContent={'flex-start'}
-                    alignItems={'center'}
-                    boxSizing="borderBox"
-                    borderBottom={'1px solid #ebebeb'}
-                    pb="10px"
-                    pt="10px"
-                    gap="1em"
+                <Box
+                  w="100%"
+                  display={'flex'}
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                  gap="1em"
+                  borderBottom="1px solid #ebebeb"
+                  pb="10px"
+                  pt="5px"
+                >
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
                   >
-                    <Image src={Files} alt="insurance" />
-                    <Box
-                      display={'flex'}
-                      justifyContent={'center'}
-                      flexDirection={'column'}
-                    >
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'Booking Code'}
-                      </Text>
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        color="#065BAA"
-                        style={{ fontSize: '12px' }}
-                      >
-                        {quotation?.transactionId}
-                      </Text>
-                    </Box>
-                  </Box>
-                  <Box
-                    display={'flex'}
-                    justifyContent={'flex-start'}
-                    alignItems={'center'}
-                    boxSizing="borderBox"
-                    borderBottom={'1px solid #ebebeb'}
-                    pb="10px"
-                    pt="10px"
-                    gap="1em"
+                    {'Quantity'}
+                  </Text>
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
                   >
-                    <Image src={Plan} alt="insurance" />
-                    <Box
-                      display={'flex'}
-                      justifyContent={'center'}
-                      flexDirection={'column'}
-                    >
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'Travel Details'}
-                      </Text>
-                      <Box>
-                        <Text
-                          as="p"
-                          size={'sm'}
-                          fontFamily={'Mulish'}
-                          color="#065BAA"
-                          style={{ fontSize: '12px' }}
-                          gap="1em"
-                        >
-                          {initState?.coverageType}
-                        </Text>
-                      </Box>
-                      <Box
-                        display={'flex'}
-                        gap="2px"
-                        flexWrap={'nowrap'}
-                        flexDirection={'column'}
-                      >
-                        {initState?.destinationCountry?.map((country, i) => (
-                          <Text
-                            key={i}
-                            as="p"
-                            size={'sm'}
-                            fontFamily={'Mulish'}
-                            color="#065BAA"
-                            style={{ fontSize: '12px' }}
-                          >
-                            {country?.countryName}
-                            {i < initState.destinationCountry.length - 1
-                              ? ', '
-                              : ''}
-                          </Text>
-                        ))}
-                      </Box>
-                    </Box>
-                  </Box>
-                  <Box
-                    display={'flex'}
-                    justifyContent={'flex-start'}
-                    alignItems={'center'}
-                    boxSizing="borderBox"
-                    borderBottom={'1px solid #ebebeb'}
-                    pb="10px"
-                    pt="10px"
-                    gap="1em"
-                  >
-                    <Image src={Umbrella} alt="insurance" />
-                    <Box
-                      display={'flex'}
-                      justifyContent={'center'}
-                      flexDirection={'column'}
-                    >
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'Select Product'}
-                      </Text>
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        color="#065BAA"
-                        style={{ fontSize: '12px' }}
-                      >
-                        {quotation?.selectProduct?.productName}
-                      </Text>
-                    </Box>
-                  </Box>
-
-                  <Box
-                    display={'flex'}
-                    justifyContent={'flex-start'}
-                    alignItems={'center'}
-                    boxSizing="borderBox"
-                    borderBottom={'1px solid #ebebeb'}
-                    pb="10px"
-                    pt="10px"
-                    gap="1em"
-                  >
-                    <Image src={Payment} alt="insurance" />
-                    <Box
-                      display={'flex'}
-                      justifyContent={'center'}
-                      flexDirection={'column'}
-                      width={'100%'}
-                    >
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'Payment Summary'}
-                      </Text>
-                      <Box
-                        w="100%"
-                        display={'flex'}
-                        justifyContent={'space-between'}
-                        alignItems={'center'}
-                        gap="1em"
-                        borderBottom="1px solid #ebebeb"
-                        pb="10px"
-                        pt="5px"
-                      >
-                        <Text
-                          as="b"
-                          size={'sm'}
-                          fontFamily={'Mulish'}
-                          style={{ fontSize: '12px' }}
-                        >
-                          {'Product Price'}
-                        </Text>
-                        <Text
-                          as="b"
-                          size={'sm'}
-                          fontFamily={'Mulish'}
-                          style={{ fontSize: '12px' }}
-                        >
-                          <CurrencyFormatter
-                            amount={quotation?.selectProduct?.finalPrice}
-                          />
-                        </Text>
-                      </Box>
-                      <Box
-                        w="100%"
-                        display={'flex'}
-                        justifyContent={'space-between'}
-                        alignItems={'center'}
-                        gap="1em"
-                        borderBottom="1px solid #ebebeb"
-                        pb="10px"
-                        pt="5px"
-                      >
-                        <Text
-                          as="b"
-                          size={'sm'}
-                          fontFamily={'Mulish'}
-                          style={{ fontSize: '12px' }}
-                        >
-                          {'Quantity'}
-                        </Text>
-                        <Text
-                          as="b"
-                          size={'sm'}
-                          fontFamily={'Mulish'}
-                          style={{ fontSize: '12px' }}
-                        >
-                          {'x'}
-                          {quotation?.travellers.length}
-                        </Text>
-                      </Box>
-                      <Box
-                        w="100%"
-                        display={'flex'}
-                        justifyContent={'space-between'}
-                        alignItems={'center'}
-                        gap="1em"
-                        borderBottom="1px solid #ebebeb"
-                        pb="10px"
-                        pt="5px"
-                      >
-                        <Text
-                          as="b"
-                          size={'sm'}
-                          fontFamily={'Mulish'}
-                          style={{ fontSize: '12px' }}
-                        >
-                          {'Total Payment'}
-                        </Text>
-                        <Text
-                          as="b"
-                          size={'sm'}
-                          fontFamily={'Mulish'}
-                          style={{ fontSize: '12px' }}
-                        >
-                          <CurrencyFormatter
-                            amount={
-                              quotation?.selectProduct?.finalPrice *
-                              quotation?.travellers.length
-                            }
-                          />
-                        </Text>
-                      </Box>
-                      <Flex width="100%" justify="flex-start" gap={6} mt="2em">
-                        {hasCompletedAllSteps !== undefined ? (
-                          <></>
-                        ) : (
-                          <>
-                            {initState?.coverageType === 'Single Trip' ? (
-                              <Button
-                                size="sm"
-                                onClick={handleNext}
-                                w={{ base: '100%', md: '270px' }}
-                                h="48px"
-                                isDisabled={
-                                  initState?.coverageType === '' ||
-                                  initState?.travellerType === '' ||
-                                  initState?.destinationCountry?.length === 0 ||
-                                  initState?.startDate === null ||
-                                  initState?.endDate === null
-                                    ? true
-                                    : false
-                                }
-                              >
-                                {isLastStep ? 'Finish' : 'SEARCH INSURANCE'}
-                              </Button>
-                            ) : (
-                              <Button
-                                size="sm"
-                                onClick={handleNext}
-                                w={{ base: '100%', md: '270px' }}
-                                h="48px"
-                                isDisabled={
-                                  initState?.coverageType === '' ||
-                                  initState?.travellerType === '' ||
-                                  initState?.startDate === null ||
-                                  initState?.endDate === null
-                                    ? true
-                                    : false
-                                }
-                              >
-                                {isLastStep ? 'Finish' : 'Search Insurance'}
-                              </Button>
-                            )}
-                          </>
-                        )}
-                      </Flex>
-                    </Box>
-                  </Box>
+                    {'x'}
+                    {quotation?.travellers.length}
+                  </Text>
                 </Box>
+                <Box
+                  w="100%"
+                  display={'flex'}
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                  gap="1em"
+                  borderBottom="1px solid #ebebeb"
+                  pb="10px"
+                  pt="5px"
+                >
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                  >
+                    {'Total Payment'}
+                  </Text>
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                  >
+                    <CurrencyFormatter
+                      amount={
+                        quotation?.selectProduct?.finalPrice *
+                        quotation?.travellers.length
+                      }
+                    />
+                  </Text>
+                </Box>
+                <Flex width="100%" justify="flex-start" gap={6} mt="2em">
+                  {hasCompletedAllSteps !== undefined ? (
+                    <></>
+                  ) : (
+                    <>
+                      {initState?.coverageType === 'Single Trip' ? (
+                        <Button
+                          size="sm"
+                          onClick={handleNext}
+                          w={{ base: '100%', md: '270px' }}
+                          h="48px"
+                          isDisabled={
+                            initState?.coverageType === '' ||
+                            initState?.travellerType === '' ||
+                            initState?.destinationCountry?.length === 0 ||
+                            initState?.startDate === null ||
+                            initState?.endDate === null
+                              ? true
+                              : false
+                          }
+                        >
+                          {isLastStep ? 'Finish' : 'SEARCH INSURANCE'}
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          onClick={handleNext}
+                          w={{ base: '100%', md: '270px' }}
+                          h="48px"
+                          isDisabled={
+                            initState?.coverageType === '' ||
+                            initState?.travellerType === '' ||
+                            initState?.startDate === null ||
+                            initState?.endDate === null
+                              ? true
+                              : false
+                          }
+                        >
+                          {isLastStep ? 'Finish' : 'Search Insurance'}
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </Flex>
               </Box>
             </Box>
-          </TabPanel>
-          <TabPanel>
-            <p>two!</p>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 };

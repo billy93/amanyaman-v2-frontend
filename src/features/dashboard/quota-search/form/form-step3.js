@@ -509,7 +509,7 @@ const Form3 = ({
     );
     const params = {
       fullname: existingTravellers,
-      dateOfBirth: '1991-05-01',
+      dateOfBirth: dates,
     };
     try {
       const response = await getExistingTraveller(params);
