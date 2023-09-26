@@ -537,7 +537,9 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     {'x'}
-                    {newlistTravellers?.length}
+                    {payload?.travellerType !== 'Family'
+                      ? newlistTravellers?.length
+                      : 1}
                   </Text>
                 </Box>
                 <Box

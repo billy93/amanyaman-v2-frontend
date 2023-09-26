@@ -269,6 +269,7 @@ const Form3 = ({
                   display={'flex'}
                   justifyContent={'center'}
                   alignItems={'center'}
+                  flexDirection={'column'}
                   h={{ base: 'auto', md: '400px' }}
                 >
                   <Box>
@@ -278,6 +279,7 @@ const Form3 = ({
                         display={'flex'}
                         justifyContent={'center'}
                         alignItems={'center'}
+                        flexDirection={'column'}
                       >
                         <Box
                           style={{
@@ -639,7 +641,7 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     {'x'}
-                    {payload?.travellerType === 'Individual'
+                    {payload?.travellerType !== 'Family'
                       ? newlistTravellers?.length
                       : 1}
                   </Text>

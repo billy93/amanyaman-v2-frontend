@@ -233,7 +233,6 @@ const PaymentSuccessPage = () => {
                     as="p"
                     size={'sm'}
                     fontFamily={'Mulish'}
-                    color="#065BAA"
                     style={{ fontSize: '12px' }}
                   >
                     {'Singapore'}
@@ -242,7 +241,6 @@ const PaymentSuccessPage = () => {
                     as="p"
                     size={'sm'}
                     fontFamily={'Mulish'}
-                    color="#065BAA"
                     style={{ fontSize: '12px' }}
                   >
                     {`${formatDateToLong(quotation?.from)} - ${formatDateToLong(
@@ -280,7 +278,6 @@ const PaymentSuccessPage = () => {
                       as="p"
                       size={'sm'}
                       fontFamily={'Mulish'}
-                      color="#065BAA"
                       style={{ fontSize: '12px' }}
                       gap="1em"
                     >

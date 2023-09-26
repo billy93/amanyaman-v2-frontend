@@ -714,7 +714,8 @@ const Form3 = ({
     }
   }, [deleted, newlistTravellers, dispatch]);
 
-  console.log('payload initStateTraveller', initStateTraveller);
+  console.log('deleted', deleted);
+  console.log('deleted newlistTravellers', newlistTravellers);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Modal
@@ -1831,7 +1832,11 @@ const Form3 = ({
                   w={{ base: '100%', md: '270px' }}
                   h="48px"
                   isDisabled={
-                    listTravellers?.listTravellers?.length === 0 ? true : false
+                    listTravellers?.listTravellers?.length === 0 ||
+                    parseInt(payload?.adt) + parseInt(payload?.chd) !==
+                      listTravellers?.listTravellers?.length
+                      ? true
+                      : false
                   }
                 >
                   {isLastStep ? 'Finish' : 'CONTINUE PAYMENT'}
