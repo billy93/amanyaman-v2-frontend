@@ -709,13 +709,11 @@ const Form3 = ({
   };
 
   React.useEffect(() => {
-    if (deleted) {
-      dispatch(setTravellersData([...newlistTravellers]));
+    if (deleted && triggerGetList) {
+      refetch(id);
     }
-  }, [deleted, newlistTravellers, dispatch]);
+  }, [deleted, refetch, id, triggerGetList]);
 
-  console.log('deleted', deleted);
-  console.log('deleted newlistTravellers', newlistTravellers);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Modal

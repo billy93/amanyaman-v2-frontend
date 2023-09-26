@@ -36,6 +36,7 @@ import {
   useBooksProductsMutation,
   useCheckAvailabilityCreditMutation,
   useDeleteTravellerDataMutation,
+  useGetExistingTravellerMutation,
 } from '../policyApiSlice';
 
 import {
@@ -118,6 +119,8 @@ const Form3 = ({
   const [type, setType] = useState('Adult');
   const [typeStatus, setTypeStatus] = useState('Mr');
   const [select, setSelect] = useState('new');
+  const [existingTravellers, setExistingTravellers] = useState('');
+  const [existingTravellersDate, setExistingTravellersDate] = useState(null);
   const [isActiveSelectCountry, setActiveSelectCountry] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [isActiveNew, setIsActiveNew] = useState(false);
@@ -141,6 +144,10 @@ const Form3 = ({
   const historyform = useSelector(historyForm);
   const [addTravellerData, { isSuccess, isLoading: loadingAdd }] =
     useAddTravellerDataMutation();
+  const [
+    getExistingTraveller,
+    { isSuccess: successGetExisting, isLoading: loadingGetExisting },
+  ] = useGetExistingTravellerMutation();
   const [editTravellerData, { isLoading: loadingEdit }] =
     useEditTravellerDataMutation();
   // const handleUserChange = (e) => {};
@@ -156,7 +163,9 @@ const Form3 = ({
     setIsValidPhone(phoneNumberRegex.test(inputValue));
   };
 
-  console.log('isValidPhone', isValidPhone);
+  const handleExisitingTravelers = (e) => {
+    setExistingTravellers(e.target.value);
+  };
   const setAddresss = (e) => {
     setAddress(e.target.value);
   };
@@ -230,6 +239,7 @@ const Form3 = ({
       setIsActive(false);
     }
   };
+
   const selectDateNew = (date) => {
     setDateBirth(date);
     if (date !== null) {
@@ -238,6 +248,16 @@ const Form3 = ({
       setIsActiveNew(false);
     }
   };
+
+  const selectDateExisting = (date) => {
+    setExistingTravellersDate(date);
+    // if (date !== null) {
+    //   setIsActiveNew(true);
+    // } else {
+    //   setIsActiveNew(false);
+    // }
+  };
+  console.log('test', existingTravellers, existingTravellersDate);
   function getMonthName(monthNumber) {
     const date = new Date();
     date.setMonth(monthNumber - 1);
@@ -254,10 +274,10 @@ const Form3 = ({
     }`;
   };
   const formatInputValues = () => {
-    if (!dateBirth) return '';
-    return `${dateBirth?.day} ${getMonthName(dateBirth?.month)} ${
-      dateBirth?.year
-    }`;
+    if (!existingTravellersDate) return '';
+    return `${existingTravellersDate?.day} ${getMonthName(
+      existingTravellersDate?.month
+    )} ${existingTravellersDate?.year}`;
   };
 
   const handlePrev = () => {
@@ -439,10 +459,10 @@ const Form3 = ({
             placeholder=" "
             _placeholder={{ opacity: 1, color: 'gray.500' }}
             value={
-              dateBirth
-                ? `${dateBirth?.day} ${getMonthName(dateBirth?.month)} ${
-                    dateBirth?.year
-                  }`
+              existingTravellersDate
+                ? `${existingTravellersDate?.day} ${getMonthName(
+                    existingTravellersDate?.month
+                  )} ${existingTravellersDate?.year}`
                 : ''
             }
             h="48px"
@@ -451,7 +471,7 @@ const Form3 = ({
           <FormLabel
             fontSize="12"
             pt="1.5"
-            className={isActiveNew || dateBirth ? 'Actives' : ''}
+            // className={isActiveNew || existingTravellersDate ? 'Actives' : ''}
             fontFamily={'Mulish'}
           >
             Date Of Birth
@@ -482,6 +502,21 @@ const Form3 = ({
     setBeneficiary('');
     setRelationship('');
     setTicketsNumber('');
+  };
+  const getTravellersExisting = async (e) => {
+    let dates = formatDate(
+      `${existingTravellersDate?.year}-${existingTravellersDate?.month}-${existingTravellersDate?.day}`
+    );
+    const params = {
+      fullname: existingTravellers,
+      dateOfBirth: '1991-05-01',
+    };
+    try {
+      const response = await getExistingTraveller(params);
+      console.log('response', response);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const onSave = async (e) => {
     e.preventDefault();
@@ -692,7 +727,7 @@ const Form3 = ({
           });
         }
         setTriggerGetList(true);
-        refetch(id.id);
+        // refetch(id.id);
         // navigate('/master-data/travel-agent');
       }
     } catch (err) {
@@ -707,23 +742,22 @@ const Form3 = ({
       });
     }
   };
-
+  console.log('existing', existingTravellers);
   React.useEffect(() => {
-    if (deleted) {
-      dispatch(setTravellersData([...newlistTravellers]));
+    if (deleted && triggerGetList) {
+      refetch(id);
     }
-  }, [deleted, newlistTravellers, dispatch]);
+  }, [deleted, refetch, id, triggerGetList]);
 
-  console.log('deleted', deleted);
-  console.log('deleted newlistTravellers', newlistTravellers);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Modal
-        size="lg"
+        size="xl"
         blockScrollOnMount={false}
         closeOnOverlayClick={false}
         isOpen={isOpen}
         onClose={handleCloseModal}
+        placement="bottom-start"
       >
         <ModalOverlay />
         <ModalContent>
@@ -731,50 +765,23 @@ const Form3 = ({
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Box>
-              <FormControl
-                variant="floating"
-                isRequired
-                fontFamily={'Mulish'}
-                mt="14px"
-                id="float-label"
-              >
-                <Box className="floating-form">
-                  <Box className="floating-label">
-                    <Select
-                      className="floating-select"
-                      placeholder=""
-                      defaultValue={type}
-                      h="48px"
-                      onChange={handleSelectType}
-                    >
-                      <option value=""></option>
-                      <option value="Adult">Adult</option>
-                      <option value="Child">Child</option>
-                    </Select>
-                    <span className="highlight"></span>
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      style={{
-                        transform:
-                          isActiveSelectCountry || type !== ''
-                            ? 'translate(0, -19px) scale(0.75)'
-                            : '',
-                        color:
-                          isActiveSelectCountry || type !== '' ? '#065baa' : '',
-                        fontSize: '14px',
-                      }}
-                      fontFamily={'Mulish'}
-                    >
-                      Select Status
-                    </FormLabel>
-                  </Box>
+              {select !== 'new' && (
+                <Box
+                  minH="200px"
+                  m="auto"
+                  bg="#f6f2f2"
+                  display={'flex'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                >
+                  <Text as="p">Empty</Text>
                 </Box>
-                {/* It is important that the Label comes after the Control due to css selectors */}
-              </FormControl>
-            </Box>
-            <Box>
-              <RadioGroup defaultValue={select} onChange={onSelect}>
+              )}
+              <RadioGroup
+                defaultValue={select}
+                onChange={onSelect}
+                mt={select !== 'new' ? '10px' : '0px'}
+              >
                 <Stack spacing={4} direction="column">
                   <Radio value="new">
                     <Text as="p" fontSize={'sm'} fontFamily={'Mulish'}>
@@ -791,6 +798,51 @@ const Form3 = ({
             </Box>
             {select === 'new' ? (
               <>
+                <Box>
+                  <FormControl
+                    variant="floating"
+                    isRequired
+                    fontFamily={'Mulish'}
+                    mt="14px"
+                    id="float-label"
+                  >
+                    <Box className="floating-form">
+                      <Box className="floating-label">
+                        <Select
+                          className="floating-select"
+                          placeholder=""
+                          defaultValue={type}
+                          h="48px"
+                          onChange={handleSelectType}
+                        >
+                          <option value=""></option>
+                          <option value="Adult">Adult</option>
+                          <option value="Child">Child</option>
+                        </Select>
+                        <span className="highlight"></span>
+                        <FormLabel
+                          fontSize="12"
+                          pt="1.5"
+                          style={{
+                            transform:
+                              isActiveSelectCountry || type !== ''
+                                ? 'translate(0, -19px) scale(0.75)'
+                                : '',
+                            color:
+                              isActiveSelectCountry || type !== ''
+                                ? '#065baa'
+                                : '',
+                            fontSize: '14px',
+                          }}
+                          fontFamily={'Mulish'}
+                        >
+                          Select Status
+                        </FormLabel>
+                      </Box>
+                    </Box>
+                    {/* It is important that the Label comes after the Control due to css selectors */}
+                  </FormControl>
+                </Box>
                 <Box>
                   <FormControl
                     variant="floating"
@@ -829,7 +881,7 @@ const Form3 = ({
                           }}
                           fontFamily={'Mulish'}
                         >
-                          Select Type
+                          Select Title
                         </FormLabel>
                       </Box>
                     </Box>
@@ -1090,31 +1142,113 @@ const Form3 = ({
                 </Box>
               </>
             ) : (
-              <Box display={'flex'} gap="5px" mt="3em">
-                <FormControl variant="floating" id="first-name" isRequired>
-                  <Input
-                    placeholder=" "
-                    _placeholder={{ opacity: 1, color: 'gray.500' }}
-                    value={searchTraveller}
-                    onChange={setSearchTravellers}
-                    h="48px"
-                  />
-                  {/* It is important that the Label comes after the Control due to css selectors */}
-                  <FormLabel fontSize="12" pt="1.5">
-                    {' '}
-                    Search Traveller
-                  </FormLabel>
-                  {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                </FormControl>
-                <DatePicker
-                  value={dateBirth}
-                  onChange={selectDateNew}
-                  inputPlaceholder="Select a date" // placeholder
-                  formatInputText={formatInputValues}
-                  inputClassName="my-custom-input" // custom class
-                  renderInput={renderCustomInputs}
-                  shouldHighlightWeekends
-                />
+              <Box>
+                <Box
+                  display={'flex'}
+                  gap="5px"
+                  mt="3em"
+                  flexDirection={'column'}
+                >
+                  <Box
+                    mt="1em"
+                    position={'relative'}
+                    zIndex={'0'}
+                    display={'flex'}
+                    justifyContent={'flex-start'}
+                    alignItems={'center'}
+                    gap="4px"
+                    width={{ base: '100%', md: '530px' }}
+                  >
+                    <Box>
+                      <FormControl
+                        variant="floating"
+                        id="first-name"
+                        isRequired
+                      >
+                        <FormLabel
+                          fontSize="12"
+                          pt="1.5"
+                          fontFamily={'Mulish'}
+                          style={{
+                            transform: 'translate(-11px, -33px) scale(0.75)',
+                            fontSize: '18px',
+                            background: 'white',
+                            color: '#171923',
+                          }}
+                        >
+                          Name Traveller
+                        </FormLabel>
+                        <Input
+                          placeholder=" "
+                          _placeholder={{ opacity: 1, color: 'gray.500' }}
+                          value={existingTravellers}
+                          name="name"
+                          onChange={handleExisitingTravelers}
+                          h="48px"
+                        />
+
+                        {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                      </FormControl>
+                    </Box>
+                    <Box width={{ base: '100%', md: '250px' }}>
+                      <FormControl
+                        variant="floating"
+                        id="first-name"
+                        isRequired
+                        fontFamily={'Mulish'}
+                      >
+                        <FormLabel
+                          fontSize="12"
+                          pt="1.5"
+                          fontFamily={'Mulish'}
+                          style={{
+                            transform: 'translate(16px, 2px) scale(0.75)',
+                            fontSize: '18px',
+                            background: '#ebebeb',
+                            color: '#171923',
+                          }}
+                        >
+                          Date OF Birth
+                        </FormLabel>
+                        <Box className="datepicker-container">
+                          <DatePicker
+                            // calendarPopperPosition="auto"
+                            value={existingTravellersDate}
+                            onChange={selectDateExisting}
+                            inputPlaceholder="Select a date" // placeholder
+                            formatInputText={formatInputValues}
+                            // inputClassName="my-custom-inputs" // custom class
+                            renderInput={renderCustomInputs}
+                            // wrapperClassName={'calendarClassName'}
+                            calendarClassName="custom-datepicker"
+                            shouldHighlightWeekends
+                            style={{
+                              fontSize: '12px',
+                              fontfamily: 'Mulish',
+                              marginTop: '1em',
+                              color: '#000000ad',
+                            }}
+                          />
+                        </Box>
+                      </FormControl>
+                    </Box>
+                  </Box>
+
+                  <Box mt="10px">
+                    <Button
+                      variant={'outline'}
+                      onClick={getTravellersExisting}
+                      isDisabled={
+                        existingTravellers === '' ||
+                        existingTravellersDate === null
+                          ? true
+                          : false
+                      }
+                    >
+                      Search
+                    </Button>
+                  </Box>
+                </Box>
               </Box>
             )}
           </ModalBody>

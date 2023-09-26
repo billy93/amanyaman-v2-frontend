@@ -624,3 +624,14 @@ p{
   z-index: 9999;
   width: 100%;
 }
+.datepicker-container {
+  position: relative; /* Relative positioning for the container */
+  width: 200px; /* Adjust the width as needed */
+}
+
+.custom-datepicker {
+  position: absolute;
+  bottom: 100%; /* Adjust this value as needed to control the distance below the input field */
+  left: 0;
+  z-index: 1000; /* Ensure the calendar is above other elements */
+}

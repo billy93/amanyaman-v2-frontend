@@ -74,6 +74,22 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
+    getExistingTraveller: builder.mutation({
+      query: (params) => {
+        return {
+          url: '/app/bookings/travellers/existing',
+          method: 'POST',
+          body: { ...params },
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
     checkAvailabilityCredit: builder.mutation({
       query: (params) => {
         return {
@@ -217,6 +233,7 @@ export const quotSearch = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetExistingTravellerMutation,
   useGetDetailBenefitQuery,
   useGetBookingsQuotationQuery,
   useGetCheckPaymentQuery,
