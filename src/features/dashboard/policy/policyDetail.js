@@ -345,22 +345,19 @@ const PolicyDetail = () => {
     );
   } else if (isSuccess || isSuccessDownload || isSuccessView) {
     content = (
-      <Box border={'1px'} borderColor="#ebebeb" mt="5em" ml="2em" mr="2em">
+      <Box mt="4em">
         <Box
           display={'flex'}
           justifyContent={'space-between'}
           alignItems={'center'}
+          borderBottom="1px"
+          borderColor={'#ebebeb'}
         >
-          <Box
-            display="flex"
-            justifyContent={'space-between'}
-            w="100%"
-            borderBottom="1px"
-            borderColor={'#ebebeb'}
-          >
+          <Box display="flex" justifyContent={'space-between'} w="100%">
             <Box w="100%" pt="15px">
               <Breadcrumb
                 spacing="8px"
+                ml="1em"
                 separator={<ChevronRightIcon color="gray.500" />}
               >
                 <BreadcrumbItem isCurrentPage>
@@ -395,7 +392,7 @@ const PolicyDetail = () => {
                 </BreadcrumbItem>
               </Breadcrumb>
             </Box>
-            <Box display={'flex'} alignItems={'center'} gap="5px">
+            <Box display={'flex'} alignItems={'center'} gap="5px" mr="1em">
               <Menu>
                 <MenuButton as={Button} colorScheme="white">
                   <FiMoreVertical color="#065BAA" size={'16px'} />
@@ -494,262 +491,117 @@ const PolicyDetail = () => {
             </Box>
           </Box>
         </Box>
-        <Box display={'flex'} justifyContent={'space-between'} m="1em">
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>
-                <ModalCloseButton />
-              </ModalHeader>
-              <ModalBody>
-                <Box>
-                  <EmailInput quotation={quotation} handleClose={handleClose} />
-                </Box>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
-          <Modal isOpen={viewModal} onClose={setViewModal} size="full">
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>
-                <ModalCloseButton />
-              </ModalHeader>
-              <ModalBody>
-                <Box>
-                  <iframe
-                    ref={iframeRef}
-                    src={viewPolicy}
-                    title="Embedded Content"
-                    width="800px"
-                    height="600px"
-                    frameBorder="0"
-                    onLoad={handleIframeLoad}
-                    scrolling="no"
-                  ></iframe>
-                </Box>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
-          <Box w={{ base: '100%', md: '30%' }}>
-            <Box
-              display={'flex'}
-              flexDirection={'column'}
-              border={'1px solid #ebebeb'}
-              mt="15 px"
-              mr="10px"
-              w="100%"
-            >
-              <Box bg="#F0F3F8" p="10px">
-                <Text
-                  as="b"
-                  size={'sm'}
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                >
-                  {policyNumberString === undefined
-                    ? quotation?.travellers[0]?.policyNumber
-                    : policyNumberString}
-                </Text>
-              </Box>
-              <Box bg="white" p="10px">
-                <Box
-                  display={'flex'}
-                  justifyContent={'flex-start'}
-                  alignItems={'center'}
-                  boxSizing="borderBox"
-                  borderBottom={'1px solid #ebebeb'}
-                  pb="10px"
-                  pt="10px"
-                  gap="1em"
-                >
-                  <Image src={Files} alt="insurance" />
-                  <Box
-                    display={'flex'}
-                    justifyContent={'center'}
-                    flexDirection={'column'}
-                  >
-                    <Text
-                      as="b"
-                      size={'sm'}
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '12px' }}
-                    >
-                      {'Booking Code'}
-                    </Text>
-                    <Text
-                      as="p"
-                      size={'sm'}
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '12px' }}
-                    >
-                      {quotation?.transactionId}
-                    </Text>
+        <Box ml="2em" mr="2em">
+          <Box display={'flex'} justifyContent={'space-between'} m="1em">
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>
+                  <ModalCloseButton />
+                </ModalHeader>
+                <ModalBody>
+                  <Box>
+                    <EmailInput
+                      quotation={quotation}
+                      handleClose={handleClose}
+                    />
                   </Box>
-                </Box>
-                <Box
-                  display={'flex'}
-                  justifyContent={'flex-start'}
-                  alignItems={'center'}
-                  boxSizing="borderBox"
-                  borderBottom={'1px solid #ebebeb'}
-                  pb="10px"
-                  pt="10px"
-                  gap="1em"
-                >
-                  <Image src={Plan} alt="insurance" />
-                  <Box
-                    display={'flex'}
-                    justifyContent={'center'}
-                    flexDirection={'column'}
-                  >
-                    <Text
-                      as="b"
-                      size={'sm'}
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '12px' }}
-                    >
-                      {'Travel Details'}
-                    </Text>
-                    <Text
-                      as="p"
-                      size={'sm'}
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '12px' }}
-                    >
-                      {`${
-                        quotation?.coverType === 'SINGLE_TRIP'
-                          ? 'Single Trip '
-                          : 'Annual Trip'
-                      }`}
-                    </Text>
-                    <Text
-                      as="p"
-                      size={'sm'}
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '12px' }}
-                    >
-                      {'Singapore'}
-                    </Text>
-                    <Text
-                      as="p"
-                      size={'sm'}
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '12px' }}
-                    >
-                      {`${formatDateToLong(
-                        quotation?.from
-                      )} - ${formatDateToLong(quotation?.to)}`}
-                    </Text>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+            <Modal isOpen={viewModal} onClose={setViewModal} size="full">
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>
+                  <ModalCloseButton />
+                </ModalHeader>
+                <ModalBody>
+                  <Box>
+                    <iframe
+                      ref={iframeRef}
+                      src={viewPolicy}
+                      title="Embedded Content"
+                      width="800px"
+                      height="600px"
+                      frameBorder="0"
+                      onLoad={handleIframeLoad}
+                      scrolling="no"
+                    ></iframe>
                   </Box>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+            <Box w={{ base: '100%', md: '30%' }}>
+              <Box
+                display={'flex'}
+                flexDirection={'column'}
+                border={'1px solid #ebebeb'}
+                mt="15 px"
+                mr="10px"
+                w="100%"
+              >
+                <Box bg="#F0F3F8" p="10px">
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                  >
+                    {policyNumberString === undefined
+                      ? quotation?.travellers[0]?.policyNumber
+                      : policyNumberString}
+                  </Text>
                 </Box>
-                <Box
-                  display={'flex'}
-                  justifyContent={'flex-start'}
-                  alignItems={'center'}
-                  boxSizing="borderBox"
-                  borderBottom={'1px solid #ebebeb'}
-                  pb="10px"
-                  pt="10px"
-                  gap="1em"
-                >
-                  <Image src={Umbrella} alt="insurance" />
+                <Box bg="white" p="10px">
                   <Box
                     display={'flex'}
-                    justifyContent={'center'}
-                    flexDirection={'column'}
+                    justifyContent={'flex-start'}
+                    alignItems={'center'}
+                    boxSizing="borderBox"
+                    borderBottom={'1px solid #ebebeb'}
+                    pb="10px"
+                    pt="10px"
+                    gap="1em"
                   >
-                    <Text
-                      as="b"
-                      size={'sm'}
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '12px' }}
+                    <Image src={Files} alt="insurance" />
+                    <Box
+                      display={'flex'}
+                      justifyContent={'center'}
+                      flexDirection={'column'}
                     >
-                      {'Selected Plan'}
-                    </Text>
-                    <Box>
+                      <Text
+                        as="b"
+                        size={'sm'}
+                        fontFamily={'Mulish'}
+                        style={{ fontSize: '12px' }}
+                      >
+                        {'Booking Code'}
+                      </Text>
                       <Text
                         as="p"
                         size={'sm'}
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
-                        gap="1em"
                       >
-                        {`${quotation?.selectProduct?.productName}`}
+                        {quotation?.transactionId}
                       </Text>
                     </Box>
                   </Box>
-                </Box>
-                <Box
-                  display={'flex'}
-                  justifyContent={'flex-start'}
-                  alignItems={'center'}
-                  boxSizing="borderBox"
-                  borderBottom={'1px solid #ebebeb'}
-                  pb="10px"
-                  pt="10px"
-                  gap="1em"
-                >
-                  <Image src={Pasport} alt="insurance" />
                   <Box
                     display={'flex'}
-                    justifyContent={'center'}
-                    flexDirection={'column'}
+                    justifyContent={'flex-start'}
+                    alignItems={'center'}
+                    boxSizing="borderBox"
+                    borderBottom={'1px solid #ebebeb'}
+                    pb="10px"
+                    pt="10px"
+                    gap="1em"
                   >
-                    <Text
-                      as="b"
-                      size={'sm'}
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '12px' }}
-                    >
-                      {'Traveller Type'}
-                    </Text>
-                    <Box>
-                      <Text
-                        as="p"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                        gap="1em"
-                      >
-                        {`${quotation?.travellerType?.name}`}
-                      </Text>
-                    </Box>
-                  </Box>
-                </Box>
-                <Box
-                  display={'flex'}
-                  justifyContent={'flex-start'}
-                  alignItems={'flex-start'}
-                  boxSizing="borderBox"
-                  borderBottom={'1px solid #ebebeb'}
-                  pb="10px"
-                  pt="10px"
-                  gap="1em"
-                >
-                  <Image src={Payment} alt="insurance" />
-                  <Box
-                    display={'flex'}
-                    justifyContent={'center'}
-                    flexDirection={'column'}
-                    w="100%"
-                  >
-                    <Text
-                      as="b"
-                      size={'sm'}
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '12px' }}
-                    >
-                      {'Payment Details'}
-                    </Text>
+                    <Image src={Plan} alt="insurance" />
                     <Box
-                      w="100%"
                       display={'flex'}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      gap="1em"
-                      borderBottom="1px solid #ebebeb"
-                      pb="10px"
-                      pt="5px"
+                      justifyContent={'center'}
+                      flexDirection={'column'}
                     >
                       <Text
                         as="b"
@@ -757,7 +609,7 @@ const PolicyDetail = () => {
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
                       >
-                        {'Status'}
+                        {'Travel Details'}
                       </Text>
                       <Text
                         as="p"
@@ -765,26 +617,11 @@ const PolicyDetail = () => {
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
                       >
-                        {`${quotation?.paymentData?.paymentStatus}`}
-                      </Text>
-                    </Box>
-                    <Box
-                      w="100%"
-                      display={'flex'}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      gap="1em"
-                      borderBottom="1px solid #ebebeb"
-                      pb="10px"
-                      pt="5px"
-                    >
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'Payment Code'}
+                        {`${
+                          quotation?.coverType === 'SINGLE_TRIP'
+                            ? 'Single Trip '
+                            : 'Annual Trip'
+                        }`}
                       </Text>
                       <Text
                         as="p"
@@ -792,164 +629,7 @@ const PolicyDetail = () => {
                         fontFamily={'Mulish'}
                         style={{ fontSize: '12px' }}
                       >
-                        {quotation?.paymentData?.paymentId
-                          ? quotation?.paymentData?.paymentId
-                          : '-'}
-                      </Text>
-                    </Box>
-                    <Box
-                      w="100%"
-                      display={'flex'}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      gap="1em"
-                      borderBottom="1px solid #ebebeb"
-                      pb="10px"
-                      pt="5px"
-                    >
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'Payment Method'}
-                      </Text>
-                      <Text
-                        as="p"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {`${quotation?.paymentData?.paymentMethod}`}
-                      </Text>
-                    </Box>
-                    <Box
-                      w="100%"
-                      display={'flex'}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      gap="1em"
-                      borderBottom="1px solid #ebebeb"
-                      pb="10px"
-                      pt="5px"
-                    >
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'Premium price'}
-                      </Text>
-                      <Text
-                        as="p"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {`${quotation?.selectProduct?.finalPrice}`}
-                      </Text>
-                    </Box>
-                    <Box
-                      w="100%"
-                      display={'flex'}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      gap="1em"
-                      borderBottom="1px solid #ebebeb"
-                      pb="10px"
-                      pt="5px"
-                    >
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'Quantity'}
-                      </Text>
-                      <Text
-                        as="p"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'x'}
-                        {quotation?.travellers?.length}
-                      </Text>
-                    </Box>
-                    <Box
-                      w="100%"
-                      display={'flex'}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      gap="1em"
-                      borderBottom="1px solid #ebebeb"
-                      pb="10px"
-                      pt="5px"
-                    >
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'Stamp Duty'}
-                      </Text>
-                      <Text
-                        as="p"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {quotation?.stampDuty}
-                      </Text>
-                    </Box>
-                    <Box
-                      w="100%"
-                      display={'flex'}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      gap="1em"
-                      borderBottom="1px solid #ebebeb"
-                      pb="10px"
-                      pt="5px"
-                    >
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'Issued by'}
-                      </Text>
-                      <Text
-                        as="p"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {`${quotation?.sales?.firstName} ${quotation?.sales?.lastName}`}
-                      </Text>
-                    </Box>
-                    <Box
-                      w="100%"
-                      display={'flex'}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                      gap="1em"
-                      borderBottom="1px solid #ebebeb"
-                      pb="10px"
-                      pt="5px"
-                    >
-                      <Text
-                        as="b"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                      >
-                        {'Purchase Date'}
+                        {'Singapore'}
                       </Text>
                       <Text
                         as="p"
@@ -958,1005 +638,1330 @@ const PolicyDetail = () => {
                         style={{ fontSize: '12px' }}
                       >
                         {`${formatDateToLong(
-                          quotation?.paymentData?.successTimestamp
-                        )}`}
+                          quotation?.from
+                        )} - ${formatDateToLong(quotation?.to)}`}
                       </Text>
+                    </Box>
+                  </Box>
+                  <Box
+                    display={'flex'}
+                    justifyContent={'flex-start'}
+                    alignItems={'center'}
+                    boxSizing="borderBox"
+                    borderBottom={'1px solid #ebebeb'}
+                    pb="10px"
+                    pt="10px"
+                    gap="1em"
+                  >
+                    <Image src={Umbrella} alt="insurance" />
+                    <Box
+                      display={'flex'}
+                      justifyContent={'center'}
+                      flexDirection={'column'}
+                    >
+                      <Text
+                        as="b"
+                        size={'sm'}
+                        fontFamily={'Mulish'}
+                        style={{ fontSize: '12px' }}
+                      >
+                        {'Selected Plan'}
+                      </Text>
+                      <Box>
+                        <Text
+                          as="p"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                          gap="1em"
+                        >
+                          {`${quotation?.selectProduct?.productName}`}
+                        </Text>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box
+                    display={'flex'}
+                    justifyContent={'flex-start'}
+                    alignItems={'center'}
+                    boxSizing="borderBox"
+                    borderBottom={'1px solid #ebebeb'}
+                    pb="10px"
+                    pt="10px"
+                    gap="1em"
+                  >
+                    <Image src={Pasport} alt="insurance" />
+                    <Box
+                      display={'flex'}
+                      justifyContent={'center'}
+                      flexDirection={'column'}
+                    >
+                      <Text
+                        as="b"
+                        size={'sm'}
+                        fontFamily={'Mulish'}
+                        style={{ fontSize: '12px' }}
+                      >
+                        {'Traveller Type'}
+                      </Text>
+                      <Box>
+                        <Text
+                          as="p"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                          gap="1em"
+                        >
+                          {`${quotation?.travellerType?.name}`}
+                        </Text>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box
+                    display={'flex'}
+                    justifyContent={'flex-start'}
+                    alignItems={'flex-start'}
+                    boxSizing="borderBox"
+                    borderBottom={'1px solid #ebebeb'}
+                    pb="10px"
+                    pt="10px"
+                    gap="1em"
+                  >
+                    <Image src={Payment} alt="insurance" />
+                    <Box
+                      display={'flex'}
+                      justifyContent={'center'}
+                      flexDirection={'column'}
+                      w="100%"
+                    >
+                      <Text
+                        as="b"
+                        size={'sm'}
+                        fontFamily={'Mulish'}
+                        style={{ fontSize: '12px' }}
+                      >
+                        {'Payment Details'}
+                      </Text>
+                      <Box
+                        w="100%"
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        gap="1em"
+                        borderBottom="1px solid #ebebeb"
+                        pb="10px"
+                        pt="5px"
+                      >
+                        <Text
+                          as="b"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {'Status'}
+                        </Text>
+                        <Text
+                          as="p"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {`${quotation?.paymentData?.paymentStatus}`}
+                        </Text>
+                      </Box>
+                      <Box
+                        w="100%"
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        gap="1em"
+                        borderBottom="1px solid #ebebeb"
+                        pb="10px"
+                        pt="5px"
+                      >
+                        <Text
+                          as="b"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {'Payment Code'}
+                        </Text>
+                        <Text
+                          as="p"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {quotation?.paymentData?.paymentId
+                            ? quotation?.paymentData?.paymentId
+                            : '-'}
+                        </Text>
+                      </Box>
+                      <Box
+                        w="100%"
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        gap="1em"
+                        borderBottom="1px solid #ebebeb"
+                        pb="10px"
+                        pt="5px"
+                      >
+                        <Text
+                          as="b"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {'Payment Method'}
+                        </Text>
+                        <Text
+                          as="p"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {`${quotation?.paymentData?.paymentMethod}`}
+                        </Text>
+                      </Box>
+                      <Box
+                        w="100%"
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        gap="1em"
+                        borderBottom="1px solid #ebebeb"
+                        pb="10px"
+                        pt="5px"
+                      >
+                        <Text
+                          as="b"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {'Premium price'}
+                        </Text>
+                        <Text
+                          as="p"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {`${quotation?.selectProduct?.finalPrice}`}
+                        </Text>
+                      </Box>
+                      <Box
+                        w="100%"
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        gap="1em"
+                        borderBottom="1px solid #ebebeb"
+                        pb="10px"
+                        pt="5px"
+                      >
+                        <Text
+                          as="b"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {'Quantity'}
+                        </Text>
+                        <Text
+                          as="p"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {'x'}
+                          {quotation?.travellers?.length}
+                        </Text>
+                      </Box>
+                      <Box
+                        w="100%"
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        gap="1em"
+                        borderBottom="1px solid #ebebeb"
+                        pb="10px"
+                        pt="5px"
+                      >
+                        <Text
+                          as="b"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {'Stamp Duty'}
+                        </Text>
+                        <Text
+                          as="p"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {quotation?.stampDuty}
+                        </Text>
+                      </Box>
+                      <Box
+                        w="100%"
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        gap="1em"
+                        borderBottom="1px solid #ebebeb"
+                        pb="10px"
+                        pt="5px"
+                      >
+                        <Text
+                          as="b"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {'Issued by'}
+                        </Text>
+                        <Text
+                          as="p"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {`${quotation?.sales?.firstName} ${quotation?.sales?.lastName}`}
+                        </Text>
+                      </Box>
+                      <Box
+                        w="100%"
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                        gap="1em"
+                        borderBottom="1px solid #ebebeb"
+                        pb="10px"
+                        pt="5px"
+                      >
+                        <Text
+                          as="b"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {'Purchase Date'}
+                        </Text>
+                        <Text
+                          as="p"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                        >
+                          {`${formatDateToLong(
+                            quotation?.paymentData?.successTimestamp
+                          )}`}
+                        </Text>
+                      </Box>
                     </Box>
                   </Box>
                 </Box>
               </Box>
             </Box>
-          </Box>
-          <Box w="70%" pl="1em">
-            <Box bg="white" w={{ base: '100%' }} p={{ md: '10px' }}>
-              <Box
-                pb="10px"
-                pt="10px"
-                borderBottom={'1px solid #ebebeb'}
-                display={'flex'}
-                flexDirection={'row'}
-                alignItems={'center'}
-                justifyContent={'space-between'}
-              >
-                <Text
-                  as="b"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                  color={'#231F20'}
-                >
-                  {'Policy Number'}
-                </Text>
-                <Box bg="#f0f3f8" p="2px">
-                  <Text
-                    as="p"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
-                    fontWeight={'400'}
-                  >
-                    {policyNumberString === undefined
-                      ? quotation?.travellers[0]?.policyNumber
-                      : policyNumberString}
-                  </Text>
-                </Box>
-              </Box>
-              <Box
-                pb="10px"
-                pt="10px"
-                borderBottom={'1px solid #ebebeb'}
-                display={'flex'}
-                flexDirection={'row'}
-                alignItems={'center'}
-                justifyContent={'space-between'}
-              >
-                <Text
-                  as="b"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                  color={'#231F20'}
-                >
-                  {'Proforma Invoice'}
-                </Text>
-                <Box bg="#f0f3f8" p="2px">
-                  <Text
-                    as="p"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
-                    fontWeight={'400'}
-                  >
-                    {quotation !== null ? quotation?.proformaRefNo : null}
-                  </Text>
-                </Box>
-              </Box>
-              <Box
-                pb="10px"
-                pt="10px"
-                borderBottom={'1px solid #ebebeb'}
-                display={'flex'}
-                flexDirection={'column'}
-                alignItems={'flex-start'}
-                justifyContent={'center'}
-              >
-                <Text
-                  as="b"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
-                  color={'#231F20'}
-                >
-                  {'Policy History'}
-                </Text>
+            <Box w="70%" pl="1em">
+              <Box bg="white" w={{ base: '100%' }} p={{ md: '10px' }}>
                 <Box
-                  p="2px"
+                  pb="10px"
+                  pt="10px"
+                  borderBottom={'1px solid #ebebeb'}
                   display={'flex'}
-                  justifyContent={'space-between'}
+                  flexDirection={'row'}
                   alignItems={'center'}
-                  gap="5px"
-                  flexDirection="column"
+                  justifyContent={'space-between'}
                 >
-                  {quotation?.histories.map((history, i) => (
-                    <Box
-                      bg="#f0f3f8"
-                      p={'0.2em'}
-                      key={i}
-                      display={'flex'}
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
+                  <Text
+                    as="b"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                    color={'#231F20'}
+                  >
+                    {'Policy Number'}
+                  </Text>
+                  <Box bg="#f0f3f8" p="2px">
+                    <Text
+                      as="p"
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '14px' }}
+                      fontWeight={'400'}
                     >
+                      {policyNumberString === undefined
+                        ? quotation?.travellers[0]?.policyNumber
+                        : policyNumberString}
+                    </Text>
+                  </Box>
+                </Box>
+                <Box
+                  pb="10px"
+                  pt="10px"
+                  borderBottom={'1px solid #ebebeb'}
+                  display={'flex'}
+                  flexDirection={'row'}
+                  alignItems={'center'}
+                  justifyContent={'space-between'}
+                >
+                  <Text
+                    as="b"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                    color={'#231F20'}
+                  >
+                    {'Proforma Invoice'}
+                  </Text>
+                  <Box bg="#f0f3f8" p="2px">
+                    <Text
+                      as="p"
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '14px' }}
+                      fontWeight={'400'}
+                    >
+                      {quotation !== null ? quotation?.proformaRefNo : null}
+                    </Text>
+                  </Box>
+                </Box>
+                <Box
+                  pb="10px"
+                  pt="10px"
+                  borderBottom={'1px solid #ebebeb'}
+                  display={'flex'}
+                  flexDirection={'column'}
+                  alignItems={'flex-start'}
+                  justifyContent={'center'}
+                >
+                  <Text
+                    as="b"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '14px' }}
+                    color={'#231F20'}
+                  >
+                    {'Policy History'}
+                  </Text>
+                  <Box
+                    p="2px"
+                    display={'flex'}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                    gap="5px"
+                    flexDirection="column"
+                  >
+                    {quotation?.histories.map((history, i) => (
                       <Box
-                        w="8px"
-                        h="8px"
-                        bg="green"
-                        borderRadius={'full'}
-                        display="flex"
-                      />
-                      <Text
-                        p="10px"
-                        as="p"
-                        fontFamily={'Mulish'}
-                        style={{ fontSize: '12px' }}
-                        fontWeight={'400'}
+                        bg="#f0f3f8"
+                        p={'0.2em'}
+                        key={i}
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
                       >
-                        {history.message}
-                      </Text>
-                    </Box>
-                  ))}
+                        <Box
+                          w="8px"
+                          h="8px"
+                          bg="green"
+                          borderRadius={'full'}
+                          display="flex"
+                          ml="5px"
+                        />
+                        <Text
+                          p="10px"
+                          as="p"
+                          fontFamily={'Mulish'}
+                          style={{ fontSize: '12px' }}
+                          fontWeight={'400'}
+                        >
+                          {history.message}
+                        </Text>
+                      </Box>
+                    ))}
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-            {quotation?.travellerType?.name === 'Individual'
-              ? quotation?.travellers
+              {quotation?.travellerType?.name === 'Individual'
                 ? quotation?.travellers
-                    .filter(
-                      (travellers) =>
-                        travellers.policyNumber === policyNumberString
-                    )
-                    .map((travellers, i) => {
-                      return (
-                        <Box key={i} mt="1em">
-                          <Accordion allowMultiple defaultIndex={[0]}>
-                            <AccordionItem
-                              border={'1px solid #ebebeb'}
-                              borderRadius={'5px'}
-                            >
-                              <h2 style={{ marginBottom: '0' }}>
-                                <Box as="div" role="group">
-                                  <AccordionButton
-                                    _groupHover={{
-                                      boxShadow:
-                                        '0px 0px 3px 3px rgba(153, 180, 206, 0.2)',
-                                      transition: '.2s',
-                                      bg: 'white',
-                                      borderRadius: '5px',
-                                    }}
-                                  >
-                                    <AccordionIcon />
-                                    <Box as="span" flex="1" textAlign="left">
-                                      <Text as="b" fontSize={'sm'}>
-                                        {`${travellers?.firstName} ${travellers?.lastName}`}
-                                      </Text>
-                                    </Box>
-                                  </AccordionButton>
-                                </Box>
-                              </h2>
-                              <Box>
-                                <AccordionPanel pb={4}>
-                                  <Box
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                    borderRadius={'5px'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Policy Number
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {travellers?.policyNumber}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Traveller Type
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {travellers?.travellerType}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Title
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {travellers?.title}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Full Name
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {`${travellers?.firstName} ${travellers?.lastName}`}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Email Address
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {travellers?.email}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Phone Number
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {travellers?.phone}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Identitiy Card/ Passport
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {travellers?.passport}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Ticket Number
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {travellers?.ticket
-                                          ? travellers?.ticket
-                                          : '-'}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Date Of Birth
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {formatDateToLong(
-                                          travellers?.dateOfBirth
-                                        )}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Place Of Birth
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {travellers?.placeOfBirth}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Address
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {travellers?.address}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Beneficiary
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {travellers?.beneficiary
-                                          ? travellers?.beneficiary
-                                          : '-'}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    w={{ base: '100%' }}
-                                    display="flex"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    p={{ base: '4px', md: '10px' }}
-                                    borderBottom={'1px solid #ebebeb'}
-                                  >
-                                    <Box w={{ md: '30%' }}>
-                                      <Text
-                                        as="b"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                        color={'#231F20'}
-                                      >
-                                        Relationship
-                                      </Text>
-                                    </Box>
-                                    <Box w={{ md: '70%' }}>
-                                      <Text
-                                        as="p"
-                                        size="sm"
-                                        fontFamily={'Mulish'}
-                                        style={{ fontSize: '14px' }}
-                                      >
-                                        {travellers?.relationship
-                                          ? travellers.relationship
-                                          : '-'}
-                                      </Text>
-                                    </Box>
-                                  </Box>
-                                </AccordionPanel>
-                              </Box>
-                            </AccordionItem>
-                          </Accordion>
-                        </Box>
-                      );
-                    })
-                : null
-              : quotation?.travellers.map((travellers, i) => {
-                  return (
-                    <Box key={i} mt="1em">
-                      <Accordion allowMultiple defaultIndex={[0]}>
-                        <AccordionItem
-                          border={'1px solid #ebebeb'}
-                          borderRadius={'5px'}
-                        >
-                          <h2 style={{ marginBottom: '0' }}>
-                            <Box as="div" role="group">
-                              <AccordionButton
-                                _groupHover={{
-                                  boxShadow:
-                                    '0px 0px 3px 3px rgba(153, 180, 206, 0.2)',
-                                  transition: '.2s',
-                                  bg: 'white',
-                                  borderRadius: '5px',
-                                }}
-                              >
-                                <AccordionIcon />
-                                <Box as="span" flex="1" textAlign="left">
-                                  <Text as="b" fontSize={'sm'}>
-                                    {`${travellers?.firstName} ${travellers?.lastName}`}
-                                  </Text>
-                                </Box>
-                              </AccordionButton>
-                            </Box>
-                          </h2>
-                          <Box>
-                            <AccordionPanel pb={4}>
-                              <Box
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                                border="1px solid #ebebeb"
+                  ? quotation?.travellers
+                      .filter(
+                        (travellers) =>
+                          travellers.policyNumber === policyNumberString
+                      )
+                      .map((travellers, i) => {
+                        return (
+                          <Box key={i} mt="1em">
+                            <Accordion allowMultiple defaultIndex={[0]}>
+                              <AccordionItem
+                                border={'1px solid #ebebeb'}
                                 borderRadius={'5px'}
                               >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Policy Number
-                                  </Text>
+                                <h2 style={{ marginBottom: '0' }}>
+                                  <Box as="div" role="group">
+                                    <AccordionButton
+                                      _groupHover={{
+                                        boxShadow:
+                                          '0px 0px 3px 3px rgba(153, 180, 206, 0.2)',
+                                        transition: '.2s',
+                                        bg: 'white',
+                                        borderRadius: '5px',
+                                      }}
+                                    >
+                                      <AccordionIcon />
+                                      <Box as="span" flex="1" textAlign="left">
+                                        <Text as="b" fontSize={'sm'}>
+                                          {`${travellers?.firstName} ${travellers?.lastName}`}
+                                        </Text>
+                                      </Box>
+                                    </AccordionButton>
+                                  </Box>
+                                </h2>
+                                <Box>
+                                  <AccordionPanel pb={4}>
+                                    <Box
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                      borderRadius={'5px'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Policy Number
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {travellers?.policyNumber}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Traveller Type
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {travellers?.travellerType}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Title
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {travellers?.title}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Full Name
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {`${travellers?.firstName} ${travellers?.lastName}`}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Email Address
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {travellers?.email}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Phone Number
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {travellers?.phone}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Identitiy Card/ Passport
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {travellers?.passport}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Ticket Number
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {travellers?.ticket
+                                            ? travellers?.ticket
+                                            : '-'}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Date Of Birth
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {formatDateToLong(
+                                            travellers?.dateOfBirth
+                                          )}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Place Of Birth
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {travellers?.placeOfBirth}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Address
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {travellers?.address}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Beneficiary
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {travellers?.beneficiary
+                                            ? travellers?.beneficiary
+                                            : '-'}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                    <Box
+                                      w={{ base: '100%' }}
+                                      display="flex"
+                                      justifyContent="flex-start"
+                                      alignItems="center"
+                                      p={{ base: '4px', md: '10px' }}
+                                      borderBottom={'1px solid #ebebeb'}
+                                    >
+                                      <Box w={{ md: '30%' }}>
+                                        <Text
+                                          as="b"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                          color={'#231F20'}
+                                        >
+                                          Relationship
+                                        </Text>
+                                      </Box>
+                                      <Box w={{ md: '70%' }}>
+                                        <Text
+                                          as="p"
+                                          size="sm"
+                                          fontFamily={'Mulish'}
+                                          style={{ fontSize: '14px' }}
+                                        >
+                                          {travellers?.relationship
+                                            ? travellers.relationship
+                                            : '-'}
+                                        </Text>
+                                      </Box>
+                                    </Box>
+                                  </AccordionPanel>
                                 </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {travellers?.policyNumber}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Traveller Type
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {travellers?.travellerType}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Title
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {travellers?.title}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Full Name
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {`${travellers?.firstName} ${travellers?.lastName}`}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Email Address
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {travellers?.email}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Phone Number
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {travellers?.phone}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Identitiy Card/ Passport
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {travellers?.passport}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Ticket Number
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {travellers?.ticket}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Date Of Birth
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {formatDateToLong(travellers?.dateOfBirth)}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Place Of Birth
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {travellers?.placeOfBirth}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Address
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {travellers?.address}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Beneficiary
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {travellers?.beneficiary
-                                      ? travellers?.beneficiary
-                                      : '-'}
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box
-                                w={{ base: '100%' }}
-                                display="flex"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                p={{ base: '4px', md: '10px' }}
-                                borderBottom={'1px solid #ebebeb'}
-                              >
-                                <Box w={{ md: '30%' }}>
-                                  <Text
-                                    as="b"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                    color={'#231F20'}
-                                  >
-                                    Relationship
-                                  </Text>
-                                </Box>
-                                <Box w={{ md: '70%' }}>
-                                  <Text
-                                    as="p"
-                                    size="sm"
-                                    fontFamily={'Mulish'}
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {travellers?.relationship
-                                      ? travellers.relationship
-                                      : '-'}
-                                  </Text>
-                                </Box>
-                              </Box>
-                            </AccordionPanel>
+                              </AccordionItem>
+                            </Accordion>
                           </Box>
-                        </AccordionItem>
-                      </Accordion>
-                    </Box>
-                  );
-                })}
+                        );
+                      })
+                  : null
+                : quotation?.travellers.map((travellers, i) => {
+                    return (
+                      <Box key={i} mt="1em">
+                        <Accordion allowMultiple defaultIndex={[0]}>
+                          <AccordionItem
+                            border={'1px solid #ebebeb'}
+                            borderRadius={'5px'}
+                          >
+                            <h2 style={{ marginBottom: '0' }}>
+                              <Box as="div" role="group">
+                                <AccordionButton
+                                  _groupHover={{
+                                    boxShadow:
+                                      '0px 0px 3px 3px rgba(153, 180, 206, 0.2)',
+                                    transition: '.2s',
+                                    bg: 'white',
+                                    borderRadius: '5px',
+                                  }}
+                                >
+                                  <AccordionIcon />
+                                  <Box as="span" flex="1" textAlign="left">
+                                    <Text as="b" fontSize={'sm'}>
+                                      {`${travellers?.firstName} ${travellers?.lastName}`}
+                                    </Text>
+                                  </Box>
+                                </AccordionButton>
+                              </Box>
+                            </h2>
+                            <Box>
+                              <AccordionPanel pb={4}>
+                                <Box
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                  border="1px solid #ebebeb"
+                                  borderRadius={'5px'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Policy Number
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {travellers?.policyNumber}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Traveller Type
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {travellers?.travellerType}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Title
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {travellers?.title}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Full Name
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {`${travellers?.firstName} ${travellers?.lastName}`}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Email Address
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {travellers?.email}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Phone Number
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {travellers?.phone}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Identitiy Card/ Passport
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {travellers?.passport}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Ticket Number
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {travellers?.ticket}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Date Of Birth
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {formatDateToLong(
+                                        travellers?.dateOfBirth
+                                      )}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Place Of Birth
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {travellers?.placeOfBirth}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Address
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {travellers?.address}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Beneficiary
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {travellers?.beneficiary
+                                        ? travellers?.beneficiary
+                                        : '-'}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box
+                                  w={{ base: '100%' }}
+                                  display="flex"
+                                  justifyContent="flex-start"
+                                  alignItems="center"
+                                  p={{ base: '4px', md: '10px' }}
+                                  borderBottom={'1px solid #ebebeb'}
+                                >
+                                  <Box w={{ md: '30%' }}>
+                                    <Text
+                                      as="b"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                      color={'#231F20'}
+                                    >
+                                      Relationship
+                                    </Text>
+                                  </Box>
+                                  <Box w={{ md: '70%' }}>
+                                    <Text
+                                      as="p"
+                                      size="sm"
+                                      fontFamily={'Mulish'}
+                                      style={{ fontSize: '14px' }}
+                                    >
+                                      {travellers?.relationship
+                                        ? travellers.relationship
+                                        : '-'}
+                                    </Text>
+                                  </Box>
+                                </Box>
+                              </AccordionPanel>
+                            </Box>
+                          </AccordionItem>
+                        </Accordion>
+                      </Box>
+                    );
+                  })}
+            </Box>
           </Box>
         </Box>
       </Box>

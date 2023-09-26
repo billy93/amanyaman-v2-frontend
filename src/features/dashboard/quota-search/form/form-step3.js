@@ -1222,12 +1222,6 @@ const Form3 = ({
                             // wrapperClassName={'calendarClassName'}
                             calendarClassName="custom-datepicker"
                             shouldHighlightWeekends
-                            style={{
-                              fontSize: '12px',
-                              fontfamily: 'Mulish',
-                              marginTop: '1em',
-                              color: '#000000ad',
-                            }}
                           />
                         </Box>
                       </FormControl>
