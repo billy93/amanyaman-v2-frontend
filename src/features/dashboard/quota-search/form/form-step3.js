@@ -120,6 +120,7 @@ const Form3 = ({
   const [typeStatus, setTypeStatus] = useState('Mr');
   const [select, setSelect] = useState('new');
   const [existingTravellers, setExistingTravellers] = useState('');
+  const [travellersExisting, setTravellersExisting] = useState(null);
   const [existingTravellersDate, setExistingTravellersDate] = useState(null);
   const [isActiveSelectCountry, setActiveSelectCountry] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -135,7 +136,7 @@ const Form3 = ({
   const [ticketNumber, setTicketsNumber] = useState('');
   const [beneficiary, setBeneficiary] = useState('');
   const [relationship, setRelationship] = useState('');
-  const [searchTraveller, setSearchTraveller] = useState('');
+  const [searchTraveller, setSearchTraveller] = useState(null);
   const [dateBirth, setDateBirth] = useState('');
   const [isValid, setIsValid] = useState(true);
   const [isValidPhone, setIsValidPhone] = useState(true);
@@ -514,6 +515,7 @@ const Form3 = ({
     try {
       const response = await getExistingTraveller(params);
       console.log('response', response);
+      setTravellersExisting(response);
     } catch (error) {
       console.log(error);
     }
@@ -742,13 +744,14 @@ const Form3 = ({
       });
     }
   };
-  console.log('existing', existingTravellers);
+  console.log('existing', travellersExisting);
   React.useEffect(() => {
     if (deleted && triggerGetList) {
       refetch(id);
     }
   }, [deleted, refetch, id, triggerGetList]);
 
+  console.log('select', select);
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Modal
@@ -765,16 +768,300 @@ const Form3 = ({
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Box>
-              {select !== 'new' && (
+              {select === 'existing' && (
                 <Box
                   minH="200px"
                   m="auto"
                   bg="#f6f2f2"
                   display={'flex'}
                   alignItems={'center'}
-                  justifyContent={'center'}
+                  justifyContent={'space-between'}
                 >
-                  <Text as="p">Empty</Text>
+                  {travellersExisting !== null ? (
+                    <Box mt="1em" w="100%">
+                      <Box>
+                        <Box
+                          w={{ base: '100%' }}
+                          display="flex"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          p={{ base: '4px', md: '10px' }}
+                          borderBottom={'1px solid #ebebeb'}
+                        >
+                          <Box w={{ md: '30%' }}>
+                            <Text
+                              as="b"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                              color={'#231F20'}
+                            >
+                              Full Name
+                            </Text>
+                          </Box>
+                          <Box w={{ md: '70%' }}>
+                            <Text
+                              as="p"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              {`${travellersExisting?.data?.firstName} ${travellersExisting?.data?.lastName}`}
+                            </Text>
+                          </Box>
+                        </Box>
+                        <Box
+                          w={{ base: '100%' }}
+                          display="flex"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          p={{ base: '4px', md: '10px' }}
+                          borderBottom={'1px solid #ebebeb'}
+                        >
+                          <Box w={{ md: '30%' }}>
+                            <Text
+                              as="b"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                              color={'#231F20'}
+                            >
+                              Email Address
+                            </Text>
+                          </Box>
+                          <Box w={{ md: '70%' }}>
+                            <Text
+                              as="p"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              {travellersExisting?.data?.email}
+                            </Text>
+                          </Box>
+                        </Box>
+                        <Box
+                          w={{ base: '100%' }}
+                          display="flex"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          p={{ base: '4px', md: '10px' }}
+                          borderBottom={'1px solid #ebebeb'}
+                        >
+                          <Box w={{ md: '30%' }}>
+                            <Text
+                              as="b"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                              color={'#231F20'}
+                            >
+                              Phone Number
+                            </Text>
+                          </Box>
+                          <Box w={{ md: '70%' }}>
+                            <Text
+                              as="p"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              {travellersExisting?.data?.phone}
+                            </Text>
+                          </Box>
+                        </Box>
+                        <Box
+                          w={{ base: '100%' }}
+                          display="flex"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          p={{ base: '4px', md: '10px' }}
+                          borderBottom={'1px solid #ebebeb'}
+                        >
+                          <Box w={{ md: '30%' }}>
+                            <Text
+                              as="b"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                              color={'#231F20'}
+                            >
+                              Identitiy Card/ Passport
+                            </Text>
+                          </Box>
+                          <Box w={{ md: '70%' }}>
+                            <Text
+                              as="p"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              {travellersExisting?.data?.passport}
+                            </Text>
+                          </Box>
+                        </Box>
+
+                        <Box
+                          w={{ base: '100%' }}
+                          display="flex"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          p={{ base: '4px', md: '10px' }}
+                          borderBottom={'1px solid #ebebeb'}
+                        >
+                          <Box w={{ md: '30%' }}>
+                            <Text
+                              as="b"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                              color={'#231F20'}
+                            >
+                              Date Of Birth
+                            </Text>
+                          </Box>
+                          <Box w={{ md: '70%' }}>
+                            <Text
+                              as="p"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              {formatDateToLong(
+                                travellersExisting?.data?.dateOfBirth
+                              )}
+                            </Text>
+                          </Box>
+                        </Box>
+                        <Box
+                          w={{ base: '100%' }}
+                          display="flex"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          p={{ base: '4px', md: '10px' }}
+                          borderBottom={'1px solid #ebebeb'}
+                        >
+                          <Box w={{ md: '30%' }}>
+                            <Text
+                              as="b"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                              color={'#231F20'}
+                            >
+                              Place Of Birth
+                            </Text>
+                          </Box>
+                          <Box w={{ md: '70%' }}>
+                            <Text
+                              as="p"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              {travellersExisting?.data?.placeOfBirth}
+                            </Text>
+                          </Box>
+                        </Box>
+                        <Box
+                          w={{ base: '100%' }}
+                          display="flex"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          p={{ base: '4px', md: '10px' }}
+                          borderBottom={'1px solid #ebebeb'}
+                        >
+                          <Box w={{ md: '30%' }}>
+                            <Text
+                              as="b"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                              color={'#231F20'}
+                            >
+                              Address
+                            </Text>
+                          </Box>
+                          <Box w={{ md: '70%' }}>
+                            <Text
+                              as="p"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              {travellersExisting?.data?.address}
+                            </Text>
+                          </Box>
+                        </Box>
+                        <Box
+                          w={{ base: '100%' }}
+                          display="flex"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          p={{ base: '4px', md: '10px' }}
+                          borderBottom={'1px solid #ebebeb'}
+                        >
+                          <Box w={{ md: '30%' }}>
+                            <Text
+                              as="b"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                              color={'#231F20'}
+                            >
+                              Beneficiary
+                            </Text>
+                          </Box>
+                          <Box w={{ md: '70%' }}>
+                            <Text
+                              as="p"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              {travellersExisting?.data?.beneficiary
+                                ? travellersExisting?.data?.beneficiary
+                                : '-'}
+                            </Text>
+                          </Box>
+                        </Box>
+                        <Box
+                          w={{ base: '100%' }}
+                          display="flex"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          p={{ base: '4px', md: '10px' }}
+                          borderBottom={'1px solid #ebebeb'}
+                        >
+                          <Box w={{ md: '30%' }}>
+                            <Text
+                              as="b"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                              color={'#231F20'}
+                            >
+                              Relationship
+                            </Text>
+                          </Box>
+                          <Box w={{ md: '70%' }}>
+                            <Text
+                              as="p"
+                              size="sm"
+                              fontFamily={'Mulish'}
+                              style={{ fontSize: '14px' }}
+                            >
+                              {travellersExisting?.data?.relationship
+                                ? travellersExisting?.data.relationship
+                                : '-'}
+                            </Text>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                  ) : (
+                    <Text as="p">result</Text>
+                  )}
                 </Box>
               )}
               <RadioGroup
