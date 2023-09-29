@@ -582,6 +582,77 @@ const Form3 = ({
       console.log('error adding');
     }
   };
+  console.log('travellersExisting', travellersExisting);
+  const onSaveExisting = async (e) => {
+    console.log('siniii');
+    e.preventDefault();
+    let i = listTravellers?.listTravellers?.length;
+    let dates = formatDate(
+      `${dateOfBirth?.year}-${dateOfBirth?.month}-${dateOfBirth?.day}`
+    );
+    const now = new Date();
+    const newAdd = {
+      bookingId: travellersExisting?.data?.bookingId,
+      firstName: travellersExisting?.data?.firstName,
+      lastName: travellersExisting?.data?.lastName,
+      title: travellersExisting?.data?.title,
+      travellerType: travellersExisting?.data?.travellerType,
+      fullName: `${travellersExisting?.data?.firstName}${travellersExisting?.data?.lastName}`,
+      email: travellersExisting?.data?.email,
+      phone: travellersExisting?.data?.phone,
+      address: travellersExisting?.data?.address,
+      passport: travellersExisting?.data?.passport,
+      dateOfBirth: travellersExisting?.data.dateOfBirth,
+      placeOfBirth: travellersExisting?.data?.placeOfBirth,
+      ticketFlightNumber: travellersExisting?.data?.ticket,
+      flightItinerary: 'travellersExisting?.data',
+      endorsement: 'Some endorsement text',
+      refundEndorsement: 'Refund endorsement text',
+      beneficiary:
+        travellersExisting?.data?.beneficiary !== ''
+          ? travellersExisting?.data?.beneficiary
+          : '',
+      relationship:
+        travellersExisting?.data?.relationship !== ''
+          ? travellersExisting?.data?.relationship
+          : '',
+    };
+    // // eslint-disable-next-line no-unsafe-optional-chaining
+    // let travellersData = [...listTravellers?.listTravellers, newAdd];
+    // dispatch(setTravellersData(travellersData));
+    setFirstName('');
+    setLastName('');
+    setPasportNumber('');
+    setPhoneNumber('');
+    setEmail('');
+    setDateOfBirth(null);
+    setPlaceOfBirth('');
+    setAddress('');
+    setBeneficiary('');
+    setRelationship('');
+    setTicketsNumber('');
+    setTravellersExisting(null);
+    toast({
+      id: 'addTraveller',
+      title: 'Add Traveller Success',
+      status: 'success',
+      position: 'top-right',
+      duration: 3000,
+      isClosable: true,
+      variant: 'solid',
+    });
+    try {
+      const res = await addTravellerData(newAdd);
+      if (res.data) {
+        dispatch(
+          setTravellersData([...listTravellers?.listTravellers, res?.data])
+        );
+      }
+      onClose();
+    } catch (error) {
+      console.log('error adding');
+    }
+  };
   const onEdit = async (e) => {
     e.preventDefault();
     let i = listTravellers?.listTravellers?.length;
@@ -1060,7 +1131,9 @@ const Form3 = ({
                       </Box>
                     </Box>
                   ) : (
-                    <Text as="p">result</Text>
+                    <Text as="p" style={{ width: '100%', textAlign: 'center' }}>
+                      result
+                    </Text>
                   )}
                 </Box>
               )}
@@ -1541,7 +1614,13 @@ const Form3 = ({
             <Button
               colorScheme="blue"
               mr={3}
-              onClick={EditTraveller !== null ? onEdit : onSave}
+              onClick={
+                EditTraveller !== null
+                  ? onEdit
+                  : travellersExisting !== null
+                  ? onSaveExisting
+                  : onSave
+              }
               disabled={loadingEdit || loadingAdd}
               isLoading={loadingEdit || loadingAdd}
             >
