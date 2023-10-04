@@ -259,7 +259,7 @@ const Tables = ({
   pageCount: controlledPageCount,
 }) => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -349,6 +349,9 @@ const Tables = ({
     []
   );
 
+  const handleAdd = () => {
+    navigate('/master-data/band-types/create');
+  };
   return (
     <>
       <Box mb="2em" mt="2em">
@@ -361,9 +364,16 @@ const Tables = ({
             Band Types
           </Heading>
           <Stack direction="row" spacing={4} m={'2.5'}>
-            {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
-                        Add Band Types 
-                    </Button> */}
+            <Button
+              variant="ClaimBtn"
+              leftIcon={<AiOutlinePlusCircle />}
+              colorScheme="#231F20"
+              size={'sm'}
+              color="white"
+              onClick={handleAdd}
+            >
+              Add Band Types
+            </Button>
             {/* <button onClick={refetch}>Refresh</button> */}
           </Stack>
         </Box>
@@ -560,7 +570,7 @@ const Polcies = () => {
           <Link
             color="#065BAA"
             style={{ textDecoration: 'underline' }}
-            to={`/master-data/detail-system-params/${row.original.id}`}
+            to={`/master-data/band-types/edit/${row.original.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.id}

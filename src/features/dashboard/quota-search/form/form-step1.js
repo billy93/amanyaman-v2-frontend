@@ -71,6 +71,7 @@ const Form1 = ({
   isLastStep,
 }) => {
   const initState = useSelector(selectManualInput);
+  const test = useSelector((state) => state);
   const dispatch = useDispatch();
   const [isActive] = useState(false);
   const [persist, setPersist] = usePersist();
@@ -90,6 +91,7 @@ const Form1 = ({
   //    endDate:"",
   // })
 
+  console.log('fuck', test);
   const handleTypeTrip = (type) => {
     dispatch(setFormStateCoverageType(type));
   };

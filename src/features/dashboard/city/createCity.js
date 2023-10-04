@@ -166,7 +166,7 @@ const EditCity = () => {
                     border: '1 px solid',
                   }}
                 >
-                  Plan Type
+                  Country
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -178,7 +178,7 @@ const EditCity = () => {
                 style={{ pointerEvents: 'none' }}
               >
                 <Text as={'b'} fontSize={'sm'} color="#231F20">
-                  {'Create Plan Type'}
+                  {'Create City'}
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -205,7 +205,7 @@ const EditCity = () => {
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
-                Name
+                City Name
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
@@ -229,7 +229,7 @@ const EditCity = () => {
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
-                Number
+                Description
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>

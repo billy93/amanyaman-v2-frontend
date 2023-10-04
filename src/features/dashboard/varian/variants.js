@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 /* eslint-disable react/display-name */
 import React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useGetVariantsQuery } from './systemParamsApiSlice';
 import {
   usePagination,
@@ -10,9 +11,11 @@ import {
 } from 'react-table';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Box,
+  Stack,
   Heading,
   Text,
   Center,
@@ -221,7 +224,7 @@ const Tables = ({
   size,
   pageCount: controlledPageCount,
 }) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // eslint-disable-next-line no-unused-vars
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showFilter, setShowFilter] = React.useState(false);
@@ -304,30 +307,38 @@ const Tables = ({
     []
   );
 
+  const handleAdd = () => {
+    navigate('/master-data/variants/create');
+  };
   // function fuzzyTextFilterFn(rows, id, filterValue) {
   // return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
   // }
 
   return (
     <>
-      <Box mb="2em" mt="2em">
+      <Box mb="0.5em" mt="1em">
         <Box
           display={'flex'}
           justifyContent={'space-between'}
           alignItems={'center'}
         >
           <Heading as={'h6'} size={'sm'}>
-            Variants
+            List Variant
           </Heading>
+          <Stack direction="row" spacing={4} m={'2.5'}>
+            <Button
+              variant="ClaimBtn"
+              leftIcon={<AiOutlinePlusCircle />}
+              colorScheme="#231F20"
+              size={'sm'}
+              color="white"
+              onClick={handleAdd}
+            >
+              Add Variant
+            </Button>
+            {/* <button onClick={refetch}>Refresh</button> */}
+          </Stack>
         </Box>
-        {/* <Box mb={'3'} bg={'#ffeccc'} border={'1px'} borderColor={'#ffa000'} width={'300px'} height={'100px'} p={'2'} display="flex" justifyContent={'center'} alignItems={'center'}>
-                <Box bg="#FFA00">
-                    <MdWarning size={'20px'} color="#FFA000"/>
-                </Box>
-                <Text as={'p'} fontSize='xs' color={'black.200'} p={'3'}>
-                        You can only claim policy of Success policy status with maximum 30 days from the end date and no ongoing/successful refund record
-                </Text>
-            </Box> */}
       </Box>
       <Box bg="white" overflow={'scroll'} p="3">
         <table {...getTableProps()} className="my-table">
@@ -568,6 +579,16 @@ const Polcies = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ row }) => (
+          <Link
+            color="#065BAA"
+            style={{ textDecoration: 'underline', fontSize: '12px' }}
+            to={`/master-data/variants/edit/${row.original.id}`}
+          >
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.id}
+          </Link>
+        ),
       },
       {
         Header: 'Name',

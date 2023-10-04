@@ -3,7 +3,7 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import { useGetListCountryQuery } from './listApiSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   usePagination,
   useSortBy,
@@ -34,6 +34,7 @@ import {
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 
 const Styles = styled.div`
   // padding: 1rem;
@@ -323,6 +324,10 @@ const Tables = ({
     []
   );
 
+  const handleAdd = () => {
+    navigate('/master-data/countries/create');
+  };
+
   return (
     <>
       <Box mb={'0.5em'}>
@@ -335,20 +340,18 @@ const Tables = ({
             List Country
           </Heading>
           <Stack direction="row" spacing={4} m={'2.5'}>
-            {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
-                        Add Country 
-                    </Button> */}
-            {/* <button onClick={refetch}>Refresh</button> */}
+            <Button
+              variant="ClaimBtn"
+              leftIcon={<AiOutlinePlusCircle />}
+              colorScheme="#231F20"
+              size={'sm'}
+              color="white"
+              onClick={handleAdd}
+            >
+              Add Country
+            </Button>
           </Stack>
         </Box>
-        {/* <Box mb={'3'} bg={'#ffeccc'} border={'1px'} borderColor={'#ffa000'} width={'300px'} height={'100px'} p={'2'} display="flex" justifyContent={'center'} alignItems={'center'}>
-                <Box bg="#FFA00">
-                    <MdWarning size={'20px'} color="#FFA000"/>
-                </Box>
-                <Text as={'p'} fontSize='xs' color={'black.200'} p={'3'}>
-                        You can only claim policy of Success policy status with maximum 30 days from the end date and no ongoing/successful refund record
-                </Text>
-            </Box> */}
       </Box>
       <Box
         bg="white"
@@ -536,6 +539,16 @@ const CountryList = () => {
         minWidth: 50,
         width: 50,
         filter: 'fuzzyText',
+        Cell: ({ row }) => (
+          <Link
+            color="#065BAA"
+            style={{ textDecoration: 'underline', fontSize: '12px' }}
+            to={`/master-data/countries/edit/${row.original.id}`}
+          >
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.id}
+          </Link>
+        ),
       },
       {
         Header: 'Name',

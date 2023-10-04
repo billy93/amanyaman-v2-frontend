@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import React from 'react';
 import { useGetPlanTypesQuery } from './planTypeApiSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   usePagination,
   useSortBy,
@@ -10,6 +10,7 @@ import {
 } from 'react-table';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Heading, Stack, Text, Center, Select } from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
@@ -217,7 +218,7 @@ const Tables = ({
   pageCount: controlledPageCount,
 }) => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -306,7 +307,9 @@ const Tables = ({
   // function fuzzyTextFilterFn(rows, id, filterValue) {
   // return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
   // }
-
+  const handleAdd = () => {
+    navigate('/master-data/plan-types/create');
+  };
   return (
     <>
       <Box mb="1em">
@@ -319,9 +322,16 @@ const Tables = ({
             Plan Type
           </Heading>
           <Stack direction="row" spacing={4} m={'2.5'}>
-            {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
-                        Add Plan Type 
-                    </Button> */}
+            <Button
+              variant="ClaimBtn"
+              leftIcon={<AiOutlinePlusCircle />}
+              colorScheme="#231F20"
+              size={'sm'}
+              color="white"
+              onClick={handleAdd}
+            >
+              Add Plan Type
+            </Button>
             {/* <button onClick={refetch}>Refresh</button> */}
           </Stack>
         </Box>
@@ -530,7 +540,7 @@ const PlanTypes = () => {
           <Link
             color="#065BAA"
             style={{ textDecoration: 'underline' }}
-            to={`/master-data/detail-system-params/${row.original.id}`}
+            to={`/master-data/plan-types/edit/${row.original.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.id}

@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 /* eslint-disable react/display-name */
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useGetListCityQuery } from './listApiSlice';
 import {
   usePagination,
@@ -8,6 +9,7 @@ import {
   useFilters,
   useColumnOrder,
 } from 'react-table';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -217,7 +219,7 @@ const Tables = ({
   pageCount: controlledPageCount,
 }) => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -303,7 +305,9 @@ const Tables = ({
     }),
     []
   );
-
+  const handleAdd = () => {
+    navigate('/master-data/cities/create');
+  };
   return (
     <>
       <Box mb="0.5em">
@@ -313,23 +317,22 @@ const Tables = ({
           alignItems={'center'}
         >
           <Heading as={'h6'} size={'sm'}>
-            List Country
+            List City
           </Heading>
           <Stack direction="row" spacing={4} m={'2.5'}>
-            {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
-                        Add Country 
-                    </Button> */}
+            <Button
+              variant="ClaimBtn"
+              leftIcon={<AiOutlinePlusCircle />}
+              colorScheme="#231F20"
+              size={'sm'}
+              color="white"
+              onClick={handleAdd}
+            >
+              Add City
+            </Button>
             {/* <button onClick={refetch}>Refresh</button> */}
           </Stack>
         </Box>
-        {/* <Box mb={'3'} bg={'#ffeccc'} border={'1px'} borderColor={'#ffa000'} width={'300px'} height={'100px'} p={'2'} display="flex" justifyContent={'center'} alignItems={'center'}>
-                <Box bg="#FFA00">
-                    <MdWarning size={'20px'} color="#FFA000"/>
-                </Box>
-                <Text as={'p'} fontSize='xs' color={'black.200'} p={'3'}>
-                        You can only claim policy of Success policy status with maximum 30 days from the end date and no ongoing/successful refund record
-                </Text>
-            </Box> */}
       </Box>
       <Box
         bg="white"
@@ -517,6 +520,16 @@ const CityList = () => {
         minWidth: 50,
         width: 50,
         filter: 'fuzzyText',
+        Cell: ({ row }) => (
+          <Link
+            color="#065BAA"
+            style={{ textDecoration: 'underline', fontSize: '12px' }}
+            to={`/master-data/cities/edit/${row.original.id}`}
+          >
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.id}
+          </Link>
+        ),
       },
       {
         Header: 'Name',

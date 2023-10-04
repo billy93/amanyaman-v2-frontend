@@ -31,22 +31,22 @@ const authSlice = createSlice({
             icon: '',
             children: [
               {
-                link: '/master-data/list-area',
+                link: '/master-data/areas',
                 name: 'Area',
                 href: '#',
               },
               {
-                link: '/master-data/list-band-type',
+                link: '/master-data/band-types',
                 name: 'Band Type',
                 href: '#',
               },
               {
-                link: '/master-data/list-city',
+                link: '/master-data/cities',
                 name: 'Cities',
                 href: '#',
               },
               {
-                link: '/master-data/list-country',
+                link: '/master-data/countries',
                 name: 'Countries',
                 href: '#',
               },
@@ -56,7 +56,7 @@ const authSlice = createSlice({
                 href: '#',
               },
               {
-                link: '/master-data/list-group-area',
+                link: '/master-data/group-areas',
                 name: 'Group Area',
                 href: '#',
               },
@@ -71,7 +71,7 @@ const authSlice = createSlice({
                 href: '#',
               },
               {
-                link: '/master-data/list-plan-type',
+                link: '/master-data/plan-types',
                 name: 'Plan Type',
                 href: '#',
               },
@@ -87,12 +87,12 @@ const authSlice = createSlice({
               },
 
               {
-                link: '/master-data/list-traveller-type',
+                link: '/master-data/traveller-types',
                 name: 'Traveller Type',
                 href: '#',
               },
               {
-                link: '/master-data/list-variant',
+                link: '/master-data/variants',
                 name: 'Variants',
                 href: '#',
               },

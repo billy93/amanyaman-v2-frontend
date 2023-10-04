@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import React from 'react';
 import { useGetTravellerTypesQuery } from './travellerTypesApiSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   usePagination,
   useSortBy,
@@ -10,6 +10,7 @@ import {
 } from 'react-table';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Heading, Stack, Text, Center, Select } from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
@@ -197,6 +198,7 @@ const Tables = ({
   totalCount,
   pageCount: controlledPageCount,
 }) => {
+  const navigate = useNavigate();
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -269,7 +271,9 @@ const Tables = ({
     }),
     []
   );
-
+  const handleAdd = () => {
+    navigate('/master-data/traveller-types/create');
+  };
   return (
     <>
       <Box mb="1em">
@@ -282,9 +286,16 @@ const Tables = ({
             Traveller Type
           </Heading>
           <Stack direction="row" spacing={4} m={'2.5'}>
-            {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
-                        Add Traveller Type 
-                    </Button> */}
+            <Button
+              variant="ClaimBtn"
+              leftIcon={<AiOutlinePlusCircle />}
+              colorScheme="#231F20"
+              size={'sm'}
+              color="white"
+              onClick={handleAdd}
+            >
+              Add Traveller Type
+            </Button>
             {/* <button onClick={refetch}>Refresh</button> */}
           </Stack>
         </Box>
@@ -485,7 +496,7 @@ const Polcies = () => {
           <Link
             color="#065BAA"
             style={{ textDecoration: 'underline' }}
-            to={`/master-data/detail-system-params/${row.original.id}`}
+            to={`/master-data/traveller-types/edit/${row.original.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.id}

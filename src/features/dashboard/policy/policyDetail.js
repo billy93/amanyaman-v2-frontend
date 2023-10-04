@@ -94,6 +94,7 @@ const PolicyDetail = () => {
   const { id, policyNumberString } = useParams();
   const [emails, setEmails] = useState([]);
   const [currentEmail, setCurrentEmail] = useState('');
+  const [isLoadingState, setIsLoadingState] = useState(false);
   const [viewModal, setViewModal] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -168,6 +169,7 @@ const PolicyDetail = () => {
     isLoading: loadingDownload,
     isError: isErrorDownload,
     isSuccess: isSuccessDownload,
+    refetch: refetchDownload,
   } = useDownloadPolicyQuery(getTravellerId(policyNumberString), {
     skip: onTrigger,
   });
@@ -181,6 +183,7 @@ const PolicyDetail = () => {
   });
   const handleDownload = () => {
     setOnTrigger(false);
+    setIsLoadingState(!isLoadingState);
   };
 
   const [isActives, setActives] = useState(false);
@@ -189,6 +192,7 @@ const PolicyDetail = () => {
     const newTab = window.open('', '_blank');
     if (newTab) {
       newTab.location.href = url;
+
       return newTab;
     } else {
       console.error('Failed to open a new tab.');
@@ -196,9 +200,30 @@ const PolicyDetail = () => {
     }
   };
 
+  const callbackDownload = React.useCallback((data) => {
+    downloadAndOpenPdfInNewTab(data);
+    setOnTrigger(true);
+    // setIsLoadingState(!isLoadingState);
+  }, []);
+
   React.useEffect(() => {
-    downloadAndOpenPdfInNewTab(downloadPolicy);
+    callbackDownload(downloadPolicy);
   }, [downloadPolicy]);
+
+  React.useEffect(() => {
+    if (!onTrigger) {
+      refetchDownload(getTravellerId(policyNumberString));
+      setIsLoadingState(!isLoadingState);
+    }
+  }, [onTrigger]);
+
+  React.useEffect(() => {
+    if (!onTrigger) {
+      setIsLoadingState(true);
+    } else {
+      setIsLoadingState(false);
+    }
+  }, [onTrigger]);
 
   const downloadAndOpenPdfInNewTab = async (downloadPolicy) => {
     if (!downloadPolicy) {
@@ -217,12 +242,17 @@ const PolicyDetail = () => {
       newTab.document.body.appendChild(iframe);
 
       // Clean up the blob URL when the new tab is closed
-      newTab.addEventListener('beforeunload', () => {
-        URL.revokeObjectURL(downloadPolicy);
-      });
+      newTab.addEventListener(
+        'beforeunload',
+        () => {
+          URL.revokeObjectURL(downloadPolicy);
+        },
+        1000
+      );
     }
   };
 
+  console.log('onTrigger', onTrigger, isLoadingState);
   React.useEffect(() => {
     getTravellerId(policyNumberString);
   }, [policyNumberString, getTravellerId]);
@@ -337,7 +367,7 @@ const PolicyDetail = () => {
 
   console.log('view closed', viewModal);
   let content;
-  if (isLoading || loadingDownload || loadingView) {
+  if (isLoading || loadingDownload || loadingView || isLoadingState) {
     content = (
       <Center h="50vh" color="#065BAA">
         <PulseLoader color={'#065BAA'} />

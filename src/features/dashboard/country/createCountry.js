@@ -47,7 +47,7 @@ function usePrevious(value) {
   return ref.current;
 }
 
-const EditCity = () => {
+const CreateUser = () => {
   const dispatch = useDispatch();
   const listProducts = useSelector(listUsers);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
@@ -64,8 +64,12 @@ const EditCity = () => {
     },
   ]);
   const [fields, setFields] = React.useState({
-    name: '',
-    desc: '',
+    countryName: '',
+    countryCode: '',
+    currencyCode: '',
+    associatedAirport: '',
+    countryIataCode: '',
+    postCode: '',
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
@@ -155,7 +159,7 @@ const EditCity = () => {
             separator={<ChevronRightIcon color="gray.500" />}
           >
             <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink as={NavLink} to="/master-data/cities">
+              <BreadcrumbLink as={NavLink} to="/master-data/countries">
                 <Text
                   as="b"
                   ml="4"
@@ -166,7 +170,7 @@ const EditCity = () => {
                     border: '1 px solid',
                   }}
                 >
-                  Plan Type
+                  Countries
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -178,7 +182,7 @@ const EditCity = () => {
                 style={{ pointerEvents: 'none' }}
               >
                 <Text as={'b'} fontSize={'sm'} color="#231F20">
-                  {'Create Plan Type'}
+                  {'Create Countries'}
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -197,20 +201,161 @@ const EditCity = () => {
               <Input
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="name"
-                value={fields?.name}
+                name="countryName"
+                value={fields?.countryName}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
-                Name
+                Country Name
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
           </Box>
-
+          <Box
+            display="flex"
+            gap="5px"
+            m="auto"
+            width={{ base: '100%', md: '540px' }}
+          >
+            <Box width={{ base: '100%', md: '240px' }}>
+              <FormControl
+                variant="floating"
+                id="first-name"
+                isRequired
+                mt="14px"
+              >
+                <Input
+                  placeholder=" "
+                  _placeholder={{ opacity: 1, color: 'gray.500' }}
+                  name="countryCode"
+                  value={fields?.countryCode}
+                  onChange={handleData}
+                  h="48px"
+                  variant={'custom'}
+                />
+                {/* It is important that the Label comes after the Control due to css selectors */}
+                <FormLabel fontSize="12" pt="1.5">
+                  Country Code
+                </FormLabel>
+                {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+              </FormControl>
+            </Box>
+            <Box width={{ base: '100%', md: '240px' }}>
+              <FormControl
+                variant="floating"
+                id="lastname-name"
+                isRequired
+                mt="14px"
+              >
+                <Input
+                  placeholder=" "
+                  _placeholder={{ opacity: 1, color: 'gray.500' }}
+                  name="countryIataCode"
+                  value={fields?.countryIataCode}
+                  onChange={handleData}
+                  h="48px"
+                  variant={'custom'}
+                  bg={
+                    fields !== null && fields?.countryIataCode !== ''
+                      ? '#e8f0fe'
+                      : '#ebebeb'
+                  }
+                />
+                {/* It is important that the Label comes after the Control due to css selectors */}
+                <FormLabel fontSize="12" pt="1.5">
+                  CountryIata Code
+                </FormLabel>
+                {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+              </FormControl>
+            </Box>
+          </Box>
+          <Box width={{ base: '100%', md: '540px' }} m="auto">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Input
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                name="associatedAirport"
+                value={fields?.associatedAirport}
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
+              {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormLabel fontSize="12" pt="1.5">
+                Associated Airport
+              </FormLabel>
+              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+            </FormControl>
+          </Box>
+          <Box width={{ base: '100%', md: '540px' }} m="auto">
+            <FormControl
+              variant="floating"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+              id="float-label"
+            >
+              <Box className="floating-form">
+                <Box className="floating-label">
+                  <Select
+                    style={{ fontFamily: 'Mulish', fontWeight: 'normal' }}
+                    bg={
+                      fields !== null && fields?.currencyCode !== ''
+                        ? '#e8f0fe'
+                        : '#ebebeb'
+                    }
+                    placeholder=""
+                    name="currencyCode"
+                    h="48px"
+                    onChange={handleData}
+                  >
+                    {fields?.currencyCode === '' && (
+                      <option value={''}>{''}</option>
+                    )}
+                    {currency?.map((role, i) => {
+                      return (
+                        <option
+                          value={role.currencyCode}
+                          key={i}
+                          fontFamily={'Mulish'}
+                          fontSize={'12px'}
+                        >
+                          {role.currencyCode}
+                        </option>
+                      );
+                    })}
+                  </Select>
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        fields !== null && fields?.currencyCode !== ''
+                          ? 'translate(0, -10px) scale(0.75)'
+                          : 'translate(0, 4px) scale(0.75)',
+                      color:
+                        fields !== null && fields?.currencyCode === ''
+                          ? '#231F20'
+                          : '#065baa',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Currency Code
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
           <Box width={{ base: '100%', md: '540px' }} m="auto">
             <FormControl
               variant="floating"
@@ -222,14 +367,14 @@ const EditCity = () => {
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 name="postCode"
-                value={fields?.desc}
+                value={fields?.postCode}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
-                Number
+                Post Code
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
@@ -268,4 +413,4 @@ const EditCity = () => {
     </Stack>
   );
 };
-export default EditCity;
+export default CreateUser;

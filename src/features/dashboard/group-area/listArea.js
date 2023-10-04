@@ -2,7 +2,7 @@
 /* eslint-disable indent */
 import React, { useState } from 'react';
 import { useGetListAreaGroupQuery } from './listApiSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   usePagination,
   useSortBy,
@@ -11,6 +11,7 @@ import {
 } from 'react-table';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion } from 'framer-motion';
 import {
   Box,
@@ -302,7 +303,7 @@ const Tables = ({
   // }
   const handleAdd = (e) => {
     e.preventDefault();
-    navigate('/master-data/create-system-params');
+    navigate('/master-data/group-areas/create');
   };
   const [expandedRows, setExpandedRows] = useState([]);
 
@@ -329,12 +330,19 @@ const Tables = ({
           alignItems={'center'}
         >
           <Heading as={'h6'} size={'sm'}>
-            List GroupArea
+            List Group Area
           </Heading>
           <Stack direction="row" spacing={4}>
-            {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
-                        Add System Params 
-                    </Button> */}
+            <Button
+              variant="ClaimBtn"
+              leftIcon={<AiOutlinePlusCircle />}
+              colorScheme="#231F20"
+              size={'sm'}
+              color="white"
+              onClick={handleAdd}
+            >
+              Add Group Area
+            </Button>
             {/* <button onClick={refetch}>Refresh</button> */}
           </Stack>
         </Box>
@@ -504,6 +512,16 @@ const GroupArea = () => {
         minWidth: 50,
         width: 50,
         filter: 'fuzzyText',
+        Cell: ({ row }) => (
+          <Link
+            color="#065BAA"
+            style={{ textDecoration: 'underline', fontSize: '12px' }}
+            to={`/master-data/group-areas/edit/${row.original.id}`}
+          >
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.id}
+          </Link>
+        ),
       },
       {
         Header: 'Name',

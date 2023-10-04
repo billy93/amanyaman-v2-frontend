@@ -1,16 +1,13 @@
-import { AES, enc } from 'crypto-js';
+import CryptoJS from 'crypto-js';
 
-const secretKey = 'amanyamanv22023'; // Replace with your secret key
-
-// Function to encrypt data
-export const encryptData = (data) => {
-  const ciphertext = AES.encrypt(JSON.stringify(data), secretKey).toString();
-  return ciphertext;
+// Encryption function
+export const encryptData = (data, secretKey) => {
+  const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), secretKey);
+  return encryptedData.toString();
 };
 
-// Function to decrypt data
-export const decryptData = (ciphertext) => {
-  const bytes = AES.decrypt(ciphertext, secretKey);
-  const decryptedData = JSON.parse(bytes.toString(enc.Utf8));
-  return decryptedData;
+// Decryption function
+export const decryptData = (encryptedData, secretKey) => {
+  const decryptedData = CryptoJS.AES.decrypt(encryptedData, secretKey);
+  return JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
 };

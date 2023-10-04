@@ -1,23 +1,15 @@
-import React, { useState } from 'react';
-import { NavLink, Navigate, useNavigate } from 'react-router-dom';
+/* eslint-disable no-unused-vars */
+import React from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   Box,
   Stack,
   Text,
-  Link,
-  Heading,
   Button,
-  Image,
   FormControl,
   Input,
   FormLabel,
-  useToast,
-  InputGroup,
-  InputRightElement,
   Select,
-  Divider,
-  Textarea,
-  Center,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -25,18 +17,23 @@ import {
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import {
-  setSystemParamsFieldValue,
-  setSystemParamsFieldName,
-  systemParamsValues,
-  systemParamsNames,
-  setFields,
-  listFields,
-} from './systemParamsSlice';
-import { differenceInCalendarDays } from 'date-fns';
+  useCreateUserMutation,
+  useGetRoleQuery,
+} from '../masterUser/userApiSlice';
+import {
+  setListUser,
+  listUsers,
+  listRoleUsers,
+  setRoleUser,
+  formUser,
+  setFormUser,
+} from '../masterUser//masterUserSlice';
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import { MdAdd } from 'react-icons/md';
-import { useCreateParamsMutation } from './systemParamsApiSlice';
+// import { MdAdd } from 'react-icons/md';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
+// import  OnQueryError  from '../../../components/UseCustomToast'
+import UseCustomToast from '../../../components/UseCustomToast';
+// import { ChevronRightIcon } from '@chakra-ui/icons';
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -50,59 +47,95 @@ function usePrevious(value) {
   return ref.current;
 }
 
-const CreateParams = () => {
+const EditCity = () => {
   const dispatch = useDispatch();
-  const hiddenInputIdtty = React.useRef(null);
+  const listProducts = useSelector(listUsers);
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+  const listRoles = useSelector(listRoleUsers);
+  const formuser = useSelector(formUser);
+  const [currency] = React.useState([
+    {
+      id: 1,
+      currencyCode: 'USD',
+    },
+    {
+      id: 2,
+      currencyCode: 'EUR',
+    },
+  ]);
+  const [fields, setFields] = React.useState({
+    name: '',
+    desc: '',
+  });
+  //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
-  const [trigger, setTrigger] = React.useState(false);
-  const list = useSelector(listFields);
-  const values = useSelector(systemParamsValues);
-  const [createParams, { isLoading }] = useCreateParamsMutation();
+  const [trigger] = React.useState(false);
+  const { data: rolesData } = useGetRoleQuery();
+  const prevListRoles = usePrevious(rolesData);
+  // const [isValid,setIsvalid] = React.useState(true);
+  const [filterby] = React.useState({
+    travelAgentName: '',
+    custCode: '',
+  });
+  const { data: { response: listAgent } = {} } = useGetTravelAgentQuery({
+    page: 0,
+    size: 999,
+    ...filterby,
+  });
 
-  const toast = useToast();
-  const handleUploadIdentity = (e) => {
-    hiddenInputIdtty.current.click();
-  };
+  const [createUser] = useCreateUserMutation({
+    skip: trigger === false,
+  });
 
   const handleNext = async (e) => {
     e.preventDefault();
+    const datas = {
+      login: formuser?.login,
+      firstName: formuser?.firstName,
+      lastName: formuser?.lastName,
+      email: formuser?.email,
+      authorities: [`${formuser?.authorities}`],
+      travelAgent: {
+        id: formUser?.travelAgent,
+      },
+    };
+
     try {
-      let data = await createParams(list);
-      //  dispatch(setListUser([...listProducts, datas]));
-      toast({
-        title: 'Created User Syestem Parameters',
-        status: 'success',
-        position: 'top-right',
-        duration: 3000,
-        isClosable: true,
-        variant: 'solid',
-      });
-    } catch (err) {
-      toast({
-        title: `${err?.originalStatus}`,
-        status: 'error',
-        position: 'top-right',
-        duration: 3000,
-        isClosable: true,
-        variant: 'solid',
-      });
+      let resp = await createUser(datas);
+      // console.log('ress', resp)
+      if (resp?.data) {
+        showSuccessToast('User created successfully!');
+        dispatch(setListUser([...listProducts, datas]));
+        navigate('/master-data/master-user');
+      } else {
+        // const statusCode = error?.response?.status || 'Unknown';
+        const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+        showErrorToast(errorMessage);
+      }
+    } catch (error) {
+      const statusCode = error?.response?.status || 'Unknown';
+      const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      showErrorToast(errorMessage);
     }
-    setFields(null);
-    navigate('/master-data/system-params');
+    // navigate('/master-data/master-user')
   };
 
   const handleData = (e) => {
-    const data = {
-      ...list,
+    const forms = {
+      ...fields,
       [e.target.name]: e.target.value,
     };
-
-    dispatch(setFields(data));
-  };
-  const handleDatas = (e) => {
-    dispatch(setSystemParamsFieldValue(e.target.value));
+    // dispatch(setFormUser(forms));
+    setFields(forms);
   };
 
+  React.useEffect(() => {
+    if (JSON.stringify(prevListRoles) !== JSON.stringify(rolesData)) {
+      dispatch(setRoleUser(rolesData));
+    }
+  }, [rolesData, prevListRoles, dispatch]);
+
+  console.log('test', fields);
   return (
     <Stack mt={{ base: '1em', md: '5em' }}>
       <Box
@@ -122,7 +155,7 @@ const CreateParams = () => {
             separator={<ChevronRightIcon color="gray.500" />}
           >
             <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink as={NavLink} to="/master-data/master-user">
+              <BreadcrumbLink as={NavLink} to="/master-data/variants">
                 <Text
                   as="b"
                   ml="4"
@@ -133,7 +166,7 @@ const CreateParams = () => {
                     border: '1 px solid',
                   }}
                 >
-                  System Parameters
+                  Variant
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -145,7 +178,7 @@ const CreateParams = () => {
                 style={{ pointerEvents: 'none' }}
               >
                 <Text as={'b'} fontSize={'sm'} color="#231F20">
-                  {'Create'}
+                  {'Create Variant'}
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -153,7 +186,7 @@ const CreateParams = () => {
         </Box>
       </Box>
       <Box border="1px" borderColor={'#ebebeb'} borderTop={'none'}>
-        <Box minH={{ base: '0', md: '400px' }}>
+        <Box>
           <Box width={{ base: '100%', md: '540px' }} m="auto">
             <FormControl
               variant="floating"
@@ -165,37 +198,14 @@ const CreateParams = () => {
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 name="name"
-                value={list?.name}
+                value={fields?.name}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
-                System Parameters Name
-              </FormLabel>
-              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-            </FormControl>
-          </Box>
-          <Box width={{ base: '100%', md: '540px' }} m="auto">
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              mt="14px"
-            >
-              <Input
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="value"
-                value={list?.value}
-                onChange={handleData}
-                h="48px"
-                variant={'custom'}
-              />
-              {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
-                System Parameters Value
+                Variant
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
@@ -209,11 +219,15 @@ const CreateParams = () => {
           borderRadius={'5px'}
           border="1px"
           borderColor={'#ebebeb'}
+          mt="1em"
         >
           <Button
-            isLoading={isLoading}
             isDisabled={
-              list?.name === '' || list?.value === '' || isLoading
+              formuser?.authorities.length === 0 ||
+              formuser?.login === '' ||
+              formuser?.firstName === '' ||
+              formuser?.email === '' ||
+              formuser?.lastName === ''
                 ? true
                 : false
             }
@@ -230,4 +244,4 @@ const CreateParams = () => {
     </Stack>
   );
 };
-export default CreateParams;
+export default EditCity;

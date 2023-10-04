@@ -9,6 +9,7 @@ import {
 } from 'react-table';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Heading, Stack, Text, Center, Select } from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
@@ -19,6 +20,7 @@ import { setStateSelectedt } from '../policy/policySlice';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -217,7 +219,7 @@ const Tables = ({
 }) => {
   const dispatch = useDispatch();
   // const totalCountss = useSelector(totalCounts);
-
+  const navigate = useNavigate();
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -309,6 +311,9 @@ const Tables = ({
     []
   );
 
+  const handleAdd = () => {
+    navigate('/master-data/areas/create');
+  };
   return (
     <>
       <Box>
@@ -322,9 +327,16 @@ const Tables = ({
             List Area
           </Heading>
           <Stack direction="row" spacing={4}>
-            {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
-                        Add Country 
-                    </Button> */}
+            <Button
+              variant="ClaimBtn"
+              leftIcon={<AiOutlinePlusCircle />}
+              colorScheme="#231F20"
+              size={'sm'}
+              color="white"
+              onClick={handleAdd}
+            >
+              Add Area
+            </Button>
             {/* <button onClick={refetch}>Refresh</button> */}
           </Stack>
         </Box>
@@ -513,6 +525,16 @@ const AreaList = () => {
         minWidth: 50,
         width: 50,
         filter: 'fuzzyText',
+        Cell: ({ row }) => (
+          <Link
+            color="#065BAA"
+            style={{ textDecoration: 'underline', fontSize: '12px' }}
+            to={`/master-data/areas/edit/${row.original.id}`}
+          >
+            {/* <AiOutlineFileDone size={25} /> */}
+            {row.original.id}
+          </Link>
+        ),
       },
       {
         Header: 'Name',

@@ -64,8 +64,8 @@ const EditCity = () => {
     },
   ]);
   const [fields, setFields] = React.useState({
-    name: '',
-    desc: '',
+    areaGroupDescription: '',
+    areaGroupName: '',
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
@@ -74,8 +74,8 @@ const EditCity = () => {
   const prevListRoles = usePrevious(rolesData);
   // const [isValid,setIsvalid] = React.useState(true);
   const [filterby] = React.useState({
-    travelAgentName: '',
-    custCode: '',
+    areaGroupName: '',
+    areaGroupDescription: '',
   });
   const { data: { response: listAgent } = {} } = useGetTravelAgentQuery({
     page: 0,
@@ -155,7 +155,7 @@ const EditCity = () => {
             separator={<ChevronRightIcon color="gray.500" />}
           >
             <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink as={NavLink} to="/master-data/cities">
+              <BreadcrumbLink as={NavLink} to="/master-data/group-areas">
                 <Text
                   as="b"
                   ml="4"
@@ -166,7 +166,7 @@ const EditCity = () => {
                     border: '1 px solid',
                   }}
                 >
-                  Plan Type
+                  Group Area
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -178,7 +178,7 @@ const EditCity = () => {
                 style={{ pointerEvents: 'none' }}
               >
                 <Text as={'b'} fontSize={'sm'} color="#231F20">
-                  {'Create Plan Type'}
+                  {'Create Group Area'}
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -197,15 +197,15 @@ const EditCity = () => {
               <Input
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="name"
-                value={fields?.name}
+                name="namareaGroupNamee"
+                value={fields?.areaGroupName}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
-                Name
+                Group Area Name
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
@@ -221,15 +221,15 @@ const EditCity = () => {
               <Input
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="postCode"
-                value={fields?.desc}
+                name="areaGroupDescription"
+                value={fields?.areaGroupDescription}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
-                Number
+                Area Group Description
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>

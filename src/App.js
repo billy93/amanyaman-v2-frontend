@@ -26,7 +26,9 @@ import ProductPrice from './features/dashboard/productPrice/productPrice';
 import ListCountry from './features/dashboard/country/listCountry';
 import ListCity from './features/dashboard/city/listCity';
 import ListArea from './features/dashboard/area/listArea';
-import ListVariants from './features/dashboard/varian/systemParameters';
+import ListVariants from './features/dashboard/varian/variants';
+import CreateVariant from './features/dashboard/varian/createVariant';
+import EditVariant from './features/dashboard/varian/editVariant';
 import ListGroupArea from './features/dashboard/group-area/listArea';
 import Dashboards from './features/dashboard/dashboards/dashboard';
 import CreateProductPrice from './features/dashboard/productPrice/createProductPrice';
@@ -46,6 +48,20 @@ import PaymentLoader from './components/loaderComponent';
 import UpdatePolicyPage from './features/dashboard/policy/updatePolicy';
 import UpgradePolicyPage from './features/dashboard/upgradePoicy/mainQuotSearch';
 import UpgradePolicyPageId from './features/dashboard/upgradePoicy/quotaSearchById';
+import CreateCountryList from './features/dashboard/country/createCountry';
+import EditCountryList from './features/dashboard/country/editCountry';
+import CreateCitesList from './features/dashboard/city/createCity';
+import EditCitiesList from './features/dashboard/city/editCity';
+import CreateArea from './features/dashboard/area/createArea';
+import EditArea from './features/dashboard/area/editArea';
+import CreateBandTypes from './features/dashboard/bandType/createBandTypes';
+import EditBandTypes from './features/dashboard/bandType/editBandTypes';
+import CreateGroupArea from './features/dashboard/group-area/createGroupArea';
+import EditGroupArea from './features/dashboard/group-area/editGroupArea';
+import CreatePlanType from './features/dashboard/planType/createPlanType';
+import EditPlanType from './features/dashboard/planType/editPlanType';
+import CreateTravellerType from './features/dashboard/travellerType/createTravellerType';
+import EditTravellerType from './features/dashboard/travellerType/editTravellerType';
 
 function App() {
   return (
@@ -192,23 +208,24 @@ function App() {
           element={<DetailTravelAgent />}
           allowedRoles={['ROLE_ADMIN']}
         />
+
         <Route
-          path="list-country"
-          element={<ListCountry />}
-          allowedRoles={['ROLE_ADMIN']}
-        />
-        <Route
-          path="list-city"
+          path="cities"
           element={<ListCity />}
           allowedRoles={['ROLE_ADMIN']}
         />
         <Route
-          path="list-area"
+          path="countries"
+          element={<ListCountry />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+        <Route
+          path="areas"
           element={<ListArea />}
           allowedRoles={['ROLE_ADMIN']}
         />
         <Route
-          path="list-group-area"
+          path="group-areas"
           element={<ListGroupArea />}
           allowedRoles={['ROLE_ADMIN']}
         />
@@ -218,22 +235,22 @@ function App() {
           allowedRoles={['ROLE_ADMIN']}
         />
         <Route
-          path="list-plan-type"
+          path="plan-types"
           element={<PlanType />}
           allowedRoles={['ROLE_ADMIN']}
         />
         <Route
-          path="list-band-type"
+          path="band-types"
           element={<BandType />}
           allowedRoles={['ROLE_ADMIN']}
         />
         <Route
-          path="list-variant"
+          path="variants"
           element={<ListVariants />}
           allowedRoles={['ROLE_ADMIN']}
         />
         <Route
-          path="list-traveller-type"
+          path="traveller-types"
           element={<TravellerType />}
           allowedRoles={['ROLE_ADMIN']}
         />
@@ -285,6 +302,134 @@ function App() {
         }
       >
         <Route path="list" element={<Product />} />
+      </Route>
+      <Route
+        path="/master-data/countries"
+        exact
+        element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}
+      >
+        <Route
+          path="create"
+          element={<CreateCountryList />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+        <Route
+          path="edit/:id"
+          element={<EditCountryList />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+      </Route>
+      <Route
+        path="/master-data/cities"
+        exact
+        element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}
+      >
+        <Route
+          path="create"
+          element={<CreateCitesList />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+        <Route
+          path="edit/:id"
+          element={<EditCitiesList />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+      </Route>
+      <Route
+        path="/master-data/areas"
+        exact
+        element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}
+      >
+        <Route
+          path="create"
+          element={<CreateArea />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+        <Route
+          path="edit/:id"
+          element={<EditArea />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+      </Route>
+      <Route
+        path="/master-data/band-types"
+        exact
+        element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}
+      >
+        <Route
+          path="create"
+          element={<CreateBandTypes />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+        <Route
+          path="edit/:id"
+          element={<EditBandTypes />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+      </Route>
+      <Route
+        path="/master-data/group-areas"
+        exact
+        element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}
+      >
+        <Route
+          path="create"
+          element={<CreateGroupArea />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+        <Route
+          path="edit/:id"
+          element={<EditGroupArea />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+      </Route>
+      <Route
+        path="/master-data/plan-types"
+        exact
+        element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}
+      >
+        <Route
+          path="create"
+          element={<CreatePlanType />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+        <Route
+          path="edit/:id"
+          element={<EditPlanType />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+      </Route>
+      <Route
+        path="/master-data/traveller-types"
+        exact
+        element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}
+      >
+        <Route
+          path="create"
+          element={<CreateTravellerType />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+        <Route
+          path="edit/:id"
+          element={<EditTravellerType />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+      </Route>
+      <Route
+        path="/master-data/variants"
+        exact
+        element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}
+      >
+        <Route
+          path="create"
+          element={<CreateVariant />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
+        <Route
+          path="edit/:id"
+          element={<EditVariant />}
+          allowedRoles={['ROLE_ADMIN']}
+        />
       </Route>
     </Routes>
   );

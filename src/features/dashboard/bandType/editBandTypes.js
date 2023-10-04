@@ -47,7 +47,7 @@ function usePrevious(value) {
   return ref.current;
 }
 
-const EditCity = () => {
+const CreateUser = () => {
   const dispatch = useDispatch();
   const listProducts = useSelector(listUsers);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
@@ -64,8 +64,8 @@ const EditCity = () => {
     },
   ]);
   const [fields, setFields] = React.useState({
-    name: '',
-    desc: '',
+    start: '',
+    end: '',
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
@@ -155,7 +155,7 @@ const EditCity = () => {
             separator={<ChevronRightIcon color="gray.500" />}
           >
             <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink as={NavLink} to="/master-data/cities">
+              <BreadcrumbLink as={NavLink} to="/master-data/band-types">
                 <Text
                   as="b"
                   ml="4"
@@ -166,7 +166,7 @@ const EditCity = () => {
                     border: '1 px solid',
                   }}
                 >
-                  Plan Type
+                  Band Type
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -178,7 +178,7 @@ const EditCity = () => {
                 style={{ pointerEvents: 'none' }}
               >
                 <Text as={'b'} fontSize={'sm'} color="#231F20">
-                  {'Create Plan Type'}
+                  {'Edit Band Type'}
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -197,15 +197,15 @@ const EditCity = () => {
               <Input
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="name"
-                value={fields?.name}
+                name="start"
+                value={fields?.start}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
-                Name
+                Start
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
@@ -221,15 +221,15 @@ const EditCity = () => {
               <Input
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="postCode"
-                value={fields?.desc}
+                name="end"
+                value={fields?.end}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
-                Number
+                End
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
@@ -261,11 +261,11 @@ const EditCity = () => {
             fontWeight={'700'}
             onClick={handleNext}
           >
-            Add
+            Edit
           </Button>
         </Box>
       </Box>
     </Stack>
   );
 };
-export default EditCity;
+export default CreateUser;
