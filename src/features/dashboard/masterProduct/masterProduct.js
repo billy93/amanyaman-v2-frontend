@@ -329,7 +329,7 @@ const Tables = ({
   );
   const prev = usePrevious(selectedRowIds);
   React.useEffect(() => {
-    toggleAllRowsSelected();
+    // toggleAllRowsSelected();
   }, []);
 
   const getValues = (data) => {
@@ -503,7 +503,9 @@ const Tables = ({
                   />
                 }
               />
-              {/* <Text as="p" size="sm">Delete</Text> */}
+              <Text as="p" size="sm">
+                Delete
+              </Text>
             </Box>
           </>
         )}
