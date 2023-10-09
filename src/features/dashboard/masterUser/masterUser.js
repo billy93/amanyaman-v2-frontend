@@ -293,7 +293,7 @@ const Tables = ({
   );
   const prev = usePrevious(selectedRowIds);
   React.useEffect(() => {
-    toggleAllRowsSelected();
+    // toggleAllRowsSelected();
   }, []);
 
   // console.log('testtt', toggleAllRowsSelected());

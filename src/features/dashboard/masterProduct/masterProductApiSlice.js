@@ -56,6 +56,70 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
       transformResponse(response, meta) {
+        // console.log('resssssss', meta.response.headers.get('X-Total-Count'));
+        return {
+          response,
+          totalCount: Number(meta.response.headers.get('X-Total-Count')),
+        };
+      },
+    }),
+    exportFile: builder.query({
+      query: (data) => {
+        const {
+          page,
+          size,
+          productCode,
+          bandType,
+          planType,
+          productType,
+          areaGroup,
+        } = data;
+        let url = '/app/products/list/export';
+        const params = new URLSearchParams();
+
+        if (productCode !== '') {
+          params.append('productCode', productCode);
+        }
+        if (bandType !== '') {
+          params.append('bandType', bandType);
+        }
+        if (planType !== '') {
+          params.append('planType', planType);
+        }
+        if (areaGroup !== '') {
+          params.append('areaGroup', areaGroup);
+        }
+        if (productType !== '') {
+          params.append('productType', productType);
+        }
+        if (page !== '') {
+          params.append('page', page);
+        }
+        if (size !== '') {
+          params.append('size', size);
+        }
+
+        // params.append('sort', 'createdDate,desc');
+
+        // Add other filter parameters if needed
+
+        if (params.toString() !== '') {
+          url += `?${params.toString()}`;
+        }
+
+        return {
+          url: url,
+          method: 'GET',
+          prepareHeaders: (headers) => {
+            headers.append('Accept', 'application/json');
+            return headers;
+          },
+          responseType: 'blob',
+          responseHandler: (response) =>
+            response.blob().then((blob) => URL.createObjectURL(blob)),
+        };
+      },
+      transformResponse(response, meta) {
         console.log('resssssss', meta.response.headers.get('X-Total-Count'));
         return {
           response,
@@ -63,6 +127,15 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    // exportFile: builder.query({
+    //   query: () => ({
+    //     url: '/app/products/list/export',
+    //     method: 'GET',
+    //     responseType: 'blob',
+    //     responseHandler: (response) =>
+    //       response.blob().then((blob) => URL.createObjectURL(blob)),
+    //   }),
+    // }),
     createMasterProduct: builder.mutation({
       query: (payload) => ({
         url: '/app/products',
@@ -141,6 +214,7 @@ export const policyApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useExportFileQuery,
   useGetProductAdditionalQuery,
   useUpdateMasterProductMutation,
   useCreateMasterProductMutation,

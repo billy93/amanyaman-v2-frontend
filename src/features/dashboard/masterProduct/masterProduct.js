@@ -9,7 +9,7 @@ import { usePagination } from 'react-table';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
-// import ExportData from './export'
+import ExportData from './export';
 import { debounce } from 'lodash';
 import {
   useToast,
@@ -329,7 +329,7 @@ const Tables = ({
   );
   const prev = usePrevious(selectedRowIds);
   React.useEffect(() => {
-    toggleAllRowsSelected();
+    // toggleAllRowsSelected();
   }, [selected]);
 
   // console.log('testtt', toggleAllRowsSelected());
@@ -1041,7 +1041,7 @@ const MasterUser = () => {
             >
               Apply Filter
             </Button>
-            {/* <ExportData /> */}
+            <ExportData params={filterQuery} page={totalCount} size={size} />
 
             {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
                         Import 
