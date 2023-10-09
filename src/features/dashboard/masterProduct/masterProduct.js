@@ -329,8 +329,11 @@ const Tables = ({
   );
   const prev = usePrevious(selectedRowIds);
   React.useEffect(() => {
-    // toggleAllRowsSelected();
-  }, []);
+    toggleAllRowsSelected();
+  }, [selected]);
+
+  // console.log('testtt', toggleAllRowsSelected());
+  console.log('testtt select', selected);
 
   const getValues = (data) => {
     let original = data.map((item) => item.original);
