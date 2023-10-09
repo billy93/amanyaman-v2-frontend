@@ -54,7 +54,12 @@ function usePrevious(value) {
 const CreateUser = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { data: getData, isLoading, isSuccess } = useGetCountryByIdQuery(id);
+  const {
+    data: getData,
+    isLoading,
+    isSuccess,
+    refetch,
+  } = useGetCountryByIdQuery(id);
   const listProducts = useSelector(listUsers);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const listRoles = useSelector(listRoleUsers);
@@ -98,6 +103,9 @@ const CreateUser = () => {
     skip: trigger === false,
   });
 
+  React.useEffect(() => {
+    refetch();
+  }, [refetch]);
   React.useEffect(() => {
     if (getData) {
       setFields({

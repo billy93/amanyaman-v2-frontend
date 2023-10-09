@@ -23,10 +23,10 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    createParams: builder.mutation({
+    createPlanTypes: builder.mutation({
       query: (data) => {
         return {
-          url: '/app/system-parameters',
+          url: '/app/plan-types',
           method: 'POST',
           body: { ...data },
           invalidatesTags: (result, error, arg) =>
@@ -39,10 +39,10 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    updateParams: builder.mutation({
+    updatePlanTypes: builder.mutation({
       query: (data) => {
         return {
-          url: '/app/system-parameters',
+          url: '/app/plan-types',
           method: 'PUT',
           body: { ...data },
           invalidatesTags: (result, error, arg) =>
@@ -54,6 +54,18 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
               : ['MasterQuery'],
         };
       },
+    }),
+    getPlanTypesById: builder.query({
+      prepareHeaders: (headers) => {
+        headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+        return headers;
+      },
+      query: (id) => ({
+        url: `/app/plan-types/${id}`,
+        cachePolicy: 'no-cache',
+      }),
+      provideTags: (result, error, id) =>
+        result ? [{ type: 'user', id }] : [],
     }),
     deleteParams: builder.mutation({
       query: (id) => {
@@ -75,7 +87,8 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetPlanTypesQuery,
-  useCreateParamsMutation,
-  useUpdateParamsMutation,
+  useCreatePlanTypesMutation,
+  useUpdatePlanTypesMutation,
   useDeleteParamsMutation,
+  useGetPlanTypesByIdQuery,
 } = systemParamsApiSlice;

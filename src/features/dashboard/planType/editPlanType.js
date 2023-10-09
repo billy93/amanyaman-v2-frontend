@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
   Stack,
@@ -28,6 +28,10 @@ import {
   formUser,
   setFormUser,
 } from '../masterUser//masterUserSlice';
+import {
+  useUpdatePlanTypesMutation,
+  useGetPlanTypesByIdQuery,
+} from './planTypeApiSlice';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 // import { MdAdd } from 'react-icons/md';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
@@ -49,6 +53,7 @@ function usePrevious(value) {
 
 const CreateUser = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const listProducts = useSelector(listUsers);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const listRoles = useSelector(listRoleUsers);
@@ -65,12 +70,13 @@ const CreateUser = () => {
   ]);
   const [fields, setFields] = React.useState({
     name: '',
-    desc: '',
+    number: '',
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
   const [trigger] = React.useState(false);
   const { data: rolesData } = useGetRoleQuery();
+  const { data: planTypeByiD, refetch } = useGetPlanTypesByIdQuery(id);
   const prevListRoles = usePrevious(rolesData);
   // const [isValid,setIsvalid] = React.useState(true);
   const [filterby] = React.useState({
@@ -83,38 +89,39 @@ const CreateUser = () => {
     ...filterby,
   });
 
-  const [createUser] = useCreateUserMutation({
+  const [updatePlanTypes] = useUpdatePlanTypesMutation({
     skip: trigger === false,
   });
 
+  React.useEffect(() => {
+    refetch();
+  }, [refetch]);
+  React.useEffect(() => {
+    if (planTypeByiD) {
+      setFields({
+        ...planTypeByiD,
+      });
+    }
+  }, [planTypeByiD]);
+
   const handleNext = async (e) => {
     e.preventDefault();
-    const datas = {
-      login: formuser?.login,
-      firstName: formuser?.firstName,
-      lastName: formuser?.lastName,
-      email: formuser?.email,
-      authorities: [`${formuser?.authorities}`],
-      travelAgent: {
-        id: formUser?.travelAgent,
-      },
-    };
 
     try {
-      let resp = await createUser(datas);
+      let resp = await updatePlanTypes(fields);
       // console.log('ress', resp)
       if (resp?.data) {
-        showSuccessToast('User created successfully!');
-        dispatch(setListUser([...listProducts, datas]));
-        navigate('/master-data/master-user');
+        showSuccessToast('Plan Types edited successfully!');
+        // dispatch(setListUser([...listProducts, datas]));
+        navigate('/master-data/plan-types');
       } else {
         // const statusCode = error?.response?.status || 'Unknown';
-        const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+        const errorMessage = `Failed to edited Plan Types. Status Code: ${resp?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to edit Plan Types. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
     }
     // navigate('/master-data/master-user')
@@ -219,10 +226,11 @@ const CreateUser = () => {
               mt="14px"
             >
               <Input
+                type="number"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="postCode"
-                value={fields?.desc}
+                name="number"
+                value={fields?.number}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
@@ -246,14 +254,16 @@ const CreateUser = () => {
           mt="1em"
         >
           <Button
+            variant="ClaimBtn"
+            style={{ textTransform: 'uppercase', fontSize: '14px' }}
+            fontFamily="arial"
+            fontWeight={'700'}
+          >
+            Cancel
+          </Button>
+          <Button
             isDisabled={
-              formuser?.authorities.length === 0 ||
-              formuser?.login === '' ||
-              formuser?.firstName === '' ||
-              formuser?.email === '' ||
-              formuser?.lastName === ''
-                ? true
-                : false
+              fields?.name === '' || formuser?.number === '' ? true : false
             }
             variant={'ClaimBtn'}
             style={{ textTransform: 'uppercase', fontSize: '14px' }}
