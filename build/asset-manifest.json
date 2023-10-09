@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ce6a079d.css",
+    "main.js": "/static/js/main.50fc65a6.js",
+    "static/media/banner-sales01.jpg": "/static/media/banner-sales01.d30f51f1e6ec5e463ae4.jpg",
+    "static/media/banner01.jpg": "/static/media/banner01.c206ad0513b873107f2b.jpg",
+    "static/media/Background.png": "/static/media/Background.4c8d22abaa675f1cfc32.png",
+    "static/media/mulish-all-800-normal.woff": "/static/media/mulish-all-800-normal.b340fe9e3f1b7fa14584.woff",
+    "static/media/mulish-all-700-normal.woff": "/static/media/mulish-all-700-normal.cac3c30708f011a0c2af.woff",
+    "static/media/logo.svg": "/static/media/logo.2535609d79d52743af4434f107f663ec.svg",
+    "static/media/Naturescape.png": "/static/media/Naturescape.0a5ff1bf575b7f6cde76.png",
+    "static/media/mulish-latin-800-normal.woff2": "/static/media/mulish-latin-800-normal.35f7f49d51ac4ed765a3.woff2",
+    "static/media/mulish-latin-700-normal.woff2": "/static/media/mulish-latin-700-normal.5511543db7aeca28690f.woff2",
+    "static/media/mulish-latin-ext-800-normal.woff2": "/static/media/mulish-latin-ext-800-normal.c0133643559e73bc20eb.woff2",
+    "static/media/mulish-latin-ext-700-normal.woff2": "/static/media/mulish-latin-ext-700-normal.9ececd238026964f6efd.woff2",
+    "static/media/mulish-cyrillic-ext-800-normal.woff2": "/static/media/mulish-cyrillic-ext-800-normal.f0899366988ef86b88ec.woff2",
+    "static/media/mulish-cyrillic-ext-700-normal.woff2": "/static/media/mulish-cyrillic-ext-700-normal.59380406f77e8beb57f9.woff2",
+    "static/media/mulish-cyrillic-800-normal.woff2": "/static/media/mulish-cyrillic-800-normal.f573233ec85151f88b90.woff2",
+    "static/media/mulish-cyrillic-700-normal.woff2": "/static/media/mulish-cyrillic-700-normal.6825a12730535d482be3.woff2",
+    "static/media/mulish-vietnamese-800-normal.woff2": "/static/media/mulish-vietnamese-800-normal.b2fe3a26c4aa6c7d826b.woff2",
+    "static/media/mulish-vietnamese-700-normal.woff2": "/static/media/mulish-vietnamese-700-normal.26f18017998871dba82a.woff2",
+    "index.html": "/index.html",
+    "main.ce6a079d.css.map": "/static/css/main.ce6a079d.css.map",
+    "main.50fc65a6.js.map": "/static/js/main.50fc65a6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ce6a079d.css",
+    "static/js/main.50fc65a6.js"
+  ]
+}
