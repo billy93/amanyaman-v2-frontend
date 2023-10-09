@@ -147,6 +147,7 @@ const PolicyDetail = () => {
       dispatch(setHistoryForm(0));
     }
   }, [id]);
+
   const getTravellerId = React.useCallback(
     (type) => {
       let idTraveller;
@@ -157,7 +158,7 @@ const PolicyDetail = () => {
         // console.log('ddddd', data);
         idTraveller = `${id}/${data && data[0]?.id}`;
       } else {
-        idTraveller = `${id}/${quotation && quotation[0]?.travellers[0].id}`;
+        idTraveller = `${id}/${quotation && quotation?.travellers[0].id}`;
       }
       return idTraveller;
     },
@@ -212,7 +213,7 @@ const PolicyDetail = () => {
 
   React.useEffect(() => {
     if (!onTrigger) {
-      refetchDownload(getTravellerId(policyNumberString));
+      refetchDownload();
       setIsLoadingState(!isLoadingState);
     }
   }, [onTrigger]);
@@ -252,7 +253,12 @@ const PolicyDetail = () => {
     }
   };
 
-  console.log('onTrigger', onTrigger, isLoadingState);
+  console.log(
+    'onTrigger',
+    policyNumberString,
+    getTravellerId(policyNumberString)
+  );
+  console.log('quot', quotation);
   React.useEffect(() => {
     getTravellerId(policyNumberString);
   }, [policyNumberString, getTravellerId]);

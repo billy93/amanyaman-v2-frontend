@@ -857,15 +857,26 @@ const CreatePrice = () => {
             </Box>
           </Box>
           <Box
-            m="auto"
-            width={{ base: '100%', md: '540px' }}
-            bg="white"
-            py={8}
-            px={{ base: 4, md: 12 }}
-            boxShadow="md"
-            borderRadius="md"
+            display={'flex'}
+            justifyContent={'flex-end'}
+            alignItems={'center'}
+            p="9px"
+            borderRadius={'5px'}
+            border="1px"
+            borderColor={'#ebebeb'}
+            mt="1em"
+            pl="0.5"
+            pr="0.5"
           >
-            {/* ... Your form content here ... */}
+            <Button
+              variant={'ClaimBtn'}
+              style={{ textTransform: 'uppercase', fontSize: '14px' }}
+              fontFamily="arial"
+              fontWeight={'700'}
+              // onClick={handleNext}
+            >
+              Add
+            </Button>
           </Box>
         </Box>
       </Box>
