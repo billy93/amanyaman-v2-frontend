@@ -23,7 +23,48 @@ export const listCountry = apiSlice.injectEndpoints({
         };
       },
     }),
+    createGroupArea: builder.mutation({
+      query: (users) => ({
+        url: '/app/area-groups',
+        method: 'POST',
+        body: { ...users },
+        transformResponse: (response) => {
+          // Custom response transformation logic here
+          return response.data;
+        },
+      }),
+      // OnQueryError
+    }),
+    getGroupAreaById: builder.query({
+      prepareHeaders: (headers) => {
+        headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+        return headers;
+      },
+      query: (id) => ({
+        url: `/app/area-groups/${id}`,
+        cachePolicy: 'no-cache',
+      }),
+      provideTags: (result, error, id) =>
+        result ? [{ type: 'user', id }] : [],
+    }),
+    updateGroupArea: builder.mutation({
+      query: (users) => ({
+        url: '/app/area-groups',
+        method: 'PUT',
+        body: { ...users },
+        transformResponse: (response) => {
+          // Custom response transformation logic here
+          return response.data;
+        },
+      }),
+      // OnQueryError
+    }),
   }),
 });
 
-export const { useGetListAreaGroupQuery } = listCountry;
+export const {
+  useGetListAreaGroupQuery,
+  useCreateGroupAreaMutation,
+  useUpdateGroupAreaMutation,
+  useGetGroupAreaByIdQuery,
+} = listCountry;

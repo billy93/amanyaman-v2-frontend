@@ -23,7 +23,62 @@ export const listCountry = apiSlice.injectEndpoints({
         };
       },
     }),
+    createCity: builder.mutation({
+      query: (users) => ({
+        url: '/app/cities',
+        method: 'POST',
+        body: { ...users },
+        transformResponse: (response) => {
+          // Custom response transformation logic here
+          return response.data;
+        },
+      }),
+      // OnQueryError
+    }),
+    getCityById: builder.query({
+      prepareHeaders: (headers) => {
+        headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+        return headers;
+      },
+      query: (id) => ({
+        url: `/app/cities/${id}`,
+        cachePolicy: 'no-cache',
+      }),
+      provideTags: (result, error, id) =>
+        result ? [{ type: 'user', id }] : [],
+    }),
+    deleteCity: builder.mutation({
+      prepareHeaders: (headers) => {
+        headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+        return headers;
+      },
+      query: (id) => ({
+        url: `/app/cities/${id}`,
+        method: 'DELETE',
+        cachePolicy: 'no-cache',
+      }),
+      provideTags: (result, error, id) =>
+        result ? [{ type: 'user', id }] : [],
+    }),
+    updateCity: builder.mutation({
+      query: (users) => ({
+        url: '/app/cities',
+        method: 'PUT',
+        body: { ...users },
+        transformResponse: (response) => {
+          // Custom response transformation logic here
+          return response.data;
+        },
+      }),
+      // OnQueryError
+    }),
   }),
 });
 
-export const { useGetListCityQuery } = listCountry;
+export const {
+  useDeleteCityMutation,
+  useGetListCityQuery,
+  useCreateCityMutation,
+  useGetCityByIdQuery,
+  useUpdateCityMutation,
+} = listCountry;

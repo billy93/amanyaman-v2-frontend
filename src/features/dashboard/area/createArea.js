@@ -20,6 +20,7 @@ import {
   useCreateUserMutation,
   useGetRoleQuery,
 } from '../masterUser/userApiSlice';
+import { useCreateAreaMutation } from './listApiSlice';
 import {
   setListUser,
   listUsers,
@@ -65,7 +66,7 @@ const EditCity = () => {
   ]);
   const [fields, setFields] = React.useState({
     name: '',
-    desc: '',
+    description: '',
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
@@ -83,38 +84,28 @@ const EditCity = () => {
     ...filterby,
   });
 
-  const [createUser] = useCreateUserMutation({
+  const [createArea] = useCreateAreaMutation({
     skip: trigger === false,
   });
 
   const handleNext = async (e) => {
     e.preventDefault();
-    const datas = {
-      login: formuser?.login,
-      firstName: formuser?.firstName,
-      lastName: formuser?.lastName,
-      email: formuser?.email,
-      authorities: [`${formuser?.authorities}`],
-      travelAgent: {
-        id: formUser?.travelAgent,
-      },
-    };
 
     try {
-      let resp = await createUser(datas);
+      let resp = await createArea(fields);
       // console.log('ress', resp)
       if (resp?.data) {
-        showSuccessToast('User created successfully!');
-        dispatch(setListUser([...listProducts, datas]));
-        navigate('/master-data/master-user');
+        showSuccessToast('Area Created successfully!');
+        // dispatch(setListUser([...listProducts, datas]));
+        navigate('/master-data/areas');
       } else {
         // const statusCode = error?.response?.status || 'Unknown';
-        const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+        const errorMessage = `Failed to Create Area. Status Code: ${resp?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to Create Area. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
     }
     // navigate('/master-data/master-user')
@@ -221,8 +212,8 @@ const EditCity = () => {
               <Input
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="postCode"
-                value={fields?.desc}
+                name="description"
+                value={fields?.description}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
@@ -246,14 +237,16 @@ const EditCity = () => {
           mt="1em"
         >
           <Button
+            variant="ClaimBtn"
+            style={{ textTransform: 'uppercase', fontSize: '14px' }}
+            fontFamily="arial"
+            fontWeight={'700'}
+          >
+            Cancel
+          </Button>
+          <Button
             isDisabled={
-              formuser?.authorities.length === 0 ||
-              formuser?.login === '' ||
-              formuser?.firstName === '' ||
-              formuser?.email === '' ||
-              formuser?.lastName === ''
-                ? true
-                : false
+              fields?.name === '' || fields?.description === '' ? true : false
             }
             variant={'ClaimBtn'}
             style={{ textTransform: 'uppercase', fontSize: '14px' }}

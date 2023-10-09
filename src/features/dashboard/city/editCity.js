@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
   Stack,
@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import { useGetCityByIdQuery, useUpdateCityMutation } from './listApiSlice';
 import {
   useCreateUserMutation,
   useGetRoleQuery,
@@ -48,7 +49,9 @@ function usePrevious(value) {
 }
 
 const CreateUser = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
+  const { data: cityById, refetch } = useGetCityByIdQuery(id);
   const listProducts = useSelector(listUsers);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const listRoles = useSelector(listRoleUsers);
@@ -83,38 +86,39 @@ const CreateUser = () => {
     ...filterby,
   });
 
-  const [createUser] = useCreateUserMutation({
+  const [updateCity] = useUpdateCityMutation({
     skip: trigger === false,
   });
 
+  React.useEffect(() => {
+    if (cityById) {
+      setFields({
+        ...cityById,
+      });
+    }
+  }, [cityById]);
+
+  React.useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   const handleNext = async (e) => {
     e.preventDefault();
-    const datas = {
-      login: formuser?.login,
-      firstName: formuser?.firstName,
-      lastName: formuser?.lastName,
-      email: formuser?.email,
-      authorities: [`${formuser?.authorities}`],
-      travelAgent: {
-        id: formUser?.travelAgent,
-      },
-    };
-
     try {
-      let resp = await createUser(datas);
+      let resp = await updateCity(fields);
       // console.log('ress', resp)
       if (resp?.data) {
-        showSuccessToast('User created successfully!');
-        dispatch(setListUser([...listProducts, datas]));
-        navigate('/master-data/master-user');
+        showSuccessToast('City edited successfully!');
+        // dispatch(setListUser([...listProducts, datas]));
+        navigate('/master-data/cities');
       } else {
         // const statusCode = error?.response?.status || 'Unknown';
-        const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+        const errorMessage = `Failed to edited city. Status Code: ${resp?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to edited city. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
     }
     // navigate('/master-data/master-user')
@@ -135,7 +139,7 @@ const CreateUser = () => {
     }
   }, [rolesData, prevListRoles, dispatch]);
 
-  console.log('test', fields);
+  // console.log('test', fields);
   return (
     <Stack mt={{ base: '1em', md: '5em' }}>
       <Box
@@ -221,8 +225,8 @@ const CreateUser = () => {
               <Input
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="postCode"
-                value={fields?.desc}
+                name="description"
+                value={fields?.description}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
@@ -246,14 +250,16 @@ const CreateUser = () => {
           mt="1em"
         >
           <Button
+            variant="ClaimBtn"
+            style={{ textTransform: 'uppercase', fontSize: '14px' }}
+            fontFamily="arial"
+            fontWeight={'700'}
+          >
+            Cancel
+          </Button>
+          <Button
             isDisabled={
-              formuser?.authorities.length === 0 ||
-              formuser?.login === '' ||
-              formuser?.firstName === '' ||
-              formuser?.email === '' ||
-              formuser?.lastName === ''
-                ? true
-                : false
+              fields?.name === '' || fields?.description === '' ? true : false
             }
             variant={'ClaimBtn'}
             style={{ textTransform: 'uppercase', fontSize: '14px' }}
