@@ -12,7 +12,7 @@ import { Provider } from 'react-redux';
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PulseLoader from 'react-spinners/PulseLoader';
-const { ToastContainer, toast } = createStandaloneToast();
+const { ToastContainer } = createStandaloneToast();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -43,10 +43,10 @@ root.render(
     </ChakraProvider>
   </React.StrictMode>
 );
-toast({
-  title: 'An error occurred.',
-  description: 'Unable to create user account.',
-  status: 'error',
-  duration: 9000,
-  isClosable: true,
-});
+// toast({
+//   title: 'An error occurred.',
+//   description: 'Unable to create user account.',
+//   status: 'error',
+//   duration: 9000,
+//   isClosable: true,
+// });
