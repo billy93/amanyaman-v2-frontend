@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
   Stack,
@@ -31,6 +31,10 @@ import {
 import { ChevronRightIcon } from '@chakra-ui/icons';
 // import { MdAdd } from 'react-icons/md';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
+import {
+  useGetCountryByIdQuery,
+  useUpdateCountryMutation,
+} from './listApiSlice';
 // import  OnQueryError  from '../../../components/UseCustomToast'
 import UseCustomToast from '../../../components/UseCustomToast';
 // import { ChevronRightIcon } from '@chakra-ui/icons';
@@ -49,6 +53,8 @@ function usePrevious(value) {
 
 const CreateUser = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const { data: getData, isLoading, isSuccess } = useGetCountryByIdQuery(id);
   const listProducts = useSelector(listUsers);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const listRoles = useSelector(listRoleUsers);
@@ -64,6 +70,7 @@ const CreateUser = () => {
     },
   ]);
   const [fields, setFields] = React.useState({
+    id: '',
     countryName: '',
     countryCode: '',
     currencyCode: '',
@@ -87,38 +94,36 @@ const CreateUser = () => {
     ...filterby,
   });
 
-  const [createUser] = useCreateUserMutation({
+  const [updateCountry] = useUpdateCountryMutation({
     skip: trigger === false,
   });
 
+  React.useEffect(() => {
+    if (getData) {
+      setFields({
+        ...getData,
+      });
+    }
+  }, [getData]);
+
   const handleNext = async (e) => {
     e.preventDefault();
-    const datas = {
-      login: formuser?.login,
-      firstName: formuser?.firstName,
-      lastName: formuser?.lastName,
-      email: formuser?.email,
-      authorities: [`${formuser?.authorities}`],
-      travelAgent: {
-        id: formUser?.travelAgent,
-      },
-    };
 
     try {
-      let resp = await createUser(datas);
-      // console.log('ress', resp)
+      let resp = await updateCountry(fields);
+      console.log('ress', resp);
       if (resp?.data) {
-        showSuccessToast('User created successfully!');
-        dispatch(setListUser([...listProducts, datas]));
-        navigate('/master-data/master-user');
+        showSuccessToast('Country created successfully!');
+        // dispatch(setListUser([...listProducts, datas]));
+        navigate('/master-data/countries');
       } else {
         // const statusCode = error?.response?.status || 'Unknown';
-        const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+        const errorMessage = `Failed to create country. Status Code: ${resp?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to create country. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
     }
     // navigate('/master-data/master-user')
@@ -133,13 +138,13 @@ const CreateUser = () => {
     setFields(forms);
   };
 
+  console.log('fields', fields);
   React.useEffect(() => {
     if (JSON.stringify(prevListRoles) !== JSON.stringify(rolesData)) {
       dispatch(setRoleUser(rolesData));
     }
   }, [rolesData, prevListRoles, dispatch]);
 
-  console.log('test', fields);
   return (
     <Stack mt={{ base: '1em', md: '5em' }}>
       <Box
@@ -298,62 +303,24 @@ const CreateUser = () => {
           <Box width={{ base: '100%', md: '540px' }} m="auto">
             <FormControl
               variant="floating"
+              id="first-name"
               isRequired
-              fontFamily={'Mulish'}
               mt="14px"
-              id="float-label"
             >
-              <Box className="floating-form">
-                <Box className="floating-label">
-                  <Select
-                    style={{ fontFamily: 'Mulish', fontWeight: 'normal' }}
-                    bg={
-                      fields !== null && fields?.currencyCode !== ''
-                        ? '#e8f0fe'
-                        : '#ebebeb'
-                    }
-                    placeholder=""
-                    name="currencyCode"
-                    h="48px"
-                    onChange={handleData}
-                  >
-                    {fields?.currencyCode === '' && (
-                      <option value={''}>{''}</option>
-                    )}
-                    {currency?.map((role, i) => {
-                      return (
-                        <option
-                          value={role.currencyCode}
-                          key={i}
-                          fontFamily={'Mulish'}
-                          fontSize={'12px'}
-                        >
-                          {role.currencyCode}
-                        </option>
-                      );
-                    })}
-                  </Select>
-                  <span className="highlight"></span>
-                  <FormLabel
-                    pt="1.5"
-                    style={{
-                      transform:
-                        fields !== null && fields?.currencyCode !== ''
-                          ? 'translate(0, -10px) scale(0.75)'
-                          : 'translate(0, 4px) scale(0.75)',
-                      color:
-                        fields !== null && fields?.currencyCode === ''
-                          ? '#231F20'
-                          : '#065baa',
-                      fontSize: '14px',
-                    }}
-                    fontFamily={'Mulish'}
-                  >
-                    Currency Code
-                  </FormLabel>
-                </Box>
-              </Box>
+              <Input
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                name="currencyCode"
+                value={fields?.currencyCode}
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
               {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormLabel fontSize="12" pt="1.5">
+                Currency Code
+              </FormLabel>
+              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
           </Box>
           <Box width={{ base: '100%', md: '540px' }} m="auto">
@@ -364,6 +331,7 @@ const CreateUser = () => {
               mt="14px"
             >
               <Input
+                type="number"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 name="postCode"
@@ -391,12 +359,21 @@ const CreateUser = () => {
           mt="1em"
         >
           <Button
+            variant="ClaimBtn"
+            style={{ textTransform: 'uppercase', fontSize: '14px' }}
+            fontFamily="arial"
+            fontWeight={'700'}
+          >
+            Cancel
+          </Button>
+          <Button
             isDisabled={
-              formuser?.authorities.length === 0 ||
-              formuser?.login === '' ||
-              formuser?.firstName === '' ||
-              formuser?.email === '' ||
-              formuser?.lastName === ''
+              fields?.countryName === '' ||
+              fields?.countryCode === '' ||
+              fields?.currencyCode === '' ||
+              fields?.associatedAirport === '' ||
+              fields?.countryIataCode === '' ||
+              fields?.postCode === ''
                 ? true
                 : false
             }

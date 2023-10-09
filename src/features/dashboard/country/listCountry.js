@@ -590,6 +590,14 @@ const CountryList = () => {
         width: 200,
         filter: 'fuzzyText',
       },
+      {
+        Header: 'CountryIata Code',
+        accessor: 'countryIataCode',
+        maxWidth: 200,
+        minWidth: 200,
+        width: 200,
+        filter: 'fuzzyText',
+      },
     ],
     []
   );
@@ -617,6 +625,7 @@ const CountryList = () => {
   const gotoPage = () => {
     setPage(0);
   };
+  // console.log('systemParams', systemParams);
   let content;
   if (isLoading) {
     content = (

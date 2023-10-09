@@ -552,7 +552,8 @@ const Tables = ({
             <Box display={'flex'} alignItems={'center'}>
               Page{' '}
               <strong>
-                {pageIndex + 1} of {getSelectAll().length / pageSize}
+                {pageIndex + 1} of{' '}
+                {getSelectAll() && getSelectAll().length / pageSize}
               </strong>{' '}
             </Box>
           </Box>
@@ -637,10 +638,6 @@ const DetailMasterUser = () => {
     e.preventDefault();
     navigate(`/master-data/edit-master-product/${id}`);
   };
-
-  React.useEffect(() => {
-    refetch({ id });
-  }, [msg, refetch, id]);
 
   // const prevSelect = usePrevious(defaultSelected);
   // React.useEffect(() => {
@@ -742,8 +739,9 @@ const DetailMasterUser = () => {
     // setPage(0);
   };
   const getSelectAll = () => {
-    return listTravell;
+    return listTravell && listTravell;
   };
+  console.log('listTravell', listTravell);
   let content;
   if (isLoading) {
     content = (

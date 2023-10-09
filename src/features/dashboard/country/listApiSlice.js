@@ -23,7 +23,48 @@ export const listCountry = apiSlice.injectEndpoints({
         };
       },
     }),
+    createCountry: builder.mutation({
+      query: (users) => ({
+        url: '/app/countries',
+        method: 'POST',
+        body: { ...users },
+        transformResponse: (response) => {
+          // Custom response transformation logic here
+          return response.data;
+        },
+      }),
+      // OnQueryError
+    }),
+    getCountryById: builder.query({
+      prepareHeaders: (headers) => {
+        headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+        return headers;
+      },
+      query: (id) => ({
+        url: `/app/countries/${id}`,
+        cachePolicy: 'no-cache',
+      }),
+      provideTags: (result, error, id) =>
+        result ? [{ type: 'user', id }] : [],
+    }),
+    updateCountry: builder.mutation({
+      query: (users) => ({
+        url: '/app/countries',
+        method: 'PUT',
+        body: { ...users },
+        transformResponse: (response) => {
+          // Custom response transformation logic here
+          return response.data;
+        },
+      }),
+      // OnQueryError
+    }),
   }),
 });
 
-export const { useGetListCountryQuery } = listCountry;
+export const {
+  useGetListCountryQuery,
+  useCreateCountryMutation,
+  useUpdateCountryMutation,
+  useGetCountryByIdQuery,
+} = listCountry;

@@ -30,6 +30,7 @@ import {
 } from '../masterUser//masterUserSlice';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 // import { MdAdd } from 'react-icons/md';
+import { useCreateCountryMutation } from './listApiSlice';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
 // import  OnQueryError  from '../../../components/UseCustomToast'
 import UseCustomToast from '../../../components/UseCustomToast';
@@ -87,38 +88,36 @@ const CreateUser = () => {
     ...filterby,
   });
 
-  const [createUser] = useCreateUserMutation({
+  const [createCountry] = useCreateCountryMutation({
     skip: trigger === false,
   });
 
   const handleNext = async (e) => {
     e.preventDefault();
     const datas = {
-      login: formuser?.login,
-      firstName: formuser?.firstName,
-      lastName: formuser?.lastName,
-      email: formuser?.email,
-      authorities: [`${formuser?.authorities}`],
-      travelAgent: {
-        id: formUser?.travelAgent,
-      },
+      countryName: fields?.countryName,
+      countryCode: fields?.countryCode,
+      currencyCode: fields?.currencyCode,
+      associatedAirport: fields?.associatedAirport,
+      countryIataCode: fields?.countryIataCode,
+      postCode: fields?.postCode,
     };
 
     try {
-      let resp = await createUser(datas);
-      // console.log('ress', resp)
+      let resp = await createCountry(datas);
+      console.log('ress', resp);
       if (resp?.data) {
-        showSuccessToast('User created successfully!');
-        dispatch(setListUser([...listProducts, datas]));
-        navigate('/master-data/master-user');
+        showSuccessToast('Country created successfully!');
+        // dispatch(setListUser([...listProducts, datas]));
+        navigate('/master-data/countries');
       } else {
         // const statusCode = error?.response?.status || 'Unknown';
-        const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+        const errorMessage = `Failed to create country. Status Code: ${resp?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to create country. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
     }
     // navigate('/master-data/master-user')
@@ -251,6 +250,7 @@ const CreateUser = () => {
                 mt="14px"
               >
                 <Input
+                  type="number"
                   placeholder=" "
                   _placeholder={{ opacity: 1, color: 'gray.500' }}
                   name="countryIataCode"
@@ -298,62 +298,24 @@ const CreateUser = () => {
           <Box width={{ base: '100%', md: '540px' }} m="auto">
             <FormControl
               variant="floating"
+              id="first-name"
               isRequired
-              fontFamily={'Mulish'}
               mt="14px"
-              id="float-label"
             >
-              <Box className="floating-form">
-                <Box className="floating-label">
-                  <Select
-                    style={{ fontFamily: 'Mulish', fontWeight: 'normal' }}
-                    bg={
-                      fields !== null && fields?.currencyCode !== ''
-                        ? '#e8f0fe'
-                        : '#ebebeb'
-                    }
-                    placeholder=""
-                    name="currencyCode"
-                    h="48px"
-                    onChange={handleData}
-                  >
-                    {fields?.currencyCode === '' && (
-                      <option value={''}>{''}</option>
-                    )}
-                    {currency?.map((role, i) => {
-                      return (
-                        <option
-                          value={role.currencyCode}
-                          key={i}
-                          fontFamily={'Mulish'}
-                          fontSize={'12px'}
-                        >
-                          {role.currencyCode}
-                        </option>
-                      );
-                    })}
-                  </Select>
-                  <span className="highlight"></span>
-                  <FormLabel
-                    pt="1.5"
-                    style={{
-                      transform:
-                        fields !== null && fields?.currencyCode !== ''
-                          ? 'translate(0, -10px) scale(0.75)'
-                          : 'translate(0, 4px) scale(0.75)',
-                      color:
-                        fields !== null && fields?.currencyCode === ''
-                          ? '#231F20'
-                          : '#065baa',
-                      fontSize: '14px',
-                    }}
-                    fontFamily={'Mulish'}
-                  >
-                    Currency Code
-                  </FormLabel>
-                </Box>
-              </Box>
+              <Input
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                name="currencyCode"
+                value={fields?.currencyCode}
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
               {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormLabel fontSize="12" pt="1.5">
+                Currency Code
+              </FormLabel>
+              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
           </Box>
           <Box width={{ base: '100%', md: '540px' }} m="auto">
@@ -364,6 +326,7 @@ const CreateUser = () => {
               mt="14px"
             >
               <Input
+                type="number"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 name="postCode"
@@ -391,12 +354,21 @@ const CreateUser = () => {
           mt="1em"
         >
           <Button
+            variant="ClaimBtn"
+            style={{ textTransform: 'uppercase', fontSize: '14px' }}
+            fontFamily="arial"
+            fontWeight={'700'}
+          >
+            Cancel
+          </Button>
+          <Button
             isDisabled={
-              formuser?.authorities.length === 0 ||
-              formuser?.login === '' ||
-              formuser?.firstName === '' ||
-              formuser?.email === '' ||
-              formuser?.lastName === ''
+              fields?.countryName === '' ||
+              fields?.countryCode === '' ||
+              fields?.currencyCode === '' ||
+              fields?.associatedAirport === '' ||
+              fields?.countryIataCode === '' ||
+              fields?.postCode === ''
                 ? true
                 : false
             }
