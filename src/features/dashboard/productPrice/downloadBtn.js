@@ -9,6 +9,7 @@ const DownloadXLSButton = (props) => {
 
   const handleDownload = () => {
     if (data) {
+      console.log('datass', data);
       const downloadLink = document.createElement('a');
       downloadLink.href = data;
       downloadLink.download = 'templateProudctPrice.xlsx'; // Set the desired file name and extension

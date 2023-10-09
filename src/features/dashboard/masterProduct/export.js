@@ -19,7 +19,7 @@ const DownloadXLSButton = ({ params, page, size }) => {
   const handleDownload = React.useCallback(() => {
     if (data) {
       //  const blobUrl = URL.createObjectURL(blobData);
-
+      console.log('data', data);
       // Create a download link element
       const downloadLink = document.createElement('a');
       downloadLink.href = data;
@@ -41,6 +41,7 @@ const DownloadXLSButton = ({ params, page, size }) => {
     }
   }, [data]);
 
+  console.log('data', data);
   React.useEffect(() => {
     if (!trigger) {
       handleDownload();

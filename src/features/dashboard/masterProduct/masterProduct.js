@@ -1041,7 +1041,7 @@ const MasterUser = () => {
             >
               Apply Filter
             </Button>
-            <ExportData params={filterQuery} page={totalCount} size={size} />
+            <ExportData params={filterQuery} page={0} size={totalCount} />
 
             {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
                         Import 

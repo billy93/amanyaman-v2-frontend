@@ -110,20 +110,9 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         return {
           url: url,
           method: 'GET',
-          prepareHeaders: (headers) => {
-            headers.append('Accept', 'application/json');
-            return headers;
-          },
           responseType: 'blob',
           responseHandler: (response) =>
             response.blob().then((blob) => URL.createObjectURL(blob)),
-        };
-      },
-      transformResponse(response, meta) {
-        console.log('resssssss', meta.response.headers.get('X-Total-Count'));
-        return {
-          response,
-          totalCount: Number(meta.response.headers.get('X-Total-Count')),
         };
       },
     }),
