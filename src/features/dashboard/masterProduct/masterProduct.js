@@ -812,15 +812,19 @@ const MasterUser = () => {
       },
       {
         Header: 'Additional Week',
-        accessor: 'productAdditionalWeek.productCode',
-        Cell: ({ row }) => (
-          <Box>
-            {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.productAdditionalWeek
-              ? row.original.productAdditionalWeek
-              : '-'}
-          </Box>
-        ),
+        accessor: (row) => {
+          console.log('Accessor - row:', row);
+          const value =
+            row.productAdditionalWeek === null
+              ? row.productAdditionalWeek
+              : 'N/A';
+          console.log('Accessor - value:', value);
+          return value;
+        },
+        Cell: ({ value }) => {
+          console.log('Cell - value:', value);
+          return value !== null ? value : 'N/A';
+        },
       },
       // {
       //   Header: "Additional Week",
@@ -1001,7 +1005,7 @@ const MasterUser = () => {
   const gotoPage = () => {
     setPage(0);
   };
-  // console.log('filter', filterQuery);
+  console.log('filter listUserAccount', listUserAccount);
   let content;
   if (isLoading) {
     content = (
