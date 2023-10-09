@@ -22,6 +22,7 @@ import {
   Center,
   useDisclosure,
   Select,
+  IconButton,
 } from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
@@ -31,10 +32,13 @@ import {
   listSelected,
   setStateSelectedt,
 } from '../policy/policySlice';
+import { useDeletedCountryMutation } from './listApiSlice';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
+import UseCustomToast from '../../../components/UseCustomToast';
+import { CiTrash } from 'react-icons/ci';
 
 const Styles = styled.div`
   // padding: 1rem;
@@ -508,6 +512,12 @@ const CountryList = () => {
     refetch,
   } = useGetListCountryQuery({ page, size: size });
 
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+  const [
+    deletedCountry,
+    { isSuccess, isLoading: processDelete, isError: deletedFailed },
+  ] = useDeletedCountryMutation();
+
   const fetchData = React.useCallback(
     ({ pageSize, pageIndex, pageOptions }) => {
       const fetchId = ++fetchIdRef.current;
@@ -598,6 +608,23 @@ const CountryList = () => {
         width: 200,
         filter: 'fuzzyText',
       },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'16px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
+        ),
+      },
     ],
     []
   );
@@ -625,6 +652,27 @@ const CountryList = () => {
   const gotoPage = () => {
     setPage(0);
   };
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      showSuccessToast('Deleted successfully!', 'deletedcitysuccess');
+      refetch();
+    }
+    if (deletedFailed) {
+      showErrorToast('Deleted Failed!', 'deletedcityerrors');
+    }
+  }, [isSuccess, deletedFailed]);
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    try {
+      const res = await deletedCountry(id);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // console.log('systemParams', systemParams);
   let content;
   if (isLoading) {

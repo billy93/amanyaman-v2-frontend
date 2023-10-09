@@ -11,9 +11,18 @@ import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Box, Heading, Stack, Text, Center, Select } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Stack,
+  Text,
+  Center,
+  Select,
+  IconButton,
+} from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
+import { useDeletedAreaMutation } from './listApiSlice';
 import { useDispatch } from 'react-redux';
 import { setStateSelectedt } from '../policy/policySlice';
 // import {setSystemParams,listSystemParam,setTotalCount,totalCounts} from './systemParamsSlice'
@@ -21,6 +30,8 @@ import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 import { useNavigate, Link } from 'react-router-dom';
+import UseCustomToast from '../../../components/UseCustomToast';
+import { CiTrash } from 'react-icons/ci';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -488,6 +499,11 @@ const AreaList = () => {
   const [loading, setLoading] = React.useState(false);
   const [pageCount, setPageCount] = React.useState(0);
   const fetchIdRef = React.useRef(0);
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+  const [
+    deletedArea,
+    { isSuccess, isLoading: processDelete, isError: deletedFailed },
+  ] = useDeletedAreaMutation();
   const [page, setPage] = React.useState(0);
   const {
     data: { response: systemParams, totalCount } = {},
@@ -552,6 +568,23 @@ const AreaList = () => {
         width: 200,
         filter: 'fuzzyText',
       },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'16px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
+        ),
+      },
     ],
     []
   );
@@ -580,6 +613,26 @@ const AreaList = () => {
   const total = React.useMemo(() => {
     return (page + 1) * 10;
   }, [page]);
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      showSuccessToast('Deleted successfully!', 'deletedcitysuccess');
+      refetch();
+    }
+    if (deletedFailed) {
+      showErrorToast('Deleted Failed!', 'deletedcityerrors');
+    }
+  }, [isSuccess, deletedFailed]);
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    try {
+      const res = await deletedArea(id);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   let content;
 

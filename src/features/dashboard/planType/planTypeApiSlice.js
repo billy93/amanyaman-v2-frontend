@@ -67,10 +67,10 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
       provideTags: (result, error, id) =>
         result ? [{ type: 'user', id }] : [],
     }),
-    deleteParams: builder.mutation({
+    deletePlanTypes: builder.mutation({
       query: (id) => {
         return {
-          url: `/app/system-parameters/${id}`,
+          url: `/app/plan-types/${id}`,
           method: 'DELETE',
           invalidatesTags: (result, error, arg) =>
             result
@@ -89,6 +89,6 @@ export const {
   useGetPlanTypesQuery,
   useCreatePlanTypesMutation,
   useUpdatePlanTypesMutation,
-  useDeleteParamsMutation,
+  useDeletePlanTypesMutation,
   useGetPlanTypesByIdQuery,
 } = systemParamsApiSlice;

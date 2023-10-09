@@ -154,14 +154,17 @@ const Form3 = ({
   // const handleUserChange = (e) => {};
 
   const setPhoneNumbers = (e) => {
-    const inputValue = e.target.value;
-    setPhoneNumber(inputValue);
+    // const inputValue = e.target.value;
+    const newValue = e.target.value;
+    if (!isNaN(newValue) || newValue === '') {
+      setPhoneNumber(newValue);
+    }
 
     // Regular expression for phone number format validation
-    const phoneNumberRegex = /^[0-9]{10}$/;
+    const phoneNumberRegex = /^(?:\+62|0)[0-9]{9,12}$/;
 
     // Check if the input matches the phone number format
-    setIsValidPhone(phoneNumberRegex.test(inputValue));
+    setIsValidPhone(phoneNumberRegex.test(newValue));
   };
 
   const handleExisitingTravelers = (e) => {
@@ -1169,6 +1172,7 @@ const Form3 = ({
                     <Box className="floating-form">
                       <Box className="floating-label">
                         <Select
+                          borderRadius={'5px'}
                           className="floating-select"
                           placeholder=""
                           defaultValue={type}
@@ -1186,7 +1190,7 @@ const Form3 = ({
                           style={{
                             transform:
                               isActiveSelectCountry || type !== ''
-                                ? 'translate(0, -19px) scale(0.75)'
+                                ? 'translate(0, -9px) scale(0.75)'
                                 : '',
                             color:
                               isActiveSelectCountry || type !== ''
@@ -1214,6 +1218,7 @@ const Form3 = ({
                     <Box className="floating-form">
                       <Box className="floating-label">
                         <Select
+                          borderRadius={'5px'}
                           className="floating-select"
                           placeholder=""
                           defaultValue={typeStatus}
@@ -1231,7 +1236,7 @@ const Form3 = ({
                           style={{
                             transform:
                               isActiveSelectCountry || type !== ''
-                                ? 'translate(0, -19px) scale(0.75)'
+                                ? 'translate(0, -9px) scale(0.75)'
                                 : '',
                             color:
                               isActiveSelectCountry || type !== ''

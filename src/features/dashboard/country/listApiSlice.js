@@ -59,6 +59,17 @@ export const listCountry = apiSlice.injectEndpoints({
       }),
       // OnQueryError
     }),
+    deletedCountry: builder.mutation({
+      query: (id) => ({
+        url: `/app/countries/${id}`,
+        method: 'DELETE',
+        transformResponse: (response) => {
+          // Custom response transformation logic here
+          return response.data;
+        },
+      }),
+      // OnQueryError
+    }),
   }),
 });
 
@@ -67,4 +78,5 @@ export const {
   useCreateCountryMutation,
   useUpdateCountryMutation,
   useGetCountryByIdQuery,
+  useDeletedCountryMutation,
 } = listCountry;

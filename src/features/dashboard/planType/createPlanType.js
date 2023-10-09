@@ -111,6 +111,10 @@ const EditCity = () => {
     // navigate('/master-data/master-user')
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   const handleData = (e) => {
     const forms = {
       ...fields,
@@ -242,6 +246,7 @@ const EditCity = () => {
             style={{ textTransform: 'uppercase', fontSize: '14px' }}
             fontFamily="arial"
             fontWeight={'700'}
+            onClick={handleBack}
           >
             Cancel
           </Button>

@@ -138,6 +138,10 @@ const CreateUser = () => {
     }
   }, [rolesData, prevListRoles, dispatch]);
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   console.log('test', fields);
   return (
     <Stack mt={{ base: '1em', md: '5em' }}>
@@ -358,6 +362,7 @@ const CreateUser = () => {
             style={{ textTransform: 'uppercase', fontSize: '14px' }}
             fontFamily="arial"
             fontWeight={'700'}
+            onClick={handleBack}
           >
             Cancel
           </Button>

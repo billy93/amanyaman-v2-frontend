@@ -139,7 +139,10 @@ const CreateUser = () => {
     }
   }, [rolesData, prevListRoles, dispatch]);
 
-  console.log('test', fields);
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <Stack mt={{ base: '1em', md: '5em' }}>
       <Box
@@ -254,6 +257,7 @@ const CreateUser = () => {
             style={{ textTransform: 'uppercase', fontSize: '14px' }}
             fontFamily="arial"
             fontWeight={'700'}
+            onClick={handleBack}
           >
             Cancel
           </Button>

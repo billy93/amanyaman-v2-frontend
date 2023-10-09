@@ -59,10 +59,24 @@ export const listCountry = apiSlice.injectEndpoints({
       }),
       // OnQueryError
     }),
+    deletedGroupArea: builder.mutation({
+      prepareHeaders: (headers) => {
+        headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+        return headers;
+      },
+      query: (id) => ({
+        url: `/app/area-groups/${id}`,
+        method: 'DELETE',
+        cachePolicy: 'no-cache',
+      }),
+      provideTags: (result, error, id) =>
+        result ? [{ type: 'user', id }] : [],
+    }),
   }),
 });
 
 export const {
+  useDeletedGroupAreaMutation,
   useGetListAreaGroupQuery,
   useCreateGroupAreaMutation,
   useUpdateGroupAreaMutation,

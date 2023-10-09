@@ -2,7 +2,7 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useGetListCityQuery } from './listApiSlice';
+import { useDeleteCityMutation, useGetListCityQuery } from './listApiSlice';
 import {
   usePagination,
   useSortBy,
@@ -13,7 +13,15 @@ import { AiOutlinePlusCircle } from 'react-icons/ai';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Box, Heading, Stack, Text, Center, Select } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Stack,
+  Text,
+  Center,
+  Select,
+  IconButton,
+} from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
@@ -21,6 +29,8 @@ import { setStateSelectedt } from '../policy/policySlice';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
+import UseCustomToast from '../../../components/UseCustomToast';
+import { CiTrash } from 'react-icons/ci';
 
 const Styles = styled.div`
   // padding: 1rem;
@@ -480,6 +490,11 @@ const CityList = () => {
   const [pageCount, setPageCount] = React.useState(0);
   const fetchIdRef = React.useRef(0);
   const [page, setPage] = React.useState(0);
+  const [
+    deleteCity,
+    { isSuccess, isError: deletedFailed, isLoading: processDelete },
+  ] = useDeleteCityMutation();
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
   const {
     data: { response: systemParams, totalCount } = {},
     isLoading,
@@ -547,6 +562,23 @@ const CityList = () => {
         width: 200,
         filter: 'fuzzyText',
       },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'16px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
+        ),
+      },
     ],
     []
   );
@@ -571,6 +603,30 @@ const CityList = () => {
   const goToPageFirst = () => {
     setPage(0);
   };
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    try {
+      const res = await deleteCity(id);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    refetch({ page, size: size });
+  }, [isSuccess, page, size, refetch]);
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      showSuccessToast('Deleted successfully!', 'deletedcitysuccess');
+      refetch();
+    }
+    if (deletedFailed) {
+      showErrorToast('Deleted Failed!', 'deletedcityerrors');
+    }
+  }, [isSuccess, deletedFailed]);
 
   const gotoPage = () => {
     setPage(0);

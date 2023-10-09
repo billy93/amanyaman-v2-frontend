@@ -13,6 +13,7 @@ import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion } from 'framer-motion';
+import { useDeletedGroupAreaMutation } from './listApiSlice';
 import {
   Box,
   Table as TableNew,
@@ -21,12 +22,15 @@ import {
   Text,
   Center,
   Select,
+  IconButton,
 } from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
+import UseCustomToast from '../../../components/UseCustomToast';
+import { CiTrash } from 'react-icons/ci';
 
 const Styles = styled.div`
   // padding: 1rem;
@@ -472,6 +476,11 @@ const GroupArea = () => {
   const [pageCount, setPageCount] = React.useState(0);
   const fetchIdRef = React.useRef(0);
   const [page, setPage] = React.useState(0);
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+  const [
+    deletedGroupArea,
+    { isSuccess, isLoading: processDelete, isError: deletedFailed },
+  ] = useDeletedGroupAreaMutation();
   const {
     data: { response: systemParams, totalCount } = {},
     isLoading,
@@ -539,6 +548,23 @@ const GroupArea = () => {
         width: 200,
         filter: 'fuzzyText',
       },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'16px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
+        ),
+      },
     ],
     []
   );
@@ -568,6 +594,26 @@ const GroupArea = () => {
   const total = React.useMemo(() => {
     return (page + 1) * size;
   }, [page, size]);
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      showSuccessToast('Deleted successfully!', 'deletedcitysuccess');
+      refetch();
+    }
+    if (deletedFailed) {
+      showErrorToast('Deleted Failed!', 'deletedcityerrors');
+    }
+  }, [isSuccess, deletedFailed]);
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    try {
+      const res = await deletedGroupArea(id);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (isLoading) {
     content = (
