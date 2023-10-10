@@ -753,6 +753,7 @@ const MasterUser = () => {
         accessor: 'id',
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline' }}
             to={`/master-data/detail-master-product/${row.original.id}`}
@@ -765,20 +766,23 @@ const MasterUser = () => {
       {
         Header: 'Product Code',
         accessor: 'productCode',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Currency',
         accessor: 'currId',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Product Description',
         accessor: 'productDescription',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Plan Type',
         accessor: 'planType',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.planType?.name}
           </Box>
@@ -788,7 +792,7 @@ const MasterUser = () => {
         Header: 'Area Group',
         accessor: 'areaGroup',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.areaGroup?.areaGroupName}
           </Box>
@@ -798,7 +802,7 @@ const MasterUser = () => {
         Header: 'Travel Duration',
         accessor: 'bandType',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.bandType?.travelDurationName}
           </Box>
@@ -809,7 +813,7 @@ const MasterUser = () => {
         accessor: 'travellerType',
         enableGlobalFilter: true,
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.travellerType?.name}
           </Box>
@@ -818,18 +822,15 @@ const MasterUser = () => {
       {
         Header: 'Additional Week',
         accessor: (row) => {
-          console.log('Accessor - row:', row);
           const value =
             row.productAdditionalWeek === null
               ? row.productAdditionalWeek
               : 'N/A';
-          console.log('Accessor - value:', value);
           return value;
         },
-        Cell: ({ value }) => {
-          console.log('Cell - value:', value);
-          return value !== null ? value : 'N/A';
-        },
+        Cell: ({ value }) => (
+          <div className="global-td">{value ? value : '-'}</div>
+        ),
       },
       // {
       //   Header: "Additional Week",
