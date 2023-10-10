@@ -4,17 +4,16 @@ import { Button } from '@chakra-ui/react';
 import { MdLogin } from 'react-icons/md';
 
 const DownloadXLSButton = ({ params, page, size }) => {
-  const [trigger, setTrigger] = React.useState(true);
-  const { data, error, isLoading } = useExportFileQuery(
-    { page, size: size, ...params },
-    {
-      skip: trigger === true,
-    }
-  );
+  // const [trigger, setTrigger] = React.useState(true);
+  const { data, error, isLoading } = useExportFileQuery({
+    page,
+    size: size,
+    ...params,
+  });
 
-  const handleExport = () => {
-    setTrigger(false);
-  };
+  // const handleExport = () => {
+  //   setTrigger(false);
+  // };
 
   const handleDownload = React.useCallback(() => {
     if (data) {
@@ -36,17 +35,17 @@ const DownloadXLSButton = ({ params, page, size }) => {
         document.body.removeChild(downloadLink);
         // Clean up the blob URL
         URL.revokeObjectURL(data);
-        setTrigger(true);
+        // setTrigger(true);
       }, 1000);
     }
   }, [data]);
 
-  console.log('data', data);
-  React.useEffect(() => {
-    if (!trigger) {
-      handleDownload();
-    }
-  }, [handleDownload, trigger]);
+  // console.log('data', data);
+  // React.useEffect(() => {
+  //   if (!trigger) {
+  //     handleDownload();
+  //   }
+  // }, [handleDownload, trigger]);
 
   return (
     <div>
@@ -54,7 +53,7 @@ const DownloadXLSButton = ({ params, page, size }) => {
         <span>Loading...</span>
       ) : (
         <Button
-          onClick={handleExport}
+          onClick={handleDownload}
           disabled={!!error}
           leftIcon={<MdLogin />}
           colorScheme="#231F20"

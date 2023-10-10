@@ -566,7 +566,7 @@ const Polcies = () => {
     },
     [systemParams, totalCount, page, size]
   );
-
+  console.log('systemParams', systemParams);
   const columns = React.useMemo(
     () => [
       {
@@ -635,8 +635,8 @@ const Polcies = () => {
   // const data = React.useMemo(() => tempList);
   // console.log('ddd band types', systemParams)
   React.useEffect(() => {
-    refetch();
-  }, [refetch]);
+    refetch({ page, size: size });
+  }, [page, refetch, size]);
 
   const nextPages = () => {
     setPage((prevPage) => prevPage + 1);
