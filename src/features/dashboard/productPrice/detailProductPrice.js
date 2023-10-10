@@ -152,8 +152,8 @@ const DetailMasterUser = () => {
                 p={{ md: '10px' }}
               >
                 <Box
-                  pb="10px"
-                  pt="25px"
+                  pb="15px"
+                  pt="14px"
                   borderBottom={'1px solid #ebebeb'}
                   display={'flex'}
                   flexDirection={'column'}
@@ -178,8 +178,8 @@ const DetailMasterUser = () => {
                   </Text>
                 </Box>
                 <Box
-                  pb="10px"
-                  pt="10px"
+                  pb="15px"
+                  pt="14px"
                   borderBottom={'1px solid #ebebeb'}
                   display={'flex'}
                   flexDirection={'column'}
@@ -205,8 +205,8 @@ const DetailMasterUser = () => {
                   </Text>
                 </Box>
                 <Box
-                  pt="10px"
-                  pb="10px"
+                  pt="15px"
+                  pb="14px"
                   borderBottom={'1px solid #ebebeb'}
                   display={'flex'}
                   flexDirection={'column'}

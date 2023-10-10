@@ -362,6 +362,7 @@ const Tables = ({
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <motion.th
+                    className="header-cell"
                     key={column.id}
                     {...column.getHeaderProps({
                       layoutTransition: spring,
@@ -523,6 +524,7 @@ const GroupArea = () => {
         filter: 'fuzzyText',
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline', fontSize: '12px' }}
             to={`/master-data/group-areas/edit/${row.original.id}`}
@@ -539,6 +541,7 @@ const GroupArea = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Description',
@@ -547,6 +550,7 @@ const GroupArea = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Action',
@@ -558,7 +562,7 @@ const GroupArea = () => {
           <IconButton
             isLoading={processDelete}
             _hover={{ color: 'white' }}
-            icon={<CiTrash color="#065BAA" size={'16px'} />}
+            icon={<CiTrash color="#065BAA" size={'13px'} />}
             bg="white"
             border="1px solid #ebebeb"
             onClick={() => handleActionClick(row.original.id)}

@@ -347,6 +347,7 @@ const Tables = ({
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <motion.th
+                    className="header-cell"
                     key={column.id}
                     {...column.getHeaderProps({
                       layoutTransition: spring,
@@ -581,6 +582,7 @@ const Polcies = () => {
         filter: 'fuzzyText',
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline', fontSize: '12px' }}
             to={`/master-data/variants/edit/${row.original.id}`}
@@ -597,6 +599,7 @@ const Polcies = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
     ],
     []

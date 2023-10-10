@@ -509,7 +509,11 @@ const Tables = ({
             {headerGroups.map((headerGroup, i) => (
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th key={column.id} {...column.getHeaderProps()}>
+                  <th
+                    className="header-cell"
+                    key={column.id}
+                    {...column.getHeaderProps()}
+                  >
                     {column.id !== 'selection' ? (
                       column.render('Header')
                     ) : (
@@ -859,6 +863,7 @@ const DetailMasterUser = () => {
         accessor: 'productMapping.productCode',
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline', color: '#065BAA' }}
             to={`/master-data/detail-product-price/${row.original.id}`}
@@ -872,7 +877,7 @@ const DetailMasterUser = () => {
         Header: 'Premium Price',
         accessor: 'premiumPrice',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {row?.original?.premiumPrice !== null ? (
               <CurrencyFormatter amount={row.original.premiumPrice} />
             ) : (
@@ -884,20 +889,23 @@ const DetailMasterUser = () => {
       {
         Header: 'Discount Lv1 (IDR)',
         accessor: 'commisionLv1',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Discount Lv2 (IDR)',
         accessor: 'commisionLv2',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Discount Lv3 (IDR)',
         accessor: 'commisionLv3',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Total Commision',
         accessor: 'ajiPrice',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {row?.original?.ajiPrice !== null ? (
               <CurrencyFormatter amount={row.original.ajiPrice} />
             ) : (
@@ -910,7 +918,7 @@ const DetailMasterUser = () => {
         Header: 'Net to Agent',
         accessor: 'afterCommisionPrice',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {row?.original?.afterCommisionPrice !== null ? (
               <CurrencyFormatter amount={row.original.afterCommisionPrice} />
             ) : (

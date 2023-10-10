@@ -372,6 +372,7 @@ const Tables = ({
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column, i) => (
                   <motion.th
+                    className="header-cell"
                     key={column.id}
                     {...column.getHeaderProps({
                       layoutTransition: spring,
@@ -543,6 +544,7 @@ const AreaList = () => {
         filter: 'fuzzyText',
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline', fontSize: '12px' }}
             to={`/master-data/areas/edit/${row.original.id}`}
@@ -559,6 +561,7 @@ const AreaList = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Description',
@@ -567,6 +570,7 @@ const AreaList = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Action',
@@ -578,7 +582,7 @@ const AreaList = () => {
           <IconButton
             isLoading={processDelete}
             _hover={{ color: 'white' }}
-            icon={<CiTrash color="#065BAA" size={'16px'} />}
+            icon={<CiTrash color="#065BAA" size={'14px'} />}
             bg="white"
             border="1px solid #ebebeb"
             onClick={() => handleActionClick(row.original.id)}

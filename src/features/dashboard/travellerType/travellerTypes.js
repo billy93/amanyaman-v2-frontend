@@ -324,6 +324,7 @@ const Tables = ({
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <motion.th
+                    className="header-cell"
                     key={column.id}
                     {...column.getHeaderProps({
                       layoutTransition: spring,
@@ -512,6 +513,7 @@ const Polcies = () => {
         filter: 'fuzzyText',
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline' }}
             to={`/master-data/traveller-types/edit/${row.original.id}`}
@@ -528,6 +530,7 @@ const Polcies = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Description',
@@ -536,6 +539,7 @@ const Polcies = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Action',
@@ -547,7 +551,7 @@ const Polcies = () => {
           <IconButton
             isLoading={processDelete}
             _hover={{ color: 'white' }}
-            icon={<CiTrash color="#065BAA" size={'16px'} />}
+            icon={<CiTrash color="#065BAA" size={'13px'} />}
             bg="white"
             border="1px solid #ebebeb"
             onClick={() => handleActionClick(row.original.id)}

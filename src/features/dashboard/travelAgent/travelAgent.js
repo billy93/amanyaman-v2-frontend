@@ -459,6 +459,7 @@ const Tables = ({
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column, i) => (
                   <motion.th
+                    className="header-cell"
                     key={i}
                     {...column.getHeaderProps({
                       layoutTransition: spring,
@@ -716,6 +717,7 @@ const MasterUser = () => {
         width: 50,
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline' }}
             to={`/master-data/detail-agent/${row.original.id}`}
@@ -731,6 +733,7 @@ const MasterUser = () => {
         maxWidth: 400,
         minWidth: 140,
         width: 200,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'travel Agent Phone',
@@ -738,6 +741,7 @@ const MasterUser = () => {
         maxWidth: 400,
         minWidth: 140,
         width: 200,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Travel Agent Email',
@@ -745,6 +749,7 @@ const MasterUser = () => {
         maxWidth: 400,
         minWidth: 140,
         width: 200,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Travel Agent Address',
@@ -752,6 +757,7 @@ const MasterUser = () => {
         maxWidth: 200,
         minWidth: 140,
         width: 200,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Commission',
@@ -759,6 +765,7 @@ const MasterUser = () => {
         maxWidth: 400,
         minWidth: 140,
         width: 200,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Payment Type',
@@ -766,6 +773,7 @@ const MasterUser = () => {
         maxWidth: 400,
         minWidth: 140,
         width: 200,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Cust Code',
@@ -773,6 +781,7 @@ const MasterUser = () => {
         maxWidth: 200,
         minWidth: 140,
         width: 100,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Cust Id',
@@ -780,6 +789,7 @@ const MasterUser = () => {
         maxWidth: 200,
         minWidth: 140,
         width: 100,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'CustGroup',
@@ -787,6 +797,7 @@ const MasterUser = () => {
         maxWidth: 200,
         minWidth: 140,
         width: 100,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'City',
@@ -794,6 +805,7 @@ const MasterUser = () => {
         maxWidth: 200,
         minWidth: 140,
         width: 100,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Allow Credit Payment',
@@ -802,7 +814,7 @@ const MasterUser = () => {
         minWidth: 140,
         width: 200,
         Cell: ({ row }) => (
-          <Link color="#065BAA">
+          <Link color="#065BAA" className="global-td">
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.allowCreditPayment ? 'True' : 'False'}
           </Link>

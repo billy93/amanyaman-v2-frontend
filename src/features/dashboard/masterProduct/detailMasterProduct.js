@@ -359,7 +359,12 @@ const Tables = ({
             {headerGroups.map((headerGroup, i) => (
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th key={column.id} {...column.getHeaderProps()}>
+                  <th
+                    style={{ textAlign: 'center' }}
+                    className="header-cell"
+                    key={column.id}
+                    {...column.getHeaderProps()}
+                  >
                     {column.id !== 'selection' ? (
                       column.render('Header')
                     ) : (
@@ -407,7 +412,7 @@ const Tables = ({
                         <td
                           key={cell.id}
                           {...cell.getCellProps()}
-                          style={{ cursor: 'pointer' }}
+                          style={{ cursor: 'pointer', textAlign: 'center' }}
                           onClick={() => {
                             toggleRowSelected(row?.id);
                             handleRowSelectionChange(row?.id, !row.isSelected);
@@ -680,6 +685,7 @@ const DetailMasterUser = () => {
         accessor: 'travelAgentName',
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline', color: '#065BAA' }}
             to={`/master-data/detail-product-price/${row.original?.productTravelAgent?.id}`}
@@ -692,10 +698,12 @@ const DetailMasterUser = () => {
       {
         Header: 'Cust Code',
         accessor: 'custcode',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'CGroup',
         accessor: 'cgroup',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
     ],
     []
@@ -851,8 +859,8 @@ const DetailMasterUser = () => {
                 p={{ md: '10px' }}
               >
                 <Box
-                  pb="10px"
-                  pt="10px"
+                  pb="18px"
+                  pt="18px"
                   borderBottom={'1px solid #ebebeb'}
                   display={'flex'}
                   flexDirection={'column'}
@@ -877,8 +885,8 @@ const DetailMasterUser = () => {
                   </Text>
                 </Box>
                 <Box
-                  pb="10px"
-                  pt="10px"
+                  pb="18px"
+                  pt="18px"
                   borderBottom={'1px solid #ebebeb'}
                   display={'flex'}
                   flexDirection={'column'}
@@ -904,8 +912,8 @@ const DetailMasterUser = () => {
                   </Text>
                 </Box>
                 <Box
-                  pt="10px"
-                  pb="10px"
+                  pt="18px"
+                  pb="18px"
                   borderBottom={'1px solid #ebebeb'}
                   display={'flex'}
                   flexDirection={'column'}
@@ -931,8 +939,8 @@ const DetailMasterUser = () => {
                   </Text>
                 </Box>
                 <Box
-                  pt="10px"
-                  pb="10px"
+                  pt="18px"
+                  pb="18px"
                   borderBottom={'1px solid #ebebeb'}
                   display={'flex'}
                   flexDirection={'column'}
@@ -958,8 +966,8 @@ const DetailMasterUser = () => {
                   </Text>
                 </Box>
                 <Box
-                  pt="10px"
-                  pb="10px"
+                  pt="18px"
+                  pb="18px"
                   borderBottom={'1px solid #ebebeb'}
                   display={'flex'}
                   flexDirection={'column'}

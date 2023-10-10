@@ -356,6 +356,7 @@ const Tables = ({
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <motion.th
+                    className="header-cell"
                     key={column.id}
                     {...column.getHeaderProps({
                       layoutTransition: spring,
@@ -537,6 +538,7 @@ const CityList = () => {
         filter: 'fuzzyText',
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline', fontSize: '12px' }}
             to={`/master-data/cities/edit/${row.original.id}`}
@@ -553,6 +555,7 @@ const CityList = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Country Code',
@@ -561,6 +564,7 @@ const CityList = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Action',
@@ -572,7 +576,7 @@ const CityList = () => {
           <IconButton
             isLoading={processDelete}
             _hover={{ color: 'white' }}
-            icon={<CiTrash color="#065BAA" size={'16px'} />}
+            icon={<CiTrash color="#065BAA" size={'13px'} />}
             bg="white"
             border="1px solid #ebebeb"
             onClick={() => handleActionClick(row.original.id)}

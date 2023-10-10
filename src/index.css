@@ -10,6 +10,12 @@
 .errmsg {
   color: firebrick;
 }
+.header-cell {
+  font-weight: bold;
+  background-color: #eee;
+  font-size: 13px;
+  font-family: 'Mulish';
+}
 .global-td {
   font-size: 12px;
   font-family: 'Mulish';

@@ -459,6 +459,7 @@ const Tables = ({
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column, i) => (
                   <motion.th
+                    className="header-cell"
                     key={i}
                     {...column.getHeaderProps({
                       layoutTransition: spring,
@@ -828,6 +829,7 @@ const MasterUser = () => {
         },
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline', fontSize: '12px' }}
             to={`/master-data/detail-user/${row.original.id}`}
@@ -844,6 +846,7 @@ const MasterUser = () => {
         minWidth: 140,
         width: 200,
         headerClassName: 'custom-header',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Travel Agent',
@@ -851,6 +854,7 @@ const MasterUser = () => {
         maxWidth: 400,
         minWidth: 140,
         width: 200,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Role',
@@ -858,6 +862,7 @@ const MasterUser = () => {
         maxWidth: 400,
         minWidth: 140,
         width: 200,
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
     ],
     []

@@ -329,6 +329,7 @@ const Tables = ({
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <motion.th
+                    className="header-cell"
                     key={column.id}
                     {...column.getHeaderProps({
                       layoutTransition: spring,
@@ -550,6 +551,7 @@ const Polcies = () => {
         accessor: 'id',
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline' }}
             to={`/master-data/detail-product-price/${row.original.id}`}
@@ -562,16 +564,18 @@ const Polcies = () => {
       {
         Header: 'Travel Agent',
         accessor: 'travelAgent.travelAgentName',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Product Detail Code',
         accessor: 'productMapping.productCode',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Premium Price',
         accessor: 'premiumPrice',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {row?.original?.premiumPrice !== null ? (
               <CurrencyFormatter amount={row.original.premiumPrice} />
             ) : (
@@ -583,20 +587,23 @@ const Polcies = () => {
       {
         Header: 'Discount Lvl 1',
         accessor: 'commisionLv1',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Discount Lvl 2',
         accessor: 'commisionLv2',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Discount Lvl 3',
         accessor: 'commisionLv3',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Total Commission',
         accessor: 'totalCommision',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {row?.original?.totalCommision !== null ? (
               <CurrencyFormatter amount={row.original.totalCommision} />
             ) : (
@@ -610,7 +617,7 @@ const Polcies = () => {
         accessor: 'afterCommisionPrice',
         enableGlobalFilter: true,
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {row?.original?.afterCommisionPrice !== null ? (
               <CurrencyFormatter amount={row.original.afterCommisionPrice} />
             ) : (

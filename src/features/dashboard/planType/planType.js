@@ -366,6 +366,7 @@ const Tables = ({
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <motion.th
+                    className="header-cell"
                     key={column.id}
                     {...column.getHeaderProps({
                       layoutTransition: spring,
@@ -554,6 +555,7 @@ const PlanTypes = () => {
         filter: 'fuzzyText',
         Cell: ({ row }) => (
           <Link
+            className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline' }}
             to={`/master-data/plan-types/edit/${row.original.id}`}
@@ -570,6 +572,7 @@ const PlanTypes = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Number',
@@ -578,6 +581,7 @@ const PlanTypes = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Action',
@@ -589,7 +593,7 @@ const PlanTypes = () => {
           <IconButton
             isLoading={processDelete}
             _hover={{ color: 'white' }}
-            icon={<CiTrash color="#065BAA" size={'16px'} />}
+            icon={<CiTrash color="#065BAA" size={'13px'} />}
             bg="white"
             border="1px solid #ebebeb"
             onClick={() => handleActionClick(row.original.id)}

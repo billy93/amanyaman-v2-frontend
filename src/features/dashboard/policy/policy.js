@@ -516,6 +516,7 @@ const Tables = ({
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <motion.th
+                    className="header-cell"
                     {...column.getHeaderProps({
                       layoutTransition: spring,
                       style: {
