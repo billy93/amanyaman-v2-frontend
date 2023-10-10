@@ -109,13 +109,6 @@ export const policyApiSlice = apiSlice.injectEndpoints({
           },
         };
       },
-      transformResponse(response, meta) {
-        // console.log('resssssss', meta.response.headers.get('X-Total-Count'))
-        return {
-          response,
-          totalCount: Number(meta.response.headers.get('X-Total-Count')),
-        };
-      },
     }),
     uploadFilePrice: builder.mutation({
       query: (file) => {

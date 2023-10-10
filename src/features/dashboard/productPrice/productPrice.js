@@ -40,6 +40,7 @@ import { useTable, useRowSelect } from 'react-table';
 import CustomModal from './ModalImport';
 import CurrencyFormatter from '../../../components/formatCurrency';
 import Export from './export';
+
 const Styles = styled.div`
   // padding: 1rem;
 

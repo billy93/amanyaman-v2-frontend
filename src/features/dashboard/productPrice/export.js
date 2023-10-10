@@ -4,11 +4,11 @@ import { Button } from '@chakra-ui/react';
 import { MdLogin } from 'react-icons/md';
 
 const DownloadXLSButton = ({ params, page, size }) => {
-  const {
-    response: data,
-    error,
-    isLoading,
-  } = useExportProductPriceQuery({ page: page, size: size, ...params });
+  const { data, error, isLoading } = useExportProductPriceQuery({
+    page: page,
+    size: size,
+    ...params,
+  });
 
   const handleDownload = () => {
     if (data) {
