@@ -472,104 +472,125 @@ const Login = () => {
               ) : (
                 <Box width="auto" minH="300px" mt="2" spacing="2">
                   <Stack direction={['column']} spacing="10px">
-                    <FormControl variant="floating" id="first-name" isRequired>
-                      <Input
-                        variant="custom"
-                        placeholder=" "
-                        _placeholder={{ opacity: 1, color: 'gray.500' }}
-                        name="username"
-                        value={fields?.username}
-                        onChange={setFieldChange}
-                        h="48px"
-                      />
-                      {/* It is important that the Label comes after the Control due to css selectors */}
-                      <FormLabel fontSize="12" pt="1.5">
-                        Enter Username
-                      </FormLabel>
-                      {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                    </FormControl>
-                    <FormControl variant="floating" id="pwd" isRequired>
-                      <InputGroup>
+                    <form onSubmit={handlelogin}>
+                      <FormControl
+                        variant="floating"
+                        id="first-name"
+                        isRequired
+                        style={{ margin: '4px 0px' }}
+                      >
                         <Input
                           variant="custom"
-                          type={show ? 'text' : 'password'}
                           placeholder=" "
                           _placeholder={{ opacity: 1, color: 'gray.500' }}
-                          name="password"
-                          value={fields?.password}
-                          bg={fields?.password !== '' ? '#e8f0fe' : '#ebebeb'}
+                          name="username"
+                          value={fields?.username}
                           onChange={setFieldChange}
                           h="48px"
                         />
+                        {/* It is important that the Label comes after the Control due to css selectors */}
                         <FormLabel fontSize="12" pt="1.5">
-                          Enter Password
+                          Enter Username
                         </FormLabel>
-                        <Box>
-                          <InputRightElement width="4.5rem" h="100%">
-                            <Button
-                              h="1.75rem"
-                              size="sm"
-                              onClick={handleClick}
-                              bg="none"
-                              color={'#065BAA'}
-                              border={'none'}
-                              _hover={{
-                                border: 'none',
-                                transform: 'scale(1.05, 1.05)',
-                                bg: '#054e912b',
+                        {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                      </FormControl>
+                      <FormControl
+                        variant="floating"
+                        id="pwd"
+                        isRequired
+                        style={{ margin: '4px 0px' }}
+                      >
+                        <InputGroup>
+                          <Input
+                            variant="custom"
+                            type={show ? 'text' : 'password'}
+                            placeholder=" "
+                            _placeholder={{ opacity: 1, color: 'gray.500' }}
+                            name="password"
+                            value={fields?.password}
+                            bg={fields?.password !== '' ? '#e8f0fe' : '#ebebeb'}
+                            onChange={setFieldChange}
+                            h="48px"
+                          />
+                          <FormLabel fontSize="12" pt="1.5">
+                            Enter Password
+                          </FormLabel>
+                          <Box>
+                            <InputRightElement width="4.5rem" h="100%">
+                              <Button
+                                h="1.75rem"
+                                size="sm"
+                                onClick={handleClick}
+                                bg="none"
+                                color={'#065BAA'}
+                                border={'none'}
+                                _hover={{
+                                  border: 'none',
+                                  transform: 'scale(1.05, 1.05)',
+                                  bg: '#054e912b',
 
-                                _dark: {
-                                  bg: '#054e91',
-                                },
-                              }}
-                            >
-                              {show ? <AiFillEye /> : <AiFillEyeInvisible />}
-                            </Button>
-                          </InputRightElement>
-                        </Box>
-                      </InputGroup>
-                      {/* It is important that the Label comes after the Control due to css selectors */}
-                    </FormControl>
-                    {/* <Link to="/forgot-password"> */}
-                    <Box display={'flex'} justifyContent={'flex-end'}>
-                      <Text
-                        fontSize={'sm'}
-                        as="u"
-                        color={'#065BAA'}
-                        fontFamily="Mulish"
-                        fontWeight={'700'}
-                        onClick={handleForgotPass}
-                        cursor={'pointer'}
-                      >
-                        Forgot Password ?
-                      </Text>
-                    </Box>
-                    {/* </Link> */}
-                    <Box onClick={handleRememberMe}>
-                      <Checkbox
-                        defaultChecked
-                        color={'#231F20'}
-                        onClick={handleRememberMe}
-                        checked={persist?.isPersist}
-                        id="persist"
-                      >
-                        <Text fontSize={'sm'} onClick={handleRememberMe}>
-                          Remember Me{' '}
+                                  _dark: {
+                                    bg: '#054e91',
+                                  },
+                                }}
+                              >
+                                {show ? <AiFillEye /> : <AiFillEyeInvisible />}
+                              </Button>
+                            </InputRightElement>
+                          </Box>
+                        </InputGroup>
+                        {/* It is important that the Label comes after the Control due to css selectors */}
+                      </FormControl>
+                      {/* <Link to="/forgot-password"> */}
+                      <Box display={'flex'} justifyContent={'flex-end'}>
+                        <Text
+                          fontSize={'sm'}
+                          as="u"
+                          color={'#065BAA'}
+                          fontFamily="Mulish"
+                          fontWeight={'700'}
+                          onClick={handleForgotPass}
+                          cursor={'pointer'}
+                        >
+                          Forgot Password ?
                         </Text>
-                      </Checkbox>
-                    </Box>
+                      </Box>
+                      {/* </Link> */}
+                      <Box onClick={handleRememberMe}>
+                        <Checkbox
+                          defaultChecked
+                          color={'#231F20'}
+                          onClick={handleRememberMe}
+                          checked={persist?.isPersist}
+                          id="persist"
+                        >
+                          <Text fontSize={'sm'} onClick={handleRememberMe}>
+                            Remember Me{' '}
+                          </Text>
+                        </Checkbox>
+                      </Box>
 
-                    <Button bg="#065BAA" onClick={handlelogin} h="48px">
-                      <Text
-                        as="b"
-                        fontSize={'sm'}
-                        fontFamily="arial"
-                        fontWeight={'700'}
-                        style={{ fontSize: '14px', textTransform: 'uppercase' }}
+                      <Button
+                        type="submit"
+                        bg="#065BAA"
+                        h="48px"
+                        w="100%"
+                        mt="15px"
                       >
-                        Next
-                      </Text>
-                    </Button>
+                        <Text
+                          as="b"
+                          fontSize={'sm'}
+                          fontFamily="arial"
+                          fontWeight={'700'}
+                          style={{
+                            fontSize: '14px',
+                            textTransform: 'uppercase',
+                          }}
+                        >
+                          Next
+                        </Text>
+                      </Button>
+                    </form>
                   </Stack>
                 </Box>
               )}

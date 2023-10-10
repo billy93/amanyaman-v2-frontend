@@ -29,16 +29,23 @@ import { useGetBandTypeQuery } from '../bandType/bandTypesApiSlice';
 import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
 import { useGetListAreaGroupQuery } from '../group-area/listApiSlice';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
+import { useGetProductByIdQuery } from './masterProductApiSlice';
+import { useGetDocumentTypesQuery } from '../documentType/docTypeApiSlice';
 import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSlice';
 import UseCustomToast from '../../../components/UseCustomToast';
+import { useGetProductsQuery } from './masterProductApiSlice';
 import {
   useGetListVariantQuery,
+  useUpdateMasterProductMutation,
   useCreateMasterProductMutation,
   useGetProductAdditionalQuery,
 } from './masterProductApiSlice';
 // import { selectCurrentTraveller } from '../../auth/authSlice';
 import {
   listAdditonalWeeks,
+  setListAdditionalWeeks,
+  listdocstype,
+  setListDoctType,
   areaList,
   travelDurations,
   planTypes,
@@ -60,15 +67,16 @@ import {
   listvariant,
   listtravelagents,
   setListTravellAgents,
-  setListAdditionalWeeks,
 } from './masterProductSlice';
 import { MdAdd } from 'react-icons/md';
 import { Select } from 'chakra-react-select';
 
 const CommisionForm = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const listProducts = useSelector(listtravellertype);
-  const listAddWeeks = useSelector(listAdditonalWeeks);
+  const listAdditonalWeeksRed = useSelector(listAdditonalWeeks);
+  const listdocstypes = useSelector(listdocstype);
   const listAgents = useSelector(listtravelagents);
   const travelertype = useSelector(listtravellertype);
   const listPlanType = useSelector(listplantype);
@@ -81,7 +89,7 @@ const CommisionForm = () => {
   const [isActive] = useState(false);
   const [isActiveDescLoc] = useState(false);
   const { data: { response: variant } = {} } = useGetListVariantQuery();
-  const { data: { response: additionalWeeks } = {} } =
+  const { data: { response: additonalWeek } = {} } =
     useGetProductAdditionalQuery();
   const [toastId, setToastId] = React.useState(null);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
@@ -89,6 +97,24 @@ const CommisionForm = () => {
   const navigate = useNavigate();
   const [fields, setFields] = React.useState(null);
   const toast = useToast();
+
+  const { data: products } = useGetProductByIdQuery(id, {
+    refetchOnMountOrArgChange: true,
+  });
+  const [filterQuery, setFilterQuery] = useState({
+    productCode: '',
+    bandType: '',
+  });
+  const [page, setPage] = React.useState(0);
+
+  // const {
+  //   data: { response: listproducts, totalCount } = {},
+  //   isLoading: loading,
+  //   isError,
+  //   error,
+  //   isFetching,
+  //   refetch,
+  // } = useGetProductsQuery({ page, size: 9999, ...filterQuery });
 
   const handleUploadIdentity = (e) => {
     hiddenInputIdtty.current.click();
@@ -98,6 +124,7 @@ const CommisionForm = () => {
     { isLoading, isSuccess: success, isError: errorUpload },
   ] = useCreateMasterProductMutation();
   const { data: bandTypes } = useGetBandTypeQuery({ page: 0, size: 9999 });
+  const { data: docTypes } = useGetDocumentTypesQuery({ page: 0, size: 9999 });
 
   const { data: grouparea } = useGetListAreaGroupQuery({ page: 0, size: 9999 });
 
@@ -117,6 +144,7 @@ const CommisionForm = () => {
     ...filterby,
   });
 
+  console.log('product formstate', listvariants);
   React.useEffect(() => {
     if (bandTypes) {
       let duration = bandTypes?.response.map((obj) => ({
@@ -128,6 +156,35 @@ const CommisionForm = () => {
     }
   }, [bandTypes, dispatch]);
 
+  React.useMemo(() => {
+    if (additonalWeek) {
+      let list = [
+        { label: 'SELECT OPTION', value: '', id: '', name: '' },
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        ...additonalWeek?.map((obj, i) => ({
+          ...obj,
+          productCode: obj.productCode,
+          label: obj.productCode,
+          name: obj.productCode,
+          value: obj.id,
+          idx: i,
+        })),
+      ];
+      dispatch(setListAdditionalWeeks(list));
+    }
+  }, [additonalWeek, dispatch]);
+
+  // React.useEffect(() => {
+  //   if (listproducts) {
+  //     let additionalWeek = listproducts?.map((obj) => ({
+  //       ...obj,
+  //       label: obj.travelDurationName,
+  //       value: obj.travelDurationName,
+  //     }));
+  //     dispatch(setListBandType(additionalWeek));
+  //   }
+  // }, [listproducts, dispatch]);
+
   React.useEffect(() => {
     if (travelagents) {
       let agents = travelagents?.map((obj) => ({
@@ -138,6 +195,17 @@ const CommisionForm = () => {
       dispatch(setListTravellAgents(agents));
     }
   }, [travelagents, dispatch]);
+
+  React.useEffect(() => {
+    if (docTypes) {
+      let docsType = docTypes?.response?.map((obj) => ({
+        ...obj,
+        label: obj.name,
+        value: obj.name,
+      }));
+      dispatch(setListDoctType(docsType));
+    }
+  }, [docTypes, dispatch]);
 
   React.useEffect(() => {
     if (grouparea) {
@@ -185,27 +253,118 @@ const CommisionForm = () => {
     }
   }, [variant, dispatch]);
 
-  const total = React.useMemo(() => {
-    let tot;
-    tot =
-      parseInt(formstate?.commissionlvl1) +
-      parseInt(formstate?.commissionlvl2) +
-      parseInt(formstate?.commissionlvl3);
-    return tot;
-  }, [
-    formstate?.commissionlvl1,
-    formstate?.commissionlvl2,
-    formstate?.commissionlvl3,
-  ]);
+  React.useEffect(() => {
+    if (products) {
+      const form = {
+        ...formstate,
+        id: products.id,
+        productCode: products?.productCode,
+        value: products?.value,
+        code: products?.code,
+        productName: products?.productName,
+        productDescription: products?.productDescription,
+        productMedicalCover: products?.productMedicalCover,
+        personalAccidentCover: products?.productPersonalAccidentCover,
+        productTravelCover: products?.productTravelCover,
+        currId: products?.currId,
+        productBrochure: products?.productMapping?.productBrochure,
+
+        planType: [
+          {
+            ...products?.planType,
+            label: products?.planType?.name,
+            value: products?.planType?.name,
+          },
+        ],
+        bandType: [
+          {
+            ...products?.bandType,
+            label: products?.bandType?.travelDurationName,
+            value: products?.bandType?.travelDurationName,
+          },
+        ],
+        benefitDoc:
+          products?.benefitDoc !== null
+            ? [
+                {
+                  ...products?.benefitDoc,
+                  label: products?.benefitDoc?.name,
+                  value: products?.benefitDoc?.name,
+                },
+              ]
+            : null,
+        wordingDoc:
+          products?.wordingDoc !== null
+            ? [
+                {
+                  ...products?.wordingDoc,
+                  label: products?.wordingDoc?.name,
+                  value: products?.wordingDoc?.name,
+                },
+              ]
+            : null,
+        covidDoc:
+          products?.covidDoc !== null
+            ? [
+                {
+                  ...products?.covidDoc,
+                  label: products?.covidDoc?.name,
+                  value: products?.covidDoc?.name,
+                },
+              ]
+            : null,
+        additionalWeek:
+          products?.productAdditionalWeek !== null
+            ? [
+                {
+                  ...products?.productAdditionalWeek,
+                  label: products?.productAdditionalWeek.productCode,
+                  value: products?.productAdditionalWeek.productCode,
+                },
+              ]
+            : null,
+        groupArea: [
+          {
+            ...products?.areaGroup,
+            label: products?.areaGroup?.areaGroupName,
+            value: products?.areaGroup?.areaGroupName,
+          },
+        ],
+        travellerType: [
+          {
+            ...products?.travellerType,
+            label: products?.travellerType?.name,
+            value: products?.travellerType?.name,
+          },
+        ],
+        variants: products?.variants
+          .filter((element1) =>
+            listvariants.some((element2) => element2.id === element1.variant)
+          )
+          .map((element1) => {
+            const matchingElement = listvariants.find(
+              (element2) => element2.id === element1.variant
+            );
+            return {
+              ...element1,
+              label: matchingElement.name,
+              value: matchingElement.name,
+            };
+          }),
+      };
+      dispatch(setProductForm(form));
+    }
+  }, [products, dispatch, listvariants]);
 
   const handleNext = async (e) => {
     e.preventDefault();
     const constData = {
+      id: formstate.id,
       productName: formstate?.productName,
-      code: formstate?.productCode,
+      productDetailCode: formstate?.code,
       productCode: formstate?.productCode,
       currId: formstate?.currId,
-      value: '100',
+      value: formstate?.value,
       productDescription: formstate?.productDescription,
       productBrochure: 'http://example.com/brochure.pdf',
       productPersonalAccidentCover: formstate?.personalAccidentCover,
@@ -223,31 +382,21 @@ const CommisionForm = () => {
       planType: {
         id: formstate?.planType[0]?.id,
       },
+      benefitDoc: {
+        id: formstate?.benefitDoc[0]?.id,
+      },
+      wordingDoc: {
+        id: formstate?.wordingDoc[0]?.id,
+      },
+      covidDoc: {
+        id: formstate?.covidDoc[0]?.id,
+      },
       productAdditionalWeek:
-        formstate?.additionalWeek === ''
-          ? null
-          : {
+        formstate?.additionalWeek[0].id !== ''
+          ? {
               id: formstate?.additionalWeek[0].id,
-            },
-      benefitDoc: null,
-      wordingDoc: null,
-      covidDoc: null,
-      npwp: true,
-      premiumPrice: Number(formstate?.premiumPrice),
-      commisionLv1: Number(formstate?.commissionlvl1),
-      commisionLv2: Number(formstate?.commissionlvl2),
-      commisionLv3: Number(formstate?.commissionlvl3),
-      totalCommision: (
-        Math.ceil(total * formstate?.premiumPrice) / 100
-      ).toFixed(0),
-      afterCommisionPrice: Math.ceil(
-        formstate?.premiumPrice - (total * formstate?.premiumPrice) / 100
-      ).toFixed(0),
-      ppn: 10.0,
-      pph23: 2.0,
-      ppnValue: 8.25,
-      pph23Value: 1.65,
-      ajiPrice: 92.4,
+            }
+          : null,
       variants: formstate?.variants.map((v) => {
         return { id: v.id };
       }),
@@ -255,7 +404,7 @@ const CommisionForm = () => {
     try {
       let data = await createMasterProduct(constData);
       if (data?.data) {
-        showSuccessToast('Created master product successfully!');
+        showSuccessToast('Edit master product successfully!');
         dispatch(
           setProductForm({
             productName: '',
@@ -288,12 +437,12 @@ const CommisionForm = () => {
             ppnValue: 0,
             pph23Value: 0,
             ajiPrice: 0,
-            variant: [],
+            variants: [],
           })
         );
         navigate('/master-data/master-products');
       } else {
-        const errorMessage = `Failed to created master product. Status Code: ${data?.error?.status}`;
+        const errorMessage = `Failed to Edit master product. Status Code: ${data?.error?.status}`;
         showErrorToast(errorMessage);
         dispatch(
           setProductForm({
@@ -327,12 +476,12 @@ const CommisionForm = () => {
             ppnValue: 0,
             pph23Value: 0,
             ajiPrice: 0,
-            variant: [],
+            variants: [],
           })
         );
       }
     } catch (err) {
-      const errorMessage = `Failed to created master product. Status Code: ${err?.error?.status}`;
+      const errorMessage = `Failed to Edit master product. Status Code: ${err?.error?.status}`;
       showErrorToast(errorMessage);
     }
     setFields(null);
@@ -353,6 +502,7 @@ const CommisionForm = () => {
     };
     dispatch(setProductForm(forms));
   }
+
   function handleSelectBandType(data) {
     const forms = {
       ...formstate,
@@ -384,10 +534,31 @@ const CommisionForm = () => {
     };
     dispatch(setProductForm(forms));
   }
+  function handleWordingDoc(data) {
+    const forms = {
+      ...formstate,
+      wordingDoc: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+  function handleBenefitDoc(data) {
+    const forms = {
+      ...formstate,
+      benefitDoc: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
   function handleSelectPlanType(data) {
     const forms = {
       ...formstate,
       planType: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+  function handleCovidDoc(data) {
+    const forms = {
+      ...formstate,
+      covidDoc: [{ ...data }],
     };
     dispatch(setProductForm(forms));
   }
@@ -405,6 +576,19 @@ const CommisionForm = () => {
     };
     dispatch(setProductForm(forms));
   }
+
+  const total = React.useMemo(() => {
+    let tot;
+    tot =
+      parseInt(formstate?.commissionlvl1) +
+      parseInt(formstate?.commissionlvl2) +
+      parseInt(formstate?.commissionlvl3);
+    return tot;
+  }, [
+    formstate?.commissionlvl1,
+    formstate?.commissionlvl2,
+    formstate?.commissionlvl3,
+  ]);
 
   function handleSelectAgent(data) {
     console.log('data', data);
@@ -430,24 +614,6 @@ const CommisionForm = () => {
 
     dispatch(setProductForm(newData));
   };
-
-  React.useMemo(() => {
-    if (additionalWeeks) {
-      let list = [
-        { label: 'SELECT OPTION', value: '', id: '', name: '' },
-        // eslint-disable-next-line no-unsafe-optional-chaining
-        ...additionalWeeks?.map((obj, i) => ({
-          ...obj,
-          productCode: obj.productCode,
-          label: obj.productCode,
-          name: obj.productCode,
-          value: obj.id,
-          idx: i,
-        })),
-      ];
-      dispatch(setListAdditionalWeeks(list));
-    }
-  }, [additionalWeeks, dispatch]);
 
   return (
     <Box>
@@ -702,11 +868,11 @@ const CommisionForm = () => {
                     pt="1.5"
                     style={{
                       transform:
-                        formstate !== null && formstate?.bandType?.length !== 0
+                        formstate !== null && formstate?.bandType?.length > 0
                           ? 'translate(-1px, -7px) scale(0.75)'
-                          : 'translate(0px, 3px) scale(0.75)',
+                          : 'translate(-2px, -8px) scale(0.75)',
                       color:
-                        formstate !== null && formstate?.bandType?.length !== 0
+                        formstate !== null && formstate?.bandType?.length > 0
                           ? '#065baa'
                           : '#231F20',
                       fontSize: '14px',
@@ -930,7 +1096,7 @@ const CommisionForm = () => {
                     value={formstate?.groupArea}
                     classNamePrefix="chakra-react-select"
                     options={areaLists}
-                    placeholder=""
+                    placeholder="Select some colors..."
                     closeMenuOnSelect={true}
                     menuPortalTarget={document.body}
                     styles={{
@@ -972,13 +1138,8 @@ const CommisionForm = () => {
               {/* It is important that the Label comes after the Control due to css selectors */}
             </FormControl>
           </Box>
-          <Box width={{ base: '100%', md: '260px' }} m="auto">
-            <FormControl
-              variant="floating"
-              isRequired
-              fontFamily={'Mulish'}
-              mt="14px"
-            >
+          <Box width={{ base: '100%', md: '260px' }} mt="1em">
+            <FormControl variant="floating" isRequired fontFamily={'Mulish'}>
               <Box>
                 <Box className="floating-label">
                   <Select
@@ -1026,6 +1187,135 @@ const CommisionForm = () => {
                     fontFamily={'Mulish'}
                   >
                     Traveller Type
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box width={{ base: '100%', md: '260px' }} m="auto">
+            <FormControl
+              variant="floating"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Box>
+                <Box className="floating-label">
+                  <Select
+                    isMulti={false}
+                    name="colors"
+                    onChange={handleBenefitDoc}
+                    value={formstate?.benefitDoc}
+                    classNamePrefix="chakra-react-select"
+                    options={listdocstypes}
+                    placeholder="Select some colors..."
+                    closeMenuOnSelect={true}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                    }}
+                    chakraStyles={{
+                      dropdownIndicator: (
+                        prev,
+                        { selectProps: { menuIsOpen } }
+                      ) => ({
+                        ...prev,
+                        '> svg': {
+                          transitionDuration: 'normal',
+                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                        },
+                      }),
+                    }}
+                  />
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate !== null && formstate?.benefitDoc?.length > 0
+                          ? 'translate(0, -10px) scale(0.75)'
+                          : 'translate(0, 4px) scale(0.75)',
+                      color:
+                        formstate !== null && formstate?.benefitDoc?.length > 0
+                          ? '#065baa'
+                          : '#231F20',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Benefit Doc
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+          <Box width={{ base: '100%', md: '260px' }} mt="1em">
+            <FormControl variant="floating" isRequired fontFamily={'Mulish'}>
+              <Box>
+                <Box className="floating-label">
+                  <Select
+                    isMulti={false}
+                    name="colors"
+                    onChange={handleWordingDoc}
+                    value={formstate?.wordingDoc}
+                    classNamePrefix="chakra-react-select"
+                    options={listdocstypes}
+                    placeholder=""
+                    closeMenuOnSelect={true}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                    }}
+                    chakraStyles={{
+                      dropdownIndicator: (
+                        prev,
+                        { selectProps: { menuIsOpen } }
+                      ) => ({
+                        ...prev,
+                        '> svg': {
+                          transitionDuration: 'normal',
+                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                        },
+                      }),
+                    }}
+                  />
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate !== null && formstate?.wordingDoc?.length > 0
+                          ? 'translate(0, -10px) scale(0.75)'
+                          : 'translate(0, 4px) scale(0.75)',
+                      color:
+                        formstate !== null && formstate?.wordingDoc?.length > 0
+                          ? '#065baa'
+                          : '#231F20',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Wording Doc
                   </FormLabel>
                 </Box>
               </Box>
@@ -1095,11 +1385,11 @@ const CommisionForm = () => {
                   pt="1.5"
                   style={{
                     transform:
-                      formstate !== null && formstate?.planType?.length !== 0
+                      formstate !== null && formstate?.planType?.length > 0
                         ? 'translate(0, -10px) scale(0.75)'
                         : 'translate(0, 4px) scale(0.75)',
                     color:
-                      formstate !== null && formstate?.planType?.length !== 0
+                      formstate !== null && formstate?.planType?.length > 0
                         ? '#065baa'
                         : '#231F20',
                     fontSize: '14px',
@@ -1107,6 +1397,90 @@ const CommisionForm = () => {
                   fontFamily={'Mulish'}
                 >
                   Plan Type
+                </FormLabel>
+              </Box>
+            </Box>
+            {/* It is important that the Label comes after the Control due to css selectors */}
+          </FormControl>
+        </Flex>
+      </Flex>
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <FormControl
+            variant="floating"
+            isRequired
+            fontFamily={'Mulish'}
+            mt="1em"
+          >
+            <Box w="540px">
+              <Box className="react-select-container">
+                <Select
+                  isMulti={false}
+                  name="colors"
+                  onChange={handleCovidDoc}
+                  value={formstate?.covidDoc}
+                  classNamePrefix="chakra-react-select"
+                  options={listdocstypes}
+                  closeMenuOnSelect={true}
+                  menuPortalTarget={document.body}
+                  styles={{
+                    menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                  }}
+                  components={{
+                    Placeholder: () => (
+                      <span
+                        style={{
+                          display: formstate?.planType ? 'none' : 'none',
+                        }}
+                      >
+                        Select an option
+                      </span>
+                    ),
+                  }}
+                  chakraStyles={{
+                    dropdownIndicator: (
+                      prev,
+                      { selectProps: { menuIsOpen } }
+                    ) => ({
+                      ...prev,
+                      '> svg': {
+                        transitionDuration: 'normal',
+                        transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                      },
+                    }),
+                  }}
+                />
+                <span className="highlight"></span>
+                <FormLabel
+                  pt="1.5"
+                  style={{
+                    transform:
+                      formstate !== null && formstate?.covidDoc?.length > 0
+                        ? 'translate(0, -10px) scale(0.75)'
+                        : 'translate(0, 4px) scale(0.75)',
+                    color:
+                      formstate !== null && formstate?.covidDoc?.length > 0
+                        ? '#065baa'
+                        : '#231F20',
+                    fontSize: '14px',
+                  }}
+                  fontFamily={'Mulish'}
+                >
+                  Covid Doc
                 </FormLabel>
               </Box>
             </Box>
@@ -1198,318 +1572,12 @@ const CommisionForm = () => {
           </Box>
         </Flex>
       </Flex>
-      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
-        <Flex
-          gridTemplateColumns={{
-            base: 'repeat(1, 1fr)',
-            sm: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-            lg: 'repeat(2, 1fr)',
-          }}
-          gap="20px"
-        >
-          <Box w="260px">
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              mt="14px"
-            >
-              <Input
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="premiumPrice"
-                value={formstate?.premiumPrice}
-                onChange={handleData}
-                h="48px"
-                variant={'custom'}
-              />
-              {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
-                zIndex={'0'}
-                style={{
-                  zIndex: 0,
-                  color:
-                    formstate !== null && formstate?.premiumPrice !== ''
-                      ? '#065baa'
-                      : '#171923',
-                  fontWeight: 'normal',
-                  paddingBottom: '4px',
-                }}
-              >
-                Premium Price
-              </FormLabel>
-              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-            </FormControl>
-          </Box>
-          <Box w="260px">
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              mt="14px"
-            >
-              <Stack>
-                <InputGroup size="sm">
-                  <Input
-                    type="number"
-                    placeholder=" "
-                    _placeholder={{ opacity: 1, color: 'gray.500' }}
-                    name="commissionlvl1"
-                    value={formstate?.commissionlvl1}
-                    onChange={handleData}
-                    h="48px"
-                    variant={'custom'}
-                  />
-                  <InputRightAddon children="%" h="48px" />
-                  <FormLabel
-                    fontSize="12"
-                    pt="1.5"
-                    style={{
-                      transform:
-                        formstate?.commissionlvl2 !== ''
-                          ? 'translate(-3px, -8px) scale(0.75)'
-                          : 'translate(0px, 2px) scale(0.75)',
-                      fontSize: '14px',
-                      background: 'transparent',
-                      color:
-                        formstate !== null && formstate?.commissionlvl1 !== ''
-                          ? '#065baa'
-                          : '#171923',
-                      zIndex: '0',
-                      fontWeight: 'normal',
-                    }}
-                  >
-                    Commission Level 1
-                  </FormLabel>
-                </InputGroup>
-              </Stack>
-            </FormControl>
-          </Box>
-        </Flex>
-      </Flex>
-      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
-        <Flex
-          gridTemplateColumns={{
-            base: 'repeat(1, 1fr)',
-            sm: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-            lg: 'repeat(2, 1fr)',
-          }}
-          gap="20px"
-        >
-          <Box w="260px">
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              mt="14px"
-            >
-              <Input
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="commissionlvl2"
-                value={formstate?.commissionlvl2}
-                onChange={handleData}
-                h="48px"
-                variant={'custom'}
-              />
-              {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
-                zIndex={'0'}
-                style={{
-                  zIndex: 0,
-                  color:
-                    formstate !== null && formstate?.commissionlvl2 !== ''
-                      ? '#065baa'
-                      : '#171923',
-                  fontWeight: 'normal',
-                  paddingBottom: '4px',
-                }}
-              >
-                Commission Level 2
-              </FormLabel>
-              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-            </FormControl>
-          </Box>
-          <Box w="260px">
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              mt="14px"
-            >
-              <Stack>
-                <InputGroup size="sm">
-                  <Input
-                    type="number"
-                    placeholder=" "
-                    _placeholder={{ opacity: 1, color: 'gray.500' }}
-                    name="commissionlvl3"
-                    value={formstate?.commissionlvl3}
-                    onChange={handleData}
-                    h="48px"
-                    variant={'custom'}
-                  />
-                  <InputRightAddon children="%" h="48px" />
-                  <FormLabel
-                    fontSize="12"
-                    pt="1.5"
-                    style={{
-                      transform:
-                        formstate?.commissionlvl3 !== ''
-                          ? 'translate(-3px, -8px) scale(0.75)'
-                          : 'translate(0px, 2px) scale(0.75)',
-                      fontSize: '14px',
-                      background: 'transparent',
-                      color:
-                        formstate !== null && formstate?.commissionlvl3 !== ''
-                          ? '#065baa'
-                          : '#171923',
-                      zIndex: '0',
-                      fontWeight: 'normal',
-                    }}
-                  >
-                    Commission Level 3
-                  </FormLabel>
-                </InputGroup>
-              </Stack>
-            </FormControl>
-          </Box>
-        </Flex>
-      </Flex>
-      <Flex
-        mt="1em"
-        width={{ base: '100%' }}
-        gridTemplateColumns={{
-          base: 'repeat(1, 1fr)',
-          sm: 'repeat(2, 1fr)',
-          md: 'repeat(3, 1fr)',
-          lg: 'repeat(4, 1fr)',
-        }}
-        justifyContent="center"
-        alignItems="center"
-        gap="20px"
-        flexWrap="wrap"
-        mx="auto"
-      >
-        <Box
-          border="1px solid #ebebeb"
-          p="10px"
-          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
-          fontSize="14px"
-          fontFamily="Mulish"
-        >
-          Total Commission
-        </Box>
-        <Box
-          border="1px solid #ebebeb"
-          p="10px"
-          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
-          fontSize="14px"
-          fontFamily="Mulish"
-        >
-          {'Rp '}
-          {(Math.ceil(total * formstate?.premiumPrice) / 100).toFixed(0)}
-        </Box>
-        <Box
-          p="10px"
-          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
-          border="none"
-        >
-          <Flex alignItems="center" gap="5px">
-            <RiErrorWarningLine size="25px" color="blue" />
-            <Box display="flex" flexDirection="column">
-              <Text
-                as="b"
-                fontSize="sm"
-                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
-              >
-                {' '}
-                Total commission:
-              </Text>
-              <Text
-                as="p"
-                fontSize="sm"
-                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
-              >
-                Calculated from commission level 1, 2 & 3
-              </Text>
-            </Box>
-          </Flex>
-        </Box>
-      </Flex>
-      <Flex
-        width={{ base: '100%' }}
-        gridTemplateColumns={{
-          base: 'repeat(1, 1fr)',
-          sm: 'repeat(2, 1fr)',
-          md: 'repeat(3, 1fr)',
-          lg: 'repeat(4, 1fr)',
-        }}
-        justifyContent="center"
-        alignItems="center"
-        gap="20px"
-        flexWrap="wrap"
-        mx="auto"
-      >
-        <Box
-          border="1px solid #ebebeb"
-          p="10px"
-          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
-          fontSize="14px"
-          fontFamily="Mulish"
-        >
-          After Commision
-        </Box>
-        <Box
-          border="1px solid #ebebeb"
-          p="10px"
-          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
-          fontSize="14px"
-          fontFamily="Mulish"
-        >
-          {'Rp '}
-          {Math.ceil(
-            formstate?.premiumPrice - (total * formstate?.premiumPrice) / 100
-          ).toFixed(0)}
-        </Box>
-        <Box
-          p="10px"
-          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
-          border="none"
-        >
-          <Flex alignItems="center" gap="5px">
-            <RiErrorWarningLine size="25px" color="blue" />
-            <Box display="flex" flexDirection="column">
-              <Text
-                as="b"
-                fontSize="sm"
-                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
-              >
-                {' '}
-                After commission price:
-              </Text>
-              <Text
-                as="p"
-                fontSize="sm"
-                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
-              >
-                Premium price - total commission
-              </Text>
-            </Box>
-          </Flex>
-        </Box>
-      </Flex>
       <Box
         display={'flex'}
         justifyContent={'flex-end'}
         alignItems={'center'}
         pr="2em"
+        pb="1em"
       >
         <Button
           onClick={handleNext}
@@ -1518,7 +1586,7 @@ const CommisionForm = () => {
           fontFamily="arial"
           fontWeight={'700'}
         >
-          ADD
+          Add
         </Button>
       </Box>
     </Box>

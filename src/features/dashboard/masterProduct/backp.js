@@ -1,687 +1,1528 @@
+/* eslint-disable indent */
+/* eslint-disable react/no-children-prop */
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { useGetUsersQuery } from "./masterProductApiSlice"
-import { Link } from "react-router-dom";
-import Data from './list.json'
-import Table, { usePagination } from "react-table";
-import PulseLoader from 'react-spinners/PulseLoader'
-import matchSorter from 'match-sorter'
+import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import {
- useToast,
-  Modal,
-ModalOverlay,
-ModalContent,
-ModalHeader,
-ModalFooter,
-ModalBody,
-ModalCloseButton,
-Input,
-InputGroup,
-InputLeftElement,
-InputRightAddon,
-Link as Links,
   Box,
-  Table as TableNew,
-  Thead,
-  Tbody,
-  Tfoot,
-  LinkOverlay,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-  Heading,
-  Stack,
   Text,
-  Center,
-  useDisclosure,
-  IconButton
-} from '@chakra-ui/react'
-import { Button } from '@chakra-ui/react'
-import { useDispatch, useSelector } from 'react-redux'
-import {listProduct,listProductSelection,setMasterProduct,setListSelectProduct} from './masterProductSlice'
-import {MdLogin,MdFilterList,MdWarning} from 'react-icons/md'
-import {AiOutlineClose} from 'react-icons/ai'
-import {BsFillTrashFill} from 'react-icons/bs'
-import {AiOutlinePlusCircle} from 'react-icons/ai'
-import {BiSkipPreviousCircle,BiSkipNextCircle} from 'react-icons/bi'
-import styled from "styled-components";
-import { useTable, useRowSelect,useGlobalFilter, useAsyncDebounce } from "react-table";
-import { Search2Icon } from "@chakra-ui/icons";
+  FormControl,
+  Input,
+  FormLabel,
+  useToast,
+  Textarea,
+  Button,
+  Flex,
+  Stack,
+  InputGroup,
+  InputRightAddon,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+} from '@chakra-ui/react';
+import { ChevronRightIcon } from '@chakra-ui/icons';
+import { RiErrorWarningLine } from 'react-icons/ri';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useGetBandTypeQuery } from '../bandType/bandTypesApiSlice';
+import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
+import { useGetListAreaGroupQuery } from '../group-area/listApiSlice';
+import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
+import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSlice';
+import UseCustomToast from '../../../components/UseCustomToast';
+import {
+  useGetListVariantQuery,
+  useCreateMasterProductMutation,
+  useGetProductAdditionalQuery,
+} from './masterProductApiSlice';
+// import { selectCurrentTraveller } from '../../auth/authSlice';
+import {
+  listAdditonalWeeks,
+  areaList,
+  travelDurations,
+  planTypes,
+  typeProd,
+  setMasterProduct,
+  setListBandType,
+  setListArea,
+  setListPlanType,
+  listarea,
+  listbandtype,
+  listplantype,
+  listProduct,
+  formProduct,
+  setProductForm,
+  listAdditonal,
+  listtravellertype,
+  setListTravellerType,
+  setListVariant,
+  listvariant,
+  listtravelagents,
+  setListTravellAgents,
+  setListAdditionalWeeks,
+} from './masterProductSlice';
+import { MdAdd } from 'react-icons/md';
+import { Select } from 'chakra-react-select';
 
-const Styles = styled.div`
-  padding: 1rem;
+const CommisionForm = () => {
+  const dispatch = useDispatch();
+  const listProducts = useSelector(listtravellertype);
+  const listAddWeeks = useSelector(listAdditonalWeeks);
+  const listAgents = useSelector(listtravelagents);
+  const travelertype = useSelector(listtravellertype);
+  const listPlanType = useSelector(listplantype);
+  const additonal = useSelector(listbandtype);
+  const areaLists = useSelector(listarea);
+  const listvariants = useSelector(listvariant);
+  const formstate = useSelector(formProduct);
+  const typesProduct = useSelector(listplantype);
+  const listTravelDurations = useSelector(listbandtype);
+  const [isActive] = useState(false);
+  const [isActiveDescLoc] = useState(false);
+  const { data: { response: variant } = {} } = useGetListVariantQuery();
+  const { data: { response: additionalWeeks } = {} } =
+    useGetProductAdditionalQuery();
+  const [toastId, setToastId] = React.useState(null);
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+  const hiddenInputIdtty = React.useRef(null);
+  const navigate = useNavigate();
+  const [fields, setFields] = React.useState(null);
+  const toast = useToast();
 
-  table {
-    width:100%;
-    border-spacing: 0;
-    border-top: 1px solid #ebebeb;
+  const handleUploadIdentity = (e) => {
+    hiddenInputIdtty.current.click();
+  };
+  const [
+    createMasterProduct,
+    { isLoading, isSuccess: success, isError: errorUpload },
+  ] = useCreateMasterProductMutation();
+  const { data: bandTypes } = useGetBandTypeQuery({ page: 0, size: 9999 });
 
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
+  const { data: grouparea } = useGetListAreaGroupQuery({ page: 0, size: 9999 });
 
-    th{
-    background-color: #fff;
-    color: #231F20;
-    padding: 13px 15px;
-    border-top: 1px solid #ebebeb;
-    border-bottom: 1px solid #ebebeb;
-    text-align: left;
-    white-space: nowrap;
-    font-weight: bold;
-    min-width: 40px;
-    vertical-align: bottom;
-    background-clip: padding-box;
-    font-family:"Mulish";
-    },
-    td {
-      background-color: #fff;
-      font-family:"Mulish";
-      color: #231F20;
-      padding: 13px 15px;
-      border-top: 1px solid #ebebeb;
-      border-bottom: 1px solid #ebebeb;
-      text-align: left;
-      white-space: nowrap;
-      font-weight: normal;
-      min-width: 40px;
-      vertical-align: bottom;
-      background-clip: padding-box;
-    }
-  }
-`;
+  const { data: planTypes } = useGetPlanTypesQuery({ page: 0, size: 9999 });
 
-function usePrevious(value) {
-  // The ref object is a generic container whose current property is mutable ...
-  // ... and can hold any value, similar to an instance property on a class
-  const ref = React.useRef();
-  // Store current value in ref
+  const { data: travellerTypes } = useGetTravellerTypesQuery({
+    page: 0,
+    size: 9999,
+  });
+  const [filterby] = React.useState({
+    travelAgentName: '',
+    custCode: '',
+  });
+  const { data: { response: travelagents } = {} } = useGetTravelAgentQuery({
+    page: 0,
+    size: 9999,
+    ...filterby,
+  });
+
   React.useEffect(() => {
-    ref.current = value;
-  }, [value]); // Only re-run if value changes
-  // Return previous value (happens before update in useEffect above)
-  return ref.current;
-}
-const IndeterminateCheckbox = React.forwardRef(
-  ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = React.useRef();
-    const resolvedRef = ref || defaultRef;
+    if (bandTypes) {
+      let duration = bandTypes?.response.map((obj) => ({
+        ...obj,
+        label: obj.travelDurationName,
+        value: obj.travelDurationName,
+      }));
+      dispatch(setListBandType(duration));
+    }
+  }, [bandTypes, dispatch]);
 
-    React.useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate;
-    }, [resolvedRef, indeterminate]);
+  React.useEffect(() => {
+    if (travelagents) {
+      let agents = travelagents?.map((obj) => ({
+        ...obj,
+        label: obj.travelAgentName,
+        value: obj.travelAgentName,
+      }));
+      dispatch(setListTravellAgents(agents));
+    }
+  }, [travelagents, dispatch]);
 
-    return (
-      <>
-        <input type="checkbox" ref={resolvedRef} {...rest} />
-      </>
-    );
-  }
-);
-function GlobalFilter({
-  preGlobalFilteredRows,
-  globalFilter,
-  setGlobalFilter,
-}) {
-  const count = preGlobalFilteredRows.length
-  const [value, setValue] = React.useState(globalFilter)
-  const onChange = useAsyncDebounce(value => {
-    setGlobalFilter(value || undefined)
-  }, 200)
+  React.useEffect(() => {
+    if (grouparea) {
+      let area = grouparea?.response.map((obj) => ({
+        ...obj,
+        label: obj.areaGroupName,
+        value: obj.areaGroupName,
+      }));
+      dispatch(setListArea(area));
+    }
+  }, [grouparea, dispatch]);
 
-  return (
-    <span>
-      Search:{' '}
-      <input
-        value={value || ""}
-        onChange={e => {
-          setValue(e.target.value);
-          onChange(e.target.value);
-        }}
-        placeholder={`${count} records...`}
-        style={{
-          fontSize: '1.1rem',
-          border: '0',
-        }}
-      />
-    </span>
-  )
-}
+  // console.log('variant', variant);
 
-function fuzzyTextFilterFn(rows, id, filterValue) {
-  return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
-}
+  React.useEffect(() => {
+    if (planTypes) {
+      let plan = planTypes?.response.map((obj) => ({
+        ...obj,
+        label: obj.name,
+        value: obj.name,
+      }));
+      dispatch(setListPlanType(plan));
+    }
+  }, [planTypes, dispatch]);
 
-// Let the table remove the filter if the string is empty
-fuzzyTextFilterFn.autoRemove = val => !val
+  React.useEffect(() => {
+    if (travellerTypes) {
+      let type = travellerTypes?.response.map((obj) => ({
+        ...obj,
+        label: obj.name,
+        value: obj.name,
+      }));
+      dispatch(setListTravellerType(type));
+    }
+  }, [travellerTypes, dispatch]);
 
-const Tables = ({
-  columns,
-  data,
-  fetchData,
-  loading,
-  // globalFilter,
-  pageCount: controlledPageCount}) => {
- const dispatch = useDispatch()
- const listuser = useSelector(listProduct)
- const selected = useSelector(listProductSelection)
- const prevSelected = usePrevious(selected)
- const { isOpen, onOpen, onClose } = useDisclosure()
- const filterOptions = { filteredIds: [] };
- const toast = useToast()
- const filterTypes = React.useMemo(
-    () => ({
-      // Add a new fuzzyTextFilterFn filter type.
-      fuzzyText: fuzzyTextFilterFn,
-      // Or, override the default text filter to use
-      // "startWith"
-      text: (rows, id, filterValue) => {
-        return rows.filter(row => {
-          const rowValue = row.values[id]
-          return rowValue !== undefined
-            ? String(rowValue)
-                .toLowerCase()
-                .startsWith(String(filterValue).toLowerCase())
-            : true
-        })
+  React.useEffect(() => {
+    if (variant) {
+      let type = variant?.map((obj) => ({
+        ...obj,
+        label: obj.name,
+        value: obj.name,
+      }));
+      dispatch(setListVariant(type));
+    }
+  }, [variant, dispatch]);
+
+  const total = React.useMemo(() => {
+    let tot;
+    tot =
+      parseInt(formstate?.commissionlvl1) +
+      parseInt(formstate?.commissionlvl2) +
+      parseInt(formstate?.commissionlvl3);
+    return tot;
+  }, [
+    formstate?.commissionlvl1,
+    formstate?.commissionlvl2,
+    formstate?.commissionlvl3,
+  ]);
+
+  const handleNext = async (e) => {
+    e.preventDefault();
+    const constData = {
+      productName: formstate?.productName,
+      code: formstate?.productCode,
+      productCode: formstate?.productCode,
+      currId: formstate?.currId,
+      value: '100',
+      productDescription: formstate?.productDescription,
+      productBrochure: 'http://example.com/brochure.pdf',
+      productPersonalAccidentCover: formstate?.personalAccidentCover,
+      productMedicalCover: formstate?.productMedicalCover,
+      productTravelCover: formstate?.productTravelCover,
+      travellerType: {
+        id: formstate?.planType[0]?.id,
       },
-    }),
-    []
-  )
- 
-   const onOpenModal = () => {
-        onOpen()
-        // getSelectedRows()
- }
-    const onCloseModal = () => {
-        onClose()
-        dispatch(setListSelectProduct([]))
-        // resetSelectedRows: () => toggleAllRowsSelected(false)
-        // getSelectedRows()
-    }
-     const clearSelect = () => {
-     dispatch(setListSelectProduct([]))
-     onClose()
-     const rowIds = listuser?.map((item,i) =>i);
-     rowIds.forEach(id => toggleRowSelected(id, false));
- }
-     const cancelDelete = () => {
-     onClose()
- }
-    const deletedUser = () => {
-    //  dispatch(setMasterUser([]))
-     onOpen()
-    //  const rowIds = listuser?.map((item,i) =>i);
-    //  rowIds.forEach(id => toggleRowSelected(id, false));
- }
-  // Use the state and functions returned from useTable to build your UI
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    selectedFlatRows,
-    toggleAllRowsSelected,
-    toggleRowSelected,
-    // which has only the rows for the active page
-
-    // The rest of these things are super handy, too ;)
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    state,
-    previousPage,
-    setPageSize,
-    preGlobalFilteredRows,
-    setGlobalFilter,
-    // Get the state from the instance
-    state: { pageIndex, pageSize,selectedRowIds,globalFilter },
-  } = useTable(
-    {
-      columns,
-      data,
-      initialState: { pageIndex: 0 }, // Pass our hoisted table state
-      manualPagination: true, // Tell the usePagination
-      // hook that we'll handle our own data fetching
-      // This means we'll also have to provide our own
-      // pageCount.
-      pageCount: controlledPageCount,
-      filterTypes,
-    },
-    useGlobalFilter,
-    usePagination,
-    useRowSelect,
-    (hooks) => {
-      hooks.visibleColumns.push((columns) => [
-        // Let's make a column for selection
-        {
-          id: "selection",
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
-          Header: ({ getToggleAllRowsSelectedProps }) => (
-            <div style={{display:"flex", justifyContent:"center", alignItems:'center'}}>
-              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-            </div>
-          ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
-          Cell: ({ row }) => (
-            <div style={{display:"flex", justifyContent:"center", alignItems:'center'}}>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          )
-        },
-        ...columns
-      ]);
-    }
-      );
-  const prev = usePrevious(selectedRowIds)
-  React.useEffect(() => {
-      toggleAllRowsSelected();
-  }, []);
-    
-  React.useEffect(() => {
-      if (JSON.stringify(prev) !== JSON.stringify(selectedRowIds)) {
-          getValues(selectedFlatRows)
-      }
-  }, [prev, selectedRowIds]);
-  
-  // Render the UI for your table
-    const getValues = (data) => {
-     let original = data.map((item) => item.original)
-     dispatch(setListSelectProduct(original))
-    }
-    
-    const deletedUserUpdate = (e) => {
-        e.preventDefault()
-        const nextState = listuser.filter(
-        item => !selected.some(({ id }) => item.id === id)
+      bandType: {
+        id: formstate?.bandType[0]?.id,
+      },
+      areaGroup: {
+        id: formstate?.groupArea[0]?.id,
+      },
+      planType: {
+        id: formstate?.planType[0]?.id,
+      },
+      productAdditionalWeek:
+        formstate?.additionalWeek === ''
+          ? null
+          : {
+              id: formstate?.additionalWeek[0].id,
+            },
+      benefitDoc: null,
+      wordingDoc: null,
+      covidDoc: null,
+      npwp: true,
+      premiumPrice: Number(formstate?.premiumPrice),
+      commisionLv1: Number(formstate?.commissionlvl1),
+      commisionLv2: Number(formstate?.commissionlvl2),
+      commisionLv3: Number(formstate?.commissionlvl3),
+      totalCommision: (
+        Math.ceil(total * formstate?.premiumPrice) / 100
+      ).toFixed(0),
+      afterCommisionPrice: Math.ceil(
+        formstate?.premiumPrice - (total * formstate?.premiumPrice) / 100
+      ).toFixed(0),
+      ppn: 10.0,
+      pph23: 2.0,
+      ppnValue: 8.25,
+      pph23Value: 1.65,
+      ajiPrice: 92.4,
+      variants: formstate?.variants.map((v) => {
+        return { id: v.id };
+      }),
+    };
+    try {
+      let data = await createMasterProduct(constData);
+      if (data?.data) {
+        showSuccessToast('Created master product successfully!');
+        dispatch(
+          setProductForm({
+            productName: '',
+            code: '',
+            productCode: '',
+            currId: '',
+            value: '',
+            productDescription: '',
+            productBrochure: '',
+            productPersonalAccidentCover: '',
+            productMedicalCover: '',
+            productTravelCover: '',
+            travellerType: '',
+            bandType: '',
+            areaGroup: '',
+            planType: '',
+            productAdditionalWeek: null,
+            benefitDoc: null,
+            wordingDoc: null,
+            covidDoc: null,
+            npwp: false,
+            premiumPrice: 0,
+            commisionLv1: 0,
+            commisionLv2: 0,
+            commisionLv3: 0,
+            totalCommision: 0,
+            afterCommisionPrice: 0,
+            ppn: 0,
+            pph23: 0,
+            ppnValue: 0,
+            pph23Value: 0,
+            ajiPrice: 0,
+            variant: [],
+          })
         );
-        console.log('nextState',nextState)
-        dispatch(setMasterProduct(nextState))
-        dispatch(setListSelectProduct([]))
-        onClose()
-        toast({
-                  title: `Deleted Success`,
-                  status:"success",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-                })
-  } 
-  React.useEffect(() => {
-    fetchData({ pageIndex, pageSize })
-  }, [fetchData, pageIndex, pageSize])
-  React.useEffect(() => {
-    setGlobalFilter(globalFilter || undefined);
-  }, [globalFilter]);
-  
-  return (
-      <>
-    <Modal size="xl" blockScrollOnMount={false} closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent maxW="56rem">
-                <ModalHeader>
-                    <Heading variant="primary" as="div" size="lg" fontFamily={'Mulish'} color={'#231F20'} style={{fontSize:'18px'}}>
-                        Delete Product
-                    </Heading>
-                    <Text as="p" fontSize={'sm'} fontFamily={'Mulish'} color={'#231F20'} style={{fontSize:'14px'}} fontWeight={'normal'}>
-                        {/* You’re about to delete {selected && selected?.length > 0} product: */}
-                    </Text>
-                </ModalHeader>
-                <ModalCloseButton onClick={clearSelect}/>
-                <ModalBody pb={6}>
-                   <TableContainer>
-                    <TableNew variant={'simple'}>
-                        <Thead>
-                        <Tr>
-                                   <Th>Product Id</Th>
-                                    <Th>Product Code</Th>
-                                    <Th>Product Detail Code</Th>
-                                    <Th >Currency</Th>
-                                    <Th >Product Description</Th>
-                                    <Th >Personal Accident Cover</Th>
-                                    <Th >Medical Cover</Th>
-                                    <Th >Travel Cover	</Th>
-                                    <Th >Product Type	</Th>
-                                    <Th >Travel Duration</Th>
-                                    <Th >Additional Week</Th>
-                                    <Th >Updated Data</Th>
-                        </Tr>
-                        </Thead>
-                        <Tbody>
-                             {
-                                    selected && selected?.map((item, i) => {
-                                        return (
-                                            <Tr key={item.id} >
-                                                <Td>{item.productId }</Td>
-                                                <Td>{ item.productCode}</Td>
-                                                <Td>{ item.productDetailCode}</Td>
-                                                <Td>{ item.currency}</Td>
-                                                <Td>{ item.productDescription}</Td>
-                                                <Td>{ item.personalAccidentCover}</Td>
-                                                <Td>{ item.medicalCover}</Td>
-                                                <Td>{ item.travelCover}</Td>
-                                                <Td>{ item.productType}</Td>
-                                                <Td>{ item.travelDuration}</Td>
-                                                <Td>{ item.additionalWeek}</Td>
-                                                <Td>{ item.updatedData}</Td>
-                                            </Tr>
-                                        )
-                                    })
-                               }
-                        </Tbody>
-                         <TableCaption textAlign={'left'} >
-                                        <Text as="p" fontSize={'sm'} style={{fontSize:"14px"}} fontFamily={'Mulish'}>
-                                         Deleting these products will remove all of it’s information from the database. This cannot be undone.
-                                        </Text>
-                         </TableCaption>
-                    </TableNew>
-                    </TableContainer>
-                </ModalBody>
+        navigate('/master-data/master-products');
+      } else {
+        const errorMessage = `Failed to created master product. Status Code: ${data?.error?.status}`;
+        showErrorToast(errorMessage);
+        dispatch(
+          setProductForm({
+            productName: '',
+            code: '',
+            productCode: '',
+            currId: '',
+            value: '',
+            productDescription: '',
+            productBrochure: '',
+            productPersonalAccidentCover: '',
+            productMedicalCover: '',
+            productTravelCover: '',
+            travellerType: '',
+            bandType: '',
+            areaGroup: '',
+            planType: '',
+            productAdditionalWeek: null,
+            benefitDoc: null,
+            wordingDoc: null,
+            covidDoc: null,
+            npwp: false,
+            premiumPrice: 0,
+            commisionLv1: 0,
+            commisionLv2: 0,
+            commisionLv3: 0,
+            totalCommision: 0,
+            afterCommisionPrice: 0,
+            ppn: 0,
+            pph23: 0,
+            ppnValue: 0,
+            pph23Value: 0,
+            ajiPrice: 0,
+            variant: [],
+          })
+        );
+      }
+    } catch (err) {
+      const errorMessage = `Failed to created master product. Status Code: ${err?.error?.status}`;
+      showErrorToast(errorMessage);
+    }
+    setFields(null);
+    navigate('/master-data/master-products');
+  };
 
-                <ModalFooter>
-                        <Button onClick={cancelDelete}>Cancel</Button>
-                      <Button colorScheme='blue' mr={3} onClick={ deletedUserUpdate}>
-                        Delete Product
-                        </Button>
-                </ModalFooter>
-                </ModalContent>
-            </Modal>
-    <Box mb="1em" display="flex" alignItems="center" gap="10px">
-        
-        {
-             selected?.length > 0 && (
-                <>
-                <Text as="p" size="sm">
-                {Object.keys(selectedRowIds).length} Selected
-                 </Text>
-                 <IconButton border="none" bg={'white'} onClick={clearSelect} size="sm" icon={<AiOutlineClose size="16px" color='black'/>} />
-                <Box display="flex" gap="5px" alignItems="center">
-                    <IconButton border="none" bg={'white'} size="sm" icon={<BsFillTrashFill size="16px" color='black' onClick={ deletedUser} />} />
-                    {/* <Text as="p" size="sm">Delete</Text> */}
-                </Box>
-                </>
-            )
-        }
-        
+  const handleData = (e) => {
+    const data = {
+      ...formstate,
+      [e.target.name]: e.target.value,
+    };
+    dispatch(setProductForm(data));
+  };
+  function handleSelectAdditional(data) {
+    const forms = {
+      ...formstate,
+      additionalWeek: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+  function handleSelectBandType(data) {
+    const forms = {
+      ...formstate,
+      bandType: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+
+  function handleVariant(data) {
+    const forms = {
+      ...formstate,
+      variants: [...data],
+    };
+    dispatch(setProductForm(forms));
+  }
+
+  function handletravellerType(data) {
+    const forms = {
+      ...formstate,
+      travellerType: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+
+  function handleGroupArea(data) {
+    const forms = {
+      ...formstate,
+      groupArea: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+  function handleSelectPlanType(data) {
+    const forms = {
+      ...formstate,
+      planType: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+  function handleTravelDuration(data) {
+    const forms = {
+      ...formstate,
+      travelDuration: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+  function handleSelectProductType(data) {
+    const forms = {
+      ...formstate,
+      productType: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+
+  function handleSelectAgent(data) {
+    console.log('data', data);
+    const newData = {
+      ...formstate,
+      travelAgentName: { ...data },
+    };
+    dispatch(setProductForm(newData));
+  }
+  function handleSelectProduct(data) {
+    console.log('data', data);
+    const newData = {
+      ...formstate,
+      productName: [{ ...data }],
+    };
+    dispatch(setProductForm(newData));
+  }
+  const handleDatas = (e) => {
+    const newData = {
+      ...formstate,
+      [e.target.name]: e.target.value,
+    };
+
+    dispatch(setProductForm(newData));
+  };
+
+  React.useMemo(() => {
+    if (additionalWeeks) {
+      let list = [
+        { label: 'SELECT OPTION', value: '', id: '', name: '' },
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        ...additionalWeeks?.map((obj, i) => ({
+          ...obj,
+          productCode: obj.productCode,
+          label: obj.productCode,
+          name: obj.productCode,
+          value: obj.id,
+          idx: i,
+        })),
+      ];
+      dispatch(setListAdditionalWeeks(list));
+    }
+  }, [additionalWeeks, dispatch]);
+
+  return (
+    <Box>
+      <Box
+        display={'flex'}
+        justifyContent={'space-between'}
+        alignItems={'center'}
+      >
+        <Box
+          display="flex"
+          justifyContent={'space-between'}
+          w="100%"
+          borderBottom="1px"
+          borderColor={'#ebebeb'}
+        >
+          <Box w="100%" pt="15px" pl="1em" pr="1em">
+            <Breadcrumb
+              spacing="8px"
+              separator={<ChevronRightIcon color="gray.500" />}
+            >
+              <BreadcrumbItem isCurrentPage>
+                <BreadcrumbLink as={NavLink} to="/master-data/master-products">
+                  <Text
+                    as="b"
+                    ml="4"
+                    fontSize="sm"
+                    color="#065BAA"
+                    _hover={{
+                      borderBottom: '#065BAA',
+                      border: '1 px solid',
+                    }}
+                  >
+                    Proudcts
+                  </Text>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbItem>
+                <BreadcrumbLink
+                  as={NavLink}
+                  to="#"
+                  style={{ pointerEvents: 'none' }}
+                >
+                  <Text as={'b'} fontSize={'sm'} color="#231F20">
+                    create product
+                  </Text>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </Breadcrumb>
+          </Box>
+        </Box>
       </Box>
-      <Box bg="white" overflow={'scroll'} p="3">
-        <input
-        type="text"
-        value={globalFilter || ""}
-        onChange={e => setGlobalFilter(e.target.value)}
-      />
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.slice(0, 10).map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-          <tr>
-            {loading ? (
-              // Use our custom loading state to show a loading indicator
-              <td colSpan="10000">Loading...</td>
-            ) : (
-              <td colSpan="10000">
-                Showing {page.length} of ~{controlledPageCount * pageSize}{' '}
-                results
-              </td>
-            )}
-          </tr>
-        </tbody>
-        </table>
-        </Box>
-      <Box display="flex" justifyContent={'flex-end'} alignItems={'center'} mt="1em">
-        <Box>
-          <Button onClick={() => previousPage()} disabled={!canPreviousPage} bg="white" border={'none'} _hover={{
-            bg: "#f0eeee",
-            borderRadius: "5px",
-            WebkitBorderRadius: "5px",
-            MozBorderRadius:"5px"
-        }}>
-            <BiSkipPreviousCircle size="25px" color="black" />
-            <Text as="p" fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">Prev</Text>
-        </Button>{' | '}
-          <Button onClick={() => nextPage()} disabled={!canNextPage} bg="white" border={'none'}>
-            <BiSkipNextCircle size="25px" color="black" />
-            <Text fontFamily={'Mulish'} style={{fontSize:"12px"}} color="#231F20" pl="5px">
-            Next
-            </Text>
-          </Button>{' '}
-        </Box>
-        <Box>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </Box>
-        {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Input
+                id="inputs"
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                value={formstate?.productCode}
+                name="productCode"
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                fontFamily={'Mulish'}
+                style={{ fontSize: '14px' }}
+              >
+                Product Code
+              </FormLabel>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Input
+                id="inputs"
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                value={formstate?.productName}
+                name="productName"
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                fontFamily={'Mulish'}
+                style={{ fontSize: '14px' }}
+              >
+                Product Name
+              </FormLabel>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box width={{ base: '100%', md: '260px' }}>
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Input
+                id="inputs"
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                value={formstate?.currId}
+                name="currId"
+                onChange={handleData}
+                textTransform={'uppercase'}
+                h="48px"
+                variant={'custom'}
+                background={formstate?.currId !== '' ? '#e8f0fe' : '#ebebeb'}
+              />
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                fontFamily={'Mulish'}
+                style={{ fontSize: '14px' }}
+              >
+                Currency
+              </FormLabel>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+          <Box width={{ base: '100%', md: '260px' }}>
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Input
+                id="inputs"
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                value={formstate?.productDetailCode}
+                name="productDetailCode"
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                fontFamily={'Mulish'}
+                style={{ fontSize: '14px' }}
+              >
+                Product Detail Code
+              </FormLabel>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
           }}
         >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
-      </Box>
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedRowIds: selectedRowIds,
-              "selectedFlatRows[].original": selectedFlatRows.map(
-                (d) => d.original
-              )
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
-    </>
-  );
-}
-
-const MasterProduct = () => {
-    const [MasterChecked, setMasterChecked] = useState(false)
-    const dispatch = useDispatch()
-    const tempList = useSelector(listProduct);
-    const [data, setData] = React.useState([])
-    const [loading, setLoading] = React.useState(false)
-    const [pageCount, setPageCount] = React.useState(0)
-    const fetchIdRef = React.useRef(0)
-    const [globalFilter, setGlobalFilter] = React.useState("");
-    const fetchData = React.useCallback(({ pageSize, pageIndex }) => {
-    // This will get called when the table needs new data
-    // You could fetch your data from literally anywhere,
-    // even a server. But for this example, we'll just fake it.
-
-    // Give this fetch an ID
-    const fetchId = ++fetchIdRef.current
-
-    // Set the loading state
-    setLoading(true)
-    const onChange = (e) => setGlobalFilter(e.target.value);
-    // We'll even set a delay to simulate a server here
-    setTimeout(() => {
-      // Only update the data if this is the latest fetch
-      if (fetchId === fetchIdRef.current) {
-        const startRow = pageSize * pageIndex
-        const endRow = startRow + pageSize
-        setData(tempList.slice(startRow, endRow))
-
-        // Your server could send back total page count.
-        // For now we'll just fake it, too
-        setPageCount(Math.ceil(tempList.length / pageSize))
-
-        setLoading(false)
-      }
-    }, 1000)
-  }, [])
-     const columns = React.useMemo(
-    () => [
-      {
-        Header: "Product Id",
-        accessor: "productId",
-        filter: 'fuzzyText',
-        Cell: ({ row }) => (
-       
-          <Link
-            color="#065BAA"
-            style={{textDecoration:"underline"}}
-            to={`/product-detail/${row.original.productId}`}
-          >
-            {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.productId}
-          </Link>
-       
-    ),
-      },
-      {
-        Header: "Product Code",
-        accessor: "productCode",
-        enableGlobalFilter: true, 
-      },
-      {
-        Header: "Product Detail Code",
-        accessor: "productDetailCode",
-        enableGlobalFilter: true, 
-      },
-      {
-        Header: "Currency",
-        accessor: "currency"
-      },
-      {
-        Header: "Product Description",
-        accessor: "productDescription"
-      },
-      {
-        Header: "Personal Accident Cover",
-        accessor: "personalAccidentCover"
-      },
-      {
-        Header: "Medical Cover",
-        accessor: "medicalCover"
-      },
-      {
-        Header: "Travel Cover",
-        accessor: "travelCover"
-      },
-      {
-        Header: "Product Type",
-        accessor: "productType",
-        enableGlobalFilter: true, 
-      },
-      {
-        Header: "Travel Duration",
-        accessor: "travelDuration"
-      },
-      {
-        Header: "Additional Week",
-        accessor: "additionalWeek"
-      },
-      {
-        Header: "Updated Data",
-        accessor: "updatedData"
-      }
-    ],
-    []
-  );
-  const onChange = (e) => setGlobalFilter(e.target.value);
-    // const data = React.useMemo(() => tempList);
-    // console.log('ddd', data)
-    const {
-        data: users,
-        isLoading,
-        isSuccess,
-        isError,
-        error
-    } = useGetUsersQuery()
-
-    let content;
-    if (isLoading) {
-        content = <Center h='50vh' color='#065BAA'>
-                       <PulseLoader color={"#065BAA"} />
-                   </Center>;
-    } else if (Data) {
-        content = (
-            <Box pl="2em" pr="2em" mt="5em"> 
-            <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                <Heading as={'h6'} size={'sm'}>Products</Heading>
-                <Stack direction='row' spacing={4} m={'2.5'}>
-                  <Box>
-                    <InputGroup borderRadius={5} size="sm">
-                      <InputLeftElement
-                        pointerEvents="none"
-                        children={<Search2Icon color="gray.600" />}
-                      />
-                    <Input value={globalFilter} onChange={onChange}  type="text" placeholder="Search product id" border="1px solid #949494" />
-                      <InputRightAddon
-                        p={0}
-                        border="none"
-                      >
-                      </InputRightAddon>
-                    </InputGroup>
-                  </Box>
-                  <Link to="/master-data/create-product"> 
-                    <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white">
-                        Add Product 
-                    </Button>
-                  </Link>
-                </Stack>
-            </Box>
-            
-           
-                <Styles>
-                <Tables
-                columns={columns}
-                data={data}
-                fetchData={fetchData}
-                loading={loading}
-                pageCount={pageCount}
-                // globalFilter={globalFilter}
-                />
-                </Styles>
-                {/* <Link to="/welcome">Back to Welcome</Link> */}
+          <Box width={{ base: '100%', md: '540px' }}>
+            <FormControl
+              variant="floating"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Box>
+                <Box className="floating-label">
+                  <Select
+                    isMulti={false}
+                    name="colors"
+                    onChange={handleSelectBandType}
+                    value={formstate?.bandType}
+                    classNamePrefix="chakra-react-select"
+                    options={additonal}
+                    placeholder=""
+                    closeMenuOnSelect={true}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                    }}
+                    chakraStyles={{
+                      dropdownIndicator: (
+                        prev,
+                        { selectProps: { menuIsOpen } }
+                      ) => ({
+                        ...prev,
+                        '> svg': {
+                          transitionDuration: 'normal',
+                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                        },
+                      }),
+                    }}
+                  />
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate !== null && formstate?.bandType?.length !== 0
+                          ? 'translate(-1px, -7px) scale(0.75)'
+                          : 'translate(0px, 3px) scale(0.75)',
+                      color:
+                        formstate !== null && formstate?.bandType?.length !== 0
+                          ? '#065baa'
+                          : '#231F20',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Band Type
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
           </Box>
-        )
-    } else if (isError) {
-        content = <p>{JSON.stringify(error)}</p>;
-    }
+        </Flex>
+      </Flex>
+      <Box width={{ base: '100%', md: '540px' }} m="auto">
+        <FormControl
+          variant="floating"
+          id="first-name"
+          isRequired
+          fontFamily={'Mulish'}
+          mt="14px"
+        >
+          <Textarea
+            id="myTextarea"
+            placeholder=" "
+            _placeholder={{ opacity: 1, color: 'gray.500' }}
+            value={formstate?.productDescription}
+            name="productDescription"
+            onChange={handleData}
+            h="48px"
+          />
+          <FormLabel
+            fontSize="12"
+            pt="1.5"
+            className={isActiveDescLoc ? 'Active' : ''}
+            fontFamily={'Mulish'}
+            style={{ fontSize: '14px' }}
+          >
+            Description
+          </FormLabel>
+          {/* It is important that the Label comes after the Control due to css selectors */}
+        </FormControl>
+      </Box>
+      <Box width={{ base: '100%', md: '540px' }} m="auto">
+        <FormControl
+          variant="floating"
+          id="first-name"
+          isRequired
+          fontFamily={'Mulish'}
+          mt="14px"
+        >
+          <Textarea
+            id="myTextarea"
+            placeholder=" "
+            _placeholder={{ opacity: 1, color: 'gray.500' }}
+            name="personalAccidentCover"
+            value={formstate?.personalAccidentCover}
+            onChange={handleData}
+            h="48px"
+            background={
+              formstate?.personalAccidentCover !== '' ? '#e8f0fe' : ''
+            }
+          />
+          <FormLabel
+            fontSize="12"
+            pt="1.5"
+            className={isActiveDescLoc ? 'Active' : ''}
+            fontFamily={'Mulish'}
+            style={{ fontSize: '14px' }}
+          >
+            Personal Accident Cover
+          </FormLabel>
+          {/* It is important that the Label comes after the Control due to css selectors */}
+        </FormControl>
+      </Box>
+      <Box width={{ base: '100%', md: '540px' }} m="auto">
+        <FormControl
+          variant="floating"
+          id="first-name"
+          isRequired
+          fontFamily={'Mulish'}
+          mt="14px"
+        >
+          <Textarea
+            id="myTextarea"
+            placeholder=" "
+            _placeholder={{ opacity: 1, color: 'gray.500' }}
+            value={formstate?.productMedicalCover}
+            name="productMedicalCover"
+            onChange={handleData}
+            h="48px"
+            background={formstate?.productMedicalCover !== '' ? '#e8f0fe' : ''}
+          />
+          <FormLabel
+            fontSize="12"
+            pt="1.5"
+            className={isActiveDescLoc ? 'Active' : ''}
+            fontFamily={'Mulish'}
+            style={{ fontSize: '14px' }}
+          >
+            Product Medical Cover
+          </FormLabel>
+          {/* It is important that the Label comes after the Control due to css selectors */}
+        </FormControl>
+      </Box>
+      <Box width={{ base: '100%', md: '540px' }} m="auto">
+        <FormControl
+          variant="floating"
+          id="first-name"
+          isRequired
+          fontFamily={'Mulish'}
+          mt="14px"
+        >
+          <Textarea
+            id="myTextarea"
+            placeholder=" "
+            _placeholder={{ opacity: 1, color: 'gray.500' }}
+            value={formstate?.productTravelCover}
+            name="productTravelCover"
+            onChange={handleData}
+            background={formstate?.productTravelCover !== '' ? '#e8f0fe' : ''}
+          />
+          <FormLabel
+            pt="1.5"
+            style={{
+              transform:
+                formstate !== null && formstate?.productTravelCover !== ''
+                  ? 'translate(0, -10px) scale(0.75)'
+                  : 'translate(0, 4px) scale(0.75)',
+              color:
+                formstate !== null && formstate?.productTravelCover !== ''
+                  ? '#065baa'
+                  : '#231F20',
+              fontSize: '14px',
+            }}
+            fontFamily={'Mulish'}
+          >
+            Product Travel Cover
+          </FormLabel>
+          {/* It is important that the Label comes after the Control due to css selectors */}
+        </FormControl>
+      </Box>
+      {/* <Box width={{ base: '100%', md: '540px' }} m="auto">
+        <FormControl
+          variant="floating"
+          fontFamily={'Mulish'}
+          id="float-label"
+          mt="30px"
+        >
+          <Button
+            bg="white"
+            variant={'base'}
+            w={{ base: '100%', md: '363px' }}
+            onClick={handleUploadIdentity}
+            h="48px"
+            border={'2px'}
+            borderStyle={'dashed'}
+            borderColor={'#ebebeb'}
+          >
+            <MdAdd size={'1em'} color="#065BAA" /> Upload your file
+          </Button>
+          <Input
+            type="file"
+            name={'identityCard'}
+            // onChange={(e) => handleidentityCard(e, 'File Identity')}
+            style={{ display: 'none' }}
+            ref={hiddenInputIdtty}
+          />
+          <FormLabel
+            fontSize="14"
+            pt="1.5"
+            style={{
+              transform: 'translate(-12px, -37px) scale(0.75)',
+              color: '#231F20',
+              fontSize: '20px',
+              fontWeight: 'bold',
+            }}
+            fontFamily={'Mulish'}
+          >
+            Create Product
+          </FormLabel>
+          <Text
+            as="p"
+            fontSize={'sm'}
+            fontFamily={'Mulish'}
+            style={{ fontSize: '12px' }}
+          ></Text>
+          <Button onClick={handleUploadClick}>Upload</Button>
+        </FormControl>
+      </Box> */}
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box width={{ base: '100%', md: '260px' }} m="auto">
+            <FormControl
+              variant="floating"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Box>
+                <Box className="floating-label">
+                  <Select
+                    isMulti={false}
+                    name="colors"
+                    onChange={handleGroupArea}
+                    value={formstate?.groupArea}
+                    classNamePrefix="chakra-react-select"
+                    options={areaLists}
+                    placeholder=""
+                    closeMenuOnSelect={true}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                    }}
+                    chakraStyles={{
+                      dropdownIndicator: (
+                        prev,
+                        { selectProps: { menuIsOpen } }
+                      ) => ({
+                        ...prev,
+                        '> svg': {
+                          transitionDuration: 'normal',
+                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                        },
+                      }),
+                    }}
+                  />
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate !== null && formstate?.groupArea?.length !== 0
+                          ? 'translate(0, -10px) scale(0.75)'
+                          : 'translate(0, 4px) scale(0.75)',
+                      color:
+                        formstate !== null && formstate?.groupArea?.length !== 0
+                          ? '#065baa'
+                          : '#231F20',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Area Group
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+          <Box width={{ base: '100%', md: '260px' }} m="auto">
+            <FormControl
+              variant="floating"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Box>
+                <Box className="floating-label">
+                  <Select
+                    isMulti={false}
+                    name="colors"
+                    onChange={handletravellerType}
+                    value={formstate?.travellerType}
+                    classNamePrefix="chakra-react-select"
+                    options={travelertype}
+                    placeholder=""
+                    closeMenuOnSelect={true}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                    }}
+                    chakraStyles={{
+                      dropdownIndicator: (
+                        prev,
+                        { selectProps: { menuIsOpen } }
+                      ) => ({
+                        ...prev,
+                        '> svg': {
+                          transitionDuration: 'normal',
+                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                        },
+                      }),
+                    }}
+                  />
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate !== null &&
+                        formstate?.travellerType?.length !== 0
+                          ? 'translate(0, -10px) scale(0.75)'
+                          : 'translate(0, 4px) scale(0.75)',
+                      color:
+                        formstate !== null &&
+                        formstate?.travellerType?.length !== 0
+                          ? '#065baa'
+                          : '#231F20',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Traveller Type
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
 
-    return content
-}
-export default MasterProduct
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <FormControl variant="floating" isRequired fontFamily={'Mulish'}>
+            <Box w="540px">
+              <Box className="react-select-container">
+                <Select
+                  isMulti={false}
+                  name="colors"
+                  onChange={handleSelectPlanType}
+                  value={formstate?.planType}
+                  classNamePrefix="chakra-react-select"
+                  options={listPlanType}
+                  closeMenuOnSelect={true}
+                  menuPortalTarget={document.body}
+                  styles={{
+                    menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                  }}
+                  components={{
+                    Placeholder: () => (
+                      <span
+                        style={{
+                          display: formstate?.planType ? 'none' : 'none',
+                        }}
+                      >
+                        Select an option
+                      </span>
+                    ),
+                  }}
+                  chakraStyles={{
+                    dropdownIndicator: (
+                      prev,
+                      { selectProps: { menuIsOpen } }
+                    ) => ({
+                      ...prev,
+                      '> svg': {
+                        transitionDuration: 'normal',
+                        transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                      },
+                    }),
+                  }}
+                />
+                <span className="highlight"></span>
+                <FormLabel
+                  pt="1.5"
+                  style={{
+                    transform:
+                      formstate !== null && formstate?.planType?.length !== 0
+                        ? 'translate(0, -10px) scale(0.75)'
+                        : 'translate(0, 4px) scale(0.75)',
+                    color:
+                      formstate !== null && formstate?.planType?.length !== 0
+                        ? '#065baa'
+                        : '#231F20',
+                    fontSize: '14px',
+                  }}
+                  fontFamily={'Mulish'}
+                >
+                  Plan Type
+                </FormLabel>
+              </Box>
+            </Box>
+            {/* It is important that the Label comes after the Control due to css selectors */}
+          </FormControl>
+        </Flex>
+      </Flex>
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box className="react-select-container" mt="1em">
+            <FormControl variant="floating" isRequired fontFamily={'Mulish'}>
+              <Box w="540px">
+                <Box className="react-select-container">
+                  <Select
+                    isMulti
+                    name="colors"
+                    onChange={handleVariant}
+                    value={formstate?.variants}
+                    classNamePrefix="chakra-react-select"
+                    options={listvariants}
+                    closeMenuOnSelect={true}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (provided) => ({
+                        ...provided,
+                        zIndex: 100,
+                      }),
+                    }}
+                    components={{
+                      Placeholder: () => (
+                        <span
+                          style={{
+                            display: formstate?.planType ? 'none' : 'none',
+                          }}
+                        >
+                          Select an option
+                        </span>
+                      ),
+                    }}
+                    chakraStyles={{
+                      dropdownIndicator: (
+                        prev,
+                        { selectProps: { menuIsOpen } }
+                      ) => ({
+                        ...prev,
+                        '> svg': {
+                          transitionDuration: 'normal',
+                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                        },
+                      }),
+                    }}
+                  />
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate !== null && formstate?.variant?.length !== 0
+                          ? 'translate(0, -10px) scale(0.75)'
+                          : 'translate(0, 4px) scale(0.75)',
+                      color:
+                        formstate !== null && formstate?.variant?.length !== 0
+                          ? '#065baa'
+                          : '#231F20',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Variant
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Input
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                name="premiumPrice"
+                value={formstate?.premiumPrice}
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
+              {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                zIndex={'0'}
+                style={{
+                  zIndex: 0,
+                  color:
+                    formstate !== null && formstate?.premiumPrice !== ''
+                      ? '#065baa'
+                      : '#171923',
+                  fontWeight: 'normal',
+                  paddingBottom: '4px',
+                }}
+              >
+                Premium Price
+              </FormLabel>
+              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+            </FormControl>
+          </Box>
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Stack>
+                <InputGroup size="sm">
+                  <Input
+                    type="number"
+                    placeholder=" "
+                    _placeholder={{ opacity: 1, color: 'gray.500' }}
+                    name="commissionlvl1"
+                    value={formstate?.commissionlvl1}
+                    onChange={handleData}
+                    h="48px"
+                    variant={'custom'}
+                  />
+                  <InputRightAddon children="%" h="48px" />
+                  <FormLabel
+                    fontSize="12"
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate?.commissionlvl2 !== ''
+                          ? 'translate(-3px, -8px) scale(0.75)'
+                          : 'translate(0px, 2px) scale(0.75)',
+                      fontSize: '14px',
+                      background: 'transparent',
+                      color:
+                        formstate !== null && formstate?.commissionlvl1 !== ''
+                          ? '#065baa'
+                          : '#171923',
+                      zIndex: '0',
+                      fontWeight: 'normal',
+                    }}
+                  >
+                    Commission Level 1
+                  </FormLabel>
+                </InputGroup>
+              </Stack>
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Input
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                name="commissionlvl2"
+                value={formstate?.commissionlvl2}
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
+              {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                zIndex={'0'}
+                style={{
+                  zIndex: 0,
+                  color:
+                    formstate !== null && formstate?.commissionlvl2 !== ''
+                      ? '#065baa'
+                      : '#171923',
+                  fontWeight: 'normal',
+                  paddingBottom: '4px',
+                }}
+              >
+                Commission Level 2
+              </FormLabel>
+              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+            </FormControl>
+          </Box>
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Stack>
+                <InputGroup size="sm">
+                  <Input
+                    type="number"
+                    placeholder=" "
+                    _placeholder={{ opacity: 1, color: 'gray.500' }}
+                    name="commissionlvl3"
+                    value={formstate?.commissionlvl3}
+                    onChange={handleData}
+                    h="48px"
+                    variant={'custom'}
+                  />
+                  <InputRightAddon children="%" h="48px" />
+                  <FormLabel
+                    fontSize="12"
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate?.commissionlvl3 !== ''
+                          ? 'translate(-3px, -8px) scale(0.75)'
+                          : 'translate(0px, 2px) scale(0.75)',
+                      fontSize: '14px',
+                      background: 'transparent',
+                      color:
+                        formstate !== null && formstate?.commissionlvl3 !== ''
+                          ? '#065baa'
+                          : '#171923',
+                      zIndex: '0',
+                      fontWeight: 'normal',
+                    }}
+                  >
+                    Commission Level 3
+                  </FormLabel>
+                </InputGroup>
+              </Stack>
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex
+        mt="1em"
+        width={{ base: '100%' }}
+        gridTemplateColumns={{
+          base: 'repeat(1, 1fr)',
+          sm: 'repeat(2, 1fr)',
+          md: 'repeat(3, 1fr)',
+          lg: 'repeat(4, 1fr)',
+        }}
+        justifyContent="center"
+        alignItems="center"
+        gap="20px"
+        flexWrap="wrap"
+        mx="auto"
+      >
+        <Box
+          border="1px solid #ebebeb"
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          fontSize="14px"
+          fontFamily="Mulish"
+        >
+          Total Commission
+        </Box>
+        <Box
+          border="1px solid #ebebeb"
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          fontSize="14px"
+          fontFamily="Mulish"
+        >
+          {'Rp '}
+          {(Math.ceil(total * formstate?.premiumPrice) / 100).toFixed(0)}
+        </Box>
+        <Box
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          border="none"
+        >
+          <Flex alignItems="center" gap="5px">
+            <RiErrorWarningLine size="25px" color="blue" />
+            <Box display="flex" flexDirection="column">
+              <Text
+                as="b"
+                fontSize="sm"
+                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              >
+                {' '}
+                Total commission:
+              </Text>
+              <Text
+                as="p"
+                fontSize="sm"
+                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              >
+                Calculated from commission level 1, 2 & 3
+              </Text>
+            </Box>
+          </Flex>
+        </Box>
+      </Flex>
+      <Flex
+        width={{ base: '100%' }}
+        gridTemplateColumns={{
+          base: 'repeat(1, 1fr)',
+          sm: 'repeat(2, 1fr)',
+          md: 'repeat(3, 1fr)',
+          lg: 'repeat(4, 1fr)',
+        }}
+        justifyContent="center"
+        alignItems="center"
+        gap="20px"
+        flexWrap="wrap"
+        mx="auto"
+      >
+        <Box
+          border="1px solid #ebebeb"
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          fontSize="14px"
+          fontFamily="Mulish"
+        >
+          After Commision
+        </Box>
+        <Box
+          border="1px solid #ebebeb"
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          fontSize="14px"
+          fontFamily="Mulish"
+        >
+          {'Rp '}
+          {Math.ceil(
+            formstate?.premiumPrice - (total * formstate?.premiumPrice) / 100
+          ).toFixed(0)}
+        </Box>
+        <Box
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          border="none"
+        >
+          <Flex alignItems="center" gap="5px">
+            <RiErrorWarningLine size="25px" color="blue" />
+            <Box display="flex" flexDirection="column">
+              <Text
+                as="b"
+                fontSize="sm"
+                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              >
+                {' '}
+                After commission price:
+              </Text>
+              <Text
+                as="p"
+                fontSize="sm"
+                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              >
+                Premium price - total commission
+              </Text>
+            </Box>
+          </Flex>
+        </Box>
+      </Flex>
+      <Box
+        display={'flex'}
+        justifyContent={'flex-end'}
+        alignItems={'center'}
+        pr="2em"
+      >
+        <Button
+          onClick={handleNext}
+          variant={'ClaimBtn'}
+          style={{ textTransform: 'uppercase', fontSize: '14px' }}
+          fontFamily="arial"
+          fontWeight={'700'}
+        >
+          ADD
+        </Button>
+      </Box>
+    </Box>
+  );
+};
+
+export default CommisionForm;
