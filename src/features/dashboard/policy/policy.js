@@ -736,6 +736,10 @@ const Polcies = () => {
     navigate(`/create-quota/search/${bookingId}`);
   };
 
+  const handleRedirectPaymentPage = (link) => {
+    window.open(link, '_blank', 'noreferrer');
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -770,10 +774,9 @@ const Polcies = () => {
         Cell: ({ row }) => (
           <Box
             onClick={
-              row.original.paymentStatus === 'WAITING_FOR_PAYMENT' ||
-              row.original.paymentStatus === null
-                ? () => handleRedirect(row.original.bookingId)
-                : null
+              row.original.paymentStatus === 'WAITING_FOR_PAYMENT'
+                ? () => handleRedirectPaymentPage(row.original.paymentLink)
+                : () => handleRedirect(row.original.bookingId)
             }
             // to={`/create-quota/search/${row.original.bookingId}`}
             color="#065BAA"
@@ -858,17 +861,25 @@ const Polcies = () => {
               <Button variant={'outline'} colorScheme="teal">
                 {'Success'}
               </Button>
-            ) : row.original.paymentStatus === 'FAIL' ? (
-              <Button variant={'outline'} colorScheme="red">
-                {'Success'}
+            ) : row.original.paymentStatus === 'WAITING_FOR_PAYMENT' ? (
+              <Button variant={'outline'} colorScheme="yellow">
+                {'Waiting For Payment'}
               </Button>
             ) : (
-              <Button variant={'outline'} colorScheme="yellow">
+              <Button variant={'outline'} colorScheme="red">
                 {'Pending'}
               </Button>
             )}
           </Box>
         ),
+      },
+      {
+        Header: 'Payment Code',
+        accessor: 'paymentCode',
+        maxWidth: 400,
+        minWidth: 200,
+        width: 200,
+        filter: 'fuzzyText',
       },
       {
         Header: 'Issued By',
