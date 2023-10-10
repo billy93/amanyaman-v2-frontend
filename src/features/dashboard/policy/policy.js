@@ -801,6 +801,7 @@ const Polcies = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Premium Price',
@@ -810,7 +811,7 @@ const Polcies = () => {
         width: 200,
         filter: 'fuzzyText',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {row?.original?.totalPrice !== null ? (
               <CurrencyFormatter amount={row.original.totalPrice} />
             ) : (
