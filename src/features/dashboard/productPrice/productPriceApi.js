@@ -100,6 +100,9 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         return {
           url: url,
           method: 'GET',
+          responseType: 'blob',
+          responseHandler: (response) =>
+            response.blob().then((blob) => URL.createObjectURL(blob)),
           prepareHeaders: (headers) => {
             headers.append('Accept', 'application/json');
             return headers;

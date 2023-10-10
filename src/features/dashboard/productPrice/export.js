@@ -3,21 +3,19 @@ import { useExportProductPriceQuery } from './productPriceApi';
 import { Button } from '@chakra-ui/react';
 import { MdLogin } from 'react-icons/md';
 
-const DownloadXLSButton = (props) => {
+const DownloadXLSButton = ({ params, page, size }) => {
   const {
     response: data,
     error,
     isLoading,
-  } = useExportProductPriceQuery({
-    skip: true,
-  });
+  } = useExportProductPriceQuery({ page: page, size: size, ...params });
 
   const handleDownload = () => {
     if (data) {
       console.log('datass', data);
       const downloadLink = document.createElement('a');
       downloadLink.href = data;
-      downloadLink.download = 'templateProudctPrice.xlsx'; // Set the desired file name and extension
+      downloadLink.download = 'exportProudctPrice.xlsx'; // Set the desired file name and extension
 
       // Append the link to the DOM
       document.body.appendChild(downloadLink);
@@ -45,6 +43,7 @@ const DownloadXLSButton = (props) => {
           leftIcon={<MdLogin />}
           colorScheme="#231F20"
           variant="outline"
+          size={'sm'}
         >
           Download XLS
         </Button>

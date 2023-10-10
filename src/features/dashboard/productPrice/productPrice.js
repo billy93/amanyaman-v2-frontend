@@ -760,7 +760,7 @@ const Polcies = () => {
               modalHeader="Import Excel File"
               modalBody="Import Excel File"
             />
-            <Export />
+            <Export params={filterQuery} page={0} size={totalCount} />
             {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
                         Export 
                     </Button> */}
