@@ -62,6 +62,58 @@ export const policyApiSlice = apiSlice.injectEndpoints({
           response.blob().then((blob) => URL.createObjectURL(blob)),
       }),
     }),
+    // exportProductPrices: builder.query({
+    //   query: (url) => ({
+    //     url: '/app/product-travel-agents/list/export',
+    //     method: 'GET',
+    //     responseType: 'blob',
+    //     responseHandler: (response) =>
+    //       response.blob().then((blob) => URL.createObjectURL(blob)),
+    //   }),
+    // }),
+    exportProductPrice: builder.query({
+      query: (data) => {
+        let url = '/app/product-travel-agents/list/export';
+        const params = new URLSearchParams();
+
+        for (const filter in data) {
+          if (data[filter] !== '') {
+            if (
+              filter === 'page' ||
+              filter === 'size' ||
+              filter === 'productCode' ||
+              filter === 'travellerType' ||
+              filter === 'travelAgent' ||
+              filter === 'bandType' ||
+              filter === 'areaGroup' ||
+              filter === 'planType'
+            ) {
+              params.append(filter, data[filter]);
+            } else {
+              params.append(filter, encodeURIComponent(data[filter]));
+            }
+          }
+        }
+        if (params.toString() !== '') {
+          url += `?${params.toString()}`;
+        }
+        return {
+          url: url,
+          method: 'GET',
+          prepareHeaders: (headers) => {
+            headers.append('Accept', 'application/json');
+            return headers;
+          },
+        };
+      },
+      transformResponse(response, meta) {
+        // console.log('resssssss', meta.response.headers.get('X-Total-Count'))
+        return {
+          response,
+          totalCount: Number(meta.response.headers.get('X-Total-Count')),
+        };
+      },
+    }),
     uploadFilePrice: builder.mutation({
       query: (file) => {
         const formData = new FormData();
@@ -86,4 +138,5 @@ export const {
   useGetTemplateFilePriceQuery,
   useGetProductPriceQuery,
   useUploadFilePriceMutation,
+  useExportProductPriceQuery,
 } = policyApiSlice;

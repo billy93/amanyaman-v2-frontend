@@ -39,7 +39,7 @@ import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 import CustomModal from './ModalImport';
 import CurrencyFormatter from '../../../components/formatCurrency';
-
+import Export from './export';
 const Styles = styled.div`
   // padding: 1rem;
 
@@ -760,6 +760,7 @@ const Polcies = () => {
               modalHeader="Import Excel File"
               modalBody="Import Excel File"
             />
+            <Export />
             {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
                         Export 
                     </Button> */}
