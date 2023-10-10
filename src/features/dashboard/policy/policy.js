@@ -977,7 +977,20 @@ const Polcies = () => {
       {
         Header: 'Ticket Number',
         Cell: ({ row }) => (
-          <Box border={'1px solid'} variant={'outline'} colorScheme="teal">
+          <Box
+            style={{
+              padding: '4px 10px',
+              borderColor: 'teal',
+              color: 'teal',
+              borderRadius: '4px',
+              fontWeight: 600,
+              fontSize: '14px',
+              textAlign: 'center',
+            }}
+            border={'1px solid'}
+            variant={'outline'}
+            colorScheme="teal"
+          >
             {'Active'}
           </Box>
         ),
