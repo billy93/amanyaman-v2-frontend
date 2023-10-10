@@ -32,6 +32,7 @@ const DownloadXLSButton = ({ params, page, size }) => {
     }
   };
   console.log('error', error);
+  console.log('data', data);
   return (
     <>
       {isLoading ? (
@@ -39,7 +40,7 @@ const DownloadXLSButton = ({ params, page, size }) => {
       ) : (
         <Button
           onClick={handleDownload}
-          disabled={!!error}
+          // disabled={!!error}
           leftIcon={<MdLogin />}
           colorScheme="#231F20"
           variant="outline"
