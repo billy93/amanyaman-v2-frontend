@@ -776,6 +776,8 @@ const Polcies = () => {
             onClick={
               row.original.paymentStatus === 'WAITING_FOR_PAYMENT'
                 ? () => handleRedirectPaymentPage(row.original.paymentLink)
+                : row.original.paymentStatus === 'SUCCESS'
+                ? null
                 : () => handleRedirect(row.original.bookingId)
             }
             // to={`/create-quota/search/${row.original.bookingId}`}
