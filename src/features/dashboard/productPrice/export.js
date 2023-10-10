@@ -31,9 +31,9 @@ const DownloadXLSButton = ({ params, page, size }) => {
       }, 1000);
     }
   };
-
+  console.log('error', error);
   return (
-    <div>
+    <>
       {isLoading ? (
         <span>Loading...</span>
       ) : (
@@ -45,11 +45,11 @@ const DownloadXLSButton = ({ params, page, size }) => {
           variant="outline"
           size={'sm'}
         >
-          Download XLS
+          Export
         </Button>
       )}
       {error && <span> {error.message}</span>}
-    </div>
+    </>
   );
 };
 export default DownloadXLSButton;
