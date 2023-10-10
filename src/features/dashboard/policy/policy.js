@@ -759,8 +759,8 @@ const Polcies = () => {
                 : `/policies/detail/${row.original.bookingId}`
             }
           >
+            <div className="global-td"> {row.original.policyNumber}</div>
             {/* <AiOutlineFileDone size={25} /> */}
-            {row.original.policyNumber}
           </Link>
         ),
       },
@@ -773,6 +773,7 @@ const Polcies = () => {
         filter: 'fuzzyText',
         Cell: ({ row }) => (
           <Box
+            className="global-td"
             onClick={
               row.original.paymentStatus === 'WAITING_FOR_PAYMENT'
                 ? () => handleRedirectPaymentPage(row.original.paymentLink)
@@ -825,6 +826,7 @@ const Polcies = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Policy Status',
@@ -834,7 +836,7 @@ const Polcies = () => {
         width: 200,
         filter: 'fuzzyText',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.statusSales === 'SUCCESS' ? (
               <Box
@@ -844,25 +846,25 @@ const Polcies = () => {
                   color: 'teal',
                   borderRadius: '4px',
                   fontWeight: 600,
-                  fontSize: '14px',
                   textAlign: 'center',
+                  border: '1px solid',
                 }}
-                cursor={'none'}
+                border={'1px solid'}
               >
                 {'Success'}
               </Box>
             ) : (
               <Box
+                border={'1px solid'}
                 style={{
                   padding: '4px 10px',
                   borderColor: '#b7791f',
                   color: '#b7791f',
                   borderRadius: '4px',
                   fontWeight: 600,
-                  fontSize: '14px',
                   textAlign: 'center',
+                  border: '1px solid',
                 }}
-                cursor={'none'}
               >
                 {'Pending'}
               </Box>
@@ -879,23 +881,42 @@ const Polcies = () => {
         Filter: SelectColumnFilter,
         filter: 'includes',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.paymentStatus === 'SUCCESS' ? (
               <Box
+                border={'1px solid'}
+                borderColor={'teal'}
+                variant={'outline'}
                 style={{
                   padding: '4px 10px',
                   borderColor: 'teal',
                   color: 'teal',
                   borderRadius: '4px',
                   fontWeight: 600,
-                  fontSize: '14px',
                   textAlign: 'center',
+                  border: '1px solid',
                 }}
               >
                 {'Success'}
               </Box>
             ) : row.original.paymentStatus === 'WAITING_FOR_PAYMENT' ? (
+              <Box
+                border={'1px solid'}
+                variant={'outline'}
+                borderColor="#b7791f"
+                style={{
+                  padding: '4px 10px',
+                  borderColor: '#b7791f',
+                  color: '#b7791f',
+                  borderRadius: '4px',
+                  textAlign: 'center',
+                  border: '1px solid',
+                }}
+              >
+                {'Waiting For Payment'}
+              </Box>
+            ) : (
               <Box
                 style={{
                   padding: '4px 10px',
@@ -903,18 +924,13 @@ const Polcies = () => {
                   color: '#b7791f',
                   borderRadius: '4px',
                   fontWeight: 600,
-                  fontSize: '14px',
                   textAlign: 'center',
+                  border: '1px solid',
                 }}
-              >
-                {'Waiting For Payment'}
-              </Box>
-            ) : (
-              <Box
                 border={'1px solid'}
+                borderColor={'red'}
                 variant={'outline'}
                 colorScheme="red"
-                cursor={'none'}
               >
                 {'Pending'}
               </Box>
@@ -929,6 +945,7 @@ const Polcies = () => {
         minWidth: 200,
         width: 200,
         filter: 'fuzzyText',
+        Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
       {
         Header: 'Issued By',
@@ -938,7 +955,7 @@ const Polcies = () => {
         width: 200,
         filter: 'fuzzyText',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.issuedByFirstName} {row.original.issuedByLastName}
           </Box>
@@ -953,7 +970,7 @@ const Polcies = () => {
         Filter: SelectDateColumnFilter,
         filter: 'date',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {/* <AiOutlineFileDone size={25} /> */}
             {formatDateToLong(row.original.startDate)}
           </Box>
@@ -968,7 +985,7 @@ const Polcies = () => {
         Filter: SelectDateColumnFilter,
         filter: 'date',
         Cell: ({ row }) => (
-          <Box>
+          <Box className="global-td">
             {/* <AiOutlineFileDone size={25} /> */}
             {formatDateToLong(row.original.purchaseDate)}
           </Box>
@@ -978,13 +995,13 @@ const Polcies = () => {
         Header: 'Ticket Number',
         Cell: ({ row }) => (
           <Box
+            className="global-td"
             style={{
               padding: '4px 10px',
               borderColor: 'teal',
               color: 'teal',
               borderRadius: '4px',
               fontWeight: 600,
-              fontSize: '14px',
               textAlign: 'center',
             }}
             border={'1px solid'}
@@ -1082,14 +1099,14 @@ const Polcies = () => {
     );
   } else if (Data) {
     content = (
-      <Box ml="2em" mr="2em" mt="5em">
+      <Box ml="1em" mr="1em" mt="5em">
         <Box
           display={'flex'}
           justifyContent={'space-between'}
           alignItems={'center'}
           mt="6em"
-          ml="2em"
-          mr="2em"
+          ml="1em"
+          mr="1em"
           mb={showFilter ? '1em' : '1em'}
         >
           <Heading as={'h6'} size={'sm'}>

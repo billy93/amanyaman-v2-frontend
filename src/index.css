@@ -10,6 +10,12 @@
 .errmsg {
   color: firebrick;
 }
+.global-td {
+  font-size: 12px;
+  font-family: 'Mulish';
+  color: #333;
+  font-weight: normal;
+}
 #myTextarea {
   /* Specify desired styles */
   font-family: 'Mulish';
