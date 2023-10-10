@@ -837,13 +837,13 @@ const Polcies = () => {
           <Box>
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.statusSales === 'SUCCESS' ? (
-              <Button variant={'outline'} colorScheme="teal" cursor={'none'}>
+              <Box border={'1px solid'} colorScheme="teal" cursor={'none'}>
                 {'Success'}
-              </Button>
+              </Box>
             ) : (
-              <Button variant={'outline'} colorScheme="yellow" cursor={'none'}>
+              <Box border={'1px solid'} colorScheme="yellow" cursor={'none'}>
                 {'Pending'}
-              </Button>
+              </Box>
             )}
           </Box>
         ),
@@ -860,17 +860,32 @@ const Polcies = () => {
           <Box>
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.paymentStatus === 'SUCCESS' ? (
-              <Button variant={'outline'} colorScheme="teal" cursor={'none'}>
+              <Box
+                border={'1px solid'}
+                variant={'outline'}
+                colorScheme="teal"
+                cursor={'none'}
+              >
                 {'Success'}
-              </Button>
+              </Box>
             ) : row.original.paymentStatus === 'WAITING_FOR_PAYMENT' ? (
-              <Button variant={'outline'} colorScheme="yellow" cursor={'none'}>
+              <Box
+                border={'1px solid'}
+                variant={'outline'}
+                colorScheme="yellow"
+                cursor={'none'}
+              >
                 {'Waiting For Payment'}
-              </Button>
+              </Box>
             ) : (
-              <Button variant={'outline'} colorScheme="red" cursor={'none'}>
+              <Box
+                border={'1px solid'}
+                variant={'outline'}
+                colorScheme="red"
+                cursor={'none'}
+              >
                 {'Pending'}
-              </Button>
+              </Box>
             )}
           </Box>
         ),
@@ -930,9 +945,9 @@ const Polcies = () => {
       {
         Header: 'Ticket Number',
         Cell: ({ row }) => (
-          <Button variant={'outline'} colorScheme="teal">
+          <Box border={'1px solid'} variant={'outline'} colorScheme="teal">
             {'Active'}
-          </Button>
+          </Box>
         ),
       },
     ],
