@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
   Stack,
@@ -20,6 +20,10 @@ import {
   useCreateUserMutation,
   useGetRoleQuery,
 } from '../masterUser/userApiSlice';
+import {
+  useUpdateTravellerTypeMutation,
+  useGetTravellerTypeByIdQuery,
+} from './travellerTypesApiSlice';
 import {
   setListUser,
   listUsers,
@@ -49,6 +53,9 @@ function usePrevious(value) {
 
 const CreateUser = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const { data, isSuccess, isError, refetch } =
+    useGetTravellerTypeByIdQuery(id);
   const listProducts = useSelector(listUsers);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const listRoles = useSelector(listRoleUsers);
@@ -65,7 +72,7 @@ const CreateUser = () => {
   ]);
   const [fields, setFields] = React.useState({
     name: '',
-    desc: '',
+    description: '',
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
@@ -83,38 +90,39 @@ const CreateUser = () => {
     ...filterby,
   });
 
-  const [createUser] = useCreateUserMutation({
+  const [updateTravellerType] = useUpdateTravellerTypeMutation({
     skip: trigger === false,
   });
 
+  React.useEffect(() => {
+    if (data) {
+      setFields({
+        ...data,
+      });
+    }
+  }, [data]);
+
+  React.useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   const handleNext = async (e) => {
     e.preventDefault();
-    const datas = {
-      login: formuser?.login,
-      firstName: formuser?.firstName,
-      lastName: formuser?.lastName,
-      email: formuser?.email,
-      authorities: [`${formuser?.authorities}`],
-      travelAgent: {
-        id: formUser?.travelAgent,
-      },
-    };
-
     try {
-      let resp = await createUser(datas);
+      let resp = await updateTravellerType(fields);
       // console.log('ress', resp)
       if (resp?.data) {
-        showSuccessToast('User created successfully!');
-        dispatch(setListUser([...listProducts, datas]));
-        navigate('/master-data/master-user');
+        showSuccessToast('Traveller types edited successfully!');
+        // dispatch(setListUser([...listProducts, datas]));
+        navigate('/master-data/traveller-types');
       } else {
         // const statusCode = error?.response?.status || 'Unknown';
-        const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+        const errorMessage = `Failed to edit traveller types. Status Code: ${resp?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to edit traveller types. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
     }
     // navigate('/master-data/master-user')
@@ -134,6 +142,10 @@ const CreateUser = () => {
       dispatch(setRoleUser(rolesData));
     }
   }, [rolesData, prevListRoles, dispatch]);
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   console.log('test', fields);
   return (
@@ -221,8 +233,8 @@ const CreateUser = () => {
               <Input
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="postCode"
-                value={fields?.desc}
+                name="description"
+                value={fields?.description}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
@@ -246,14 +258,17 @@ const CreateUser = () => {
           mt="1em"
         >
           <Button
+            variant="ClaimBtn"
+            style={{ textTransform: 'uppercase', fontSize: '14px' }}
+            fontFamily="arial"
+            fontWeight={'700'}
+            onClick={handleBack}
+          >
+            Cancel
+          </Button>
+          <Button
             isDisabled={
-              formuser?.authorities.length === 0 ||
-              formuser?.login === '' ||
-              formuser?.firstName === '' ||
-              formuser?.email === '' ||
-              formuser?.lastName === ''
-                ? true
-                : false
+              fields?.name === '' || fields?.description === '' ? true : false
             }
             variant={'ClaimBtn'}
             style={{ textTransform: 'uppercase', fontSize: '14px' }}

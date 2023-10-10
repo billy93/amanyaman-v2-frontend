@@ -2,7 +2,10 @@
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { useGetBandTypeQuery } from './bandTypesApiSlice';
+import {
+  useDeleteBandTypesMutation,
+  useGetBandTypeQuery,
+} from './bandTypesApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import Table, {
   usePagination,
@@ -10,6 +13,7 @@ import Table, {
   useFilters,
   useColumnOrder,
 } from 'react-table';
+import { CiTrash } from 'react-icons/ci';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaChevronUp, FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -66,6 +70,7 @@ import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
+import UseCustomToast from '../../../components/UseCustomToast';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -524,6 +529,11 @@ const Polcies = () => {
   const fetchIdRef = React.useRef(0);
   const [page, setPage] = React.useState(0);
   const [size, setSize] = React.useState(5);
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+  const [
+    deletedBandType,
+    { isSuccess, isLoading: processDelete, isError: deletedFailed },
+  ] = useDeleteBandTypesMutation();
 
   const {
     data: { response: systemParams, totalCount } = {},
@@ -601,6 +611,23 @@ const Polcies = () => {
         width: 200,
         filter: 'fuzzyText',
       },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'16px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
+        ),
+      },
     ],
     []
   );
@@ -608,8 +635,8 @@ const Polcies = () => {
   // const data = React.useMemo(() => tempList);
   // console.log('ddd band types', systemParams)
   React.useEffect(() => {
-    refetch({ page, size: size });
-  }, [page, refetch, size]);
+    refetch();
+  }, [refetch]);
 
   const nextPages = () => {
     setPage((prevPage) => prevPage + 1);
@@ -628,6 +655,26 @@ const Polcies = () => {
   const gotoPage = () => {
     setPage(0);
   };
+  React.useEffect(() => {
+    if (isSuccess) {
+      showSuccessToast('Deleted successfully!', 'deletedcitysuccess');
+      refetch();
+    }
+    if (deletedFailed) {
+      showErrorToast('Deleted Failed!', 'deletedcityerrors');
+    }
+  }, [isSuccess, deletedFailed]);
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    try {
+      const res = await deletedBandType(id);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   let content;
   if (isLoading) {
     content = (

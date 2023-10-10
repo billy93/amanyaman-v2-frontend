@@ -14,6 +14,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from '@chakra-ui/react';
+import { useCreateTravellerTypeMutation } from './travellerTypesApiSlice';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import {
@@ -65,7 +66,7 @@ const EditCity = () => {
   ]);
   const [fields, setFields] = React.useState({
     name: '',
-    desc: '',
+    description: '',
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
@@ -83,38 +84,28 @@ const EditCity = () => {
     ...filterby,
   });
 
-  const [createUser] = useCreateUserMutation({
+  const [createTravellerType] = useCreateTravellerTypeMutation({
     skip: trigger === false,
   });
 
   const handleNext = async (e) => {
     e.preventDefault();
-    const datas = {
-      login: formuser?.login,
-      firstName: formuser?.firstName,
-      lastName: formuser?.lastName,
-      email: formuser?.email,
-      authorities: [`${formuser?.authorities}`],
-      travelAgent: {
-        id: formUser?.travelAgent,
-      },
-    };
 
     try {
-      let resp = await createUser(datas);
+      let resp = await createTravellerType(fields);
       // console.log('ress', resp)
       if (resp?.data) {
-        showSuccessToast('User created successfully!');
-        dispatch(setListUser([...listProducts, datas]));
-        navigate('/master-data/master-user');
+        showSuccessToast('Traveller Type created successfully!');
+        // dispatch(setListUser([...listProducts, datas]));
+        navigate('/master-data/traveller-types');
       } else {
         // const statusCode = error?.response?.status || 'Unknown';
-        const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+        const errorMessage = `Failed to create traveller types. Status Code: ${resp?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to create traveller types. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
     }
     // navigate('/master-data/master-user')
@@ -134,6 +125,10 @@ const EditCity = () => {
       dispatch(setRoleUser(rolesData));
     }
   }, [rolesData, prevListRoles, dispatch]);
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   console.log('test', fields);
   return (
@@ -221,8 +216,8 @@ const EditCity = () => {
               <Input
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="postCode"
-                value={fields?.desc}
+                name="description"
+                value={fields?.description}
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
@@ -246,12 +241,17 @@ const EditCity = () => {
           mt="1em"
         >
           <Button
+            variant="ClaimBtn"
+            style={{ textTransform: 'uppercase', fontSize: '14px' }}
+            fontFamily="arial"
+            fontWeight={'700'}
+            onClick={handleBack}
+          >
+            Cancel
+          </Button>
+          <Button
             isDisabled={
-              formuser?.authorities.length === 0 ||
-              formuser?.login === '' ||
-              formuser?.firstName === '' ||
-              formuser?.email === '' ||
-              formuser?.lastName === ''
+              formuser?.name === '' || formuser?.description === ''
                 ? true
                 : false
             }

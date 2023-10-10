@@ -23,10 +23,10 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    createParams: builder.mutation({
+    createBandTypes: builder.mutation({
       query: (data) => {
         return {
-          url: '/app/system-parameters',
+          url: '/app/band-types',
           method: 'POST',
           body: { ...data },
           invalidatesTags: (result, error, arg) =>
@@ -39,10 +39,10 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    updateParams: builder.mutation({
+    updateBandTypes: builder.mutation({
       query: (data) => {
         return {
-          url: '/app/system-parameters',
+          url: '/app/band-types',
           method: 'PUT',
           body: { ...data },
           invalidatesTags: (result, error, arg) =>
@@ -55,10 +55,22 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    deleteParams: builder.mutation({
+    getBandTypesById: builder.query({
+      prepareHeaders: (headers) => {
+        headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+        return headers;
+      },
+      query: (id) => ({
+        url: `/app/band-types/${id}`,
+        cachePolicy: 'no-cache',
+      }),
+      provideTags: (result, error, id) =>
+        result ? [{ type: 'user', id }] : [],
+    }),
+    deleteBandTypes: builder.mutation({
       query: (id) => {
         return {
-          url: `/app/system-parameters/${id}`,
+          url: `/app/band-types/${id}`,
           method: 'DELETE',
           invalidatesTags: (result, error, arg) =>
             result
@@ -75,8 +87,8 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetBandTypeQuery,
-  useGetSystemParamsQuery,
-  useCreateParamsMutation,
-  useUpdateParamsMutation,
-  useDeleteParamsMutation,
+  useCreateBandTypesMutation,
+  useUpdateBandTypesMutation,
+  useGetBandTypesByIdQuery,
+  useDeleteBandTypesMutation,
 } = systemParamsApiSlice;

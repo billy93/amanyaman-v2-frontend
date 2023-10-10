@@ -28,6 +28,7 @@ import {
   formUser,
   setFormUser,
 } from '../masterUser//masterUserSlice';
+import { useCreateBandTypesMutation } from './bandTypesApiSlice';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 // import { MdAdd } from 'react-icons/md';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
@@ -64,8 +65,8 @@ const EditCity = () => {
     },
   ]);
   const [fields, setFields] = React.useState({
-    start: '',
-    end: '',
+    start: 0,
+    end: 0,
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
@@ -83,38 +84,32 @@ const EditCity = () => {
     ...filterby,
   });
 
-  const [createUser] = useCreateUserMutation({
+  const [createBandTypes] = useCreateBandTypesMutation({
     skip: trigger === false,
   });
 
   const handleNext = async (e) => {
     e.preventDefault();
-    const datas = {
-      login: formuser?.login,
-      firstName: formuser?.firstName,
-      lastName: formuser?.lastName,
-      email: formuser?.email,
-      authorities: [`${formuser?.authorities}`],
-      travelAgent: {
-        id: formUser?.travelAgent,
-      },
+    const data = {
+      ...fields,
+      travelDurationName: `${fields?.start}-${fields?.end} Days`,
+      travelDurationDescription: `${fields?.start}-${fields?.end} Days`,
     };
-
     try {
-      let resp = await createUser(datas);
+      let resp = await createBandTypes(data);
       // console.log('ress', resp)
       if (resp?.data) {
-        showSuccessToast('User created successfully!');
-        dispatch(setListUser([...listProducts, datas]));
-        navigate('/master-data/master-user');
+        showSuccessToast('Band Types created successfully!');
+        // dispatch(setListUser([...listProducts, datas]));
+        navigate('/master-data/band-types');
       } else {
         // const statusCode = error?.response?.status || 'Unknown';
-        const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+        const errorMessage = `Failed to create band types. Status Code: ${resp?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to create band types. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
     }
     // navigate('/master-data/master-user')
@@ -134,6 +129,10 @@ const EditCity = () => {
       dispatch(setRoleUser(rolesData));
     }
   }, [rolesData, prevListRoles, dispatch]);
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   console.log('test', fields);
   return (
@@ -195,6 +194,7 @@ const EditCity = () => {
               mt="14px"
             >
               <Input
+                type="number"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 name="start"
@@ -219,9 +219,10 @@ const EditCity = () => {
               mt="14px"
             >
               <Input
+                type="number"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="postCode"
+                name="end"
                 value={fields?.end}
                 onChange={handleData}
                 h="48px"
@@ -246,15 +247,16 @@ const EditCity = () => {
           mt="1em"
         >
           <Button
-            isDisabled={
-              formuser?.authorities.length === 0 ||
-              formuser?.login === '' ||
-              formuser?.firstName === '' ||
-              formuser?.email === '' ||
-              formuser?.lastName === ''
-                ? true
-                : false
-            }
+            variant="ClaimBtn"
+            style={{ textTransform: 'uppercase', fontSize: '14px' }}
+            fontFamily="arial"
+            fontWeight={'700'}
+            onClick={handleBack}
+          >
+            Cancel
+          </Button>
+          <Button
+            isDisabled={fields?.start === 0 || fields?.end === 0 ? true : false}
             variant={'ClaimBtn'}
             style={{ textTransform: 'uppercase', fontSize: '14px' }}
             fontFamily="arial"

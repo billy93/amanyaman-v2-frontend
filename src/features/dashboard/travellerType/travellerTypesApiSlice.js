@@ -24,10 +24,10 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    createParams: builder.mutation({
+    createTravellerType: builder.mutation({
       query: (data) => {
         return {
-          url: '/app/system-parameters',
+          url: '/app/traveller-types',
           method: 'POST',
           body: { ...data },
           invalidatesTags: (result, error, arg) =>
@@ -40,10 +40,22 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    updateParams: builder.mutation({
+    getTravellerTypeById: builder.query({
+      prepareHeaders: (headers) => {
+        headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+        return headers;
+      },
+      query: (id) => ({
+        url: `/app/traveller-types/${id}`,
+        cachePolicy: 'no-cache',
+      }),
+      provideTags: (result, error, id) =>
+        result ? [{ type: 'user', id }] : [],
+    }),
+    updateTravellerType: builder.mutation({
       query: (data) => {
         return {
-          url: '/app/system-parameters',
+          url: '/app/traveller-types',
           method: 'PUT',
           body: { ...data },
           invalidatesTags: (result, error, arg) =>
@@ -56,10 +68,10 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    deleteParams: builder.mutation({
+    deleteTravellerType: builder.mutation({
       query: (id) => {
         return {
-          url: `/app/system-parameters/${id}`,
+          url: `/app/traveller-types/${id}`,
           method: 'DELETE',
           invalidatesTags: (result, error, arg) =>
             result
@@ -76,8 +88,8 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetTravellerTypesQuery,
-  useGetSystemParamsQuery,
-  useCreateParamsMutation,
-  useUpdateParamsMutation,
-  useDeleteParamsMutation,
+  useCreateTravellerTypeMutation,
+  useDeleteTravellerTypeMutation,
+  useUpdateTravellerTypeMutation,
+  useGetTravellerTypeByIdQuery,
 } = systemParamsApiSlice;

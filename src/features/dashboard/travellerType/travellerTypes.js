@@ -1,6 +1,9 @@
 /* eslint-disable indent */
 import React from 'react';
-import { useGetTravellerTypesQuery } from './travellerTypesApiSlice';
+import {
+  useDeleteTravellerTypeMutation,
+  useGetTravellerTypesQuery,
+} from './travellerTypesApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   usePagination,
@@ -12,12 +15,22 @@ import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Box, Heading, Stack, Text, Center, Select } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Stack,
+  Text,
+  Center,
+  Select,
+  IconButton,
+} from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
+import UseCustomToast from '../../../components/UseCustomToast';
+import { CiTrash } from 'react-icons/ci';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -444,6 +457,11 @@ const Polcies = () => {
   const [loading, setLoading] = React.useState(false);
   const [pageCount, setPageCount] = React.useState(0);
   const fetchIdRef = React.useRef(0);
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+  const [
+    deleteTravellerType,
+    { isSuccess, isLoading: processDelete, isError: deletedFailed },
+  ] = useDeleteTravellerTypeMutation();
   const [page, setPage] = React.useState(0);
   const {
     data: { response: systemParams, totalCount } = {},
@@ -519,6 +537,23 @@ const Polcies = () => {
         width: 200,
         filter: 'fuzzyText',
       },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'16px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
+        ),
+      },
     ],
     []
   );
@@ -526,6 +561,13 @@ const Polcies = () => {
   React.useEffect(() => {
     refetch({ page, size: size });
   }, [page, refetch, size]);
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+  }, [refetch, isSuccess]);
+
   const nextPages = () => {
     setPage((prevPage) => prevPage + 1);
   };
@@ -546,6 +588,26 @@ const Polcies = () => {
 
   const gotoPage = () => {
     setPage(0);
+  };
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      showSuccessToast('Deleted successfully!', 'deletedcitysuccess');
+      refetch();
+    }
+    if (deletedFailed) {
+      showErrorToast('Deleted Failed!', 'deletedcityerrors');
+    }
+  }, [isSuccess, deletedFailed]);
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    try {
+      const res = await deleteTravellerType(id);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   let content;
