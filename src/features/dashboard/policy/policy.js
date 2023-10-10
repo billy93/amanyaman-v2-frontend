@@ -837,11 +837,33 @@ const Polcies = () => {
           <Box>
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.statusSales === 'SUCCESS' ? (
-              <Box border={'1px solid'} colorScheme="teal" cursor={'none'}>
+              <Box
+                style={{
+                  padding: '4px 10px',
+                  borderColor: 'teal',
+                  color: 'teal',
+                  borderRadius: '4px',
+                  fontWeight: 600,
+                  fontSize: '14px',
+                  textAlign: 'center',
+                }}
+                cursor={'none'}
+              >
                 {'Success'}
               </Box>
             ) : (
-              <Box border={'1px solid'} colorScheme="yellow" cursor={'none'}>
+              <Box
+                style={{
+                  padding: '4px 10px',
+                  borderColor: '#b7791f',
+                  color: '#b7791f',
+                  borderRadius: '4px',
+                  fontWeight: 600,
+                  fontSize: '14px',
+                  textAlign: 'center',
+                }}
+                cursor={'none'}
+              >
                 {'Pending'}
               </Box>
             )}
@@ -861,19 +883,29 @@ const Polcies = () => {
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.paymentStatus === 'SUCCESS' ? (
               <Box
-                border={'1px solid'}
-                variant={'outline'}
-                colorScheme="teal"
-                cursor={'none'}
+                style={{
+                  padding: '4px 10px',
+                  borderColor: 'teal',
+                  color: 'teal',
+                  borderRadius: '4px',
+                  fontWeight: 600,
+                  fontSize: '14px',
+                  textAlign: 'center',
+                }}
               >
                 {'Success'}
               </Box>
             ) : row.original.paymentStatus === 'WAITING_FOR_PAYMENT' ? (
               <Box
-                border={'1px solid'}
-                variant={'outline'}
-                colorScheme="yellow"
-                cursor={'none'}
+                style={{
+                  padding: '4px 10px',
+                  borderColor: '#b7791f',
+                  color: '#b7791f',
+                  borderRadius: '4px',
+                  fontWeight: 600,
+                  fontSize: '14px',
+                  textAlign: 'center',
+                }}
               >
                 {'Waiting For Payment'}
               </Box>
