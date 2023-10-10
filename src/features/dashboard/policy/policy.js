@@ -837,11 +837,11 @@ const Polcies = () => {
           <Box>
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.statusSales === 'SUCCESS' ? (
-              <Button variant={'outline'} colorScheme="teal">
+              <Button variant={'outline'} colorScheme="teal" cursor={'none'}>
                 {'Success'}
               </Button>
             ) : (
-              <Button variant={'outline'} colorScheme="yellow">
+              <Button variant={'outline'} colorScheme="yellow" cursor={'none'}>
                 {'Pending'}
               </Button>
             )}
@@ -860,15 +860,15 @@ const Polcies = () => {
           <Box>
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.paymentStatus === 'SUCCESS' ? (
-              <Button variant={'outline'} colorScheme="teal">
+              <Button variant={'outline'} colorScheme="teal" cursor={'none'}>
                 {'Success'}
               </Button>
             ) : row.original.paymentStatus === 'WAITING_FOR_PAYMENT' ? (
-              <Button variant={'outline'} colorScheme="yellow">
+              <Button variant={'outline'} colorScheme="yellow" cursor={'none'}>
                 {'Waiting For Payment'}
               </Button>
             ) : (
-              <Button variant={'outline'} colorScheme="red">
+              <Button variant={'outline'} colorScheme="red" cursor={'none'}>
                 {'Pending'}
               </Button>
             )}
@@ -928,7 +928,7 @@ const Polcies = () => {
         ),
       },
       {
-        Header: 'Action',
+        Header: 'Ticket Number',
         Cell: ({ row }) => (
           <Button variant={'outline'} colorScheme="teal">
             {'Active'}
