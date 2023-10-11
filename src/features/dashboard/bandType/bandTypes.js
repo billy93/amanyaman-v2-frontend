@@ -17,6 +17,7 @@ import { CiTrash } from 'react-icons/ci';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaChevronUp, FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
+import PageLoader from '../../../components/pageLoader';
 import {
   useToast,
   Select,
@@ -682,11 +683,7 @@ const Polcies = () => {
 
   let content;
   if (isLoading) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (systemParams) {
     content = (
       <Box pl="2em" pr="2em" mt="3em">

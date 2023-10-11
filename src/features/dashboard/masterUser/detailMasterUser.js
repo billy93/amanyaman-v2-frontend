@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { useGetUsersByIdQuery } from './userApiSlice';
 import { NavLink, useParams, Link, useNavigate } from 'react-router-dom';
@@ -13,7 +14,7 @@ import {
   Button,
   IconButton,
 } from '@chakra-ui/react';
-import PulseLoader from 'react-spinners/PulseLoader';
+import PageLoader from '../../../components/pageLoader';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -313,11 +314,7 @@ const DetailMasterUser = () => {
   );
   let content;
   if (isLoading) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (Data) {
     content = (
       <Box>

@@ -7,7 +7,6 @@ import {
   useFilters,
   useColumnOrder,
 } from 'react-table';
-import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,10 +15,10 @@ import {
   Heading,
   Stack,
   Text,
-  Center,
   Select,
   IconButton,
 } from '@chakra-ui/react';
+import PageLoader from '../../../components/pageLoader';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
 import { useDeletedAreaMutation } from './listApiSlice';
@@ -641,11 +640,7 @@ const AreaList = () => {
   let content;
 
   if (isLoading) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (systemParams) {
     // const totalCount = data;
     content = (

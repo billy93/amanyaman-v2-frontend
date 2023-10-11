@@ -5,7 +5,7 @@ import { useGetTravelAgentQuery } from './travelApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import matchSorter from 'match-sorter';
 import { usePagination } from 'react-table';
-import PulseLoader from 'react-spinners/PulseLoader';
+import { HashLoader } from 'react-spinners';
 import { motion } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
 import { debounce } from 'lodash';
@@ -973,8 +973,19 @@ const MasterUser = () => {
   let content;
   if (isLoading) {
     content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
+      <Center
+        h="100vh"
+        d="flex"
+        flexDir="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <HashLoader
+          color="#36d7b7"
+          size={50}
+          loading={isLoading}
+          speedMultiplier={100}
+        />
       </Center>
     );
   } else if (listUserAccount) {

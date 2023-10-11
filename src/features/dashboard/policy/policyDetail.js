@@ -5,7 +5,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import PulseLoader from 'react-spinners/PulseLoader';
+import PageLoader from '../../../components/pageLoader';
 import { Navigate, useNavigate, useParams, NavLink } from 'react-router-dom';
 import {
   Text,
@@ -375,9 +375,9 @@ const PolicyDetail = () => {
   let content;
   if (isLoading || loadingDownload || loadingView || isLoadingState) {
     content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
-      </Center>
+      <PageLoader
+        loading={isLoading || loadingDownload || loadingView || isLoadingState}
+      />
     );
   } else if (isSuccess || isSuccessDownload || isSuccessView) {
     content = (

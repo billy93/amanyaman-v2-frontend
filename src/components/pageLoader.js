@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
-import { Spinner, Box } from '@chakra-ui/react';
+import { Box, Center } from '@chakra-ui/react';
+import { HashLoader } from 'react-spinners';
 
 const PageLoader = ({ loading }) => (
   <Fragment>
@@ -11,13 +12,19 @@ const PageLoader = ({ loading }) => (
         alignItems={'center'}
         h="100vh"
       >
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
+        <Center
+          d="flex"
+          flexDir="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <HashLoader
+            color="#36d7b7"
+            size={50}
+            loading={loading}
+            speedMultiplier={100}
+          />
+        </Center>
       </Box>
     ) : null}
   </Fragment>

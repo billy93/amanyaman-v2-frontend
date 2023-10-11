@@ -6,6 +6,7 @@ import { useGetPolicyListQuery } from './policyApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import Data from './list.json';
 import { debounce } from 'lodash';
+import PageLoader from '../../../components/pageLoader';
 import {
   usePagination,
   useSortBy,
@@ -19,7 +20,6 @@ import {
   setCredentials,
 } from '../../auth/authSlice';
 import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
-import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -1104,11 +1104,7 @@ const Polcies = () => {
   // console.log('filter listpolicies', listpolicies);
   let content;
   if (isLoading) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (Data) {
     content = (
       <Box ml="1em" mr="1em" mt="5em">

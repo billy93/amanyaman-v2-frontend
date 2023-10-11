@@ -31,6 +31,7 @@ import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 import UseCustomToast from '../../../components/UseCustomToast';
 import { CiTrash } from 'react-icons/ci';
+import PageLoader from '../../../components/pageLoader';
 
 const Styles = styled.div`
   // padding: 1rem;
@@ -668,11 +669,7 @@ const PlanTypes = () => {
 
   let content;
   if (isLoading) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (planTypes) {
     // const totalCount = data;
     content = (

@@ -8,13 +8,13 @@ import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
 import { useGetListAreaGroupQuery } from '../group-area/listApiSlice';
 import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSlice';
+import PageLoader from '../../../components/pageLoader';
 import {
   usePagination,
   useSortBy,
   useFilters,
   useColumnOrder,
 } from 'react-table';
-import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { debounce } from 'lodash';
@@ -732,11 +732,7 @@ const Polcies = () => {
   };
   let content;
   if (isLoading) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (systemParams) {
     content = (
       <>

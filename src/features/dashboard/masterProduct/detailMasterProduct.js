@@ -9,6 +9,7 @@ import {
   useUpdateSelectProductMutation,
   useUpdateSelectProductMultpleMutation,
 } from '../travelAgent/travelApiSlice';
+import PageLoader from '../../../components/pageLoader';
 import { NavLink, useParams, useNavigate, Link } from 'react-router-dom';
 import {
   useTable,
@@ -754,11 +755,7 @@ const DetailMasterUser = () => {
   console.log('listTravell', listTravell);
   let content;
   if (isLoading) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (user !== null || listTravell) {
     content = (
       <Box>

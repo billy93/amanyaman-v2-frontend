@@ -59,6 +59,7 @@ import { useTable, useRowSelect, useFilters, useSortBy } from 'react-table';
 // import CustomModal from './customModal';
 import { useGetBandTypeQuery } from '../bandType/bandTypesApiSlice';
 import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSlice';
+import PageLoader from '../../../components/pageLoader';
 
 const Styles = styled.div`
   table {
@@ -1014,11 +1015,7 @@ const MasterUser = () => {
   console.log('filter listUserAccount', listUserAccount);
   let content;
   if (isLoading) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (listUserAccount) {
     content = (
       <Box pl="2em" pr="2em" mt="6em">

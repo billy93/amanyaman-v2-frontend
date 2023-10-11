@@ -9,6 +9,7 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 import 'react-calendar/dist/Calendar.css';
 import { BsFillPencilFill } from 'react-icons/bs';
 import CurrencyFormatter from '../../../components/formatCurrency';
+import PageLoader from '../../../components/pageLoader';
 
 const DetailMasterUser = () => {
   const { id } = useParams();
@@ -29,11 +30,7 @@ const DetailMasterUser = () => {
   };
   let content;
   if (isLoading) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (user) {
     content = (
       <Box>

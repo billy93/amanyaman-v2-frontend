@@ -32,6 +32,7 @@ import {
   Button,
 } from '@chakra-ui/react';
 import PulseLoader from 'react-spinners/PulseLoader';
+import { HashLoader } from 'react-spinners';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -968,8 +969,19 @@ const DetailMasterUser = () => {
   let content;
   if (isLoading) {
     content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
+      <Center
+        h="100vh"
+        d="flex"
+        flexDir="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <HashLoader
+          color="#36d7b7"
+          size={50}
+          loading={isLoading}
+          speedMultiplier={100}
+        />
       </Center>
     );
   } else if (listTravell) {

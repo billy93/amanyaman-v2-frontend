@@ -4,13 +4,13 @@
 import React from 'react';
 import { useGetListCountryQuery } from './listApiSlice';
 import { useNavigate, Link } from 'react-router-dom';
+import PageLoader from '../../../components/pageLoader';
 import {
   usePagination,
   useSortBy,
   useFilters,
   useColumnOrder,
 } from 'react-table';
-import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -684,11 +684,7 @@ const CountryList = () => {
   // console.log('systemParams', systemParams);
   let content;
   if (isLoading) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <PulseLoader color={'#065BAA'} />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (systemParams) {
     // const totalCount = data;
     content = (
