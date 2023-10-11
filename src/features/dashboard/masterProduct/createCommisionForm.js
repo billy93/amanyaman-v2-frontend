@@ -356,10 +356,10 @@ const CommisionForm = () => {
     }
   }, [products, dispatch, listvariants]);
 
+  console.log('formstate', formstate);
   const handleNext = async (e) => {
     e.preventDefault();
     const constData = {
-      id: formstate.id,
       productName: formstate?.productName,
       productDetailCode: formstate?.code,
       productCode: formstate?.productCode,
@@ -392,7 +392,7 @@ const CommisionForm = () => {
         id: formstate?.covidDoc[0]?.id,
       },
       productAdditionalWeek:
-        formstate?.additionalWeek[0].id !== ''
+        formstate?.additionalWeek !== ''
           ? {
               id: formstate?.additionalWeek[0].id,
             }
@@ -404,7 +404,7 @@ const CommisionForm = () => {
     try {
       let data = await createMasterProduct(constData);
       if (data?.data) {
-        showSuccessToast('Edit master product successfully!');
+        showSuccessToast('Create master product successfully!');
         dispatch(
           setProductForm({
             productName: '',
@@ -442,7 +442,7 @@ const CommisionForm = () => {
         );
         navigate('/master-data/master-products');
       } else {
-        const errorMessage = `Failed to Edit master product. Status Code: ${data?.error?.status}`;
+        const errorMessage = `Failed to Create master product. Status Code: ${data?.error?.status}`;
         showErrorToast(errorMessage);
         dispatch(
           setProductForm({
@@ -481,7 +481,7 @@ const CommisionForm = () => {
         );
       }
     } catch (err) {
-      const errorMessage = `Failed to Edit master product. Status Code: ${err?.error?.status}`;
+      const errorMessage = `Failed to Create master product. Status Code: ${err?.error?.status}`;
       showErrorToast(errorMessage);
     }
     setFields(null);
