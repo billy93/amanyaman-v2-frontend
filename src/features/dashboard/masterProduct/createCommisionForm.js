@@ -230,7 +230,7 @@ const CommisionForm = () => {
     e.preventDefault();
     const constData = {
       productName: formstate?.productName,
-      code: formstate?.productCode,
+      code: formstate?.productDetailCode,
       productCode: formstate?.productCode,
       currId: formstate?.currId,
       value: '100',

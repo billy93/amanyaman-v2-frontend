@@ -257,6 +257,7 @@ const Tables = ({
   fetchData,
   loading,
   size,
+  totalCount,
   pageCount: controlledPageCount,
 }) => {
   const dispatch = useDispatch();
@@ -692,7 +693,7 @@ const Polcies = () => {
 
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(tempList?.listPolicy.length / pageSize));
+        setPageCount(Math.ceil(totalCount / size));
 
         setLoading(false);
       }
@@ -1238,6 +1239,7 @@ const Polcies = () => {
             loading={loading}
             pageCount={pageCount}
             size={size}
+            totalcount={totalCount}
           />
         </Styles>
         <Box
@@ -1249,7 +1251,7 @@ const Polcies = () => {
         >
           <Box>
             <Box>
-              {loading ? (
+              {loading || isFetching ? (
                 // Use our custom loading state to show a loading indicator
                 <td colSpan="10000">Loading...</td>
               ) : (

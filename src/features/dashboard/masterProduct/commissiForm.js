@@ -259,7 +259,7 @@ const CommisionForm = () => {
         id: products.id,
         productCode: products?.productCode,
         value: products?.value,
-        code: products?.code,
+        productDetailCode: products?.code,
         productName: products?.productName,
         productDescription: products?.productDescription,
         productMedicalCover: products?.productMedicalCover,
