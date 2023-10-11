@@ -693,7 +693,7 @@ const Polcies = () => {
 
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(totalCount / size));
+        setPageCount(Math.ceil(parseInt(totalCount) / size));
 
         setLoading(false);
       }
