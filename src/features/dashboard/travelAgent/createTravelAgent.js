@@ -584,7 +584,7 @@ const CreateUser = () => {
                 isSearchable={false}
                 classNamePrefix="chakra-react-select"
                 options={listCity}
-                placeholder="Select some colors..."
+                placeholder=""
                 closeMenuOnSelect={true}
                 styles={customStyles}
                 chakraStyles={{

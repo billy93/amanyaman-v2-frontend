@@ -1028,6 +1028,7 @@ const MasterUser = () => {
               variant={'custom'}
             />
             <Select
+              className="global-td"
               placeholder="Select Role"
               sx={{
                 '&::placeholder': {
