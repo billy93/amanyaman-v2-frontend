@@ -362,7 +362,7 @@ const Tables = ({
               <tr key={i} {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <th
-                    style={{ textAlign: 'center' }}
+                    style={{ textAlign: 'left' }}
                     className="header-cell"
                     key={column.id}
                     {...column.getHeaderProps()}
