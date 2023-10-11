@@ -257,9 +257,15 @@ const CommisionForm = () => {
           : {
               id: formstate?.additionalWeek[0].id,
             },
-      benefitDoc: null,
-      wordingDoc: null,
-      covidDoc: null,
+      benefitDoc: {
+        id: formstate?.benefitDoc[0]?.id,
+      },
+      wordingDoc: {
+        id: formstate?.wordingDoc[0]?.id,
+      },
+      covidDoc: {
+        id: formstate?.covidDoc[0]?.id,
+      },
       npwp: true,
       premiumPrice: Number(formstate?.premiumPrice),
       commisionLv1: Number(formstate?.commissionlvl1),
