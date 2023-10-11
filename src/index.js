@@ -31,19 +31,12 @@ root.render(
               alignItems={'center'}
               h="100vh"
             >
-              <Center
-                d="flex"
-                flexDir="column"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <HashLoader
-                  color="#50b848"
-                  size={50}
-                  loading={true}
-                  speedMultiplier={1}
-                />
-              </Center>
+              <HashLoader
+                color="#50b848"
+                size={50}
+                loading={true}
+                speedMultiplier={1}
+              />
             </Box>
           }
           persistor={persistor}
