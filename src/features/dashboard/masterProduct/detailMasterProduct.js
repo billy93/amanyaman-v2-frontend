@@ -1329,6 +1329,7 @@ const DetailMasterUser = () => {
                 '&::placeholder': {
                   color: 'gray',
                   fontStyle: 'italic',
+                  fontSize: '12px',
                 },
               }}
             />
@@ -1346,6 +1347,7 @@ const DetailMasterUser = () => {
                 '&::placeholder': {
                   color: 'gray',
                   fontStyle: 'italic',
+                  fontSize: '12px',
                 },
               }}
             />
