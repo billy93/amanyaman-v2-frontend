@@ -954,7 +954,7 @@ const MasterUser = () => {
           mb={showFilter ? '1.5em' : '2em'}
         >
           <Heading as={'h6'} size={'sm'}>
-            Travel Agent
+            Master User
           </Heading>
           <Stack direction="row" spacing={4} mr="0">
             <Button
