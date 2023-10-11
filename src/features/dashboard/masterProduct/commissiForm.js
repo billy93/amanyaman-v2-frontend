@@ -1526,7 +1526,8 @@ const CommisionForm = () => {
                       Placeholder: () => (
                         <span
                           style={{
-                            display: formstate?.planType ? 'none' : 'none',
+                            display:
+                              formstate?.variants === null ? 'none' : 'none',
                           }}
                         >
                           Select an option
@@ -1551,11 +1552,11 @@ const CommisionForm = () => {
                     pt="1.5"
                     style={{
                       transform:
-                        formstate !== null && formstate?.variant?.length !== 0
+                        formstate !== null && formstate?.variants?.length !== 0
                           ? 'translate(0, -10px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
-                        formstate !== null && formstate?.variant?.length !== 0
+                        formstate !== null && formstate?.variants?.length !== 0
                           ? '#065baa'
                           : '#231F20',
                       fontSize: '14px',
@@ -1577,6 +1578,24 @@ const CommisionForm = () => {
         alignItems={'center'}
         pr="2em"
         pb="1em"
+        isDisabled={
+          formstate?.productName === '' ||
+          formstate?.productCode === '' ||
+          formstate?.currId === '' ||
+          formstate?.productDescription === '' ||
+          formstate?.productPersonalAccidentCover === '' ||
+          formstate?.productMedicalCover === '' ||
+          formstate?.productTravelCover === '' ||
+          formstate?.travellerType === null ||
+          formstate?.bandType === null ||
+          formstate?.areaGroup === null ||
+          formstate?.planType === null ||
+          formstate?.benefitDoc === null ||
+          formstate?.wordingDoc === null ||
+          formstate?.covidDoc === null
+            ? true
+            : false
+        }
       >
         <Button
           onClick={handleNext}

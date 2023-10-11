@@ -352,6 +352,8 @@ const Tables = ({
         bg="white"
         overflow={'scroll'}
         mt="0.5em"
+        pr="1em"
+        pl="1em"
         style={{ maxHeight: '400px', overflowY: 'auto' }}
       >
         <table {...getTableProps()}>
@@ -1261,8 +1263,8 @@ const DetailMasterUser = () => {
         </Box>
         <Box
           border={'1px solid #ebebeb'}
-          pt="5px"
-          pl="5px"
+          pr="1em"
+          pl="1em"
           mt="1em"
           borderRadius={'5px'}
         >
