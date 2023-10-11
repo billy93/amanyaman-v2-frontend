@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { PersistGate } from 'redux-persist/integration/react';
-import { createStandaloneToast, Center, Box } from '@chakra-ui/react';
+import { createStandaloneToast, Box } from '@chakra-ui/react';
 import { defaultTheme } from './theme';
 import '@coreui/coreui/dist/css/coreui.min.css';
 import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
