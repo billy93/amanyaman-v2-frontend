@@ -1440,7 +1440,6 @@ const PolicyDetail = () => {
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {formatDateToLong(
                                             travellers?.dateOfBirth
