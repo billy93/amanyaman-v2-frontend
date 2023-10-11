@@ -479,9 +479,9 @@ const Tables = ({
                     <div
                       {...column.getSortByToggleProps()}
                       style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
+                        // display: 'flex',
+                        // justifyContent: 'space-between',
+                        // alignItems: 'center',
                         cursor: 'pointer',
                       }}
                     >
