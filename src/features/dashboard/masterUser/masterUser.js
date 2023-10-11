@@ -941,10 +941,16 @@ const MasterUser = () => {
   let content;
   if (isLoading) {
     content = (
-      <Center h="50vh" color="#065BAA">
+      <Center
+        h="100vh"
+        d="flex"
+        flexDir="column"
+        justifyContent="center"
+        alignItems="center"
+      >
         <HashLoader
           color="#36d7b7"
-          size="50"
+          size={50}
           loading={true}
           speedMultiplier={100}
         />
