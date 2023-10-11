@@ -1091,7 +1091,6 @@ const MasterUser = () => {
             />
             <Select
               fontStyle={'italic'}
-              size="sm"
               placeholder="Select by Travel Duration"
               backgroundColor={searchBandType === '' ? '#ebebeb' : '#e8f0fe'}
               sx={{
@@ -1147,6 +1146,11 @@ const MasterUser = () => {
                   fontStyle: 'italic',
                 },
               }}
+              style={{
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'normal',
+              }}
               _placeholder={{
                 color: 'grey',
               }}
@@ -1179,10 +1183,16 @@ const MasterUser = () => {
                   fontStyle: 'italic',
                   fontSize: '12px',
                 },
+
                 option: {
                   fontSize: '12px',
                   fontStyle: 'italic',
                 },
+              }}
+              style={{
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'normal',
               }}
               _placeholder={{
                 color: 'gray',
@@ -1221,6 +1231,11 @@ const MasterUser = () => {
                   fontSize: '12px',
                   fontStyle: 'italic',
                 },
+              }}
+              style={{
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'normal',
               }}
               _placeholder={{
                 color: 'grey',
