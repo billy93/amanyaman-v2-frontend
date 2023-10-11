@@ -1091,6 +1091,7 @@ const MasterUser = () => {
             />
             <Select
               fontStyle={'italic'}
+              size="sm"
               placeholder="Select by Travel Duration"
               backgroundColor={searchBandType === '' ? '#ebebeb' : '#e8f0fe'}
               sx={{
