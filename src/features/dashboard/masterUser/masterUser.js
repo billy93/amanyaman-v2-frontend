@@ -1028,6 +1028,7 @@ const MasterUser = () => {
               variant={'custom'}
             />
             <Select
+              backgroundColor={filterRole === '' ? '#ebebeb' : '#e8f0fe'}
               className="global-td"
               placeholder="Select Role"
               sx={{
@@ -1036,6 +1037,11 @@ const MasterUser = () => {
                   fontStyle: 'italic',
                   fontSize: '12px',
                 },
+              }}
+              style={{
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'normal',
               }}
               _placeholder={{
                 color: 'grey',
