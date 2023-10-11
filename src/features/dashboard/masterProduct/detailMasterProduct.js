@@ -1287,7 +1287,7 @@ const DetailMasterUser = () => {
             value={defaultSelected}
             style={{ fontSize: '12px', fontFamily: 'Mulish' }}
           >
-            <Stack direction="row" pl="0.5em" pt="1em">
+            <Stack direction="row" pl="0.5em" pt="1em" className="global-td">
               <Radio value="all">Show All</Radio>
               <Radio value="selected">Show Only Selected</Radio>
               <Radio value="unselected">Show Only Unselected</Radio>
@@ -1313,6 +1313,12 @@ const DetailMasterUser = () => {
               borderRadius={'5px'}
               textTransform={'uppercase'}
               _placeholder={{ textTransform: 'lowercase' }}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                },
+              }}
             />
             <Input
               variant={'custom'}
@@ -1324,6 +1330,12 @@ const DetailMasterUser = () => {
               borderRadius={'5px'}
               textTransform={'uppercase'}
               _placeholder={{ textTransform: 'lowercase' }}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                },
+              }}
             />
             <Input
               variant={'custom'}
@@ -1335,6 +1347,12 @@ const DetailMasterUser = () => {
               borderRadius={'5px'}
               textTransform={'uppercase'}
               _placeholder={{ textTransform: 'lowercase' }}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                },
+              }}
             />
           </Box>
           <Styles>
