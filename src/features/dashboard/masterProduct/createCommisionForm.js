@@ -117,6 +117,7 @@ const CommisionForm = () => {
     ...filterby,
   });
 
+  console.log('travelertype', travelertype);
   React.useEffect(() => {
     if (bandTypes) {
       let duration = bandTypes?.response.map((obj) => ({
@@ -198,6 +199,16 @@ const CommisionForm = () => {
     formstate?.commissionlvl3,
   ]);
 
+  const ajiPriceCalc = React.useMemo(() => {
+    let tot;
+    tot = Math.ceil(
+      formstate?.premiumPrice -
+        (total * formstate?.premiumPrice) / 100 +
+        (((total * formstate?.premiumPrice) / 100) * formstate?.pph23) / 100
+    );
+    return tot;
+  }, [formstate?.premiumPrice, formstate?.pph23, total]);
+
   const handleNext = async (e) => {
     e.preventDefault();
     const constData = {
@@ -243,11 +254,16 @@ const CommisionForm = () => {
       afterCommisionPrice: Math.ceil(
         formstate?.premiumPrice - (total * formstate?.premiumPrice) / 100
       ).toFixed(0),
-      ppn: 10.0,
-      pph23: 2.0,
-      ppnValue: 8.25,
-      pph23Value: 1.65,
-      ajiPrice: 92.4,
+      ppn: formstate?.ppn,
+      pph23: formstate?.pph23,
+      ppnValue: Math.ceil(
+        (Math.ceil((total * formstate?.premiumPrice) / 100) * formstate?.ppn) /
+          100
+      ),
+      pph23Value: Math.ceil(
+        (((total * formstate?.premiumPrice) / 100) * formstate?.pph23) / 100
+      ).toFixed(0),
+      ajiPrice: ajiPriceCalc,
       variants: formstate?.variants.map((v) => {
         return { id: v.id };
       }),
@@ -1382,6 +1398,98 @@ const CommisionForm = () => {
           </Box>
         </Flex>
       </Flex>
+      <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Input
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                name="pph23"
+                value={formstate?.pph23}
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+              />
+              {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                zIndex={'0'}
+                style={{
+                  zIndex: 0,
+                  color:
+                    formstate !== null && formstate?.pph23 !== ''
+                      ? '#065baa'
+                      : '#171923',
+                  fontWeight: 'normal',
+                  paddingBottom: '4px',
+                }}
+              >
+                PPH23
+              </FormLabel>
+              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+            </FormControl>
+          </Box>
+          <Box w="260px">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Stack>
+                <InputGroup size="sm">
+                  <Input
+                    type="number"
+                    placeholder=" "
+                    _placeholder={{ opacity: 1, color: 'gray.500' }}
+                    name="ppn"
+                    value={formstate?.ppn}
+                    onChange={handleData}
+                    h="48px"
+                    variant={'custom'}
+                  />
+                  <InputRightAddon children="%" h="48px" />
+                  <FormLabel
+                    fontSize="12"
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate?.ppn !== ''
+                          ? 'translate(-3px, -8px) scale(0.75)'
+                          : 'translate(0px, 2px) scale(0.75)',
+                      fontSize: '14px',
+                      background: 'transparent',
+                      color:
+                        formstate !== null && formstate?.ppn !== ''
+                          ? '#065baa'
+                          : '#171923',
+                      zIndex: '0',
+                      fontWeight: 'normal',
+                    }}
+                  >
+                    PPN
+                  </FormLabel>
+                </InputGroup>
+              </Stack>
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
       <Flex
         mt="1em"
         width={{ base: '100%' }}
@@ -1505,6 +1613,67 @@ const CommisionForm = () => {
           </Flex>
         </Box>
       </Flex>
+      <Flex
+        mt="1em"
+        width={{ base: '100%' }}
+        gridTemplateColumns={{
+          base: 'repeat(1, 1fr)',
+          sm: 'repeat(2, 1fr)',
+          md: 'repeat(3, 1fr)',
+          lg: 'repeat(4, 1fr)',
+        }}
+        justifyContent="center"
+        alignItems="center"
+        gap="20px"
+        flexWrap="wrap"
+        mx="auto"
+      >
+        <Box
+          border="1px solid #ebebeb"
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          fontSize="14px"
+          fontFamily="Mulish"
+        >
+          Ajiprice
+        </Box>
+        <Box
+          border="1px solid #ebebeb"
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          fontSize="14px"
+          fontFamily="Mulish"
+        >
+          {'Rp '}
+          {ajiPriceCalc}
+        </Box>
+        <Box
+          p="10px"
+          flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+          border="none"
+        >
+          <Flex alignItems="center" gap="5px">
+            <RiErrorWarningLine size="25px" color="blue" />
+            <Box display="flex" flexDirection="column">
+              <Text
+                as="b"
+                fontSize="sm"
+                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              >
+                {' '}
+                Ajiprice:
+              </Text>
+              <Text
+                as="p"
+                fontSize="sm"
+                style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              >
+                Calculated from After commission price + pph23
+              </Text>
+            </Box>
+          </Flex>
+        </Box>
+      </Flex>
       <Box
         display={'flex'}
         justifyContent={'flex-end'}
@@ -1512,6 +1681,31 @@ const CommisionForm = () => {
         pr="2em"
       >
         <Button
+          isDisabled={
+            (formstate?.productName === '',
+            formstate?.productCode === '',
+            formstate?.currId === '',
+            formstate?.value === '',
+            formstate?.productDescription === '',
+            formstate?.productBrochure === '',
+            formstate?.productPersonalAccidentCover === '',
+            formstate?.productMedicalCover === '',
+            formstate?.productTravelCover === '',
+            formstate?.travellerType === null,
+            formstate?.bandType === null,
+            formstate?.areaGroup === null,
+            formstate?.planType === null,
+            formstate?.benefitDoc === null,
+            formstate?.wordingDoc === null,
+            formstate?.covidDoc === null,
+            formstate?.premiumPrice < 0,
+            formstate?.commisionLv1 < 0,
+            formstate?.commisionLv2 < 0,
+            formstate?.commisionLv3 < 0,
+            formstate?.totalCommision < 0,
+            formstate?.afterCommisionPrice < 0,
+            formstate?.ajiPrice < 0)
+          }
           onClick={handleNext}
           variant={'ClaimBtn'}
           style={{ textTransform: 'uppercase', fontSize: '14px' }}
