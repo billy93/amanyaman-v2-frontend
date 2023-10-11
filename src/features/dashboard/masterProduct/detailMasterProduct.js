@@ -1288,9 +1288,15 @@ const DetailMasterUser = () => {
             style={{ fontSize: '12px', fontFamily: 'Mulish' }}
           >
             <Stack direction="row" pl="0.5em" pt="1em" className="global-td">
-              <Radio value="all">Show All</Radio>
-              <Radio value="selected">Show Only Selected</Radio>
-              <Radio value="unselected">Show Only Unselected</Radio>
+              <Radio value="all" className="global-td">
+                Show All
+              </Radio>
+              <Radio value="selected" className="global-td">
+                Show Only Selected
+              </Radio>
+              <Radio value="unselected" className="global-td">
+                Show Only Unselected
+              </Radio>
             </Stack>
           </RadioGroup>
           <Box
@@ -1351,6 +1357,7 @@ const DetailMasterUser = () => {
                 '&::placeholder': {
                   color: 'gray',
                   fontStyle: 'italic',
+                  fontSize: '12px',
                 },
               }}
             />
