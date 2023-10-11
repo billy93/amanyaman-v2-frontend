@@ -1105,6 +1105,11 @@ const MasterUser = () => {
                   fontStyle: 'italic',
                 },
               }}
+              style={{
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'normal',
+              }}
               _placeholder={{
                 color: 'grey',
               }}
