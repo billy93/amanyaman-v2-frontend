@@ -1082,6 +1082,10 @@ const MasterUser = () => {
                   fontStyle: 'italic',
                   fontSize: '12px',
                 },
+                option: {
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                },
               }}
               backgroundColor={searchName === '' ? '#ebebeb' : '#e8f0fe'}
             />
@@ -1094,6 +1098,10 @@ const MasterUser = () => {
                   color: 'gray',
                   fontStyle: 'italic',
                   fontSize: '12px',
+                },
+                option: {
+                  fontSize: '12px',
+                  fontStyle: 'italic',
                 },
               }}
               _placeholder={{
@@ -1128,6 +1136,10 @@ const MasterUser = () => {
                   fontStyle: 'italic',
                   fontSize: '12px',
                 },
+                option: {
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                },
               }}
               _placeholder={{
                 color: 'grey',
@@ -1160,6 +1172,10 @@ const MasterUser = () => {
                   color: 'gray',
                   fontStyle: 'italic',
                   fontSize: '12px',
+                },
+                option: {
+                  fontSize: '12px',
+                  fontStyle: 'italic',
                 },
               }}
               _placeholder={{
@@ -1194,6 +1210,10 @@ const MasterUser = () => {
                   color: 'gray',
                   fontStyle: 'italic',
                   fontSize: '12px',
+                },
+                option: {
+                  fontSize: '12px',
+                  fontStyle: 'italic',
                 },
               }}
               _placeholder={{
