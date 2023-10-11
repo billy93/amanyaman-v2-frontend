@@ -38,7 +38,8 @@ const Login = () => {
   const usersCurrent = useSelector(userLoginCurrent);
   const navigate = useNavigate();
   const [formReset, setFormReset] = useState(false);
-  const [login, { isLoading, isSuccess: loginSuccess }] = useLoginMutation();
+  const [login, { isLoading, isSuccess: loginSuccess, isError: loginError }] =
+    useLoginMutation();
   const isAuthenticated = useSelector(isAuthenticate);
   const dispatch = useDispatch();
   const [fields, setFields] = useState({
@@ -259,231 +260,111 @@ const Login = () => {
     });
   };
 
-  const content = isLoading ? (
-    <PageLoader loading={isLoading} />
-  ) : (
-    <section className="login-page">
-      <Box color="black:500">
-        <VStack spacing={4} align="stretch">
-          <AbsoluteCenter axis="both" width="400px">
-            <Box
-              bg="white"
-              minH="300"
-              p="5"
-              boxShadow="md"
-              rounded="md"
-              width={{ base: '100%' }}
-            >
-              <Box mt="15px">
-                <Image
-                  src={'https://claim.amanyaman.com/images/logo.svg'}
-                  alt="Logo Aman"
-                  objectFit="cover"
-                  ml={'auto'}
-                  mr={'auto'}
-                />
-              </Box>
-              <Stack
-                spacing={2}
-                display="flex"
-                flexDirection="row"
-                justifyContent="center"
-                mt="35px"
-                h="50"
+  let content;
+  if (isLoading) {
+    content = <PageLoader loading={isLoading} />;
+  } else {
+    content = (
+      <section className="login-page">
+        <Box color="black:500">
+          <VStack spacing={4} align="stretch">
+            <AbsoluteCenter axis="both" width="400px">
+              <Box
+                bg="white"
+                minH="300"
+                p="5"
+                boxShadow="md"
+                rounded="md"
+                width={{ base: '100%' }}
               >
-                <Heading variant="primary" as="h4" size="md">
-                  Sales App
-                </Heading>
-              </Stack>
-              {formReset ? (
-                <Box width="auto" minH="300px" mt="2" spacing="2">
-                  {isError ? (
-                    <Box
-                      mb={'3'}
-                      bg={'#ffeccc'}
-                      border={'1px'}
-                      borderColor={'#ffa000'}
-                      width={{ base: '100%' }}
-                      height={'55px'}
-                      p={'2'}
-                      display="flex"
-                      justifyContent={'flex-start'}
-                      alignItems={'center'}
-                    >
-                      <Box bg="#FFA00">
-                        <MdWarning size={'20px'} color="#FFA000" />
-                      </Box>
-                      <Text as={'p'} fontSize="xs" color={'black.200'} p={'3'}>
-                        User not found
-                      </Text>
-                    </Box>
-                  ) : (
-                    <Box
-                      mb={'3'}
-                      bg={'#ffeccc'}
-                      border={'1px'}
-                      borderColor={'#ffa000'}
-                      width={{ base: '100%' }}
-                      height={'55px'}
-                      p={'2'}
-                      display="flex"
-                      justifyContent={'flex-start'}
-                      alignItems={'center'}
-                    >
-                      <Box bg="#FFA00">
-                        <MdWarning size={'20px'} color="#FFA000" />
-                      </Box>
-                      <Text as={'p'} fontSize="xs" color={'black.200'} p={'3'}>
-                        Please Fill Email and Password to reset password
-                      </Text>
-                    </Box>
-                  )}
-
-                  <Stack direction={['column']} spacing="10px">
-                    <FormControl variant="floating" id="first-name" isRequired>
-                      <Input
-                        variant="custom"
-                        placeholder=" "
-                        _placeholder={{ opacity: 1, color: 'gray.500' }}
-                        name="username"
-                        value={fieldsReset?.username}
-                        onChange={setFieldResetChange}
-                        h="48px"
-                      />
-                      {/* It is important that the Label comes after the Control due to css selectors */}
-                      <FormLabel fontSize="12" pt="1.5">
-                        Enter Username
-                      </FormLabel>
-                      {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                    </FormControl>
-                    <FormControl
-                      variant="floating"
-                      id="pwd"
-                      isRequired
-                      display={'none'}
-                    >
-                      <InputGroup>
-                        <Input
-                          variant={'custom'}
-                          type={show ? 'text' : 'password'}
-                          placeholder=" "
-                          _placeholder={{ opacity: 1, color: 'gray.500' }}
-                          name="password"
-                          value={fieldsReset?.password}
-                          onChange={setFieldResetChange}
-                          h="48px"
-                        />
-                        <FormLabel fontSize="12" pt="1.5">
-                          Enter Password
-                        </FormLabel>
-                        <Box>
-                          <InputRightElement width="4.5rem" h="100%">
-                            <Button
-                              h="1.75rem"
-                              size="sm"
-                              onClick={handleClick}
-                              bg="none"
-                              color={'#065BAA'}
-                              border={'none'}
-                              _hover={{
-                                border: 'none',
-                                transform: 'scale(1.05, 1.05)',
-                                bg: '#054e912b',
-
-                                _dark: {
-                                  bg: '#054e91',
-                                },
-                              }}
-                            >
-                              {show ? <AiFillEye /> : <AiFillEyeInvisible />}
-                            </Button>
-                          </InputRightElement>
+                <Box mt="15px">
+                  <Image
+                    src={'https://claim.amanyaman.com/images/logo.svg'}
+                    alt="Logo Aman"
+                    objectFit="cover"
+                    ml={'auto'}
+                    mr={'auto'}
+                  />
+                </Box>
+                <Stack
+                  spacing={2}
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="center"
+                  mt="35px"
+                  h="50"
+                >
+                  <Heading variant="primary" as="h4" size="md">
+                    Sales App
+                  </Heading>
+                </Stack>
+                {formReset ? (
+                  <Box width="auto" minH="300px" mt="2" spacing="2">
+                    {isError ? (
+                      <Box
+                        mb={'3'}
+                        bg={'#ffeccc'}
+                        border={'1px'}
+                        borderColor={'#ffa000'}
+                        width={{ base: '100%' }}
+                        height={'55px'}
+                        p={'2'}
+                        display="flex"
+                        justifyContent={'flex-start'}
+                        alignItems={'center'}
+                      >
+                        <Box bg="#FFA00">
+                          <MdWarning size={'20px'} color="#FFA000" />
                         </Box>
-                      </InputGroup>
-                      {/* It is important that the Label comes after the Control due to css selectors */}
-                    </FormControl>
-                    {/* <Link to="/forgot-password"> */}
-                    {formReset ? (
-                      <>
-                        <Box display={'flex'} justifyContent={'flex-end'}>
-                          <Text
-                            fontSize={'sm'}
-                            as="u"
-                            color={'#065BAA'}
-                            onClick={handleForgotPass}
-                            fontFamily="Mulish"
-                            fontWeight={'700'}
-                            cursor={'pointer'}
-                          >
-                            Back to login ?
-                          </Text>
-                        </Box>
-                      </>
-                    ) : (
-                      <Box display={'flex'} justifyContent={'flex-end'}>
                         <Text
-                          fontSize={'sm'}
-                          as="u"
-                          color={'#065BAA'}
-                          fontFamily="Mulish"
-                          fontWeight={'700'}
-                          onClick={handleForgotPass}
-                          cursor={'pointer'}
+                          as={'p'}
+                          fontSize="xs"
+                          color={'black.200'}
+                          p={'3'}
                         >
-                          Forgot Password ?
+                          User not found
+                        </Text>
+                      </Box>
+                    ) : (
+                      <Box
+                        mb={'3'}
+                        bg={'#ffeccc'}
+                        border={'1px'}
+                        borderColor={'#ffa000'}
+                        width={{ base: '100%' }}
+                        height={'55px'}
+                        p={'2'}
+                        display="flex"
+                        justifyContent={'flex-start'}
+                        alignItems={'center'}
+                      >
+                        <Box bg="#FFA00">
+                          <MdWarning size={'20px'} color="#FFA000" />
+                        </Box>
+                        <Text
+                          as={'p'}
+                          fontSize="xs"
+                          color={'black.200'}
+                          p={'3'}
+                        >
+                          Please Fill Email and Password to reset password
                         </Text>
                       </Box>
                     )}
 
-                    {/* </Link> */}
-                    <Box onClick={handleRememberMe} display={'none'}>
-                      <Checkbox
-                        defaultChecked
-                        color={'#231F20'}
-                        onClick={handleRememberMe}
-                        checked={persist?.isPersist}
-                        id="persist"
-                      >
-                        <Text fontSize={'sm'} onClick={handleRememberMe}>
-                          Remember Me{' '}
-                        </Text>
-                      </Checkbox>
-                    </Box>
-                    <Button
-                      bg="#065BAA"
-                      onClick={handleReset}
-                      h="48px"
-                      isLoading={loading}
-                    >
-                      <Text
-                        as="b"
-                        fontSize={'sm'}
-                        fontFamily="arial"
-                        fontWeight={'700'}
-                        style={{ fontSize: '14px', textTransform: 'uppercase' }}
-                      >
-                        Reset
-                      </Text>
-                    </Button>
-                  </Stack>
-                </Box>
-              ) : (
-                <Box width="auto" minH="300px" mt="2" spacing="2">
-                  <Stack direction={['column']} spacing="10px">
-                    <form onSubmit={handlelogin}>
+                    <Stack direction={['column']} spacing="10px">
                       <FormControl
                         variant="floating"
                         id="first-name"
                         isRequired
-                        style={{ margin: '4px 0px' }}
                       >
                         <Input
                           variant="custom"
                           placeholder=" "
                           _placeholder={{ opacity: 1, color: 'gray.500' }}
                           name="username"
-                          value={fields?.username}
-                          onChange={setFieldChange}
+                          value={fieldsReset?.username}
+                          onChange={setFieldResetChange}
                           h="48px"
                         />
                         {/* It is important that the Label comes after the Control due to css selectors */}
@@ -496,18 +377,17 @@ const Login = () => {
                         variant="floating"
                         id="pwd"
                         isRequired
-                        style={{ margin: '4px 0px' }}
+                        display={'none'}
                       >
                         <InputGroup>
                           <Input
-                            variant="custom"
+                            variant={'custom'}
                             type={show ? 'text' : 'password'}
                             placeholder=" "
                             _placeholder={{ opacity: 1, color: 'gray.500' }}
                             name="password"
-                            value={fields?.password}
-                            bg={fields?.password !== '' ? '#e8f0fe' : '#ebebeb'}
-                            onChange={setFieldChange}
+                            value={fieldsReset?.password}
+                            onChange={setFieldResetChange}
                             h="48px"
                           />
                           <FormLabel fontSize="12" pt="1.5">
@@ -540,21 +420,40 @@ const Login = () => {
                         {/* It is important that the Label comes after the Control due to css selectors */}
                       </FormControl>
                       {/* <Link to="/forgot-password"> */}
-                      <Box display={'flex'} justifyContent={'flex-end'}>
-                        <Text
-                          fontSize={'sm'}
-                          as="u"
-                          color={'#065BAA'}
-                          fontFamily="Mulish"
-                          fontWeight={'700'}
-                          onClick={handleForgotPass}
-                          cursor={'pointer'}
-                        >
-                          Forgot Password ?
-                        </Text>
-                      </Box>
+                      {formReset ? (
+                        <>
+                          <Box display={'flex'} justifyContent={'flex-end'}>
+                            <Text
+                              fontSize={'sm'}
+                              as="u"
+                              color={'#065BAA'}
+                              onClick={handleForgotPass}
+                              fontFamily="Mulish"
+                              fontWeight={'700'}
+                              cursor={'pointer'}
+                            >
+                              Back to login ?
+                            </Text>
+                          </Box>
+                        </>
+                      ) : (
+                        <Box display={'flex'} justifyContent={'flex-end'}>
+                          <Text
+                            fontSize={'sm'}
+                            as="u"
+                            color={'#065BAA'}
+                            fontFamily="Mulish"
+                            fontWeight={'700'}
+                            onClick={handleForgotPass}
+                            cursor={'pointer'}
+                          >
+                            Forgot Password ?
+                          </Text>
+                        </Box>
+                      )}
+
                       {/* </Link> */}
-                      <Box onClick={handleRememberMe}>
+                      <Box onClick={handleRememberMe} display={'none'}>
                         <Checkbox
                           defaultChecked
                           color={'#231F20'}
@@ -567,13 +466,11 @@ const Login = () => {
                           </Text>
                         </Checkbox>
                       </Box>
-
                       <Button
-                        type="submit"
                         bg="#065BAA"
+                        onClick={handleReset}
                         h="48px"
-                        w="100%"
-                        mt="15px"
+                        isLoading={loading}
                       >
                         <Text
                           as="b"
@@ -585,19 +482,149 @@ const Login = () => {
                             textTransform: 'uppercase',
                           }}
                         >
-                          Next
+                          Reset
                         </Text>
                       </Button>
-                    </form>
-                  </Stack>
-                </Box>
-              )}
-            </Box>
-          </AbsoluteCenter>
-        </VStack>
-      </Box>
-    </section>
-  );
+                    </Stack>
+                  </Box>
+                ) : (
+                  <Box width="auto" minH="300px" mt="2" spacing="2">
+                    <Stack direction={['column']} spacing="10px">
+                      <form onSubmit={handlelogin}>
+                        <FormControl
+                          variant="floating"
+                          id="first-name"
+                          isRequired
+                          style={{ margin: '4px 0px' }}
+                        >
+                          <Input
+                            variant="custom"
+                            placeholder=" "
+                            _placeholder={{ opacity: 1, color: 'gray.500' }}
+                            name="username"
+                            value={fields?.username}
+                            onChange={setFieldChange}
+                            h="48px"
+                          />
+                          {/* It is important that the Label comes after the Control due to css selectors */}
+                          <FormLabel fontSize="12" pt="1.5">
+                            Enter Username
+                          </FormLabel>
+                          {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                        </FormControl>
+                        <FormControl
+                          variant="floating"
+                          id="pwd"
+                          isRequired
+                          style={{ margin: '4px 0px' }}
+                        >
+                          <InputGroup>
+                            <Input
+                              variant="custom"
+                              type={show ? 'text' : 'password'}
+                              placeholder=" "
+                              _placeholder={{ opacity: 1, color: 'gray.500' }}
+                              name="password"
+                              value={fields?.password}
+                              bg={
+                                fields?.password !== '' ? '#e8f0fe' : '#ebebeb'
+                              }
+                              onChange={setFieldChange}
+                              h="48px"
+                            />
+                            <FormLabel fontSize="12" pt="1.5">
+                              Enter Password
+                            </FormLabel>
+                            <Box>
+                              <InputRightElement width="4.5rem" h="100%">
+                                <Button
+                                  h="1.75rem"
+                                  size="sm"
+                                  onClick={handleClick}
+                                  bg="none"
+                                  color={'#065BAA'}
+                                  border={'none'}
+                                  _hover={{
+                                    border: 'none',
+                                    transform: 'scale(1.05, 1.05)',
+                                    bg: '#054e912b',
+
+                                    _dark: {
+                                      bg: '#054e91',
+                                    },
+                                  }}
+                                >
+                                  {show ? (
+                                    <AiFillEye />
+                                  ) : (
+                                    <AiFillEyeInvisible />
+                                  )}
+                                </Button>
+                              </InputRightElement>
+                            </Box>
+                          </InputGroup>
+                          {/* It is important that the Label comes after the Control due to css selectors */}
+                        </FormControl>
+                        {/* <Link to="/forgot-password"> */}
+                        <Box display={'flex'} justifyContent={'flex-end'}>
+                          <Text
+                            fontSize={'sm'}
+                            as="u"
+                            color={'#065BAA'}
+                            fontFamily="Mulish"
+                            fontWeight={'700'}
+                            onClick={handleForgotPass}
+                            cursor={'pointer'}
+                          >
+                            Forgot Password ?
+                          </Text>
+                        </Box>
+                        {/* </Link> */}
+                        <Box onClick={handleRememberMe}>
+                          <Checkbox
+                            defaultChecked
+                            color={'#231F20'}
+                            onClick={handleRememberMe}
+                            checked={persist?.isPersist}
+                            id="persist"
+                          >
+                            <Text fontSize={'sm'} onClick={handleRememberMe}>
+                              Remember Me{' '}
+                            </Text>
+                          </Checkbox>
+                        </Box>
+
+                        <Button
+                          type="submit"
+                          bg="#065BAA"
+                          h="48px"
+                          w="100%"
+                          mt="15px"
+                        >
+                          <Text
+                            as="b"
+                            fontSize={'sm'}
+                            fontFamily="arial"
+                            fontWeight={'700'}
+                            style={{
+                              fontSize: '14px',
+                              textTransform: 'uppercase',
+                            }}
+                          >
+                            Next
+                          </Text>
+                        </Button>
+                      </form>
+                    </Stack>
+                  </Box>
+                )}
+              </Box>
+            </AbsoluteCenter>
+          </VStack>
+        </Box>
+      </section>
+    );
+  }
 
   return content;
 };
