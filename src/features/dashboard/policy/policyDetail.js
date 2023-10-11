@@ -865,7 +865,9 @@ const PolicyDetail = () => {
                           fontFamily={'Mulish'}
                           style={{ fontSize: '12px' }}
                         >
-                          {`splitCreditLimit(${quotation?.paymentData?.paymentMethod})`}
+                          {splitCreditLimit(
+                            quotation?.paymentData?.paymentMethod
+                          )}
                         </Text>
                       </Box>
                       <Box
