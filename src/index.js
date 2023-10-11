@@ -23,22 +23,22 @@ root.render(
     >
       <Provider store={store}>
         <PersistGate
-          loading={
-            <Box
-              className="overlay"
-              display={'flex'}
-              justifyContent={'center'}
-              alignItems={'center'}
-              h="100vh"
-            >
-              <HashLoader
-                color="#50b848"
-                size={50}
-                loading={true}
-                speedMultiplier={1}
-              />
-            </Box>
-          }
+          // loading={
+          //   <Box
+          //     className="overlay"
+          //     display={'flex'}
+          //     justifyContent={'center'}
+          //     alignItems={'center'}
+          //     h="100vh"
+          //   >
+          //     <HashLoader
+          //       color="#50b848"
+          //       size={50}
+          //       loading={true}
+          //       speedMultiplier={1}
+          //     />
+          //   </Box>
+          // }
           persistor={persistor}
         >
           {/* <ApiProvider api={apiSlice}>     */}
