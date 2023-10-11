@@ -1014,22 +1014,13 @@ const PolicyDetail = () => {
                   flexDirection={'row'}
                   alignItems={'center'}
                   justifyContent={'space-between'}
+                  className="global-detail"
                 >
-                  <Text
-                    as="b"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
-                    color={'#231F20'}
-                  >
+                  <Text as="b" fontFamily={'Mulish'} color={'#231F20'}>
                     {'Policy Number'}
                   </Text>
-                  <Box bg="#f0f3f8" p="2px">
-                    <Text
-                      as="p"
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '14px' }}
-                      fontWeight={'400'}
-                    >
+                  <Box bg="#f0f3f8" p="2px" className="global-detail">
+                    <Text as="p" fontFamily={'Mulish'} fontWeight={'400'}>
                       {policyNumberString === undefined
                         ? quotation?.travellers[0]?.policyNumber
                         : policyNumberString}
@@ -1044,22 +1035,13 @@ const PolicyDetail = () => {
                   flexDirection={'row'}
                   alignItems={'center'}
                   justifyContent={'space-between'}
+                  className="global-detail"
                 >
-                  <Text
-                    as="b"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
-                    color={'#231F20'}
-                  >
+                  <Text as="b" fontFamily={'Mulish'} color={'#231F20'}>
                     {'Proforma Invoice'}
                   </Text>
-                  <Box bg="#f0f3f8" p="2px">
-                    <Text
-                      as="p"
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '14px' }}
-                      fontWeight={'400'}
-                    >
+                  <Box bg="#f0f3f8" p="2px" className="global-detail">
+                    <Text as="p" fontFamily={'Mulish'} fontWeight={'400'}>
                       {quotation !== null ? quotation?.proformaRefNo : null}
                     </Text>
                   </Box>
@@ -1072,13 +1054,9 @@ const PolicyDetail = () => {
                   flexDirection={'column'}
                   alignItems={'flex-start'}
                   justifyContent={'center'}
+                  className="global-detail"
                 >
-                  <Text
-                    as="b"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
-                    color={'#231F20'}
-                  >
+                  <Text as="b" fontFamily={'Mulish'} color={'#231F20'}>
                     {'Policy History'}
                   </Text>
                   <Box
@@ -1088,6 +1066,7 @@ const PolicyDetail = () => {
                     alignItems={'center'}
                     gap="5px"
                     flexDirection="column"
+                    className="global-detail"
                   >
                     {quotation?.histories.map((history, i) => (
                       <Box
@@ -1105,6 +1084,7 @@ const PolicyDetail = () => {
                           borderRadius={'full'}
                           display="flex"
                           ml="5px"
+                          className="global-detail"
                         />
                         <Text
                           p="10px"
@@ -1165,23 +1145,27 @@ const PolicyDetail = () => {
                                       borderBottom={'1px solid #ebebeb'}
                                       borderRadius={'5px'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Policy Number
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {travellers?.policyNumber}
                                         </Text>
@@ -1195,23 +1179,27 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Traveller Type
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {travellers?.travellerType}
                                         </Text>
@@ -1225,23 +1213,27 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Title
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {travellers?.title}
                                         </Text>
@@ -1255,23 +1247,27 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Full Name
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {`${travellers?.firstName} ${travellers?.lastName}`}
                                         </Text>
@@ -1285,23 +1281,27 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Email Address
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {travellers?.email}
                                         </Text>
@@ -1315,23 +1315,27 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Phone Number
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {travellers?.phone}
                                         </Text>
@@ -1345,23 +1349,27 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Identitiy Card/ Passport
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {travellers?.passport}
                                         </Text>
@@ -1375,23 +1383,27 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Ticket Number
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {travellers?.ticket
                                             ? travellers?.ticket
@@ -1407,18 +1419,23 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Date Of Birth
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
@@ -1439,23 +1456,27 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Place Of Birth
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {travellers?.placeOfBirth}
                                         </Text>
@@ -1469,18 +1490,23 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Address
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
@@ -1499,23 +1525,27 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Beneficiary
                                         </Text>
                                       </Box>
-                                      <Box w={{ md: '70%' }}>
+                                      <Box
+                                        w={{ md: '70%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {travellers?.beneficiary
                                             ? travellers?.beneficiary
@@ -1531,12 +1561,14 @@ const PolicyDetail = () => {
                                       p={{ base: '4px', md: '10px' }}
                                       borderBottom={'1px solid #ebebeb'}
                                     >
-                                      <Box w={{ md: '30%' }}>
+                                      <Box
+                                        w={{ md: '30%' }}
+                                        className="global-detail"
+                                      >
                                         <Text
                                           as="b"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                           color={'#231F20'}
                                         >
                                           Relationship
