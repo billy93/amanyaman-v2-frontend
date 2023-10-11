@@ -830,7 +830,7 @@ const DetailMasterUser = () => {
             </Box>
           </Box>
         </Box>
-        <Box display={'flex'} gap="10px" pr="1em" pl="1em">
+        <Box display={'flex'} gap="10px" pr="1.5em" pl="1.5em">
           <Box display={'flex'} flexDirection={'column'} mt="1em">
             <Box
               border="1px solid #ebebeb"
@@ -1262,7 +1262,7 @@ const DetailMasterUser = () => {
           </Box>
         </Box>
         <Box
-          border={'1px solid #ebebeb'}
+          // border={'1px solid #ebebeb'}
           pr="1em"
           pl="1em"
           mt="1em"
