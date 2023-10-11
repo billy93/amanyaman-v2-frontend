@@ -815,6 +815,11 @@ const Polcies = () => {
               _placeholder={{
                 color: 'grey',
               }}
+              style={{
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'normal',
+              }}
               sx={{
                 '&::placeholder': {
                   color: 'gray',
@@ -839,6 +844,11 @@ const Polcies = () => {
               backgroundColor={
                 filterQuery?.planType === '' ? '#ebebeb' : '#e8f0fe'
               }
+              style={{
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'normal',
+              }}
               _placeholder={{
                 color: 'grey',
               }}
@@ -866,6 +876,11 @@ const Polcies = () => {
               backgroundColor={
                 filterQuery?.bandType === '' ? '#ebebeb' : '#e8f0fe'
               }
+              style={{
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'normal',
+              }}
               sx={{
                 '&::placeholder': {
                   color: 'gray',
@@ -899,6 +914,11 @@ const Polcies = () => {
                   fontStyle: 'italic',
                   fontSize: '12px',
                 },
+              }}
+              style={{
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'normal',
               }}
               _placeholder={{
                 color: 'grey',
