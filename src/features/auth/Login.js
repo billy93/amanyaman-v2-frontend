@@ -38,8 +38,7 @@ const Login = () => {
   const usersCurrent = useSelector(userLoginCurrent);
   const navigate = useNavigate();
   const [formReset, setFormReset] = useState(false);
-  const [login, { isLoading, isSuccess: loginSuccess, isError: loginError }] =
-    useLoginMutation();
+  const [login, { isLoading, isSuccess: loginSuccess }] = useLoginMutation();
   const isAuthenticated = useSelector(isAuthenticate);
   const dispatch = useDispatch();
   const [fields, setFields] = useState({
