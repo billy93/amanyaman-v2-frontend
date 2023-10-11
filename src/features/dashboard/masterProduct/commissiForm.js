@@ -360,7 +360,7 @@ const CommisionForm = () => {
     const constData = {
       id: formstate.id,
       productName: formstate?.productName,
-      productDetailCode: formstate?.code,
+      code: formstate?.productDetailCode,
       productCode: formstate?.productCode,
       currId: formstate?.currId,
       value: formstate?.value,
