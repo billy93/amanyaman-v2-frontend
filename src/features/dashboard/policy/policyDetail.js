@@ -371,13 +371,6 @@ const PolicyDetail = () => {
     navigate(`/upgrade-quote/search/${id}`);
   };
 
-  function splitCreditLimit(inputString) {
-    const parts = inputString.split('_');
-    return {
-      part1: parts[0],
-      part2: parts[1],
-    };
-  }
   console.log('view closed', viewModal);
   let content;
   if (isLoading || loadingDownload || loadingView || isLoadingState) {
@@ -865,9 +858,7 @@ const PolicyDetail = () => {
                           fontFamily={'Mulish'}
                           style={{ fontSize: '12px' }}
                         >
-                          {splitCreditLimit(
-                            quotation?.paymentData?.paymentMethod
-                          )}
+                          {`${quotation?.paymentData?.paymentMethod}`}
                         </Text>
                       </Box>
                       <Box
