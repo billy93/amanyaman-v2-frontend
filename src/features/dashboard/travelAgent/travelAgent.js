@@ -1039,6 +1039,13 @@ const MasterUser = () => {
               bg="#ebebeb"
               borderRadius={'5px'}
               textTransform={'uppercase'}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
+              }}
               _placeholder={{ textTransform: 'lowercase' }}
             />
             <Input
@@ -1050,6 +1057,13 @@ const MasterUser = () => {
               bg="#ebebeb"
               borderRadius={'5px'}
               textTransform={'uppercase'}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
+              }}
               _placeholder={{ textTransform: 'lowercase' }}
             />
           </Box>

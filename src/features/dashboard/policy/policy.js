@@ -1168,6 +1168,13 @@ const Polcies = () => {
               bg="#ebebeb"
               borderRadius={'5px'}
               _placeholder={{ textTransform: 'lowercase' }}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
+              }}
             />
             <Input
               variant={'custom'}
@@ -1178,6 +1185,13 @@ const Polcies = () => {
               bg="#ebebeb"
               borderRadius={'5px'}
               _placeholder={{ textTransform: 'lowercase' }}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
+              }}
             />
             <Input
               variant={'custom'}
@@ -1188,6 +1202,13 @@ const Polcies = () => {
               bg="#ebebeb"
               borderRadius={'5px'}
               _placeholder={{ textTransform: 'lowercase' }}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
+              }}
             />
 
             <Select
@@ -1195,10 +1216,12 @@ const Polcies = () => {
               backgroundColor={
                 filterQuery?.policyStatus === '' ? '#ebebeb' : '#e8f0fe'
               }
-              style={{
-                fontSize: '14px',
-                fontFamily: 'Mulish',
-                fontWeight: 'normal',
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
               }}
               _placeholder={{
                 color: 'grey',
@@ -1216,10 +1239,12 @@ const Polcies = () => {
               backgroundColor={
                 filterQuery?.planType === '' ? '#ebebeb' : '#e8f0fe'
               }
-              style={{
-                fontSize: '14px',
-                fontFamily: 'Mulish',
-                fontWeight: 'normal',
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
               }}
               _placeholder={{
                 color: 'grey',

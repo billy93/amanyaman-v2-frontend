@@ -1004,21 +1004,37 @@ const MasterUser = () => {
               bg="#ebebeb"
               borderRadius={'5px'}
               variant={'custom'}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
+              }}
             />
             <Input
               value={filterEmail}
               onChange={handleFilterByEmail}
               placeholder={'Search by email'}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
+              }}
               bg="#ebebeb"
               borderRadius={'5px'}
               variant={'custom'}
             />
             <Select
               placeholder="Select Role"
-              style={{
-                fontSize: '14px',
-                fontFamily: 'Mulish',
-                fontWeight: 'normal',
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
               }}
               _placeholder={{
                 color: 'grey',

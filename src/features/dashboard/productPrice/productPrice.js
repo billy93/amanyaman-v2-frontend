@@ -812,13 +812,15 @@ const Polcies = () => {
               backgroundColor={
                 filterQuery?.travellerType === '' ? '#ebebeb' : '#e8f0fe'
               }
-              style={{
-                fontSize: '14px',
-                fontFamily: 'Mulish',
-                fontWeight: 'normal',
-              }}
               _placeholder={{
                 color: 'grey',
+              }}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
               }}
               defaultValue={''}
               name="travellerType"
@@ -837,13 +839,15 @@ const Polcies = () => {
               backgroundColor={
                 filterQuery?.planType === '' ? '#ebebeb' : '#e8f0fe'
               }
-              style={{
-                fontSize: '14px',
-                fontFamily: 'Mulish',
-                fontWeight: 'normal',
-              }}
               _placeholder={{
                 color: 'grey',
+              }}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
               }}
               defaultValue={''}
               name="planType"
@@ -862,10 +866,12 @@ const Polcies = () => {
               backgroundColor={
                 filterQuery?.bandType === '' ? '#ebebeb' : '#e8f0fe'
               }
-              style={{
-                fontSize: '14px',
-                fontFamily: 'Mulish',
-                fontWeight: 'normal',
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
               }}
               _placeholder={{
                 color: 'grey',
@@ -887,10 +893,12 @@ const Polcies = () => {
               backgroundColor={
                 filterQuery?.travelAgent === '' ? '#ebebeb' : '#e8f0fe'
               }
-              style={{
-                fontSize: '14px',
-                fontFamily: 'Mulish',
-                fontWeight: 'normal',
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
               }}
               _placeholder={{
                 color: 'grey',
