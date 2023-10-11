@@ -1076,15 +1076,24 @@ const MasterUser = () => {
               bg="#ebebeb"
               borderRadius={'5px'}
               variant={'custom'}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
+              }}
               backgroundColor={searchName === '' ? '#ebebeb' : '#e8f0fe'}
             />
             <Select
               placeholder="Select by Travel Duration"
               backgroundColor={searchBandType === '' ? '#ebebeb' : '#e8f0fe'}
-              style={{
-                fontSize: '14px',
-                fontFamily: 'Mulish',
-                fontWeight: 'normal',
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
               }}
               _placeholder={{
                 color: 'grey',
@@ -1104,10 +1113,12 @@ const MasterUser = () => {
             <Select
               placeholder="Select by Plan Type"
               backgroundColor={searchPlanType === '' ? '#ebebeb' : '#e8f0fe'}
-              style={{
-                fontSize: '14px',
-                fontFamily: 'Mulish',
-                fontWeight: 'normal',
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
               }}
               _placeholder={{
                 color: 'grey',
@@ -1127,10 +1138,12 @@ const MasterUser = () => {
             <Select
               placeholder="Select by Area"
               backgroundColor={searchArea === '' ? '#ebebeb' : '#e8f0fe'}
-              style={{
-                fontSize: '14px',
-                fontFamily: 'Mulish',
-                fontWeight: 'normal',
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
               }}
               _placeholder={{
                 color: 'grey',
@@ -1150,10 +1163,12 @@ const MasterUser = () => {
             <Select
               placeholder="Select by product type"
               backgroundColor={searchProductType === '' ? '#ebebeb' : '#e8f0fe'}
-              style={{
-                fontSize: '14px',
-                fontFamily: 'Mulish',
-                fontWeight: 'normal',
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
               }}
               _placeholder={{
                 color: 'grey',
