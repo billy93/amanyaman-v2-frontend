@@ -1945,9 +1945,7 @@ const CommisionForm = () => {
             formstate?.productName === '' ||
             formstate?.productCode === '' ||
             formstate?.currId === '' ||
-            formstate?.value === '' ||
             formstate?.productDescription === '' ||
-            formstate?.productBrochure === '' ||
             formstate?.productPersonalAccidentCover === '' ||
             formstate?.productMedicalCover === '' ||
             formstate?.productTravelCover === '' ||
