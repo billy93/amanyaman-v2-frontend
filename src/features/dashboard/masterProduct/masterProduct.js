@@ -1111,6 +1111,7 @@ const MasterUser = () => {
                       fontSize={'sm'}
                       className="global-td"
                       fontStyle={'italic'}
+                      style={{ fontSize: '12px' }}
                     >
                       {types.travelDurationName}
                     </Text>
@@ -1144,6 +1145,7 @@ const MasterUser = () => {
                       fontSize={'sm'}
                       className="global-td"
                       fontStyle={'italic'}
+                      style={{ fontSize: '12px' }}
                     >
                       {types.name}
                     </Text>
@@ -1177,6 +1179,7 @@ const MasterUser = () => {
                       fontSize={'sm'}
                       className="global-td"
                       fontStyle={'italic'}
+                      style={{ fontSize: '12px' }}
                     >
                       {types.areaGroupName}
                     </Text>
@@ -1205,7 +1208,14 @@ const MasterUser = () => {
               {travellerTypes?.response.map((types, i) => {
                 return (
                   <option value={types.id} key={i}>
-                    {types.name}
+                    <Text
+                      fontSize={'sm'}
+                      className="global-td"
+                      fontStyle={'italic'}
+                      style={{ fontSize: '12px' }}
+                    >
+                      {types.name}
+                    </Text>
                   </option>
                 );
               })}
