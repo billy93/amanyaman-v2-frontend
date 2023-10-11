@@ -28,7 +28,7 @@ const DownloadXLSButton = ({ params, page, size }) => {
         document.body.removeChild(downloadLink);
         // Clean up the blob URL
         URL.revokeObjectURL(data);
-      }, 1000);
+      }, 200);
     }
   };
   console.log('error', error);
