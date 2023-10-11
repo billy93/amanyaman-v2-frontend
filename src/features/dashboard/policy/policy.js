@@ -700,6 +700,7 @@ const Polcies = () => {
     }, 1000);
   }, []);
 
+  console.log('totalCount', totalCount);
   function formatDateToLong(dateString) {
     const monthNames = [
       'January',
@@ -1251,7 +1252,7 @@ const Polcies = () => {
         >
           <Box>
             <Box>
-              {loading || isFetching ? (
+              {loading ? (
                 // Use our custom loading state to show a loading indicator
                 <td colSpan="10000">Loading...</td>
               ) : (
