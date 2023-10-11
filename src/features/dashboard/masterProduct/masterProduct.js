@@ -1163,7 +1163,9 @@ const MasterUser = () => {
                 },
               }}
               _placeholder={{
-                color: 'grey',
+                color: 'gray',
+                fontStyle: 'italic',
+                fontSize: '12px',
               }}
               defaultValue={''}
               name="areaGroup"
