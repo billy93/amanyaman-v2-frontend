@@ -1107,7 +1107,13 @@ const MasterUser = () => {
               {bandTypes?.response.map((types, i) => {
                 return (
                   <option value={types.id} key={i}>
-                    {types.travelDurationName}
+                    <Text
+                      fontSize={'sm'}
+                      className="global-td"
+                      fontStyle={'italic'}
+                    >
+                      {types.travelDurationName}
+                    </Text>
                   </option>
                 );
               })}
@@ -1134,7 +1140,13 @@ const MasterUser = () => {
               {planTypes?.response.map((types, i) => {
                 return (
                   <option value={types.id} key={i}>
-                    {types.name}
+                    <Text
+                      fontSize={'sm'}
+                      className="global-td"
+                      fontStyle={'italic'}
+                    >
+                      {types.name}
+                    </Text>
                   </option>
                 );
               })}
@@ -1161,7 +1173,13 @@ const MasterUser = () => {
               {grouparea?.response.map((types, i) => {
                 return (
                   <option value={types.id} key={i}>
-                    {types.areaGroupName}
+                    <Text
+                      fontSize={'sm'}
+                      className="global-td"
+                      fontStyle={'italic'}
+                    >
+                      {types.areaGroupName}
+                    </Text>
                   </option>
                 );
               })}
