@@ -700,7 +700,7 @@ const Polcies = () => {
     }, 1000);
   }, []);
 
-  console.log('totalCount', totalCount);
+  // console.log('totalCount', totalCount);
   function formatDateToLong(dateString) {
     const monthNames = [
       'January',
@@ -743,6 +743,14 @@ const Polcies = () => {
     window.open(link, '_blank', 'noreferrer');
   };
 
+  const handleRedirectPaymentPageSuccess = (row) => {
+    if (row?.planType === 'Individual') {
+      navigate(`/policies/detail/${row.policyNumber}/${row.bookingId}`);
+    } else {
+      navigate(`/policies/detail/${row.bookingId}`);
+    }
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -781,7 +789,7 @@ const Polcies = () => {
               row.original.paymentStatus === 'WAITING_FOR_PAYMENT'
                 ? () => handleRedirectPaymentPage(row.original.paymentLink)
                 : row.original.paymentStatus === 'SUCCESS'
-                ? null
+                ? () => handleRedirectPaymentPageSuccess(row.original)
                 : () => handleRedirect(row.original.bookingId)
             }
             // to={`/create-quota/search/${row.original.bookingId}`}
