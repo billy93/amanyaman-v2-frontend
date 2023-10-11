@@ -61,6 +61,7 @@ import {
   listtravelagents,
   setListTravellAgents,
   setListAdditionalWeeks,
+  listdocstype,
 } from './masterProductSlice';
 import { MdAdd } from 'react-icons/md';
 import { Select } from 'chakra-react-select';
@@ -70,6 +71,7 @@ const CommisionForm = () => {
   const listProducts = useSelector(listtravellertype);
   const listAddWeeks = useSelector(listAdditonalWeeks);
   const listAgents = useSelector(listtravelagents);
+  const listdocstypes = useSelector(listdocstype);
   const travelertype = useSelector(listtravellertype);
   const listPlanType = useSelector(listplantype);
   const additonal = useSelector(listbandtype);
@@ -393,6 +395,14 @@ const CommisionForm = () => {
     dispatch(setProductForm(forms));
   }
 
+  function handleWordingDoc(data) {
+    const forms = {
+      ...formstate,
+      wordingDoc: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+
   function handleGroupArea(data) {
     const forms = {
       ...formstate,
@@ -418,6 +428,22 @@ const CommisionForm = () => {
     const forms = {
       ...formstate,
       productType: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+
+  function handleCovidDoc(data) {
+    const forms = {
+      ...formstate,
+      covidDoc: [{ ...data }],
+    };
+    dispatch(setProductForm(forms));
+  }
+
+  function handleBenefitDoc(data) {
+    const forms = {
+      ...formstate,
+      benefitDoc: [{ ...data }],
     };
     dispatch(setProductForm(forms));
   }
@@ -1146,6 +1172,135 @@ const CommisionForm = () => {
           }}
           gap="20px"
         >
+          <Box width={{ base: '100%', md: '260px' }} m="auto">
+            <FormControl
+              variant="floating"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Box>
+                <Box className="floating-label">
+                  <Select
+                    isMulti={false}
+                    name="colors"
+                    onChange={handleBenefitDoc}
+                    value={formstate?.benefitDoc}
+                    classNamePrefix="chakra-react-select"
+                    options={listdocstypes}
+                    placeholder="Select some colors..."
+                    closeMenuOnSelect={true}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                    }}
+                    chakraStyles={{
+                      dropdownIndicator: (
+                        prev,
+                        { selectProps: { menuIsOpen } }
+                      ) => ({
+                        ...prev,
+                        '> svg': {
+                          transitionDuration: 'normal',
+                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                        },
+                      }),
+                    }}
+                  />
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate !== null && formstate?.benefitDoc?.length > 0
+                          ? 'translate(0, -10px) scale(0.75)'
+                          : 'translate(0, 4px) scale(0.75)',
+                      color:
+                        formstate !== null && formstate?.benefitDoc?.length > 0
+                          ? '#065baa'
+                          : '#231F20',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Benefit Doc
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+          <Box width={{ base: '100%', md: '260px' }} mt="1em">
+            <FormControl variant="floating" isRequired fontFamily={'Mulish'}>
+              <Box>
+                <Box className="floating-label">
+                  <Select
+                    isMulti={false}
+                    name="colors"
+                    onChange={handleWordingDoc}
+                    value={formstate?.wordingDoc}
+                    classNamePrefix="chakra-react-select"
+                    options={listdocstypes}
+                    placeholder=""
+                    closeMenuOnSelect={true}
+                    menuPortalTarget={document.body}
+                    styles={{
+                      menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                    }}
+                    chakraStyles={{
+                      dropdownIndicator: (
+                        prev,
+                        { selectProps: { menuIsOpen } }
+                      ) => ({
+                        ...prev,
+                        '> svg': {
+                          transitionDuration: 'normal',
+                          transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                        },
+                      }),
+                    }}
+                  />
+                  <span className="highlight"></span>
+                  <FormLabel
+                    pt="1.5"
+                    style={{
+                      transform:
+                        formstate !== null && formstate?.wordingDoc?.length > 0
+                          ? 'translate(0, -10px) scale(0.75)'
+                          : 'translate(0, 4px) scale(0.75)',
+                      color:
+                        formstate !== null && formstate?.wordingDoc?.length > 0
+                          ? '#065baa'
+                          : '#231F20',
+                      fontSize: '14px',
+                    }}
+                    fontFamily={'Mulish'}
+                  >
+                    Wording Doc
+                  </FormLabel>
+                </Box>
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
           <Box className="react-select-container" mt="1em">
             <FormControl variant="floating" isRequired fontFamily={'Mulish'}>
               <Box w="540px">
@@ -1212,6 +1367,90 @@ const CommisionForm = () => {
               {/* It is important that the Label comes after the Control due to css selectors */}
             </FormControl>
           </Box>
+        </Flex>
+      </Flex>
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <FormControl
+            variant="floating"
+            isRequired
+            fontFamily={'Mulish'}
+            mt="1em"
+          >
+            <Box w="540px">
+              <Box className="react-select-container">
+                <Select
+                  isMulti={false}
+                  name="colors"
+                  onChange={handleCovidDoc}
+                  value={formstate?.covidDoc}
+                  classNamePrefix="chakra-react-select"
+                  options={listdocstypes}
+                  closeMenuOnSelect={true}
+                  menuPortalTarget={document.body}
+                  styles={{
+                    menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+                  }}
+                  components={{
+                    Placeholder: () => (
+                      <span
+                        style={{
+                          display: formstate?.planType ? 'none' : 'none',
+                        }}
+                      >
+                        Select an option
+                      </span>
+                    ),
+                  }}
+                  chakraStyles={{
+                    dropdownIndicator: (
+                      prev,
+                      { selectProps: { menuIsOpen } }
+                    ) => ({
+                      ...prev,
+                      '> svg': {
+                        transitionDuration: 'normal',
+                        transform: `rotate(${menuIsOpen ? -180 : 0}deg)`,
+                      },
+                    }),
+                  }}
+                />
+                <span className="highlight"></span>
+                <FormLabel
+                  pt="1.5"
+                  style={{
+                    transform:
+                      formstate !== null && formstate?.covidDoc?.length > 0
+                        ? 'translate(0, -10px) scale(0.75)'
+                        : 'translate(0, 4px) scale(0.75)',
+                    color:
+                      formstate !== null && formstate?.covidDoc?.length > 0
+                        ? '#065baa'
+                        : '#231F20',
+                    fontSize: '14px',
+                  }}
+                  fontFamily={'Mulish'}
+                >
+                  Covid Doc
+                </FormLabel>
+              </Box>
+            </Box>
+            {/* It is important that the Label comes after the Control due to css selectors */}
+          </FormControl>
         </Flex>
       </Flex>
       <Flex width="100%" justifyContent="center" alignItems="center" mx="auto">
