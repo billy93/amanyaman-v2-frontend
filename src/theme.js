@@ -22,6 +22,7 @@ import '@fontsource/mulish/700.css';
 const activeLabelStyles = {
   transform: 'scale(0.85) translateY(-12px)',
   color: '#065baa',
+  fontSize: '12px',
 };
 
 const breakpoints = {
