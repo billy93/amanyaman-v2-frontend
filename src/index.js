@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { PersistGate } from 'redux-persist/integration/react';
-import { createStandaloneToast, Box } from '@chakra-ui/react';
+import { createStandaloneToast } from '@chakra-ui/react';
 import { defaultTheme } from './theme';
 import '@coreui/coreui/dist/css/coreui.min.css';
 import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
@@ -11,7 +11,7 @@ import { store, persistor } from './app/store';
 import { Provider } from 'react-redux';
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { HashLoader } from 'react-spinners';
+// import { HashLoader } from 'react-spinners';
 const { ToastContainer } = createStandaloneToast();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
