@@ -2,8 +2,7 @@
 import React from 'react';
 import { useGetByIdQuery } from './productPriceApi';
 import { NavLink, useParams, useNavigate } from 'react-router-dom';
-import { Box, Heading, Text, Center, IconButton } from '@chakra-ui/react';
-import PulseLoader from 'react-spinners/PulseLoader';
+import { Box, Heading, Text, IconButton } from '@chakra-ui/react';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import 'react-calendar/dist/Calendar.css';

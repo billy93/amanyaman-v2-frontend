@@ -11,7 +11,7 @@ import {
 import PageLoader from '../../../components/pageLoader';
 import { FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Box, Heading, Stack, Text, Center, Select } from '@chakra-ui/react';
+import { Box, Heading, Stack, Text, Select } from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';

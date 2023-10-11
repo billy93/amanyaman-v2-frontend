@@ -9,7 +9,6 @@ import {
   useColumnOrder,
 } from 'react-table';
 import { useDeletePlanTypesMutation } from './planTypeApiSlice';
-import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,7 +17,6 @@ import {
   Heading,
   Stack,
   Text,
-  Center,
   Select,
   IconButton,
 } from '@chakra-ui/react';

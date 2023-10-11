@@ -13,7 +13,7 @@ import { useLoginMutation } from './authApiSlice';
 import { useForgotPassQuery } from './forgotApiSlice';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
 import usePersist from '../hook/usePersist';
-import PageLoader from '../../../components/pageLoader';
+import PageLoader from '../../components/pageLoader';
 import {
   FormControl,
   FormLabel,
