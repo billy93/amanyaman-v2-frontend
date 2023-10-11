@@ -23,7 +23,7 @@
   font-weight: normal;
 }
 .global-detail {
-  font-size: 12px;
+  font-size: 12px!important;
   font-family: 'Mulish';
   font-weight: normal;
 }
