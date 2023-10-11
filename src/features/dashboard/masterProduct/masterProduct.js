@@ -1087,7 +1087,6 @@ const MasterUser = () => {
             />
             <Select
               fontStyle={'italic'}
-              className="global-td"
               placeholder="Select by Travel Duration"
               backgroundColor={searchBandType === '' ? '#ebebeb' : '#e8f0fe'}
               sx={{
@@ -1121,7 +1120,6 @@ const MasterUser = () => {
             </Select>
             <Select
               fontStyle={'italic'}
-              className="global-td"
               placeholder="Select by Plan Type"
               backgroundColor={searchPlanType === '' ? '#ebebeb' : '#e8f0fe'}
               sx={{
@@ -1155,7 +1153,6 @@ const MasterUser = () => {
             </Select>
             <Select
               fontStyle={'italic'}
-              className="global-td"
               placeholder="Select by Area"
               backgroundColor={searchArea === '' ? '#ebebeb' : '#e8f0fe'}
               sx={{
@@ -1188,7 +1185,6 @@ const MasterUser = () => {
               })}
             </Select>
             <Select
-              className="global-td"
               placeholder="Select by product type"
               backgroundColor={searchProductType === '' ? '#ebebeb' : '#e8f0fe'}
               sx={{
