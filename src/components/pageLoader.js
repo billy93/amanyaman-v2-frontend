@@ -22,7 +22,7 @@ const PageLoader = ({ loading }) => (
             color="#36d7b7"
             size={50}
             loading={loading}
-            speedMultiplier={1.5}
+            speedMultiplier={1}
           />
         </Center>
       </Box>
