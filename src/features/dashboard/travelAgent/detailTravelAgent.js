@@ -1392,8 +1392,9 @@ const DetailMasterUser = () => {
         <Box
           border={'1px solid #ebebeb'}
           pt="5px"
-          pl="5px"
+          pl="1em"
           mt="1em"
+          pr="1em"
           borderRadius={'5px'}
         >
           <Box
