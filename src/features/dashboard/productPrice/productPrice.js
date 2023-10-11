@@ -797,6 +797,7 @@ const Polcies = () => {
             mt={'1em'}
           >
             <Input
+              fontStyle={'italic'}
               variant={'custom'}
               value={searchTerm}
               onChange={handleSearchTermChange}
@@ -804,6 +805,13 @@ const Polcies = () => {
               placeholder={'Search by product code'}
               bg="#ebebeb"
               borderRadius={'5px'}
+              sx={{
+                '&::placeholder': {
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                },
+              }}
               textTransform={'uppercase'}
               _placeholder={{ textTransform: 'lowercase' }}
             />
