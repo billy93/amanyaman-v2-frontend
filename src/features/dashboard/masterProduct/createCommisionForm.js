@@ -30,6 +30,7 @@ import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
 import { useGetListAreaGroupQuery } from '../group-area/listApiSlice';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
 import { useGetTravellerTypesQuery } from '../travellerType/travellerTypesApiSlice';
+import { useGetDocumentTypesQuery } from '../documentType/docTypeApiSlice';
 import UseCustomToast from '../../../components/UseCustomToast';
 import {
   useGetListVariantQuery,
@@ -46,6 +47,7 @@ import {
   setMasterProduct,
   setListBandType,
   setListArea,
+  setListDoctType,
   setListPlanType,
   listarea,
   listbandtype,
@@ -105,6 +107,8 @@ const CommisionForm = () => {
 
   const { data: planTypes } = useGetPlanTypesQuery({ page: 0, size: 9999 });
 
+  const { data: docTypes } = useGetDocumentTypesQuery({ page: 0, size: 9999 });
+
   const { data: travellerTypes } = useGetTravellerTypesQuery({
     page: 0,
     size: 9999,
@@ -154,6 +158,17 @@ const CommisionForm = () => {
   }, [grouparea, dispatch]);
 
   // console.log('variant', variant);
+
+  React.useEffect(() => {
+    if (docTypes) {
+      let docsType = docTypes?.response?.map((obj) => ({
+        ...obj,
+        label: obj.name,
+        value: obj.name,
+      }));
+      dispatch(setListDoctType(docsType));
+    }
+  }, [docTypes, dispatch]);
 
   React.useEffect(() => {
     if (planTypes) {
