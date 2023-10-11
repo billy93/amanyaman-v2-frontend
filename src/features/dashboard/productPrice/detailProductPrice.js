@@ -36,7 +36,7 @@ const DetailMasterUser = () => {
     );
   } else if (user) {
     content = (
-      <Box pl="2em" pr="2em">
+      <Box>
         <Box
           display={'flex'}
           justifyContent={'space-between'}
@@ -50,7 +50,7 @@ const DetailMasterUser = () => {
             borderBottom="1px"
             borderColor={'#ebebeb'}
           >
-            <Box w="100%" pt="15px">
+            <Box w="100%" pt="15px" pl="0.5em">
               <Breadcrumb
                 spacing="8px"
                 separator={<ChevronRightIcon color="gray.500" />}
@@ -121,7 +121,7 @@ const DetailMasterUser = () => {
             </Box>
           </Box>
         </Box>
-        <Box display={'flex'} gap="10px">
+        <Box display={'flex'} gap="10px" pl="1em" pr="1em">
           <Box display={'flex'} flexDirection={'column'} mt="1em">
             <Box
               border="1px solid #ebebeb"
