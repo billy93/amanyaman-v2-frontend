@@ -1288,14 +1288,20 @@ const DetailMasterUser = () => {
             style={{ fontSize: '12px', fontFamily: 'Mulish' }}
           >
             <Stack direction="row" pl="0.5em" pt="1em" className="global-td">
-              <Radio value="all" className="global-td">
-                Show All
+              <Radio value="all">
+                <Text fontSize={'sm'} className="global-td">
+                  Show All
+                </Text>
               </Radio>
-              <Radio value="selected" className="global-td">
-                Show Only Selected
+              <Radio value="selected">
+                <Text fontSize={'sm'} className="global-td">
+                  Show Only Selected
+                </Text>
               </Radio>
-              <Radio value="unselected" className="global-td">
-                Show Only Unselected
+              <Radio value="unselected">
+                <Text fontSize={'sm'} className="global-td">
+                  Show Only Unselected
+                </Text>
               </Radio>
             </Stack>
           </RadioGroup>
