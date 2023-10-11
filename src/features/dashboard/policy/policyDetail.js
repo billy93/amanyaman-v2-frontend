@@ -1511,7 +1511,6 @@ const PolicyDetail = () => {
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {travellers?.address}
                                         </Text>
@@ -1579,7 +1578,6 @@ const PolicyDetail = () => {
                                           as="p"
                                           size="sm"
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
                                         >
                                           {travellers?.relationship
                                             ? travellers.relationship
