@@ -1203,7 +1203,7 @@ const CommisionForm = () => {
                     value={formstate?.benefitDoc}
                     classNamePrefix="chakra-react-select"
                     options={listdocstypes}
-                    placeholder="Select some colors..."
+                    placeholder=""
                     closeMenuOnSelect={true}
                     menuPortalTarget={document.body}
                     styles={{
@@ -1339,7 +1339,7 @@ const CommisionForm = () => {
                       Placeholder: () => (
                         <span
                           style={{
-                            display: formstate?.planType ? 'none' : 'none',
+                            display: formstate?.variants ? 'none' : 'none',
                           }}
                         >
                           Select an option
@@ -1364,11 +1364,11 @@ const CommisionForm = () => {
                     pt="1.5"
                     style={{
                       transform:
-                        formstate !== null && formstate?.variant?.length !== 0
+                        formstate !== null && formstate?.variants?.length !== 0
                           ? 'translate(0, -10px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
-                        formstate !== null && formstate?.variant?.length !== 0
+                        formstate !== null && formstate?.variants?.length !== 0
                           ? '#065baa'
                           : '#231F20',
                       fontSize: '14px',
