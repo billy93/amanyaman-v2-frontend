@@ -19,7 +19,7 @@ const PageLoader = ({ loading }) => (
           alignItems="center"
         >
           <HashLoader
-            color="#36d7b7"
+            color="#50b848"
             size={50}
             loading={loading}
             speedMultiplier={1}

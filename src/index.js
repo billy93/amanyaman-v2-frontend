@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { PersistGate } from 'redux-persist/integration/react';
-import { createStandaloneToast, Center } from '@chakra-ui/react';
+import { createStandaloneToast, Center, Box } from '@chakra-ui/react';
 import { defaultTheme } from './theme';
 import '@coreui/coreui/dist/css/coreui.min.css';
 import '@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css';
@@ -11,7 +11,7 @@ import { store, persistor } from './app/store';
 import { Provider } from 'react-redux';
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import PulseLoader from 'react-spinners/PulseLoader';
+import { HashLoader } from 'react-spinners';
 const { ToastContainer } = createStandaloneToast();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -24,9 +24,27 @@ root.render(
       <Provider store={store}>
         <PersistGate
           loading={
-            <Center h="50vh">
-              <PulseLoader color={'#FFF'} />
-            </Center>
+            <Box
+              className="overlay"
+              display={'flex'}
+              justifyContent={'center'}
+              alignItems={'center'}
+              h="100vh"
+            >
+              <Center
+                d="flex"
+                flexDir="column"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <HashLoader
+                  color="#50b848"
+                  size={50}
+                  loading={true}
+                  speedMultiplier={1}
+                />
+              </Center>
+            </Box>
           }
           persistor={persistor}
         >
