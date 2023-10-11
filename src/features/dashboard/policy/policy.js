@@ -1228,6 +1228,11 @@ const Polcies = () => {
               }}
               defaultValue={''}
               name="policyStatus"
+              style={{
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'normal',
+              }}
               onChange={handleFilter}
             >
               <option value={''}>{'All Policy Status'}</option>
@@ -1245,6 +1250,11 @@ const Polcies = () => {
                   fontStyle: 'italic',
                   fontSize: '12px',
                 },
+              }}
+              style={{
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'normal',
               }}
               _placeholder={{
                 color: 'grey',
