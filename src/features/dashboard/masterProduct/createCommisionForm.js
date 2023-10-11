@@ -1936,29 +1936,31 @@ const CommisionForm = () => {
       >
         <Button
           isDisabled={
-            (formstate?.productName === '',
-            formstate?.productCode === '',
-            formstate?.currId === '',
-            formstate?.value === '',
-            formstate?.productDescription === '',
-            formstate?.productBrochure === '',
-            formstate?.productPersonalAccidentCover === '',
-            formstate?.productMedicalCover === '',
-            formstate?.productTravelCover === '',
-            formstate?.travellerType === null,
-            formstate?.bandType === null,
-            formstate?.areaGroup === null,
-            formstate?.planType === null,
-            formstate?.benefitDoc === null,
-            formstate?.wordingDoc === null,
-            formstate?.covidDoc === null,
-            formstate?.premiumPrice < 0,
-            formstate?.commisionLv1 < 0,
-            formstate?.commisionLv2 < 0,
-            formstate?.commisionLv3 < 0,
-            formstate?.totalCommision < 0,
-            formstate?.afterCommisionPrice < 0,
-            formstate?.ajiPrice < 0)
+            formstate?.productName === '' ||
+            formstate?.productCode === '' ||
+            formstate?.currId === '' ||
+            formstate?.value === '' ||
+            formstate?.productDescription === '' ||
+            formstate?.productBrochure === '' ||
+            formstate?.productPersonalAccidentCover === '' ||
+            formstate?.productMedicalCover === '' ||
+            formstate?.productTravelCover === '' ||
+            formstate?.travellerType === null ||
+            formstate?.bandType === null ||
+            formstate?.areaGroup === null ||
+            formstate?.planType === null ||
+            formstate?.benefitDoc === null ||
+            formstate?.wordingDoc === null ||
+            formstate?.covidDoc === null ||
+            formstate?.premiumPrice < 0 ||
+            formstate?.commisionLv1 < 0 ||
+            formstate?.commisionLv2 < 0 ||
+            formstate?.commisionLv3 < 0 ||
+            formstate?.totalCommision < 0 ||
+            formstate?.afterCommisionPrice < 0 ||
+            formstate?.ajiPrice < 0
+              ? true
+              : false
           }
           onClick={handleNext}
           variant={'ClaimBtn'}
