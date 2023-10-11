@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Center } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   saveToken,
@@ -13,7 +13,7 @@ import { useLoginMutation } from './authApiSlice';
 import { useForgotPassQuery } from './forgotApiSlice';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
 import usePersist from '../hook/usePersist';
-import PulseLoader from 'react-spinners/PulseLoader';
+import PageLoader from '../../../components/pageLoader';
 import {
   FormControl,
   FormLabel,
@@ -260,9 +260,7 @@ const Login = () => {
   };
 
   const content = isLoading ? (
-    <Center h="50vh" color="#065BAA">
-      <PulseLoader color={'#065BAA'} />
-    </Center>
+    <PageLoader loading={isLoading} />
   ) : (
     <section className="login-page">
       <Box color="black:500">
