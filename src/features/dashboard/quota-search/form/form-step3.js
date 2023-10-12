@@ -1296,7 +1296,7 @@ const Form3 = ({
                       onChange={setLastNames}
                       h="48px"
                       style={{
-                        backgroundColor: typeStatus !== '' ? '#e8f0fe' : '',
+                        backgroundColor: lastName !== '' ? '#e8f0fe' : '',
                       }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
@@ -1382,9 +1382,9 @@ const Form3 = ({
                     <FormLabel
                       fontSize="12"
                       pt="1.5"
-                      className={isActive ? 'Active' : ''}
                       fontFamily={'Mulish'}
                       style={{ fontSize: '14px' }}
+                      className="floating-label-global"
                     >
                       Address
                     </FormLabel>
