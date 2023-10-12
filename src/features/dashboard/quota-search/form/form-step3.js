@@ -1178,6 +1178,9 @@ const Form3 = ({
                           defaultValue={type}
                           h="48px"
                           onChange={handleSelectType}
+                          style={{
+                            backgroundColor: type !== '' ? '#e8f0fe' : '',
+                          }}
                         >
                           <option value=""></option>
                           <option value="Adult">Adult</option>
@@ -1196,7 +1199,14 @@ const Form3 = ({
                               isActiveSelectCountry || type !== ''
                                 ? '#065baa'
                                 : '',
-                            fontSize: '14px',
+                            fontStyle:
+                              isActiveSelectCountry || type !== ''
+                                ? 'italic'
+                                : 'normal',
+                            fontSize:
+                              isActiveSelectCountry || type !== ''
+                                ? '12px'
+                                : '14px',
                           }}
                           fontFamily={'Mulish'}
                         >
@@ -1264,9 +1274,16 @@ const Form3 = ({
                       value={firstName}
                       onChange={setFirstNames}
                       h="48px"
+                      style={{
+                        backgroundColor: firstName !== '' ? '#e8f0fe' : '',
+                      }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel fontSize="12" pt="1.5">
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
                       FirstName
                     </FormLabel>
                     {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -1278,9 +1295,16 @@ const Form3 = ({
                       value={lastName}
                       onChange={setLastNames}
                       h="48px"
+                      style={{
+                        backgroundColor: typeStatus !== '' ? '#e8f0fe' : '',
+                      }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel fontSize="12" pt="1.5">
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
                       LastName
                     </FormLabel>
                     {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -1308,7 +1332,7 @@ const Form3 = ({
                     renderInput={renderCustomInput}
                     shouldHighlightWeekends
                     style={{
-                      backgroundColor: selectDate !== null ? '#e8f0fe' : '',
+                      backgroundColor: dateOfBirth !== null ? '#e8f0fe' : '',
                     }}
                   />
                   <FormControl variant="floating" id="first-name" isRequired>
@@ -1326,7 +1350,7 @@ const Form3 = ({
                     <FormLabel
                       fontSize="12"
                       pt="1.5"
-                      className="float-label-global"
+                      className="floating-label-global"
                     >
                       {' '}
                       Place Of Birth
