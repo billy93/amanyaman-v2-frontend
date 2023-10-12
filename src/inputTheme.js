@@ -68,6 +68,8 @@ const variantCustom = definePartsStyle((props) => {
       },
       _placeholder: {
         color: '#1a202c85',
+        fontSize: '12px',
+        fontStyle: 'italic',
       },
       _focusVisible: {
         bg: 'gray.200',

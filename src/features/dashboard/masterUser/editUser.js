@@ -350,12 +350,15 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant={'custom'}
+                  background={
+                    formuser?.firstName !== '' ? '#e8f0fe' : '#ebebeb'
+                  }
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel
                   fontSize="12"
                   pt="1.5"
-                  style={{ fontFamily: 'Mulish', fontWeight: 'normal' }}
+                  className="floating-label-globa"
                 >
                   FistName
                 </FormLabel>
@@ -377,12 +380,13 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant={'custom'}
+                  background={formuser?.lastName !== '' ? '#e8f0fe' : '#ebebeb'}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel
                   fontSize="12"
                   pt="1.5"
-                  style={{ fontFamily: 'Mulish', fontWeight: 'normal' }}
+                  className="floating-label-globa"
                 >
                   LastName
                 </FormLabel>
@@ -405,6 +409,7 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                background={formuser?.email !== '' ? '#e8f0fe' : '#ebebeb'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -460,7 +465,8 @@ const CreateUser = () => {
                         formuser !== null && formuser?.authorities === ''
                           ? '#231F20'
                           : '#065baa',
-                      fontSize: '14px',
+                      fontSize: '12px',
+                      fontStyle: 'italic',
                     }}
                     fontFamily={'Mulish'}
                   >
@@ -510,7 +516,8 @@ const CreateUser = () => {
                         formuser !== null && formuser?.travelAgent === ''
                           ? '#231F20'
                           : '#065baa',
-                      fontSize: '14px',
+                      fontSize: '12px',
+                      fontStyle: 'italic',
                     }}
                     fontFamily={'Mulish'}
                   >

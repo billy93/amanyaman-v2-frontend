@@ -28,7 +28,7 @@
   font-weight: normal;
 }
 .floating-label-global{
-   font-size: 12px;
+   font-size: 12px!important;
     font-style: italic;
     font-family: 'Mulish';
     font-weight: 300;
