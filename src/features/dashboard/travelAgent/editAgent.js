@@ -411,7 +411,8 @@ const CreateUser = () => {
                   variant="custom"
                   className="global-input"
                   style={{
-                    backgroundColor: detail?.commission !== '' ? '#e8f0fe' : '',
+                    backgroundColor:
+                      detail?.commission !== null ? '#e8f0fe' : '',
                   }}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
@@ -443,7 +444,7 @@ const CreateUser = () => {
                   className="global-input"
                   style={{
                     backgroundColor:
-                      detail?.paymentType !== '' ? '#e8f0fe' : '',
+                      detail?.paymentType !== null ? '#e8f0fe' : '',
                   }}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
@@ -538,7 +539,8 @@ const CreateUser = () => {
                 variant="custom"
                 className="global-input"
                 style={{
-                  backgroundColor: detail?.apiPassword !== '' ? '#e8f0fe' : '',
+                  backgroundColor:
+                    detail?.apiPassword !== null ? '#e8f0fe' : '',
                 }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
