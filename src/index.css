@@ -33,6 +33,12 @@
     font-family: 'Mulish';
     font-weight: 300;
 }
+.floating-label-global-filled{
+   font-size: 14px!important;
+    font-style: normal;
+    font-family: 'Mulish';
+    font-weight: 300;
+}
 .global-input{
   font-size: 12px!important;
   font-family: 'Mulish';

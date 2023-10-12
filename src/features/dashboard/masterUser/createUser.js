@@ -278,7 +278,11 @@ const CreateUser = () => {
               <FormLabel
                 fontSize="12"
                 pt="1.5"
-                className="floating-label-global"
+                className={
+                  formuser?.login !== ''
+                    ? 'floating-label-global-filled'
+                    : 'floating-label-global'
+                }
               >
                 Username
               </FormLabel>
@@ -315,7 +319,11 @@ const CreateUser = () => {
                 <FormLabel
                   fontSize="12"
                   pt="1.5"
-                  className="floating-label-global"
+                  className={
+                    formuser?.firstName !== ''
+                      ? 'floating-label-global-filled'
+                      : 'floating-label-global'
+                  }
                 >
                   FistName
                 </FormLabel>
@@ -347,7 +355,11 @@ const CreateUser = () => {
                 <FormLabel
                   fontSize="12"
                   pt="1.5"
-                  className="floating-label-global"
+                  className={
+                    formuser?.lastName !== ''
+                      ? 'floating-label-global-filled'
+                      : 'floating-label-global'
+                  }
                 >
                   LastName
                 </FormLabel>
@@ -381,7 +393,11 @@ const CreateUser = () => {
               <FormLabel
                 fontSize="12"
                 pt="1.5"
-                className="floating-label-global"
+                className={
+                  formuser?.email !== ''
+                    ? 'floating-label-global-filled'
+                    : 'floating-label-global'
+                }
               >
                 Email
               </FormLabel>
