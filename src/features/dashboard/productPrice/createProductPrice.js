@@ -428,7 +428,7 @@ const CreatePrice = () => {
           fontWeight={'700'}
           onClick={handleNext}
         >
-          Add
+          Edit
         </Button>
       </Box>
     </>
