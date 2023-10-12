@@ -197,6 +197,23 @@ const CreateUser = () => {
     dispatch(setFormUser(forms));
   }
 
+  const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      backgroundColor: formuser?.authorities ? '#e8f0fe' : '#ebebeb', // Conditional background color
+      border: '1px solid #000',
+      // Add other styles as needed
+    }),
+  };
+  const customStyless = {
+    control: (provided, state) => ({
+      ...provided,
+      backgroundColor: formuser?.travelAgent ? '#e8f0fe' : '#ebebeb', // Conditional background color
+      border: '1px solid #000',
+      // Add other styles as needed
+    }),
+  };
+
   return (
     <Stack mt={{ base: '1em', md: '5em' }}>
       <Box
@@ -441,8 +458,9 @@ const CreateUser = () => {
                     value={formuser?.authorities}
                     classNamePrefix="chakra-react-select"
                     options={listRoles}
-                    placeholder="Select some colors..."
+                    placeholder=""
                     closeMenuOnSelect={true}
+                    styles={customStyles}
                     chakraStyles={{
                       dropdownIndicator: (
                         prev,
@@ -492,8 +510,9 @@ const CreateUser = () => {
                     value={formuser?.travelAgent}
                     classNamePrefix="chakra-react-select"
                     options={dropdowntravelagents}
-                    placeholder="Select some colors..."
+                    placeholder=""
                     closeMenuOnSelect={true}
+                    styles={customStyless}
                     chakraStyles={{
                       dropdownIndicator: (
                         prev,
@@ -512,11 +531,11 @@ const CreateUser = () => {
                     pt="1.5"
                     style={{
                       transform:
-                        formuser !== null && formuser?.travelAgent !== ''
+                        formuser !== null && formuser?.travelAgent !== null
                           ? 'translate(0, -10px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
-                        formuser !== null && formuser?.travelAgent === ''
+                        formuser !== null && formuser?.travelAgent === null
                           ? '#231F20'
                           : '#065baa',
                       fontSize: '12px',

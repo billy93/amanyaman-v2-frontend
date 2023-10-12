@@ -359,7 +359,11 @@ const CreateUser = () => {
                 h="48px"
                 variant={'custom'}
                 className="gloabl-input"
-                background={formuser?.email !== '' ? '#e8f0fe' : '#ebebeb'}
+                bg={
+                  formuser !== null && formuser?.email !== ''
+                    ? '#e8f0fe'
+                    : '#ebebeb'
+                }
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
