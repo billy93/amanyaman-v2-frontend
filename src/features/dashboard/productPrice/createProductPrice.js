@@ -192,271 +192,281 @@ const CreatePrice = () => {
           </Breadcrumb>
         </Box>
       </Box>
-      <Flex
-        width="100%"
-        justifyContent="center"
-        alignItems="center"
-        mx="auto"
-        gap="10px"
-      >
+      <Box bg="red" m="auto" w="500px">
         <Flex
-          gridTemplateColumns={{
-            base: 'repeat(1, 1fr)',
-            sm: 'repeat(1, 1fr)',
-            md: 'repeat(1, 1fr)',
-            lg: 'repeat(1, 1fr)',
-          }}
-          gap="20px"
+          width="100%"
+          justifyContent="center"
+          alignItems="center"
+          mx="auto"
+          gap="10px"
         >
-          <Box width={{ base: '100%', md: '260px' }}>
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              fontFamily={'Mulish'}
-              mt="14px"
-            >
-              <Input
-                isDisabled={true}
-                id="inputs"
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                value={data?.productMapping?.productCode}
-                name="productCode"
-                onChange={handleData}
-                textTransform={'uppercase'}
-                h="48px"
-                variant={'custom'}
-                background={
-                  data?.productMapping?.productCode !== ''
-                    ? '#e8f0fe'
-                    : '#ebebeb'
-                }
-              />
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
+          <Flex
+            gridTemplateColumns={{
+              base: 'repeat(1, 1fr)',
+              sm: 'repeat(1, 1fr)',
+              md: 'repeat(1, 1fr)',
+              lg: 'repeat(1, 1fr)',
+            }}
+            gap="20px"
+          >
+            <Box width={{ base: '100%', md: '260px' }}>
+              <FormControl
+                variant="floating"
+                id="first-name"
+                isRequired
                 fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
+                mt="14px"
               >
-                Product Code
-              </FormLabel>
-              {/* It is important that the Label comes after the Control due to css selectors */}
-            </FormControl>
-          </Box>
+                <Input
+                  isDisabled={true}
+                  id="inputs"
+                  placeholder=" "
+                  _placeholder={{ opacity: 1, color: 'gray.500' }}
+                  value={data?.productMapping?.productCode}
+                  name="productCode"
+                  onChange={handleData}
+                  textTransform={'uppercase'}
+                  h="48px"
+                  variant={'custom'}
+                  background={
+                    data?.productMapping?.productCode !== ''
+                      ? '#e8f0fe'
+                      : '#ebebeb'
+                  }
+                />
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                >
+                  Product Code
+                </FormLabel>
+                {/* It is important that the Label comes after the Control due to css selectors */}
+              </FormControl>
+            </Box>
+          </Flex>
         </Flex>
-      </Flex>
-      <Flex
-        width="100%"
-        justifyContent="center"
-        alignItems="center"
-        mx="auto"
-        gap="10px"
-      >
         <Flex
-          gridTemplateColumns={{
-            base: 'repeat(1, 1fr)',
-            sm: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-            lg: 'repeat(2, 1fr)',
-          }}
-          gap="20px"
+          width="100%"
+          justifyContent="center"
+          alignItems="center"
+          mx="auto"
+          gap="10px"
         >
-          <Box width={{ base: '100%', md: '260px' }}>
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              fontFamily={'Mulish'}
-              mt="14px"
-            >
-              <Input
-                id="inputs"
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                value={data?.premiumPrice}
-                name="productCode"
-                onChange={handlePreiumPrice}
-                textTransform={'uppercase'}
-                h="48px"
-                variant={'custom'}
-                background={fields?.premiumPrice !== '' ? '#e8f0fe' : '#ebebeb'}
-              />
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
+          <Flex
+            gridTemplateColumns={{
+              base: 'repeat(1, 1fr)',
+              sm: 'repeat(1, 1fr)',
+              md: 'repeat(2, 1fr)',
+              lg: 'repeat(2, 1fr)',
+            }}
+            gap="20px"
+          >
+            <Box width={{ base: '100%', md: '260px' }}>
+              <FormControl
+                variant="floating"
+                id="first-name"
+                isRequired
                 fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
+                mt="14px"
               >
-                Premium Price
-              </FormLabel>
-              {/* It is important that the Label comes after the Control due to css selectors */}
-            </FormControl>
-          </Box>
-          <Box width={{ base: '100%', md: '260px' }}>
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              fontFamily={'Mulish'}
-              mt="14px"
-            >
-              <Input
-                id="inputs"
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                value={fields?.commisionLv1}
-                name="travelAgentName"
-                onChange={handleComm1}
-                h="48px"
-                variant={'custom'}
-                background={fields?.commisionLv1 !== '' ? '#e8f0fe' : '#ebebeb'}
-              />
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
+                <Input
+                  id="inputs"
+                  placeholder=" "
+                  _placeholder={{ opacity: 1, color: 'gray.500' }}
+                  value={data?.premiumPrice}
+                  name="productCode"
+                  onChange={handlePreiumPrice}
+                  textTransform={'uppercase'}
+                  h="48px"
+                  variant={'custom'}
+                  background={
+                    fields?.premiumPrice !== '' ? '#e8f0fe' : '#ebebeb'
+                  }
+                />
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                >
+                  Premium Price
+                </FormLabel>
+                {/* It is important that the Label comes after the Control due to css selectors */}
+              </FormControl>
+            </Box>
+            <Box width={{ base: '100%', md: '260px' }}>
+              <FormControl
+                variant="floating"
+                id="first-name"
+                isRequired
                 fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
+                mt="14px"
               >
-                Commission Lv1
-              </FormLabel>
-              {/* It is important that the Label comes after the Control due to css selectors */}
-            </FormControl>
-          </Box>
+                <Input
+                  id="inputs"
+                  placeholder=" "
+                  _placeholder={{ opacity: 1, color: 'gray.500' }}
+                  value={fields?.commisionLv1}
+                  name="travelAgentName"
+                  onChange={handleComm1}
+                  h="48px"
+                  variant={'custom'}
+                  background={
+                    fields?.commisionLv1 !== '' ? '#e8f0fe' : '#ebebeb'
+                  }
+                />
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                >
+                  Commission Lv1
+                </FormLabel>
+                {/* It is important that the Label comes after the Control due to css selectors */}
+              </FormControl>
+            </Box>
+          </Flex>
         </Flex>
-      </Flex>
-      <Flex
-        width="100%"
-        justifyContent="center"
-        alignItems="center"
-        mx="auto"
-        gap="10px"
-      >
         <Flex
-          gridTemplateColumns={{
-            base: 'repeat(1, 1fr)',
-            sm: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-            lg: 'repeat(2, 1fr)',
-          }}
-          gap="20px"
+          width="100%"
+          justifyContent="center"
+          alignItems="center"
+          mx="auto"
+          gap="10px"
         >
-          <Box width={{ base: '100%', md: '260px' }}>
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              fontFamily={'Mulish'}
-              mt="14px"
-            >
-              <Input
-                id="inputs"
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                value={fields?.commisionLv2}
-                name="commisionLv2"
-                onChange={handleComm2}
-                textTransform={'uppercase'}
-                h="48px"
-                variant={'custom'}
-                background={fields?.commisionLv2 !== '' ? '#e8f0fe' : '#ebebeb'}
-              />
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
+          <Flex
+            gridTemplateColumns={{
+              base: 'repeat(1, 1fr)',
+              sm: 'repeat(1, 1fr)',
+              md: 'repeat(2, 1fr)',
+              lg: 'repeat(2, 1fr)',
+            }}
+            gap="20px"
+          >
+            <Box width={{ base: '100%', md: '260px' }}>
+              <FormControl
+                variant="floating"
+                id="first-name"
+                isRequired
                 fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
+                mt="14px"
               >
-                CommissionLv2
-              </FormLabel>
-              {/* It is important that the Label comes after the Control due to css selectors */}
-            </FormControl>
-          </Box>
-          <Box width={{ base: '100%', md: '260px' }}>
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              fontFamily={'Mulish'}
-              mt="14px"
-            >
-              <Input
-                id="inputs"
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                value={fields?.commisionLv3}
-                name="commisionLv3"
-                onChange={handleComm3}
-                h="48px"
-                variant={'custom'}
-                background={fields?.commisionLv3 !== '' ? '#e8f0fe' : '#ebebeb'}
-              />
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
+                <Input
+                  id="inputs"
+                  placeholder=" "
+                  _placeholder={{ opacity: 1, color: 'gray.500' }}
+                  value={fields?.commisionLv2}
+                  name="commisionLv2"
+                  onChange={handleComm2}
+                  textTransform={'uppercase'}
+                  h="48px"
+                  variant={'custom'}
+                  background={
+                    fields?.commisionLv2 !== '' ? '#e8f0fe' : '#ebebeb'
+                  }
+                />
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                >
+                  CommissionLv2
+                </FormLabel>
+                {/* It is important that the Label comes after the Control due to css selectors */}
+              </FormControl>
+            </Box>
+            <Box width={{ base: '100%', md: '260px' }}>
+              <FormControl
+                variant="floating"
+                id="first-name"
+                isRequired
                 fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
+                mt="14px"
               >
-                Commission Lv3
-              </FormLabel>
-              {/* It is important that the Label comes after the Control due to css selectors */}
-            </FormControl>
-          </Box>
+                <Input
+                  id="inputs"
+                  placeholder=" "
+                  _placeholder={{ opacity: 1, color: 'gray.500' }}
+                  value={fields?.commisionLv3}
+                  name="commisionLv3"
+                  onChange={handleComm3}
+                  h="48px"
+                  variant={'custom'}
+                  background={
+                    fields?.commisionLv3 !== '' ? '#e8f0fe' : '#ebebeb'
+                  }
+                />
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                >
+                  Commission Lv3
+                </FormLabel>
+                {/* It is important that the Label comes after the Control due to css selectors */}
+              </FormControl>
+            </Box>
+          </Flex>
         </Flex>
-      </Flex>
-      <Flex
-        width="100%"
-        justifyContent="center"
-        alignItems="center"
-        mx="auto"
-        gap="10px"
-      >
         <Flex
-          gridTemplateColumns={{
-            base: 'repeat(1, 1fr)',
-            sm: 'repeat(1, 1fr)',
-            md: 'repeat(1, 1fr)',
-            lg: 'repeat(1, 1fr)',
-          }}
-          gap="20px"
+          width="100%"
+          justifyContent="center"
+          alignItems="center"
+          mx="auto"
+          gap="10px"
         >
-          <Box width={{ base: '100%', md: '260px' }}>
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              fontFamily={'Mulish'}
-              mt="14px"
-            >
-              <Input
-                isDisabled={true}
-                id="inputs"
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                value={data?.travelAgent?.travelAgentName}
-                name="travelAgentName"
-                onChange={handleData}
-                h="48px"
-                variant={'custom'}
-                background={
-                  data?.travelAgent?.travelAgentName !== ''
-                    ? '#e8f0fe'
-                    : '#ebebeb'
-                }
-              />
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
+          <Flex
+            gridTemplateColumns={{
+              base: 'repeat(1, 1fr)',
+              sm: 'repeat(1, 1fr)',
+              md: 'repeat(1, 1fr)',
+              lg: 'repeat(1, 1fr)',
+            }}
+            gap="20px"
+          >
+            <Box width={{ base: '100%', md: '260px' }}>
+              <FormControl
+                variant="floating"
+                id="first-name"
+                isRequired
                 fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
+                mt="14px"
               >
-                Travel Agent Name
-              </FormLabel>
-              {/* It is important that the Label comes after the Control due to css selectors */}
-            </FormControl>
-          </Box>
+                <Input
+                  isDisabled={true}
+                  id="inputs"
+                  placeholder=" "
+                  _placeholder={{ opacity: 1, color: 'gray.500' }}
+                  value={data?.travelAgent?.travelAgentName}
+                  name="travelAgentName"
+                  onChange={handleData}
+                  h="48px"
+                  variant={'custom'}
+                  background={
+                    data?.travelAgent?.travelAgentName !== ''
+                      ? '#e8f0fe'
+                      : '#ebebeb'
+                  }
+                />
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  fontFamily={'Mulish'}
+                  style={{ fontSize: '14px' }}
+                >
+                  Travel Agent Name
+                </FormLabel>
+                {/* It is important that the Label comes after the Control due to css selectors */}
+              </FormControl>
+            </Box>
+          </Flex>
         </Flex>
-      </Flex>
+      </Box>
       <Box
         display={'flex'}
         justifyContent={'flex-end'}
