@@ -693,14 +693,14 @@ const Polcies = () => {
 
         // Your server could send back total page count.
         // For now we'll just fake it, too
-        setPageCount(Math.ceil(parseInt(totalCount) / size));
+        setPageCount(Math.ceil(parseInt(totalCount) / pageSize));
 
         setLoading(false);
       }
     }, 1000);
   }, []);
 
-  // console.log('totalCount', totalCount);
+  console.log('totalCount', totalCount);
   function formatDateToLong(dateString) {
     const monthNames = [
       'January',
