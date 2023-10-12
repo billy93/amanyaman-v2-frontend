@@ -410,7 +410,7 @@ input[type=number]::-webkit-inner-spin-button {
   outline: 0;
   border: 1px solid #ddd;
   border-radius: 4px;
-  background: #fff;
+  background: transparent;
   font-family: "Mulish";
   font-size: 16px;
 }
