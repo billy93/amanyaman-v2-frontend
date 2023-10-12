@@ -208,6 +208,7 @@ const CreatePrice = () => {
               lg: 'repeat(1, 1fr)',
             }}
             gap="20px"
+            w="100%"
           >
             <Box width={{ base: '100%', md: '260px' }}>
               <FormControl
@@ -261,6 +262,7 @@ const CreatePrice = () => {
               md: 'repeat(2, 1fr)',
               lg: 'repeat(2, 1fr)',
             }}
+            w="100%"
             gap="20px"
           >
             <Box width={{ base: '100%', md: '260px' }}>
@@ -345,6 +347,7 @@ const CreatePrice = () => {
               lg: 'repeat(2, 1fr)',
             }}
             gap="20px"
+            w="100%"
           >
             <Box width={{ base: '100%', md: '260px' }}>
               <FormControl
@@ -428,8 +431,9 @@ const CreatePrice = () => {
               lg: 'repeat(1, 1fr)',
             }}
             gap="20px"
+            w="100%"
           >
-            <Box width={{ base: '100%', md: '260px' }}>
+            <Box width={{ base: '100%' }}>
               <FormControl
                 variant="floating"
                 id="first-name"
