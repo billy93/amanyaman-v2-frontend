@@ -453,6 +453,7 @@ const CreateUser = () => {
               isRequired
               fontFamily={'Mulish'}
               mt="14px"
+              className="global-input"
             >
               <Box className="floating-form">
                 <Box className="react-select-container">
@@ -515,7 +516,12 @@ const CreateUser = () => {
             </FormControl>
           </Box>
           <Box width={{ base: '100%', md: '540px' }} m="auto">
-            <FormControl variant="floating" fontFamily={'Mulish'} mt="14px">
+            <FormControl
+              variant="floating"
+              fontFamily={'Mulish'}
+              mt="14px"
+              className="gloabl-input"
+            >
               <Box className="floating-form">
                 <Box className="floating-label">
                   <Select
