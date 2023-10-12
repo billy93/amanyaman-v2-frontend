@@ -949,9 +949,10 @@ const CommisionForm = () => {
             value={formstate?.personalAccidentCover}
             onChange={handleData}
             h="48px"
-            background={
-              formstate?.personalAccidentCover !== '' ? '#e8f0fe' : ''
-            }
+            style={{
+              backgroundColor:
+                formstate?.personalAccidentCover !== '' ? '#e8f0fe' : '',
+            }}
           />
           <FormLabel
             fontSize="12"
@@ -981,7 +982,10 @@ const CommisionForm = () => {
             name="productMedicalCover"
             onChange={handleData}
             h="48px"
-            background={formstate?.productMedicalCover !== '' ? '#e8f0fe' : ''}
+            style={{
+              backgroundColor:
+                formstate?.productMedicalCover !== '' ? '#e8f0fe' : '',
+            }}
           />
           <FormLabel
             fontSize="12"
@@ -1010,7 +1014,10 @@ const CommisionForm = () => {
             value={formstate?.productTravelCover}
             name="productTravelCover"
             onChange={handleData}
-            background={formstate?.productTravelCover !== '' ? '#e8f0fe' : ''}
+            style={{
+              backgroundColor:
+                formstate?.productTravelCover !== '' ? '#e8f0fe' : '',
+            }}
           />
           <FormLabel
             pt="1.5"
