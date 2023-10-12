@@ -1323,7 +1323,7 @@ const Form3 = ({
                   </Text>
                 </Box>
                 <Box display={'flex'} gap="5px" mt="10px">
-                  <Box>
+                  <Box bg={dateOfBirth !== null ? '#e8f0fe' : ''}>
                     <DatePicker
                       value={dateOfBirth}
                       onChange={selectDate}
