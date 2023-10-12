@@ -708,7 +708,11 @@ const CreateUser = () => {
                 name="colors"
                 onChange={handleSelect}
                 value={detail?.city}
-                classNamePrefix="chakra-react-select"
+                classNamePrefix={
+                  detail?.city?.length !== 0
+                    ? 'chakra-react-select-default'
+                    : 'chakra-react-select'
+                }
                 options={listCity}
                 placeholder="Select some colors..."
                 closeMenuOnSelect={true}
@@ -798,11 +802,12 @@ const CreateUser = () => {
                 fontFamily={'Mulish'}
                 className="floating-label-global"
                 style={{
-                  transform: `${detail?.city !== ''}`
-                    ? 'translate(-1px, -10px) scale(0.75)'
-                    : 'translate(1px, 4px) scale(0.75)',
-                  fontSize: '14px',
-                  color: `${detail?.city !== ''}` ? '#065baa' : '#231F20',
+                  transform:
+                    detail?.city?.length !== 0
+                      ? 'translate(-1px, -10px) scale(0.75)'
+                      : 'translate(1px, 4px) scale(0.75)',
+                  fontSize: detail?.city?.length !== 0 ? '13px' : '14px',
+                  color: detail?.city?.length !== 0 ? '#065baa' : '#231F20',
                   fontStyle: 'italic',
                 }}
               >
