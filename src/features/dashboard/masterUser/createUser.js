@@ -383,11 +383,7 @@ const CreateUser = () => {
                 h="48px"
                 variant={'custom'}
                 className="gloabl-input"
-                bg={
-                  formuser !== null && formuser?.email !== ''
-                    ? '#e8f0fe'
-                    : '#ebebeb'
-                }
+                background={formuser?.email !== '' ? '#e8f0fe' : '#ebebeb'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -451,11 +447,17 @@ const CreateUser = () => {
                           ? 'translate(0, -10px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
-                        formuser !== null && formuser?.authorities?.length === 0
+                        formuser !== null && formuser?.authorities === null
                           ? '#231F20'
                           : '#065baa',
-                      fontSize: '12px',
-                      fontStyle: 'italic',
+                      fontSize:
+                        formuser !== null && formuser?.authorities === null
+                          ? '14px'
+                          : '13px',
+                      fontStyle:
+                        formuser !== null && formuser?.authorities === null
+                          ? 'normal'
+                          : 'italic',
                     }}
                     fontFamily={'Mulish'}
                   >
@@ -514,8 +516,14 @@ const CreateUser = () => {
                         formuser !== null && formuser?.travelAgent === ''
                           ? '#231F20'
                           : '#065baa',
-                      fontSize: '12px',
-                      fontStyle: 'italic',
+                      fontSize:
+                        formuser !== null && formuser?.travelAgent === null
+                          ? '14px'
+                          : '13px',
+                      fontStyle:
+                        formuser !== null && formuser?.travelAgent === null
+                          ? 'normal'
+                          : 'italic',
                     }}
                     fontFamily={'Mulish'}
                   >
