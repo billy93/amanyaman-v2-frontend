@@ -1633,36 +1633,44 @@ const CommisionForm = () => {
               isRequired
               mt="14px"
             >
-              <Input
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="commissionlvl2"
-                value={formstate?.commissionlvl2}
-                onChange={handleData}
-                h="48px"
-                variant={'custom'}
-                background={
-                  formstate?.commissionlvl2 !== '' ? '#e8f0fe' : '#ebebeb'
-                }
-              />
-              <InputRightAddon children="%" h="48px" />
-              {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
-                zIndex={'0'}
-                style={{
-                  zIndex: 0,
-                  color:
-                    formstate !== null && formstate?.commissionlvl2 !== ''
-                      ? '#065baa'
-                      : '#171923',
-                  fontWeight: 'normal',
-                  paddingBottom: '4px',
-                }}
-              >
-                Commission Level 2
-              </FormLabel>
+              <InputGroup size="sm">
+                <Input
+                  placeholder=" "
+                  _placeholder={{ opacity: 1, color: 'gray.500' }}
+                  name="commissionlvl2"
+                  value={formstate?.commissionlvl2}
+                  onChange={handleData}
+                  h="48px"
+                  variant={'custom'}
+                  background={
+                    formstate?.commissionlvl2 !== '' ? '#e8f0fe' : '#ebebeb'
+                  }
+                />
+                <InputRightAddon children="%" h="48px" />
+                {/* It is important that the Label comes after the Control due to css selectors */}
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  zIndex={'0'}
+                  style={{
+                    transform:
+                      formstate?.commissionlvl2 !== '' ||
+                      formstate?.commissionlvl2 !== 0
+                        ? 'translate(-3px, -8px) scale(0.75)'
+                        : 'translate(0px, 2px) scale(0.75)',
+                    fontSize: '14px',
+                    background: 'transparent',
+                    color:
+                      formstate !== null && formstate?.commissionlvl2 !== ''
+                        ? '#065baa'
+                        : '#171923',
+                    zIndex: '0',
+                    fontWeight: 'normal',
+                  }}
+                >
+                  Commission Level 2
+                </FormLabel>
+              </InputGroup>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
           </Box>
@@ -1694,7 +1702,8 @@ const CommisionForm = () => {
                     pt="1.5"
                     style={{
                       transform:
-                        formstate?.commissionlvl3 !== ''
+                        formstate?.commissionlvl3 !== '' ||
+                        formstate?.commissionlvl3 !== 0
                           ? 'translate(-3px, -8px) scale(0.75)'
                           : 'translate(0px, 2px) scale(0.75)',
                       fontSize: '14px',
@@ -1732,34 +1741,36 @@ const CommisionForm = () => {
               isRequired
               mt="14px"
             >
-              <Input
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="pph23"
-                value={formstate?.pph23}
-                onChange={handleData}
-                h="48px"
-                variant={'custom'}
-                background={formstate?.pph23 !== '' ? '#e8f0fe' : '#ebebeb'}
-              />
-              <InputRightAddon children="%" h="48px" />
-              {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
-                zIndex={'0'}
-                style={{
-                  zIndex: 0,
-                  color:
-                    formstate !== null && formstate?.pph23 !== ''
-                      ? '#065baa'
-                      : '#171923',
-                  fontWeight: 'normal',
-                  paddingBottom: '4px',
-                }}
-              >
-                PPH23
-              </FormLabel>
+              <InputGroup size="sm">
+                <Input
+                  placeholder=" "
+                  _placeholder={{ opacity: 1, color: 'gray.500' }}
+                  name="pph23"
+                  value={formstate?.pph23}
+                  onChange={handleData}
+                  h="48px"
+                  variant={'custom'}
+                  background={formstate?.pph23 !== '' ? '#e8f0fe' : '#ebebeb'}
+                />
+                <InputRightAddon children="%" h="48px" />
+                {/* It is important that the Label comes after the Control due to css selectors */}
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  zIndex={'0'}
+                  style={{
+                    zIndex: 0,
+                    color:
+                      formstate !== null && formstate?.pph23 !== ''
+                        ? '#065baa'
+                        : '#171923',
+                    fontWeight: 'normal',
+                    paddingBottom: '4px',
+                  }}
+                >
+                  PPH23
+                </FormLabel>
+              </InputGroup>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
           </Box>
