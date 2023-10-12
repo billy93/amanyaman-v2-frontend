@@ -1035,7 +1035,7 @@ const DetailMasterUser = () => {
                 </BreadcrumbItem>
               </Breadcrumb>
             </Box>
-            <Box display={'flex'} alignItems={'center'} gap="5px">
+            <Box display={'flex'} alignItems={'center'} gap="5px" pr="1em">
               <IconButton
                 _hover={{ color: 'white' }}
                 icon={<BsFillPencilFill color="#065BAA" size={'16px'} />}
