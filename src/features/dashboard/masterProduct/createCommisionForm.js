@@ -1805,13 +1805,18 @@ const CommisionForm = () => {
                   pt="1.5"
                   zIndex={'0'}
                   style={{
-                    zIndex: 0,
+                    transform:
+                      formstate?.pph23 !== ''
+                        ? 'translate(-3px, -8px) scale(0.75)'
+                        : 'translate(0px, 2px) scale(0.75)',
+                    fontSize: '14px',
+                    background: 'transparent',
                     color:
                       formstate !== null && formstate?.pph23 !== ''
                         ? '#065baa'
                         : '#171923',
+                    zIndex: '0',
                     fontWeight: 'normal',
-                    paddingBottom: '4px',
                   }}
                 >
                   PPH23
