@@ -448,15 +448,15 @@ const CreateUser = () => {
                           ? 'translate(0, -10px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
-                        formuser !== null && formuser?.authorities !== 0
+                        formuser !== null && formuser?.authorities?.length !== 0
                           ? '#065baa '
                           : '#231F20',
                       fontSize:
-                        formuser !== null && formuser?.authorities !== 0
+                        formuser !== null && formuser?.authorities?.length !== 0
                           ? '14px'
                           : '13px',
                       fontStyle:
-                        formuser !== null && formuser?.authorities !== 0
+                        formuser !== null && formuser?.authorities?.length !== 0
                           ? 'italic'
                           : 'normal',
                     }}
@@ -518,8 +518,8 @@ const CreateUser = () => {
                           : '13px',
                       fontStyle:
                         formuser !== null && formuser?.travelAgent === ''
-                          ? 'normal'
-                          : 'italic',
+                          ? 'italic'
+                          : 'normal',
                     }}
                     fontFamily={'Mulish'}
                   >
