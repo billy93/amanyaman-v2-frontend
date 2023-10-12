@@ -349,6 +349,7 @@ const CreateUser = () => {
                   value={formuser?.firstName}
                   onChange={handleData}
                   h="48px"
+                  className="global-input"
                   variant={'custom'}
                   background={
                     formuser?.firstName !== '' ? '#e8f0fe' : '#ebebeb'
@@ -358,7 +359,7 @@ const CreateUser = () => {
                 <FormLabel
                   fontSize="12"
                   pt="1.5"
-                  className="floating-label-globa"
+                  className="floating-label-global"
                 >
                   FistName
                 </FormLabel>
@@ -380,13 +381,14 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant={'custom'}
+                  className="global-input"
                   background={formuser?.lastName !== '' ? '#e8f0fe' : '#ebebeb'}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel
                   fontSize="12"
                   pt="1.5"
-                  className="floating-label-globa"
+                  className="floating-label-global"
                 >
                   LastName
                 </FormLabel>
@@ -409,6 +411,7 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                className="gloabl-input"
                 background={formuser?.email !== '' ? '#e8f0fe' : '#ebebeb'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
