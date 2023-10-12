@@ -528,7 +528,7 @@ const CommisionForm = () => {
     const inputNumber = parseInt(event.target.value, 10);
     const data = {
       ...formstate,
-      commisionLv1: inputNumber,
+      commissionlvl1: inputNumber,
     };
 
     if (!isNaN(inputNumber) && inputNumber >= 0) {
@@ -540,7 +540,7 @@ const CommisionForm = () => {
     const inputNumber = parseInt(event.target.value, 10);
     const data = {
       ...formstate,
-      commisionLv2: inputNumber,
+      commissionlvl2: inputNumber,
     };
 
     if (!isNaN(inputNumber) && inputNumber >= 0) {
@@ -551,7 +551,7 @@ const CommisionForm = () => {
     const inputNumber = parseInt(event.target.value, 10);
     const data = {
       ...formstate,
-      commisionLv3: inputNumber,
+      commissionlvl3: inputNumber,
     };
 
     if (!isNaN(inputNumber) && inputNumber >= 0) {
