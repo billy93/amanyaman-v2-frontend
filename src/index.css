@@ -67,6 +67,9 @@ body {
 .chakra-react-select__control.chakra-react-select__value-container{
   background: #e8f0fe;
 }
+.chakra-react-select-default{
+  background: #e8f0fe!important;
+}
 input, button {
   font: inherit;
 }

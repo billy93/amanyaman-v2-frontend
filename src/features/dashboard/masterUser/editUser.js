@@ -461,7 +461,11 @@ const CreateUser = () => {
                     name="colors"
                     onChange={handleSelectRoles}
                     value={formuser?.authorities}
-                    classNamePrefix="chakra-react-select"
+                    classNamePrefix={
+                      formuser?.authorities?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
+                    }
                     options={listRoles}
                     placeholder=""
                     closeMenuOnSelect={true}
