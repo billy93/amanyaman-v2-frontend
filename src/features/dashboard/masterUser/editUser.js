@@ -486,7 +486,7 @@ const CreateUser = () => {
                     style={{
                       transform:
                         formuser !== null && formuser?.authorities?.length > 0
-                          ? 'translate(0, 2px) scale(0.75)'
+                          ? 'translate(0, -8px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
                         formuser !== null && formuser?.authorities?.lenght > 0
@@ -544,7 +544,7 @@ const CreateUser = () => {
                     style={{
                       transform:
                         formuser !== null && formuser?.travelAgent === null
-                          ? 'translate(0, 2px) scale(0.75)'
+                          ? 'translate(0, -8px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
                         formuser !== null && formuser?.travelAgent === null
