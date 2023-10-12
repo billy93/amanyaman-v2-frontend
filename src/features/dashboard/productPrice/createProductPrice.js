@@ -185,7 +185,7 @@ const CreatePrice = () => {
                 style={{ pointerEvents: 'none' }}
               >
                 <Text as={'b'} fontSize={'sm'} color="#231F20">
-                  {'Create Product Price'}
+                  {'Edit Product Price'}
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
