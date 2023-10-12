@@ -457,8 +457,8 @@ const CreateUser = () => {
                           : '13px',
                       fontStyle:
                         formuser !== null && formuser?.authorities?.length !== 0
-                          ? 'italic'
-                          : 'normal',
+                          ? 'normal'
+                          : 'italic',
                     }}
                     fontFamily={'Mulish'}
                   >
