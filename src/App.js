@@ -155,7 +155,7 @@ function App() {
         }
       >
         <Route path="master-products" element={<MasterProduct />} />
-        <Route path="create-product-price" element={<CreateProductPrice />} />
+        <Route path="edit-product-price/:id" element={<CreateProductPrice />} />
         <Route
           path="detail-product-price/:id"
           element={<DetailProductPrice />}

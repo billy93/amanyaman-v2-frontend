@@ -22,7 +22,7 @@ const DetailMasterUser = () => {
   const navigate = useNavigate();
 
   const handleEditUser = () => {
-    navigate(`/master-data/edit-master-product/${id}`, { replace: true });
+    navigate(`/master-data/edit-product-price/${id}`, { replace: true });
   };
   const handleGoBack = () => {
     navigate(-1);

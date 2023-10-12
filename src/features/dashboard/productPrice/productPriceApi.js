@@ -110,6 +110,15 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    updateProductPrice: builder.mutation({
+      query: (data) => {
+        return {
+          url: '/app/product-travel-agents',
+          method: 'PUT',
+          body: { ...data },
+        };
+      },
+    }),
     uploadFilePrice: builder.mutation({
       query: (file) => {
         const formData = new FormData();
@@ -135,4 +144,5 @@ export const {
   useGetProductPriceQuery,
   useUploadFilePriceMutation,
   useExportProductPriceQuery,
+  useUpdateProductPriceMutation,
 } = policyApiSlice;
