@@ -271,6 +271,8 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                className="gloabl-input"
+                background={formuser?.login !== '' ? '#e8f0fe' : '#ebebeb'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
@@ -300,6 +302,10 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant={'custom'}
+                  className="gloabl-input"
+                  background={
+                    formuser?.firstName !== '' ? '#e8f0fe' : '#ebebeb'
+                  }
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel fontSize="12" pt="1.5">
@@ -352,6 +358,8 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                className="gloabl-input"
+                background={formuser?.email !== '' ? '#e8f0fe' : '#ebebeb'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel fontSize="12" pt="1.5">
@@ -410,7 +418,8 @@ const CreateUser = () => {
                         formuser !== null && formuser?.authorities?.length === 0
                           ? '#231F20'
                           : '#065baa',
-                      fontSize: '14px',
+                      fontSize: '12px',
+                      fontStyle: 'italic',
                     }}
                     fontFamily={'Mulish'}
                   >
@@ -469,7 +478,8 @@ const CreateUser = () => {
                         formuser !== null && formuser?.travelAgent === ''
                           ? '#231F20'
                           : '#065baa',
-                      fontSize: '14px',
+                      fontSize: '12px',
+                      fontStyle: 'italic',
                     }}
                     fontFamily={'Mulish'}
                   >
