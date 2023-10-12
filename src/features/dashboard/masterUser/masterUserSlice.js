@@ -39,6 +39,7 @@ const createMasterUserSlice = createSlice({
       firstName: '',
       lastName: '',
       area: '',
+      email: '',
       authorities: [],
       travelAgent: '',
     },

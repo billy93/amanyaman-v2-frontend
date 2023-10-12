@@ -125,6 +125,7 @@ const CreateUser = () => {
     }
   }, [rolesData, prevListRoles, dispatch]);
 
+  console.log('formuser', formuser);
   return (
     <Stack mt={{ base: '1em', md: '5em' }}>
       <Box
@@ -447,17 +448,17 @@ const CreateUser = () => {
                           ? 'translate(0, -10px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
-                        formuser !== null && formuser?.authorities === null
-                          ? '#231F20'
-                          : '#065baa',
+                        formuser !== null && formuser?.authorities !== 0
+                          ? '#065baa '
+                          : '#231F20',
                       fontSize:
-                        formuser !== null && formuser?.authorities === null
+                        formuser !== null && formuser?.authorities !== 0
                           ? '14px'
                           : '13px',
                       fontStyle:
-                        formuser !== null && formuser?.authorities === null
-                          ? 'normal'
-                          : 'italic',
+                        formuser !== null && formuser?.authorities !== 0
+                          ? 'italic'
+                          : 'normal',
                     }}
                     fontFamily={'Mulish'}
                   >
@@ -469,12 +470,7 @@ const CreateUser = () => {
             </FormControl>
           </Box>
           <Box width={{ base: '100%', md: '540px' }} m="auto">
-            <FormControl
-              variant="floating"
-              fontFamily={'Mulish'}
-              mt="14px"
-              id="float-label"
-            >
+            <FormControl variant="floating" fontFamily={'Mulish'} mt="14px">
               <Box className="floating-form">
                 <Box className="floating-label">
                   <Select
@@ -517,11 +513,11 @@ const CreateUser = () => {
                           ? '#231F20'
                           : '#065baa',
                       fontSize:
-                        formuser !== null && formuser?.travelAgent === null
+                        formuser !== null && formuser?.travelAgent === ''
                           ? '14px'
                           : '13px',
                       fontStyle:
-                        formuser !== null && formuser?.travelAgent === null
+                        formuser !== null && formuser?.travelAgent === ''
                           ? 'normal'
                           : 'italic',
                     }}
