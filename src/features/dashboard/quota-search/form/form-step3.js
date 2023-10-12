@@ -1458,9 +1458,16 @@ const Form3 = ({
                       value={pasportNumber}
                       onChange={setPasportNumbers}
                       h="48px"
+                      style={{
+                        backgroundColor: pasportNumber !== '' ? '#e8f0fe' : '',
+                      }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel fontSize="12" pt="1.5">
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
                       Pasport Number
                     </FormLabel>
                     {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
