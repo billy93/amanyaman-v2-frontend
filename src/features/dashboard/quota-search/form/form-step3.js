@@ -1224,6 +1224,9 @@ const Form3 = ({
                           defaultValue={typeStatus}
                           h="48px"
                           onChange={handleSelectTypeStatus}
+                          style={{
+                            backgroundColor: typeStatus !== '' ? '#e8f0fe' : '',
+                          }}
                         >
                           <option value="Mr">Mr</option>
                           <option value="Mrs">Mrs</option>
@@ -1305,10 +1308,7 @@ const Form3 = ({
                     renderInput={renderCustomInput}
                     shouldHighlightWeekends
                     style={{
-                      fontSize: '12px',
-                      fontfamily: 'Mulish',
-                      marginTop: '1em',
-                      color: '#000000ad',
+                      backgroundColor: selectDate !== null ? '#e8f0fe' : '',
                     }}
                   />
                   <FormControl variant="floating" id="first-name" isRequired>
@@ -1319,13 +1319,15 @@ const Form3 = ({
                       onChange={setPlaceOfBirths}
                       h="48px"
                       style={{
-                        fontSize: '12px',
-                        fontfamily: 'Mulish',
-                        color: '#000000ad',
+                        backgroundColor: placeOfBirth !== '' ? '#e8f0fe' : '',
                       }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel fontSize="12" pt="1.5">
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="float-label-global"
+                    >
                       {' '}
                       Place Of Birth
                     </FormLabel>
@@ -1341,16 +1343,16 @@ const Form3 = ({
                     mt="14px"
                   >
                     <Textarea
+                      pt="1em"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
                       value={address}
+                      onChange={setAddresss}
                       style={{
+                        backgroundColor: address !== '' ? '#e8f0fe' : '',
                         fontSize: '12px',
                         fontfamily: 'Mulish',
-                        marginTop: '1em',
-                        color: '#000000ad',
                       }}
-                      onChange={setAddresss}
                       h="48px"
                     />
                     <FormLabel
@@ -1378,8 +1380,15 @@ const Form3 = ({
                       value={email}
                       onChange={setEmailAddress}
                       h="48px"
+                      style={{
+                        backgroundColor: email !== '' ? '#e8f0fe' : '',
+                      }}
                     />
-                    <FormLabel fontSize="12" pt="1.5">
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
                       Email
                     </FormLabel>
                     <FormErrorMessage>
@@ -1399,9 +1408,16 @@ const Form3 = ({
                       value={phoneNumber}
                       onChange={setPhoneNumbers}
                       h="48px"
+                      style={{
+                        backgroundColor: phoneNumber !== '' ? '#e8f0fe' : '',
+                      }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel fontSize="12" pt="1.5">
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
                       Phone Number
                     </FormLabel>
                     <FormErrorMessage>
@@ -1432,9 +1448,16 @@ const Form3 = ({
                       value={ticketNumber}
                       onChange={setTicketNumbers}
                       h="48px"
+                      style={{
+                        backgroundColor: ticketNumber !== '' ? '#e8f0fe' : '',
+                      }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel fontSize="12" pt="1.5">
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
                       Ticket Number
                     </FormLabel>
                     {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -1448,9 +1471,16 @@ const Form3 = ({
                       value={beneficiary}
                       onChange={setBeneficiaries}
                       h="48px"
+                      style={{
+                        backgroundColor: beneficiary !== '' ? '#e8f0fe' : '',
+                      }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel fontSize="12" pt="1.5">
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
                       Beneficiary
                     </FormLabel>
                     {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -1460,10 +1490,8 @@ const Form3 = ({
                       <Box>
                         <Select
                           style={{
-                            fontFamily: 'Mulish',
-                            color: '#232934eb',
-                            fontSize: '14px',
-                            fontWeight: '500',
+                            backgroundColor:
+                              relationship !== '' ? '#e8f0fe' : '',
                           }}
                           // className="floating-select"
                           placeholder=""
