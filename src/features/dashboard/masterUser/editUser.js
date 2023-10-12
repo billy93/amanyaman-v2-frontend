@@ -204,8 +204,7 @@ const CreateUser = () => {
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      backgroundColor:
-        formuser?.authorities?.lenght > 0 ? '#e8f0fe' : '#ebebeb', // Conditional background color
+      backgroundColor: state?.authorities?.lenght > 0 ? '#e8f0fe' : '#ebebeb', // Conditional background color
       border: '1px solid #000',
       // Add other styles as needed
     }),
@@ -213,7 +212,7 @@ const CreateUser = () => {
   const customStyless = {
     control: (provided, state) => ({
       ...provided,
-      backgroundColor: formuser?.travelAgent !== null ? '#e8f0fe' : '#ebebeb', // Conditional background color
+      backgroundColor: state?.travelAgent !== null ? '#e8f0fe' : '#ebebeb', // Conditional background color
       border: '1px solid #000',
       // Add other styles as needed
     }),
@@ -462,7 +461,7 @@ const CreateUser = () => {
                     name="colors"
                     onChange={handleSelectRoles}
                     value={formuser?.authorities}
-                    // classNamePrefix="chakra-react-select"
+                    classNamePrefix="chakra-react-select"
                     options={listRoles}
                     placeholder=""
                     closeMenuOnSelect={true}
@@ -520,7 +519,7 @@ const CreateUser = () => {
                     name="colors"
                     onChange={handleSelect}
                     value={formuser?.travelAgent}
-                    // classNamePrefix="chakra-react-select"
+                    classNamePrefix="chakra-react-select"
                     options={dropdowntravelagents}
                     placeholder=""
                     closeMenuOnSelect={true}
