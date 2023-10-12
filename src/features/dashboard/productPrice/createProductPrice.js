@@ -77,6 +77,52 @@ const CreatePrice = () => {
     navigate(-1);
   };
 
+  const handlePreiumPrice = (event) => {
+    const inputNumber = parseInt(event.target.value, 10);
+    const data = {
+      ...fields,
+      premiumPrice: inputNumber,
+    };
+
+    if (!isNaN(inputNumber) && inputNumber >= 0) {
+      setFields(data);
+    }
+  };
+
+  const handleComm1 = (event) => {
+    const inputNumber = parseInt(event.target.value, 10);
+    const data = {
+      ...fields,
+      commisionLv1: inputNumber,
+    };
+
+    if (!isNaN(inputNumber) && inputNumber >= 0) {
+      setFields(data);
+    }
+  };
+
+  const handleComm2 = (event) => {
+    const inputNumber = parseInt(event.target.value, 10);
+    const data = {
+      ...fields,
+      commisionLv2: inputNumber,
+    };
+
+    if (!isNaN(inputNumber) && inputNumber >= 0) {
+      setFields(data);
+    }
+  };
+  const handleComm3 = (event) => {
+    const inputNumber = parseInt(event.target.value, 10);
+    const data = {
+      ...fields,
+      commisionLv3: inputNumber,
+    };
+
+    if (!isNaN(inputNumber) && inputNumber >= 0) {
+      setFields(data);
+    }
+  };
   const handleNext = async () => {
     try {
       const res = await updateProductPrice(fields);
@@ -198,41 +244,6 @@ const CreatePrice = () => {
               {/* It is important that the Label comes after the Control due to css selectors */}
             </FormControl>
           </Box>
-          <Box width={{ base: '100%', md: '260px' }}>
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              fontFamily={'Mulish'}
-              mt="14px"
-            >
-              <Input
-                isDisabled={true}
-                id="inputs"
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                value={data?.travelAgent?.travelAgentName}
-                name="travelAgentName"
-                onChange={handleData}
-                h="48px"
-                variant={'custom'}
-                background={
-                  data?.travelAgent?.travelAgentName !== ''
-                    ? '#e8f0fe'
-                    : '#ebebeb'
-                }
-              />
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
-                fontFamily={'Mulish'}
-                style={{ fontSize: '14px' }}
-              >
-                Travel Agent Name
-              </FormLabel>
-              {/* It is important that the Label comes after the Control due to css selectors */}
-            </FormControl>
-          </Box>
         </Flex>
       </Flex>
       <Flex
@@ -265,7 +276,7 @@ const CreatePrice = () => {
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 value={data?.premiumPrice}
                 name="productCode"
-                onChange={handleData}
+                onChange={handlePreiumPrice}
                 textTransform={'uppercase'}
                 h="48px"
                 variant={'custom'}
@@ -296,7 +307,7 @@ const CreatePrice = () => {
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 value={fields?.commisionLv1}
                 name="travelAgentName"
-                onChange={handleData}
+                onChange={handleComm1}
                 h="48px"
                 variant={'custom'}
                 background={fields?.commisionLv1 !== '' ? '#e8f0fe' : '#ebebeb'}
@@ -344,7 +355,7 @@ const CreatePrice = () => {
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 value={fields?.commisionLv2}
                 name="commisionLv2"
-                onChange={handleData}
+                onChange={handleComm2}
                 textTransform={'uppercase'}
                 h="48px"
                 variant={'custom'}
@@ -375,7 +386,7 @@ const CreatePrice = () => {
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 value={fields?.commisionLv3}
                 name="commisionLv3"
-                onChange={handleData}
+                onChange={handleComm3}
                 h="48px"
                 variant={'custom'}
                 background={fields?.commisionLv3 !== '' ? '#e8f0fe' : '#ebebeb'}
@@ -387,6 +398,59 @@ const CreatePrice = () => {
                 style={{ fontSize: '14px' }}
               >
                 Commission Lv3
+              </FormLabel>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+            </FormControl>
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex
+        width="100%"
+        justifyContent="center"
+        alignItems="center"
+        mx="auto"
+        gap="10px"
+      >
+        <Flex
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap="20px"
+        >
+          <Box width={{ base: '100%', md: '260px' }}>
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              fontFamily={'Mulish'}
+              mt="14px"
+            >
+              <Input
+                isDisabled={true}
+                id="inputs"
+                placeholder=" "
+                _placeholder={{ opacity: 1, color: 'gray.500' }}
+                value={data?.travelAgent?.travelAgentName}
+                name="travelAgentName"
+                onChange={handleData}
+                h="48px"
+                variant={'custom'}
+                background={
+                  data?.travelAgent?.travelAgentName !== ''
+                    ? '#e8f0fe'
+                    : '#ebebeb'
+                }
+              />
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                fontFamily={'Mulish'}
+                style={{ fontSize: '14px' }}
+              >
+                Travel Agent Name
               </FormLabel>
               {/* It is important that the Label comes after the Control due to css selectors */}
             </FormControl>
