@@ -700,7 +700,7 @@ const Polcies = () => {
     }, 1000);
   }, []);
 
-  console.log('totalCount', totalCount);
+  // console.log('totalCount', totalCount);
   function formatDateToLong(dateString) {
     const monthNames = [
       'January',
@@ -1433,7 +1433,7 @@ const Polcies = () => {
                 Page{' '}
               </Text>
               <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
-                {page + 1} of {pageCount}
+                {page + 1} of {Math.ceil(totalCount / size)}
               </Text>{' '}
             </Box>
           </Box>
