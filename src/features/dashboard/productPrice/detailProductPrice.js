@@ -309,7 +309,7 @@ const DetailMasterUser = () => {
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {user ? user?.commisionLv1 : '-'}
+                  {user ? `${user?.commisionLv1}{ '%'}` : '-'}
                 </Text>
               </Box>
             </Box>
@@ -339,7 +339,7 @@ const DetailMasterUser = () => {
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {user ? user?.commisionLv2 : '-'}
+                  {user ? `${user?.commisionLv2}{ '%'}` : '-'}
                 </Text>
               </Box>
             </Box>
@@ -369,7 +369,7 @@ const DetailMasterUser = () => {
                   fontFamily={'Mulish'}
                   style={{ fontSize: '14px' }}
                 >
-                  {user ? user?.commisionLv3 : '-'}
+                  {user ? `${user?.commisionLv3}{ '%'}` : '-'}
                 </Text>
               </Box>
             </Box>

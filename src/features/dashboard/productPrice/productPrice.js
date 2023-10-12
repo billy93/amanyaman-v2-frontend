@@ -587,17 +587,31 @@ const Polcies = () => {
       {
         Header: 'Discount Lvl 1',
         accessor: 'commisionLv1',
-        Cell: ({ value }) => <div className="global-td">{value}</div>,
+        Cell: ({ value }) => (
+          <div className="global-td">
+            {value}
+            {'%'}
+          </div>
+        ),
       },
       {
         Header: 'Discount Lvl 2',
         accessor: 'commisionLv2',
-        Cell: ({ value }) => <div className="global-td">{value}</div>,
+        Cell: ({ value }) => (
+          <div className="global-td">
+            {value} {'%'}
+          </div>
+        ),
       },
       {
         Header: 'Discount Lvl 3',
         accessor: 'commisionLv3',
-        Cell: ({ value }) => <div className="global-td">{value}</div>,
+        Cell: ({ value }) => (
+          <div className="global-td">
+            {value}
+            {'%'}
+          </div>
+        ),
       },
       {
         Header: 'Total Commission',
