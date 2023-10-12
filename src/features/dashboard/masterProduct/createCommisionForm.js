@@ -808,7 +808,6 @@ const CommisionForm = () => {
             style={{
               backgroundColor:
                 formstate?.productDescription !== '' ? '#e8f0fe' : '',
-              border: '1px solid #000',
             }}
           />
           <FormLabel
