@@ -512,6 +512,53 @@ const CommisionForm = () => {
     }
   }, [additionalWeeks, dispatch]);
 
+  const handlePremiumPrice = (event) => {
+    const inputNumber = parseInt(event.target.value, 10);
+    const data = {
+      ...formstate,
+      premiumPrice: inputNumber,
+    };
+
+    if (!isNaN(inputNumber) && inputNumber >= 0) {
+      dispatch(setProductForm(data));
+    }
+  };
+
+  const handleComm1 = (event) => {
+    const inputNumber = parseInt(event.target.value, 10);
+    const data = {
+      ...formstate,
+      commisionLv1: inputNumber,
+    };
+
+    if (!isNaN(inputNumber) && inputNumber >= 0) {
+      dispatch(setProductForm(data));
+    }
+  };
+
+  const handleComm2 = (event) => {
+    const inputNumber = parseInt(event.target.value, 10);
+    const data = {
+      ...formstate,
+      commisionLv2: inputNumber,
+    };
+
+    if (!isNaN(inputNumber) && inputNumber >= 0) {
+      dispatch(setProductForm(data));
+    }
+  };
+  const handleComm3 = (event) => {
+    const inputNumber = parseInt(event.target.value, 10);
+    const data = {
+      ...formstate,
+      commisionLv3: inputNumber,
+    };
+
+    if (!isNaN(inputNumber) && inputNumber >= 0) {
+      dispatch(setProductForm(data));
+    }
+  };
+
   return (
     <Box>
       <Box
@@ -1539,7 +1586,7 @@ const CommisionForm = () => {
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 name="premiumPrice"
                 value={formstate?.premiumPrice}
-                onChange={handleData}
+                onChange={handlePremiumPrice}
                 h="48px"
                 variant={'custom'}
                 background={
@@ -1581,7 +1628,7 @@ const CommisionForm = () => {
                     _placeholder={{ opacity: 1, color: 'gray.500' }}
                     name="commissionlvl1"
                     value={formstate?.commissionlvl1}
-                    onChange={handleData}
+                    onChange={handleComm1}
                     h="48px"
                     variant={'custom'}
                     background={
@@ -1638,7 +1685,7 @@ const CommisionForm = () => {
                   _placeholder={{ opacity: 1, color: 'gray.500' }}
                   name="commissionlvl2"
                   value={formstate?.commissionlvl2}
-                  onChange={handleData}
+                  onChange={handleComm2}
                   h="48px"
                   variant={'custom'}
                   background={
@@ -1688,7 +1735,7 @@ const CommisionForm = () => {
                     _placeholder={{ opacity: 1, color: 'gray.500' }}
                     name="commissionlvl3"
                     value={formstate?.commissionlvl3}
-                    onChange={handleData}
+                    onChange={handleComm3}
                     h="48px"
                     variant={'custom'}
                     background={
