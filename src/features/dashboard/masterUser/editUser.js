@@ -462,7 +462,7 @@ const CreateUser = () => {
                     name="colors"
                     onChange={handleSelectRoles}
                     value={formuser?.authorities}
-                    classNamePrefix="chakra-react-select"
+                    // classNamePrefix="chakra-react-select"
                     options={listRoles}
                     placeholder=""
                     closeMenuOnSelect={true}
@@ -494,8 +494,8 @@ const CreateUser = () => {
                           : '#065baa',
                       fontSize:
                         formuser !== null && formuser?.authorities?.lenght > 0
-                          ? '14px'
-                          : '12px',
+                          ? '12px'
+                          : '14px',
                       fontStyle:
                         formuser !== null && formuser?.authorities?.lenght > 0
                           ? 'italic'
@@ -520,7 +520,7 @@ const CreateUser = () => {
                     name="colors"
                     onChange={handleSelect}
                     value={formuser?.travelAgent}
-                    classNamePrefix="chakra-react-select"
+                    // classNamePrefix="chakra-react-select"
                     options={dropdowntravelagents}
                     placeholder=""
                     closeMenuOnSelect={true}
@@ -544,8 +544,8 @@ const CreateUser = () => {
                     style={{
                       transform:
                         formuser !== null && formuser?.travelAgent === null
-                          ? 'translate(0, -8px) scale(0.75)'
-                          : 'translate(0, 4px) scale(0.75)',
+                          ? 'translate(0, 4px) scale(0.75)'
+                          : 'translate(0, -2px) scale(0.75)',
                       color:
                         formuser !== null && formuser?.travelAgent === null
                           ? '#231F20'
@@ -556,8 +556,8 @@ const CreateUser = () => {
                           : '12px',
                       fontStyle:
                         formuser !== null && formuser?.travelAgent === null
-                          ? 'italic'
-                          : 'normal',
+                          ? 'normal'
+                          : 'italic',
                     }}
                     fontFamily={'Mulish'}
                   >
