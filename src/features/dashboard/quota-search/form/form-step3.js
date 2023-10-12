@@ -1323,20 +1323,22 @@ const Form3 = ({
                   </Text>
                 </Box>
                 <Box display={'flex'} gap="5px" mt="10px">
-                  <DatePicker
-                    value={dateOfBirth}
-                    onChange={selectDate}
-                    inputPlaceholder="Select a date" // placeholder
-                    formatInputText={formatInputValue}
-                    inputClassName={
-                      dateOfBirth !== null ? '' : 'my-custom-input'
-                    } // custom class
-                    renderInput={renderCustomInput}
-                    shouldHighlightWeekends
-                    style={{
-                      backgroundColor: dateOfBirth !== null ? '#e8f0fe' : '',
-                    }}
-                  />
+                  <Box>
+                    <DatePicker
+                      value={dateOfBirth}
+                      onChange={selectDate}
+                      inputPlaceholder="Select a date" // placeholder
+                      formatInputText={formatInputValue}
+                      inputClassName={
+                        dateOfBirth !== null ? '' : 'my-custom-input'
+                      } // custom class
+                      renderInput={renderCustomInput}
+                      shouldHighlightWeekends
+                      style={{
+                        backgroundColor: dateOfBirth !== null ? '#e8f0fe' : '',
+                      }}
+                    />
+                  </Box>
                   <FormControl variant="floating" id="first-name" isRequired>
                     <Input
                       placeholder=" "

@@ -27,6 +27,11 @@
   font-family: 'Mulish';
   font-weight: normal;
 }
+.custom-calendar .custom-day.selected {
+  background-color: #e8f0fe; /* Change this to the desired background color */
+   /* Change this to the desired text color */
+  /* Add other styles as needed */
+}
 .floating-label-global{
    font-size: 12px!important;
     font-style: italic;
