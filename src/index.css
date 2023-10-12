@@ -27,6 +27,12 @@
   font-family: 'Mulish';
   font-weight: normal;
 }
+.floating-label-global{
+   font-size: 12px;
+    font-style: italic;
+    font-family: 'Mulish';
+    font-weight: 300;
+}
 #myTextarea {
   /* Specify desired styles */
   font-family: 'Mulish';

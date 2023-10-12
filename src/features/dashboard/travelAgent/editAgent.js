@@ -302,7 +302,11 @@ const CreateUser = () => {
                 variant="custom"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Travel Agent Name
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -331,7 +335,11 @@ const CreateUser = () => {
                   variant="custom"
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
-                <FormLabel fontSize="12" pt="1.5">
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  className="floating-label-global"
+                >
                   Travel Agent Email
                 </FormLabel>
                 {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -354,7 +362,11 @@ const CreateUser = () => {
                   variant="custom"
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
-                <FormLabel fontSize="12" pt="1.5">
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  className="floating-label-global"
+                >
                   travel Agent Address
                 </FormLabel>
                 {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -384,7 +396,11 @@ const CreateUser = () => {
                   variant="custom"
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
-                <FormLabel fontSize="12" pt="1.5">
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  className="floating-label-global"
+                >
                   Commison
                 </FormLabel>
                 {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -407,7 +423,11 @@ const CreateUser = () => {
                   variant="custom"
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
-                <FormLabel fontSize="12" pt="1.5">
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  className="floating-label-global"
+                >
                   Payment type
                 </FormLabel>
                 {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -431,7 +451,11 @@ const CreateUser = () => {
                 variant="custom"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Travel Agent Phone
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -454,7 +478,11 @@ const CreateUser = () => {
                 variant="custom"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Cust Code
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -477,7 +505,11 @@ const CreateUser = () => {
                 variant="custom"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Api password
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -500,7 +532,11 @@ const CreateUser = () => {
                 variant="custom"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Cust Id
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -523,7 +559,11 @@ const CreateUser = () => {
                 variant="custom"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 CGroup
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -546,7 +586,11 @@ const CreateUser = () => {
                 variant="custom"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Legal Name
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -571,7 +615,11 @@ const CreateUser = () => {
                 variant="custom"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Proforma Invoice Recipients{' '}
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -601,6 +649,7 @@ const CreateUser = () => {
               h="48px"
             >
               <Select
+                className="floating-label-global"
                 isMulti={false}
                 name="colors"
                 onChange={handleSelect}
@@ -693,6 +742,7 @@ const CreateUser = () => {
                 fontSize="12"
                 pt="1.5"
                 fontFamily={'Mulish'}
+                className="floating-label-global"
                 style={{
                   transform: `${detail?.city}`
                     ? 'translate(-1px, -10px) scale(0.75)'
