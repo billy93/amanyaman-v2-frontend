@@ -523,7 +523,11 @@ const CreateUser = () => {
                     name="colors"
                     onChange={handleSelect}
                     value={formuser?.travelAgent}
-                    classNamePrefix="chakra-react-select"
+                    classNamePrefix={
+                      formuser?.travelAgent === null
+                        ? 'chakra-react-select'
+                        : 'chakra-react-select-default'
+                    }
                     options={dropdowntravelagents}
                     placeholder=""
                     closeMenuOnSelect={true}
