@@ -1328,7 +1328,9 @@ const Form3 = ({
                     onChange={selectDate}
                     inputPlaceholder="Select a date" // placeholder
                     formatInputText={formatInputValue}
-                    inputClassName="my-custom-input" // custom class
+                    inputClassName={
+                      dateOfBirth !== null ? '' : 'my-custom-input'
+                    } // custom class
                     renderInput={renderCustomInput}
                     shouldHighlightWeekends
                     style={{
@@ -1376,6 +1378,7 @@ const Form3 = ({
                         backgroundColor: address !== '' ? '#e8f0fe' : '',
                         fontSize: '12px',
                         fontfamily: 'Mulish',
+                        fontWeight: 'normal',
                       }}
                       h="48px"
                     />
