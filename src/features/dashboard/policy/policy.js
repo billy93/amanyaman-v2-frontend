@@ -1086,7 +1086,7 @@ const Polcies = () => {
   };
 
   const goToPageLast = () => {
-    setPage(pageCount - 1);
+    setPage(Math.ceil(totalCount / size) - 1);
   };
 
   const goToPageFirst = () => {
