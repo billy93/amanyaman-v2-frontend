@@ -203,8 +203,8 @@ const CreatePrice = () => {
           gridTemplateColumns={{
             base: 'repeat(1, 1fr)',
             sm: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-            lg: 'repeat(2, 1fr)',
+            md: 'repeat(1, 1fr)',
+            lg: 'repeat(1, 1fr)',
           }}
           gap="20px"
         >
@@ -415,8 +415,8 @@ const CreatePrice = () => {
           gridTemplateColumns={{
             base: 'repeat(1, 1fr)',
             sm: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-            lg: 'repeat(2, 1fr)',
+            md: 'repeat(1, 1fr)',
+            lg: 'repeat(1, 1fr)',
           }}
           gap="20px"
         >
