@@ -301,6 +301,10 @@ const CreateUser = () => {
                 h="48px"
                 variant="custom"
                 className="global-input"
+                style={{
+                  backgroundColor:
+                    detail?.travelAgentName !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -335,6 +339,10 @@ const CreateUser = () => {
                   h="48px"
                   variant="custom"
                   className="global-input"
+                  style={{
+                    backgroundColor:
+                      detail?.travelAgentEmail !== '' ? '#e8f0fe' : '',
+                  }}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel
@@ -363,6 +371,10 @@ const CreateUser = () => {
                   h="48px"
                   variant="custom"
                   className="global-input"
+                  style={{
+                    backgroundColor:
+                      detail?.travelAgentAddress !== '' ? '#e8f0fe' : '',
+                  }}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel
@@ -398,6 +410,9 @@ const CreateUser = () => {
                   h="48px"
                   variant="custom"
                   className="global-input"
+                  style={{
+                    backgroundColor: detail?.commission !== '' ? '#e8f0fe' : '',
+                  }}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel
@@ -426,6 +441,10 @@ const CreateUser = () => {
                   h="48px"
                   variant="custom"
                   className="global-input"
+                  style={{
+                    backgroundColor:
+                      detail?.paymentType !== '' ? '#e8f0fe' : '',
+                  }}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel
@@ -455,6 +474,10 @@ const CreateUser = () => {
                 h="48px"
                 variant="custom"
                 className="global-input"
+                style={{
+                  backgroundColor:
+                    detail?.travelAgentPhone !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -483,6 +506,9 @@ const CreateUser = () => {
                 h="48px"
                 variant="custom"
                 className="global-input"
+                style={{
+                  backgroundColor: detail?.custcode !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -511,6 +537,9 @@ const CreateUser = () => {
                 h="48px"
                 variant="custom"
                 className="global-input"
+                style={{
+                  backgroundColor: detail?.apiPassword !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -539,6 +568,9 @@ const CreateUser = () => {
                 h="48px"
                 variant="custom"
                 className="global-input"
+                style={{
+                  backgroundColor: detail?.custid !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -567,6 +599,9 @@ const CreateUser = () => {
                 h="48px"
                 variant="custom"
                 className="global-input"
+                style={{
+                  backgroundColor: detail?.cgroup !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -595,6 +630,9 @@ const CreateUser = () => {
                 h="48px"
                 variant="custom"
                 className="global-input"
+                style={{
+                  backgroundColor: detail?.legalName !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -625,6 +663,10 @@ const CreateUser = () => {
                 h="48px"
                 variant="custom"
                 className="global-input"
+                style={{
+                  backgroundColor:
+                    detail?.proformaInvoiceRecipients !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -756,13 +798,11 @@ const CreateUser = () => {
                 fontFamily={'Mulish'}
                 className="floating-label-global"
                 style={{
-                  transform: `${detail?.city?.length !== 0}`
+                  transform: `${detail?.city !== ''}`
                     ? 'translate(-1px, -10px) scale(0.75)'
                     : 'translate(1px, 4px) scale(0.75)',
                   fontSize: '14px',
-                  color: `${detail?.city?.length !== 0}`
-                    ? '#065baa'
-                    : '#231F20',
+                  color: `${detail?.city !== ''}` ? '#065baa' : '#231F20',
                   fontStyle: 'italic',
                 }}
               >
