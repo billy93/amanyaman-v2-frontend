@@ -697,6 +697,9 @@ const CommisionForm = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                background={
+                  formstate?.productCode !== '' ? '#e8f0fe' : '#ebebeb'
+                }
               />
               <FormLabel
                 fontSize="12"
@@ -726,6 +729,9 @@ const CommisionForm = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                background={
+                  formstate?.productName !== '' ? '#e8f0fe' : '#ebebeb'
+                }
               />
               <FormLabel
                 fontSize="12"
@@ -804,6 +810,9 @@ const CommisionForm = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                background={
+                  formstate?.productDetailCode !== '' ? '#e8f0fe' : '#ebebeb'
+                }
               />
               <FormLabel
                 fontSize="12"
@@ -841,7 +850,11 @@ const CommisionForm = () => {
                     name="colors"
                     onChange={handleSelectBandType}
                     value={formstate?.bandType}
-                    classNamePrefix="chakra-react-select"
+                    classNamePrefix={
+                      formstate?.bandType?.length !== 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
+                    }
                     options={additonal}
                     placeholder=""
                     closeMenuOnSelect={true}
@@ -903,6 +916,10 @@ const CommisionForm = () => {
             name="productDescription"
             onChange={handleData}
             h="48px"
+            style={{
+              backgroundColor:
+                formstate?.productDescription !== '' ? '#e8f0fe' : '',
+            }}
           />
           <FormLabel
             fontSize="12"
@@ -1093,9 +1110,13 @@ const CommisionForm = () => {
                     name="colors"
                     onChange={handleGroupArea}
                     value={formstate?.groupArea}
-                    classNamePrefix="chakra-react-select"
+                    classNamePrefix={
+                      formstate?.groupArea?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
+                    }
                     options={areaLists}
-                    placeholder="Select some colors..."
+                    placeholder=""
                     closeMenuOnSelect={true}
                     menuPortalTarget={document.body}
                     styles={{
@@ -1146,7 +1167,11 @@ const CommisionForm = () => {
                     name="colors"
                     onChange={handletravellerType}
                     value={formstate?.travellerType}
-                    classNamePrefix="chakra-react-select"
+                    classNamePrefix={
+                      formstate?.travellerType?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
+                    }
                     options={travelertype}
                     placeholder=""
                     closeMenuOnSelect={true}
@@ -1224,7 +1249,11 @@ const CommisionForm = () => {
                     name="colors"
                     onChange={handleBenefitDoc}
                     value={formstate?.benefitDoc}
-                    classNamePrefix="chakra-react-select"
+                    classNamePrefix={
+                      formstate?.benefitDoc?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
+                    }
                     options={listdocstypes}
                     placeholder="Select some colors..."
                     closeMenuOnSelect={true}
@@ -1277,7 +1306,11 @@ const CommisionForm = () => {
                     name="colors"
                     onChange={handleWordingDoc}
                     value={formstate?.wordingDoc}
-                    classNamePrefix="chakra-react-select"
+                    classNamePrefix={
+                      formstate?.wordingDoc?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
+                    }
                     options={listdocstypes}
                     placeholder=""
                     closeMenuOnSelect={true}
@@ -1348,7 +1381,11 @@ const CommisionForm = () => {
                   name="colors"
                   onChange={handleSelectPlanType}
                   value={formstate?.planType}
-                  classNamePrefix="chakra-react-select"
+                  classNamePrefix={
+                    formstate?.planType?.length > 0
+                      ? 'chakra-react-select-default'
+                      : 'chakra-react-select'
+                  }
                   options={listPlanType}
                   closeMenuOnSelect={true}
                   menuPortalTarget={document.body}
@@ -1432,7 +1469,11 @@ const CommisionForm = () => {
                   name="colors"
                   onChange={handleCovidDoc}
                   value={formstate?.covidDoc}
-                  classNamePrefix="chakra-react-select"
+                  classNamePrefix={
+                    formstate?.covidDoc?.length > 0
+                      ? 'chakra-react-select-default'
+                      : 'chakra-react-select'
+                  }
                   options={listdocstypes}
                   closeMenuOnSelect={true}
                   menuPortalTarget={document.body}
@@ -1512,7 +1553,11 @@ const CommisionForm = () => {
                     name="colors"
                     onChange={handleVariant}
                     value={formstate?.variants}
-                    classNamePrefix="chakra-react-select"
+                    classNamePrefix={
+                      formstate?.variants?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
+                    }
                     options={listvariants}
                     closeMenuOnSelect={true}
                     menuPortalTarget={document.body}
