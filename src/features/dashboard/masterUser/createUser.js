@@ -275,7 +275,11 @@ const CreateUser = () => {
                 background={formuser?.login !== '' ? '#e8f0fe' : '#ebebeb'}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Username
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -308,7 +312,11 @@ const CreateUser = () => {
                   }
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
-                <FormLabel fontSize="12" pt="1.5">
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  className="floating-label-global"
+                >
                   FistName
                 </FormLabel>
                 {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -336,7 +344,11 @@ const CreateUser = () => {
                   }
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
-                <FormLabel fontSize="12" pt="1.5">
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  className="floating-label-global"
+                >
                   LastName
                 </FormLabel>
                 {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -366,7 +378,11 @@ const CreateUser = () => {
                 }
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Email
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
