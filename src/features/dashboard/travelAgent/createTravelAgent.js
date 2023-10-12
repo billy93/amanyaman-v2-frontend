@@ -682,14 +682,13 @@ const CreateUser = () => {
                 pt="1.5"
                 fontFamily={'Mulish'}
                 style={{
-                  transform: `${formuser?.city?.length !== 0}`
-                    ? 'translate(-1px, -10px) scale(0.75)'
-                    : 'translate(1px, 4px) scale(0.75)',
+                  transform:
+                    formuser?.city === ''
+                      ? 'translate(-1px, -10px) scale(0.75)'
+                      : 'translate(1px, 4px) scale(0.75)',
                   fontSize: '12px',
-                  color: `${formuser?.city?.length !== 0}`
-                    ? '#231F20'
-                    : ' #065baa',
-                  fontStyle: formuser?.city?.length !== 0 ? 'italic' : 'normal',
+                  color: formuser?.city !== '' ? '#231F20' : ' #065baa',
+                  fontStyle: formuser?.city !== '' ? 'italic' : 'normal',
                 }}
               >
                 Select City
