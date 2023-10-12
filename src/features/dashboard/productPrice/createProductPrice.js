@@ -192,7 +192,7 @@ const CreatePrice = () => {
           </Breadcrumb>
         </Box>
       </Box>
-      <Box bg="red" m="auto" w="500px">
+      <Box m="auto" w="500px">
         <Flex
           width="100%"
           justifyContent="center"
@@ -210,7 +210,7 @@ const CreatePrice = () => {
             gap="20px"
             w="100%"
           >
-            <Box width={{ base: '100%', md: '260px' }}>
+            <Box width={{ base: '100%' }}>
               <FormControl
                 variant="floating"
                 id="first-name"
