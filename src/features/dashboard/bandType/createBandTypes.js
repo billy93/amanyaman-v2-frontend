@@ -202,9 +202,16 @@ const EditCity = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                style={{
+                  backgroundColor: fields?.start !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Start
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -227,9 +234,16 @@ const EditCity = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                style={{
+                  backgroundColor: fields?.end !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 End
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}

@@ -209,9 +209,16 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                style={{
+                  backgroundColor: fields?.countryName !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Country Name
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -238,9 +245,17 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant={'custom'}
+                  style={{
+                    backgroundColor:
+                      fields?.countryCode !== '' ? '#e8f0fe' : '',
+                  }}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
-                <FormLabel fontSize="12" pt="1.5">
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  className="floating-label-global"
+                >
                   Country Code
                 </FormLabel>
                 {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -265,11 +280,15 @@ const CreateUser = () => {
                   bg={
                     fields !== null && fields?.countryIataCode !== ''
                       ? '#e8f0fe'
-                      : '#ebebeb'
+                      : ''
                   }
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
-                <FormLabel fontSize="12" pt="1.5">
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  className="floating-label-global"
+                >
                   CountryIata Code
                 </FormLabel>
                 {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -291,9 +310,17 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                style={{
+                  backgroundColor:
+                    fields?.associatedAirport !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Associated Airport
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -314,9 +341,16 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                style={{
+                  backgroundColor: fields?.currencyCode !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Currency Code
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -338,9 +372,16 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                style={{
+                  backgroundColor: fields?.postCode !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Post Code
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
