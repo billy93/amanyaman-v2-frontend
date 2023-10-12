@@ -735,14 +735,15 @@ const CommisionForm = () => {
               <Box>
                 <Box className="floating-label">
                   <Select
-                    background={
-                      formstate?.bandType?.length !== 0 ? '#e8f0fe' : '#ebebeb'
+                    classNamePrefix={
+                      formstate?.bandType?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
                     }
                     isMulti={false}
                     name="colors"
                     onChange={handleSelectBandType}
                     value={formstate?.bandType}
-                    classNamePrefix="chakra-react-select"
                     options={additonal}
                     placeholder=""
                     closeMenuOnSelect={true}
@@ -804,9 +805,11 @@ const CommisionForm = () => {
             name="productDescription"
             onChange={handleData}
             h="48px"
-            background={
-              formstate?.productDescription !== '' ? '#e8f0fe' : '#ebebeb'
-            }
+            style={{
+              backgroundColor:
+                formstate?.productDescription !== '' ? '#e8f0fe' : '',
+              border: '1px solid #000',
+            }}
           />
           <FormLabel
             fontSize="12"
@@ -836,9 +839,11 @@ const CommisionForm = () => {
             value={formstate?.personalAccidentCover}
             onChange={handleData}
             h="48px"
-            background={
-              formstate?.personalAccidentCover !== '' ? '#e8f0fe' : ''
-            }
+            style={{
+              backgroundColor:
+                formstate?.personalAccidentCover !== '' ? '#e8f0fe' : '',
+              border: '1px solid #000',
+            }}
           />
           <FormLabel
             fontSize="12"
@@ -868,7 +873,11 @@ const CommisionForm = () => {
             name="productMedicalCover"
             onChange={handleData}
             h="48px"
-            background={formstate?.productMedicalCover !== '' ? '#e8f0fe' : ''}
+            style={{
+              backgroundColor:
+                formstate?.productMedicalCover !== '' ? '#e8f0fe' : '',
+              border: '1px solid #000',
+            }}
           />
           <FormLabel
             fontSize="12"
@@ -897,7 +906,11 @@ const CommisionForm = () => {
             value={formstate?.productTravelCover}
             name="productTravelCover"
             onChange={handleData}
-            background={formstate?.productTravelCover !== '' ? '#e8f0fe' : ''}
+            style={{
+              backgroundColor:
+                formstate?.productTravelCover !== '' ? '#e8f0fe' : '',
+              border: '1px solid #000',
+            }}
           />
           <FormLabel
             pt="1.5"
@@ -993,14 +1006,15 @@ const CommisionForm = () => {
               <Box>
                 <Box className="floating-label">
                   <Select
-                    background={
-                      formstate?.groupArea !== '' ? '#e8f0fe' : '#ebebeb'
+                    classNamePrefix={
+                      formstate?.groupArea?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
                     }
                     isMulti={false}
                     name="colors"
                     onChange={handleGroupArea}
                     value={formstate?.groupArea}
-                    classNamePrefix="chakra-react-select"
                     options={areaLists}
                     placeholder=""
                     closeMenuOnSelect={true}
@@ -1054,14 +1068,15 @@ const CommisionForm = () => {
               <Box>
                 <Box className="floating-label">
                   <Select
-                    background={
-                      formstate?.travellerType !== '' ? '#e8f0fe' : '#ebebeb'
+                    classNamePrefix={
+                      formstate?.authorities?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
                     }
                     isMulti={false}
                     name="colors"
                     onChange={handletravellerType}
                     value={formstate?.travellerType}
-                    classNamePrefix="chakra-react-select"
                     options={travelertype}
                     placeholder=""
                     closeMenuOnSelect={true}
@@ -1130,14 +1145,15 @@ const CommisionForm = () => {
             <Box w="540px">
               <Box className="react-select-container">
                 <Select
-                  background={
-                    formstate?.planType !== '' ? '#e8f0fe' : '#ebebeb'
+                  classNamePrefix={
+                    formstate?.planType?.length > 0
+                      ? 'chakra-react-select-default'
+                      : 'chakra-react-select'
                   }
                   isMulti={false}
                   name="colors"
                   onChange={handleSelectPlanType}
                   value={formstate?.planType}
-                  classNamePrefix="chakra-react-select"
                   options={listPlanType}
                   closeMenuOnSelect={true}
                   menuPortalTarget={document.body}
@@ -1218,14 +1234,15 @@ const CommisionForm = () => {
               <Box>
                 <Box className="floating-label">
                   <Select
-                    background={
-                      formstate?.benefitDoc !== null ? '#e8f0fe' : '#ebebeb'
+                    classNamePrefix={
+                      formstate?.benefitDoc?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
                     }
                     isMulti={false}
                     name="colors"
                     onChange={handleBenefitDoc}
                     value={formstate?.benefitDoc}
-                    classNamePrefix="chakra-react-select"
                     options={listdocstypes}
                     placeholder=""
                     closeMenuOnSelect={true}
@@ -1274,14 +1291,15 @@ const CommisionForm = () => {
               <Box>
                 <Box className="floating-label">
                   <Select
-                    background={
-                      formstate?.wordingDoc !== null ? '#e8f0fe' : '#ebebeb'
+                    classNamePrefix={
+                      formstate?.wordingDoc?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
                     }
                     isMulti={false}
                     name="colors"
                     onChange={handleWordingDoc}
                     value={formstate?.wordingDoc}
-                    classNamePrefix="chakra-react-select"
                     options={listdocstypes}
                     placeholder=""
                     closeMenuOnSelect={true}
@@ -1348,14 +1366,15 @@ const CommisionForm = () => {
               <Box w="540px">
                 <Box className="react-select-container">
                   <Select
-                    background={
-                      formstate?.variants !== null ? '#e8f0fe' : '#ebebeb'
+                    classNamePrefix={
+                      formstate?.variants?.length > 0
+                        ? 'chakra-react-select-default'
+                        : 'chakra-react-select'
                     }
                     isMulti
                     name="colors"
                     onChange={handleVariant}
                     value={formstate?.variants}
-                    classNamePrefix="chakra-react-select"
                     options={listvariants}
                     closeMenuOnSelect={true}
                     menuPortalTarget={document.body}
