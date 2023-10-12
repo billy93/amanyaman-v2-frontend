@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import {
@@ -104,14 +105,17 @@ const CreateUser = () => {
               value: user?.authorities[0],
             },
           ],
-          travelAgent: [
-            {
-              id: user?.travelAgent?.id,
-              travelAgentName: user?.travelAgent?.travelAgentName,
-              label: user?.travelAgent?.travelAgentName,
-              value: user?.travelAgent?.travelAgentName,
-            },
-          ],
+          travelAgent:
+            user?.travelAgent !== null
+              ? [
+                  {
+                    id: user?.travelAgent?.id,
+                    travelAgentName: user?.travelAgent?.travelAgentName,
+                    label: user?.travelAgent?.travelAgentName,
+                    value: user?.travelAgent?.travelAgentName,
+                  },
+                ]
+              : null,
         };
         dispatch(setFormUser(datauser));
       }
@@ -200,7 +204,8 @@ const CreateUser = () => {
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      backgroundColor: formuser?.authorities ? '#e8f0fe' : '#ebebeb', // Conditional background color
+      backgroundColor:
+        formuser?.authorities?.lenght > 0 ? '#e8f0fe' : '#ebebeb', // Conditional background color
       border: '1px solid #000',
       // Add other styles as needed
     }),
@@ -208,12 +213,13 @@ const CreateUser = () => {
   const customStyless = {
     control: (provided, state) => ({
       ...provided,
-      backgroundColor: formuser?.travelAgent ? '#e8f0fe' : '#ebebeb', // Conditional background color
+      backgroundColor: formuser?.travelAgent !== null ? '#e8f0fe' : '#ebebeb', // Conditional background color
       border: '1px solid #000',
       // Add other styles as needed
     }),
   };
 
+  // console.log('formuser?.travelAgent', formuser?.travelAgent);
   return (
     <Stack mt={{ base: '1em', md: '5em' }}>
       <Box
@@ -479,15 +485,21 @@ const CreateUser = () => {
                     pt="1.5"
                     style={{
                       transform:
-                        formuser !== null && formuser?.authorities !== ''
-                          ? 'translate(0, -10px) scale(0.75)'
+                        formuser !== null && formuser?.authorities?.length > 0
+                          ? 'translate(0, 2px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
-                        formuser !== null && formuser?.authorities === ''
+                        formuser !== null && formuser?.authorities?.lenght > 0
                           ? '#231F20'
                           : '#065baa',
-                      fontSize: '12px',
-                      fontStyle: 'italic',
+                      fontSize:
+                        formuser !== null && formuser?.authorities?.lenght > 0
+                          ? '14px'
+                          : '12px',
+                      fontStyle:
+                        formuser !== null && formuser?.authorities?.lenght > 0
+                          ? 'italic'
+                          : 'normal',
                     }}
                     fontFamily={'Mulish'}
                   >
@@ -531,15 +543,21 @@ const CreateUser = () => {
                     pt="1.5"
                     style={{
                       transform:
-                        formuser !== null && formuser?.travelAgent !== null
-                          ? 'translate(0, -10px) scale(0.75)'
+                        formuser !== null && formuser?.travelAgent === null
+                          ? 'translate(0, 2px) scale(0.75)'
                           : 'translate(0, 4px) scale(0.75)',
                       color:
                         formuser !== null && formuser?.travelAgent === null
                           ? '#231F20'
                           : '#065baa',
-                      fontSize: '12px',
-                      fontStyle: 'italic',
+                      fontSize:
+                        formuser !== null && formuser?.travelAgent === null
+                          ? '14px'
+                          : '12px',
+                      fontStyle:
+                        formuser !== null && formuser?.travelAgent === null
+                          ? 'italic'
+                          : 'normal',
                     }}
                     fontFamily={'Mulish'}
                   >
