@@ -290,11 +290,10 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant={'custom'}
-                  bg={
-                    fields !== null && fields?.countryIataCode !== ''
-                      ? '#e8f0fe'
-                      : ''
-                  }
+                  style={{
+                    backgroundColor:
+                      fields?.countryIataCode !== '' ? '#e8f0fe' : '',
+                  }}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel

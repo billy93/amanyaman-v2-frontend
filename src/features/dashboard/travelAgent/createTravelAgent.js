@@ -285,9 +285,17 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                style={{
+                  backgroundColor:
+                    formuser?.travelAgentName !== '' ? '#e8f0fe' : '',
+                }}
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel fontSize="12" pt="1.5">
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
                 Travel Agent Name
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -314,9 +322,17 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant={'custom'}
+                  style={{
+                    backgroundColor:
+                      formuser?.travelAgentEmail !== '' ? '#e8f0fe' : '',
+                  }}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
-                <FormLabel fontSize="12" pt="1.5">
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  className="floating-label-global"
+                >
                   Travel Agent Email
                 </FormLabel>
                 {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -339,9 +355,17 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant={'custom'}
+                  style={{
+                    backgroundColor:
+                      formuser?.travelAgentAddress !== '' ? '#e8f0fe' : '',
+                  }}
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
-                <FormLabel fontSize="12" pt="1.5">
+                <FormLabel
+                  fontSize="12"
+                  pt="1.5"
+                  className="floating-label-global"
+                >
                   travel Agent Address
                 </FormLabel>
                 {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -577,12 +601,16 @@ const CreateUser = () => {
               h="48px"
             >
               <Select
+                classNamePrefix={
+                  formuser?.city?.length > 0
+                    ? 'chakra-react-select-default'
+                    : 'chakra-react-select'
+                }
                 isMulti={false}
                 name="colors"
                 onChange={handleDataSelectc}
                 value={formuser?.city}
                 isSearchable={false}
-                classNamePrefix="chakra-react-select"
                 options={listCity}
                 placeholder=""
                 closeMenuOnSelect={true}
@@ -620,8 +648,10 @@ const CreateUser = () => {
                   transform: `${formuser?.city}`
                     ? 'translate(-1px, -10px) scale(0.75)'
                     : 'translate(1px, 4px) scale(0.75)',
-                  fontSize: '14px',
-                  color: `${formuser?.city}` ? '#065baa' : '#231F20',
+                  fontSize: '12px',
+                  color: `${formuser?.city?.length !== 0}`
+                    ? '#065baa'
+                    : '#231F20',
                 }}
               >
                 Select City
