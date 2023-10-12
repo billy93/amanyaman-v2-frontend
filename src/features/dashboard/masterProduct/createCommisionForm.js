@@ -842,7 +842,6 @@ const CommisionForm = () => {
             style={{
               backgroundColor:
                 formstate?.personalAccidentCover !== '' ? '#e8f0fe' : '',
-              border: '1px solid #000',
             }}
           />
           <FormLabel
@@ -876,7 +875,6 @@ const CommisionForm = () => {
             style={{
               backgroundColor:
                 formstate?.productMedicalCover !== '' ? '#e8f0fe' : '',
-              border: '1px solid #000',
             }}
           />
           <FormLabel
@@ -909,7 +907,6 @@ const CommisionForm = () => {
             style={{
               backgroundColor:
                 formstate?.productTravelCover !== '' ? '#e8f0fe' : '',
-              border: '1px solid #000',
             }}
           />
           <FormLabel
@@ -1069,7 +1066,7 @@ const CommisionForm = () => {
                 <Box className="floating-label">
                   <Select
                     classNamePrefix={
-                      formstate?.authorities?.length > 0
+                      formstate?.travellerType?.length > 0
                         ? 'chakra-react-select-default'
                         : 'chakra-react-select'
                     }
@@ -1458,11 +1455,15 @@ const CommisionForm = () => {
             <Box w="540px">
               <Box className="react-select-container">
                 <Select
+                  classNamePrefix={
+                    formstate?.covidDoc?.length > 0
+                      ? 'chakra-react-select-default'
+                      : 'chakra-react-select'
+                  }
                   isMulti={false}
                   name="colors"
                   onChange={handleCovidDoc}
                   value={formstate?.covidDoc}
-                  classNamePrefix="chakra-react-select"
                   options={listdocstypes}
                   closeMenuOnSelect={true}
                   menuPortalTarget={document.body}
@@ -1542,6 +1543,9 @@ const CommisionForm = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                background={
+                  formstate?.premiumPrice !== '' ? '#e8f0fe' : '#ebebeb'
+                }
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -1581,6 +1585,9 @@ const CommisionForm = () => {
                     onChange={handleData}
                     h="48px"
                     variant={'custom'}
+                    background={
+                      formstate?.commissionlvl1 !== '' ? '#e8f0fe' : '#ebebeb'
+                    }
                   />
                   <InputRightAddon children="%" h="48px" />
                   <FormLabel
@@ -1634,7 +1641,11 @@ const CommisionForm = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                background={
+                  formstate?.commissionlvl2 !== '' ? '#e8f0fe' : '#ebebeb'
+                }
               />
+              <InputRightAddon children="%" h="48px" />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
                 fontSize="12"
@@ -1673,6 +1684,9 @@ const CommisionForm = () => {
                     onChange={handleData}
                     h="48px"
                     variant={'custom'}
+                    background={
+                      formstate?.commissionlvl3 !== '' ? '#e8f0fe' : '#ebebeb'
+                    }
                   />
                   <InputRightAddon children="%" h="48px" />
                   <FormLabel
@@ -1726,7 +1740,9 @@ const CommisionForm = () => {
                 onChange={handleData}
                 h="48px"
                 variant={'custom'}
+                background={formstate?.pph23 !== '' ? '#e8f0fe' : '#ebebeb'}
               />
+              <InputRightAddon children="%" h="48px" />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
                 fontSize="12"
@@ -1765,6 +1781,7 @@ const CommisionForm = () => {
                     onChange={handleData}
                     h="48px"
                     variant={'custom'}
+                    background={formstate?.ppn !== '' ? '#e8f0fe' : '#ebebeb'}
                   />
                   <InputRightAddon children="%" h="48px" />
                   <FormLabel
