@@ -457,6 +457,7 @@ const CreateUser = () => {
               <Box className="floating-form">
                 <Box className="react-select-container">
                   <Select
+                    h={'48px'}
                     isMulti={false}
                     name="colors"
                     onChange={handleSelectRoles}
@@ -518,6 +519,7 @@ const CreateUser = () => {
               <Box className="floating-form">
                 <Box className="floating-label">
                   <Select
+                    h={'48px'}
                     defaultValue={null}
                     isMulti={false}
                     name="colors"
@@ -552,7 +554,7 @@ const CreateUser = () => {
                       transform:
                         formuser !== null && formuser?.travelAgent === null
                           ? 'translate(0, 4px) scale(0.75)'
-                          : 'translate(0, -2px) scale(0.75)',
+                          : 'translate(0, -11px) scale(0.75)',
                       color:
                         formuser !== null && formuser?.travelAgent === null
                           ? '#231F20'
