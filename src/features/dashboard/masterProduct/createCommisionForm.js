@@ -735,6 +735,9 @@ const CommisionForm = () => {
               <Box>
                 <Box className="floating-label">
                   <Select
+                    background={
+                      formstate?.bandType?.length !== 0 ? '#e8f0fe' : '#ebebeb'
+                    }
                     isMulti={false}
                     name="colors"
                     onChange={handleSelectBandType}
@@ -801,6 +804,9 @@ const CommisionForm = () => {
             name="productDescription"
             onChange={handleData}
             h="48px"
+            background={
+              formstate?.productDescription !== '' ? '#e8f0fe' : '#ebebeb'
+            }
           />
           <FormLabel
             fontSize="12"
@@ -987,6 +993,9 @@ const CommisionForm = () => {
               <Box>
                 <Box className="floating-label">
                   <Select
+                    background={
+                      formstate?.groupArea !== '' ? '#e8f0fe' : '#ebebeb'
+                    }
                     isMulti={false}
                     name="colors"
                     onChange={handleGroupArea}
@@ -1045,6 +1054,9 @@ const CommisionForm = () => {
               <Box>
                 <Box className="floating-label">
                   <Select
+                    background={
+                      formstate?.travellerType !== '' ? '#e8f0fe' : '#ebebeb'
+                    }
                     isMulti={false}
                     name="colors"
                     onChange={handletravellerType}
@@ -1118,6 +1130,9 @@ const CommisionForm = () => {
             <Box w="540px">
               <Box className="react-select-container">
                 <Select
+                  background={
+                    formstate?.planType !== '' ? '#e8f0fe' : '#ebebeb'
+                  }
                   isMulti={false}
                   name="colors"
                   onChange={handleSelectPlanType}
@@ -1203,6 +1218,9 @@ const CommisionForm = () => {
               <Box>
                 <Box className="floating-label">
                   <Select
+                    background={
+                      formstate?.benefitDoc !== null ? '#e8f0fe' : '#ebebeb'
+                    }
                     isMulti={false}
                     name="colors"
                     onChange={handleBenefitDoc}
@@ -1256,6 +1274,9 @@ const CommisionForm = () => {
               <Box>
                 <Box className="floating-label">
                   <Select
+                    background={
+                      formstate?.wordingDoc !== null ? '#e8f0fe' : '#ebebeb'
+                    }
                     isMulti={false}
                     name="colors"
                     onChange={handleWordingDoc}
@@ -1327,6 +1348,9 @@ const CommisionForm = () => {
               <Box w="540px">
                 <Box className="react-select-container">
                   <Select
+                    background={
+                      formstate?.variants !== null ? '#e8f0fe' : '#ebebeb'
+                    }
                     isMulti
                     name="colors"
                     onChange={handleVariant}
