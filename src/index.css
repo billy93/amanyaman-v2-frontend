@@ -33,6 +33,10 @@
     font-family: 'Mulish';
     font-weight: 300;
 }
+.global-input{
+  font-size: 12px;
+  font-family: 'Mulish';
+}
 #myTextarea {
   /* Specify desired styles */
   font-family: 'Mulish';

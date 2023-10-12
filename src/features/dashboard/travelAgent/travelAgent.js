@@ -5,7 +5,7 @@ import { useGetTravelAgentQuery } from './travelApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import matchSorter from 'match-sorter';
 import { usePagination } from 'react-table';
-import { HashLoader } from 'react-spinners';
+import PageLoader from '../../../components/pageLoader';
 import { motion } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
 import { debounce } from 'lodash';
@@ -31,7 +31,6 @@ import {
   Heading,
   Stack,
   Text,
-  Center,
   useDisclosure,
   IconButton,
   Select,
@@ -972,22 +971,7 @@ const MasterUser = () => {
 
   let content;
   if (isLoading) {
-    content = (
-      <Center
-        h="100vh"
-        d="flex"
-        flexDir="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <HashLoader
-          color="#36d7b7"
-          size={50}
-          loading={isLoading}
-          speedMultiplier={100}
-        />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (listUserAccount) {
     content = (
       <Box pl="2em" pr="2em" mt="6em">

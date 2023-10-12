@@ -300,6 +300,7 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant="custom"
+                className="global-input"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -333,6 +334,7 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant="custom"
+                  className="global-input"
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel
@@ -360,6 +362,7 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant="custom"
+                  className="global-input"
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel
@@ -394,6 +397,7 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant="custom"
+                  className="global-input"
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel
@@ -421,6 +425,7 @@ const CreateUser = () => {
                   onChange={handleData}
                   h="48px"
                   variant="custom"
+                  className="global-input"
                 />
                 {/* It is important that the Label comes after the Control due to css selectors */}
                 <FormLabel
@@ -449,6 +454,7 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant="custom"
+                className="global-input"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -476,6 +482,7 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant="custom"
+                className="global-input"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -503,6 +510,7 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant="custom"
+                className="global-input"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -530,6 +538,7 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant="custom"
+                className="global-input"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -557,6 +566,7 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant="custom"
+                className="global-input"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -584,6 +594,7 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant="custom"
+                className="global-input"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -613,6 +624,7 @@ const CreateUser = () => {
                 onChange={handleData}
                 h="48px"
                 variant="custom"
+                className="global-input"
               />
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
@@ -649,7 +661,7 @@ const CreateUser = () => {
               h="48px"
             >
               <Select
-                className="floating-label-global"
+                className="global-input"
                 isMulti={false}
                 name="colors"
                 onChange={handleSelect}

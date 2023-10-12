@@ -7,6 +7,7 @@ import {
   useUpdateSelectProductMutation,
   useUpdateSelectProductMultpleMutation,
 } from './travelApiSlice';
+import PageLoader from '../../../components/pageLoader';
 import { NavLink, useParams, Link, useNavigate } from 'react-router-dom';
 import {
   useTable,
@@ -968,22 +969,7 @@ const DetailMasterUser = () => {
 
   let content;
   if (isLoading) {
-    content = (
-      <Center
-        h="100vh"
-        d="flex"
-        flexDir="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <HashLoader
-          color="#36d7b7"
-          size={50}
-          loading={isLoading}
-          speedMultiplier={100}
-        />
-      </Center>
-    );
+    content = <PageLoader loading={isLoading} />;
   } else if (listTravell) {
     content = (
       <Box>
