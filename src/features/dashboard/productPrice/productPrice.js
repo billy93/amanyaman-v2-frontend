@@ -1000,8 +1000,9 @@ const Polcies = () => {
                   htmlFor="select"
                   style={{
                     paddingRight: '5px',
-                    fontSize: '14px',
+                    fontSize: '12px',
                     fontFamily: 'Mulish',
+                    fontStyle: 'normal',
                   }}
                 >
                   Per page
@@ -1013,6 +1014,11 @@ const Polcies = () => {
                   onChange={(e) => {
                     setSize(Number(e.target.value));
                     gotoPage(0);
+                  }}
+                  style={{
+                    fontSize: '12px',
+                    fontStyle: 'italic',
+                    height: '30px',
                   }}
                 >
                   <option value={5}>5</option>
