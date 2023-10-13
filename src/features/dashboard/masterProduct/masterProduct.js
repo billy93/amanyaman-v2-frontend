@@ -625,8 +625,8 @@ const Tables = ({
                               cell.column.id === 'productDescription' ||
                               cell.column.id === 'productMedicalCover') &&
                             isExpanded
-                              ? 'expanded'
-                              : ''
+                              ? 'expanded global-td'
+                              : 'global-td'
                           }`}
                         >
                           {cellContent}

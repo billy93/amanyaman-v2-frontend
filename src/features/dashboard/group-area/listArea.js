@@ -440,7 +440,7 @@ const Tables = ({
                           cell.column.id === 'areaGroupDescription' &&
                           isExpanded
                             ? 'expanded global-td'
-                            : ''
+                            : 'global-td'
                         }`}
                       >
                         {cell.column.id === 'areaGroupDescription' &&

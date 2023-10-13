@@ -245,11 +245,16 @@ export default function Navbar({ allowedRoles }) {
           >
             <Box display={'flex'} alignItems={'center'}>
               <Image src={Logo} alt="logo" width="133px" />
-              <Button
-                variant={'ClaimBtn'}
+              <Box
+                p={'3px'}
                 size="xs"
                 w={'35px'}
                 h="20px"
+                bg="#065BAA"
+                color="white"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
                 borderRadius={'base'}
               >
                 <Text
@@ -259,7 +264,7 @@ export default function Navbar({ allowedRoles }) {
                 >
                   {username?.firstName !== undefined ? 'Sale' : 'Claim'}
                 </Text>
-              </Button>
+              </Box>
             </Box>
           </Box>
           <Spacer />
