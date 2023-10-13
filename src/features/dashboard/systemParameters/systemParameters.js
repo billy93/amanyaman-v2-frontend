@@ -52,6 +52,21 @@ const Styles = styled.div`
       background-clip: padding-box;
       font-family: 'Mulish';
     }
+    ,
+    td {
+      background-color: #fff;
+      font-family: 'Mulish';
+      color: #231f20;
+      padding: 13px 15px;
+      border-top: 1px solid #ebebeb;
+      border-bottom: 1px solid #ebebeb;
+      text-align: left;
+      white-space: nowrap;
+      font-weight: normal;
+      min-width: 40px;
+      vertical-align: bottom;
+      background-clip: padding-box;
+    }
   }
 `;
 
