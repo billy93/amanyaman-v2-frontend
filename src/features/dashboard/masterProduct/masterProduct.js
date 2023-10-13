@@ -1288,7 +1288,7 @@ const MasterUser = () => {
                 ) : (
                   <td
                     colSpan="10000"
-                    style={{ fontSize: '14px', fontFamily: 'Mulish' }}
+                    style={{ fontSize: '12px', fontFamily: 'Mulish' }}
                   >
                     Showing {size} of {totalCount} results
                   </td>
@@ -1304,7 +1304,7 @@ const MasterUser = () => {
                     htmlFor="select"
                     style={{
                       paddingRight: '5px',
-                      fontSize: '14px',
+                      fontSize: '12px',
                       fontFamily: 'Mulish',
                     }}
                   >

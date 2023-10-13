@@ -599,10 +599,14 @@ const Tables = ({
           mr="10px"
         >
           <Box display={'flex'} justifyContent={'start'} alignItems={'center'}>
-            <label htmlFor="select" style={{ paddingRight: '5px' }}>
+            <label
+              htmlFor="select"
+              style={{ paddingRight: '5px', fontSize: '12px' }}
+            >
               Per page
             </label>
             <Select
+              style={{ fontSize: '12px', fontStyle: 'italic', height: '30px' }}
               id="pageSize"
               w="100px"
               value={pageSize}

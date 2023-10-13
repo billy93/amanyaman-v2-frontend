@@ -984,7 +984,7 @@ const Polcies = () => {
               ) : (
                 <td
                   colSpan="10000"
-                  style={{ fontSize: '14px', fontFamily: 'Mulish' }}
+                  style={{ fontSize: '12px', fontFamily: 'Mulish' }}
                 >
                   Showing {size} of {totalCount} results
                 </td>

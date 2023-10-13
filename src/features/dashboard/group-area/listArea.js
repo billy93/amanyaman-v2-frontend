@@ -652,7 +652,7 @@ const GroupArea = () => {
               ) : (
                 <td
                   colSpan="10000"
-                  style={{ fontSize: '14px', fontFamily: 'Mulish' }}
+                  style={{ fontSize: '12px', fontFamily: 'Mulish' }}
                 >
                   Showing {size} of {totalCount} results
                 </td>
@@ -668,13 +668,18 @@ const GroupArea = () => {
                   htmlFor="select"
                   style={{
                     paddingRight: '5px',
-                    fontSize: '14px',
+                    fontSize: '12px',
                     fontFamily: 'Mulish',
                   }}
                 >
                   Per page
                 </label>
                 <Select
+                  style={{
+                    fontSize: '12px',
+                    fontStyle: 'italic',
+                    height: '30px',
+                  }}
                   id="pageSize"
                   w="100px"
                   value={size}

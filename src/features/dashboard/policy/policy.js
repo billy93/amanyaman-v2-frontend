@@ -1320,6 +1320,11 @@ const Polcies = () => {
                   Per page
                 </label>
                 <Select
+                  style={{
+                    fontSize: '12px',
+                    fontStyle: 'italic',
+                    height: '30px',
+                  }}
                   id="pageSize"
                   w="100px"
                   value={size}
