@@ -438,8 +438,8 @@ const Form3 = ({
           <FormLabel
             fontSize="12"
             pt="1.5"
-            className={isActive || dateOfBirth ? 'Actives' : ''}
             fontFamily={'Mulish'}
+            className="floating-label-global"
           >
             Date Of Birth
           </FormLabel>
@@ -477,6 +477,7 @@ const Form3 = ({
             pt="1.5"
             // className={isActiveNew || existingTravellersDate ? 'Actives' : ''}
             fontFamily={'Mulish'}
+            className="floating-label-global"
           >
             Date Of Birth
           </FormLabel>
@@ -1545,15 +1546,14 @@ const Form3 = ({
                         <span className="highlight"></span>
                         <FormLabel
                           pt="1.5"
+                          className="floating-label-global"
                           style={{
                             transform:
                               relationship !== ''
                                 ? 'translate(-21px, -54px) scale(0.75)'
                                 : 'translate(-21px, -40px) scale(0.75)',
                             background: relationship === '' ? 'white' : '',
-                            fontSize: '14px',
-                            fontFamily: 'Mulish',
-                            fontWeight: '600',
+
                             color:
                               relationship === '' ? '#000000c9' : '#065baa',
                           }}
