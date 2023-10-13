@@ -439,7 +439,7 @@ const Tables = ({
                         className={`${
                           cell.column.id === 'areaGroupDescription' &&
                           isExpanded
-                            ? 'expanded'
+                            ? 'expanded global-td'
                             : ''
                         }`}
                       >
