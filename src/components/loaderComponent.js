@@ -38,9 +38,7 @@ const Redirect = () => {
       },
     }
   );
-  console.log('checkstatus', checkstatus);
-  console.log('checkstatus error', error);
-  console.log('checkstatus success', isSuccess);
+
   const [loading] = React.useState(true);
   const navigate = useNavigate();
   const { id } = useParams();

@@ -11,6 +11,7 @@ const PageLoader = ({ loading }) => (
         justifyContent={'center'}
         alignItems={'center'}
         h="100vh"
+        w="100%"
       >
         <Center
           d="flex"

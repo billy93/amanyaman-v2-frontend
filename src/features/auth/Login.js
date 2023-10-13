@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@chakra-ui/react';
@@ -145,7 +146,7 @@ const Login = () => {
         password: fields?.password,
         rememberMe: fields?.rememberMe,
       }).unwrap();
-      console.log('trave', userData);
+      // console.log('trave', userData);
       if (userData) {
         if (userData.roles[0] === 'ROLE_TRAVEL_AGENT') {
           dispatch(
