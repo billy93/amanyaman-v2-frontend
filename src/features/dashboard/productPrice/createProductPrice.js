@@ -239,7 +239,16 @@ const CreatePrice = () => {
                   fontSize="12"
                   pt="1.5"
                   fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
+                  style={{
+                    fontStyle:
+                      data?.productMapping?.productCode !== ''
+                        ? 'italic'
+                        : 'normal',
+                    fontSize:
+                      data?.productMapping?.productCode !== ''
+                        ? '12px'
+                        : '14px',
+                  }}
                 >
                   Product Code
                 </FormLabel>
@@ -291,7 +300,11 @@ const CreatePrice = () => {
                   fontSize="12"
                   pt="1.5"
                   fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
+                  style={{
+                    fontStyle:
+                      fields?.premiumPrice !== '' ? 'italic' : 'normal',
+                    fontSize: fields?.premiumPrice !== '' ? '12px' : '14px',
+                  }}
                 >
                   Premium Price
                 </FormLabel>
@@ -323,7 +336,11 @@ const CreatePrice = () => {
                   fontSize="12"
                   pt="1.5"
                   fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
+                  style={{
+                    fontStyle:
+                      fields?.commisionLv1 !== '' ? 'italic' : 'normal',
+                    fontSize: fields?.commisionLv1 !== '' ? '12px' : '14px',
+                  }}
                 >
                   Commission Lv1
                 </FormLabel>
@@ -375,7 +392,11 @@ const CreatePrice = () => {
                   fontSize="12"
                   pt="1.5"
                   fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
+                  style={{
+                    fontStyle:
+                      fields?.commisionLv2 !== '' ? 'italic' : 'normal',
+                    fontSize: fields?.commisionLv2 !== '' ? '12px' : '14px',
+                  }}
                 >
                   CommissionLv2
                 </FormLabel>
@@ -407,7 +428,11 @@ const CreatePrice = () => {
                   fontSize="12"
                   pt="1.5"
                   fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
+                  style={{
+                    fontStyle:
+                      fields?.commisionLv3 !== '' ? 'italic' : 'normal',
+                    fontSize: fields?.commisionLv3 !== '' ? '12px' : '14px',
+                  }}
                 >
                   Commission Lv3
                 </FormLabel>
@@ -461,7 +486,16 @@ const CreatePrice = () => {
                   fontSize="12"
                   pt="1.5"
                   fontFamily={'Mulish'}
-                  style={{ fontSize: '14px' }}
+                  style={{
+                    fontStyle:
+                      data?.travelAgent?.travelAgentName !== ''
+                        ? 'italic'
+                        : 'normal',
+                    fontSize:
+                      data?.travelAgent?.travelAgentName !== ''
+                        ? '12px'
+                        : '14px',
+                  }}
                 >
                   Travel Agent Name
                 </FormLabel>
