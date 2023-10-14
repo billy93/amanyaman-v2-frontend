@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import matchSorter from 'match-sorter';
 import { usePagination } from 'react-table';
 import PageLoader from '../../../components/pageLoader';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
 // eslint-disable-next-line no-unused-vars
 import ExportData from './export';
@@ -607,7 +607,7 @@ const MasterUser = () => {
   const [debounceName, setDebounceName] = React.useState('');
   const [debounceEmail, setDebounceEmail] = React.useState('');
   const [debounceRole, setDebounceRole] = React.useState('');
-
+  const controls = useAnimation();
   const fetchIdRef = React.useRef(0);
   const [filterby, setFilterBy] = React.useState({
     name: '',
@@ -879,7 +879,19 @@ const MasterUser = () => {
     // setChangePage(true)
   };
 
-  const showFilterBtn = () => {
+  const showFilterBtn = async () => {
+    await controls.start({
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 200,
+        delay: 0.5,
+        duration: 0.5,
+        staggerChildren: true,
+        damping: 40,
+      },
+    });
     setShowFilter(!showFilter);
     setPage(0);
   };
@@ -1005,8 +1017,8 @@ const MasterUser = () => {
               <motion.Box
                 w="100%"
                 animate={{
-                  y: showFilter ? 0 : '-100vh',
-                  opacity: showFilter ? 0.5 : 1,
+                  y: 0,
+                  opacity: 1,
                   transition: {
                     type: 'spring',
                     stiffness: 200,
@@ -1016,9 +1028,10 @@ const MasterUser = () => {
                     damping: 40,
                   },
                 }}
-                initial={{
-                  opacity: showFilter ? 1 : 0.5,
-                  y: showFilter ? '-100vh' : 0,
+                initial={controls}
+                exit={{
+                  opacity: 0.5,
+                  y: '-100vh',
                 }}
               >
                 <Input
