@@ -1161,11 +1161,11 @@ const Polcies = () => {
             <Box
               w={{ base: '100%', md: '70%' }}
               display={'flex'}
-              justifyContent={'space-around'}
+              justifyContent={'flex-start'}
               alignItems={'center'}
-              gap="4px"
-              mr="1em"
-              ml="1em"
+              gap="8px"
+              mr="0.5em"
+              ml="0.5em"
               mb="1em"
               mt={'1em'}
             >
@@ -1176,7 +1176,7 @@ const Polcies = () => {
                   opacity: 0.5,
                   transition: {
                     type: 'spring',
-                    stiffness: 100,
+                    stiffness: 200,
                     delay: 0.5,
                     duration: 0.5,
                     staggerChildren: true,
@@ -1212,7 +1212,7 @@ const Polcies = () => {
                   opacity: 0.5,
                   transition: {
                     type: 'spring',
-                    stiffness: 100,
+                    stiffness: 250,
                     delay: 0.6,
                     duration: 0.5,
                     staggerChildren: true,
@@ -1249,7 +1249,7 @@ const Polcies = () => {
                   opacity: 0.5,
                   transition: {
                     type: 'spring',
-                    stiffness: 100,
+                    stiffness: 200,
                     delay: 0.7,
                     duration: 0.5,
                     staggerChildren: true,
@@ -1287,7 +1287,7 @@ const Polcies = () => {
                   opacity: 0.5,
                   transition: {
                     type: 'spring',
-                    stiffness: 100,
+                    stiffness: 350,
                     delay: 0.8,
                     duration: 0.5,
                     staggerChildren: true,
@@ -1335,7 +1335,7 @@ const Polcies = () => {
                   opacity: 0.5,
                   transition: {
                     type: 'spring',
-                    stiffness: 100,
+                    stiffness: 400,
                     delay: 0.9,
                     duration: 0.5,
                     staggerChildren: true,
