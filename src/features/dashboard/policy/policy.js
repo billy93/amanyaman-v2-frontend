@@ -1249,7 +1249,7 @@ const Polcies = () => {
                   opacity: 0.5,
                   transition: {
                     type: 'spring',
-                    stiffness: 200,
+                    stiffness: 300,
                     delay: 0.7,
                     duration: 0.5,
                     staggerChildren: true,

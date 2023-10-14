@@ -1071,219 +1071,295 @@ const MasterUser = () => {
             </Stack>
           </Box>
           {showFilter ? (
-            <motion.div
-              initial={{ y: -55, zIndex: 999 }}
-              animate={{ y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
+            // <motion.div
+            //   initial={{ y: -55, zIndex: 999 }}
+            //   animate={{ y: 0 }}
+            //   transition={{ delay: 0.5, duration: 0.5 }}
+            // >
+            <Box
+              w={{ base: '100%', md: '70%' }}
+              display={'flex'}
+              justifyContent={'space-around'}
+              alignItems={'center'}
+              gap="4px"
+              mt="1.5em"
+              mb="1.5em"
             >
-              <Box
-                w={{ base: '100%', md: '70%' }}
-                display={'flex'}
-                justifyContent={'space-around'}
-                alignItems={'center'}
-                gap="4px"
-                mt="1.5em"
-                mb="1.5em"
-              >
-                <Input
-                  value={searchName}
-                  onChange={handleSearchTermChange}
-                  placeholder={'Search by product code'}
-                  bg="#ebebeb"
-                  borderRadius={'5px'}
-                  variant={'custom'}
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-                    option: {
-                      fontSize: '12px',
-                      fontStyle: 'italic',
-                    },
-                  }}
-                  backgroundColor={searchName === '' ? '#ebebeb' : '#e8f0fe'}
-                />
-                <Select
-                  fontStyle={'italic'}
-                  placeholder="Select by Travel Duration"
-                  backgroundColor={
-                    searchBandType === '' ? '#ebebeb' : '#e8f0fe'
-                  }
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-                    option: {
-                      fontSize: '12px',
-                      fontStyle: 'italic',
-                    },
-                  }}
-                  style={{
-                    fontSize: '12px',
-                    fontStyle: 'italic',
-                    fontWeight: 'normal',
-                  }}
-                  _placeholder={{
-                    color: 'grey',
-                  }}
-                  defaultValue={''}
-                  name="bandType"
-                  onChange={handleSearchBandTypeChange}
-                >
-                  {bandTypes?.response.map((types, i) => {
-                    return (
-                      <option value={types.id} key={i}>
-                        <Text
-                          fontSize={'sm'}
-                          className="global-td"
-                          fontStyle={'italic'}
-                          style={{ fontSize: '12px' }}
-                        >
-                          {types.travelDurationName}
-                        </Text>
-                      </option>
-                    );
-                  })}
-                </Select>
-                <Select
-                  fontStyle={'italic'}
-                  placeholder="Select by Plan Type"
-                  backgroundColor={
-                    searchPlanType === '' ? '#ebebeb' : '#e8f0fe'
-                  }
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-                    option: {
-                      fontSize: '12px',
-                      fontStyle: 'italic',
-                    },
-                  }}
-                  style={{
-                    fontSize: '12px',
-                    fontStyle: 'italic',
-                    fontWeight: 'normal',
-                  }}
-                  _placeholder={{
-                    color: 'grey',
-                  }}
-                  defaultValue={''}
-                  name="planType"
-                  onChange={handleSearchPlanTypeChange}
-                >
-                  {planTypes?.response.map((types, i) => {
-                    return (
-                      <option value={types.id} key={i}>
-                        <Text
-                          fontSize={'sm'}
-                          className="global-td"
-                          fontStyle={'italic'}
-                          style={{ fontSize: '12px' }}
-                        >
-                          {types.name}
-                        </Text>
-                      </option>
-                    );
-                  })}
-                </Select>
-                <Select
-                  fontStyle={'italic'}
-                  placeholder="Select by Area"
-                  backgroundColor={searchArea === '' ? '#ebebeb' : '#e8f0fe'}
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-
-                    option: {
-                      fontSize: '12px',
-                      fontStyle: 'italic',
-                    },
-                  }}
-                  style={{
-                    fontSize: '12px',
-                    fontStyle: 'italic',
-                    fontWeight: 'normal',
-                  }}
-                  _placeholder={{
+              <motion.Input
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 300,
+                    delay: 0.5,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 50,
+                  },
+                }}
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
+                }}
+                value={searchName}
+                onChange={handleSearchTermChange}
+                placeholder={'Search by product code'}
+                bg="#ebebeb"
+                borderRadius={'5px'}
+                variant={'custom'}
+                sx={{
+                  '&::placeholder': {
                     color: 'gray',
                     fontStyle: 'italic',
                     fontSize: '12px',
-                  }}
-                  defaultValue={''}
-                  name="areaGroup"
-                  onChange={handleSearchAreaChange}
-                >
-                  {grouparea?.response.map((types, i) => {
-                    return (
-                      <option value={types.id} key={i}>
-                        <Text
-                          fontSize={'sm'}
-                          className="global-td"
-                          fontStyle={'italic'}
-                          style={{ fontSize: '12px' }}
-                        >
-                          {types.areaGroupName}
-                        </Text>
-                      </option>
-                    );
-                  })}
-                </Select>
-                <Select
-                  placeholder="Select by product type"
-                  backgroundColor={
-                    searchProductType === '' ? '#ebebeb' : '#e8f0fe'
-                  }
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-                    option: {
-                      fontSize: '12px',
-                      fontStyle: 'italic',
-                    },
-                  }}
-                  style={{
+                  },
+                  option: {
                     fontSize: '12px',
                     fontStyle: 'italic',
-                    fontWeight: 'normal',
-                  }}
-                  _placeholder={{
-                    color: 'grey',
-                  }}
-                  defaultValue={''}
-                  name="areaGroup"
-                  onChange={handleSearchProductTypeChange}
-                >
-                  {travellerTypes?.response.map((types, i) => {
-                    return (
-                      <option value={types.id} key={i}>
-                        <Text
-                          fontSize={'sm'}
-                          className="global-td"
-                          fontStyle={'italic'}
-                          style={{ fontSize: '12px' }}
-                        >
-                          {types.name}
-                        </Text>
-                      </option>
-                    );
-                  })}
-                </Select>
-              </Box>
-            </motion.div>
-          ) : null}
+                  },
+                }}
+                backgroundColor={searchName === '' ? '#ebebeb' : '#e8f0fe'}
+              />
+              <motion.Select
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 400,
+                    delay: 0.9,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 50,
+                  },
+                }}
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
+                }}
+                fontStyle={'italic'}
+                placeholder="Select by Travel Duration"
+                backgroundColor={searchBandType === '' ? '#ebebeb' : '#e8f0fe'}
+                sx={{
+                  '&::placeholder': {
+                    color: 'gray',
+                    fontStyle: 'italic',
+                    fontSize: '12px',
+                  },
+                  option: {
+                    fontSize: '12px',
+                    fontStyle: 'italic',
+                  },
+                }}
+                style={{
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                  fontWeight: 'normal',
+                }}
+                _placeholder={{
+                  color: 'grey',
+                }}
+                defaultValue={''}
+                name="bandType"
+                onChange={handleSearchBandTypeChange}
+              >
+                {bandTypes?.response.map((types, i) => {
+                  return (
+                    <option value={types.id} key={i}>
+                      <Text
+                        fontSize={'sm'}
+                        className="global-td"
+                        fontStyle={'italic'}
+                        style={{ fontSize: '12px' }}
+                      >
+                        {types.travelDurationName}
+                      </Text>
+                    </option>
+                  );
+                })}
+              </motion.Select>
+              <motion.Select
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 400,
+                    delay: 0.9,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 50,
+                  },
+                }}
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
+                }}
+                fontStyle={'italic'}
+                placeholder="Select by Plan Type"
+                backgroundColor={searchPlanType === '' ? '#ebebeb' : '#e8f0fe'}
+                sx={{
+                  '&::placeholder': {
+                    color: 'gray',
+                    fontStyle: 'italic',
+                    fontSize: '12px',
+                  },
+                  option: {
+                    fontSize: '12px',
+                    fontStyle: 'italic',
+                  },
+                }}
+                style={{
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                  fontWeight: 'normal',
+                }}
+                _placeholder={{
+                  color: 'grey',
+                }}
+                defaultValue={''}
+                name="planType"
+                onChange={handleSearchPlanTypeChange}
+              >
+                {planTypes?.response.map((types, i) => {
+                  return (
+                    <option value={types.id} key={i}>
+                      <Text
+                        fontSize={'sm'}
+                        className="global-td"
+                        fontStyle={'italic'}
+                        style={{ fontSize: '12px' }}
+                      >
+                        {types.name}
+                      </Text>
+                    </option>
+                  );
+                })}
+              </motion.Select>
+              <motion.Select
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 400,
+                    delay: 0.9,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 50,
+                  },
+                }}
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
+                }}
+                fontStyle={'italic'}
+                placeholder="Select by Area"
+                backgroundColor={searchArea === '' ? '#ebebeb' : '#e8f0fe'}
+                sx={{
+                  '&::placeholder': {
+                    color: 'gray',
+                    fontStyle: 'italic',
+                    fontSize: '12px',
+                  },
+
+                  option: {
+                    fontSize: '12px',
+                    fontStyle: 'italic',
+                  },
+                }}
+                style={{
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                  fontWeight: 'normal',
+                }}
+                _placeholder={{
+                  color: 'gray',
+                  fontStyle: 'italic',
+                  fontSize: '12px',
+                }}
+                defaultValue={''}
+                name="areaGroup"
+                onChange={handleSearchAreaChange}
+              >
+                {grouparea?.response.map((types, i) => {
+                  return (
+                    <option value={types.id} key={i}>
+                      <Text
+                        fontSize={'sm'}
+                        className="global-td"
+                        fontStyle={'italic'}
+                        style={{ fontSize: '12px' }}
+                      >
+                        {types.areaGroupName}
+                      </Text>
+                    </option>
+                  );
+                })}
+              </motion.Select>
+              <motion.Select
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 400,
+                    delay: 0.9,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 50,
+                  },
+                }}
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
+                }}
+                placeholder="Select by product type"
+                backgroundColor={
+                  searchProductType === '' ? '#ebebeb' : '#e8f0fe'
+                }
+                sx={{
+                  '&::placeholder': {
+                    color: 'gray',
+                    fontStyle: 'italic',
+                    fontSize: '12px',
+                  },
+                  option: {
+                    fontSize: '12px',
+                    fontStyle: 'italic',
+                  },
+                }}
+                style={{
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                  fontWeight: 'normal',
+                }}
+                _placeholder={{
+                  color: 'grey',
+                }}
+                defaultValue={''}
+                name="areaGroup"
+                onChange={handleSearchProductTypeChange}
+              >
+                {travellerTypes?.response.map((types, i) => {
+                  return (
+                    <option value={types.id} key={i}>
+                      <Text
+                        fontSize={'sm'}
+                        className="global-td"
+                        fontStyle={'italic'}
+                        style={{ fontSize: '12px' }}
+                      >
+                        {types.name}
+                      </Text>
+                    </option>
+                  );
+                })}
+              </motion.Select>
+            </Box>
+          ) : // </motion.div>
+          null}
           <>
             <Styles>
               {
