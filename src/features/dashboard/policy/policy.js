@@ -1167,11 +1167,11 @@ const Polcies = () => {
               >
                 <Input
                   variant={'custom'}
-                  // value={filterQuery?.policyNumber}
+                  value={filterQuery?.policyNumber}
                   onChange={handleFilter}
                   name="policyNumber"
                   placeholder={'Search by policy number'}
-                  bg="#ebebeb"
+                  bg={filterQuery?.policyNumber === '' ? '#ebebeb' : '#e8f0fe'}
                   borderRadius={'5px'}
                   _placeholder={{ textTransform: 'lowercase' }}
                   sx={{
@@ -1188,7 +1188,7 @@ const Polcies = () => {
                   onChange={handleFilter}
                   name="traveller"
                   placeholder={'Search by traveller'}
-                  bg="#ebebeb"
+                  bg={filterQuery?.traveller === '' ? '#ebebeb' : '#e8f0fe'}
                   borderRadius={'5px'}
                   _placeholder={{ textTransform: 'lowercase' }}
                   sx={{
@@ -1205,7 +1205,7 @@ const Polcies = () => {
                   onChange={handleFilter}
                   name="bookingNumber"
                   placeholder={'Search by booking number'}
-                  bg="#ebebeb"
+                  bg={filterQuery?.bookingNumber === '' ? '#ebebeb' : '#e8f0fe'}
                   borderRadius={'5px'}
                   _placeholder={{ textTransform: 'lowercase' }}
                   sx={{
