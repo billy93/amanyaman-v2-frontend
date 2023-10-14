@@ -1004,6 +1004,9 @@ const MasterUser = () => {
             >
               <motion.Box
                 w="100%"
+                style={{
+                  border: '1px solid #ccc',
+                }}
                 animate={{
                   y: 0,
                   opacity: 0.5,
@@ -1019,6 +1022,21 @@ const MasterUser = () => {
                 initial={{
                   opacity: 1,
                   y: '-100vh',
+                }}
+                whileFocus={{
+                  border: [
+                    'linear-gradient(to right, #f0f -200%, #0ff -100%, #f0f 0%, #0ff 100%)',
+                    'linear-gradient(to right, #f0f -100%, #0ff 0%, #f0f 100%, #0ff 200%)',
+                    'linear-gradient(to right, #f0f 0%, #0ff 100%, #f0f 200%, #0ff 300%)',
+                  ],
+                }}
+                transition={{
+                  border: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'linear',
+                    from: 'linear-gradient(to right, #fff -200%, #fff -100%, #fff 0%, #fff 100%)',
+                  },
                 }}
               >
                 <Input
