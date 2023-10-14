@@ -880,18 +880,45 @@ const MasterUser = () => {
   };
 
   const showFilterBtn = async () => {
-    await controls.start({
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 200,
-        delay: 0.5,
-        duration: 0.5,
-        staggerChildren: true,
-        damping: 40,
-      },
-    });
+    if (showFilter) {
+      await controls.start({
+        y: 0,
+        opacity: 1,
+        transition: {
+          type: 'spring',
+          stiffness: 200,
+          delay: 0.5,
+          duration: 0.5,
+          staggerChildren: true,
+          damping: 40,
+        },
+      }); // Reverse animation
+    } else {
+      await controls.start({
+        y: '-100vh',
+        opacity: 1,
+        transition: {
+          type: 'spring',
+          stiffness: 200,
+          delay: 0.5,
+          duration: 0.5,
+          staggerChildren: true,
+          damping: 40,
+        },
+      }); // Show animation
+    }
+    // await controls.start({
+    //   y: 0,
+    //   opacity: 1,
+    //   transition: {
+    //     type: 'spring',
+    //     stiffness: 200,
+    //     delay: 0.5,
+    //     duration: 0.5,
+    //     staggerChildren: true,
+    //     damping: 40,
+    //   },
+    // });
     setShowFilter(!showFilter);
     setPage(0);
   };
@@ -1018,7 +1045,7 @@ const MasterUser = () => {
                 w="100%"
                 animate={{
                   y: 0,
-                  opacity: 1,
+                  opacity: 0.5,
                   transition: {
                     type: 'spring',
                     stiffness: 200,
@@ -1028,9 +1055,8 @@ const MasterUser = () => {
                     damping: 40,
                   },
                 }}
-                initial={controls}
-                exit={{
-                  opacity: 0.5,
+                initial={{
+                  opacity: 1,
                   y: '-100vh',
                 }}
               >
