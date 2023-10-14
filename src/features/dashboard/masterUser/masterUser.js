@@ -1087,22 +1087,10 @@ const MasterUser = () => {
               </motion.Box>
               <motion.Box
                 w="100%"
-                animate={{
-                  y: 0,
-                  opacity: 0.5,
-                  transition: {
-                    type: 'spring',
-                    stiffness: 250,
-                    delay: 0.6,
-                    duration: 0.5,
-                    staggerChildren: true,
-                    damping: 40,
-                  },
-                }}
-                initial={{
-                  opacity: 1,
-                  y: '-100vh',
-                }}
+                initial={showFilter ? 'hidden' : 'visible'}
+                animate={showFilter ? 'visible' : 'hidden'}
+                variants={modalVariants}
+                transition={{ duration: 0.4 }}
               >
                 <Input
                   value={filterEmail}
@@ -1122,22 +1110,10 @@ const MasterUser = () => {
               </motion.Box>
               <motion.Box
                 w="100%"
-                animate={{
-                  y: 0,
-                  opacity: 0.5,
-                  transition: {
-                    type: 'spring',
-                    stiffness: 300,
-                    delay: 0.7,
-                    duration: 0.5,
-                    staggerChildren: true,
-                    damping: 40,
-                  },
-                }}
-                initial={{
-                  opacity: 1,
-                  y: '-100vh',
-                }}
+                initial={showFilter ? 'hidden' : 'visible'}
+                animate={showFilter ? 'visible' : 'hidden'}
+                variants={modalVariants}
+                transition={{ duration: 0.5 }}
               >
                 <Select
                   backgroundColor={filterRole === '' ? '#ebebeb' : '#e8f0fe'}
