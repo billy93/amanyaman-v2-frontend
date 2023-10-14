@@ -919,7 +919,10 @@ const MasterUser = () => {
     //     damping: 40,
     //   },
     // });
-    setShowFilter(!showFilter);
+    setTimeout(() => {
+      setShowFilter(!showFilter);
+    }, 300); // 1000 milliseconds = 1 second
+
     setPage(0);
   };
 
