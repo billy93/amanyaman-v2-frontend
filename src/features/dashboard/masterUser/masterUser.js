@@ -1017,8 +1017,8 @@ const MasterUser = () => {
                   },
                 }}
                 initial={{
-                  opacity: showFilter ? 1 : 0,
-                  y: showFilter ? '-100vh' : '0',
+                  opacity: showFilter ? 1 : 0.5,
+                  y: showFilter ? '-100vh' : 0,
                 }}
               >
                 <Input
