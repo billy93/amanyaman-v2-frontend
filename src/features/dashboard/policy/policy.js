@@ -1149,21 +1149,35 @@ const Polcies = () => {
             </Stack>
           </Box>
           {showFilter && (
-            <motion.div
-              initial={{ y: -55, zIndex: 999 }}
-              animate={{ y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
+            // <motion.div
+            //   initial={{ y: -55, zIndex: 999 }}
+            //   animate={{ y: 0 }}
+            //   transition={{ delay: 0.5, duration: 0.5 }}
+            // >
+            <Box
+              w={{ base: '100%', md: '70%' }}
+              display={'flex'}
+              justifyContent={'space-around'}
+              alignItems={'center'}
+              gap="4px"
+              mr="1em"
+              ml="1em"
+              mb="1em"
+              mt={'1em'}
             >
-              <Box
-                w={{ base: '100%', md: '70%' }}
-                display={'flex'}
-                justifyContent={'space-around'}
-                alignItems={'center'}
-                gap="4px"
-                mr="1em"
-                ml="1em"
-                mb="1em"
-                mt={'1em'}
+              <motion.div
+                animate={{
+                  y: 0,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 100,
+                    duration: 0.5,
+                    staggerChildren: true,
+                  },
+                }}
+                initial={{
+                  y: '-100vh',
+                }}
               >
                 <Input
                   variant={'custom'}
@@ -1182,105 +1196,106 @@ const Polcies = () => {
                     },
                   }}
                 />
-                <Input
-                  variant={'custom'}
-                  value={filterQuery?.traveller}
-                  onChange={handleFilter}
-                  name="traveller"
-                  placeholder={'Search by traveller'}
-                  bg={filterQuery?.traveller === '' ? '#ebebeb' : '#e8f0fe'}
-                  borderRadius={'5px'}
-                  _placeholder={{ textTransform: 'lowercase' }}
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-                  }}
-                />
-                <Input
-                  variant={'custom'}
-                  value={filterQuery?.bookingNumber}
-                  onChange={handleFilter}
-                  name="bookingNumber"
-                  placeholder={'Search by booking number'}
-                  bg={filterQuery?.bookingNumber === '' ? '#ebebeb' : '#e8f0fe'}
-                  borderRadius={'5px'}
-                  _placeholder={{ textTransform: 'lowercase' }}
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-                  }}
-                />
-
-                <Select
-                  placeholder="Select by Policy status"
-                  backgroundColor={
-                    filterQuery?.policyStatus === '' ? '#ebebeb' : '#e8f0fe'
-                  }
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-                  }}
-                  _placeholder={{
-                    color: 'grey',
-                  }}
-                  defaultValue={''}
-                  name="policyStatus"
-                  style={{
-                    fontSize: '12px',
+              </motion.div>
+              <Input
+                variant={'custom'}
+                value={filterQuery?.traveller}
+                onChange={handleFilter}
+                name="traveller"
+                placeholder={'Search by traveller'}
+                bg={filterQuery?.traveller === '' ? '#ebebeb' : '#e8f0fe'}
+                borderRadius={'5px'}
+                _placeholder={{ textTransform: 'lowercase' }}
+                sx={{
+                  '&::placeholder': {
+                    color: 'gray',
                     fontStyle: 'italic',
-                    fontWeight: 'normal',
-                  }}
-                  onChange={handleFilter}
-                >
-                  <option value={''}>{'All Policy Status'}</option>
-                  <option value={'SUCCESS'}>{'Success'}</option>
-                  <option value={'WAITING_FOR_PAYMENT'}>{'Pending'}</option>
-                </Select>
-                <Select
-                  placeholder="Select by Plan Type"
-                  backgroundColor={
-                    filterQuery?.planType === '' ? '#ebebeb' : '#e8f0fe'
-                  }
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-                  }}
-                  style={{
                     fontSize: '12px',
+                  },
+                }}
+              />
+              <Input
+                variant={'custom'}
+                value={filterQuery?.bookingNumber}
+                onChange={handleFilter}
+                name="bookingNumber"
+                placeholder={'Search by booking number'}
+                bg={filterQuery?.bookingNumber === '' ? '#ebebeb' : '#e8f0fe'}
+                borderRadius={'5px'}
+                _placeholder={{ textTransform: 'lowercase' }}
+                sx={{
+                  '&::placeholder': {
+                    color: 'gray',
                     fontStyle: 'italic',
-                    fontWeight: 'normal',
-                  }}
-                  _placeholder={{
-                    color: 'grey',
-                  }}
-                  defaultValue={''}
-                  name="planType"
-                  onChange={handleFilter}
-                >
-                  {planTypes?.response.map((types, i) => {
-                    return (
-                      <option value={types.id} key={i}>
-                        {types.name}
-                      </option>
-                    );
-                  })}
-                </Select>
+                    fontSize: '12px',
+                  },
+                }}
+              />
 
-                {/* <Button variant={'outline'} onClick={handleSearch}>Search</Button> */}
-              </Box>
-            </motion.div>
+              <Select
+                placeholder="Select by Policy status"
+                backgroundColor={
+                  filterQuery?.policyStatus === '' ? '#ebebeb' : '#e8f0fe'
+                }
+                sx={{
+                  '&::placeholder': {
+                    color: 'gray',
+                    fontStyle: 'italic',
+                    fontSize: '12px',
+                  },
+                }}
+                _placeholder={{
+                  color: 'grey',
+                }}
+                defaultValue={''}
+                name="policyStatus"
+                style={{
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                  fontWeight: 'normal',
+                }}
+                onChange={handleFilter}
+              >
+                <option value={''}>{'All Policy Status'}</option>
+                <option value={'SUCCESS'}>{'Success'}</option>
+                <option value={'WAITING_FOR_PAYMENT'}>{'Pending'}</option>
+              </Select>
+              <Select
+                placeholder="Select by Plan Type"
+                backgroundColor={
+                  filterQuery?.planType === '' ? '#ebebeb' : '#e8f0fe'
+                }
+                sx={{
+                  '&::placeholder': {
+                    color: 'gray',
+                    fontStyle: 'italic',
+                    fontSize: '12px',
+                  },
+                }}
+                style={{
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                  fontWeight: 'normal',
+                }}
+                _placeholder={{
+                  color: 'grey',
+                }}
+                defaultValue={''}
+                name="planType"
+                onChange={handleFilter}
+              >
+                {planTypes?.response.map((types, i) => {
+                  return (
+                    <option value={types.id} key={i}>
+                      {types.name}
+                    </option>
+                  );
+                })}
+              </Select>
+
+              {/* <Button variant={'outline'} onClick={handleSearch}>Search</Button> */}
+            </Box>
+            // </motion.div>
           )}
           <Styles>
             <Tables
