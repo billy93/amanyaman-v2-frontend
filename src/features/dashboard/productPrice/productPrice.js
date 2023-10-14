@@ -807,9 +807,9 @@ const Polcies = () => {
             <Box
               w={{ base: '100%', md: '70%' }}
               display={'flex'}
-              justifyContent={'space-around'}
+              justifyContent={'flex-start'}
               alignItems={'center'}
-              gap="4px"
+              gap="8px"
               mr="2em"
               ml="2em"
               mb="1em"

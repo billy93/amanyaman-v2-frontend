@@ -1079,9 +1079,9 @@ const MasterUser = () => {
             <Box
               w={{ base: '100%', md: '70%' }}
               display={'flex'}
-              justifyContent={'space-around'}
+              justifyContent={'flex-start'}
               alignItems={'center'}
-              gap="4px"
+              gap="8px"
               mt="1.5em"
               mb="1.5em"
             >
