@@ -1180,6 +1180,7 @@ const Polcies = () => {
                     delay: 0.5,
                     duration: 0.5,
                     staggerChildren: true,
+                    damping: 30,
                   },
                 }}
                 initial={{
@@ -1212,9 +1213,10 @@ const Polcies = () => {
                   transition: {
                     type: 'spring',
                     stiffness: 100,
-                    delay: 0.7,
+                    delay: 0.6,
                     duration: 0.5,
                     staggerChildren: true,
+                    damping: 35,
                   },
                 }}
                 initial={{
@@ -1248,9 +1250,10 @@ const Polcies = () => {
                   transition: {
                     type: 'spring',
                     stiffness: 100,
-                    delay: 0.9,
+                    delay: 0.7,
                     duration: 0.5,
                     staggerChildren: true,
+                    damping: 40,
                   },
                 }}
                 initial={{
@@ -1285,9 +1288,10 @@ const Polcies = () => {
                   transition: {
                     type: 'spring',
                     stiffness: 100,
-                    delay: 1.1,
+                    delay: 0.8,
                     duration: 0.5,
                     staggerChildren: true,
+                    damping: 45,
                   },
                 }}
                 initial={{
@@ -1332,9 +1336,10 @@ const Polcies = () => {
                   transition: {
                     type: 'spring',
                     stiffness: 100,
-                    delay: 1.3,
+                    delay: 0.9,
                     duration: 0.5,
                     staggerChildren: true,
+                    damping: 50,
                   },
                 }}
                 initial={{
