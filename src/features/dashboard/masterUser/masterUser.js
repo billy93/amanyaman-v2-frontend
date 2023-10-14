@@ -880,33 +880,33 @@ const MasterUser = () => {
   };
 
   const showFilterBtn = async () => {
-    if (showFilter) {
-      await controls.start({
-        y: 0,
-        opacity: 1,
-        transition: {
-          type: 'spring',
-          stiffness: 200,
-          delay: 0.5,
-          duration: 0.5,
-          staggerChildren: true,
-          damping: 40,
-        },
-      }); // Reverse animation
-    } else {
-      await controls.start({
-        y: '-100vh',
-        opacity: 1,
-        transition: {
-          type: 'spring',
-          stiffness: 200,
-          delay: 0.5,
-          duration: 0.5,
-          staggerChildren: true,
-          damping: 40,
-        },
-      }); // Show animation
-    }
+    // if (showFilter) {
+    //   await controls.start({
+    //     y: 0,
+    //     opacity: 1,
+    //     transition: {
+    //       type: 'spring',
+    //       stiffness: 200,
+    //       delay: 0.5,
+    //       duration: 0.5,
+    //       staggerChildren: true,
+    //       damping: 40,
+    //     },
+    //   }); // Reverse animation
+    // } else {
+    //   await controls.start({
+    //     y: '-100vh',
+    //     opacity: 1,
+    //     transition: {
+    //       type: 'spring',
+    //       stiffness: 200,
+    //       delay: 0.5,
+    //       duration: 0.5,
+    //       staggerChildren: true,
+    //       damping: 40,
+    //     },
+    //   }); // Show animation
+    // }
     // await controls.start({
     //   y: 0,
     //   opacity: 1,
@@ -974,6 +974,11 @@ const MasterUser = () => {
   const total = React.useMemo(() => {
     return (page + 1) * size;
   }, [page]);
+
+  const modalVariants = {
+    hidden: { opacity: 0, scale: 0 },
+    visible: { opacity: 1, scale: 1 },
+  };
 
   let content;
   if (isLoading) {
@@ -1043,22 +1048,26 @@ const MasterUser = () => {
             >
               <motion.Box
                 w="100%"
-                animate={{
-                  y: 0,
-                  opacity: 0.5,
-                  transition: {
-                    type: 'spring',
-                    stiffness: 200,
-                    delay: 0.5,
-                    duration: 0.5,
-                    staggerChildren: true,
-                    damping: 40,
-                  },
-                }}
-                initial={{
-                  opacity: 1,
-                  y: '-100vh',
-                }}
+                // animate={{
+                //   y: 0,
+                //   opacity: 0.5,
+                //   transition: {
+                //     type: 'spring',
+                //     stiffness: 200,
+                //     delay: 0.5,
+                //     duration: 0.5,
+                //     staggerChildren: true,
+                //     damping: 40,
+                //   },
+                // }}
+                // initial={{
+                //   opacity: 1,
+                //   y: '-100vh',
+                // }}
+                initial={showFilter ? 'hidden' : 'visible'}
+                animate={showFilter ? 'visible' : 'hidden'}
+                variants={modalVariants}
+                transition={{ duration: 0.3 }}
               >
                 <Input
                   value={filterName}
