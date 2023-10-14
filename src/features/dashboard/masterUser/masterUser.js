@@ -988,19 +988,38 @@ const MasterUser = () => {
             </Stack>
           </Box>
           {showFilter ? (
-            <motion.div
-              initial={{ y: -55, zIndex: 999 }}
-              animate={{ y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
+            // <motion.div
+            //   initial={{ y: -55, zIndex: 999 }}
+            //   animate={{ y: 0 }}
+            //   transition={{ delay: 0.5, duration: 0.5 }}
+            // >
+            <Box
+              w={{ base: '100%', md: '650px' }}
+              display={'flex'}
+              justifyContent={'space-around'}
+              alignItems={'center'}
+              gap="4px"
+              mt="1em"
+              mb="1em"
             >
-              <Box
-                w={{ base: '100%', md: '650px' }}
-                display={'flex'}
-                justifyContent={'space-around'}
-                alignItems={'center'}
-                gap="4px"
-                mt="1em"
-                mb="1em"
+              <motion.Box
+                w="100%"
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 200,
+                    delay: 0.5,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 40,
+                  },
+                }}
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
+                }}
               >
                 <Input
                   value={filterName}
@@ -1017,6 +1036,26 @@ const MasterUser = () => {
                     },
                   }}
                 />
+              </motion.Box>
+              <motion.Box
+                w="100%"
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 250,
+                    delay: 0.6,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 40,
+                  },
+                }}
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
+                }}
+              >
                 <Input
                   value={filterEmail}
                   onChange={handleFilterByEmail}
@@ -1032,6 +1071,26 @@ const MasterUser = () => {
                   borderRadius={'5px'}
                   variant={'custom'}
                 />
+              </motion.Box>
+              <motion.Box
+                w="100%"
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 300,
+                    delay: 0.7,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 40,
+                  },
+                }}
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
+                }}
+              >
                 <Select
                   backgroundColor={filterRole === '' ? '#ebebeb' : '#e8f0fe'}
                   className="global-td"
@@ -1063,9 +1122,10 @@ const MasterUser = () => {
                     );
                   })}
                 </Select>
-              </Box>
-            </motion.div>
-          ) : null}
+              </motion.Box>
+            </Box>
+          ) : // </motion.div>
+          null}
 
           <Styles>
             {

@@ -1035,42 +1035,82 @@ const MasterUser = () => {
                 mr="2em"
                 mb="1em"
               >
-                <Input
-                  variant={'custom'}
-                  value={searchAgent}
-                  onChange={handleSearchAgentName}
-                  name="travelAgentName"
-                  placeholder={'Search by agentname'}
-                  bg="#ebebeb"
-                  borderRadius={'5px'}
-                  textTransform={'uppercase'}
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
+                <motion.Box
+                  w="100%"
+                  animate={{
+                    y: 0,
+                    opacity: 0.5,
+                    transition: {
+                      type: 'spring',
+                      stiffness: 200,
+                      delay: 0.5,
+                      duration: 0.5,
+                      staggerChildren: true,
+                      damping: 40,
                     },
                   }}
-                  _placeholder={{ textTransform: 'lowercase' }}
-                />
-                <Input
-                  variant={'custom'}
-                  value={searchCustCode}
-                  onChange={handleSearchCustCode}
-                  name="custCode"
-                  placeholder={'Search by cust code'}
-                  bg="#ebebeb"
-                  borderRadius={'5px'}
-                  textTransform={'uppercase'}
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
+                  initial={{
+                    opacity: 1,
+                    y: '-100vh',
+                  }}
+                >
+                  <Input
+                    variant={'custom'}
+                    value={searchAgent}
+                    onChange={handleSearchAgentName}
+                    name="travelAgentName"
+                    placeholder={'Search by agentname'}
+                    bg="#ebebeb"
+                    borderRadius={'5px'}
+                    textTransform={'uppercase'}
+                    sx={{
+                      '&::placeholder': {
+                        color: 'gray',
+                        fontStyle: 'italic',
+                        fontSize: '12px',
+                      },
+                    }}
+                    _placeholder={{ textTransform: 'lowercase' }}
+                  />
+                </motion.Box>
+                <motion.Box
+                  w="100%"
+                  animate={{
+                    y: 0,
+                    opacity: 0.5,
+                    transition: {
+                      type: 'spring',
+                      stiffness: 250,
+                      delay: 0.6,
+                      duration: 0.5,
+                      staggerChildren: true,
+                      damping: 40,
                     },
                   }}
-                  _placeholder={{ textTransform: 'lowercase' }}
-                />
+                  initial={{
+                    opacity: 1,
+                    y: '-100vh',
+                  }}
+                >
+                  <Input
+                    variant={'custom'}
+                    value={searchCustCode}
+                    onChange={handleSearchCustCode}
+                    name="custCode"
+                    placeholder={'Search by cust code'}
+                    bg="#ebebeb"
+                    borderRadius={'5px'}
+                    textTransform={'uppercase'}
+                    sx={{
+                      '&::placeholder': {
+                        color: 'gray',
+                        fontStyle: 'italic',
+                        fontSize: '12px',
+                      },
+                    }}
+                    _placeholder={{ textTransform: 'lowercase' }}
+                  />
+                </motion.Box>
               </Box>
             </motion.div>
           )}

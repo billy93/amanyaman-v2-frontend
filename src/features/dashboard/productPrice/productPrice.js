@@ -815,153 +815,253 @@ const Polcies = () => {
               mb="1em"
               mt={'1em'}
             >
-              <Input
-                fontStyle={'italic'}
-                variant={'custom'}
-                value={searchTerm}
-                onChange={handleSearchTermChange}
-                name="productCode"
-                placeholder={'Search by product code'}
-                bg="#ebebeb"
-                borderRadius={'5px'}
-                sx={{
-                  '&::placeholder': {
-                    color: 'gray',
-                    fontStyle: 'italic',
-                    fontSize: '12px',
+              <motion.Box
+                w="100%"
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 200,
+                    delay: 0.5,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 40,
                   },
                 }}
-                textTransform={'uppercase'}
-                _placeholder={{ textTransform: 'lowercase' }}
-              />
-              <Select
-                placeholder="Select by Traveller Type"
-                backgroundColor={
-                  filterQuery?.travellerType === '' ? '#ebebeb' : '#e8f0fe'
-                }
-                _placeholder={{
-                  color: 'grey',
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
                 }}
-                style={{
-                  fontSize: '12px',
-                  fontStyle: 'italic',
-                  fontWeight: 'normal',
-                }}
-                sx={{
-                  '&::placeholder': {
-                    color: 'gray',
-                    fontStyle: 'italic',
-                    fontSize: '12px',
-                  },
-                }}
-                defaultValue={''}
-                name="travellerType"
-                onChange={handleFilter}
               >
-                {travellerTypes?.response.map((types, i) => {
-                  return (
-                    <option value={types.id} key={i}>
-                      {types.name}
-                    </option>
-                  );
-                })}
-              </Select>
-              <Select
-                placeholder="Select by Plan Type"
-                backgroundColor={
-                  filterQuery?.planType === '' ? '#ebebeb' : '#e8f0fe'
-                }
-                style={{
-                  fontSize: '12px',
-                  fontStyle: 'italic',
-                  fontWeight: 'normal',
-                }}
-                _placeholder={{
-                  color: 'grey',
-                }}
-                sx={{
-                  '&::placeholder': {
-                    color: 'gray',
-                    fontStyle: 'italic',
-                    fontSize: '12px',
+                <Input
+                  fontStyle={'italic'}
+                  variant={'custom'}
+                  value={searchTerm}
+                  onChange={handleSearchTermChange}
+                  name="productCode"
+                  placeholder={'Search by product code'}
+                  bg="#ebebeb"
+                  borderRadius={'5px'}
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
+                  }}
+                  textTransform={'uppercase'}
+                  _placeholder={{ textTransform: 'lowercase' }}
+                />
+              </motion.Box>
+              <motion.Box
+                w="100%"
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 250,
+                    delay: 0.6,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 40,
                   },
                 }}
-                defaultValue={''}
-                name="planType"
-                onChange={handleFilter}
-              >
-                {planTypes?.response.map((types, i) => {
-                  return (
-                    <option value={types.id} key={i}>
-                      {types.name}
-                    </option>
-                  );
-                })}
-              </Select>
-              <Select
-                placeholder="Select by Travel Duration"
-                backgroundColor={
-                  filterQuery?.bandType === '' ? '#ebebeb' : '#e8f0fe'
-                }
-                style={{
-                  fontSize: '12px',
-                  fontStyle: 'italic',
-                  fontWeight: 'normal',
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
                 }}
-                sx={{
-                  '&::placeholder': {
-                    color: 'gray',
-                    fontStyle: 'italic',
+              >
+                <Select
+                  placeholder="Select by Traveller Type"
+                  backgroundColor={
+                    filterQuery?.travellerType === '' ? '#ebebeb' : '#e8f0fe'
+                  }
+                  _placeholder={{
+                    color: 'grey',
+                  }}
+                  style={{
                     fontSize: '12px',
+                    fontStyle: 'italic',
+                    fontWeight: 'normal',
+                  }}
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
+                  }}
+                  defaultValue={''}
+                  name="travellerType"
+                  onChange={handleFilter}
+                >
+                  {travellerTypes?.response.map((types, i) => {
+                    return (
+                      <option value={types.id} key={i}>
+                        {types.name}
+                      </option>
+                    );
+                  })}
+                </Select>
+              </motion.Box>
+              <motion.Box
+                w="100%"
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 300,
+                    delay: 0.7,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 40,
                   },
                 }}
-                _placeholder={{
-                  color: 'grey',
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
                 }}
-                defaultValue={''}
-                name="bandType"
-                onChange={handleFilter}
               >
-                {bandTypes?.response.map((types, i) => {
-                  return (
-                    <option value={types.id} key={i}>
-                      {types.travelDurationName}
-                    </option>
-                  );
-                })}
-              </Select>
-              <Select
-                placeholder="Select by Travel Agent"
-                backgroundColor={
-                  filterQuery?.travelAgent === '' ? '#ebebeb' : '#e8f0fe'
-                }
-                sx={{
-                  '&::placeholder': {
-                    color: 'gray',
-                    fontStyle: 'italic',
+                <Select
+                  placeholder="Select by Plan Type"
+                  backgroundColor={
+                    filterQuery?.planType === '' ? '#ebebeb' : '#e8f0fe'
+                  }
+                  style={{
                     fontSize: '12px',
+                    fontStyle: 'italic',
+                    fontWeight: 'normal',
+                  }}
+                  _placeholder={{
+                    color: 'grey',
+                  }}
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
+                  }}
+                  defaultValue={''}
+                  name="planType"
+                  onChange={handleFilter}
+                >
+                  {planTypes?.response.map((types, i) => {
+                    return (
+                      <option value={types.id} key={i}>
+                        {types.name}
+                      </option>
+                    );
+                  })}
+                </Select>
+              </motion.Box>
+              <motion.Box
+                w="100%"
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 300,
+                    delay: 0.7,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 40,
                   },
                 }}
-                style={{
-                  fontSize: '12px',
-                  fontStyle: 'italic',
-                  fontWeight: 'normal',
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
                 }}
-                _placeholder={{
-                  color: 'grey',
-                }}
-                defaultValue={''}
-                name="travelAgent"
-                onChange={handleFilter}
               >
-                {travelagents?.map((types, i) => {
-                  return (
-                    <option value={types.id} key={i}>
-                      {types.travelAgentName}
-                    </option>
-                  );
-                })}
-              </Select>
+                <Select
+                  placeholder="Select by Travel Duration"
+                  backgroundColor={
+                    filterQuery?.bandType === '' ? '#ebebeb' : '#e8f0fe'
+                  }
+                  style={{
+                    fontSize: '12px',
+                    fontStyle: 'italic',
+                    fontWeight: 'normal',
+                  }}
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
+                  }}
+                  _placeholder={{
+                    color: 'grey',
+                  }}
+                  defaultValue={''}
+                  name="bandType"
+                  onChange={handleFilter}
+                >
+                  {bandTypes?.response.map((types, i) => {
+                    return (
+                      <option value={types.id} key={i}>
+                        {types.travelDurationName}
+                      </option>
+                    );
+                  })}
+                </Select>
+              </motion.Box>
+              <motion.Box
+                w="100%"
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 350,
+                    delay: 0.8,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 40,
+                  },
+                }}
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
+                }}
+              >
+                <Select
+                  placeholder="Select by Travel Agent"
+                  backgroundColor={
+                    filterQuery?.travelAgent === '' ? '#ebebeb' : '#e8f0fe'
+                  }
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
+                  }}
+                  style={{
+                    fontSize: '12px',
+                    fontStyle: 'italic',
+                    fontWeight: 'normal',
+                  }}
+                  _placeholder={{
+                    color: 'grey',
+                  }}
+                  defaultValue={''}
+                  name="travelAgent"
+                  onChange={handleFilter}
+                >
+                  {travelagents?.map((types, i) => {
+                    return (
+                      <option value={types.id} key={i}>
+                        {types.travelAgentName}
+                      </option>
+                    );
+                  })}
+                </Select>
+              </motion.Box>
               {/* <Button variant={'outline'} onClick={handleSearch}>Search</Button> */}
             </Box>
           </motion.div>
