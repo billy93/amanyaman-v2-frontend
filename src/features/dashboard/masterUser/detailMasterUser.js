@@ -5,6 +5,7 @@ import { NavLink, useParams, Link, useNavigate } from 'react-router-dom';
 import { listPolicy } from '../policy/policySlice';
 import Data from './list.json';
 import { useTable, usePagination } from 'react-table';
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import {
   Box,
@@ -317,7 +318,11 @@ const DetailMasterUser = () => {
     content = <PageLoader loading={isLoading} />;
   } else if (Data) {
     content = (
-      <Box>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 1.1 }}
+      >
         <Box
           display={'flex'}
           justifyContent={'space-between'}
@@ -527,7 +532,7 @@ const DetailMasterUser = () => {
             </Box>
           </Box>
         </Box>
-      </Box>
+      </motion.div>
     );
   } else if (isError) {
     content = <p>{JSON.stringify(error)}</p>;

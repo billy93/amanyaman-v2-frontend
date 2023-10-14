@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 import {
   saveToken,
   resetPassword,
@@ -63,6 +64,12 @@ const Login = () => {
   const checkAccount = useSelector(userResetPassword);
   const handleClick = () => setShow(!show);
   dispatch(resetPassword(emailuser));
+
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleClicks = () => {
+    setIsClicked(!isClicked);
+  };
   const setFieldChange = (e) => {
     setFields({ ...fields, [e.target.name]: e.target.value });
   };
@@ -594,7 +601,7 @@ const Login = () => {
                           </Checkbox>
                         </Box>
 
-                        <Button
+                        {/* <Button
                           type="submit"
                           bg="#065BAA"
                           h="48px"
@@ -613,7 +620,21 @@ const Login = () => {
                           >
                             Next
                           </Text>
-                        </Button>
+                        </Button> */}
+                        <motion.div
+                          whileTap={{ scale: isClicked ? 1 : 0.95 }}
+                          onClick={handleClicks}
+                        >
+                          <Button
+                            type="submit"
+                            bg="#065BAA"
+                            h="48px"
+                            w="100%"
+                            mt="15px"
+                          >
+                            Next
+                          </Button>
+                        </motion.div>
                       </form>
                     </Stack>
                   </Box>

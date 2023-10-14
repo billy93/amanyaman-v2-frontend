@@ -666,94 +666,100 @@ const DocumentList = () => {
   } else if (systemParams) {
     // const totalCount = data;
     content = (
-      <Box ml="2em" mr="2em" mt="6em">
-        {/* <div>{ console.log('celelng',totalCount)}</div> */}
-        <Styles>
-          <Tables
-            columns={columns}
-            data={data}
-            fetchData={fetchData}
-            loading={loading}
-            pageCount={pageCount}
-            totalCount={totalCount}
-          />
-        </Styles>
-        {/* <Link to="/welcome">Back to Welcome</Link> */}
-        <Box
-          display="flex"
-          justifyContent={'flex-end'}
-          alignItems={'center'}
-          mt="1em"
-        >
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 1.1 }}
+      >
+        <Box ml="2em" mr="2em" mt="6em">
+          {/* <div>{ console.log('celelng',totalCount)}</div> */}
+          <Styles>
+            <Tables
+              columns={columns}
+              data={data}
+              fetchData={fetchData}
+              loading={loading}
+              pageCount={pageCount}
+              totalCount={totalCount}
+            />
+          </Styles>
+          {/* <Link to="/welcome">Back to Welcome</Link> */}
           <Box
-            display={'flex'}
-            justifyContent={'space-between'}
+            display="flex"
+            justifyContent={'flex-end'}
             alignItems={'center'}
-            w="100%"
+            mt="1em"
           >
-            {loading || isFetching ? (
-              // Use our custom loading state to show a loading indicator
-              <td colSpan="10000">Loading...</td>
-            ) : (
-              <td colSpan="10000">
-                Showing {total} of {totalCount} results
-              </td>
-            )}
-            <Box>
-              <Button
-                isDisabled={page === 0 ? true : false}
-                onClick={prevPages}
-                bg="white"
-                border={'none'}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-              >
-                <BiSkipPreviousCircle size="25px" color="black" />
-                <Text
-                  as="p"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
+            <Box
+              display={'flex'}
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              w="100%"
+            >
+              {loading || isFetching ? (
+                // Use our custom loading state to show a loading indicator
+                <td colSpan="10000">Loading...</td>
+              ) : (
+                <td colSpan="10000">
+                  Showing {total} of {totalCount} results
+                </td>
+              )}
+              <Box>
+                <Button
+                  isDisabled={page === 0 ? true : false}
+                  onClick={prevPages}
+                  bg="white"
+                  border={'none'}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
+                  }}
                 >
-                  Prev
-                </Text>
-              </Button>
-              {' | '}
-              <Button
-                isDisabled={Math.ceil(totalCount / 10) === page + 1}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-                onClick={nextPages}
-                bg="white"
-                border={'none'}
-              >
-                <BiSkipNextCircle size="25px" color="black" />
-                <Text
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
+                  <BiSkipPreviousCircle size="25px" color="black" />
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    Prev
+                  </Text>
+                </Button>
+                {' | '}
+                <Button
+                  isDisabled={Math.ceil(totalCount / 10) === page + 1}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
+                  }}
+                  onClick={nextPages}
+                  bg="white"
+                  border={'none'}
                 >
-                  Next
-                </Text>
-              </Button>{' '}
-              Page{' '}
-              <strong>
-                {page + 1} of {pageCount}
-              </strong>{' '}
+                  <BiSkipNextCircle size="25px" color="black" />
+                  <Text
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    Next
+                  </Text>
+                </Button>{' '}
+                Page{' '}
+                <strong>
+                  {page + 1} of {pageCount}
+                </strong>{' '}
+              </Box>
             </Box>
           </Box>
         </Box>
-      </Box>
+      </motion.div>
     );
   } else if (isError) {
     content = <p>{JSON.stringify(error)}</p>;

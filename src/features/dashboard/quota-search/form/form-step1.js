@@ -25,6 +25,7 @@ import {
   listcountries,
   setListProducts,
 } from '../quotaSearchSlice';
+import { motion } from 'framer-motion';
 import {
   Text,
   Flex,
@@ -485,635 +486,661 @@ const Form1 = ({
   };
 
   return (
-    <Box border={'1px'} borderColor="#ebebeb">
-      <Box
-        border={'1px'}
-        borderColor="#ebebeb"
-        p="12px"
-        display="flex"
-        justifyContent={'space-between'}
-        alignItems="center"
-      >
-        <Box position={'relative'} m="auto">
-          <Heading
-            as="h4"
-            style={{ fontSize: '18px' }}
-            fontSize="sm"
-            color="#065BAA"
-            textAlign={'center'}
-          >
-            Time & Location{' '}
-          </Heading>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 1.1, duration: 1.1 }}
+    >
+      <Box border={'1px'} borderColor="#ebebeb">
+        <Box
+          border={'1px'}
+          borderColor="#ebebeb"
+          p="12px"
+          display="flex"
+          justifyContent={'space-between'}
+          alignItems="center"
+        >
+          <Box position={'relative'} m="auto">
+            <Heading
+              as="h4"
+              style={{ fontSize: '18px' }}
+              fontSize="sm"
+              color="#065BAA"
+              textAlign={'center'}
+            >
+              Time & Location{' '}
+            </Heading>
+          </Box>
         </Box>
-      </Box>
-      <Tabs position="relative" variant="unstyled">
-        <TabList>
-          <Tab
-            h={{ base: 'auto', md: '48px' }}
+        <Tabs position="relative" variant="unstyled">
+          <TabList>
+            <Tab
+              h={{ base: 'auto', md: '48px' }}
+              width={{ base: '100%', md: '251px' }}
+            >
+              Manual Input
+            </Tab>
+            <Tab
+              h={{ base: 'auto', md: '48px' }}
+              width={{ base: '100%', md: '251px' }}
+            >
+              Use Galileo PNR
+            </Tab>
+          </TabList>
+          <TabIndicator
+            mt="-1.5px"
+            height="2px"
             width={{ base: '100%', md: '251px' }}
-          >
-            Manual Input
-          </Tab>
-          <Tab
-            h={{ base: 'auto', md: '48px' }}
-            width={{ base: '100%', md: '251px' }}
-          >
-            Use Galileo PNR
-          </Tab>
-        </TabList>
-        <TabIndicator
-          mt="-1.5px"
-          height="2px"
-          width={{ base: '100%', md: '251px' }}
-          bg="blue.500"
-          borderRadius="1px"
-        />
-        <TabPanels>
-          <TabPanel mt="1em">
-            <Box position={'relative'} w={{ base: '100%' }}>
-              <ul className="slideshow">
-                <li>
-                  <span className="img-bg-slide">Image 01</span>
-                </li>
-                <li>
-                  <span className="img-bg-slide">Image 02</span>
-                </li>
-              </ul>
-              <Box
-                position={'relative'}
-                zIndex={'1'}
-                w={{ base: '100%', md: '566px' }}
-                bg="white"
-                top={{ base: '0', md: '-48px' }}
-                p="32px 20px"
-                boxShadow={'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'}
+            bg="blue.500"
+            borderRadius="1px"
+          />
+          <TabPanels>
+            <TabPanel mt="1em">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 1.1 }}
               >
-                <Box
-                  mt="1em"
-                  display="flex"
-                  justifyContent="flext-start"
-                  width={{ base: '100%', md: '530px' }}
-                  gap="4px"
+                <motion.div
+                  initial={{ y: '200vh' }}
+                  animate={{ y: 0 }}
+                  transition={{ delay: 1.1, duration: 1.1 }}
                 >
-                  <FormControl
-                    variant="floating"
-                    id="first-name"
-                    isRequired
-                    fontFamily={'Mulish'}
-                  >
-                    <Button
-                      bg="#ebebeb"
-                      w={{ base: '100%', md: '259px' }}
-                      border={
-                        initState?.coverageType === 'Single Trip'
-                          ? '2px solid #065BAA'
-                          : ''
-                      }
-                      h="48px"
-                      aria-label="Search database"
-                      color={
-                        initState?.coverageType === 'Single Trip'
-                          ? '#065BAA'
-                          : '#231F20'
-                      }
-                      _hover={{
-                        bg: '#ebebeb',
-                      }}
-                      onClick={() => handleTypeTrip('Single Trip')}
+                  <Box position={'relative'} w={{ base: '100%' }}>
+                    <ul className="slideshow">
+                      <li>
+                        <span className="img-bg-slide">Image 01</span>
+                      </li>
+                      <li>
+                        <span className="img-bg-slide">Image 02</span>
+                      </li>
+                    </ul>
+                    <Box
+                      position={'relative'}
+                      zIndex={'1'}
+                      w={{ base: '100%', md: '566px' }}
+                      bg="white"
+                      top={{ base: '0', md: '-48px' }}
+                      p="32px 20px"
+                      boxShadow={'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'}
                     >
-                      Single Trip
-                    </Button>
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      fontFamily={'Mulish'}
-                      style={{
-                        transform: 'translate(-12px, -40px) scale(0.75)',
-                        fontSize: '18px',
-                        zIndex: '0',
-                      }}
-                    >
-                      Select Coverage Type
-                    </FormLabel>
-                  </FormControl>
-                  <FormControl
-                    variant="floating"
-                    id="first-name"
-                    isRequired
-                    fontFamily={'Mulish'}
-                  >
-                    <Button
-                      bg="#ebebeb"
-                      border={
-                        initState?.coverageType === 'Anual Trip'
-                          ? '2px solid #065BAA'
-                          : ''
-                      }
-                      w={{ base: '100%', md: '259px' }}
-                      h="48px"
-                      aria-label="Search database"
-                      color={
-                        initState?.coverageType === 'Anual Trip'
-                          ? '#065BAA'
-                          : '#231F20'
-                      }
-                      _hover={{
-                        bg: '#ebebeb',
-                      }}
-                      onClick={() => handleTypeTrip('Anual Trip')}
-                    >
-                      Annual Trip
-                    </Button>
-                    {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"14px" }}>Select Coverage Type</FormLabel> */}
-                  </FormControl>
-                </Box>
-                <Box>
-                  <FormControl
-                    variant="floating"
-                    id="first-name"
-                    isRequired
-                    fontFamily={'Mulish'}
-                  >
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      fontFamily={'Mulish'}
-                      style={{
-                        transform: 'translate(-12px, -40px) scale(0.75)',
-                        fontSize: '18px',
-                        zIndex: '0',
-                      }}
-                    >
-                      Select Travellers Type
-                    </FormLabel>
-                  </FormControl>
-                  <Box
-                    display="flex"
-                    justifyContent="flext-start"
-                    width={{ base: '100%', md: '530px' }}
-                    mt="3em"
-                    gap="4px"
-                  >
-                    {/* <Box>
-                                    <label>Select Travellers Type</label>
-                                </Box> */}
-                    <FormControl
-                      variant="floating"
-                      id="first-name"
-                      isRequired
-                      fontFamily={'Mulish'}
-                    >
-                      <Button
-                        bg="#ebebeb"
-                        w={{ base: '100%', md: '168px' }}
-                        h="48px"
-                        aria-label="Search database"
-                        border={
-                          initState?.travellerType === 'Individual'
-                            ? '2px solid #065BAA'
-                            : ''
-                        }
-                        color={
-                          initState?.travellerType === 'Individual'
-                            ? '#065BAA'
-                            : '#231F20'
-                        }
-                        _hover={{
-                          bg: '#ebebeb',
-                        }}
-                        onClick={() => handleTravellerType('Individual')}
+                      <Box
+                        mt="1em"
+                        display="flex"
+                        justifyContent="flext-start"
+                        width={{ base: '100%', md: '530px' }}
+                        gap="4px"
                       >
-                        Individual(s)
-                      </Button>
-                      {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"18px" }}>Select Travellers Type</FormLabel> */}
-                    </FormControl>
-                    <FormControl
-                      variant="floating"
-                      id="first-name"
-                      isRequired
-                      fontFamily={'Mulish'}
-                    >
-                      <Button
-                        bg="#ebebeb"
-                        w={{ base: '100%', md: '168px' }}
-                        h="48px"
-                        aria-label="Search database"
-                        _hover={{
-                          bg: '#ebebeb',
-                        }}
-                        border={
-                          initState?.travellerType === 'Group'
-                            ? '2px solid #065BAA'
-                            : ''
-                        }
-                        color={
-                          initState?.travellerType === 'Group'
-                            ? '#065BAA'
-                            : '#231F20'
-                        }
-                        onClick={() => handleTravellerType('Group')}
-                      >
-                        Group
-                      </Button>
-                      {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"14px" }}>Select Coverage Type</FormLabel> */}
-                    </FormControl>
-                    <FormControl
-                      variant="floating"
-                      id="first-name"
-                      isRequired
-                      fontFamily={'Mulish'}
-                    >
-                      <Button
-                        bg="#ebebeb"
-                        w={{ base: '100%', md: '168px' }}
-                        h="48px"
-                        aria-label="Search database"
-                        border={
-                          initState?.travellerType === 'Family'
-                            ? '2px solid #065BAA'
-                            : ''
-                        }
-                        color={
-                          initState?.travellerType === 'Family'
-                            ? '#065BAA'
-                            : '#231F20'
-                        }
-                        _hover={{
-                          bg: '#ebebeb',
-                        }}
-                        onClick={() => handleTravellerType('Family')}
-                      >
-                        Family
-                      </Button>
-                      {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"14px" }}>Select Coverage Type</FormLabel> */}
-                    </FormControl>
-                  </Box>
-                </Box>
-                <Box
-                  mt="1em"
-                  width={{ base: '100%', md: '100%' }}
-                  position={'relative'}
-                  display={'flex'}
-                  gap="10px"
-                >
-                  <Box w={{ md: '60%' }}>
-                    <FormControl variant="floating" fontFamily={'Mulish'}>
-                      <Input
-                        min={
-                          initState?.travellerType === 'Family'
-                            ? 1
-                            : initState?.travellerType === 'Group'
-                            ? 2
-                            : 1
-                        }
-                        max={
-                          initState?.travellerType === 'Family'
-                            ? 2
-                            : initState?.travellerType === 'Group'
-                            ? 100
-                            : 100
-                        }
-                        type="number"
-                        w="100%"
-                        h="48px"
-                        value={initState?.adult}
-                        bg="#ebebeb"
-                        borderRadius="5px"
-                        onChange={handleTravellerAdult}
-                      />
-                      <FormLabel
-                        fontSize="12"
-                        pt="1.5"
-                        fontFamily={'Mulish'}
-                        style={{
-                          transform: 'translate(29px, 2px) scale(0.75)',
-                          fontSize: '18px',
-                          background: '#ebebeb',
-                          color: '#171923',
-                          zIndex: '0',
-                        }}
-                      >
-                        Adult
-                      </FormLabel>
-                    </FormControl>
-                    {initState?.travellerType === 'Family' && (
-                      <Box>
-                        <Text
-                          fontSize="12"
+                        <FormControl
+                          variant="floating"
+                          id="first-name"
+                          isRequired
                           fontFamily={'Mulish'}
-                          style={{
-                            transform: 'translate(-24px, 5px) scale(0.75)',
-                            fontSize: '14px',
-                            background: 'white',
-                            color: '#171923',
-                            zIndex: '0',
-                            width: '100%',
-                          }}
                         >
-                          max 2 adults.
-                        </Text>
-                      </Box>
-                    )}
-                    {initState?.travellerType === 'Group' && (
-                      <Box pb="20px">
-                        <Text
-                          fontSize="12"
-                          fontFamily={'Mulish'}
-                          style={{
-                            transform: 'translate(-24px, 5px) scale(0.75)',
-                            fontSize: '14px',
-                            background: 'white',
-                            color: '#171923',
-                            zIndex: '0',
-                            width: '100%',
-                          }}
-                        >
-                          min 2 or max 100 adults.
-                        </Text>
-                      </Box>
-                    )}
-                  </Box>
-                  {initState?.travellerType === 'Family' && (
-                    <Box w={{ md: '40%' }}>
-                      <FormControl variant="floating" fontFamily={'Mulish'}>
-                        <Input
-                          type="number"
-                          w="100%"
-                          h="48px"
-                          value={initState?.child}
-                          bg="#ebebeb"
-                          borderRadius="5px"
-                          onChange={handleTravellerChild}
-                        />
-                        <FormLabel
-                          fontSize="12"
-                          pt="1.5"
-                          fontFamily={'Mulish'}
-                          style={{
-                            transform: 'translate(16px, 2px) scale(0.75)',
-                            fontSize: '18px',
-                            background: '#ebebeb',
-                            color: '#171923',
-                            zIndex: '0',
-                          }}
-                        >
-                          Child
-                        </FormLabel>
-                        <Box>
-                          <Text
+                          <Button
+                            bg="#ebebeb"
+                            w={{ base: '100%', md: '259px' }}
+                            border={
+                              initState?.coverageType === 'Single Trip'
+                                ? '2px solid #065BAA'
+                                : ''
+                            }
+                            h="48px"
+                            aria-label="Search database"
+                            color={
+                              initState?.coverageType === 'Single Trip'
+                                ? '#065BAA'
+                                : '#231F20'
+                            }
+                            _hover={{
+                              bg: '#ebebeb',
+                            }}
+                            onClick={() => handleTypeTrip('Single Trip')}
+                          >
+                            Single Trip
+                          </Button>
+                          <FormLabel
                             fontSize="12"
                             pt="1.5"
                             fontFamily={'Mulish'}
                             style={{
-                              transform: 'translate(-15px, -6px) scale(0.75)',
-                              fontSize: '14px',
-                              background: 'white',
-                              color: '#171923',
+                              transform: 'translate(-12px, -40px) scale(0.75)',
+                              fontSize: '18px',
                               zIndex: '0',
-                              width: '100%',
                             }}
                           >
-                            max 23 years old, not married yet and still studying
-                            in university.
-                          </Text>
-                        </Box>
-                      </FormControl>
-                    </Box>
-                  )}
-                </Box>
-
-                {initState?.coverageType === '' ||
-                initState?.coverageType === 'Single Trip' ? (
-                  <Box
-                    mt="2em"
-                    w={{ base: '100%', md: '520px' }}
-                    h={{ sm: '48px' }}
-                  >
-                    <FormControl
-                      variant="floating"
-                      fontFamily={'Mulish'}
-                      isRequired
-                      h="48px"
-                    >
-                      <Select
-                        size="lg"
-                        isMulti
-                        variant="outline"
-                        onChange={handleSelect}
-                        value={initState?.destinationCountry}
-                        isSearchable={true}
-                        styles={{
-                          menuPortal: (provided) => ({ ...provided }),
-                        }}
-                        options={listCountries}
-                      />
-                      <FormLabel
-                        fontSize="12"
-                        pt="1.5"
-                        fontFamily={'Mulish'}
-                        style={{
-                          transform: 'translate(-12px, -40px) scale(0.75)',
-                          fontSize: '18px',
-                          color: '#171923',
-                          zIndex: '0',
-                        }}
-                      >
-                        Select Destination Country
-                      </FormLabel>
-                    </FormControl>
-                  </Box>
-                ) : null}
-                <Box
-                  mt="1em"
-                  position={'relative'}
-                  zIndex={'0'}
-                  display={'flex'}
-                  justifyContent={'flex-start'}
-                  alignItems={'center'}
-                  gap="4px"
-                  width={{ base: '100%', md: '530px' }}
-                >
-                  <Box
-                    mt="1.5em"
-                    h="48px"
-                    width={{ base: '100%', md: '250px' }}
-                  >
-                    <FormControl
-                      mt="10px"
-                      variant="floating"
-                      id="first-name"
-                      isRequired
-                      fontFamily={'Mulish'}
-                    >
-                      <FormLabel
-                        fontSize="12"
-                        pt="1.5"
-                        fontFamily={'Mulish'}
-                        style={{
-                          transform: 'translate(16px, 2px) scale(0.75)',
-                          fontSize: '18px',
-                          background: '#ebebeb',
-                          color: '#171923',
-                        }}
-                      >
-                        Start Date
-                      </FormLabel>
-                      <DatePicker
-                        width="100%"
-                        value={initState?.startDate}
-                        onChange={selectDate}
-                        inputPlaceholder="Select a date" // placeholder
-                        formatInputText={formatInputValue}
-                        inputClassName="my-custom-inputs" // custom class
-                        renderInput={renderCustomInput}
-                        wrapperClassName={'calendarClassName'}
-                        shouldHighlightWeekends
-                        minimumDate={startDate}
-                        // maximumDate={endDateObj}
-                      />
-                    </FormControl>
-                  </Box>
-                  {initState.coverageType === '' ||
-                  initState.coverageType === 'Single Trip' ? (
-                    <Box
-                      width={{ base: '100%', md: '250px' }}
-                      mt="1.5em"
-                      h="48px"
-                    >
-                      <FormControl
-                        mt="10px"
-                        variant="floating"
-                        id="first-name"
-                        isRequired
-                        fontFamily={'Mulish'}
-                      >
-                        <FormLabel
-                          fontSize="12"
-                          pt="1.5"
+                            Select Coverage Type
+                          </FormLabel>
+                        </FormControl>
+                        <FormControl
+                          variant="floating"
+                          id="first-name"
+                          isRequired
                           fontFamily={'Mulish'}
-                          style={{
-                            transform: 'translate(16px, 2px) scale(0.75)',
-                            fontSize: '18px',
-                            background: '#ebebeb',
-                            color: '#171923',
-                          }}
                         >
-                          End Date
-                        </FormLabel>
-                        <DatePicker
-                          value={initState?.endDate}
-                          onChange={selectEndDate}
-                          inputPlaceholder="Select a date" // placeholder
-                          formatInputText={formatInputValues}
-                          inputClassName="my-custom-inputs" // custom class
-                          renderInput={renderCustomInputs}
-                          shouldHighlightWeekends
-                          wrapperClassName={'calendarClassName'}
-                          minimumDate={startToEndDate}
-                          maximumDate={endDateObj}
-                        />
-                      </FormControl>
-                    </Box>
-                  ) : (
-                    <Box
-                      width={{ base: '100%', md: '250px' }}
-                      mt="1.5em"
-                      h="48px"
-                    >
-                      <FormControl
-                        mt="10px"
-                        variant="floating"
-                        id="first-name"
-                        isRequired
-                        fontFamily={'Mulish'}
-                      >
-                        <FormLabel
-                          fontSize="12"
-                          pt="1.5"
+                          <Button
+                            bg="#ebebeb"
+                            border={
+                              initState?.coverageType === 'Anual Trip'
+                                ? '2px solid #065BAA'
+                                : ''
+                            }
+                            w={{ base: '100%', md: '259px' }}
+                            h="48px"
+                            aria-label="Search database"
+                            color={
+                              initState?.coverageType === 'Anual Trip'
+                                ? '#065BAA'
+                                : '#231F20'
+                            }
+                            _hover={{
+                              bg: '#ebebeb',
+                            }}
+                            onClick={() => handleTypeTrip('Anual Trip')}
+                          >
+                            Annual Trip
+                          </Button>
+                          {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"14px" }}>Select Coverage Type</FormLabel> */}
+                        </FormControl>
+                      </Box>
+                      <Box>
+                        <FormControl
+                          variant="floating"
+                          id="first-name"
+                          isRequired
                           fontFamily={'Mulish'}
-                          style={{
-                            transform: 'translate(-11px, -32px) scale(0.75)',
-                            fontSize: '15px',
-                            background: 'white',
-                            color: '#171923',
-                          }}
                         >
-                          End Date
-                        </FormLabel>
+                          <FormLabel
+                            fontSize="12"
+                            pt="1.5"
+                            fontFamily={'Mulish'}
+                            style={{
+                              transform: 'translate(-12px, -40px) scale(0.75)',
+                              fontSize: '18px',
+                              zIndex: '0',
+                            }}
+                          >
+                            Select Travellers Type
+                          </FormLabel>
+                        </FormControl>
                         <Box
-                          style={{
-                            background: 'white',
-                            padding: '0.7em',
-                          }}
+                          display="flex"
+                          justifyContent="flext-start"
+                          width={{ base: '100%', md: '530px' }}
+                          mt="3em"
+                          gap="4px"
                         >
-                          {`${initState?.endDate?.day} ${getMonthName(
-                            initState?.endDate?.month
-                          )} ${initState?.endDate?.year}`}
+                          {/* <Box>
+                                    <label>Select Travellers Type</label>
+                                </Box> */}
+                          <FormControl
+                            variant="floating"
+                            id="first-name"
+                            isRequired
+                            fontFamily={'Mulish'}
+                          >
+                            <Button
+                              bg="#ebebeb"
+                              w={{ base: '100%', md: '168px' }}
+                              h="48px"
+                              aria-label="Search database"
+                              border={
+                                initState?.travellerType === 'Individual'
+                                  ? '2px solid #065BAA'
+                                  : ''
+                              }
+                              color={
+                                initState?.travellerType === 'Individual'
+                                  ? '#065BAA'
+                                  : '#231F20'
+                              }
+                              _hover={{
+                                bg: '#ebebeb',
+                              }}
+                              onClick={() => handleTravellerType('Individual')}
+                            >
+                              Individual(s)
+                            </Button>
+                            {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"18px" }}>Select Travellers Type</FormLabel> */}
+                          </FormControl>
+                          <FormControl
+                            variant="floating"
+                            id="first-name"
+                            isRequired
+                            fontFamily={'Mulish'}
+                          >
+                            <Button
+                              bg="#ebebeb"
+                              w={{ base: '100%', md: '168px' }}
+                              h="48px"
+                              aria-label="Search database"
+                              _hover={{
+                                bg: '#ebebeb',
+                              }}
+                              border={
+                                initState?.travellerType === 'Group'
+                                  ? '2px solid #065BAA'
+                                  : ''
+                              }
+                              color={
+                                initState?.travellerType === 'Group'
+                                  ? '#065BAA'
+                                  : '#231F20'
+                              }
+                              onClick={() => handleTravellerType('Group')}
+                            >
+                              Group
+                            </Button>
+                            {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"14px" }}>Select Coverage Type</FormLabel> */}
+                          </FormControl>
+                          <FormControl
+                            variant="floating"
+                            id="first-name"
+                            isRequired
+                            fontFamily={'Mulish'}
+                          >
+                            <Button
+                              bg="#ebebeb"
+                              w={{ base: '100%', md: '168px' }}
+                              h="48px"
+                              aria-label="Search database"
+                              border={
+                                initState?.travellerType === 'Family'
+                                  ? '2px solid #065BAA'
+                                  : ''
+                              }
+                              color={
+                                initState?.travellerType === 'Family'
+                                  ? '#065BAA'
+                                  : '#231F20'
+                              }
+                              _hover={{
+                                bg: '#ebebeb',
+                              }}
+                              onClick={() => handleTravellerType('Family')}
+                            >
+                              Family
+                            </Button>
+                            {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"14px" }}>Select Coverage Type</FormLabel> */}
+                          </FormControl>
                         </Box>
-                      </FormControl>
-                    </Box>
-                  )}
-                </Box>
-                {hasCompletedAllSteps !== undefined && (
-                  <Box>
-                    <Heading fontSize="xl" textAlign={'center'}>
-                      Woohoo! All steps completed! 🎉
-                    </Heading>
-                  </Box>
-                )}
-                <Flex width="100%" justify="flex-start" gap={6} mt="2em">
-                  {hasCompletedAllSteps !== undefined ? (
-                    <></>
-                  ) : (
-                    <>
-                      {initState?.coverageType === 'Single Trip' ? (
-                        <Button
-                          size="sm"
-                          onClick={handleNext}
-                          w={{ base: '100%', md: '270px' }}
-                          h="48px"
-                          isDisabled={
-                            initState?.coverageType === '' ||
-                            initState?.travellerType === '' ||
-                            initState?.destinationCountry?.length === 0 ||
-                            initState?.startDate === null ||
-                            initState?.endDate === null
-                              ? true
-                              : false
-                          }
+                      </Box>
+                      <Box
+                        mt="1em"
+                        width={{ base: '100%', md: '100%' }}
+                        position={'relative'}
+                        display={'flex'}
+                        gap="10px"
+                      >
+                        <Box w={{ md: '60%' }}>
+                          <FormControl variant="floating" fontFamily={'Mulish'}>
+                            <Input
+                              min={
+                                initState?.travellerType === 'Family'
+                                  ? 1
+                                  : initState?.travellerType === 'Group'
+                                  ? 2
+                                  : 1
+                              }
+                              max={
+                                initState?.travellerType === 'Family'
+                                  ? 2
+                                  : initState?.travellerType === 'Group'
+                                  ? 100
+                                  : 100
+                              }
+                              type="number"
+                              w="100%"
+                              h="48px"
+                              value={initState?.adult}
+                              bg="#ebebeb"
+                              borderRadius="5px"
+                              onChange={handleTravellerAdult}
+                            />
+                            <FormLabel
+                              fontSize="12"
+                              pt="1.5"
+                              fontFamily={'Mulish'}
+                              style={{
+                                transform: 'translate(29px, 2px) scale(0.75)',
+                                fontSize: '18px',
+                                background: '#ebebeb',
+                                color: '#171923',
+                                zIndex: '0',
+                              }}
+                            >
+                              Adult
+                            </FormLabel>
+                          </FormControl>
+                          {initState?.travellerType === 'Family' && (
+                            <Box>
+                              <Text
+                                fontSize="12"
+                                fontFamily={'Mulish'}
+                                style={{
+                                  transform:
+                                    'translate(-24px, 5px) scale(0.75)',
+                                  fontSize: '14px',
+                                  background: 'white',
+                                  color: '#171923',
+                                  zIndex: '0',
+                                  width: '100%',
+                                }}
+                              >
+                                max 2 adults.
+                              </Text>
+                            </Box>
+                          )}
+                          {initState?.travellerType === 'Group' && (
+                            <Box pb="20px">
+                              <Text
+                                fontSize="12"
+                                fontFamily={'Mulish'}
+                                style={{
+                                  transform:
+                                    'translate(-24px, 5px) scale(0.75)',
+                                  fontSize: '14px',
+                                  background: 'white',
+                                  color: '#171923',
+                                  zIndex: '0',
+                                  width: '100%',
+                                }}
+                              >
+                                min 2 or max 100 adults.
+                              </Text>
+                            </Box>
+                          )}
+                        </Box>
+                        {initState?.travellerType === 'Family' && (
+                          <Box w={{ md: '40%' }}>
+                            <FormControl
+                              variant="floating"
+                              fontFamily={'Mulish'}
+                            >
+                              <Input
+                                type="number"
+                                w="100%"
+                                h="48px"
+                                value={initState?.child}
+                                bg="#ebebeb"
+                                borderRadius="5px"
+                                onChange={handleTravellerChild}
+                              />
+                              <FormLabel
+                                fontSize="12"
+                                pt="1.5"
+                                fontFamily={'Mulish'}
+                                style={{
+                                  transform: 'translate(16px, 2px) scale(0.75)',
+                                  fontSize: '18px',
+                                  background: '#ebebeb',
+                                  color: '#171923',
+                                  zIndex: '0',
+                                }}
+                              >
+                                Child
+                              </FormLabel>
+                              <Box>
+                                <Text
+                                  fontSize="12"
+                                  pt="1.5"
+                                  fontFamily={'Mulish'}
+                                  style={{
+                                    transform:
+                                      'translate(-15px, -6px) scale(0.75)',
+                                    fontSize: '14px',
+                                    background: 'white',
+                                    color: '#171923',
+                                    zIndex: '0',
+                                    width: '100%',
+                                  }}
+                                >
+                                  max 23 years old, not married yet and still
+                                  studying in university.
+                                </Text>
+                              </Box>
+                            </FormControl>
+                          </Box>
+                        )}
+                      </Box>
+
+                      {initState?.coverageType === '' ||
+                      initState?.coverageType === 'Single Trip' ? (
+                        <Box
+                          mt="2em"
+                          w={{ base: '100%', md: '520px' }}
+                          h={{ sm: '48px' }}
                         >
-                          {isLastStep ? 'Finish' : 'Continue'}
-                        </Button>
-                      ) : (
-                        <Button
-                          size="sm"
-                          onClick={handleNext}
-                          w={{ base: '100%', md: '270px' }}
+                          <FormControl
+                            variant="floating"
+                            fontFamily={'Mulish'}
+                            isRequired
+                            h="48px"
+                          >
+                            <Select
+                              size="lg"
+                              isMulti
+                              variant="outline"
+                              onChange={handleSelect}
+                              value={initState?.destinationCountry}
+                              isSearchable={true}
+                              styles={{
+                                menuPortal: (provided) => ({ ...provided }),
+                              }}
+                              options={listCountries}
+                            />
+                            <FormLabel
+                              fontSize="12"
+                              pt="1.5"
+                              fontFamily={'Mulish'}
+                              style={{
+                                transform:
+                                  'translate(-12px, -40px) scale(0.75)',
+                                fontSize: '18px',
+                                color: '#171923',
+                                zIndex: '0',
+                              }}
+                            >
+                              Select Destination Country
+                            </FormLabel>
+                          </FormControl>
+                        </Box>
+                      ) : null}
+                      <Box
+                        mt="1em"
+                        position={'relative'}
+                        zIndex={'0'}
+                        display={'flex'}
+                        justifyContent={'flex-start'}
+                        alignItems={'center'}
+                        gap="4px"
+                        width={{ base: '100%', md: '530px' }}
+                      >
+                        <Box
+                          mt="1.5em"
                           h="48px"
-                          isDisabled={
-                            initState?.coverageType === '' ||
-                            initState?.travellerType === '' ||
-                            initState?.startDate === null ||
-                            initState?.endDate === null
-                              ? true
-                              : false
-                          }
+                          width={{ base: '100%', md: '250px' }}
                         >
-                          {isLastStep ? 'Finish' : 'Continue'}
-                        </Button>
+                          <FormControl
+                            mt="10px"
+                            variant="floating"
+                            id="first-name"
+                            isRequired
+                            fontFamily={'Mulish'}
+                          >
+                            <FormLabel
+                              fontSize="12"
+                              pt="1.5"
+                              fontFamily={'Mulish'}
+                              style={{
+                                transform: 'translate(16px, 2px) scale(0.75)',
+                                fontSize: '18px',
+                                background: '#ebebeb',
+                                color: '#171923',
+                              }}
+                            >
+                              Start Date
+                            </FormLabel>
+                            <DatePicker
+                              width="100%"
+                              value={initState?.startDate}
+                              onChange={selectDate}
+                              inputPlaceholder="Select a date" // placeholder
+                              formatInputText={formatInputValue}
+                              inputClassName="my-custom-inputs" // custom class
+                              renderInput={renderCustomInput}
+                              wrapperClassName={'calendarClassName'}
+                              shouldHighlightWeekends
+                              minimumDate={startDate}
+                              // maximumDate={endDateObj}
+                            />
+                          </FormControl>
+                        </Box>
+                        {initState.coverageType === '' ||
+                        initState.coverageType === 'Single Trip' ? (
+                          <Box
+                            width={{ base: '100%', md: '250px' }}
+                            mt="1.5em"
+                            h="48px"
+                          >
+                            <FormControl
+                              mt="10px"
+                              variant="floating"
+                              id="first-name"
+                              isRequired
+                              fontFamily={'Mulish'}
+                            >
+                              <FormLabel
+                                fontSize="12"
+                                pt="1.5"
+                                fontFamily={'Mulish'}
+                                style={{
+                                  transform: 'translate(16px, 2px) scale(0.75)',
+                                  fontSize: '18px',
+                                  background: '#ebebeb',
+                                  color: '#171923',
+                                }}
+                              >
+                                End Date
+                              </FormLabel>
+                              <DatePicker
+                                value={initState?.endDate}
+                                onChange={selectEndDate}
+                                inputPlaceholder="Select a date" // placeholder
+                                formatInputText={formatInputValues}
+                                inputClassName="my-custom-inputs" // custom class
+                                renderInput={renderCustomInputs}
+                                shouldHighlightWeekends
+                                wrapperClassName={'calendarClassName'}
+                                minimumDate={startToEndDate}
+                                maximumDate={endDateObj}
+                              />
+                            </FormControl>
+                          </Box>
+                        ) : (
+                          <Box
+                            width={{ base: '100%', md: '250px' }}
+                            mt="1.5em"
+                            h="48px"
+                          >
+                            <FormControl
+                              mt="10px"
+                              variant="floating"
+                              id="first-name"
+                              isRequired
+                              fontFamily={'Mulish'}
+                            >
+                              <FormLabel
+                                fontSize="12"
+                                pt="1.5"
+                                fontFamily={'Mulish'}
+                                style={{
+                                  transform:
+                                    'translate(-11px, -32px) scale(0.75)',
+                                  fontSize: '15px',
+                                  background: 'white',
+                                  color: '#171923',
+                                }}
+                              >
+                                End Date
+                              </FormLabel>
+                              <Box
+                                style={{
+                                  background: 'white',
+                                  padding: '0.7em',
+                                }}
+                              >
+                                {`${initState?.endDate?.day} ${getMonthName(
+                                  initState?.endDate?.month
+                                )} ${initState?.endDate?.year}`}
+                              </Box>
+                            </FormControl>
+                          </Box>
+                        )}
+                      </Box>
+                      {hasCompletedAllSteps !== undefined && (
+                        <Box>
+                          <Heading fontSize="xl" textAlign={'center'}>
+                            Woohoo! All steps completed! 🎉
+                          </Heading>
+                        </Box>
                       )}
-                    </>
-                  )}
-                </Flex>
-              </Box>
-            </Box>
-          </TabPanel>
-          <TabPanel>
-            <p>two!</p>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </Box>
+                      <Flex width="100%" justify="flex-start" gap={6} mt="2em">
+                        {hasCompletedAllSteps !== undefined ? (
+                          <></>
+                        ) : (
+                          <>
+                            {initState?.coverageType === 'Single Trip' ? (
+                              <Button
+                                size="sm"
+                                onClick={handleNext}
+                                w={{ base: '100%', md: '270px' }}
+                                h="48px"
+                                isDisabled={
+                                  initState?.coverageType === '' ||
+                                  initState?.travellerType === '' ||
+                                  initState?.destinationCountry?.length === 0 ||
+                                  initState?.startDate === null ||
+                                  initState?.endDate === null
+                                    ? true
+                                    : false
+                                }
+                              >
+                                {isLastStep ? 'Finish' : 'Continue'}
+                              </Button>
+                            ) : (
+                              <Button
+                                size="sm"
+                                onClick={handleNext}
+                                w={{ base: '100%', md: '270px' }}
+                                h="48px"
+                                isDisabled={
+                                  initState?.coverageType === '' ||
+                                  initState?.travellerType === '' ||
+                                  initState?.startDate === null ||
+                                  initState?.endDate === null
+                                    ? true
+                                    : false
+                                }
+                              >
+                                {isLastStep ? 'Finish' : 'Continue'}
+                              </Button>
+                            )}
+                          </>
+                        )}
+                      </Flex>
+                    </Box>
+                  </Box>
+                </motion.div>
+              </motion.div>
+            </TabPanel>
+            <TabPanel>
+              <p>two!</p>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Box>
+    </motion.div>
   );
 };
 export default Form1;

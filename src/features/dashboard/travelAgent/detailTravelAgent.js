@@ -976,7 +976,11 @@ const DetailMasterUser = () => {
     content = <PageLoader loading={isLoading} />;
   } else if (listTravell) {
     content = (
-      <Box>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 1.1 }}
+      >
         <Box
           display={'flex'}
           justifyContent={'space-between'}
@@ -1538,7 +1542,7 @@ const DetailMasterUser = () => {
                     </select> */}
           </Box>
         </Box>
-      </Box>
+      </motion.div>
     );
   } else if (isError) {
     content = <p>{JSON.stringify(error)}</p>;

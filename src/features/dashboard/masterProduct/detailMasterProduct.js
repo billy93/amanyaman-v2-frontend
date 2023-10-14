@@ -46,6 +46,7 @@ import 'react-calendar/dist/Calendar.css';
 import UseCustomToast from '../../../components/UseCustomToast';
 import { BsFillPencilFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -348,7 +349,11 @@ const Tables = ({
   };
   console.log('data table', rows);
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 1.5, duration: 1.5 }}
+    >
       <Box
         bg="white"
         overflow={'scroll'}
@@ -574,7 +579,7 @@ const Tables = ({
           <span></span>
         </Box>
       </Box>
-    </>
+    </motion.div>
   );
 };
 
@@ -764,7 +769,11 @@ const DetailMasterUser = () => {
     content = <PageLoader loading={isLoading} />;
   } else if (user !== null || listTravell) {
     content = (
-      <Box>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 1.1 }}
+      >
         <Box
           display={'flex'}
           justifyContent={'space-between'}
@@ -1387,7 +1396,7 @@ const DetailMasterUser = () => {
             />
           </Styles>
         </Box>
-      </Box>
+      </motion.div>
     );
   } else if (isError) {
     content = <p>{JSON.stringify(error)}</p>;

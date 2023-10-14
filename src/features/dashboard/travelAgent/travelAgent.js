@@ -974,273 +974,285 @@ const MasterUser = () => {
     content = <PageLoader loading={isLoading} />;
   } else if (listUserAccount) {
     content = (
-      <Box pl="2em" pr="2em" mt="6em">
-        <Box
-          display={'flex'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-          mb={showFilter ? '1.5em' : '2em'}
-        >
-          <Heading as={'h6'} size={'sm'}>
-            Travel Agent
-          </Heading>
-          <Stack direction="row" spacing={4} mr="0">
-            <Button
-              leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
-              colorScheme="#231F20"
-              variant="outline"
-              size={'sm'}
-              color={showFilter ? '#065BAA' : ''}
-              onClick={showFilterBtn}
-            >
-              Apply Filter
-            </Button>
-            {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 1.1 }}
+      >
+        <Box pl="2em" pr="2em" mt="6em">
+          <Box
+            display={'flex'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            mb={showFilter ? '1.5em' : '2em'}
+          >
+            <Heading as={'h6'} size={'sm'}>
+              Travel Agent
+            </Heading>
+            <Stack direction="row" spacing={4} mr="0">
+              <Button
+                leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
+                colorScheme="#231F20"
+                variant="outline"
+                size={'sm'}
+                color={showFilter ? '#065BAA' : ''}
+                onClick={showFilterBtn}
+              >
+                Apply Filter
+              </Button>
+              {/* <Button leftIcon={<MdLogin />} colorScheme='#231F20' variant='outline' size={'sm'} color="#231F20">
                         Export 
                     </Button> */}
-            <CustomModal
-              showModalButtonText="Import"
-              modalHeader="Import Excel File"
-              modalBody="Import Excel File"
-            />
-            <Button
-              variant="ClaimBtn"
-              leftIcon={<AiOutlinePlusCircle />}
-              colorScheme="#231F20"
-              size={'sm'}
-              color="white"
-              onClick={handleAddUser}
-            >
-              Add Agent
-            </Button>
-          </Stack>
-        </Box>
-        {showFilter && (
-          <Box
-            w={{ base: '100%', md: '50%' }}
-            display={'flex'}
-            justifyContent={'space-around'}
-            alignItems={'center'}
-            gap="4px"
-            mr="2em"
-            mb="1em"
-          >
-            <Input
-              variant={'custom'}
-              value={searchAgent}
-              onChange={handleSearchAgentName}
-              name="travelAgentName"
-              placeholder={'Search by agentname'}
-              bg="#ebebeb"
-              borderRadius={'5px'}
-              textTransform={'uppercase'}
-              sx={{
-                '&::placeholder': {
-                  color: 'gray',
-                  fontStyle: 'italic',
-                  fontSize: '12px',
-                },
-              }}
-              _placeholder={{ textTransform: 'lowercase' }}
-            />
-            <Input
-              variant={'custom'}
-              value={searchCustCode}
-              onChange={handleSearchCustCode}
-              name="custCode"
-              placeholder={'Search by cust code'}
-              bg="#ebebeb"
-              borderRadius={'5px'}
-              textTransform={'uppercase'}
-              sx={{
-                '&::placeholder': {
-                  color: 'gray',
-                  fontStyle: 'italic',
-                  fontSize: '12px',
-                },
-              }}
-              _placeholder={{ textTransform: 'lowercase' }}
-            />
+              <CustomModal
+                showModalButtonText="Import"
+                modalHeader="Import Excel File"
+                modalBody="Import Excel File"
+              />
+              <Button
+                variant="ClaimBtn"
+                leftIcon={<AiOutlinePlusCircle />}
+                colorScheme="#231F20"
+                size={'sm'}
+                color="white"
+                onClick={handleAddUser}
+              >
+                Add Agent
+              </Button>
+            </Stack>
           </Box>
-        )}
-        <Styles>
-          {
-            <Tables
-              columns={columns}
-              data={listUserAccount}
-              fetchData={fetchData}
-              loading={loading}
-              load={load}
-              pageCount={pageCount}
-              setPageCount={setPageCount}
-              totalCount={totalCount}
-              page={page}
-              size={size}
-            />
-          }
-        </Styles>
-        <Box
-          display={'flex'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-          w="100%"
-          mt="15px"
-        >
-          <Box>
+          {showFilter && (
+            <motion.div
+              initial={{ y: -55, zIndex: 999 }}
+              animate={{ y: 0 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+            >
+              <Box
+                w={{ base: '100%', md: '50%' }}
+                display={'flex'}
+                justifyContent={'space-around'}
+                alignItems={'center'}
+                gap="4px"
+                mr="2em"
+                mb="1em"
+              >
+                <Input
+                  variant={'custom'}
+                  value={searchAgent}
+                  onChange={handleSearchAgentName}
+                  name="travelAgentName"
+                  placeholder={'Search by agentname'}
+                  bg="#ebebeb"
+                  borderRadius={'5px'}
+                  textTransform={'uppercase'}
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
+                  }}
+                  _placeholder={{ textTransform: 'lowercase' }}
+                />
+                <Input
+                  variant={'custom'}
+                  value={searchCustCode}
+                  onChange={handleSearchCustCode}
+                  name="custCode"
+                  placeholder={'Search by cust code'}
+                  bg="#ebebeb"
+                  borderRadius={'5px'}
+                  textTransform={'uppercase'}
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
+                  }}
+                  _placeholder={{ textTransform: 'lowercase' }}
+                />
+              </Box>
+            </motion.div>
+          )}
+          <Styles>
+            {
+              <Tables
+                columns={columns}
+                data={listUserAccount}
+                fetchData={fetchData}
+                loading={loading}
+                load={load}
+                pageCount={pageCount}
+                setPageCount={setPageCount}
+                totalCount={totalCount}
+                page={page}
+                size={size}
+              />
+            }
+          </Styles>
+          <Box
+            display={'flex'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            w="100%"
+            mt="15px"
+          >
             <Box>
-              {loading || isFetching ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td
-                  colSpan="10000"
-                  style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              <Box>
+                {loading || isFetching ? (
+                  // Use our custom loading state to show a loading indicator
+                  <td colSpan="10000">Loading...</td>
+                ) : (
+                  <td
+                    colSpan="10000"
+                    style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+                  >
+                    Showing {size} of {totalCount} results
+                  </td>
+                )}
+              </Box>
+              <Box>
+                <Box
+                  display={'flex'}
+                  justifyContent={'start'}
+                  alignItems={'center'}
                 >
-                  Showing {size} of {totalCount} results
-                </td>
-              )}
+                  <label
+                    htmlFor="select"
+                    style={{
+                      paddingRight: '5px',
+                      fontSize: '12px',
+                      fontFamily: 'Mulish',
+                    }}
+                  >
+                    Per page
+                  </label>
+                  <Select
+                    style={{
+                      fontSize: '12px',
+                      fontStyle: 'italic',
+                      height: '30px',
+                    }}
+                    id="pageSize"
+                    w="100px"
+                    value={size}
+                    onChange={(e) => {
+                      setSize(Number(e.target.value));
+                      gotoPage(0);
+                    }}
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                    {/* Add more options as needed */}
+                  </Select>
+                </Box>
+              </Box>
             </Box>
             <Box>
-              <Box
-                display={'flex'}
-                justifyContent={'start'}
-                alignItems={'center'}
-              >
-                <label
-                  htmlFor="select"
-                  style={{
-                    paddingRight: '5px',
-                    fontSize: '12px',
-                    fontFamily: 'Mulish',
+              <Box display={'flex'} alignItems={'center'}>
+                <Button
+                  isDisabled={page === 0 ? true : false}
+                  onClick={goToPageFirst}
+                  bg="white"
+                  border={'none'}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
                   }}
                 >
-                  Per page
-                </label>
-                <Select
-                  style={{
-                    fontSize: '12px',
-                    fontStyle: 'italic',
-                    height: '30px',
-                  }}
-                  id="pageSize"
-                  w="100px"
-                  value={size}
-                  onChange={(e) => {
-                    setSize(Number(e.target.value));
-                    gotoPage(0);
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="2px"
+                  >
+                    {'<<'}
+                  </Text>
+                </Button>
+                <Button
+                  isDisabled={page === 0 ? true : false}
+                  onClick={previousPage}
+                  bg="white"
+                  border={'none'}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
                   }}
                 >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                  {/* Add more options as needed */}
-                </Select>
+                  <BiSkipPreviousCircle size="25px" color="black" />
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    {'<'}
+                  </Text>
+                </Button>
+                {' | '}
+                <Button
+                  isDisabled={Math.ceil(totalCount / size) === page + 1}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
+                  }}
+                  onClick={handleNexts}
+                  bg="white"
+                  border={'none'}
+                >
+                  <BiSkipNextCircle size="25px" color="black" />
+                  <Text
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    {'>'}
+                  </Text>
+                </Button>{' '}
+                <Button
+                  isDisabled={pageCount === page ? true : false}
+                  onClick={goToPageLast}
+                  bg="white"
+                  border={'none'}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
+                  }}
+                >
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    {'>>'}
+                  </Text>
+                </Button>
+                <Text as="p" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                  Page{' '}
+                </Text>
+                <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                  {page + 1} of {pageCount}
+                </Text>{' '}
               </Box>
             </Box>
           </Box>
-          <Box>
-            <Box display={'flex'} alignItems={'center'}>
-              <Button
-                isDisabled={page === 0 ? true : false}
-                onClick={goToPageFirst}
-                bg="white"
-                border={'none'}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-              >
-                <Text
-                  as="p"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="2px"
-                >
-                  {'<<'}
-                </Text>
-              </Button>
-              <Button
-                isDisabled={page === 0 ? true : false}
-                onClick={previousPage}
-                bg="white"
-                border={'none'}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-              >
-                <BiSkipPreviousCircle size="25px" color="black" />
-                <Text
-                  as="p"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
-                >
-                  {'<'}
-                </Text>
-              </Button>
-              {' | '}
-              <Button
-                isDisabled={Math.ceil(totalCount / size) === page + 1}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-                onClick={handleNexts}
-                bg="white"
-                border={'none'}
-              >
-                <BiSkipNextCircle size="25px" color="black" />
-                <Text
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
-                >
-                  {'>'}
-                </Text>
-              </Button>{' '}
-              <Button
-                isDisabled={pageCount === page ? true : false}
-                onClick={goToPageLast}
-                bg="white"
-                border={'none'}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-              >
-                <Text
-                  as="p"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
-                >
-                  {'>>'}
-                </Text>
-              </Button>
-              <Text as="p" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
-                Page{' '}
-              </Text>
-              <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
-                {page + 1} of {pageCount}
-              </Text>{' '}
-            </Box>
-          </Box>
         </Box>
-      </Box>
+      </motion.div>
     );
   } else if (isError) {
     content = <p>{JSON.stringify(error)}</p>;

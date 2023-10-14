@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import PageLoader from '../../../components/pageLoader';
+import { motion } from 'framer-motion';
 import { Navigate, useNavigate, useParams, NavLink } from 'react-router-dom';
 import {
   Text,
@@ -381,7 +382,12 @@ const PolicyDetail = () => {
     );
   } else if (isSuccess || isSuccessDownload || isSuccessView) {
     content = (
-      <Box mt="4em">
+      <motion.Box
+        mt="4em"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 1.1 }}
+      >
         <Box
           display={'flex'}
           justifyContent={'space-between'}
@@ -755,7 +761,7 @@ const PolicyDetail = () => {
                   </Box>
                   <Box
                     display={'flex'}
-                    justifyContent={'flex-start'}
+                    justifyContent={'center'}
                     alignItems={'flex-start'}
                     boxSizing="borderBox"
                     borderBottom={'1px solid #ebebeb'}
@@ -2084,7 +2090,7 @@ const PolicyDetail = () => {
             </Box>
           </Box>
         </Box>
-      </Box>
+      </motion.Box>
     );
   } else if (isError || isErrorDownload || isErrorView) {
     content = <p>{'Something Wrong'}</p>;

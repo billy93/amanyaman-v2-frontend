@@ -414,7 +414,20 @@ input[type=number]::-webkit-inner-spin-button {
   font-family: "Mulish";
   font-size: 16px;
 }
+.scroll-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: #007BFF;
+  z-index: 999;
+}
 
+.scroll-indicator-bar {
+  height: 100%;
+  background-color: #007BFF;
+}
 #float-labelss label {
   font-size: 14px;
   font-family: "Mulish";

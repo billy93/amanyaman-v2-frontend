@@ -686,182 +686,188 @@ const Polcies = () => {
     content = <PageLoader loading={isLoading} />;
   } else if (systemParams) {
     content = (
-      <Box pl="2em" pr="2em" mt="3em">
-        {/* <div>{ console.log('celelng',totalCount)}</div> */}
-        <Styles>
-          <Tables
-            columns={columns}
-            data={systemParams}
-            fetchData={fetchData}
-            loading={loading}
-            pageCount={pageCount}
-            totalCount={totalCount}
-            size={size}
-          />
-        </Styles>
-        {/* <Link to="/welcome">Back to Welcome</Link> */}
-        <Box
-          display={'flex'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-          w="100%"
-          mt="15px"
-        >
-          <Box>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 1.1 }}
+      >
+        <Box pl="2em" pr="2em" mt="3em">
+          {/* <div>{ console.log('celelng',totalCount)}</div> */}
+          <Styles>
+            <Tables
+              columns={columns}
+              data={systemParams}
+              fetchData={fetchData}
+              loading={loading}
+              pageCount={pageCount}
+              totalCount={totalCount}
+              size={size}
+            />
+          </Styles>
+          {/* <Link to="/welcome">Back to Welcome</Link> */}
+          <Box
+            display={'flex'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            w="100%"
+            mt="15px"
+          >
             <Box>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td
-                  colSpan="10000"
-                  style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+              <Box>
+                {loading ? (
+                  // Use our custom loading state to show a loading indicator
+                  <td colSpan="10000">Loading...</td>
+                ) : (
+                  <td
+                    colSpan="10000"
+                    style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+                  >
+                    Showing {size} of {totalCount} results
+                  </td>
+                )}
+              </Box>
+              <Box>
+                <Box
+                  display={'flex'}
+                  justifyContent={'start'}
+                  alignItems={'center'}
                 >
-                  Showing {size} of {totalCount} results
-                </td>
-              )}
+                  <label
+                    htmlFor="select"
+                    style={{
+                      paddingRight: '5px',
+                      fontSize: '12px',
+                      fontFamily: 'Mulish',
+                    }}
+                  >
+                    Per page
+                  </label>
+                  <Select
+                    style={{
+                      fontSize: '12px',
+                      fontStyle: 'italic',
+                      height: '30px',
+                    }}
+                    id="pageSize"
+                    w="100px"
+                    value={size}
+                    onChange={(e) => {
+                      setSize(Number(e.target.value));
+                      gotoPage(0);
+                    }}
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                    {/* Add more options as needed */}
+                  </Select>
+                </Box>
+              </Box>
             </Box>
             <Box>
-              <Box
-                display={'flex'}
-                justifyContent={'start'}
-                alignItems={'center'}
-              >
-                <label
-                  htmlFor="select"
-                  style={{
-                    paddingRight: '5px',
-                    fontSize: '12px',
-                    fontFamily: 'Mulish',
+              <Box display={'flex'} alignItems={'center'}>
+                <Button
+                  isDisabled={page === 0 ? true : false}
+                  onClick={goToPageFirst}
+                  bg="white"
+                  border={'none'}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
                   }}
                 >
-                  Per page
-                </label>
-                <Select
-                  style={{
-                    fontSize: '12px',
-                    fontStyle: 'italic',
-                    height: '30px',
-                  }}
-                  id="pageSize"
-                  w="100px"
-                  value={size}
-                  onChange={(e) => {
-                    setSize(Number(e.target.value));
-                    gotoPage(0);
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="2px"
+                  >
+                    {'<<'}
+                  </Text>
+                </Button>
+                <Button
+                  isDisabled={page === 0 ? true : false}
+                  onClick={prevPages}
+                  bg="white"
+                  border={'none'}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
                   }}
                 >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                  {/* Add more options as needed */}
-                </Select>
+                  <BiSkipPreviousCircle size="25px" color="black" />
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    {'<'}
+                  </Text>
+                </Button>
+                {' | '}
+                <Button
+                  isDisabled={Math.ceil(totalCount / size) === page + 1}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
+                  }}
+                  onClick={nextPages}
+                  bg="white"
+                  border={'none'}
+                >
+                  <BiSkipNextCircle size="25px" color="black" />
+                  <Text
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    {'>'}
+                  </Text>
+                </Button>{' '}
+                <Button
+                  isDisabled={pageCount === page ? true : false}
+                  onClick={goToPageLast}
+                  bg="white"
+                  border={'none'}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
+                  }}
+                >
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    {'>>'}
+                  </Text>
+                </Button>
+                <Text as="p" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                  Page{' '}
+                </Text>
+                <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                  {page + 1} of {pageCount}
+                </Text>{' '}
               </Box>
             </Box>
           </Box>
-          <Box>
-            <Box display={'flex'} alignItems={'center'}>
-              <Button
-                isDisabled={page === 0 ? true : false}
-                onClick={goToPageFirst}
-                bg="white"
-                border={'none'}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-              >
-                <Text
-                  as="p"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="2px"
-                >
-                  {'<<'}
-                </Text>
-              </Button>
-              <Button
-                isDisabled={page === 0 ? true : false}
-                onClick={prevPages}
-                bg="white"
-                border={'none'}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-              >
-                <BiSkipPreviousCircle size="25px" color="black" />
-                <Text
-                  as="p"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
-                >
-                  {'<'}
-                </Text>
-              </Button>
-              {' | '}
-              <Button
-                isDisabled={Math.ceil(totalCount / size) === page + 1}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-                onClick={nextPages}
-                bg="white"
-                border={'none'}
-              >
-                <BiSkipNextCircle size="25px" color="black" />
-                <Text
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
-                >
-                  {'>'}
-                </Text>
-              </Button>{' '}
-              <Button
-                isDisabled={pageCount === page ? true : false}
-                onClick={goToPageLast}
-                bg="white"
-                border={'none'}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-              >
-                <Text
-                  as="p"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
-                >
-                  {'>>'}
-                </Text>
-              </Button>
-              <Text as="p" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
-                Page{' '}
-              </Text>
-              <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
-                {page + 1} of {pageCount}
-              </Text>{' '}
-            </Box>
-          </Box>
         </Box>
-      </Box>
+      </motion.div>
     );
   } else if (isError) {
     content = <p>{JSON.stringify(error)}</p>;

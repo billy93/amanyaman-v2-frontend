@@ -11,6 +11,7 @@ import {
   usePaymentProccedMutation,
   useCheckAvailabilityCreditMutation,
 } from '../policyApiSlice';
+import { motion } from 'framer-motion';
 import UseCustomToast from '../../../../components/UseCustomToast';
 import {
   Center,
@@ -363,239 +364,227 @@ const Form3 = ({
           mt="10px"
           mr="10px"
         >
-          <Box bg="#F0F3F8" p="10px">
-            <Text
-              as="b"
-              size={'sm'}
-              fontFamily={'Mulish'}
-              style={{ fontSize: '14px' }}
-            >
-              {'Summary'}
-            </Text>
-          </Box>
-          <Box bg="white" p="10px">
-            <Box
-              display={'flex'}
-              justifyContent={'flex-start'}
-              alignItems={'center'}
-              boxSizing="borderBox"
-              borderBottom={'1px solid #ebebeb'}
-              pb="10px"
-              pt="10px"
-              gap="1em"
-            >
-              <Image src={Files} alt="insurance" />
-              <Box
-                display={'flex'}
-                justifyContent={'center'}
-                flexDirection={'column'}
+          <motion.div
+            initial={{ y: '100vh' }}
+            animate={{ y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+          >
+            <Box bg="#F0F3F8" p="10px">
+              <Text
+                as="b"
+                size={'sm'}
+                fontFamily={'Mulish'}
+                style={{ fontSize: '14px' }}
               >
-                <Text
-                  as="b"
-                  size={'sm'}
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                >
-                  {'Booking Code'}
-                </Text>
-                <Text
-                  as="b"
-                  size={'sm'}
-                  fontFamily={'Mulish'}
-                  color="#065BAA"
-                  style={{ fontSize: '12px' }}
-                >
-                  {payload?.transactionId}
-                </Text>
-              </Box>
+                {'Summary'}
+              </Text>
             </Box>
-            <Box
-              display={'flex'}
-              justifyContent={'flex-start'}
-              alignItems={'center'}
-              boxSizing="borderBox"
-              borderBottom={'1px solid #ebebeb'}
-              pb="10px"
-              pt="10px"
-              gap="1em"
-            >
-              <Image src={Plan} alt="insurance" />
+
+            <Box bg="white" p="10px">
               <Box
                 display={'flex'}
-                justifyContent={'center'}
-                flexDirection={'column'}
+                justifyContent={'flex-start'}
+                alignItems={'center'}
+                boxSizing="borderBox"
+                borderBottom={'1px solid #ebebeb'}
+                pb="10px"
+                pt="10px"
+                gap="1em"
               >
-                <Text
-                  as="b"
-                  size={'sm'}
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
+                <Image src={Files} alt="insurance" />
+                <Box
+                  display={'flex'}
+                  justifyContent={'center'}
+                  flexDirection={'column'}
                 >
-                  {'Travel Details'}
-                </Text>
-                <Box>
                   <Text
-                    as="p"
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                  >
+                    {'Booking Code'}
+                  </Text>
+                  <Text
+                    as="b"
                     size={'sm'}
                     fontFamily={'Mulish'}
                     color="#065BAA"
                     style={{ fontSize: '12px' }}
-                    gap="1em"
                   >
-                    {payload?.coverType === 'SINGLE_TRIP'
-                      ? 'Single Trip'
-                      : 'Annual Trip'}
+                    {payload?.transactionId}
                   </Text>
                 </Box>
-                <Box display={'flex'} gap="2px" flexWrap={'nowrap'}>
-                  {payload?.destinations?.map((country, i) => {
-                    return (
-                      <Text
-                        key={i}
-                        as="p"
-                        size={'sm'}
-                        fontFamily={'Mulish'}
-                        color="#065BAA"
-                        style={{ fontSize: '12px' }}
-                      >
-                        {country.countryName}
-                      </Text>
-                    );
-                  })}
-                </Box>
               </Box>
-            </Box>
-            <Box
-              display={'flex'}
-              justifyContent={'flex-start'}
-              alignItems={'center'}
-              boxSizing="borderBox"
-              borderBottom={'1px solid #ebebeb'}
-              pb="10px"
-              pt="10px"
-              gap="1em"
-            >
-              <Image src={Umbrella} alt="insurance" />
               <Box
                 display={'flex'}
-                justifyContent={'center'}
-                flexDirection={'column'}
+                justifyContent={'flex-start'}
+                alignItems={'center'}
+                boxSizing="borderBox"
+                borderBottom={'1px solid #ebebeb'}
+                pb="10px"
+                pt="10px"
+                gap="1em"
               >
-                <Text
-                  as="b"
-                  size={'sm'}
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
+                <Image src={Plan} alt="insurance" />
+                <Box
+                  display={'flex'}
+                  justifyContent={'center'}
+                  flexDirection={'column'}
                 >
-                  {'Select Product'}
-                </Text>
-                <Text
-                  as="b"
-                  size={'sm'}
-                  fontFamily={'Mulish'}
-                  color="#065BAA"
-                  style={{ fontSize: '12px' }}
-                >
-                  {payload?.bookingProduct?.productName}
-                </Text>
-              </Box>
-            </Box>
-            <Box
-              display={'flex'}
-              justifyContent={'flex-start'}
-              alignItems={'center'}
-              boxSizing="borderBox"
-              borderBottom={'1px solid #ebebeb'}
-              pb="10px"
-              pt="10px"
-            >
-              <Image src={Pasport} alt="insurance" />
-              <Accordion allowMultiple>
-                <AccordionItem border={'none'}>
-                  <h2>
-                    <Box as="div">
-                      <AccordionButton
-                        border={'none'}
-                        style={{ border: 'none' }}
-                      >
-                        <Box as="span" flex="1" textAlign="left">
-                          <Text
-                            as="b"
-                            fontSize={'sm'}
-                            fontFamily={'Mulish'}
-                            style={{ fontSize: '12px' }}
-                          >
-                            {'List Of Travellers'}
-                          </Text>
-                        </Box>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </Box>
-                  </h2>
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                  >
+                    {'Travel Details'}
+                  </Text>
                   <Box>
-                    <AccordionPanel pb={4}>
-                      {/* <Box> */}
-                      {newlistTravellers?.map((list, i) => {
-                        return (
-                          <Box display={'flex'} key={i} gap="2px">
-                            <Text
-                              as="p"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                            >
-                              {`Traveller ${i + 1} `}
-                            </Text>
+                    <Text
+                      as="p"
+                      size={'sm'}
+                      fontFamily={'Mulish'}
+                      color="#065BAA"
+                      style={{ fontSize: '12px' }}
+                      gap="1em"
+                    >
+                      {payload?.coverType === 'SINGLE_TRIP'
+                        ? 'Single Trip'
+                        : 'Annual Trip'}
+                    </Text>
+                  </Box>
+                  <Box display={'flex'} gap="2px" flexWrap={'nowrap'}>
+                    {payload?.destinations?.map((country, i) => {
+                      return (
+                        <Text
+                          key={i}
+                          as="p"
+                          size={'sm'}
+                          fontFamily={'Mulish'}
+                          color="#065BAA"
+                          style={{ fontSize: '12px' }}
+                        >
+                          {country.countryName}
+                        </Text>
+                      );
+                    })}
+                  </Box>
+                </Box>
+              </Box>
+              <Box
+                display={'flex'}
+                justifyContent={'flex-start'}
+                alignItems={'center'}
+                boxSizing="borderBox"
+                borderBottom={'1px solid #ebebeb'}
+                pb="10px"
+                pt="10px"
+                gap="1em"
+              >
+                <Image src={Umbrella} alt="insurance" />
+                <Box
+                  display={'flex'}
+                  justifyContent={'center'}
+                  flexDirection={'column'}
+                >
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                  >
+                    {'Select Product'}
+                  </Text>
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    color="#065BAA"
+                    style={{ fontSize: '12px' }}
+                  >
+                    {payload?.bookingProduct?.productName}
+                  </Text>
+                </Box>
+              </Box>
+              <Box
+                display={'flex'}
+                justifyContent={'flex-start'}
+                alignItems={'center'}
+                boxSizing="borderBox"
+                borderBottom={'1px solid #ebebeb'}
+                pb="10px"
+                pt="10px"
+              >
+                <Image src={Pasport} alt="insurance" />
+                <Accordion allowMultiple>
+                  <AccordionItem border={'none'}>
+                    <h2>
+                      <Box as="div">
+                        <AccordionButton
+                          border={'none'}
+                          style={{ border: 'none' }}
+                        >
+                          <Box as="span" flex="1" textAlign="left">
                             <Text
                               as="b"
-                              size="sm"
+                              fontSize={'sm'}
                               fontFamily={'Mulish'}
                               style={{ fontSize: '12px' }}
                             >
-                              {`${list?.firstName} ${list?.lastName} `}
+                              {'List Of Travellers'}
                             </Text>
                           </Box>
-                        );
-                      })}
-                      {/* </Box>  */}
-                    </AccordionPanel>
-                  </Box>
-                </AccordionItem>
-              </Accordion>
-            </Box>
-            <Box
-              display={'flex'}
-              justifyContent={'flex-start'}
-              alignItems={'center'}
-              boxSizing="borderBox"
-              borderBottom={'1px solid #ebebeb'}
-              pb="10px"
-              pt="10px"
-              gap="1em"
-            >
-              <Image src={Payment} alt="insurance" />
+                          <AccordionIcon />
+                        </AccordionButton>
+                      </Box>
+                    </h2>
+                    <Box>
+                      <AccordionPanel pb={4}>
+                        {/* <Box> */}
+                        {newlistTravellers?.map((list, i) => {
+                          return (
+                            <Box display={'flex'} key={i} gap="2px">
+                              <Text
+                                as="p"
+                                size="sm"
+                                fontFamily={'Mulish'}
+                                style={{ fontSize: '12px' }}
+                              >
+                                {`Traveller ${i + 1} `}
+                              </Text>
+                              <Text
+                                as="b"
+                                size="sm"
+                                fontFamily={'Mulish'}
+                                style={{ fontSize: '12px' }}
+                              >
+                                {`${list?.firstName} ${list?.lastName} `}
+                              </Text>
+                            </Box>
+                          );
+                        })}
+                        {/* </Box>  */}
+                      </AccordionPanel>
+                    </Box>
+                  </AccordionItem>
+                </Accordion>
+              </Box>
               <Box
                 display={'flex'}
-                justifyContent={'center'}
-                flexDirection={'column'}
+                justifyContent={'flex-start'}
+                alignItems={'center'}
+                boxSizing="borderBox"
+                borderBottom={'1px solid #ebebeb'}
+                pb="10px"
+                pt="10px"
+                gap="1em"
               >
-                <Text
-                  as="b"
-                  size={'sm'}
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                >
-                  {'Payment Summary'}
-                </Text>
+                <Image src={Payment} alt="insurance" />
                 <Box
-                  w="100%"
                   display={'flex'}
-                  justifyContent={'space-between'}
-                  alignItems={'center'}
-                  gap="1em"
-                  borderBottom="1px solid #ebebeb"
-                  pb="10px"
-                  pt="5px"
+                  justifyContent={'center'}
+                  flexDirection={'column'}
                 >
                   <Text
                     as="b"
@@ -603,83 +592,102 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {'Premium Price'}
+                    {'Payment Summary'}
                   </Text>
-                  <Text
-                    as="b"
-                    size={'sm'}
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
+                  <Box
+                    w="100%"
+                    display={'flex'}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                    gap="1em"
+                    borderBottom="1px solid #ebebeb"
+                    pb="10px"
+                    pt="5px"
                   >
-                    <CurrencyFormatter
-                      amount={payload?.bookingProduct?.finalPrice}
-                    />
-                  </Text>
-                </Box>
-                <Box
-                  w="100%"
-                  display={'flex'}
-                  justifyContent={'space-between'}
-                  alignItems={'center'}
-                  gap="1em"
-                  borderBottom="1px solid #ebebeb"
-                  pb="10px"
-                  pt="5px"
-                >
-                  <Text
-                    as="b"
-                    size={'sm'}
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
+                    <Text
+                      as="b"
+                      size={'sm'}
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '12px' }}
+                    >
+                      {'Premium Price'}
+                    </Text>
+                    <Text
+                      as="b"
+                      size={'sm'}
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '12px' }}
+                    >
+                      <CurrencyFormatter
+                        amount={payload?.bookingProduct?.finalPrice}
+                      />
+                    </Text>
+                  </Box>
+                  <Box
+                    w="100%"
+                    display={'flex'}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                    gap="1em"
+                    borderBottom="1px solid #ebebeb"
+                    pb="10px"
+                    pt="5px"
                   >
-                    {'Quantity'}
-                  </Text>
-                  <Text
-                    as="b"
-                    size={'sm'}
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
+                    <Text
+                      as="b"
+                      size={'sm'}
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '12px' }}
+                    >
+                      {'Quantity'}
+                    </Text>
+                    <Text
+                      as="b"
+                      size={'sm'}
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '12px' }}
+                    >
+                      {'x'}
+                      {payload?.travellerType !== 'Family'
+                        ? newlistTravellers?.length
+                        : 1}
+                    </Text>
+                  </Box>
+                  <Box
+                    w="100%"
+                    display={'flex'}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                    gap="1em"
+                    borderBottom="1px solid #ebebeb"
+                    pb="10px"
+                    pt="5px"
                   >
-                    {'x'}
-                    {payload?.travellerType !== 'Family'
-                      ? newlistTravellers?.length
-                      : 1}
-                  </Text>
-                </Box>
-                <Box
-                  w="100%"
-                  display={'flex'}
-                  justifyContent={'space-between'}
-                  alignItems={'center'}
-                  gap="1em"
-                  borderBottom="1px solid #ebebeb"
-                  pb="10px"
-                  pt="5px"
-                >
-                  <Text
-                    as="b"
-                    size={'sm'}
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
-                  >
-                    {'Stamp Duty'}
-                  </Text>
-                  <Text
-                    as="b"
-                    size={'sm'}
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
-                  >
-                    {payload?.stampDuty > 0 ? (
-                      <CurrencyFormatter amount={payload?.stampDuty} />
-                    ) : (
-                      'IDR 0'
-                    )}
-                  </Text>
+                    <Text
+                      as="b"
+                      size={'sm'}
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '12px' }}
+                    >
+                      {'Stamp Duty'}
+                    </Text>
+                    <Text
+                      as="b"
+                      size={'sm'}
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '12px' }}
+                    >
+                      {payload?.stampDuty > 0 ? (
+                        <CurrencyFormatter amount={payload?.stampDuty} />
+                      ) : (
+                        'IDR 0'
+                      )}
+                    </Text>
+                  </Box>
                 </Box>
               </Box>
             </Box>
-          </Box>
+          </motion.div>
         </Box>
       </Box>
       {hasCompletedAllSteps !== undefined && (

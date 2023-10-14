@@ -1107,344 +1107,356 @@ const Polcies = () => {
     content = <PageLoader loading={isLoading} />;
   } else if (Data) {
     content = (
-      <Box ml="1em" mr="1em" mt="5em">
-        <Box
-          display={'flex'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-          mt="6em"
-          ml="1em"
-          mr="1em"
-          mb={showFilter ? '1em' : '1em'}
-        >
-          <Heading as={'h6'} size={'sm'}>
-            Policies
-          </Heading>
-          <Stack direction="row" spacing={4} mr="0">
-            <Button
-              leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
-              colorScheme="#231F20"
-              variant="outline"
-              size={'sm'}
-              color={showFilter ? '#065BAA' : ''}
-              onClick={showFilterBtn}
-            >
-              Apply Filter
-            </Button>
-
-            <Button
-              leftIcon={<MdLogin />}
-              colorScheme="#231F20"
-              variant="outline"
-              size={'sm'}
-              color="#231F20"
-            >
-              Export All
-            </Button>
-          </Stack>
-        </Box>
-        {showFilter && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 1.1 }}
+      >
+        <Box ml="1em" mr="1em" mt="5em">
           <Box
-            w={{ base: '100%', md: '70%' }}
             display={'flex'}
-            justifyContent={'space-around'}
+            justifyContent={'space-between'}
             alignItems={'center'}
-            gap="4px"
-            mr="1em"
+            mt="6em"
             ml="1em"
-            mb="1em"
-            mt={'1em'}
+            mr="1em"
+            mb={showFilter ? '1em' : '1em'}
           >
-            <Input
-              variant={'custom'}
-              // value={filterQuery?.policyNumber}
-              onChange={handleFilter}
-              name="policyNumber"
-              placeholder={'Search by policy number'}
-              bg="#ebebeb"
-              borderRadius={'5px'}
-              _placeholder={{ textTransform: 'lowercase' }}
-              sx={{
-                '&::placeholder': {
-                  color: 'gray',
-                  fontStyle: 'italic',
-                  fontSize: '12px',
-                },
-              }}
-            />
-            <Input
-              variant={'custom'}
-              value={filterQuery?.traveller}
-              onChange={handleFilter}
-              name="traveller"
-              placeholder={'Search by traveller'}
-              bg="#ebebeb"
-              borderRadius={'5px'}
-              _placeholder={{ textTransform: 'lowercase' }}
-              sx={{
-                '&::placeholder': {
-                  color: 'gray',
-                  fontStyle: 'italic',
-                  fontSize: '12px',
-                },
-              }}
-            />
-            <Input
-              variant={'custom'}
-              value={filterQuery?.bookingNumber}
-              onChange={handleFilter}
-              name="bookingNumber"
-              placeholder={'Search by booking number'}
-              bg="#ebebeb"
-              borderRadius={'5px'}
-              _placeholder={{ textTransform: 'lowercase' }}
-              sx={{
-                '&::placeholder': {
-                  color: 'gray',
-                  fontStyle: 'italic',
-                  fontSize: '12px',
-                },
-              }}
-            />
-
-            <Select
-              placeholder="Select by Policy status"
-              backgroundColor={
-                filterQuery?.policyStatus === '' ? '#ebebeb' : '#e8f0fe'
-              }
-              sx={{
-                '&::placeholder': {
-                  color: 'gray',
-                  fontStyle: 'italic',
-                  fontSize: '12px',
-                },
-              }}
-              _placeholder={{
-                color: 'grey',
-              }}
-              defaultValue={''}
-              name="policyStatus"
-              style={{
-                fontSize: '12px',
-                fontStyle: 'italic',
-                fontWeight: 'normal',
-              }}
-              onChange={handleFilter}
-            >
-              <option value={''}>{'All Policy Status'}</option>
-              <option value={'SUCCESS'}>{'Success'}</option>
-              <option value={'WAITING_FOR_PAYMENT'}>{'Pending'}</option>
-            </Select>
-            <Select
-              placeholder="Select by Plan Type"
-              backgroundColor={
-                filterQuery?.planType === '' ? '#ebebeb' : '#e8f0fe'
-              }
-              sx={{
-                '&::placeholder': {
-                  color: 'gray',
-                  fontStyle: 'italic',
-                  fontSize: '12px',
-                },
-              }}
-              style={{
-                fontSize: '12px',
-                fontStyle: 'italic',
-                fontWeight: 'normal',
-              }}
-              _placeholder={{
-                color: 'grey',
-              }}
-              defaultValue={''}
-              name="planType"
-              onChange={handleFilter}
-            >
-              {planTypes?.response.map((types, i) => {
-                return (
-                  <option value={types.id} key={i}>
-                    {types.name}
-                  </option>
-                );
-              })}
-            </Select>
-
-            {/* <Button variant={'outline'} onClick={handleSearch}>Search</Button> */}
-          </Box>
-        )}
-        <Styles>
-          <Tables
-            columns={columns}
-            data={listpolicies}
-            fetchData={fetchData}
-            loading={loading}
-            pageCount={pageCount}
-            size={size}
-            totalcount={totalCount}
-          />
-        </Styles>
-        <Box
-          display={'flex'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-          w="100%"
-          mt="15px"
-        >
-          <Box>
-            <Box>
-              {loading ? (
-                // Use our custom loading state to show a loading indicator
-                <td colSpan="10000">Loading...</td>
-              ) : (
-                <td
-                  colSpan="10000"
-                  style={{ fontSize: '12px', fontFamily: 'Mulish' }}
-                >
-                  Showing {size} of {totalCount} results
-                </td>
-              )}
-            </Box>
-            <Box>
-              <Box
-                display={'flex'}
-                justifyContent={'start'}
-                alignItems={'center'}
+            <Heading as={'h6'} size={'sm'}>
+              Policies
+            </Heading>
+            <Stack direction="row" spacing={4} mr="0">
+              <Button
+                leftIcon={<MdFilterList color={showFilter ? '#065BAA' : ''} />}
+                colorScheme="#231F20"
+                variant="outline"
+                size={'sm'}
+                color={showFilter ? '#065BAA' : ''}
+                onClick={showFilterBtn}
               >
-                <label
-                  htmlFor="select"
-                  style={{
-                    paddingRight: '5px',
-                    fontSize: '12px',
-                    fontFamily: 'Mulish',
+                Apply Filter
+              </Button>
+
+              <Button
+                leftIcon={<MdLogin />}
+                colorScheme="#231F20"
+                variant="outline"
+                size={'sm'}
+                color="#231F20"
+              >
+                Export All
+              </Button>
+            </Stack>
+          </Box>
+          {showFilter && (
+            <motion.div
+              initial={{ y: -55, zIndex: 999 }}
+              animate={{ y: 0 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+            >
+              <Box
+                w={{ base: '100%', md: '70%' }}
+                display={'flex'}
+                justifyContent={'space-around'}
+                alignItems={'center'}
+                gap="4px"
+                mr="1em"
+                ml="1em"
+                mb="1em"
+                mt={'1em'}
+              >
+                <Input
+                  variant={'custom'}
+                  // value={filterQuery?.policyNumber}
+                  onChange={handleFilter}
+                  name="policyNumber"
+                  placeholder={'Search by policy number'}
+                  bg="#ebebeb"
+                  borderRadius={'5px'}
+                  _placeholder={{ textTransform: 'lowercase' }}
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
                   }}
-                >
-                  Per page
-                </label>
+                />
+                <Input
+                  variant={'custom'}
+                  value={filterQuery?.traveller}
+                  onChange={handleFilter}
+                  name="traveller"
+                  placeholder={'Search by traveller'}
+                  bg="#ebebeb"
+                  borderRadius={'5px'}
+                  _placeholder={{ textTransform: 'lowercase' }}
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
+                  }}
+                />
+                <Input
+                  variant={'custom'}
+                  value={filterQuery?.bookingNumber}
+                  onChange={handleFilter}
+                  name="bookingNumber"
+                  placeholder={'Search by booking number'}
+                  bg="#ebebeb"
+                  borderRadius={'5px'}
+                  _placeholder={{ textTransform: 'lowercase' }}
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
+                  }}
+                />
+
                 <Select
+                  placeholder="Select by Policy status"
+                  backgroundColor={
+                    filterQuery?.policyStatus === '' ? '#ebebeb' : '#e8f0fe'
+                  }
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
+                  }}
+                  _placeholder={{
+                    color: 'grey',
+                  }}
+                  defaultValue={''}
+                  name="policyStatus"
                   style={{
                     fontSize: '12px',
                     fontStyle: 'italic',
-                    height: '30px',
+                    fontWeight: 'normal',
                   }}
-                  id="pageSize"
-                  w="100px"
-                  value={size}
-                  onChange={(e) => {
-                    setSize(Number(e.target.value));
-                    gotoPage(0);
+                  onChange={handleFilter}
+                >
+                  <option value={''}>{'All Policy Status'}</option>
+                  <option value={'SUCCESS'}>{'Success'}</option>
+                  <option value={'WAITING_FOR_PAYMENT'}>{'Pending'}</option>
+                </Select>
+                <Select
+                  placeholder="Select by Plan Type"
+                  backgroundColor={
+                    filterQuery?.planType === '' ? '#ebebeb' : '#e8f0fe'
+                  }
+                  sx={{
+                    '&::placeholder': {
+                      color: 'gray',
+                      fontStyle: 'italic',
+                      fontSize: '12px',
+                    },
+                  }}
+                  style={{
+                    fontSize: '12px',
+                    fontStyle: 'italic',
+                    fontWeight: 'normal',
+                  }}
+                  _placeholder={{
+                    color: 'grey',
+                  }}
+                  defaultValue={''}
+                  name="planType"
+                  onChange={handleFilter}
+                >
+                  {planTypes?.response.map((types, i) => {
+                    return (
+                      <option value={types.id} key={i}>
+                        {types.name}
+                      </option>
+                    );
+                  })}
+                </Select>
+
+                {/* <Button variant={'outline'} onClick={handleSearch}>Search</Button> */}
+              </Box>
+            </motion.div>
+          )}
+          <Styles>
+            <Tables
+              columns={columns}
+              data={listpolicies}
+              fetchData={fetchData}
+              loading={loading}
+              pageCount={pageCount}
+              size={size}
+              totalcount={totalCount}
+            />
+          </Styles>
+          <Box
+            display={'flex'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            w="100%"
+            mt="15px"
+          >
+            <Box>
+              <Box>
+                {loading ? (
+                  // Use our custom loading state to show a loading indicator
+                  <td colSpan="10000">Loading...</td>
+                ) : (
+                  <td
+                    colSpan="10000"
+                    style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+                  >
+                    Showing {size} of {totalCount} results
+                  </td>
+                )}
+              </Box>
+              <Box>
+                <Box
+                  display={'flex'}
+                  justifyContent={'start'}
+                  alignItems={'center'}
+                >
+                  <label
+                    htmlFor="select"
+                    style={{
+                      paddingRight: '5px',
+                      fontSize: '12px',
+                      fontFamily: 'Mulish',
+                    }}
+                  >
+                    Per page
+                  </label>
+                  <Select
+                    style={{
+                      fontSize: '12px',
+                      fontStyle: 'italic',
+                      height: '30px',
+                    }}
+                    id="pageSize"
+                    w="100px"
+                    value={size}
+                    onChange={(e) => {
+                      setSize(Number(e.target.value));
+                      gotoPage(0);
+                    }}
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                    {/* Add more options as needed */}
+                  </Select>
+                </Box>
+              </Box>
+            </Box>
+            <Box>
+              <Box display={'flex'} alignItems={'center'}>
+                <Button
+                  isDisabled={page === 0 ? true : false}
+                  onClick={goToPageFirst}
+                  bg="white"
+                  border={'none'}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
                   }}
                 >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                  {/* Add more options as needed */}
-                </Select>
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="2px"
+                  >
+                    {'<<'}
+                  </Text>
+                </Button>
+                <Button
+                  isDisabled={page === 0 ? true : false}
+                  onClick={previousPage}
+                  bg="white"
+                  border={'none'}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
+                  }}
+                >
+                  <BiSkipPreviousCircle size="25px" color="black" />
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    {'<'}
+                  </Text>
+                </Button>
+                {' | '}
+                <Button
+                  isDisabled={Math.ceil(totalCount / size) === page + 1}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
+                  }}
+                  onClick={handleNexts}
+                  bg="white"
+                  border={'none'}
+                >
+                  <BiSkipNextCircle size="25px" color="black" />
+                  <Text
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    {'>'}
+                  </Text>
+                </Button>{' '}
+                <Button
+                  isDisabled={pageCount === page ? true : false}
+                  onClick={goToPageLast}
+                  bg="white"
+                  border={'none'}
+                  _hover={{
+                    bg: '#f0eeee',
+                    borderRadius: '5px',
+                    WebkitBorderRadius: '5px',
+                    MozBorderRadius: '5px',
+                  }}
+                >
+                  <Text
+                    as="p"
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                    color="#231F20"
+                    pl="5px"
+                  >
+                    {'>>'}
+                  </Text>
+                </Button>
+                <Text as="p" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                  Page{' '}
+                </Text>
+                <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
+                  {page + 1} of {Math.ceil(totalCount / size)}
+                </Text>{' '}
               </Box>
             </Box>
           </Box>
-          <Box>
-            <Box display={'flex'} alignItems={'center'}>
-              <Button
-                isDisabled={page === 0 ? true : false}
-                onClick={goToPageFirst}
-                bg="white"
-                border={'none'}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-              >
-                <Text
-                  as="p"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="2px"
-                >
-                  {'<<'}
-                </Text>
-              </Button>
-              <Button
-                isDisabled={page === 0 ? true : false}
-                onClick={previousPage}
-                bg="white"
-                border={'none'}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-              >
-                <BiSkipPreviousCircle size="25px" color="black" />
-                <Text
-                  as="p"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
-                >
-                  {'<'}
-                </Text>
-              </Button>
-              {' | '}
-              <Button
-                isDisabled={Math.ceil(totalCount / size) === page + 1}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-                onClick={handleNexts}
-                bg="white"
-                border={'none'}
-              >
-                <BiSkipNextCircle size="25px" color="black" />
-                <Text
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
-                >
-                  {'>'}
-                </Text>
-              </Button>{' '}
-              <Button
-                isDisabled={pageCount === page ? true : false}
-                onClick={goToPageLast}
-                bg="white"
-                border={'none'}
-                _hover={{
-                  bg: '#f0eeee',
-                  borderRadius: '5px',
-                  WebkitBorderRadius: '5px',
-                  MozBorderRadius: '5px',
-                }}
-              >
-                <Text
-                  as="p"
-                  fontFamily={'Mulish'}
-                  style={{ fontSize: '12px' }}
-                  color="#231F20"
-                  pl="5px"
-                >
-                  {'>>'}
-                </Text>
-              </Button>
-              <Text as="p" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
-                Page{' '}
-              </Text>
-              <Text as="b" style={{ fontSize: '14px', fontFamily: 'Mulish' }}>
-                {page + 1} of {Math.ceil(totalCount / size)}
-              </Text>{' '}
-            </Box>
-          </Box>
+          {/* <Link to="/welcome">Back to Welcome</Link> */}
         </Box>
-        {/* <Link to="/welcome">Back to Welcome</Link> */}
-      </Box>
+      </motion.div>
     );
   } else if (isError) {
     content = <p>{JSON.stringify(error)}</p>;

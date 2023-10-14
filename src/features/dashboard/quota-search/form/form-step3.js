@@ -12,6 +12,7 @@ import {
   userLoginCurrent,
   setCredentials,
 } from '../../../auth/authSlice';
+import { motion, useAnimationControls } from 'framer-motion';
 import usePersist from '../../../../features/hook/usePersist';
 import {
   messages,
@@ -438,8 +439,14 @@ const Form3 = ({
           <FormLabel
             fontSize="12"
             pt="1.5"
+            style={{
+              transform:
+                dateOfBirth !== null ? 'translate(0, -6px) scale(0.75)' : '',
+              color: dateOfBirth !== null ? '#065baa' : '',
+              fontStyle: dateOfBirth !== null ? 'italic' : 'italic',
+              fontSize: dateOfBirth !== null ? '12px' : '12px',
+            }}
             fontFamily={'Mulish'}
-            className="floating-label-global"
           >
             Date Of Birth
           </FormLabel>
@@ -476,8 +483,16 @@ const Form3 = ({
             fontSize="12"
             pt="1.5"
             // className={isActiveNew || existingTravellersDate ? 'Actives' : ''}
+            style={{
+              transform:
+                existingTravellersDate !== null
+                  ? 'translate(0, -9px) scale(0.75)'
+                  : '',
+              color: existingTravellersDate !== null ? '#065baa' : '',
+              fontStyle: existingTravellersDate !== null ? 'italic' : 'italic',
+              fontSize: existingTravellersDate !== null ? '12px' : '12px',
+            }}
             fontFamily={'Mulish'}
-            className="floating-label-global"
           >
             Date Of Birth
           </FormLabel>
@@ -826,1590 +841,1768 @@ const Form3 = ({
     }
   }, [deleted, refetch, id, triggerGetList]);
 
-  console.log('select', select);
+  const wrapperVariants = {
+    hidden: {
+      opacity: 0,
+      x: '100vw',
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { type: 'spring', delay: 0.1 },
+    },
+    exit: {
+      x: '-100vh',
+      transition: { ease: 'easeInOut' },
+    },
+  };
+
+  const controls = useAnimationControls();
   return (
-    <Box border={'1px'} borderColor="#ebebeb">
-      <Modal
-        size="xl"
-        blockScrollOnMount={false}
-        closeOnOverlayClick={false}
-        isOpen={isOpen}
-        onClose={handleCloseModal}
-        placement="bottom-start"
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Traveller</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <Box>
-              {select === 'existing' && (
-                <Box
-                  minH="200px"
-                  m="auto"
-                  bg="#f6f2f2"
-                  display={'flex'}
-                  alignItems={'center'}
-                  justifyContent={'space-between'}
-                >
-                  {travellersExisting !== null ? (
-                    <Box mt="1em" w="100%">
-                      <Box>
-                        <Box
-                          w={{ base: '100%' }}
-                          display="flex"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          p={{ base: '4px', md: '10px' }}
-                          borderBottom={'1px solid #ebebeb'}
-                        >
-                          <Box w={{ md: '30%' }}>
-                            <Text
-                              as="b"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                              color={'#231F20'}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 1.1, duration: 1.1 }}
+    >
+      <Box border={'1px'} borderColor="#ebebeb">
+        <motion.div
+          variants={wrapperVariants}
+          initial="hidden"
+          animate={controls}
+          exit="exit"
+        >
+          <Modal
+            size="xl"
+            blockScrollOnMount={false}
+            closeOnOverlayClick={false}
+            isOpen={isOpen}
+            onClose={handleCloseModal}
+            placement="bottom-start"
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Add Traveller</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody pb={6}>
+                <Box>
+                  {select === 'existing' && (
+                    <motion.Box
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.1, duration: 1.1 }}
+                      minH="200px"
+                      m="auto"
+                      bg="#f6f2f2"
+                      display={'flex'}
+                      alignItems={'center'}
+                      justifyContent={'space-between'}
+                    >
+                      {travellersExisting !== null ? (
+                        <Box mt="1em" w="100%">
+                          <Box>
+                            <Box
+                              w={{ base: '100%' }}
+                              display="flex"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              p={{ base: '4px', md: '10px' }}
+                              borderBottom={'1px solid #ebebeb'}
                             >
-                              Full Name
-                            </Text>
-                          </Box>
-                          <Box w={{ md: '70%' }}>
-                            <Text
-                              as="p"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
+                              <Box w={{ md: '30%' }}>
+                                <Text
+                                  as="b"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                  color={'#231F20'}
+                                >
+                                  Full Name
+                                </Text>
+                              </Box>
+                              <Box w={{ md: '70%' }}>
+                                <Text
+                                  as="p"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  {`${travellersExisting?.data?.firstName} ${travellersExisting?.data?.lastName}`}
+                                </Text>
+                              </Box>
+                            </Box>
+                            <Box
+                              w={{ base: '100%' }}
+                              display="flex"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              p={{ base: '4px', md: '10px' }}
+                              borderBottom={'1px solid #ebebeb'}
                             >
-                              {`${travellersExisting?.data?.firstName} ${travellersExisting?.data?.lastName}`}
-                            </Text>
-                          </Box>
-                        </Box>
-                        <Box
-                          w={{ base: '100%' }}
-                          display="flex"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          p={{ base: '4px', md: '10px' }}
-                          borderBottom={'1px solid #ebebeb'}
-                        >
-                          <Box w={{ md: '30%' }}>
-                            <Text
-                              as="b"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                              color={'#231F20'}
+                              <Box w={{ md: '30%' }}>
+                                <Text
+                                  as="b"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                  color={'#231F20'}
+                                >
+                                  Email Address
+                                </Text>
+                              </Box>
+                              <Box w={{ md: '70%' }}>
+                                <Text
+                                  as="p"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  {travellersExisting?.data?.email}
+                                </Text>
+                              </Box>
+                            </Box>
+                            <Box
+                              w={{ base: '100%' }}
+                              display="flex"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              p={{ base: '4px', md: '10px' }}
+                              borderBottom={'1px solid #ebebeb'}
                             >
-                              Email Address
-                            </Text>
-                          </Box>
-                          <Box w={{ md: '70%' }}>
-                            <Text
-                              as="p"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
+                              <Box w={{ md: '30%' }}>
+                                <Text
+                                  as="b"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                  color={'#231F20'}
+                                >
+                                  Phone Number
+                                </Text>
+                              </Box>
+                              <Box w={{ md: '70%' }}>
+                                <Text
+                                  as="p"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  {travellersExisting?.data?.phone}
+                                </Text>
+                              </Box>
+                            </Box>
+                            <Box
+                              w={{ base: '100%' }}
+                              display="flex"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              p={{ base: '4px', md: '10px' }}
+                              borderBottom={'1px solid #ebebeb'}
                             >
-                              {travellersExisting?.data?.email}
-                            </Text>
-                          </Box>
-                        </Box>
-                        <Box
-                          w={{ base: '100%' }}
-                          display="flex"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          p={{ base: '4px', md: '10px' }}
-                          borderBottom={'1px solid #ebebeb'}
-                        >
-                          <Box w={{ md: '30%' }}>
-                            <Text
-                              as="b"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                              color={'#231F20'}
-                            >
-                              Phone Number
-                            </Text>
-                          </Box>
-                          <Box w={{ md: '70%' }}>
-                            <Text
-                              as="p"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              {travellersExisting?.data?.phone}
-                            </Text>
-                          </Box>
-                        </Box>
-                        <Box
-                          w={{ base: '100%' }}
-                          display="flex"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          p={{ base: '4px', md: '10px' }}
-                          borderBottom={'1px solid #ebebeb'}
-                        >
-                          <Box w={{ md: '30%' }}>
-                            <Text
-                              as="b"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                              color={'#231F20'}
-                            >
-                              Identitiy Card/ Passport
-                            </Text>
-                          </Box>
-                          <Box w={{ md: '70%' }}>
-                            <Text
-                              as="p"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              {travellersExisting?.data?.passport}
-                            </Text>
-                          </Box>
-                        </Box>
+                              <Box w={{ md: '30%' }}>
+                                <Text
+                                  as="b"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                  color={'#231F20'}
+                                >
+                                  Identitiy Card/ Passport
+                                </Text>
+                              </Box>
+                              <Box w={{ md: '70%' }}>
+                                <Text
+                                  as="p"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  {travellersExisting?.data?.passport}
+                                </Text>
+                              </Box>
+                            </Box>
 
-                        <Box
-                          w={{ base: '100%' }}
-                          display="flex"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          p={{ base: '4px', md: '10px' }}
-                          borderBottom={'1px solid #ebebeb'}
-                        >
-                          <Box w={{ md: '30%' }}>
-                            <Text
-                              as="b"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                              color={'#231F20'}
+                            <Box
+                              w={{ base: '100%' }}
+                              display="flex"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              p={{ base: '4px', md: '10px' }}
+                              borderBottom={'1px solid #ebebeb'}
                             >
-                              Date Of Birth
-                            </Text>
-                          </Box>
-                          <Box w={{ md: '70%' }}>
-                            <Text
-                              as="p"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
+                              <Box w={{ md: '30%' }}>
+                                <Text
+                                  as="b"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                  color={'#231F20'}
+                                >
+                                  Date Of Birth
+                                </Text>
+                              </Box>
+                              <Box w={{ md: '70%' }}>
+                                <Text
+                                  as="p"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  {formatDateToLong(
+                                    travellersExisting?.data?.dateOfBirth
+                                  )}
+                                </Text>
+                              </Box>
+                            </Box>
+                            <Box
+                              w={{ base: '100%' }}
+                              display="flex"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              p={{ base: '4px', md: '10px' }}
+                              borderBottom={'1px solid #ebebeb'}
                             >
-                              {formatDateToLong(
-                                travellersExisting?.data?.dateOfBirth
-                              )}
-                            </Text>
+                              <Box w={{ md: '30%' }}>
+                                <Text
+                                  as="b"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                  color={'#231F20'}
+                                >
+                                  Place Of Birth
+                                </Text>
+                              </Box>
+                              <Box w={{ md: '70%' }}>
+                                <Text
+                                  as="p"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  {travellersExisting?.data?.placeOfBirth}
+                                </Text>
+                              </Box>
+                            </Box>
+                            <Box
+                              w={{ base: '100%' }}
+                              display="flex"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              p={{ base: '4px', md: '10px' }}
+                              borderBottom={'1px solid #ebebeb'}
+                            >
+                              <Box w={{ md: '30%' }}>
+                                <Text
+                                  as="b"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                  color={'#231F20'}
+                                >
+                                  Address
+                                </Text>
+                              </Box>
+                              <Box w={{ md: '70%' }}>
+                                <Text
+                                  as="p"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  {travellersExisting?.data?.address}
+                                </Text>
+                              </Box>
+                            </Box>
+                            <Box
+                              w={{ base: '100%' }}
+                              display="flex"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              p={{ base: '4px', md: '10px' }}
+                              borderBottom={'1px solid #ebebeb'}
+                            >
+                              <Box w={{ md: '30%' }}>
+                                <Text
+                                  as="b"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                  color={'#231F20'}
+                                >
+                                  Beneficiary
+                                </Text>
+                              </Box>
+                              <Box w={{ md: '70%' }}>
+                                <Text
+                                  as="p"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  {travellersExisting?.data?.beneficiary
+                                    ? travellersExisting?.data?.beneficiary
+                                    : '-'}
+                                </Text>
+                              </Box>
+                            </Box>
+                            <Box
+                              w={{ base: '100%' }}
+                              display="flex"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              p={{ base: '4px', md: '10px' }}
+                              borderBottom={'1px solid #ebebeb'}
+                            >
+                              <Box w={{ md: '30%' }}>
+                                <Text
+                                  as="b"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                  color={'#231F20'}
+                                >
+                                  Relationship
+                                </Text>
+                              </Box>
+                              <Box w={{ md: '70%' }}>
+                                <Text
+                                  as="p"
+                                  size="sm"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  {travellersExisting?.data?.relationship
+                                    ? travellersExisting?.data.relationship
+                                    : '-'}
+                                </Text>
+                              </Box>
+                            </Box>
                           </Box>
                         </Box>
-                        <Box
-                          w={{ base: '100%' }}
-                          display="flex"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          p={{ base: '4px', md: '10px' }}
-                          borderBottom={'1px solid #ebebeb'}
+                      ) : (
+                        <motion.Box
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 1.1, duration: 1.1 }}
                         >
-                          <Box w={{ md: '30%' }}>
-                            <Text
-                              as="b"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                              color={'#231F20'}
-                            >
-                              Place Of Birth
-                            </Text>
-                          </Box>
-                          <Box w={{ md: '70%' }}>
-                            <Text
-                              as="p"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              {travellersExisting?.data?.placeOfBirth}
-                            </Text>
-                          </Box>
-                        </Box>
-                        <Box
-                          w={{ base: '100%' }}
-                          display="flex"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          p={{ base: '4px', md: '10px' }}
-                          borderBottom={'1px solid #ebebeb'}
-                        >
-                          <Box w={{ md: '30%' }}>
-                            <Text
-                              as="b"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                              color={'#231F20'}
-                            >
-                              Address
-                            </Text>
-                          </Box>
-                          <Box w={{ md: '70%' }}>
-                            <Text
-                              as="p"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              {travellersExisting?.data?.address}
-                            </Text>
-                          </Box>
-                        </Box>
-                        <Box
-                          w={{ base: '100%' }}
-                          display="flex"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          p={{ base: '4px', md: '10px' }}
-                          borderBottom={'1px solid #ebebeb'}
-                        >
-                          <Box w={{ md: '30%' }}>
-                            <Text
-                              as="b"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                              color={'#231F20'}
-                            >
-                              Beneficiary
-                            </Text>
-                          </Box>
-                          <Box w={{ md: '70%' }}>
-                            <Text
-                              as="p"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              {travellersExisting?.data?.beneficiary
-                                ? travellersExisting?.data?.beneficiary
-                                : '-'}
-                            </Text>
-                          </Box>
-                        </Box>
-                        <Box
-                          w={{ base: '100%' }}
-                          display="flex"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          p={{ base: '4px', md: '10px' }}
-                          borderBottom={'1px solid #ebebeb'}
-                        >
-                          <Box w={{ md: '30%' }}>
-                            <Text
-                              as="b"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                              color={'#231F20'}
-                            >
-                              Relationship
-                            </Text>
-                          </Box>
-                          <Box w={{ md: '70%' }}>
-                            <Text
-                              as="p"
-                              size="sm"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              {travellersExisting?.data?.relationship
-                                ? travellersExisting?.data.relationship
-                                : '-'}
-                            </Text>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Box>
-                  ) : (
-                    <Text as="p" style={{ width: '100%', textAlign: 'center' }}>
-                      result
-                    </Text>
+                          <Text
+                            as="p"
+                            style={{
+                              height: '200px',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              background: '#d3d3d324',
+                            }}
+                          >
+                            result
+                          </Text>
+                        </motion.Box>
+                      )}
+                    </motion.Box>
                   )}
-                </Box>
-              )}
-              <RadioGroup
-                defaultValue={select}
-                onChange={onSelect}
-                mt={select !== 'new' ? '10px' : '0px'}
-              >
-                <Stack spacing={4} direction="column">
-                  <Radio value="new">
-                    <Text as="p" fontSize={'sm'} fontFamily={'Mulish'}>
-                      New Traveller
-                    </Text>
-                  </Radio>
-                  <Radio value="existing">
-                    <Text as="p" fontSize={'sm'} fontFamily={'Mulish'}>
-                      Existing Traveller
-                    </Text>
-                  </Radio>
-                </Stack>
-              </RadioGroup>
-            </Box>
-            {select === 'new' ? (
-              <>
-                <Box>
-                  <FormControl
-                    variant="floating"
-                    isRequired
-                    fontFamily={'Mulish'}
-                    mt="14px"
-                    id="float-label"
+                  <RadioGroup
+                    defaultValue={select}
+                    onChange={onSelect}
+                    mt={select !== 'new' ? '10px' : '0px'}
                   >
-                    <Box className="floating-form">
-                      <Box className="floating-label">
-                        <Select
-                          borderRadius={'5px'}
-                          className="floating-select"
-                          placeholder=""
-                          defaultValue={type}
-                          h="48px"
-                          onChange={handleSelectType}
-                          style={{
-                            backgroundColor: type !== '' ? '#e8f0fe' : '',
-                          }}
+                    <Stack spacing={4} direction="column">
+                      <Radio value="new">
+                        <Text as="p" fontSize={'sm'} fontFamily={'Mulish'}>
+                          New Traveller
+                        </Text>
+                      </Radio>
+                      <Radio value="existing">
+                        <Text as="p" fontSize={'sm'} fontFamily={'Mulish'}>
+                          Existing Traveller
+                        </Text>
+                      </Radio>
+                    </Stack>
+                  </RadioGroup>
+                </Box>
+                {select === 'new' ? (
+                  <motion.div
+                    initial={{ y: '100vh' }}
+                    animate={{ y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.5 }}
+                  >
+                    <motion.Box
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.1, duration: 1.1 }}
+                    >
+                      <FormControl
+                        variant="floating"
+                        isRequired
+                        fontFamily={'Mulish'}
+                        mt="14px"
+                        id="float-label"
+                      >
+                        <Box className="floating-form">
+                          <Box className="floating-label">
+                            <Select
+                              borderRadius={'5px'}
+                              className="floating-select"
+                              placeholder=""
+                              defaultValue={type}
+                              h="48px"
+                              onChange={handleSelectType}
+                              style={{
+                                backgroundColor: type !== '' ? '#e8f0fe' : '',
+                              }}
+                            >
+                              <option value=""></option>
+                              <option value="Adult">Adult</option>
+                              <option value="Child">Child</option>
+                            </Select>
+                            <span className="highlight"></span>
+                            <FormLabel
+                              fontSize="12"
+                              pt="1.5"
+                              style={{
+                                transform:
+                                  isActiveSelectCountry || type !== ''
+                                    ? 'translate(0, -9px) scale(0.75)'
+                                    : '',
+                                color:
+                                  isActiveSelectCountry || type !== ''
+                                    ? '#065baa'
+                                    : '',
+                                fontStyle:
+                                  isActiveSelectCountry || type !== ''
+                                    ? 'italic'
+                                    : 'normal',
+                                fontSize:
+                                  isActiveSelectCountry || type !== ''
+                                    ? '12px'
+                                    : '14px',
+                              }}
+                              fontFamily={'Mulish'}
+                            >
+                              Select Status
+                            </FormLabel>
+                          </Box>
+                        </Box>
+                        {/* It is important that the Label comes after the Control due to css selectors */}
+                      </FormControl>
+                    </motion.Box>
+                    <motion.Box
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.1, duration: 1.1 }}
+                    >
+                      <FormControl
+                        variant="floating"
+                        isRequired
+                        fontFamily={'Mulish'}
+                        mt="14px"
+                        id="float-label"
+                      >
+                        <Box className="floating-form">
+                          <Box className="floating-label">
+                            <Select
+                              borderRadius={'5px'}
+                              className="floating-select"
+                              placeholder=""
+                              defaultValue={typeStatus}
+                              h="48px"
+                              onChange={handleSelectTypeStatus}
+                              style={{
+                                backgroundColor:
+                                  typeStatus !== '' ? '#e8f0fe' : '',
+                              }}
+                            >
+                              <option value="Mr">Mr</option>
+                              <option value="Mrs">Mrs</option>
+                              <option value="Ms">Ms</option>
+                            </Select>
+                            <span className="highlight"></span>
+                            <FormLabel
+                              fontSize="12"
+                              pt="1.5"
+                              style={{
+                                transform:
+                                  isActiveSelectCountry || type !== ''
+                                    ? 'translate(0, -9px) scale(0.75)'
+                                    : '',
+                                color:
+                                  isActiveSelectCountry || type !== ''
+                                    ? '#065baa'
+                                    : '',
+                                fontSize: '14px',
+                              }}
+                              fontFamily={'Mulish'}
+                            >
+                              Select Title
+                            </FormLabel>
+                          </Box>
+                        </Box>
+                        {/* It is important that the Label comes after the Control due to css selectors */}
+                      </FormControl>
+                    </motion.Box>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.1, duration: 1.1 }}
+                    >
+                      <Box display={'flex'} gap="5px">
+                        <FormControl
+                          variant="floating"
+                          id="first-name"
+                          isRequired
                         >
-                          <option value=""></option>
-                          <option value="Adult">Adult</option>
-                          <option value="Child">Child</option>
-                        </Select>
-                        <span className="highlight"></span>
-                        <FormLabel
-                          fontSize="12"
-                          pt="1.5"
-                          style={{
-                            transform:
-                              isActiveSelectCountry || type !== ''
-                                ? 'translate(0, -9px) scale(0.75)'
-                                : '',
-                            color:
-                              isActiveSelectCountry || type !== ''
-                                ? '#065baa'
-                                : '',
-                            fontStyle:
-                              isActiveSelectCountry || type !== ''
-                                ? 'italic'
-                                : 'normal',
-                            fontSize:
-                              isActiveSelectCountry || type !== ''
-                                ? '12px'
-                                : '14px',
-                          }}
-                          fontFamily={'Mulish'}
+                          <Input
+                            placeholder=" "
+                            _placeholder={{ opacity: 1, color: 'gray.500' }}
+                            value={firstName}
+                            onChange={setFirstNames}
+                            h="48px"
+                            style={{
+                              backgroundColor:
+                                firstName !== '' ? '#e8f0fe' : '',
+                            }}
+                          />
+                          {/* It is important that the Label comes after the Control due to css selectors */}
+                          <FormLabel
+                            fontSize="12"
+                            pt="1.5"
+                            className="floating-label-global"
+                          >
+                            FirstName
+                          </FormLabel>
+                          {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                        </FormControl>
+                        <FormControl
+                          variant="floating"
+                          id="first-name"
+                          isRequired
                         >
-                          Select Status
-                        </FormLabel>
+                          <Input
+                            placeholder=" "
+                            _placeholder={{ opacity: 1, color: 'gray.500' }}
+                            value={lastName}
+                            onChange={setLastNames}
+                            h="48px"
+                            style={{
+                              backgroundColor: lastName !== '' ? '#e8f0fe' : '',
+                            }}
+                          />
+                          {/* It is important that the Label comes after the Control due to css selectors */}
+                          <FormLabel
+                            fontSize="12"
+                            pt="1.5"
+                            className="floating-label-global"
+                          >
+                            LastName
+                          </FormLabel>
+                          {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                        </FormControl>
                       </Box>
-                    </Box>
-                    {/* It is important that the Label comes after the Control due to css selectors */}
-                  </FormControl>
-                </Box>
-                <Box>
-                  <FormControl
-                    variant="floating"
-                    isRequired
-                    fontFamily={'Mulish'}
-                    mt="14px"
-                    id="float-label"
-                  >
-                    <Box className="floating-form">
-                      <Box className="floating-label">
-                        <Select
-                          borderRadius={'5px'}
-                          className="floating-select"
-                          placeholder=""
-                          defaultValue={typeStatus}
-                          h="48px"
-                          onChange={handleSelectTypeStatus}
-                          style={{
-                            backgroundColor: typeStatus !== '' ? '#e8f0fe' : '',
-                          }}
+                    </motion.div>
+                    <motion.Box
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.1, duration: 1.1 }}
+                    >
+                      <Text
+                        as="p"
+                        fontFamily={'Mulish'}
+                        color="#065BAA"
+                        pl="5px"
+                        style={{ fontSize: '12px' }}
+                      >
+                        As on ID Card/passport/driving license (without degree
+                        or special characters)
+                      </Text>
+                    </motion.Box>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.1, duration: 1.1 }}
+                    >
+                      <Box display={'flex'} gap="5px" mt="10px">
+                        <Box bg={dateOfBirth !== null ? '#e8f0fe' : ''}>
+                          <DatePicker
+                            value={dateOfBirth}
+                            onChange={selectDate}
+                            inputPlaceholder="Select a date" // placeholder
+                            formatInputText={formatInputValue}
+                            inputClassName={
+                              dateOfBirth !== null ? '' : 'my-custom-input'
+                            } // custom class
+                            renderInput={renderCustomInput}
+                            shouldHighlightWeekends
+                            style={{
+                              backgroundColor:
+                                dateOfBirth !== null ? '#e8f0fe' : '',
+                            }}
+                          />
+                        </Box>
+                        <FormControl
+                          variant="floating"
+                          id="first-name"
+                          isRequired
                         >
-                          <option value="Mr">Mr</option>
-                          <option value="Mrs">Mrs</option>
-                          <option value="Ms">Ms</option>
-                        </Select>
-                        <span className="highlight"></span>
-                        <FormLabel
-                          fontSize="12"
-                          pt="1.5"
-                          style={{
-                            transform:
-                              isActiveSelectCountry || type !== ''
-                                ? 'translate(0, -9px) scale(0.75)'
-                                : '',
-                            color:
-                              isActiveSelectCountry || type !== ''
-                                ? '#065baa'
-                                : '',
-                            fontSize: '14px',
-                          }}
-                          fontFamily={'Mulish'}
-                        >
-                          Select Title
-                        </FormLabel>
+                          <Input
+                            placeholder=" "
+                            _placeholder={{ opacity: 1, color: 'gray.500' }}
+                            value={placeOfBirth}
+                            onChange={setPlaceOfBirths}
+                            h="48px"
+                            style={{
+                              backgroundColor:
+                                placeOfBirth !== '' ? '#e8f0fe' : '',
+                            }}
+                          />
+                          {/* It is important that the Label comes after the Control due to css selectors */}
+                          <FormLabel
+                            fontSize="12"
+                            pt="1.5"
+                            className="floating-label-global"
+                          >
+                            {' '}
+                            Place Of Birth
+                          </FormLabel>
+                          {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                        </FormControl>
                       </Box>
-                    </Box>
-                    {/* It is important that the Label comes after the Control due to css selectors */}
-                  </FormControl>
-                </Box>
-                <Box display={'flex'} gap="5px">
-                  <FormControl variant="floating" id="first-name" isRequired>
-                    <Input
-                      placeholder=" "
-                      _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={firstName}
-                      onChange={setFirstNames}
-                      h="48px"
-                      style={{
-                        backgroundColor: firstName !== '' ? '#e8f0fe' : '',
-                      }}
-                    />
-                    {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      className="floating-label-global"
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.1, duration: 1.1 }}
                     >
-                      FirstName
-                    </FormLabel>
-                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                  </FormControl>
-                  <FormControl variant="floating" id="first-name" isRequired>
-                    <Input
-                      placeholder=" "
-                      _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={lastName}
-                      onChange={setLastNames}
-                      h="48px"
-                      style={{
-                        backgroundColor: lastName !== '' ? '#e8f0fe' : '',
-                      }}
-                    />
-                    {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      className="floating-label-global"
-                    >
-                      LastName
-                    </FormLabel>
-                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                  </FormControl>
-                </Box>
-                <Box>
-                  <Text
-                    as="p"
-                    fontFamily={'Mulish'}
-                    color="#065BAA"
-                    pl="5px"
-                    style={{ fontSize: '12px' }}
-                  >
-                    As on ID Card/passport/driving license (without degree or
-                    special characters)
-                  </Text>
-                </Box>
-                <Box display={'flex'} gap="5px" mt="10px">
-                  <Box bg={dateOfBirth !== null ? '#e8f0fe' : ''}>
-                    <DatePicker
-                      value={dateOfBirth}
-                      onChange={selectDate}
-                      inputPlaceholder="Select a date" // placeholder
-                      formatInputText={formatInputValue}
-                      inputClassName={
-                        dateOfBirth !== null ? '' : 'my-custom-input'
-                      } // custom class
-                      renderInput={renderCustomInput}
-                      shouldHighlightWeekends
-                      style={{
-                        backgroundColor: dateOfBirth !== null ? '#e8f0fe' : '',
-                      }}
-                    />
-                  </Box>
-                  <FormControl variant="floating" id="first-name" isRequired>
-                    <Input
-                      placeholder=" "
-                      _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={placeOfBirth}
-                      onChange={setPlaceOfBirths}
-                      h="48px"
-                      style={{
-                        backgroundColor: placeOfBirth !== '' ? '#e8f0fe' : '',
-                      }}
-                    />
-                    {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      className="floating-label-global"
-                    >
-                      {' '}
-                      Place Of Birth
-                    </FormLabel>
-                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                  </FormControl>
-                </Box>
-                <Box w={{ base: '100%', md: '365px' }} pb="20px">
-                  <FormControl
-                    variant="floating"
-                    id="first-name"
-                    isRequired
-                    fontFamily={'Mulish'}
-                    mt="14px"
-                  >
-                    <Textarea
-                      pt="1em"
-                      placeholder=" "
-                      _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={address}
-                      onChange={setAddresss}
-                      style={{
-                        backgroundColor: address !== '' ? '#e8f0fe' : '',
-                        fontSize: '12px',
-                        fontfamily: 'Mulish',
-                        fontWeight: 'normal',
-                      }}
-                      h="48px"
-                    />
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      fontFamily={'Mulish'}
-                      style={{ fontSize: '14px' }}
-                      className="floating-label-global"
-                    >
-                      Address
-                    </FormLabel>
-                    {/* It is important that the Label comes after the Control due to css selectors */}
-                  </FormControl>
-                </Box>
-                <Box display={'flex'} gap="5px">
-                  <FormControl
-                    variant="floating"
-                    id="first-name"
-                    isRequired
-                    isInvalid={!isValid}
-                  >
-                    <Input
-                      type="email"
-                      placeholder=""
-                      value={email}
-                      onChange={setEmailAddress}
-                      h="48px"
-                      style={{
-                        backgroundColor: email !== '' ? '#e8f0fe' : '',
-                      }}
-                    />
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      className="floating-label-global"
-                    >
-                      Email
-                    </FormLabel>
-                    <FormErrorMessage>
-                      {!isValid && 'Invalid email address format'}
-                    </FormErrorMessage>
-                  </FormControl>
-                  <FormControl
-                    variant="floating"
-                    id="first-name"
-                    isRequired
-                    isInvalid={!isValidPhone}
-                  >
-                    <Input
-                      type="tel"
-                      placeholder=" "
-                      _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={phoneNumber}
-                      onChange={setPhoneNumbers}
-                      h="48px"
-                      style={{
-                        backgroundColor: phoneNumber !== '' ? '#e8f0fe' : '',
-                      }}
-                    />
-                    {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      className="floating-label-global"
-                    >
-                      Phone Number
-                    </FormLabel>
-                    <FormErrorMessage>
-                      {!isValidPhone && 'Invalid phone number format'}
-                    </FormErrorMessage>
-                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                  </FormControl>
-                </Box>
-                <Box display={'flex'} gap="5px" mt="1em">
-                  <FormControl variant="floating" id="first-name" isRequired>
-                    <Input
-                      placeholder=" "
-                      _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={pasportNumber}
-                      onChange={setPasportNumbers}
-                      h="48px"
-                      style={{
-                        backgroundColor: pasportNumber !== '' ? '#e8f0fe' : '',
-                      }}
-                    />
-                    {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      className="floating-label-global"
-                    >
-                      Pasport Number
-                    </FormLabel>
-                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                  </FormControl>
-                  <FormControl variant="floating" id="first-name">
-                    <Input
-                      placeholder=" "
-                      _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={ticketNumber}
-                      onChange={setTicketNumbers}
-                      h="48px"
-                      style={{
-                        backgroundColor: ticketNumber !== '' ? '#e8f0fe' : '',
-                      }}
-                    />
-                    {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      className="floating-label-global"
-                    >
-                      Ticket Number
-                    </FormLabel>
-                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                  </FormControl>
-                </Box>
-                <Box display={'flex'} gap="5px" mt="1em">
-                  <FormControl variant="floating" id="first-name">
-                    <Input
-                      placeholder=" "
-                      _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={beneficiary}
-                      onChange={setBeneficiaries}
-                      h="48px"
-                      style={{
-                        backgroundColor: beneficiary !== '' ? '#e8f0fe' : '',
-                      }}
-                    />
-                    {/* It is important that the Label comes after the Control due to css selectors */}
-                    <FormLabel
-                      fontSize="12"
-                      pt="1.5"
-                      className="floating-label-global"
-                    >
-                      Beneficiary
-                    </FormLabel>
-                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                  </FormControl>
-                  <FormControl>
-                    <Box className="floating-form">
-                      <Box>
-                        <Select
-                          style={{
-                            backgroundColor:
-                              relationship !== '' ? '#e8f0fe' : '',
-                          }}
-                          // className="floating-select"
-                          placeholder=""
-                          defaultValue={relationship}
-                          h="48px"
-                          onChange={setRelationships}
+                      <Box w={{ base: '100%', md: '365px' }} pb="20px">
+                        <FormControl
+                          variant="floating"
+                          id="first-name"
+                          isRequired
+                          fontFamily={'Mulish'}
+                          mt="14px"
                         >
-                          <option value="" className="">
-                            Relationship
-                          </option>
-                          <option value="parent">Parent</option>
-                          <option value="child">Child</option>
-                          <option value="close-family">Close Family</option>
-                        </Select>
-                        <span className="highlight"></span>
-                        <FormLabel
-                          pt="1.5"
-                          className="floating-label-global"
-                          style={{
-                            transform:
-                              relationship !== ''
-                                ? 'translate(-21px, -54px) scale(0.75)'
-                                : 'translate(-21px, -40px) scale(0.75)',
-                            background: relationship === '' ? 'white' : '',
+                          <Textarea
+                            pt="1em"
+                            placeholder=" "
+                            _placeholder={{ opacity: 1, color: 'gray.500' }}
+                            value={address}
+                            onChange={setAddresss}
+                            style={{
+                              backgroundColor: address !== '' ? '#e8f0fe' : '',
+                              fontSize: '12px',
+                              fontfamily: 'Mulish',
+                              fontWeight: 'normal',
+                            }}
+                            h="48px"
+                          />
+                          <FormLabel
+                            fontSize="12"
+                            pt="1.5"
+                            fontFamily={'Mulish'}
+                            style={{ fontSize: '14px' }}
+                            className="floating-label-global"
+                          >
+                            Address
+                          </FormLabel>
+                          {/* It is important that the Label comes after the Control due to css selectors */}
+                        </FormControl>
+                      </Box>
+                      <Box display={'flex'} gap="5px">
+                        <FormControl
+                          variant="floating"
+                          id="first-name"
+                          isRequired
+                          isInvalid={!isValid}
+                        >
+                          <Input
+                            type="email"
+                            placeholder=""
+                            value={email}
+                            onChange={setEmailAddress}
+                            h="48px"
+                            style={{
+                              backgroundColor: email !== '' ? '#e8f0fe' : '',
+                            }}
+                          />
+                          <FormLabel
+                            fontSize="12"
+                            pt="1.5"
+                            className="floating-label-global"
+                          >
+                            Email
+                          </FormLabel>
+                          <FormErrorMessage>
+                            {!isValid && 'Invalid email address format'}
+                          </FormErrorMessage>
+                        </FormControl>
+                        <FormControl
+                          variant="floating"
+                          id="first-name"
+                          isRequired
+                          isInvalid={!isValidPhone}
+                        >
+                          <Input
+                            type="tel"
+                            placeholder=" "
+                            _placeholder={{ opacity: 1, color: 'gray.500' }}
+                            value={phoneNumber}
+                            onChange={setPhoneNumbers}
+                            h="48px"
+                            style={{
+                              backgroundColor:
+                                phoneNumber !== '' ? '#e8f0fe' : '',
+                            }}
+                          />
+                          {/* It is important that the Label comes after the Control due to css selectors */}
+                          <FormLabel
+                            fontSize="12"
+                            pt="1.5"
+                            className="floating-label-global"
+                          >
+                            Phone Number
+                          </FormLabel>
+                          <FormErrorMessage>
+                            {!isValidPhone && 'Invalid phone number format'}
+                          </FormErrorMessage>
+                          {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                        </FormControl>
+                      </Box>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.1, duration: 1.1 }}
+                    >
+                      <Box display={'flex'} gap="5px" mt="1em">
+                        <FormControl
+                          variant="floating"
+                          id="first-name"
+                          isRequired
+                        >
+                          <Input
+                            placeholder=" "
+                            _placeholder={{ opacity: 1, color: 'gray.500' }}
+                            value={pasportNumber}
+                            onChange={setPasportNumbers}
+                            h="48px"
+                            style={{
+                              backgroundColor:
+                                pasportNumber !== '' ? '#e8f0fe' : '',
+                            }}
+                          />
+                          {/* It is important that the Label comes after the Control due to css selectors */}
+                          <FormLabel
+                            fontSize="12"
+                            pt="1.5"
+                            className="floating-label-global"
+                          >
+                            Pasport Number
+                          </FormLabel>
+                          {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                        </FormControl>
+                        <FormControl variant="floating" id="first-name">
+                          <Input
+                            placeholder=" "
+                            _placeholder={{ opacity: 1, color: 'gray.500' }}
+                            value={ticketNumber}
+                            onChange={setTicketNumbers}
+                            h="48px"
+                            style={{
+                              backgroundColor:
+                                ticketNumber !== '' ? '#e8f0fe' : '',
+                            }}
+                          />
+                          {/* It is important that the Label comes after the Control due to css selectors */}
+                          <FormLabel
+                            fontSize="12"
+                            pt="1.5"
+                            className="floating-label-global"
+                          >
+                            Ticket Number
+                          </FormLabel>
+                          {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                        </FormControl>
+                      </Box>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.1, duration: 1.1 }}
+                    >
+                      <Box display={'flex'} gap="5px" mt="1em">
+                        <FormControl variant="floating" id="first-name">
+                          <Input
+                            placeholder=" "
+                            _placeholder={{ opacity: 1, color: 'gray.500' }}
+                            value={beneficiary}
+                            onChange={setBeneficiaries}
+                            h="48px"
+                            style={{
+                              backgroundColor:
+                                beneficiary !== '' ? '#e8f0fe' : '',
+                            }}
+                          />
+                          {/* It is important that the Label comes after the Control due to css selectors */}
+                          <FormLabel
+                            fontSize="12"
+                            pt="1.5"
+                            className="floating-label-global"
+                          >
+                            Beneficiary
+                          </FormLabel>
+                          {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                        </FormControl>
+                        <FormControl>
+                          <Box className="floating-form">
+                            <Box>
+                              <Select
+                                className="global-input"
+                                style={{
+                                  backgroundColor:
+                                    relationship !== '' ? '#e8f0fe' : '',
+                                }}
+                                // className="floating-select"
+                                placeholder=""
+                                defaultValue={relationship}
+                                h="48px"
+                                onChange={setRelationships}
+                              >
+                                <option value="" className="">
+                                  Relationship
+                                </option>
+                                <option value="parent">Parent</option>
+                                <option value="child">Child</option>
+                                <option value="close-family">
+                                  Close Family
+                                </option>
+                              </Select>
+                              <span className="highlight"></span>
+                              <FormLabel
+                                pt="1.5"
+                                className="floating-label-global"
+                                style={{
+                                  transform:
+                                    relationship !== ''
+                                      ? 'translate(-21px, -54px) scale(0.75)'
+                                      : 'translate(-21px, -36px) scale(0.75)',
+                                  background:
+                                    relationship === '' ? 'white' : '',
 
-                            color:
-                              relationship === '' ? '#000000c9' : '#065baa',
-                          }}
-                          _hover={{
-                            backgroundColor: 'none',
-                          }}
-                          fontFamily={'Mulish'}
+                                  color:
+                                    relationship === ''
+                                      ? '#000000c9'
+                                      : '#065baa',
+                                }}
+                                _hover={{
+                                  backgroundColor: 'none',
+                                }}
+                                fontFamily={'Mulish'}
+                              >
+                                Relationship
+                              </FormLabel>
+                            </Box>
+                          </Box>
+                          {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                        </FormControl>
+                      </Box>
+                    </motion.div>
+                  </motion.div>
+                ) : (
+                  <Box>
+                    <Box
+                      display={'flex'}
+                      gap="5px"
+                      mt="3em"
+                      flexDirection={'column'}
+                    >
+                      <Box
+                        mt="1em"
+                        position={'relative'}
+                        zIndex={'0'}
+                        display={'flex'}
+                        justifyContent={'flex-start'}
+                        alignItems={'center'}
+                        gap="4px"
+                        width={{ base: '100%', md: '530px' }}
+                      >
+                        <Box>
+                          <FormControl
+                            variant="floating"
+                            id="first-name"
+                            isRequired
+                          >
+                            <FormLabel
+                              fontSize="12"
+                              pt="1.5"
+                              fontFamily={'Mulish'}
+                              style={{
+                                transform:
+                                  'translate(-11px, -33px) scale(0.75)',
+                                fontSize: '18px',
+                                background: 'white',
+                                color: '#171923',
+                              }}
+                            >
+                              Name Traveller
+                            </FormLabel>
+                            <Input
+                              placeholder=" "
+                              _placeholder={{ opacity: 1, color: 'gray.500' }}
+                              value={existingTravellers}
+                              name="name"
+                              onChange={handleExisitingTravelers}
+                              h="48px"
+                            />
+
+                            {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                          </FormControl>
+                        </Box>
+                        <Box width={{ base: '100%', md: '250px' }}>
+                          <FormControl
+                            variant="floating"
+                            id="first-name"
+                            isRequired
+                            fontFamily={'Mulish'}
+                          >
+                            <FormLabel
+                              fontSize="12"
+                              pt="1.5"
+                              fontFamily={'Mulish'}
+                              style={{
+                                transform: 'translate(16px, 2px) scale(0.75)',
+                                fontSize: '18px',
+                                background: '#ebebeb',
+                                color: '#171923',
+                              }}
+                            >
+                              Date OF Birth
+                            </FormLabel>
+                            <Box className="datepicker-container">
+                              <DatePicker
+                                // calendarPopperPosition="auto"
+                                value={existingTravellersDate}
+                                onChange={selectDateExisting}
+                                inputPlaceholder="Select a date" // placeholder
+                                formatInputText={formatInputValues}
+                                // inputClassName="my-custom-inputs" // custom class
+                                renderInput={renderCustomInputs}
+                                // wrapperClassName={'calendarClassName'}
+                                calendarClassName="custom-datepicker"
+                                shouldHighlightWeekends
+                                style={{
+                                  backgroundColor:
+                                    existingTravellersDate !== null
+                                      ? '#e8f0fe'
+                                      : '',
+                                }}
+                              />
+                            </Box>
+                          </FormControl>
+                        </Box>
+                      </Box>
+
+                      <Box mt="10px">
+                        <Button
+                          variant={'outline'}
+                          onClick={getTravellersExisting}
+                          isDisabled={
+                            existingTravellers === '' ||
+                            existingTravellersDate === null
+                              ? true
+                              : false
+                          }
                         >
-                          Relationship
-                        </FormLabel>
+                          Search
+                        </Button>
                       </Box>
                     </Box>
-                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                  </FormControl>
-                </Box>
-              </>
-            ) : (
-              <Box>
-                <Box
-                  display={'flex'}
-                  gap="5px"
-                  mt="3em"
-                  flexDirection={'column'}
+                  </Box>
+                )}
+              </ModalBody>
+
+              <ModalFooter>
+                <Button onClick={onClose} disabled={loadingEdit || loadingAdd}>
+                  Cancel
+                </Button>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={
+                    EditTraveller !== null
+                      ? onEdit
+                      : travellersExisting !== null
+                      ? onSaveExisting
+                      : onSave
+                  }
+                  disabled={loadingEdit || loadingAdd}
+                  isLoading={loadingEdit || loadingAdd}
                 >
+                  {EditTraveller !== null ? 'Edit' : 'Add'}
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </motion.div>
+        <Box
+          border={'1px'}
+          borderColor="#ebebeb"
+          p="12px"
+          display="flex"
+          justifyContent={'space-between'}
+          alignItems="center"
+        >
+          <Box
+            as="button"
+            isDisabled={activeStep === 0}
+            onClick={handlePrev}
+            display="flex"
+            textAlign="left"
+          >
+            <ArrowBackIcon boxSize={4} size="sm" w={5} h={5} color="#065BAA" />
+            <Heading
+              fontSize="sm"
+              as="b"
+              color="#065BAA"
+              style={{ fontSize: '16px' }}
+              fontFamily="Mulish"
+              fontWeight={'700'}
+            >
+              Change Insurance
+            </Heading>
+          </Box>
+          <Box position={'relative'} m="auto">
+            <Heading
+              variant="primary"
+              as="h4"
+              size="md"
+              style={{ fontSize: '18px' }}
+              fontSize="sm"
+              color="#065BAA"
+              textAlign={'center'}
+            >
+              Fill in Travellers Data{' '}
+            </Heading>
+          </Box>
+        </Box>
+        <Box display={'flex'}>
+          <Box
+            display={'flex'}
+            flexDirection={'column'}
+            w={{ base: '100%', md: '30%' }}
+            border={'1px solid #ebebeb'}
+            m="1em"
+          >
+            {loading ? (
+              <Center h="50vh">
+                <PulseLoader color={'#FFF'} />
+              </Center>
+            ) : (
+              <motion.Box
+                initial={{ y: 100 }}
+                animate={{ y: 0 }}
+                transition={{ delay: 1.1, duration: 1.1 }}
+              >
+                <Box bg="#F0F3F8" p="15px">
                   <Box
-                    mt="1em"
-                    position={'relative'}
-                    zIndex={'0'}
+                    display="flex"
+                    justifyContent={'flex-start'}
+                    alignItems={'center'}
+                    pt="15px"
+                  >
+                    <Image src={Umbrella} alt="insurance" />
+                    <Box
+                      display={'flex'}
+                      justifyContent={'center'}
+                      flexDirection={'column'}
+                    >
+                      <Text
+                        as="b"
+                        size={'sm'}
+                        fontFamily={'Mulish'}
+                        style={{ fontSize: '14px' }}
+                      >
+                        {payload?.bookingProduct?.productName}
+                      </Text>
+                      <Text
+                        as="b"
+                        size={'sm'}
+                        fontFamily={'Mulish'}
+                        color="#065BAA"
+                        style={{ fontSize: '14px' }}
+                      >
+                        {
+                          <CurrencyFormatter
+                            amount={payload?.bookingProduct?.finalPrice}
+                          />
+                        }{' '}
+                        {'-/ per orang'}
+                      </Text>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box bg="white" p="10px">
+                  <Box
                     display={'flex'}
                     justifyContent={'flex-start'}
                     alignItems={'center'}
-                    gap="4px"
-                    width={{ base: '100%', md: '530px' }}
+                    boxSizing="borderBox"
+                    borderBottom={'1px solid #ebebeb'}
+                    pb="10px"
+                    pt="10px"
                   >
-                    <Box>
-                      <FormControl
-                        variant="floating"
-                        id="first-name"
-                        isRequired
-                      >
-                        <FormLabel
-                          fontSize="12"
-                          pt="1.5"
-                          fontFamily={'Mulish'}
-                          style={{
-                            transform: 'translate(-11px, -33px) scale(0.75)',
-                            fontSize: '18px',
-                            background: 'white',
-                            color: '#171923',
-                          }}
-                        >
-                          Name Traveller
-                        </FormLabel>
-                        <Input
-                          placeholder=" "
-                          _placeholder={{ opacity: 1, color: 'gray.500' }}
-                          value={existingTravellers}
-                          name="name"
-                          onChange={handleExisitingTravelers}
-                          h="48px"
-                        />
-
-                        {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                      </FormControl>
-                    </Box>
-                    <Box width={{ base: '100%', md: '250px' }}>
-                      <FormControl
-                        variant="floating"
-                        id="first-name"
-                        isRequired
-                        fontFamily={'Mulish'}
-                      >
-                        <FormLabel
-                          fontSize="12"
-                          pt="1.5"
-                          fontFamily={'Mulish'}
-                          style={{
-                            transform: 'translate(16px, 2px) scale(0.75)',
-                            fontSize: '18px',
-                            background: '#ebebeb',
-                            color: '#171923',
-                          }}
-                        >
-                          Date OF Birth
-                        </FormLabel>
-                        <Box className="datepicker-container">
-                          <DatePicker
-                            // calendarPopperPosition="auto"
-                            value={existingTravellersDate}
-                            onChange={selectDateExisting}
-                            inputPlaceholder="Select a date" // placeholder
-                            formatInputText={formatInputValues}
-                            // inputClassName="my-custom-inputs" // custom class
-                            renderInput={renderCustomInputs}
-                            // wrapperClassName={'calendarClassName'}
-                            calendarClassName="custom-datepicker"
-                            shouldHighlightWeekends
-                          />
-                        </Box>
-                      </FormControl>
-                    </Box>
-                  </Box>
-
-                  <Box mt="10px">
-                    <Button
-                      variant={'outline'}
-                      onClick={getTravellersExisting}
-                      isDisabled={
-                        existingTravellers === '' ||
-                        existingTravellersDate === null
-                          ? true
-                          : false
-                      }
+                    <Text
+                      as="b"
+                      w={'50%'}
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '14px' }}
                     >
-                      Search
-                    </Button>
+                      Plan Type
+                    </Text>
+                    <Text
+                      as="p"
+                      w={'50%'}
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '12px' }}
+                      pl="5px"
+                    >
+                      {payload?.coverType}
+                    </Text>
                   </Box>
-                </Box>
-              </Box>
-            )}
-          </ModalBody>
-
-          <ModalFooter>
-            <Button onClick={onClose} disabled={loadingEdit || loadingAdd}>
-              Cancel
-            </Button>
-            <Button
-              colorScheme="blue"
-              mr={3}
-              onClick={
-                EditTraveller !== null
-                  ? onEdit
-                  : travellersExisting !== null
-                  ? onSaveExisting
-                  : onSave
-              }
-              disabled={loadingEdit || loadingAdd}
-              isLoading={loadingEdit || loadingAdd}
-            >
-              {EditTraveller !== null ? 'Edit' : 'Add'}
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-      <Box
-        border={'1px'}
-        borderColor="#ebebeb"
-        p="12px"
-        display="flex"
-        justifyContent={'space-between'}
-        alignItems="center"
-      >
-        <Box
-          as="button"
-          isDisabled={activeStep === 0}
-          onClick={handlePrev}
-          display="flex"
-          textAlign="left"
-        >
-          <ArrowBackIcon boxSize={4} size="sm" w={5} h={5} color="#065BAA" />
-          <Heading
-            fontSize="sm"
-            as="b"
-            color="#065BAA"
-            style={{ fontSize: '16px' }}
-            fontFamily="Mulish"
-            fontWeight={'700'}
-          >
-            Change Insurance
-          </Heading>
-        </Box>
-        <Box position={'relative'} m="auto">
-          <Heading
-            variant="primary"
-            as="h4"
-            size="md"
-            style={{ fontSize: '18px' }}
-            fontSize="sm"
-            color="#065BAA"
-            textAlign={'center'}
-          >
-            Fill in Travellers Data{' '}
-          </Heading>
-        </Box>
-      </Box>
-      <Box display={'flex'}>
-        <Box
-          display={'flex'}
-          flexDirection={'column'}
-          w={{ base: '100%', md: '30%' }}
-          border={'1px solid #ebebeb'}
-          m="1em"
-        >
-          {loading ? (
-            <Center h="50vh">
-              <PulseLoader color={'#FFF'} />
-            </Center>
-          ) : (
-            <Box>
-              <Box bg="#F0F3F8" p="15px">
-                <Box
-                  display="flex"
-                  justifyContent={'flex-start'}
-                  alignItems={'center'}
-                  pt="15px"
-                >
-                  <Image src={Umbrella} alt="insurance" />
                   <Box
                     display={'flex'}
-                    justifyContent={'center'}
-                    flexDirection={'column'}
+                    justifyContent={'lex-start'}
+                    alignItems={'center'}
+                    borderBottom={'1px solid #ebebeb'}
+                    pb="10px"
+                    pt="10px"
                   >
                     <Text
                       as="b"
-                      size={'sm'}
+                      w="50%"
                       fontFamily={'Mulish'}
                       style={{ fontSize: '14px' }}
                     >
-                      {payload?.bookingProduct?.productName}
+                      Travellers Type
                     </Text>
                     <Text
-                      as="b"
-                      size={'sm'}
+                      as="p"
+                      w="50%"
                       fontFamily={'Mulish'}
-                      color="#065BAA"
+                      style={{ fontSize: '12px' }}
+                      pl="5px"
+                    >
+                      {payload?.travellerType?.name} -
+                      {` ${payload?.adt} adult `}
+                      {`${
+                        parseInt(payload?.chd) > 0
+                          ? `${payload?.chd} child`
+                          : ''
+                      }`}
+                    </Text>
+                  </Box>
+                  <Box
+                    display={'flex'}
+                    justifyContent={'lex-start'}
+                    alignItems={'center'}
+                    borderBottom={'1px solid #ebebeb'}
+                    pb="10px"
+                    pt="10px"
+                  >
+                    <Text
+                      as="b"
+                      w="50%"
+                      fontFamily={'Mulish'}
                       style={{ fontSize: '14px' }}
                     >
-                      {
-                        <CurrencyFormatter
-                          amount={payload?.bookingProduct?.finalPrice}
-                        />
-                      }{' '}
-                      {'-/ per orang'}
+                      Destination
+                    </Text>
+                    <Text
+                      as="p"
+                      w="50%"
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '12px' }}
+                      pl="5px"
+                    >
+                      {payload?.destinations.length > 0 &&
+                        payload?.destinations.map((item, i) => {
+                          return (
+                            <span key={i}>
+                              {(i ? ', ' : '') + item.countryName}
+                            </span>
+                          );
+                        })}
+                    </Text>
+                  </Box>
+                  <Box
+                    display={'flex'}
+                    justifyContent={'lex-start'}
+                    alignItems={'center'}
+                    borderBottom={'1px solid #ebebeb'}
+                    pb="10px"
+                    pt="10px"
+                  >
+                    <Text
+                      as="b"
+                      w="50%"
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '14px' }}
+                    >
+                      Start Date
+                    </Text>
+                    <Text
+                      as="p"
+                      w="50%"
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '12px' }}
+                      pl="5px"
+                    >
+                      {formatDateToLong(payload?.from)}
+                    </Text>
+                  </Box>
+                  <Box
+                    display={'flex'}
+                    justifyContent={'lex-start'}
+                    alignItems={'center'}
+                    borderBottom={'1px solid #ebebeb'}
+                    pb="10px"
+                    pt="10px"
+                  >
+                    <Text
+                      as="b"
+                      w="50%"
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '14px' }}
+                    >
+                      End Date
+                    </Text>
+
+                    <Text
+                      as="p"
+                      w="50%"
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '12px' }}
+                      pl="5px"
+                    >
+                      {formatDateToLong(payload?.to)}
                     </Text>
                   </Box>
                 </Box>
-              </Box>
-              <Box bg="white" p="10px">
+              </motion.Box>
+            )}
+          </Box>
+
+          <Box w="70%" p="1em">
+            {listTravellers?.listTravellers.map((travellers, i) => {
+              return (
+                <Box key={i} mt="1em">
+                  <Accordion allowMultiple>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5, duration: 0.5 }}
+                    >
+                      <AccordionItem
+                        border={'1px solid #ebebeb'}
+                        borderRadius={'5px'}
+                      >
+                        <h2 style={{ marginBottom: '0' }}>
+                          <Box as="div" role="group">
+                            <AccordionButton
+                              _groupHover={{
+                                boxShadow:
+                                  '0px 0px 3px 3px rgba(153, 180, 206, 0.2)',
+                                transition: '.2s',
+                                bg: 'white',
+                                borderRadius: '5px',
+                              }}
+                            >
+                              <AccordionIcon />
+                              <Box as="span" flex="1" textAlign="left">
+                                <Text as="b" fontSize={'sm'}>
+                                  {`${travellers?.firstName} ${travellers?.lastName}`}
+                                </Text>
+                              </Box>
+                              <Box
+                                _groupHover={{
+                                  display: 'none',
+                                }}
+                                visibility={'hidden'}
+                              ></Box>
+                              <Box
+                                _groupHover={{
+                                  display: 'block',
+                                  visibility: 'visible',
+                                  transition: '.5s ease',
+                                }}
+                                visibility={'hidden'}
+                              >
+                                <IconButton
+                                  _groupHover={{
+                                    color: '#3182ce',
+                                  }}
+                                  bg="white"
+                                  icon={<MdCreate size="1em" />}
+                                  onClick={() =>
+                                    handleEditTravellersData(travellers)
+                                  }
+                                >
+                                  {/* <Button
+                                key={i}
+                                onClick={handleEditTravellersData(i)}
+                              /> */}
+                                </IconButton>
+                                <IconButton
+                                  _groupHover={{
+                                    color: '#3182ce',
+                                  }}
+                                  bg="white"
+                                  icon={<CiTrash size="1em" />}
+                                  onClick={() =>
+                                    handleDelete({ id: travellers.id })
+                                  }
+                                >
+                                  {/* <Button
+                                key={i}
+                                onClick={handleEditTravellersData(i)}
+                              /> */}
+                                </IconButton>
+                              </Box>
+                            </AccordionButton>
+                          </Box>
+                        </h2>
+                        <Box>
+                          <AccordionPanel pb={4}>
+                            <Box bg="white" p="10px">
+                              <Box
+                                display={'flex'}
+                                justifyContent={'flex-start'}
+                                alignItems={'center'}
+                                boxSizing="borderBox"
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w={'50%'}
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Title
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w={'50%'}
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
+                                  {travellers.title}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'flex-start'}
+                                alignItems={'center'}
+                                boxSizing="borderBox"
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w={'50%'}
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Full Name
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w={'50%'}
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
+                                  {travellers.fullName}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'flex-start'}
+                                alignItems={'center'}
+                                boxSizing="borderBox"
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w={'50%'}
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Traveller Type
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w={'50%'}
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
+                                  {travellers.travellerType}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'lex-start'}
+                                alignItems={'center'}
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Email Address
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
+                                  {travellers.email}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'lex-start'}
+                                alignItems={'center'}
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Phone Number
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
+                                  {travellers.phone}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'lex-start'}
+                                alignItems={'center'}
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Passport Number
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
+                                  {travellers.passport === null
+                                    ? '-'
+                                    : travellers.passport}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'lex-start'}
+                                alignItems={'center'}
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Date Of Birth
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
+                                  {travellers.dateOfBirth}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'lex-start'}
+                                alignItems={'center'}
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Place Of Birth
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
+                                  {travellers.placeOfBirth}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'lex-start'}
+                                alignItems={'center'}
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Address
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
+                                  {travellers.address}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'lex-start'}
+                                alignItems={'center'}
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Beneficiary
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
+                                  {travellers.beneficiary
+                                    ? travellers.beneficiary
+                                    : '-'}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'lex-start'}
+                                alignItems={'center'}
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Realtionship
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
+                                  {travellers.relationship
+                                    ? travellers.relationship
+                                    : '-'}
+                                </Text>
+                              </Box>
+                            </Box>
+                          </AccordionPanel>
+                        </Box>
+                      </AccordionItem>
+                    </motion.div>
+                  </Accordion>
+                </Box>
+              );
+            })}
+            <Box
+              display={'flex'}
+              justifyContent={'center'}
+              alignItems={'center'}
+              w="100%"
+              pt="15px"
+            >
+              <motion.div
+                style={{
+                  padding: ' 4px 8px',
+                  border: '1px solid #3182ce',
+                  color: '#000015',
+                  fontFamily: 'Mulish',
+                  borderRadius: '5px',
+                  textAlign: 'center',
+                  fontWeight: 'normal',
+                  width: '124px',
+                }}
+                whileHover={{
+                  cursor: 'pointer',
+                  scale: 0.9,
+                  backgroundColor: '#3182ce',
+                  color: 'white',
+                  // textShadow: '0px 0px 8px #3182ce',
+                  boxShadow: '0px 0px 6px #888888',
+                }}
+                onClick={handleAddTraveller}
+              >
+                Add Traveller
+              </motion.div>
+              {/* <motion.Button
+                style={{
+                  padding: ' 4px 8px',
+                  border: '1px solid #3182ce',
+                  color: '#000015',
+                  fontFamily: 'Mulish',
+                  borderRadius: '5px',
+                  height: '48px',
+                  fontWeight: 'normal',
+                  width: '124px',
+                }}
+                whileHover={{
+                  scale: 0.8,
+                  textShadow: '0px 0px 8px rgba(255,255,255)',
+                  boxShadow: '0px 0px 8px rgba(255,255,255)',
+                }}
+                onClick={handleAddTraveller}
+              >
+                Add Travellers
+              </motion.Button> */}
+            </Box>
+            <Box display={'flex'} justifyContent={'center'} pb="15px" pt="15px">
+              or
+            </Box>
+            <Box
+              display={'flex'}
+              justifyContent={'center'}
+              alignItems={'center'}
+              w="100%"
+            >
+              <CustomModal
+                showModalButtonText="Import"
+                modalHeader="Import Excel File"
+                modalBody="Import Excel File"
+              />
+              {/* <Button variant="base" w={{ base: '100%', md: '50%' }} h="48px">
+              Import Excel File
+            </Button> */}
+            </Box>
+          </Box>
+        </Box>
+        {hasCompletedAllSteps !== undefined && (
+          <Box>
+            <Heading fontSize="xl" textAlign={'center'}>
+              Woohoo! All steps completed! 🎉
+            </Heading>
+          </Box>
+        )}
+        <Flex width="100%" justify="space-between" gap={6} mt="2em" mb="2em">
+          {hasCompletedAllSteps !== undefined ? (
+            <Button size="sm" onClick={reset}>
+              Reset
+            </Button>
+          ) : (
+            <>
+              <Box
+                w={'100%'}
+                display={'flex'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                p="1em"
+              >
                 <Box
                   display={'flex'}
                   justifyContent={'flex-start'}
                   alignItems={'center'}
-                  boxSizing="borderBox"
-                  borderBottom={'1px solid #ebebeb'}
-                  pb="10px"
-                  pt="10px"
                 >
-                  <Text
-                    as="b"
-                    w={'50%'}
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
-                  >
-                    Plan Type
+                  <Text as="p" fontSize={'sm'} fontFamily={'Mulish'}>
+                    Number Of Travellers :
                   </Text>
-                  <Text
-                    as="p"
-                    w={'50%'}
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
-                    pl="5px"
-                  >
-                    {payload?.coverType}
+                  <Text as="b" fontFamily={'Mulish'} pl="5px">
+                    {listTravellers?.listTravellers?.length}
                   </Text>
                 </Box>
-                <Box
-                  display={'flex'}
-                  justifyContent={'lex-start'}
-                  alignItems={'center'}
-                  borderBottom={'1px solid #ebebeb'}
-                  pb="10px"
-                  pt="10px"
-                >
-                  <Text
-                    as="b"
-                    w="50%"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
+                <ButtonGroup>
+                  <Button
+                    size="sm"
+                    onClick={handleNexts}
+                    w={{ base: '100%', md: '270px' }}
+                    h="48px"
+                    isDisabled={
+                      listTravellers?.listTravellers?.length === 0 ||
+                      parseInt(payload?.adt) + parseInt(payload?.chd) !==
+                        listTravellers?.listTravellers?.length
+                        ? true
+                        : false
+                    }
                   >
-                    Travellers Type
-                  </Text>
-                  <Text
-                    as="p"
-                    w="50%"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
-                    pl="5px"
-                  >
-                    {payload?.travellerType?.name} -{` ${payload?.adt} adult `}
-                    {`${
-                      parseInt(payload?.chd) > 0 ? `${payload?.chd} child` : ''
-                    }`}
-                  </Text>
-                </Box>
-                <Box
-                  display={'flex'}
-                  justifyContent={'lex-start'}
-                  alignItems={'center'}
-                  borderBottom={'1px solid #ebebeb'}
-                  pb="10px"
-                  pt="10px"
-                >
-                  <Text
-                    as="b"
-                    w="50%"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
-                  >
-                    Destination
-                  </Text>
-                  <Text
-                    as="p"
-                    w="50%"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
-                    pl="5px"
-                  >
-                    {payload?.destinations.length > 0 &&
-                      payload?.destinations.map((item, i) => {
-                        return (
-                          <span key={i}>
-                            {(i ? ', ' : '') + item.countryName}
-                          </span>
-                        );
-                      })}
-                  </Text>
-                </Box>
-                <Box
-                  display={'flex'}
-                  justifyContent={'lex-start'}
-                  alignItems={'center'}
-                  borderBottom={'1px solid #ebebeb'}
-                  pb="10px"
-                  pt="10px"
-                >
-                  <Text
-                    as="b"
-                    w="50%"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
-                  >
-                    Start Date
-                  </Text>
-                  <Text
-                    as="p"
-                    w="50%"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
-                    pl="5px"
-                  >
-                    {formatDateToLong(payload?.from)}
-                  </Text>
-                </Box>
-                <Box
-                  display={'flex'}
-                  justifyContent={'lex-start'}
-                  alignItems={'center'}
-                  borderBottom={'1px solid #ebebeb'}
-                  pb="10px"
-                  pt="10px"
-                >
-                  <Text
-                    as="b"
-                    w="50%"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '14px' }}
-                  >
-                    End Date
-                  </Text>
-
-                  <Text
-                    as="p"
-                    w="50%"
-                    fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
-                    pl="5px"
-                  >
-                    {formatDateToLong(payload?.to)}
-                  </Text>
-                </Box>
+                    {isLastStep ? 'Finish' : 'CONTINUE PAYMENT'}
+                  </Button>
+                </ButtonGroup>
               </Box>
-            </Box>
+            </>
           )}
-        </Box>
-
-        <Box w="70%" p="1em">
-          {listTravellers?.listTravellers.map((travellers, i) => {
-            return (
-              <Box key={i} mt="1em">
-                <Accordion allowMultiple>
-                  <AccordionItem
-                    border={'1px solid #ebebeb'}
-                    borderRadius={'5px'}
-                  >
-                    <h2 style={{ marginBottom: '0' }}>
-                      <Box as="div" role="group">
-                        <AccordionButton
-                          _groupHover={{
-                            boxShadow:
-                              '0px 0px 3px 3px rgba(153, 180, 206, 0.2)',
-                            transition: '.2s',
-                            bg: 'white',
-                            borderRadius: '5px',
-                          }}
-                        >
-                          <AccordionIcon />
-                          <Box as="span" flex="1" textAlign="left">
-                            <Text as="b" fontSize={'sm'}>
-                              {`${travellers?.firstName} ${travellers?.lastName}`}
-                            </Text>
-                          </Box>
-                          <Box
-                            _groupHover={{
-                              display: 'none',
-                            }}
-                            visibility={'hidden'}
-                          ></Box>
-                          <Box
-                            _groupHover={{
-                              display: 'block',
-                              visibility: 'visible',
-                              transition: '.5s ease',
-                            }}
-                            visibility={'hidden'}
-                          >
-                            <IconButton
-                              _groupHover={{
-                                color: '#3182ce',
-                              }}
-                              bg="white"
-                              icon={<MdCreate size="1em" />}
-                              onClick={() =>
-                                handleEditTravellersData(travellers)
-                              }
-                            >
-                              {/* <Button
-                                key={i}
-                                onClick={handleEditTravellersData(i)}
-                              /> */}
-                            </IconButton>
-                            <IconButton
-                              _groupHover={{
-                                color: '#3182ce',
-                              }}
-                              bg="white"
-                              icon={<CiTrash size="1em" />}
-                              onClick={() =>
-                                handleDelete({ id: travellers.id })
-                              }
-                            >
-                              {/* <Button
-                                key={i}
-                                onClick={handleEditTravellersData(i)}
-                              /> */}
-                            </IconButton>
-                          </Box>
-                        </AccordionButton>
-                      </Box>
-                    </h2>
-                    <Box>
-                      <AccordionPanel pb={4}>
-                        <Box bg="white" p="10px">
-                          <Box
-                            display={'flex'}
-                            justifyContent={'flex-start'}
-                            alignItems={'center'}
-                            boxSizing="borderBox"
-                            borderBottom={'1px solid #ebebeb'}
-                            pb="10px"
-                            pt="10px"
-                          >
-                            <Text
-                              as="b"
-                              w={'50%'}
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              Title
-                            </Text>
-                            <Text
-                              as="p"
-                              w={'50%'}
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                              pl="5px"
-                            >
-                              {travellers.title}
-                            </Text>
-                          </Box>
-                          <Box
-                            display={'flex'}
-                            justifyContent={'flex-start'}
-                            alignItems={'center'}
-                            boxSizing="borderBox"
-                            borderBottom={'1px solid #ebebeb'}
-                            pb="10px"
-                            pt="10px"
-                          >
-                            <Text
-                              as="b"
-                              w={'50%'}
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              Full Name
-                            </Text>
-                            <Text
-                              as="p"
-                              w={'50%'}
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                              pl="5px"
-                            >
-                              {travellers.fullName}
-                            </Text>
-                          </Box>
-                          <Box
-                            display={'flex'}
-                            justifyContent={'flex-start'}
-                            alignItems={'center'}
-                            boxSizing="borderBox"
-                            borderBottom={'1px solid #ebebeb'}
-                            pb="10px"
-                            pt="10px"
-                          >
-                            <Text
-                              as="b"
-                              w={'50%'}
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              Traveller Type
-                            </Text>
-                            <Text
-                              as="p"
-                              w={'50%'}
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                              pl="5px"
-                            >
-                              {travellers.travellerType}
-                            </Text>
-                          </Box>
-                          <Box
-                            display={'flex'}
-                            justifyContent={'lex-start'}
-                            alignItems={'center'}
-                            borderBottom={'1px solid #ebebeb'}
-                            pb="10px"
-                            pt="10px"
-                          >
-                            <Text
-                              as="b"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              Email Address
-                            </Text>
-                            <Text
-                              as="p"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                              pl="5px"
-                            >
-                              {travellers.email}
-                            </Text>
-                          </Box>
-                          <Box
-                            display={'flex'}
-                            justifyContent={'lex-start'}
-                            alignItems={'center'}
-                            borderBottom={'1px solid #ebebeb'}
-                            pb="10px"
-                            pt="10px"
-                          >
-                            <Text
-                              as="b"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              Phone Number
-                            </Text>
-                            <Text
-                              as="p"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                              pl="5px"
-                            >
-                              {travellers.phone}
-                            </Text>
-                          </Box>
-                          <Box
-                            display={'flex'}
-                            justifyContent={'lex-start'}
-                            alignItems={'center'}
-                            borderBottom={'1px solid #ebebeb'}
-                            pb="10px"
-                            pt="10px"
-                          >
-                            <Text
-                              as="b"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              Passport Number
-                            </Text>
-                            <Text
-                              as="p"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                              pl="5px"
-                            >
-                              {travellers.passport === null
-                                ? '-'
-                                : travellers.passport}
-                            </Text>
-                          </Box>
-                          <Box
-                            display={'flex'}
-                            justifyContent={'lex-start'}
-                            alignItems={'center'}
-                            borderBottom={'1px solid #ebebeb'}
-                            pb="10px"
-                            pt="10px"
-                          >
-                            <Text
-                              as="b"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              Date Of Birth
-                            </Text>
-                            <Text
-                              as="p"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                              pl="5px"
-                            >
-                              {travellers.dateOfBirth}
-                            </Text>
-                          </Box>
-                          <Box
-                            display={'flex'}
-                            justifyContent={'lex-start'}
-                            alignItems={'center'}
-                            borderBottom={'1px solid #ebebeb'}
-                            pb="10px"
-                            pt="10px"
-                          >
-                            <Text
-                              as="b"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              Place Of Birth
-                            </Text>
-                            <Text
-                              as="p"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                              pl="5px"
-                            >
-                              {travellers.placeOfBirth}
-                            </Text>
-                          </Box>
-                          <Box
-                            display={'flex'}
-                            justifyContent={'lex-start'}
-                            alignItems={'center'}
-                            borderBottom={'1px solid #ebebeb'}
-                            pb="10px"
-                            pt="10px"
-                          >
-                            <Text
-                              as="b"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              Address
-                            </Text>
-                            <Text
-                              as="p"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                              pl="5px"
-                            >
-                              {travellers.address}
-                            </Text>
-                          </Box>
-                          <Box
-                            display={'flex'}
-                            justifyContent={'lex-start'}
-                            alignItems={'center'}
-                            borderBottom={'1px solid #ebebeb'}
-                            pb="10px"
-                            pt="10px"
-                          >
-                            <Text
-                              as="b"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              Beneficiary
-                            </Text>
-                            <Text
-                              as="p"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                              pl="5px"
-                            >
-                              {travellers.beneficiary
-                                ? travellers.beneficiary
-                                : '-'}
-                            </Text>
-                          </Box>
-                          <Box
-                            display={'flex'}
-                            justifyContent={'lex-start'}
-                            alignItems={'center'}
-                            borderBottom={'1px solid #ebebeb'}
-                            pb="10px"
-                            pt="10px"
-                          >
-                            <Text
-                              as="b"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '14px' }}
-                            >
-                              Realtionship
-                            </Text>
-                            <Text
-                              as="p"
-                              w="50%"
-                              fontFamily={'Mulish'}
-                              style={{ fontSize: '12px' }}
-                              pl="5px"
-                            >
-                              {travellers.relationship
-                                ? travellers.relationship
-                                : '-'}
-                            </Text>
-                          </Box>
-                        </Box>
-                      </AccordionPanel>
-                    </Box>
-                  </AccordionItem>
-                </Accordion>
-              </Box>
-            );
-          })}
-          <Box
-            display={'flex'}
-            justifyContent={'center'}
-            alignItems={'center'}
-            w="100%"
-            pt="15px"
-          >
-            <Button
-              variant="base"
-              w={{ base: '100%', md: '50%' }}
-              h="48px"
-              onClick={handleAddTraveller}
-            >
-              Add Travellers
-            </Button>
-          </Box>
-          <Box display={'flex'} justifyContent={'center'} pb="15px" pt="15px">
-            or
-          </Box>
-          <Box
-            display={'flex'}
-            justifyContent={'center'}
-            alignItems={'center'}
-            w="100%"
-          >
-            <CustomModal
-              showModalButtonText="Import"
-              modalHeader="Import Excel File"
-              modalBody="Import Excel File"
-            />
-            {/* <Button variant="base" w={{ base: '100%', md: '50%' }} h="48px">
-              Import Excel File
-            </Button> */}
-          </Box>
-        </Box>
+        </Flex>
       </Box>
-      {hasCompletedAllSteps !== undefined && (
-        <Box>
-          <Heading fontSize="xl" textAlign={'center'}>
-            Woohoo! All steps completed! 🎉
-          </Heading>
-        </Box>
-      )}
-      <Flex width="100%" justify="space-between" gap={6} mt="2em" mb="2em">
-        {hasCompletedAllSteps !== undefined ? (
-          <Button size="sm" onClick={reset}>
-            Reset
-          </Button>
-        ) : (
-          <>
-            <Box
-              w={'100%'}
-              display={'flex'}
-              justifyContent={'space-between'}
-              alignItems={'center'}
-              p="1em"
-            >
-              <Box
-                display={'flex'}
-                justifyContent={'flex-start'}
-                alignItems={'center'}
-              >
-                <Text as="p" fontSize={'sm'} fontFamily={'Mulish'}>
-                  Number Of Travellers :
-                </Text>
-                <Text as="b" fontFamily={'Mulish'} pl="5px">
-                  {listTravellers?.listTravellers?.length}
-                </Text>
-              </Box>
-              <ButtonGroup>
-                <Button
-                  size="sm"
-                  onClick={handleNexts}
-                  w={{ base: '100%', md: '270px' }}
-                  h="48px"
-                  isDisabled={
-                    listTravellers?.listTravellers?.length === 0 ||
-                    parseInt(payload?.adt) + parseInt(payload?.chd) !==
-                      listTravellers?.listTravellers?.length
-                      ? true
-                      : false
-                  }
-                >
-                  {isLastStep ? 'Finish' : 'CONTINUE PAYMENT'}
-                </Button>
-              </ButtonGroup>
-            </Box>
-          </>
-        )}
-      </Flex>
-    </Box>
+    </motion.div>
   );
 };
 export default Form3;
