@@ -1005,8 +1005,8 @@ const MasterUser = () => {
               <motion.Box
                 w="100%"
                 animate={{
-                  y: 0,
-                  opacity: 0.5,
+                  y: showFilter ? 0 : '-100vh',
+                  opacity: showFilter ? 0.5 : 1,
                   transition: {
                     type: 'spring',
                     stiffness: 200,
@@ -1017,8 +1017,8 @@ const MasterUser = () => {
                   },
                 }}
                 initial={{
-                  opacity: 1,
-                  y: '-100vh',
+                  opacity: showFilter ? 1 : 0,
+                  y: showFilter ? '-100vh' : '0',
                 }}
               >
                 <Input
