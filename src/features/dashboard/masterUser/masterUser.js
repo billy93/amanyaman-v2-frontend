@@ -1088,19 +1088,20 @@ const MasterUser = () => {
             //   animate={{ y: 0 }}
             //   transition={{ delay: 0.5, duration: 0.5 }}
             // >
-            <AnimatePresence>
-              <motion.Box
-                w={{ base: '100%', md: '650px' }}
-                display={'flex'}
-                justifyContent={'space-around'}
-                alignItems={'center'}
-                gap="4px"
-                mt="1em"
-                mb="1em"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, x: '-12rem' }}
-              >
+
+            <motion.Box
+              w={{ base: '100%', md: '650px' }}
+              display={'flex'}
+              justifyContent={'space-around'}
+              alignItems={'center'}
+              gap="4px"
+              mt="1em"
+              mb="1em"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, x: '-12rem' }}
+            >
+              <AnimatePresence>
                 <motion.Box
                   w="100%"
                   // animate={{
@@ -1215,8 +1216,8 @@ const MasterUser = () => {
                     })}
                   </Select>
                 </motion.Box>
-              </motion.Box>
-            </AnimatePresence>
+              </AnimatePresence>
+            </motion.Box>
           ) : // </motion.div>
           null}
 
