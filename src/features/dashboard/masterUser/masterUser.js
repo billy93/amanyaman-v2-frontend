@@ -1089,7 +1089,7 @@ const MasterUser = () => {
             //   transition={{ delay: 0.5, duration: 0.5 }}
             // >
 
-            <motion.Box
+            <Box
               w={{ base: '100%', md: '650px' }}
               display={'flex'}
               justifyContent={'space-around'}
@@ -1097,12 +1097,6 @@ const MasterUser = () => {
               gap="4px"
               mt="1em"
               mb="1em"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, x: '-12rem' }}
-              style={{
-                display: 'flex',
-              }}
             >
               <AnimatePresence>
                 <motion.Box
@@ -1127,11 +1121,22 @@ const MasterUser = () => {
                   // initial="hidden"
                   // animate={controls}
                   // exit="exit"
-                  key="animation-on-state"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ x: '-12rem', opacity: 0 }}
-                  transition={{ duration: 0.2 }}
+                  animate={{
+                    y: 0,
+                    opacity: 0.5,
+                    transition: {
+                      type: 'spring',
+                      stiffness: 200,
+                      delay: 0.5,
+                      duration: 0.5,
+                      staggerChildren: true,
+                      damping: 40,
+                    },
+                  }}
+                  initial={{
+                    opacity: 1,
+                    y: '-100vh',
+                  }}
                 >
                   <Input
                     value={filterName}
@@ -1155,10 +1160,6 @@ const MasterUser = () => {
                   // initial="hidden"
                   // animate={controls}
                   // exit="exit"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ x: '-12rem', opacity: 0 }}
-                  transition={{ duration: 0.3 }}
                 >
                   <Input
                     value={filterEmail}
@@ -1182,10 +1183,22 @@ const MasterUser = () => {
                   // initial="hidden"
                   // animate={controls}
                   // exit="exit"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ x: '-12rem', opacity: 0 }}
-                  transition={{ duration: 0.4 }}
+                  animate={{
+                    y: 0,
+                    opacity: 0.5,
+                    transition: {
+                      type: 'spring',
+                      stiffness: 200,
+                      delay: 0.5,
+                      duration: 0.5,
+                      staggerChildren: true,
+                      damping: 40,
+                    },
+                  }}
+                  initial={{
+                    opacity: 1,
+                    y: '-100vh',
+                  }}
                 >
                   <Select
                     backgroundColor={filterRole === '' ? '#ebebeb' : '#e8f0fe'}
@@ -1220,7 +1233,7 @@ const MasterUser = () => {
                   </Select>
                 </motion.Box>
               </AnimatePresence>
-            </motion.Box>
+            </Box>
           ) : // </motion.div>
           null}
 
