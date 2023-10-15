@@ -1015,8 +1015,9 @@ const MasterUser = () => {
       opacity: 1,
       y: 0,
       transition: {
-        ease: 'easeOutExpo',
+        ease: 'easeOut',
         duration: 0.3,
+        delay: 0.3,
       },
     },
     hide: {
@@ -1025,6 +1026,7 @@ const MasterUser = () => {
       transition: {
         ease: 'easeOut',
         duration: 0.3,
+        delay: 0.5,
       },
     },
   };
