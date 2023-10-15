@@ -921,7 +921,7 @@ const MasterUser = () => {
     // });
     setTimeout(() => {
       setShowFilter(!showFilter);
-    }, 300); // 1000 milliseconds = 1 second
+    }, 500); // 1000 milliseconds = 1 second
 
     setPage(0);
   };
@@ -981,6 +981,11 @@ const MasterUser = () => {
   const modalVariants = {
     hidden: { opacity: 0, scale: 0 },
     visible: { opacity: 1, scale: 1 },
+  };
+
+  const modalVariants2 = {
+    hidden: { y: '-100vh', opacity: 0, scale: 0 },
+    visible: { y: 0, opacity: 1, scale: 1, delay: 0.5, duration: 0.5 },
   };
 
   let content;
@@ -1069,7 +1074,7 @@ const MasterUser = () => {
                 // }}
                 initial={showFilter ? 'hidden' : 'visible'}
                 animate={showFilter ? 'visible' : 'hidden'}
-                variants={modalVariants}
+                variants={showFilter ? modalVariants : modalVariants2}
                 transition={{ duration: 0.3 }}
               >
                 <Input
