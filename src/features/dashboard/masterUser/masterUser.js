@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import matchSorter from 'match-sorter';
 import { usePagination } from 'react-table';
 import PageLoader from '../../../components/pageLoader';
-import { motion, useAnimationControls } from 'framer-motion';
+import { motion, useAnimationControls, AnimatePresence } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
 // eslint-disable-next-line no-unused-vars
 import ExportData from './export';
@@ -1088,126 +1088,135 @@ const MasterUser = () => {
             //   animate={{ y: 0 }}
             //   transition={{ delay: 0.5, duration: 0.5 }}
             // >
-            <Box
-              w={{ base: '100%', md: '650px' }}
-              display={'flex'}
-              justifyContent={'space-around'}
-              alignItems={'center'}
-              gap="4px"
-              mt="1em"
-              mb="1em"
-            >
+            <AnimatePresence>
               <motion.Box
-                w="100%"
-                // animate={{
-                //   y: 0,
-                //   opacity: 0.5,
-                //   transition: {
-                //     type: 'spring',
-                //     stiffness: 200,
-                //     delay: 0.5,
-                //     duration: 0.5,
-                //     staggerChildren: true,
-                //     damping: 40,
-                //   },
-                // }}
-                // initial={{
-                //   opacity: 1,
-                //   y: '-100vh',
-                // }}
-                // variants={wrapperVariants}
-                // initial="hidden"
-                // animate={controls}
-                // exit="exit"
-                key="animation-on-state"
-                variants={variants}
-                animate={showFilter ? 'show' : 'hide'}
+                w={{ base: '100%', md: '650px' }}
+                display={'flex'}
+                justifyContent={'space-around'}
+                alignItems={'center'}
+                gap="4px"
+                mt="1em"
+                mb="1em"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, x: '-12rem' }}
               >
-                <Input
-                  value={filterName}
-                  onChange={handleFilterByName}
-                  placeholder={'Search by name'}
-                  bg="#ebebeb"
-                  borderRadius={'5px'}
-                  variant={'custom'}
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-                  }}
-                />
-              </motion.Box>
-              <motion.Box
-                w="100%"
-                // variants={wrapperVariants}
-                // initial="hidden"
-                // animate={controls}
-                // exit="exit"
-                key="animation-on-state"
-                variants={variants}
-                animate={showFilter ? 'show' : 'hide'}
-              >
-                <Input
-                  value={filterEmail}
-                  onChange={handleFilterByEmail}
-                  placeholder={'Search by email'}
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-                  }}
-                  bg="#ebebeb"
-                  borderRadius={'5px'}
-                  variant={'custom'}
-                />
-              </motion.Box>
-              <motion.Box
-                w="100%"
-                // variants={wrapperVariants}
-                // initial="hidden"
-                // animate={controls}
-                // exit="exit"
-                key="animation-on-state"
-                variants={variants}
-                animate={showFilter ? 'show' : 'hide'}
-              >
-                <Select
-                  backgroundColor={filterRole === '' ? '#ebebeb' : '#e8f0fe'}
-                  className="global-td"
-                  placeholder="Select Role"
-                  sx={{
-                    '&::placeholder': {
-                      color: 'gray',
-                      fontStyle: 'italic',
-                      fontSize: '12px',
-                    },
-                  }}
-                  style={{
-                    fontSize: '12px',
-                    fontStyle: 'italic',
-                    fontWeight: 'normal',
-                  }}
-                  _placeholder={{
-                    color: 'grey',
-                  }}
-                  defaultValue={filterRole}
-                  name="authorities"
-                  onChange={handleFilterByRole}
+                <motion.Box
+                  w="100%"
+                  // animate={{
+                  //   y: 0,
+                  //   opacity: 0.5,
+                  //   transition: {
+                  //     type: 'spring',
+                  //     stiffness: 200,
+                  //     delay: 0.5,
+                  //     duration: 0.5,
+                  //     staggerChildren: true,
+                  //     damping: 40,
+                  //   },
+                  // }}
+                  // initial={{
+                  //   opacity: 1,
+                  //   y: '-100vh',
+                  // }}
+                  // variants={wrapperVariants}
+                  // initial="hidden"
+                  // animate={controls}
+                  // exit="exit"
+                  key="animation-on-state"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ x: '-12rem', opacity: 0 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  {rolesData?.map((role, i) => {
-                    return (
-                      <option value={role.name} key={i}>
-                        {role.name}
-                      </option>
-                    );
-                  })}
-                </Select>
+                  <Input
+                    value={filterName}
+                    onChange={handleFilterByName}
+                    placeholder={'Search by name'}
+                    bg="#ebebeb"
+                    borderRadius={'5px'}
+                    variant={'custom'}
+                    sx={{
+                      '&::placeholder': {
+                        color: 'gray',
+                        fontStyle: 'italic',
+                        fontSize: '12px',
+                      },
+                    }}
+                  />
+                </motion.Box>
+                <motion.Box
+                  w="100%"
+                  // variants={wrapperVariants}
+                  // initial="hidden"
+                  // animate={controls}
+                  // exit="exit"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ x: '-12rem', opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Input
+                    value={filterEmail}
+                    onChange={handleFilterByEmail}
+                    placeholder={'Search by email'}
+                    sx={{
+                      '&::placeholder': {
+                        color: 'gray',
+                        fontStyle: 'italic',
+                        fontSize: '12px',
+                      },
+                    }}
+                    bg="#ebebeb"
+                    borderRadius={'5px'}
+                    variant={'custom'}
+                  />
+                </motion.Box>
+                <motion.Box
+                  w="100%"
+                  // variants={wrapperVariants}
+                  // initial="hidden"
+                  // animate={controls}
+                  // exit="exit"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ x: '-12rem', opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <Select
+                    backgroundColor={filterRole === '' ? '#ebebeb' : '#e8f0fe'}
+                    className="global-td"
+                    placeholder="Select Role"
+                    sx={{
+                      '&::placeholder': {
+                        color: 'gray',
+                        fontStyle: 'italic',
+                        fontSize: '12px',
+                      },
+                    }}
+                    style={{
+                      fontSize: '12px',
+                      fontStyle: 'italic',
+                      fontWeight: 'normal',
+                    }}
+                    _placeholder={{
+                      color: 'grey',
+                    }}
+                    defaultValue={filterRole}
+                    name="authorities"
+                    onChange={handleFilterByRole}
+                  >
+                    {rolesData?.map((role, i) => {
+                      return (
+                        <option value={role.name} key={i}>
+                          {role.name}
+                        </option>
+                      );
+                    })}
+                  </Select>
+                </motion.Box>
               </motion.Box>
-            </Box>
+            </AnimatePresence>
           ) : // </motion.div>
           null}
 
