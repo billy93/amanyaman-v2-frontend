@@ -984,8 +984,8 @@ const MasterUser = () => {
   };
 
   const modalVariants2 = {
-    hidden: { y: '-100vh', opacity: 0, scale: 0 },
-    visible: { y: 0, opacity: 1, scale: 1.5, delay: 0.5, duration: 0.5 },
+    hidden: { y: '-100vh', opacity: 1, scale: 0.9 },
+    visible: { y: 0, opacity: 0, scale: 0, delay: 0.5, duration: 0.5 },
   };
 
   let content;
