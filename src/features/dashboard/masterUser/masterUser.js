@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import matchSorter from 'match-sorter';
 import { usePagination } from 'react-table';
 import PageLoader from '../../../components/pageLoader';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimationControls } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
 // eslint-disable-next-line no-unused-vars
 import ExportData from './export';
@@ -607,7 +607,7 @@ const MasterUser = () => {
   const [debounceName, setDebounceName] = React.useState('');
   const [debounceEmail, setDebounceEmail] = React.useState('');
   const [debounceRole, setDebounceRole] = React.useState('');
-  const controls = useAnimation();
+  // const controls = useAnimation();
   const fetchIdRef = React.useRef(0);
   const [filterby, setFilterBy] = React.useState({
     name: '',
@@ -919,6 +919,7 @@ const MasterUser = () => {
     //     damping: 40,
     //   },
     // });
+    controls.start('visible');
     setTimeout(() => {
       setShowFilter(!showFilter);
     }, 1000); // 1000 milliseconds = 1 second
@@ -989,6 +990,24 @@ const MasterUser = () => {
     visible: { y: '-100vh', opacity: 0, scale: 0, delay: 0.5, duration: 0.5 },
     exit: { y: '-100vh', opacity: 0, scale: 0, delay: 0.5, duration: 0.5 },
   };
+
+  const wrapperVariants = {
+    hidden: {
+      opacity: 0,
+      x: '100vw',
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { type: 'spring', delay: 0.1 },
+    },
+    exit: {
+      x: '-100vh',
+      transition: { ease: 'easeInOut' },
+    },
+  };
+
+  const controls = useAnimationControls();
 
   let content;
   if (isLoading) {
@@ -1074,11 +1093,10 @@ const MasterUser = () => {
                 //   opacity: 1,
                 //   y: '-100vh',
                 // }}
-                initial={showFilter ? 'hidden' : 'visible'}
-                animate={showFilter ? 'visible' : 'hidden'}
-                variants={showFilter ? modalVariants : modalVariants2}
-                exit={showFilter ? 'exit' : 'exit'}
-                transition={{ duration: 0.3, delay: 0.6 }}
+                variants={wrapperVariants}
+                initial="hidden"
+                animate={controls}
+                exit="exit"
               >
                 <Input
                   value={filterName}
