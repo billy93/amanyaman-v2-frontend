@@ -1126,7 +1126,7 @@ const MasterUser = () => {
                     opacity: 0.5,
                     transition: {
                       type: 'spring',
-                      stiffness: 200,
+                      stiffness: 300,
                       delay: 0.5,
                       duration: 0.5,
                       staggerChildren: true,
@@ -1160,6 +1160,22 @@ const MasterUser = () => {
                   // initial="hidden"
                   // animate={controls}
                   // exit="exit"
+                  animate={{
+                    y: 0,
+                    opacity: 0.5,
+                    transition: {
+                      type: 'spring',
+                      stiffness: 350,
+                      delay: 0.6,
+                      duration: 0.5,
+                      staggerChildren: true,
+                      damping: 40,
+                    },
+                  }}
+                  initial={{
+                    opacity: 1,
+                    y: '-100vh',
+                  }}
                 >
                   <Input
                     value={filterEmail}
@@ -1188,8 +1204,8 @@ const MasterUser = () => {
                     opacity: 0.5,
                     transition: {
                       type: 'spring',
-                      stiffness: 200,
-                      delay: 0.5,
+                      stiffness: 400,
+                      delay: 0.7,
                       duration: 0.5,
                       staggerChildren: true,
                       damping: 40,
