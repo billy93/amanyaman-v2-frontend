@@ -994,11 +994,12 @@ const MasterUser = () => {
   const wrapperVariants = {
     hidden: {
       opacity: 0,
-      x: '100vw',
+      y: 0,
     },
     visible: {
+      y: '-100vh',
       opacity: 1,
-      x: 0,
+      scale: 0.5,
       transition: { type: 'spring', delay: 0.1 },
     },
     exit: {
