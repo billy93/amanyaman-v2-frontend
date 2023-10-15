@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import matchSorter from 'match-sorter';
 import { usePagination } from 'react-table';
 import PageLoader from '../../../components/pageLoader';
-import { motion, useAnimationControls } from 'framer-motion';
+import { motion, useAnimationControls, useCycle } from 'framer-motion';
 import { FaSort } from 'react-icons/fa';
 // eslint-disable-next-line no-unused-vars
 import ExportData from './export';
@@ -919,7 +919,7 @@ const MasterUser = () => {
     //     damping: 40,
     //   },
     // });
-    controls.start('visible');
+    // controls.start('visible');
     setTimeout(() => {
       setShowFilter(!showFilter);
     }, 1000); // 1000 milliseconds = 1 second
@@ -1008,6 +1008,42 @@ const MasterUser = () => {
     },
   };
 
+  const ulVariants = {
+    open: {
+      display: 'block',
+      visibility: 'visible',
+      transition: {
+        staggerChildren: 0.17,
+        delayChildren: 0.2,
+      },
+    },
+    closed: {
+      display: 'none',
+      transition: {
+        staggerChildren: 0.05,
+        staggerDirection: -1,
+        when: 'afterChildren',
+      },
+    },
+  };
+
+  const liVariants = {
+    open: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        y: { stiffness: 1000, velocity: -100 },
+      },
+    },
+    closed: {
+      y: 50,
+      opacity: 0,
+      transition: {
+        y: { stiffness: 1000 },
+      },
+    },
+  };
+
   const controls = useAnimationControls();
 
   let content;
@@ -1067,7 +1103,9 @@ const MasterUser = () => {
             //   animate={{ y: 0 }}
             //   transition={{ delay: 0.5, duration: 0.5 }}
             // >
-            <Box
+            <motion.Box
+              variants={ulVariants}
+              animate={showFilter ? 'open' : 'closed'}
               w={{ base: '100%', md: '650px' }}
               display={'flex'}
               justifyContent={'space-around'}
@@ -1078,26 +1116,11 @@ const MasterUser = () => {
             >
               <motion.Box
                 w="100%"
-                // animate={{
-                //   y: 0,
-                //   opacity: 0.5,
-                //   transition: {
-                //     type: 'spring',
-                //     stiffness: 200,
-                //     delay: 0.5,
-                //     duration: 0.5,
-                //     staggerChildren: true,
-                //     damping: 40,
-                //   },
-                // }}
-                // initial={{
-                //   opacity: 1,
-                //   y: '-100vh',
-                // }}
-                variants={wrapperVariants}
-                initial="hidden"
-                animate={controls}
-                exit="exit"
+                // variants={wrapperVariants}
+                // initial="hidden"
+                // animate={controls}
+                // exit="exit"
+                variants={liVariants}
               >
                 <Input
                   value={filterName}
@@ -1177,7 +1200,7 @@ const MasterUser = () => {
                   })}
                 </Select>
               </motion.Box>
-            </Box>
+            </motion.Box>
           ) : // </motion.div>
           null}
 
