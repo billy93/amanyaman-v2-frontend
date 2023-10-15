@@ -1015,7 +1015,7 @@ const MasterUser = () => {
       opacity: 1,
       y: 0,
       transition: {
-        ease: 'easeIn',
+        ease: 'easeOutExpo',
         duration: 0.3,
       },
     },
@@ -1139,10 +1139,13 @@ const MasterUser = () => {
               </motion.Box>
               <motion.Box
                 w="100%"
-                variants={wrapperVariants}
-                initial="hidden"
-                animate={controls}
-                exit="exit"
+                // variants={wrapperVariants}
+                // initial="hidden"
+                // animate={controls}
+                // exit="exit"
+                key="animation-on-state"
+                variants={variants}
+                animate={showFilter ? 'show' : 'hide'}
               >
                 <Input
                   value={filterEmail}
@@ -1162,10 +1165,13 @@ const MasterUser = () => {
               </motion.Box>
               <motion.Box
                 w="100%"
-                variants={wrapperVariants}
-                initial="hidden"
-                animate={controls}
-                exit="exit"
+                // variants={wrapperVariants}
+                // initial="hidden"
+                // animate={controls}
+                // exit="exit"
+                key="animation-on-state"
+                variants={variants}
+                animate={showFilter ? 'show' : 'hide'}
               >
                 <Select
                   backgroundColor={filterRole === '' ? '#ebebeb' : '#e8f0fe'}
