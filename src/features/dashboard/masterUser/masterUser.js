@@ -981,11 +981,13 @@ const MasterUser = () => {
   const modalVariants = {
     hidden: { opacity: 0, scale: 0 },
     visible: { opacity: 1, scale: 1 },
+    exit: { y: '-100vh', opacity: 0, scale: 0, delay: 0.5, duration: 0.5 },
   };
 
   const modalVariants2 = {
     hidden: { y: 0, opacity: 1, scale: 0.9 },
     visible: { y: '-100vh', opacity: 0, scale: 0, delay: 0.5, duration: 0.5 },
+    exit: { y: '-100vh', opacity: 0, scale: 0, delay: 0.5, duration: 0.5 },
   };
 
   let content;
@@ -1075,6 +1077,7 @@ const MasterUser = () => {
                 initial={showFilter ? 'hidden' : 'visible'}
                 animate={showFilter ? 'visible' : 'hidden'}
                 variants={showFilter ? modalVariants : modalVariants2}
+                exit={showFilter ? 'exit' : 'exit'}
                 transition={{ duration: 0.3, delay: 0.6 }}
               >
                 <Input
