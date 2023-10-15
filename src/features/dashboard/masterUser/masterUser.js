@@ -985,7 +985,7 @@ const MasterUser = () => {
 
   const modalVariants2 = {
     hidden: { y: '-100vh', opacity: 0, scale: 0 },
-    visible: { y: 0, opacity: 1, scale: 1, delay: 0.5, duration: 0.5 },
+    visible: { y: 0, opacity: 1, scale: 1.5, delay: 0.5, duration: 0.5 },
   };
 
   let content;
@@ -1075,7 +1075,7 @@ const MasterUser = () => {
                 initial={showFilter ? 'hidden' : 'visible'}
                 animate={showFilter ? 'visible' : 'hidden'}
                 variants={showFilter ? modalVariants : modalVariants2}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.3, delay: 0.6 }}
               >
                 <Input
                   value={filterName}
@@ -1097,8 +1097,8 @@ const MasterUser = () => {
                 w="100%"
                 initial={showFilter ? 'hidden' : 'visible'}
                 animate={showFilter ? 'visible' : 'hidden'}
-                variants={modalVariants}
-                transition={{ duration: 0.4 }}
+                variants={showFilter ? modalVariants : modalVariants2}
+                transition={{ duration: 0.2, delay: 0.5 }}
               >
                 <Input
                   value={filterEmail}
@@ -1120,8 +1120,8 @@ const MasterUser = () => {
                 w="100%"
                 initial={showFilter ? 'hidden' : 'visible'}
                 animate={showFilter ? 'visible' : 'hidden'}
-                variants={modalVariants}
-                transition={{ duration: 0.5 }}
+                variants={showFilter ? modalVariants : modalVariants2}
+                transition={{ duration: 0.1, delay: 0.1 }}
               >
                 <Select
                   backgroundColor={filterRole === '' ? '#ebebeb' : '#e8f0fe'}
