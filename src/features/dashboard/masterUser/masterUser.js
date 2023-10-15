@@ -1020,7 +1020,7 @@ const MasterUser = () => {
       },
     },
     hide: {
-      y: '100vh',
+      y: '-100vh',
       opacity: 0,
       transition: {
         ease: 'easeOut',
@@ -1119,7 +1119,7 @@ const MasterUser = () => {
                 // exit="exit"
                 key="animation-on-state"
                 variants={variants}
-                animate={showFilter ? 'hide' : 'show'}
+                animate={showFilter ? 'show' : 'hide'}
               >
                 <Input
                   value={filterName}
