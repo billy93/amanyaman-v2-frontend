@@ -1010,6 +1010,25 @@ const MasterUser = () => {
 
   const controls = useAnimationControls();
 
+  const variants = {
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        ease: 'easeIn',
+        duration: 0.3,
+      },
+    },
+    hide: {
+      y: '100vh',
+      opacity: 0,
+      transition: {
+        ease: 'easeOut',
+        duration: 0.3,
+      },
+    },
+  };
+
   let content;
   if (isLoading) {
     content = <PageLoader loading={isLoading} />;
@@ -1094,10 +1113,13 @@ const MasterUser = () => {
                 //   opacity: 1,
                 //   y: '-100vh',
                 // }}
-                variants={wrapperVariants}
-                initial="hidden"
-                animate={controls}
-                exit="exit"
+                // variants={wrapperVariants}
+                // initial="hidden"
+                // animate={controls}
+                // exit="exit"
+                key="animation-on-state"
+                variants={variants}
+                animate={showFilter ? 'hide' : 'show'}
               >
                 <Input
                   value={filterName}
