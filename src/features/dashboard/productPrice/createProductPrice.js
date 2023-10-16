@@ -157,8 +157,18 @@ const CreatePrice = () => {
     }
   };
   const handleNext = async () => {
+    const data = {
+      id: fields?.id,
+      npwp: fields?.npwp,
+      premiumPrice: fields?.premiumPrice,
+      commisionLv1: fields?.commisionLv1,
+      commisionLv2: fields?.commisionLv2,
+      commisionLv3: fields?.commisionLv3,
+      ppn: fields?.ppn,
+      pph23: fields?.pph23,
+    };
     try {
-      const res = await updateProductPrice(fields);
+      const res = await updateProductPrice(data);
       if (res?.data) {
         showSuccessToast('Plan Types created successfully!');
         navigate('/master-data/product-price');
