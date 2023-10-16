@@ -116,12 +116,17 @@ const EditCity = () => {
   };
 
   const handleData = (e) => {
-    const forms = {
+    const inputNumber = parseInt(e.target.value, 10);
+    const data = {
       ...fields,
       [e.target.name]: e.target.value,
     };
+
+    if (!isNaN(inputNumber) && inputNumber >= 0) {
+      setFields(data);
+    }
     // dispatch(setFormUser(forms));
-    setFields(forms);
+    setFields(data);
   };
 
   React.useEffect(() => {
