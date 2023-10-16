@@ -71,8 +71,8 @@ const CreateUser = () => {
     },
   ]);
   const [fields, setFields] = React.useState({
-    start: '',
-    end: '',
+    start: 1,
+    end: 2,
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
@@ -131,12 +131,20 @@ const CreateUser = () => {
   };
 
   const handleData = (e) => {
-    const forms = {
-      ...fields,
-      [e.target.name]: e.target.value,
-    };
-    // dispatch(setFormUser(forms));
-    setFields(forms);
+    let newValue = e.target.value;
+
+    // console.log('dsss', newValue);
+    if ((newValue.length === 1 && newValue === '0') || newValue[0] === '0') {
+      newValue = '';
+    }
+
+    // Additional validation, for example, to ensure it's a valid number
+    if (!isNaN(newValue)) {
+      setFields({
+        ...fields,
+        [e.target.name]: parseInt(newValue),
+      });
+    }
   };
 
   const handleBack = () => {
@@ -209,6 +217,7 @@ const CreateUser = () => {
               mt="14px"
             >
               <Input
+                type="number"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 name="start"
@@ -240,6 +249,7 @@ const CreateUser = () => {
               mt="14px"
             >
               <Input
+                type="number"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 name="end"
@@ -261,6 +271,20 @@ const CreateUser = () => {
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
+            <Box>
+              {fields?.start >= fields?.end && (
+                <Text
+                  as="p"
+                  fontSize={'12px'}
+                  color={'red'}
+                  fontFamily={'Mulish'}
+                  fontStyle={'italic'}
+                  p={'3px 1px'}
+                >
+                  Please fill end bigger than start
+                </Text>
+              )}
+            </Box>
           </Box>
         </Box>
         <Box
@@ -284,7 +308,13 @@ const CreateUser = () => {
           </Button>
           <Button
             isDisabled={
-              fields?.start === '' || fields?.end === '' ? true : false
+              fields?.start === 0 ||
+              fields?.end === 0 ||
+              isNaN(fields?.start) ||
+              isNaN(fields?.end) ||
+              fields?.start >= fields?.end
+                ? true
+                : false
             }
             variant={'ClaimBtn'}
             style={{ textTransform: 'uppercase', fontSize: '14px' }}

@@ -181,6 +181,7 @@ const CommisionForm = () => {
     }
   }, [planTypes, dispatch]);
 
+  console.log('form', formstate);
   React.useEffect(() => {
     if (travellerTypes) {
       let type = travellerTypes?.response.map((obj) => ({
@@ -525,40 +526,91 @@ const CommisionForm = () => {
   };
 
   const handleComm1 = (event) => {
-    const inputNumber = parseInt(event.target.value, 10);
-    const data = {
-      ...formstate,
-      commissionlvl1: inputNumber,
-    };
+    let newValue = event.target.value;
 
-    if (!isNaN(inputNumber) && inputNumber >= 0) {
-      dispatch(setProductForm(data));
+    console.log('dsss', isNaN(newValue));
+    if ((newValue.length === 1 && newValue === '0') || newValue[0] === '0') {
+      newValue = 0;
+    }
+
+    // Additional validation, for example, to ensure it's a valid number
+    if (!isNaN(newValue)) {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          commissionlvl1: parseInt(newValue),
+        })
+      );
     }
   };
 
   const handleComm2 = (event) => {
-    const inputNumber = parseInt(event.target.value, 10);
-    const data = {
-      ...formstate,
-      commissionlvl2: inputNumber,
-    };
+    let newValue = event.target.value;
 
-    if (!isNaN(inputNumber) && inputNumber >= 0) {
-      dispatch(setProductForm(data));
+    // console.log('dsss', isNaN(newValue));
+    if ((newValue.length === 1 && newValue === '0') || newValue[0] === '0') {
+      newValue = '';
+    }
+
+    // Additional validation, for example, to ensure it's a valid number
+    if (!isNaN(newValue)) {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          commissionlvl2: parseInt(newValue),
+        })
+      );
     }
   };
+
   const handleComm3 = (event) => {
-    const inputNumber = parseInt(event.target.value, 10);
-    const data = {
-      ...formstate,
-      commissionlvl3: inputNumber,
-    };
+    let newValue = event.target.value;
 
-    if (!isNaN(inputNumber) && inputNumber >= 0) {
-      dispatch(setProductForm(data));
+    console.log('dsss', newValue);
+    if ((newValue.length === 1 && newValue === '0') || newValue[0] === '0') {
+      newValue = '';
+    }
+
+    // Additional validation, for example, to ensure it's a valid number
+    if (!isNaN(newValue)) {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          commissionlvl3: parseInt(newValue),
+        })
+      );
     }
   };
-
+  console.log('dddsssss', isNaN(formstate?.commissionlvl1));
+  React.useEffect(() => {
+    if (isNaN(formstate?.commissionlvl1)) {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          commissionlvl1: 0,
+        })
+      );
+    } else if (isNaN(formstate?.commissionlvl2)) {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          commissionlvl2: 0,
+        })
+      );
+    } else if (isNaN(formstate?.commissionlvl3)) {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          commissionlvl3: 0,
+        })
+      );
+    }
+  }, [
+    formstate?.commissionlvl1,
+    formstate?.commissionlvl2,
+    formstate?.commissionlvl3,
+    dispatch,
+  ]);
   return (
     <Box>
       <Box

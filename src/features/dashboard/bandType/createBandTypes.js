@@ -13,6 +13,7 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -54,6 +55,7 @@ const EditCity = () => {
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const listRoles = useSelector(listRoleUsers);
   const formuser = useSelector(formUser);
+  const [errorMessage, setErrorMessage] = React.useState(false);
   const [currency] = React.useState([
     {
       id: 1,
@@ -65,8 +67,8 @@ const EditCity = () => {
     },
   ]);
   const [fields, setFields] = React.useState({
-    start: 0,
-    end: 0,
+    start: 1,
+    end: 2,
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
@@ -116,23 +118,52 @@ const EditCity = () => {
   };
 
   const handleData = (e) => {
-    const inputNumber = parseInt(e.target.value, 10);
-    const data = {
-      ...fields,
-      [e.target.name]: inputNumber,
-    };
+    let newValue = e.target.value;
 
-    if (!isNaN(inputNumber) && inputNumber > 0) {
-      setFields(data);
-    } else {
+    // console.log('dsss', newValue);
+    if ((newValue.length === 1 && newValue === '0') || newValue[0] === '0') {
+      newValue = '';
+    }
+
+    // Additional validation, for example, to ensure it's a valid number
+    if (!isNaN(newValue)) {
       setFields({
         ...fields,
-        [e.target.name]: 0,
+        [e.target.name]: parseInt(newValue),
       });
     }
-    // dispatch(setFormUser(forms));
-    // setFields(data);
   };
+
+  // console.log('isNaN(fields?.start)', fields?.start >= fields?.end);
+  React.useEffect(() => {
+    if (isNaN(fields?.start === true)) {
+      setFields({
+        ...fields,
+        start: 1,
+      });
+    }
+    if (isNaN(fields?.start === true)) {
+      setFields({
+        ...fields,
+        end: 2,
+      });
+    }
+  }, [fields?.start, fields?.end]);
+
+  React.useEffect(() => {
+    if (fields?.start === 0) {
+      setFields({
+        ...fields,
+        start: 1,
+      });
+    }
+    if (fields?.end === 0) {
+      setFields({
+        ...fields,
+        end: 2,
+      });
+    }
+  }, [fields?.start, fields?.end]);
 
   React.useEffect(() => {
     if (JSON.stringify(prevListRoles) !== JSON.stringify(rolesData)) {
@@ -205,6 +236,7 @@ const EditCity = () => {
             >
               <Input
                 type="number"
+                // minLength={'1'}
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 name="start"
@@ -234,8 +266,10 @@ const EditCity = () => {
               id="first-name"
               isRequired
               mt="14px"
+              // isInvalid={!!errorMessage}
             >
               <Input
+                // minLength={'2'}
                 type="number"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
@@ -256,8 +290,26 @@ const EditCity = () => {
               >
                 End
               </FormLabel>
-              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+              {/* {fields?.start >= fields?.end && ( */}
+              {/* <FormErrorMessage>
+                Fill End bigger than start number
+              </FormErrorMessage> */}
+              {/* )} */}
             </FormControl>
+            <Box>
+              {fields?.start >= fields?.end && (
+                <Text
+                  as="p"
+                  fontSize={'12px'}
+                  color={'red'}
+                  fontFamily={'Mulish'}
+                  fontStyle={'italic'}
+                  p={'3px 1px'}
+                >
+                  Please fill end bigger than start
+                </Text>
+              )}
+            </Box>
           </Box>
         </Box>
         <Box
@@ -280,7 +332,15 @@ const EditCity = () => {
             Cancel
           </Button>
           <Button
-            isDisabled={fields?.start === 0 || fields?.end === 0 ? true : false}
+            isDisabled={
+              fields?.start === 0 ||
+              fields?.end === 0 ||
+              isNaN(fields?.start) ||
+              isNaN(fields?.end) ||
+              fields?.start >= fields?.end
+                ? true
+                : false
+            }
             variant={'ClaimBtn'}
             style={{ textTransform: 'uppercase', fontSize: '14px' }}
             fontFamily="arial"
