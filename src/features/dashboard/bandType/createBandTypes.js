@@ -122,8 +122,13 @@ const EditCity = () => {
       [e.target.name]: inputNumber,
     };
 
-    if (!isNaN(inputNumber) && inputNumber >= 0) {
+    if (!isNaN(inputNumber) && inputNumber > 0) {
       setFields(data);
+    } else {
+      setFields({
+        ...fields,
+        [e.target.name]: 0,
+      });
     }
     // dispatch(setFormUser(forms));
     // setFields(data);
