@@ -84,7 +84,7 @@ const CreatePrice = () => {
       premiumPrice: inputNumber,
     };
 
-    if (!isNaN(inputNumber) && inputNumber >= 0) {
+    if (!isNaN(inputNumber) && fields?.premiumPrice > 0) {
       setFields(data);
     }
   };
@@ -96,8 +96,13 @@ const CreatePrice = () => {
       commisionLv1: inputNumber,
     };
 
-    if (!isNaN(inputNumber) && inputNumber >= 0) {
+    if (!isNaN(inputNumber)) {
       setFields(data);
+    } else {
+      setFields({
+        ...fields,
+        commisionLv1: 0,
+      });
     }
   };
 
@@ -108,8 +113,13 @@ const CreatePrice = () => {
       commisionLv2: inputNumber,
     };
 
-    if (!isNaN(inputNumber) && inputNumber >= 0) {
+    if (!isNaN(inputNumber)) {
       setFields(data);
+    } else {
+      setFields({
+        ...fields,
+        commisionLv2: 0,
+      });
     }
   };
   const handleComm3 = (event) => {
@@ -119,8 +129,13 @@ const CreatePrice = () => {
       commisionLv3: inputNumber,
     };
 
-    if (!isNaN(inputNumber) && inputNumber >= 0) {
+    if (!isNaN(inputNumber)) {
       setFields(data);
+    } else {
+      setFields({
+        ...fields,
+        commisionLv3: 0,
+      });
     }
   };
   const handleNext = async () => {
@@ -140,8 +155,26 @@ const CreatePrice = () => {
       console.log(error);
     }
   };
-  console.log('fields data', data);
-  console.log('fields data', fields);
+
+  const total = React.useMemo(() => {
+    let tot;
+
+    tot = fields?.commisionLv1 + fields.commisionLv2 + fields.commisionLv3;
+    return tot;
+  }, [fields?.commisionLv1, fields?.commisionLv2, fields?.commisionLv3]);
+
+  const ajiPriceCalc = React.useMemo(() => {
+    let tot;
+    tot = Math.ceil(
+      fields?.premiumPrice -
+        (total * fields?.premiumPrice) / 100 +
+        (((total * fields?.premiumPrice) / 100) * fields?.pph23) / 100
+    );
+    return tot;
+  }, [fields?.premiumPrice, fields?.pph23, total]);
+
+  // console.log('total', total);
+  // console.log('total', fields);
   return (
     <>
       <Box
@@ -286,7 +319,7 @@ const CreatePrice = () => {
                   id="inputs"
                   placeholder=" "
                   _placeholder={{ opacity: 1, color: 'gray.500' }}
-                  value={data?.premiumPrice}
+                  value={fields?.premiumPrice}
                   name="productCode"
                   onChange={handlePreiumPrice}
                   textTransform={'uppercase'}
@@ -503,6 +536,192 @@ const CreatePrice = () => {
               </FormControl>
             </Box>
           </Flex>
+        </Flex>
+      </Box>
+      <Box>
+        <Flex
+          mt="1em"
+          width={{ base: '100%' }}
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(3, 1fr)',
+            lg: 'repeat(4, 1fr)',
+          }}
+          justifyContent="center"
+          alignItems="center"
+          gap="20px"
+          flexWrap="wrap"
+          mx="auto"
+        >
+          <Box
+            border="1px solid #ebebeb"
+            p="10px"
+            flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+            fontSize="14px"
+            fontFamily="Mulish"
+          >
+            Total Commission
+          </Box>
+          <Box
+            border="1px solid #ebebeb"
+            p="10px"
+            flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+            fontSize="14px"
+            fontFamily="Mulish"
+          >
+            {'Rp '}
+            {(Math.ceil(total * fields?.premiumPrice) / 100).toFixed(0)}
+          </Box>
+          <Box
+            p="10px"
+            flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+            border="none"
+          >
+            <Flex alignItems="center" gap="5px">
+              <RiErrorWarningLine size="25px" color="blue" />
+              <Box display="flex" flexDirection="column">
+                <Text
+                  as="b"
+                  fontSize="sm"
+                  style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+                >
+                  {' '}
+                  Total commission:
+                </Text>
+                <Text
+                  as="p"
+                  fontSize="sm"
+                  style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+                >
+                  Calculated from commission level 1, 2 & 3
+                </Text>
+              </Box>
+            </Flex>
+          </Box>
+        </Flex>
+        <Flex
+          width={{ base: '100%' }}
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(3, 1fr)',
+            lg: 'repeat(4, 1fr)',
+          }}
+          justifyContent="center"
+          alignItems="center"
+          gap="20px"
+          flexWrap="wrap"
+          mx="auto"
+        >
+          <Box
+            border="1px solid #ebebeb"
+            p="10px"
+            flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+            fontSize="14px"
+            fontFamily="Mulish"
+          >
+            After Commision
+          </Box>
+          <Box
+            border="1px solid #ebebeb"
+            p="10px"
+            flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+            fontSize="14px"
+            fontFamily="Mulish"
+          >
+            {'Rp '}
+            {Math.ceil(
+              fields?.premiumPrice - (total * fields?.premiumPrice) / 100
+            ).toFixed(0)}
+          </Box>
+          <Box
+            p="10px"
+            flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+            border="none"
+          >
+            <Flex alignItems="center" gap="5px">
+              <RiErrorWarningLine size="25px" color="blue" />
+              <Box display="flex" flexDirection="column">
+                <Text
+                  as="b"
+                  fontSize="sm"
+                  style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+                >
+                  {' '}
+                  After commission price:
+                </Text>
+                <Text
+                  as="p"
+                  fontSize="sm"
+                  style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+                >
+                  Premium price - total commission
+                </Text>
+              </Box>
+            </Flex>
+          </Box>
+        </Flex>
+        <Flex
+          mt="1em"
+          width={{ base: '100%' }}
+          gridTemplateColumns={{
+            base: 'repeat(1, 1fr)',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(3, 1fr)',
+            lg: 'repeat(4, 1fr)',
+          }}
+          justifyContent="center"
+          alignItems="center"
+          gap="20px"
+          flexWrap="wrap"
+          mx="auto"
+        >
+          <Box
+            border="1px solid #ebebeb"
+            p="10px"
+            flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+            fontSize="14px"
+            fontFamily="Mulish"
+          >
+            Ajiprice
+          </Box>
+          <Box
+            border="1px solid #ebebeb"
+            p="10px"
+            flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+            fontSize="14px"
+            fontFamily="Mulish"
+          >
+            {'Rp '}
+            {ajiPriceCalc}
+          </Box>
+          <Box
+            p="10px"
+            flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg: '25%' }}
+            border="none"
+          >
+            <Flex alignItems="center" gap="5px">
+              <RiErrorWarningLine size="25px" color="blue" />
+              <Box display="flex" flexDirection="column">
+                <Text
+                  as="b"
+                  fontSize="sm"
+                  style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+                >
+                  {' '}
+                  Ajiprice:
+                </Text>
+                <Text
+                  as="p"
+                  fontSize="sm"
+                  style={{ fontSize: '12px', fontFamily: 'Mulish' }}
+                >
+                  Calculated from After commission price + pph23
+                </Text>
+              </Box>
+            </Flex>
+          </Box>
         </Flex>
       </Box>
       <Box
