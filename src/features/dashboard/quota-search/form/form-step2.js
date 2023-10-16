@@ -414,7 +414,7 @@ const Form2 = ({
                     style={{ fontSize: '14px' }}
                     fontFamily={'Mulish'}
                   >
-                    With Additional benefits and Assistance Cover.
+                    {products.productDescription}.
                   </Heading>
                   <ButtonGroup gap="5px">
                     <Button
