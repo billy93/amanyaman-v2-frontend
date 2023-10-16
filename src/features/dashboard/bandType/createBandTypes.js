@@ -86,7 +86,7 @@ const EditCity = () => {
     ...filterby,
   });
 
-  const [createBandTypes] = useCreateBandTypesMutation({
+  const [createBandTypes, { isLoading }] = useCreateBandTypesMutation({
     skip: trigger === false,
   });
 
@@ -337,7 +337,8 @@ const EditCity = () => {
               fields?.end === 0 ||
               isNaN(fields?.start) ||
               isNaN(fields?.end) ||
-              fields?.start >= fields?.end
+              fields?.start >= fields?.end ||
+              isLoading
                 ? true
                 : false
             }

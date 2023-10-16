@@ -90,7 +90,7 @@ const CreateUser = () => {
     ...filterby,
   });
 
-  const [updateBandTypes] = useUpdateBandTypesMutation({
+  const [updateBandTypes, { isLoading }] = useUpdateBandTypesMutation({
     skip: trigger === false,
   });
 
@@ -312,7 +312,8 @@ const CreateUser = () => {
               fields?.end === 0 ||
               isNaN(fields?.start) ||
               isNaN(fields?.end) ||
-              fields?.start >= fields?.end
+              fields?.start >= fields?.end ||
+              isLoading
                 ? true
                 : false
             }
