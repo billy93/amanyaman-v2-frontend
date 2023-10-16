@@ -395,8 +395,13 @@ const PolicyDetail = () => {
           borderBottom="1px"
           borderColor={'#ebebeb'}
         >
-          <Box display="flex" justifyContent={'space-between'} w="100%">
-            <Box w="100%" pt="15px">
+          <Box
+            display="flex"
+            justifyContent={'space-between'}
+            w="100%"
+            // mt="4em"
+          >
+            <Box w="100%" pt="15px" mt="4em">
               <Breadcrumb
                 spacing="8px"
                 ml="1em"
@@ -434,7 +439,13 @@ const PolicyDetail = () => {
                 </BreadcrumbItem>
               </Breadcrumb>
             </Box>
-            <Box display={'flex'} alignItems={'center'} gap="5px" mr="1em">
+            <Box
+              display={'flex'}
+              alignItems={'center'}
+              gap="5px"
+              mr="1em"
+              mt="4em"
+            >
               <Menu>
                 <MenuButton as={Button} colorScheme="white">
                   <FiMoreVertical color="#065BAA" size={'16px'} />
@@ -453,13 +464,8 @@ const PolicyDetail = () => {
                       </Text>
                     </Box>
                   </MenuItem>
-                  <MenuItem>
-                    <Box
-                      gap="5px"
-                      display={'flex'}
-                      alignItems="center"
-                      onClick={handleEditPolicy}
-                    >
+                  <MenuItem onClick={handleEditPolicy}>
+                    <Box gap="5px" display={'flex'} alignItems="center">
                       <BiRefresh color="#065BAA" size={'16px'} />
                       <Text as="p" fontSize="xs">
                         Update
@@ -479,26 +485,16 @@ const PolicyDetail = () => {
                       </Text>
                     </Box>
                   </MenuItem>
-                  <MenuItem>
-                    <Box
-                      gap="5px"
-                      display={'flex'}
-                      alignItems="center"
-                      onClick={handleView}
-                    >
+                  <MenuItem onClick={handleView}>
+                    <Box gap="5px" display={'flex'} alignItems="center">
                       <AiOutlineFolderView color="#065BAA" size={'16px'} />
                       <Text as="p" fontSize="xs">
                         View
                       </Text>
                     </Box>
                   </MenuItem>
-                  <MenuItem>
-                    <Box
-                      gap="5px"
-                      display={'flex'}
-                      alignItems="center"
-                      onClick={handleDownload}
-                    >
+                  <MenuItem onClick={handleDownload}>
+                    <Box gap="5px" display={'flex'} alignItems="center">
                       <AiOutlineDownload color="#065BAA" size={'16px'} />
                       <Text as="p" fontSize="xs">
                         Download
