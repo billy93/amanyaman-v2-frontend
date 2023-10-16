@@ -37,7 +37,7 @@ import { useGetByIdQuery } from './productPriceApi';
 const CreatePrice = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading } = useGetByIdQuery(id);
+  const { data, isLoading, refetch } = useGetByIdQuery(id);
   const dispatch = useDispatch();
   const list = useSelector(listAgent);
   const listProduct = useSelector(listProducts);
@@ -57,12 +57,18 @@ const CreatePrice = () => {
         commisionLv1: data?.commisionLv1,
         commisionLv2: data?.commisionLv2,
         commisionLv3: data?.commisionLv3,
+        totalCom: Math.ceil(
+          data?.commisionLv1 + data?.commisionLv2 + data?.commisionLv3
+        ),
         ppn: data?.ppn,
         pph23: data?.pph23,
       });
     }
   }, [data]);
 
+  React.useEffect(() => {
+    refetch(id);
+  }, [id, refetch]);
   const handleData = (e) => {
     const newData = {
       ...fields,
@@ -94,6 +100,9 @@ const CreatePrice = () => {
     const data = {
       ...fields,
       commisionLv1: inputNumber,
+      totalCom: Math.ceil(
+        fields?.commisionLv2 + fields?.commisionLv3 + inputNumber
+      ),
     };
 
     if (!isNaN(inputNumber)) {
@@ -102,6 +111,7 @@ const CreatePrice = () => {
       setFields({
         ...fields,
         commisionLv1: 0,
+        totalCom: Math.ceil(fields?.commisionLv2 + fields?.commisionLv3 + 0),
       });
     }
   };
@@ -111,6 +121,9 @@ const CreatePrice = () => {
     const data = {
       ...fields,
       commisionLv2: inputNumber,
+      totalCom: Math.ceil(
+        fields?.commisionLv1 + fields?.commisionLv3 + inputNumber
+      ),
     };
 
     if (!isNaN(inputNumber)) {
@@ -119,6 +132,7 @@ const CreatePrice = () => {
       setFields({
         ...fields,
         commisionLv2: 0,
+        totalCom: Math.ceil(fields?.commisionLv1 + fields?.commisionLv3 + 0),
       });
     }
   };
@@ -127,6 +141,9 @@ const CreatePrice = () => {
     const data = {
       ...fields,
       commisionLv3: inputNumber,
+      totalCom: Math.ceil(
+        fields?.commisionLv1 + fields?.commisionLv2 + inputNumber
+      ),
     };
 
     if (!isNaN(inputNumber)) {
@@ -135,6 +152,7 @@ const CreatePrice = () => {
       setFields({
         ...fields,
         commisionLv3: 0,
+        totalCom: Math.ceil(fields?.commisionLv1 + fields?.commisionLv2 + 0),
       });
     }
   };
@@ -156,25 +174,29 @@ const CreatePrice = () => {
     }
   };
 
-  const total = React.useMemo(() => {
-    let tot;
+  // console.log('total', total);
+  console.log('total', fields);
+  // console.log('total data', data);
+  // const total = React.useMemo(() => {
+  //   let tot;
 
-    tot = fields?.commisionLv1 + fields.commisionLv2 + fields.commisionLv3;
-    return tot;
-  }, [fields?.commisionLv1, fields?.commisionLv2, fields?.commisionLv3]);
+  //   tot = fields?.commisionLv1 + fields.commisionLv2 + fields.commisionLv3;
+  //   return tot;
+  // }, [fields?.commisionLv1, fields?.commisionLv2, fields?.commisionLv3]);
 
   const ajiPriceCalc = React.useMemo(() => {
     let tot;
     tot = Math.ceil(
       fields?.premiumPrice -
-        (total * fields?.premiumPrice) / 100 +
-        (((total * fields?.premiumPrice) / 100) * fields?.pph23) / 100
+        (fields?.totalCom * fields?.premiumPrice) / 100 +
+        (((fields?.totalCom * fields?.premiumPrice) / 100) * fields?.pph23) /
+          100
     );
     return tot;
-  }, [fields?.premiumPrice, fields?.pph23, total]);
+  }, [fields?.premiumPrice, fields?.pph23, fields?.totalCom]);
 
   // console.log('total', total);
-  // console.log('total', fields);
+  console.log('total', fields);
   return (
     <>
       <Box
@@ -571,7 +593,9 @@ const CreatePrice = () => {
             fontFamily="Mulish"
           >
             {'Rp '}
-            {(Math.ceil(total * fields?.premiumPrice) / 100).toFixed(0)}
+            {(Math.ceil(fields?.totalCom * fields?.premiumPrice) / 100).toFixed(
+              0
+            )}
           </Box>
           <Box
             p="10px"
@@ -632,7 +656,8 @@ const CreatePrice = () => {
           >
             {'Rp '}
             {Math.ceil(
-              fields?.premiumPrice - (total * fields?.premiumPrice) / 100
+              fields?.premiumPrice -
+                (fields?.totalCom * fields?.premiumPrice) / 100
             ).toFixed(0)}
           </Box>
           <Box
