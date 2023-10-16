@@ -229,7 +229,7 @@ const PolicyDetail = () => {
 
   const downloadAndOpenPdfInNewTab = async (downloadPolicy) => {
     if (!downloadPolicy) {
-      console.error('PDF data is missing.');
+      // console.error('PDF data is missing.');
       return;
     }
 
