@@ -1154,6 +1154,7 @@ const Polcies = () => {
           <Input
             readOnly
             ref={ref}
+            fontSize={'12px'}
             placeholder=" "
             _placeholder={{ opacity: 1, color: 'gray.500' }}
             value={
@@ -1175,6 +1176,7 @@ const Polcies = () => {
               color: dateDisplay !== null ? '#065baa' : '',
               fontStyle: dateDisplay !== null ? 'italic' : 'italic',
               fontSize: dateDisplay !== null ? '12px' : '12px',
+              display: dateDisplay !== null ? 'none' : '',
             }}
             fontFamily={'Mulish'}
           >
