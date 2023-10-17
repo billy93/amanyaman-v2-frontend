@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 import React from 'react';
 // import storage from 'redux-persist/lib/storage';
@@ -30,7 +31,12 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import Logo from '../img/logo.svg';
-import { Link, NavLink as Nav, useNavigate } from 'react-router-dom';
+import {
+  Link,
+  NavLink as Nav,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { MdLogout, MdArrowDropDown } from 'react-icons/md';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -57,6 +63,7 @@ const LinkItemsUser = [
 
 export default function Navbar({ allowedRoles }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
   const username = useSelector(userLoginCurrent);
@@ -87,6 +94,26 @@ export default function Navbar({ allowedRoles }) {
       console.log('No persisted state found in localStorage');
     }
   };
+  // console.log('location', location);
+  const masterDataRoutes = [
+    '/master-data',
+    '/master-data/master-product',
+    '/master-data/master-price',
+  ];
+
+  const [active, setActive] = React.useState(false);
+  const isMasterDataActive = (location) => {
+    return location?.pathname !== '/master-data/master-user' ? true : false;
+  };
+
+  // console.log('isMasterDataActive', location.pathname);
+  React.useEffect(() => {
+    if (location.pathname !== '/master-data/master-user') {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+  }, [active, location.pathname]);
 
   const handleCreatePolicy = () => {
     const addStep = {
@@ -292,16 +319,42 @@ export default function Navbar({ allowedRoles }) {
                   <>
                     <Popover trigger={'hover'} placement={'bottom-start'}>
                       <PopoverTrigger>
-                        <NewLink
+                        {link?.children ? (
+                          <span
+                            style={{
+                              fontSize: '14px',
+                              fontFamily: 'Mulish',
+                              fontWeight: 'bold',
+                              color: '#231F20',
+                            }}
+                            className={active ? 'active' : ''}
+                          >
+                            {link.name}
+                          </span>
+                        ) : (
+                          <NewLink
+                            as={Nav}
+                            to={link?.link}
+                            variant={'outline'}
+                            _hover={{ color: '#065BAA' }}
+                            activeClassName="active"
+                          >
+                            {link.name}
+                          </NewLink>
+                        )}
+                        {/* <NewLink
                           key={i}
                           as={Nav}
-                          to={link.link}
+                          to={link?.children ? '#' : link?.link}
                           p={2}
                           fontSize={'sm'}
-                          style={{ fontSize: '14px' }}
+                          style={{
+                            fontSize: '14px',
+                          }}
                           fontWeight={800}
                           fontFamilly={'Mulish'}
                           color={linkColor}
+                          activeClassName="active"
                           _activeLink={{
                             fontWeight: 'bold',
                             color: '#065BAA',
@@ -310,10 +363,11 @@ export default function Navbar({ allowedRoles }) {
                           _hover={{
                             textDecoration: 'none',
                             color: linkHoverColor,
+                            pointerEvents: 'none',
                           }}
                         >
                           {link.name}
-                        </NewLink>
+                        </NewLink> */}
                       </PopoverTrigger>
 
                       {link.children && (

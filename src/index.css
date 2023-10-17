@@ -16,6 +16,37 @@
   font-size: 13px;
   font-family: 'Mulish';
 }
+.cursor-pointer-not-clickable {
+  cursor: default; /* Set the default cursor */
+  text-decoration: none; /* Remove underline */
+  color: #0073e6; /* Set the desired text color */
+
+  /* On hover, change the cursor to a pointer and underline the text */
+  /* Prevent any interaction with the element */
+  pointer-events: none;
+}
+
+.cursor-pointer-not-clickable:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .active{
+  color:#065BAA!important;
+ }
+.commonClickable {
+  cursor: pointer; /* Change cursor to a pointer on hover */
+  text-decoration: none; /* Remove underline */
+  color: #0073e6; /* Set the desired text color */
+
+  /* Hover effect */
+  &:hover {
+    text-decoration: underline; /* Add underline on hover */
+    color: #ff5722; /* Change color on hover */
+  }
+  
+  /* Prevent any interaction with the element */
+  pointer-events: none;
+}
 .global-td {
   font-size: 12px;
   font-family: 'Mulish';

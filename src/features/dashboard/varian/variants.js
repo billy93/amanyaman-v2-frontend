@@ -608,8 +608,9 @@ const Polcies = () => {
   // const data = React.useMemo(() => tempList);
   // console.log('ddd listParams', listParams)
   React.useEffect(() => {
-    refetch({ page, size: 10 });
-  }, [page, refetch]);
+    refetch({ page, size: size });
+  }, [page, refetch, size]);
+
   const nextPages = () => {
     setPage((prevPage) => prevPage + 1);
   };
@@ -645,6 +646,7 @@ const Polcies = () => {
             fetchData={fetchData}
             loading={loading}
             pageCount={pageCount}
+            totalCount={totalCount}
             size={size}
           />
         </Styles>

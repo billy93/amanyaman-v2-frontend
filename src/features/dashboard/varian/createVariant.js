@@ -28,6 +28,7 @@ import {
   formUser,
   setFormUser,
 } from '../masterUser//masterUserSlice';
+import { useCreateVariantMutation } from './systemParamsApiSlice';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 // import { MdAdd } from 'react-icons/md';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
@@ -53,6 +54,7 @@ const EditCity = () => {
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const listRoles = useSelector(listRoleUsers);
   const formuser = useSelector(formUser);
+  // const [createVariant] = useCreateVariantMutation();
   const [currency] = React.useState([
     {
       id: 1,
@@ -65,7 +67,6 @@ const EditCity = () => {
   ]);
   const [fields, setFields] = React.useState({
     name: '',
-    desc: '',
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
@@ -83,38 +84,28 @@ const EditCity = () => {
     ...filterby,
   });
 
-  const [createUser] = useCreateUserMutation({
+  const [createVariant, { isLoading }] = useCreateVariantMutation({
     skip: trigger === false,
   });
 
   const handleNext = async (e) => {
     e.preventDefault();
-    const datas = {
-      login: formuser?.login,
-      firstName: formuser?.firstName,
-      lastName: formuser?.lastName,
-      email: formuser?.email,
-      authorities: [`${formuser?.authorities}`],
-      travelAgent: {
-        id: formUser?.travelAgent,
-      },
-    };
 
     try {
-      let resp = await createUser(datas);
+      let resp = await createVariant(fields);
       // console.log('ress', resp)
       if (resp?.data) {
-        showSuccessToast('User created successfully!');
-        dispatch(setListUser([...listProducts, datas]));
-        navigate('/master-data/master-user');
+        showSuccessToast('Variant created successfully!');
+        // dispatch(setListUser([...listProducts, datas]));
+        navigate('/master-data/variants');
       } else {
         // const statusCode = error?.response?.status || 'Unknown';
-        const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+        const errorMessage = `Failed to create variant. Status Code: ${resp?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to create variant. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
     }
     // navigate('/master-data/master-user')
@@ -135,7 +126,7 @@ const EditCity = () => {
     }
   }, [rolesData, prevListRoles, dispatch]);
 
-  console.log('test', fields);
+  // console.log('test', fields);
   return (
     <Stack mt={{ base: '1em', md: '5em' }}>
       <Box
@@ -195,6 +186,7 @@ const EditCity = () => {
               mt="14px"
             >
               <Input
+                type="text"
                 placeholder=" "
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 name="name"
@@ -229,15 +221,7 @@ const EditCity = () => {
           mt="1em"
         >
           <Button
-            isDisabled={
-              formuser?.authorities.length === 0 ||
-              formuser?.login === '' ||
-              formuser?.firstName === '' ||
-              formuser?.email === '' ||
-              formuser?.lastName === ''
-                ? true
-                : false
-            }
+            isDisabled={fields?.name === '' || isLoading ? true : false}
             variant={'ClaimBtn'}
             style={{ textTransform: 'uppercase', fontSize: '14px' }}
             fontFamily="arial"

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
   Stack,
@@ -28,6 +28,10 @@ import {
   formUser,
   setFormUser,
 } from '../masterUser//masterUserSlice';
+import {
+  useGetVariantByIdQuery,
+  useUpdateVariantMutation,
+} from './systemParamsApiSlice';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 // import { MdAdd } from 'react-icons/md';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
@@ -65,12 +69,13 @@ const CreateUser = () => {
   ]);
   const [fields, setFields] = React.useState({
     name: '',
-    desc: '',
   });
   //   const hiddenInputIdtty = React.useRef(null);
   const navigate = useNavigate();
   const [trigger] = React.useState(false);
+  const { id } = useParams();
   const { data: rolesData } = useGetRoleQuery();
+  const { data: getVariant, refetch } = useGetVariantByIdQuery(id);
   const prevListRoles = usePrevious(rolesData);
   // const [isValid,setIsvalid] = React.useState(true);
   const [filterby] = React.useState({
@@ -83,38 +88,42 @@ const CreateUser = () => {
     ...filterby,
   });
 
-  const [createUser] = useCreateUserMutation({
+  const [updateVariant, { isLoading }] = useUpdateVariantMutation({
     skip: trigger === false,
   });
 
+  React.useEffect(() => {
+    if (id) {
+      refetch(id);
+    }
+  }, [id, refetch]);
+
+  React.useEffect(() => {
+    if (getVariant) {
+      setFields({
+        ...getVariant,
+      });
+    }
+  }, [getVariant]);
+
   const handleNext = async (e) => {
     e.preventDefault();
-    const datas = {
-      login: formuser?.login,
-      firstName: formuser?.firstName,
-      lastName: formuser?.lastName,
-      email: formuser?.email,
-      authorities: [`${formuser?.authorities}`],
-      travelAgent: {
-        id: formUser?.travelAgent,
-      },
-    };
 
     try {
-      let resp = await createUser(datas);
+      let resp = await updateVariant(fields);
       // console.log('ress', resp)
       if (resp?.data) {
-        showSuccessToast('User created successfully!');
-        dispatch(setListUser([...listProducts, datas]));
-        navigate('/master-data/master-user');
+        showSuccessToast('Variant edited successfully!');
+        // dispatch(setListUser([...listProducts, datas]));
+        navigate('/master-data/variants');
       } else {
         // const statusCode = error?.response?.status || 'Unknown';
-        const errorMessage = `Failed to create user. Status Code: ${resp?.error?.status}`;
+        const errorMessage = `Failed to edit variant. Status Code: ${resp?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to create user. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to edit variant. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
     }
     // navigate('/master-data/master-user')
@@ -229,15 +238,7 @@ const CreateUser = () => {
           mt="1em"
         >
           <Button
-            isDisabled={
-              formuser?.authorities.length === 0 ||
-              formuser?.login === '' ||
-              formuser?.firstName === '' ||
-              formuser?.email === '' ||
-              formuser?.lastName === ''
-                ? true
-                : false
-            }
+            isDisabled={formuser?.name === '' || isLoading ? true : false}
             variant={'ClaimBtn'}
             style={{ textTransform: 'uppercase', fontSize: '14px' }}
             fontFamily="arial"

@@ -1325,7 +1325,9 @@ const Polcies = () => {
                 >
                   <option value={''}>{'All Policy Status'}</option>
                   <option value={'SUCCESS'}>{'Success'}</option>
-                  <option value={'WAITING_FOR_PAYMENT'}>{'Pending'}</option>
+                  <option value={'PENDING'}>{'Pending'}</option>
+                  <option value={'UPDATED'}>{'Updated'}</option>
+                  <option value={'UPGRADED'}>{'Upgraded'}</option>
                 </Select>
               </motion.Box>
               <motion.Box
