@@ -41,31 +41,22 @@ const EmailForm = ({ quotation, handleClose }) => {
     }
   };
 
+  const handleTagsChange = (tags) => {
+    setSelected(tags);
+  };
+
   const handleInputChange = (value) => {
     setInputValue(value);
   };
 
   const handleSpaceKeyPress = (e) => {
-    if (e.key === ' ' && inputValue) {
-      setSelected([...selected, inputValue]);
-      setInputValue(''); // Clear the input field after selecting
+    if (e.key === ' ') {
+      const emails = inputValue.split(' ');
+      const newTags = [...selected, ...emails];
+      setSelected(newTags);
+      setInputValue('');
     }
   };
-
-  const handleSuggestionsFetchRequested = ({ value }) => {
-    // Implement your suggestion filtering logic here, e.g., filtering by domain
-    const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
-    const filteredSuggestions =
-      inputLength === 0
-        ? []
-        : suggestions.filter((suggestion) =>
-            suggestion.toLowerCase().includes(inputValue)
-          );
-
-    setSuggestions(filteredSuggestions);
-  };
-
   React.useEffect(() => {
     if (status === 'fulfilled') {
       showSuccessToast('Successfully', 'sendemail');
@@ -107,15 +98,12 @@ const EmailForm = ({ quotation, handleClose }) => {
         <Box>
           <TagsInput
             value={selected}
-            onChange={setSelected}
+            onChange={handleTagsChange}
             name="email"
-            placeHolder="enter email"
-            inputProps={{
-              placeholder: 'Enter email',
-            }}
-            onKeyPress={handleSpaceKeyPress} // Listen for space key press
-            inputValue={inputValue} // Controlled input value
-            onInputChange={handleInputChange} // Update input value
+            placeholder="Enter email"
+            onKeyPress={handleSpaceKeyPress}
+            inputValue={inputValue}
+            onInputChange={handleInputChange}
           />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
