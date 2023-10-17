@@ -30,6 +30,7 @@
     "pdfjs-dist": "^3.10.111",
     "react": "^18.1.0",
     "react-apexcharts": "^1.4.0",
+    "react-autosuggest": "^10.1.0",
     "react-calendar": "^4.2.1",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.22.5",

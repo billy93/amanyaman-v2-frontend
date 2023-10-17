@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { TagsInput } from 'react-tag-input-component';
+import Autosuggest from 'react-autosuggest';
 import { Box, Text, Button } from '@chakra-ui/react';
 import { setStateMessage } from './policySlice';
 import { useResendEmailsMutation } from './policyApiSlice';
@@ -11,6 +12,12 @@ import UseCustomToast from '../../../components/UseCustomToast';
 const EmailForm = ({ quotation, handleClose }) => {
   const dispatch = useDispatch();
   const [selected, setSelected] = useState([]);
+  const [suggestions, setSuggestions] = useState([
+    'gmail.com',
+    'yahoo.com',
+    'outlook.com',
+    'example.com',
+  ]); // Your list of email domain suggestions
   const [sendEmails, { isLoading, status }] = useResendEmailsMutation();
   const { id, policyNumberString } = useParams();
   const { showErrorToast, showSuccessToast } = UseCustomToast();
@@ -30,6 +37,20 @@ const EmailForm = ({ quotation, handleClose }) => {
       console.log(error);
       // dispatch(setStateMessage(error?.error?.status === 400 ? 'error' : ''));
     }
+  };
+
+  const handleSuggestionsFetchRequested = ({ value }) => {
+    // Implement your suggestion filtering logic here, e.g., filtering by domain
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+    const filteredSuggestions =
+      inputLength === 0
+        ? []
+        : suggestions.filter((suggestion) =>
+            suggestion.toLowerCase().includes(inputValue)
+          );
+
+    setSuggestions(filteredSuggestions);
   };
 
   React.useEffect(() => {
@@ -76,10 +97,25 @@ const EmailForm = ({ quotation, handleClose }) => {
             onChange={setSelected}
             name="email"
             placeHolder="enter email"
+            inputProps={{
+              placeholder: 'Enter email',
+            }}
           />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
           </Text>
+          <Autosuggest
+            suggestions={suggestions}
+            onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
+            getSuggestionValue={(suggestion) => suggestion}
+            renderSuggestion={(suggestion) => <div>{suggestion}</div>}
+            inputProps={{
+              value: selected[0] || '', // Access the first element of the selected array
+              onChange: (_, { newValue }) => {
+                setSelected([newValue]);
+              },
+            }}
+          />
         </Box>
         <Box display={'flex'} justifyContent={'flex-end'}>
           <Button
