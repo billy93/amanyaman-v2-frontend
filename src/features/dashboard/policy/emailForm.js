@@ -129,7 +129,7 @@ const EmailForm = ({ quotation, handleClose }) => {
             onKeyDown={handleKeyDown}
             tabIndex="1" // Prevent TagsInput from being included in the tab order
           /> */}
-          <TagsInput value={selected} onChange={handleTagsChange} />
+          <TagsInput value={selected} onChange={handleTagsChange} addKeys />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
           </Text>
