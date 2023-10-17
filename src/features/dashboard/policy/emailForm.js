@@ -61,11 +61,16 @@ const EmailForm = ({ quotation, handleClose }) => {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Tab' && inputValue.trim() !== '') {
-      const newSelected = [...selected, inputValue.trim()];
-      setSelected(newSelected);
-      setInputValue('');
+    if (e.key === 'Tab') {
       e.preventDefault(); // Prevent the default behavior of the Tab key
+      // Focus on the "Send" button or perform any other desired action
+      document.getElementById('sendButton').focus();
+    } else if (e.key === 'Enter' || e.key === ',') {
+      if (inputValue.trim() !== '') {
+        const newSelected = [...selected, inputValue.trim()];
+        setSelected(newSelected);
+        setInputValue('');
+      }
     }
   };
 
@@ -116,6 +121,7 @@ const EmailForm = ({ quotation, handleClose }) => {
             inputValue={inputValue}
             onInputChange={handleInputChange}
             onKeyPress={handleKeyPress}
+            tabIndex="-1" // Prevent TagsInput from being included in the tab order
           />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
