@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 import React, { useState, useRef } from 'react';
@@ -129,7 +130,14 @@ const EmailForm = ({ quotation, handleClose }) => {
             onKeyDown={handleKeyDown}
             tabIndex="1" // Prevent TagsInput from being included in the tab order
           /> */}
-          <TagsInput value={selected} onChange={handleTagsChange} addKeys />
+          <TagsInput
+            value={selected}
+            onChange={handleTagsChange}
+            addKeys={`${[8, 9, 12]}`}
+            maxTags={'2'}
+            // addKeys
+            // addKeys="9"
+          />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
           </Text>
