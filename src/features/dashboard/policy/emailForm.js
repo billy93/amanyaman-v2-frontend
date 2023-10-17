@@ -132,6 +132,7 @@ const EmailForm = ({ quotation, handleClose }) => {
             variant="outline"
             isLoading={isLoading}
             onClick={handleSendEmails}
+            id="sendButton"
           >
             Send
           </Button>
