@@ -10,6 +10,7 @@ import { Box, Text, Button } from '@chakra-ui/react';
 import { setStateMessage } from './policySlice';
 import { useResendEmailsMutation } from './policyApiSlice';
 import UseCustomToast from '../../../components/UseCustomToast';
+import 'react-tagsinput/react-tagsinput.css';
 
 const EmailForm = ({ quotation, handleClose }) => {
   const dispatch = useDispatch();
