@@ -13,6 +13,7 @@ import UseCustomToast from '../../../components/UseCustomToast';
 const EmailForm = ({ quotation, handleClose }) => {
   const dispatch = useDispatch();
   const [selected, setSelected] = useState([]);
+  const sendButtonRef = useRef(null);
   const [suggestions, setSuggestions] = useState([
     'gmail.com',
     'yahoo.com',
@@ -49,15 +50,6 @@ const EmailForm = ({ quotation, handleClose }) => {
   const handleInputChange = (value) => {
     console.log('va', value);
     setInputValue(value);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === ' ' && inputValue.trim() !== '') {
-      console.log('spacee', e.key);
-      const newSelected = [...selected, inputValue.trim()];
-      setSelected(newSelected);
-      setInputValue('');
-    }
   };
 
   const handleKeyPress = (e) => {
@@ -108,6 +100,16 @@ const EmailForm = ({ quotation, handleClose }) => {
     getTravellerId(policyNumberString);
   }, [policyNumberString, getTravellerId]);
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Tab' && inputValue.trim() !== '') {
+      e.preventDefault(); // Prevent the default behavior of the Tab key
+      const newSelected = [...selected, inputValue.trim()];
+      setSelected(newSelected);
+      setInputValue('');
+      sendButtonRef.current.focus(); // Move focus to the "Send" button
+    }
+  };
+
   // console.log('quotation', status);
   // console.log('dd', getTravellerId(policyNumberString));
   return (
@@ -122,7 +124,8 @@ const EmailForm = ({ quotation, handleClose }) => {
             inputValue={inputValue}
             onInputChange={handleInputChange}
             onKeyPress={handleKeyPress}
-            tabIndex="-1" // Prevent TagsInput from being included in the tab order
+            onKeyDown={handleKeyDown}
+            // tabIndex="-1" // Prevent TagsInput from being included in the tab order
           />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
@@ -130,10 +133,11 @@ const EmailForm = ({ quotation, handleClose }) => {
         </Box>
         <Box display={'flex'} justifyContent={'flex-end'}>
           <Button
+            ref={sendButtonRef}
             variant="outline"
             isLoading={isLoading}
             onClick={handleSendEmails}
-            id="sendButton"
+            // id="sendButton"
           >
             Send
           </Button>
