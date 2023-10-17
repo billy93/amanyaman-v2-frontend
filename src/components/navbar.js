@@ -363,7 +363,32 @@ export default function Navbar({ allowedRoles }) {
                         >
                           <PopoverTrigger>
                             {link?.children ? (
-                              <span
+                              <motion.span
+                                initial={{
+                                  opacity: 0,
+                                  transition: {
+                                    type: 'spring',
+                                    stiffness: 300,
+                                  },
+                                }}
+                                animate={{
+                                  opacity: 1,
+                                  transition: {
+                                    type: 'spring',
+                                    stiffness: 200,
+                                    delay: 0.4,
+                                  },
+                                }}
+                                exit={{
+                                  opacity: 1,
+                                  transition: {
+                                    delay: 0.4,
+                                    duration: 0.3,
+                                  },
+                                }}
+                                whileHover={{
+                                  scale: 1.1,
+                                }}
                                 style={{
                                   fontSize: '14px',
                                   fontFamily: 'Mulish',
@@ -373,7 +398,7 @@ export default function Navbar({ allowedRoles }) {
                                 className={active ? 'active' : ''}
                               >
                                 {link.name}
-                              </span>
+                              </motion.span>
                             ) : (
                               <NewLink
                                 as={Nav}
