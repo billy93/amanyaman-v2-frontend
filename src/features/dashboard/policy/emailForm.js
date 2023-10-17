@@ -47,20 +47,35 @@ const EmailForm = ({ quotation, handleClose }) => {
     }
   };
 
-  const handleValidation = (tag) => {
-    console.log('tag vali', tag);
+  const isEmailValid = (email) => {
     // Regular expression for email validation
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-
-    return emailRegex.test(tag);
+    return emailRegex.test(email);
   };
 
+  const areAllTagsValid = (tagsArray) => {
+    return tagsArray.every((tag) => isEmailValid(tag));
+  };
+
+  // const handleAddTag = (tag) => {
+  //   console.log('tag val', handleValidation(tag));
+  //   if (handleValidation(tag)) {
+  //     console.log('tag cha', tag);
+  //     setSelected([...selected, ...tag]);
+  //     setTagInput('');
+  //   }
+  // };
+
   const handleAddTag = (tag) => {
-    console.log('tag val', handleValidation(tag));
-    if (handleValidation(tag)) {
-      console.log('tag cha', tag);
-      setSelected([...selected, ...tag]);
-      setTagInput('');
+    if (tag.trim() !== '') {
+      const newTags = [...selected, tag];
+      if (areAllTagsValid(newTags)) {
+        setSelected(newTags);
+        setTagInput('');
+      } else {
+        // Handle invalid email input here
+        alert('Please enter a valid email address.');
+      }
     }
   };
   console.log('tag', selected);
