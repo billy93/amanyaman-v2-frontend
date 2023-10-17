@@ -51,14 +51,13 @@ const EmailForm = ({ quotation, handleClose }) => {
   };
 
   const handleSpaceKeyPress = (e) => {
-    if (e.key === ' ') {
-      if (inputValue.trim() !== '') {
-        setSelected([...selected, inputValue]);
-        setInputValue('');
-        inputRef.current.focus(); // Focus back on the input
-      }
+    if (e.key === ' ' && inputValue.trim() !== '') {
+      const newSelected = [...selected, inputValue.trim()];
+      setSelected(newSelected);
+      setInputValue('');
     }
   };
+
   React.useEffect(() => {
     if (status === 'fulfilled') {
       showSuccessToast('Successfully', 'sendemail');
@@ -106,7 +105,6 @@ const EmailForm = ({ quotation, handleClose }) => {
             onKeyPress={handleSpaceKeyPress}
             inputValue={inputValue}
             onInputChange={handleInputChange}
-            inputRef={inputRef}
           />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
