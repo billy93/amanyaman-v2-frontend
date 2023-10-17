@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -21,6 +22,7 @@ const EmailForm = ({ quotation, handleClose }) => {
   const [sendEmails, { isLoading, status }] = useResendEmailsMutation();
   const { id, policyNumberString } = useParams();
   const { showErrorToast, showSuccessToast } = UseCustomToast();
+  const [inputValue, setInputValue] = useState('');
 
   const handleSendEmails = async () => {
     const data = {
@@ -36,6 +38,17 @@ const EmailForm = ({ quotation, handleClose }) => {
     } catch (error) {
       console.log(error);
       // dispatch(setStateMessage(error?.error?.status === 400 ? 'error' : ''));
+    }
+  };
+
+  const handleInputChange = (value) => {
+    setInputValue(value);
+  };
+
+  const handleSpaceKeyPress = (e) => {
+    if (e.key === ' ' && inputValue) {
+      setSelected([...selected, inputValue]);
+      setInputValue(''); // Clear the input field after selecting
     }
   };
 
@@ -100,22 +113,13 @@ const EmailForm = ({ quotation, handleClose }) => {
             inputProps={{
               placeholder: 'Enter email',
             }}
+            onKeyPress={handleSpaceKeyPress} // Listen for space key press
+            inputValue={inputValue} // Controlled input value
+            onInputChange={handleInputChange} // Update input value
           />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
           </Text>
-          <Autosuggest
-            suggestions={suggestions}
-            onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
-            getSuggestionValue={(suggestion) => suggestion}
-            renderSuggestion={(suggestion) => <div>{suggestion}</div>}
-            inputProps={{
-              value: selected[0] || '', // Access the first element of the selected array
-              onChange: (_, { newValue }) => {
-                setSelected([newValue]);
-              },
-            }}
-          />
         </Box>
         <Box display={'flex'} justifyContent={'flex-end'}>
           <Button
