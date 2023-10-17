@@ -63,29 +63,11 @@ const EmailForm = ({ quotation, handleClose }) => {
       alert('Please enter a valid email address.');
     }
   };
+  console.log('tag', selected);
+  console.log('tag', tagInput);
   // const handleTagsChange = (tags) => {
   //   setSelected(tags);
   // };
-
-  const handleInputChange = (value) => {
-    console.log('va', value);
-    setInputValue(value);
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Tab' && inputValue.trim() !== '') {
-      e.preventDefault(); // Prevent the default behavior of the Tab key
-      const newSelected = [...selected, inputValue.trim()];
-      setSelected(newSelected);
-      setInputValue('');
-    } else if (e.key === 'Enter' || e.key === ',') {
-      if (inputValue.trim() !== '') {
-        const newSelected = [...selected, inputValue.trim()];
-        setSelected(newSelected);
-        setInputValue('');
-      }
-    }
-  };
 
   React.useEffect(() => {
     if (status === 'fulfilled') {
@@ -120,16 +102,6 @@ const EmailForm = ({ quotation, handleClose }) => {
     getTravellerId(policyNumberString);
   }, [policyNumberString, getTravellerId]);
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Tab' && inputValue.trim() !== '') {
-      e.preventDefault(); // Prevent the default behavior of the Tab key
-      const newSelected = [...selected, inputValue.trim()];
-      setSelected(newSelected);
-      setInputValue('');
-      sendButtonRef.current.focus(); // Move focus to the "Send" button
-    }
-  };
-
   const customAddKeys = ['Enter', 'Tab'];
   // console.log('quotation', status);
   // console.log('dd', getTravellerId(policyNumberString));
@@ -152,7 +124,7 @@ const EmailForm = ({ quotation, handleClose }) => {
             value={selected}
             inputValue={tagInput}
             onChange={handleAddTag}
-            addKeys={['Enter', 'Tab', ',']}
+            addKeys={['Enter', 'Tab']}
             addOnBlur={true}
             validate={handleValidation}
             onChangeInput={setTagInput}
