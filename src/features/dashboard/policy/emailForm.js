@@ -54,15 +54,11 @@ const EmailForm = ({ quotation, handleClose }) => {
     return emailRegex.test(tag);
   };
 
-  const handleAddTag = () => {
-    if (tagInput.trim() !== '') {
-      if (handleValidation(tagInput)) {
-        setSelected([...selected, tagInput]);
-        setTagInput('');
-      } else {
-        // Handle invalid email input here
-        alert('Please enter a valid email address.');
-      }
+  const handleAddTag = (tag) => {
+    console.log('tag', tag);
+    if (handleValidation(tag)) {
+      setSelected([...selected, tag]);
+      setTagInput('');
     }
   };
   console.log('tag', selected);
@@ -111,23 +107,12 @@ const EmailForm = ({ quotation, handleClose }) => {
     <Box>
       <Box>
         <Box>
-          {/* <TagsInput
-            value={selected}
-            onChange={handleTagsChange}
-            name="email"
-            placeholder="Enter email"
-            inputValue={inputValue}
-            onInputChange={handleInputChange}
-            onKeyPress={handleKeyPress}
-            onKeyDown={handleKeyDown}
-            tabIndex="1" // Prevent TagsInput from being included in the tab order
-          /> */}
           <TagsInput
             value={selected}
-            onChange={setSelected}
+            onChange={handleAddTag}
             addKeys={['Enter', 'Tab']}
             // addOnBlur={true}
-            // onChangeInput={setTagInput}
+            onChangeInput={setTagInput}
             // tagProps={{ className: 'tag' }}
           />
           <Text as="b" fontSize="sm">
