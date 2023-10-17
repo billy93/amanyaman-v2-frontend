@@ -60,6 +60,15 @@ const EmailForm = ({ quotation, handleClose }) => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Tab' && inputValue.trim() !== '') {
+      const newSelected = [...selected, inputValue.trim()];
+      setSelected(newSelected);
+      setInputValue('');
+      e.preventDefault(); // Prevent the default behavior of the Tab key
+    }
+  };
+
   React.useEffect(() => {
     if (status === 'fulfilled') {
       showSuccessToast('Successfully', 'sendemail');
@@ -104,9 +113,9 @@ const EmailForm = ({ quotation, handleClose }) => {
             onChange={handleTagsChange}
             name="email"
             placeholder="Enter email"
-            onKeyDown={handleKeyDown}
             inputValue={inputValue}
             onInputChange={handleInputChange}
+            onKeyPress={handleKeyPress}
           />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
