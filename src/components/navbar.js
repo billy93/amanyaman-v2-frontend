@@ -440,7 +440,31 @@ export default function Navbar({ allowedRoles }) {
                               },
                             }}
                           >
-                            <PopoverContent
+                            <motion.PopoverContent
+                              style={{
+                                maxHeight: '200px',
+                                overflowY: 'auto',
+                              }}
+                              initial={{
+                                opacity: 0,
+                              }}
+                              whileHover={{
+                                backgroundColor: 'blue',
+                              }}
+                              animate={{
+                                opacity: 1,
+                                transition: {
+                                  duration: 0.3,
+                                  delay: 0.5,
+                                },
+                              }}
+                              exit={{
+                                height: 0,
+                                transition: {
+                                  delay: 0.4,
+                                  duration: 0.3,
+                                },
+                              }}
                               border={0}
                               boxShadow={'xl'}
                               bg={popoverContentBgColor}
@@ -448,39 +472,14 @@ export default function Navbar({ allowedRoles }) {
                               rounded={'xl'}
                               minW={'sm'}
                             >
-                              <motion.Box
-                                style={{
-                                  maxHeight: '200px',
-                                  overflowY: 'auto',
-                                }}
-                                initial={{
-                                  opacity: 0,
-                                }}
-                                whileHover={{
-                                  backgroundColor: 'blue',
-                                }}
-                                animate={{
-                                  opacity: 1,
-                                  transition: {
-                                    duration: 0.3,
-                                    delay: 0.5,
-                                  },
-                                }}
-                                exit={{
-                                  height: 0,
-                                  transition: {
-                                    delay: 0.4,
-                                    duration: 0.3,
-                                  },
-                                }}
-                              >
+                              <motion.Box>
                                 <PopoverBody>
                                   {link.children.map((child, i) => (
                                     <DesktopSubNav key={i} {...child} />
                                   ))}
                                 </PopoverBody>
                               </motion.Box>
-                            </PopoverContent>
+                            </motion.PopoverContent>
                           </motion.Box>
                         )}
                       </Popover>
