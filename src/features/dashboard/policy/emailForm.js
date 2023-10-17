@@ -3,7 +3,8 @@
 import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { TagsInput } from 'react-tag-input-component';
+// import { TagsInput } from 'react-tag-input-component';
+import TagsInput from 'react-tagsinput';
 import Autosuggest from 'react-autosuggest';
 import { Box, Text, Button } from '@chakra-ui/react';
 import { setStateMessage } from './policySlice';
@@ -116,7 +117,7 @@ const EmailForm = ({ quotation, handleClose }) => {
     <Box>
       <Box>
         <Box>
-          <TagsInput
+          {/* <TagsInput
             value={selected}
             onChange={handleTagsChange}
             name="email"
@@ -126,7 +127,8 @@ const EmailForm = ({ quotation, handleClose }) => {
             onKeyPress={handleKeyPress}
             onKeyDown={handleKeyDown}
             tabIndex="1" // Prevent TagsInput from being included in the tab order
-          />
+          /> */}
+          <TagsInput value={selected} onChange={handleTagsChange} />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
           </Text>
