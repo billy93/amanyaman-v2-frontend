@@ -454,13 +454,13 @@ export default function Navbar({ allowedRoles }) {
                                   overflowY: 'auto',
                                 }}
                                 initial={{
-                                  height: 0,
+                                  opacity: 0,
                                 }}
                                 whileHover={{
                                   backgroundColor: 'blue',
                                 }}
                                 animate={{
-                                  height: '200px',
+                                  opacity: 1,
                                   transition: {
                                     duration: 0.3,
                                     delay: 0.5,
