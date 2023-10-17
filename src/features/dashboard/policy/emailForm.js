@@ -50,10 +50,9 @@ const EmailForm = ({ quotation, handleClose }) => {
     setInputValue(value);
   };
 
-  const handleSpaceKeyPress = (e) => {
-    console.log('space', e.key);
-    console.log('space', e.key === 32);
+  const handleKeyDown = (e) => {
     if (e.key === ' ' && inputValue.trim() !== '') {
+      console.log('spacee', e.key);
       const newSelected = [...selected, inputValue.trim()];
       setSelected(newSelected);
       setInputValue('');
@@ -104,7 +103,7 @@ const EmailForm = ({ quotation, handleClose }) => {
             onChange={handleTagsChange}
             name="email"
             placeholder="Enter email"
-            onKeyPress={handleSpaceKeyPress}
+            onKeyDown={handleKeyDown}
             inputValue={inputValue}
             onInputChange={handleInputChange}
           />
