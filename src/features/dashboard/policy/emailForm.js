@@ -47,6 +47,7 @@ const EmailForm = ({ quotation, handleClose }) => {
   };
 
   const handleInputChange = (value) => {
+    console.log('va', value);
     setInputValue(value);
   };
 
