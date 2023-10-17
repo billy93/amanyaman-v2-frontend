@@ -306,43 +306,86 @@ export default function Navbar({ allowedRoles }) {
           </Box>
           <Spacer />
           <HStack spacing={8} alignItems={'center'}>
-            <HStack
-              as={'nav'}
-              spacing={4}
-              display={{ base: 'none', md: 'flex' }}
+            <motion.Box
+              initial={{
+                y: -100,
+                opacity: 0,
+                transition: {
+                  delay: 0.5,
+                  duration: 0.3,
+                },
+              }}
+              animate={{
+                y: 0,
+                opacity: 1,
+              }}
+              exit={{
+                y: -100,
+                opacity: 0,
+                transition: {
+                  delay: 0.3,
+                  duration: 0.2,
+                },
+              }}
             >
-              {
-                // roles?.some(role => allowedRoles.includes(role.name)) &&(
-                // sortMenuRole()
-                menuItems.map((link, i) => (
-                  // <NavLink key={i} {...link}>{link.name}</NavLink>
-                  <>
-                    <Popover trigger={'hover'} placement={'bottom-start'}>
-                      <PopoverTrigger>
-                        {link?.children ? (
-                          <span
-                            style={{
-                              fontSize: '14px',
-                              fontFamily: 'Mulish',
-                              fontWeight: 'bold',
-                              color: '#231F20',
-                            }}
-                            className={active ? 'active' : ''}
-                          >
-                            {link.name}
-                          </span>
-                        ) : (
-                          <NewLink
-                            as={Nav}
-                            to={link?.link}
-                            variant={'outline'}
-                            _hover={{ color: '#065BAA' }}
-                            activeClassName="active"
-                          >
-                            {link.name}
-                          </NewLink>
-                        )}
-                        {/* <NewLink
+              <HStack
+                as={'nav'}
+                spacing={4}
+                display={{ base: 'none', md: 'flex' }}
+              >
+                {
+                  // roles?.some(role => allowedRoles.includes(role.name)) &&(
+                  // sortMenuRole()
+                  menuItems.map((link, i) => (
+                    // <NavLink key={i} {...link}>{link.name}</NavLink>
+                    <>
+                      <Popover trigger={'hover'} placement={'bottom-start'}>
+                        <motion.Box
+                          initial={{
+                            opacity: 0,
+                            transition: { type: 'spring', stiffness: 300 },
+                          }}
+                          animate={{
+                            opacity: 1,
+                            transition: {
+                              type: 'spring',
+                              stiffness: 200,
+                              delay: 0.4,
+                            },
+                          }}
+                          exit={{
+                            opacity: 1,
+                            transition: {
+                              delay: 0.4,
+                              duration: 0.3,
+                            },
+                          }}
+                        >
+                          <PopoverTrigger>
+                            {link?.children ? (
+                              <span
+                                style={{
+                                  fontSize: '14px',
+                                  fontFamily: 'Mulish',
+                                  fontWeight: 'bold',
+                                  color: '#231F20',
+                                }}
+                                className={active ? 'active' : ''}
+                              >
+                                {link.name}
+                              </span>
+                            ) : (
+                              <NewLink
+                                as={Nav}
+                                to={link?.link}
+                                variant={'outline'}
+                                _hover={{ color: '#065BAA' }}
+                                activeClassName="active"
+                              >
+                                {link.name}
+                              </NewLink>
+                            )}
+                            {/* <NewLink
                           key={i}
                           as={Nav}
                           to={link?.children ? '#' : link?.link}
@@ -368,30 +411,31 @@ export default function Navbar({ allowedRoles }) {
                         >
                           {link.name}
                         </NewLink> */}
-                      </PopoverTrigger>
-
-                      {link.children && (
-                        <PopoverContent
-                          border={0}
-                          boxShadow={'xl'}
-                          bg={popoverContentBgColor}
-                          p={4}
-                          rounded={'xl'}
-                          minW={'sm'}
-                        >
-                          <PopoverBody maxHeight="200px" overflowY="auto">
-                            {link.children.map((child, i) => (
-                              <DesktopSubNav key={i} {...child} />
-                            ))}
-                          </PopoverBody>
-                        </PopoverContent>
-                      )}
-                    </Popover>
-                  </>
-                ))
-                // )
-              }
-            </HStack>
+                          </PopoverTrigger>
+                        </motion.Box>
+                        {link.children && (
+                          <PopoverContent
+                            border={0}
+                            boxShadow={'xl'}
+                            bg={popoverContentBgColor}
+                            p={4}
+                            rounded={'xl'}
+                            minW={'sm'}
+                          >
+                            <PopoverBody maxHeight="200px" overflowY="auto">
+                              {link.children.map((child, i) => (
+                                <DesktopSubNav key={i} {...child} />
+                              ))}
+                            </PopoverBody>
+                          </PopoverContent>
+                        )}
+                      </Popover>
+                    </>
+                  ))
+                  // )
+                }
+              </HStack>
+            </motion.Box>
           </HStack>
           <Spacer />
           {userMenu?.role === 'ROLE_TRAVEL_AGENT' && (
