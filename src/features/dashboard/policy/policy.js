@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Data from './list.json';
 import { debounce } from 'lodash';
 import PageLoader from '../../../components/pageLoader';
+import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 import {
   usePagination,
   useSortBy,
@@ -25,6 +26,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   useToast,
   Input,
+  InputRightElement,
+  FormLabel,
   Select,
   Modal,
   ModalOverlay,
@@ -45,6 +48,8 @@ import {
   Heading,
   Stack,
   Text,
+  FormControl,
+  InputGroup,
   Center,
   useDisclosure,
   IconButton,
@@ -654,7 +659,7 @@ const Polcies = () => {
     bookingNumber: '',
     planType: '',
     policyStatus: '',
-    purchaseDate: '',
+    purchaseDate: null,
   });
   const [filterQueryDebounce, setFilterQueryDebounce] = React.useState({
     policyNumber: '',
@@ -662,7 +667,7 @@ const Polcies = () => {
     bookingNumber: '',
     planType: '',
     policyStatus: '',
-    purchaseDate: '',
+    purchaseDate: null,
   });
   const [showFilter, setShowFilter] = React.useState(false);
   const {
@@ -749,6 +754,15 @@ const Polcies = () => {
     } else {
       navigate(`/policies/detail/${row.bookingId}`);
     }
+  };
+
+  const selectDate = (date) => {
+    const filters = {
+      ...filterQuery,
+      purchaseDate: date,
+    };
+    // console.log('fil', filters);
+    setFilterQuery(filters);
   };
 
   const columns = React.useMemo(
@@ -1070,7 +1084,7 @@ const Polcies = () => {
         policyStatus: '',
         planType: '',
         bookingNumber: '',
-        purchaseDate: '',
+        purchaseDate: null,
       });
     }
   }, [showFilter]);
@@ -1096,12 +1110,68 @@ const Polcies = () => {
   const gotoPage = () => {
     setPage(0);
   };
-  // const handleSearchTermChange = (e) => {
-  //   const { value } = e.target;
-  //   setSearchTerm(value);
-  //   setPage(0);
-  // };
-  // console.log('filter listpolicies', listpolicies);
+
+  function getMonthName(monthNumber) {
+    const date = new Date();
+    date.setMonth(monthNumber - 1);
+
+    const formatter = new Intl.DateTimeFormat('en-us', { month: 'long' });
+
+    return formatter.format(date);
+  }
+
+  const formatInputValue = () => {
+    if (!filterQuery) return '';
+    return `${filterQuery?.purchaseDate?.day} ${getMonthName(
+      filterQuery?.purchaseDate?.month
+    )} ${filterQuery?.purchaseDate?.year}`;
+  };
+
+  const renderCustomInput = ({ ref }) => (
+    <>
+      <FormControl
+        variant="floating"
+        id="first-name"
+        isRequired
+        fontFamily={'Mulish'}
+      >
+        <InputGroup id="float-labelss">
+          <Input
+            readOnly
+            ref={ref}
+            placeholder=" "
+            _placeholder={{ opacity: 1, color: 'gray.500' }}
+            value={
+              filterQuery?.purchaseDate
+                ? `${filterQuery?.purchaseDate?.day} ${getMonthName(
+                    filterQuery?.purchaseDate?.month
+                  )} ${filterQuery?.purchaseDate?.year}`
+                : ''
+            }
+            h="48px"
+          />
+          <InputRightElement children={<SlCalender color="green.500" />} />
+          <FormLabel
+            fontSize="12"
+            pt="1.5"
+            style={{
+              transform:
+                filterQuery !== null ? 'translate(0, -6px) scale(0.75)' : '',
+              color: filterQuery?.purchaseDate !== null ? '#065baa' : '',
+              fontStyle:
+                filterQuery?.purchaseDate !== null ? 'italic' : 'italic',
+              fontSize: filterQuery?.purchaseDate !== null ? '12px' : '12px',
+            }}
+            fontFamily={'Mulish'}
+          >
+            Date Of Birth
+          </FormLabel>
+        </InputGroup>
+        {/* It is important that the Label comes after the Control due to css selectors */}
+      </FormControl>
+    </>
+  );
+
   let content;
   if (isLoading) {
     content = <PageLoader loading={isLoading} />;
@@ -1153,11 +1223,6 @@ const Polcies = () => {
             </Stack>
           </Box>
           {showFilter && (
-            // <motion.div
-            //   initial={{ y: -55, zIndex: 999 }}
-            //   animate={{ y: 0 }}
-            //   transition={{ delay: 0.5, duration: 0.5 }}
-            // >
             <Box
               w={{ base: '100%', md: '70%' }}
               display={'flex'}
@@ -1322,13 +1387,7 @@ const Polcies = () => {
                     fontWeight: 'normal',
                   }}
                   onChange={handleFilter}
-                >
-                  <option value={''}>{'All Policy Status'}</option>
-                  <option value={'SUCCESS'}>{'Success'}</option>
-                  <option value={'PENDING'}>{'Pending'}</option>
-                  <option value={'UPDATED'}>{'Updated'}</option>
-                  <option value={'UPGRADED'}>{'Upgraded'}</option>
-                </Select>
+                />
               </motion.Box>
               <motion.Box
                 w="100%"
@@ -1382,10 +1441,44 @@ const Polcies = () => {
                   })}
                 </Select>
               </motion.Box>
-
+              <motion.Box
+                animate={{
+                  y: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 400,
+                    delay: 0.9,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 50,
+                  },
+                }}
+                initial={{
+                  opacity: 1,
+                  y: '-100vh',
+                }}
+              >
+                <DatePicker
+                  value={filterQuery?.purchaseDate}
+                  onChange={selectDate}
+                  inputPlaceholder="Select a date" // placeholder
+                  formatInputText={formatInputValue}
+                  inputClassName={
+                    filterQuery?.purchaseDate !== null ? '' : 'my-custom-input'
+                  } // custom class
+                  renderInput={renderCustomInput}
+                  shouldHighlightWeekends
+                  style={{
+                    backgroundColor:
+                      (filterQuery?.purchaseDate !== null) !== null
+                        ? '#e8f0fe'
+                        : '',
+                  }}
+                />
+              </motion.Box>
               {/* <Button variant={'outline'} onClick={handleSearch}>Search</Button> */}
             </Box>
-            // </motion.div>
           )}
           <Styles>
             <Tables
