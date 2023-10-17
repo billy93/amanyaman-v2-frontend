@@ -16,6 +16,14 @@
   font-size: 13px;
   font-family: 'Mulish';
 }
+.close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red; /* You can adjust the color as needed */
+  font-size: 16px;
+  margin-left: 4px; /* Adjust the margin for spacing */
+}
 .tag-custom{
   padding: 2px 4px;
     background: #50b8486b;
