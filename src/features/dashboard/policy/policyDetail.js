@@ -451,13 +451,8 @@ const PolicyDetail = () => {
                   <FiMoreVertical color="#065BAA" size={'16px'} />
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>
-                    <Box
-                      gap="5px"
-                      display={'flex'}
-                      alignItems="center"
-                      onClick={handleUpgrade}
-                    >
+                  <MenuItem onClick={handleUpgrade}>
+                    <Box gap="5px" display={'flex'} alignItems="center">
                       <AiOutlineUpload color="#065BAA" size={'16px'} />
                       <Text as="p" fontSize="xs">
                         Upgrade
@@ -472,13 +467,8 @@ const PolicyDetail = () => {
                       </Text>
                     </Box>
                   </MenuItem>
-                  <MenuItem>
-                    <Box
-                      gap="5px"
-                      display={'flex'}
-                      alignItems="center"
-                      onClick={addEmail}
-                    >
+                  <MenuItem onClick={addEmail}>
+                    <Box gap="5px" display={'flex'} alignItems="center">
                       <AiOutlineMail color="#065BAA" size={'16px'} />
                       <Text as="p" fontSize="xs">
                         Email
