@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable indent */
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { TagsInput } from 'react-tag-input-component';
@@ -23,6 +23,7 @@ const EmailForm = ({ quotation, handleClose }) => {
   const { id, policyNumberString } = useParams();
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const [inputValue, setInputValue] = useState('');
+  const inputRef = useRef(null);
 
   const handleSendEmails = async () => {
     const data = {
@@ -51,10 +52,11 @@ const EmailForm = ({ quotation, handleClose }) => {
 
   const handleSpaceKeyPress = (e) => {
     if (e.key === ' ') {
-      const emails = inputValue.split(' ');
-      const newTags = [...selected, ...emails];
-      setSelected(newTags);
-      setInputValue('');
+      if (inputValue.trim() !== '') {
+        setSelected([...selected, inputValue]);
+        setInputValue('');
+        inputRef.current.focus(); // Focus back on the input
+      }
     }
   };
   React.useEffect(() => {
@@ -104,6 +106,7 @@ const EmailForm = ({ quotation, handleClose }) => {
             onKeyPress={handleSpaceKeyPress}
             inputValue={inputValue}
             onInputChange={handleInputChange}
+            inputRef={inputRef}
           />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
