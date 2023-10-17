@@ -116,19 +116,19 @@ const EmailForm = ({ quotation, handleClose }) => {
             validate={handleValidation}
             onChangeInput={setTagInput}
             tagProps={{ className: 'tag-custom' }}
-          >
-            {selected.map((tag, index) => (
-              <span key={tag} className="tag-item">
-                {tag}
+            renderTag={(props) => (
+              <span className="custom-tag">
+                {props.tag}
                 <button
                   className="close-button"
-                  onClick={() => handleRemoveTag(tag)}
+                  onClick={() => handleRemoveTag(props.tag)}
                 >
                   x
                 </button>
               </span>
-            ))}
-          </TagsInput>
+            )}
+          />
+
           <Text as="b" fontSize="sm">
             press Tab or Enter to add new tag
           </Text>
