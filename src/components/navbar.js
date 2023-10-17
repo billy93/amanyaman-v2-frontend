@@ -364,30 +364,9 @@ export default function Navbar({ allowedRoles }) {
                           <PopoverTrigger>
                             {link?.children ? (
                               <motion.span
-                                initial={{
-                                  opacity: 0,
-                                  transition: {
-                                    type: 'spring',
-                                    stiffness: 300,
-                                  },
-                                }}
-                                animate={{
-                                  opacity: 1,
-                                  transition: {
-                                    type: 'spring',
-                                    stiffness: 200,
-                                    delay: 0.4,
-                                  },
-                                }}
-                                exit={{
-                                  opacity: 1,
-                                  transition: {
-                                    delay: 0.4,
-                                    duration: 0.3,
-                                  },
-                                }}
                                 whileHover={{
                                   scale: 1.1,
+                                  borderBottom: '1px solid #fafafa',
                                 }}
                                 style={{
                                   fontSize: '14px',
@@ -439,20 +418,42 @@ export default function Navbar({ allowedRoles }) {
                           </PopoverTrigger>
                         </motion.Box>
                         {link.children && (
-                          <PopoverContent
-                            border={0}
-                            boxShadow={'xl'}
-                            bg={popoverContentBgColor}
-                            p={4}
-                            rounded={'xl'}
-                            minW={'sm'}
+                          <motion.Box
+                            initial={{
+                              opacity: 0,
+                              transition: { type: 'spring', stiffness: 300 },
+                            }}
+                            animate={{
+                              opacity: 1,
+                              transition: {
+                                type: 'spring',
+                                stiffness: 200,
+                                delay: 0.4,
+                              },
+                            }}
+                            exit={{
+                              opacity: 1,
+                              transition: {
+                                delay: 0.4,
+                                duration: 0.3,
+                              },
+                            }}
                           >
-                            <PopoverBody maxHeight="200px" overflowY="auto">
-                              {link.children.map((child, i) => (
-                                <DesktopSubNav key={i} {...child} />
-                              ))}
-                            </PopoverBody>
-                          </PopoverContent>
+                            <PopoverContent
+                              border={0}
+                              boxShadow={'xl'}
+                              bg={popoverContentBgColor}
+                              p={4}
+                              rounded={'xl'}
+                              minW={'sm'}
+                            >
+                              <PopoverBody maxHeight="200px" overflowY="auto">
+                                {link.children.map((child, i) => (
+                                  <DesktopSubNav key={i} {...child} />
+                                ))}
+                              </PopoverBody>
+                            </PopoverContent>
+                          </motion.Box>
                         )}
                       </Popover>
                     </>
