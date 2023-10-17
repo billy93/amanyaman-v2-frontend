@@ -16,6 +16,13 @@
   font-size: 13px;
   font-family: 'Mulish';
 }
+.tag-custom{
+  padding: 2px 4px;
+    background: #50b8486b;
+    font-size: 12px;
+    font-family: 'Mulish';
+    border-radius: 4px;
+}
 .cursor-pointer-not-clickable {
   cursor: default; /* Set the default cursor */
   text-decoration: none; /* Remove underline */

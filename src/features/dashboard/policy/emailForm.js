@@ -95,6 +95,11 @@ const EmailForm = ({ quotation, handleClose }) => {
   }, [policyNumberString, getTravellerId]);
 
   const customAddKeys = ['Enter', 'Tab'];
+
+  const handleRemoveTag = (tag) => {
+    const newTags = selected.filter((t) => t !== tag);
+    setSelected(newTags);
+  };
   // console.log('quotation', status);
   // console.log('dd', getTravellerId(policyNumberString));
   return (
@@ -109,8 +114,20 @@ const EmailForm = ({ quotation, handleClose }) => {
             addOnBlur={true}
             validate={handleValidation}
             onChangeInput={setTagInput}
-            tagProps={{ className: 'tag' }}
-          />
+            tagProps={{ className: 'tag-custom' }}
+          >
+            {selected.map((tag, index) => (
+              <span key={tag} className="tag-item">
+                {tag}
+                <button
+                  className="close-button"
+                  onClick={() => handleRemoveTag(tag)}
+                >
+                  &times;
+                </button>
+              </span>
+            ))}
+          </TagsInput>
           <Text as="b" fontSize="sm">
             press Tab or Enter to add new tag
           </Text>
