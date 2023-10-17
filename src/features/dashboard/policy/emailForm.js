@@ -113,6 +113,7 @@ const EmailForm = ({ quotation, handleClose }) => {
     }
   };
 
+  const customAddKeys = ['Enter', 'Tab'];
   // console.log('quotation', status);
   // console.log('dd', getTravellerId(policyNumberString));
   return (
@@ -133,8 +134,8 @@ const EmailForm = ({ quotation, handleClose }) => {
           <TagsInput
             value={selected}
             onChange={handleTagsChange}
-            addKeys={`${[8, 9, 12]}`}
-            maxTags={'2'}
+            addKeys={customAddKeys}
+            // maxTags={'2'}
             // addKeys
             // addKeys="9"
           />
