@@ -1163,7 +1163,7 @@ const Polcies = () => {
                   }`
                 : ''
             }
-            h="48px"
+            h="40px"
           />
           <InputRightElement children={<SlCalender color="green.500" />} />
           <FormLabel
