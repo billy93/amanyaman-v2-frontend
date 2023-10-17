@@ -449,14 +449,18 @@ export default function Navbar({ allowedRoles }) {
                               minW={'sm'}
                             >
                               <motion.Box
+                                style={{
+                                  maxHeight: '200px',
+                                  overflowY: 'auto',
+                                }}
                                 initial={{
-                                  maxHeight: 0,
+                                  height: 0,
                                 }}
                                 whileHover={{
                                   backgroundColor: 'blue',
                                 }}
                                 animate={{
-                                  maxHeight: '200px',
+                                  height: '200px',
                                   transition: {
                                     duration: 0.3,
                                     delay: 0.5,
@@ -470,7 +474,7 @@ export default function Navbar({ allowedRoles }) {
                                   },
                                 }}
                               >
-                                <PopoverBody overflowY="auto">
+                                <PopoverBody>
                                   {link.children.map((child, i) => (
                                     <DesktopSubNav key={i} {...child} />
                                   ))}
