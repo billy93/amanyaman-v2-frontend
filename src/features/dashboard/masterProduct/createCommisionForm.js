@@ -527,14 +527,14 @@ const CommisionForm = () => {
 
   const handleComm1 = (event) => {
     let newValue = event.target.value;
-
-    console.log('dsss', isNaN(newValue));
-    if ((newValue.length === 1 && newValue === '0') || newValue[0] === '0') {
-      newValue = 0;
-    }
-
-    // Additional validation, for example, to ensure it's a valid number
-    if (!isNaN(newValue)) {
+    if (newValue === '') {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          commissionlvl1: 0,
+        })
+      );
+    } else {
       dispatch(
         setProductForm({
           ...formstate,
@@ -546,14 +546,14 @@ const CommisionForm = () => {
 
   const handleComm2 = (event) => {
     let newValue = event.target.value;
-
-    // console.log('dsss', isNaN(newValue));
-    if ((newValue.length === 1 && newValue === '0') || newValue[0] === '0') {
-      newValue = '';
-    }
-
-    // Additional validation, for example, to ensure it's a valid number
-    if (!isNaN(newValue)) {
+    if (newValue === '') {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          commissionlvl2: 0,
+        })
+      );
+    } else {
       dispatch(
         setProductForm({
           ...formstate,
@@ -563,16 +563,53 @@ const CommisionForm = () => {
     }
   };
 
+  const handlePPh = (event) => {
+    let newValue = event.target.value;
+    if (newValue === '') {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          pph23: 0,
+        })
+      );
+    } else {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          pph23: parseInt(newValue),
+        })
+      );
+    }
+  };
+  const handlePPN = (event) => {
+    let newValue = event.target.value;
+    if (newValue === '') {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          ppn: 0,
+        })
+      );
+    } else {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          ppn: parseInt(newValue),
+        })
+      );
+    }
+  };
+
   const handleComm3 = (event) => {
     let newValue = event.target.value;
-
-    console.log('dsss', newValue);
-    if ((newValue.length === 1 && newValue === '0') || newValue[0] === '0') {
-      newValue = '';
-    }
-
-    // Additional validation, for example, to ensure it's a valid number
-    if (!isNaN(newValue)) {
+    if (newValue === '') {
+      dispatch(
+        setProductForm({
+          ...formstate,
+          commissionlvl3: 0,
+        })
+      );
+    } else {
       dispatch(
         setProductForm({
           ...formstate,
@@ -581,36 +618,7 @@ const CommisionForm = () => {
       );
     }
   };
-  console.log('dddsssss', isNaN(formstate?.commissionlvl1));
-  React.useEffect(() => {
-    if (isNaN(formstate?.commissionlvl1)) {
-      dispatch(
-        setProductForm({
-          ...formstate,
-          commissionlvl1: 0,
-        })
-      );
-    } else if (isNaN(formstate?.commissionlvl2)) {
-      dispatch(
-        setProductForm({
-          ...formstate,
-          commissionlvl2: 0,
-        })
-      );
-    } else if (isNaN(formstate?.commissionlvl3)) {
-      dispatch(
-        setProductForm({
-          ...formstate,
-          commissionlvl3: 0,
-        })
-      );
-    }
-  }, [
-    formstate?.commissionlvl1,
-    formstate?.commissionlvl2,
-    formstate?.commissionlvl3,
-    dispatch,
-  ]);
+
   return (
     <Box>
       <Box
@@ -1675,7 +1683,7 @@ const CommisionForm = () => {
               <Stack>
                 <InputGroup size="sm">
                   <Input
-                    type="number"
+                    type="text"
                     placeholder=" "
                     _placeholder={{ opacity: 1, color: 'gray.500' }}
                     name="commissionlvl1"
@@ -1733,6 +1741,7 @@ const CommisionForm = () => {
             >
               <InputGroup size="sm">
                 <Input
+                  type="text"
                   placeholder=" "
                   _placeholder={{ opacity: 1, color: 'gray.500' }}
                   name="commissionlvl2"
@@ -1782,7 +1791,7 @@ const CommisionForm = () => {
               <Stack>
                 <InputGroup size="sm">
                   <Input
-                    type="number"
+                    type="text"
                     placeholder=" "
                     _placeholder={{ opacity: 1, color: 'gray.500' }}
                     name="commissionlvl3"
@@ -1841,11 +1850,12 @@ const CommisionForm = () => {
             >
               <InputGroup size="sm">
                 <Input
+                  type="text"
                   placeholder=" "
                   _placeholder={{ opacity: 1, color: 'gray.500' }}
                   name="pph23"
                   value={formstate?.pph23}
-                  onChange={handleData}
+                  onChange={handlePPh}
                   h="48px"
                   variant={'custom'}
                   background={formstate?.pph23 !== '' ? '#e8f0fe' : '#ebebeb'}
@@ -1887,12 +1897,12 @@ const CommisionForm = () => {
               <Stack>
                 <InputGroup size="sm">
                   <Input
-                    type="number"
+                    type="text"
                     placeholder=" "
                     _placeholder={{ opacity: 1, color: 'gray.500' }}
                     name="ppn"
                     value={formstate?.ppn}
-                    onChange={handleData}
+                    onChange={handlePPN}
                     h="48px"
                     variant={'custom'}
                     background={formstate?.ppn !== '' ? '#e8f0fe' : '#ebebeb'}
