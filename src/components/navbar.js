@@ -421,18 +421,19 @@ export default function Navbar({ allowedRoles }) {
                           <motion.Box
                             initial={{
                               opacity: 0,
-                              transition: { type: 'spring', stiffness: 300 },
+                            }}
+                            whileHover={{
+                              backgroundColor: 'blue',
                             }}
                             animate={{
                               opacity: 1,
                               transition: {
-                                type: 'spring',
-                                stiffness: 200,
-                                delay: 0.4,
+                                duration: 0.3,
+                                delay: 0.5,
                               },
                             }}
                             exit={{
-                              opacity: 1,
+                              opacity: 0,
                               transition: {
                                 delay: 0.4,
                                 duration: 0.3,
