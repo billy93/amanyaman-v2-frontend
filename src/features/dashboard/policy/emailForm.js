@@ -17,6 +17,7 @@ const EmailForm = ({ quotation, handleClose }) => {
   const dispatch = useDispatch();
   const [selected, setSelected] = useState([]);
   const sendButtonRef = useRef(null);
+  const [tagInput, setTagInput] = useState('');
   const [suggestions, setSuggestions] = useState([
     'gmail.com',
     'yahoo.com',
@@ -46,9 +47,25 @@ const EmailForm = ({ quotation, handleClose }) => {
     }
   };
 
-  const handleTagsChange = (tags) => {
-    setSelected(tags);
+  const handleValidation = (tag) => {
+    // Regular expression for email validation
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+
+    return emailRegex.test(tag);
   };
+
+  const handleAddTag = (tag) => {
+    if (handleValidation(tag)) {
+      setSelected([...selected, tag]);
+      setTagInput('');
+    } else {
+      // Handle invalid email input here
+      alert('Please enter a valid email address.');
+    }
+  };
+  // const handleTagsChange = (tags) => {
+  //   setSelected(tags);
+  // };
 
   const handleInputChange = (value) => {
     console.log('va', value);
@@ -133,14 +150,16 @@ const EmailForm = ({ quotation, handleClose }) => {
           /> */}
           <TagsInput
             value={selected}
-            onChange={handleTagsChange}
-            addKeys={customAddKeys}
-            // maxTags={'2'}
-            // addKeys
-            // addKeys="9"
+            inputValue={tagInput}
+            onChange={handleAddTag}
+            addKeys={['Enter', 'Tab', ',']}
+            addOnBlur={true}
+            validate={handleValidation}
+            onChangeInput={setTagInput}
+            tagProps={{ className: 'tag' }}
           />
           <Text as="b" fontSize="sm">
-            press enter or comma to add new tag
+            press Tab or Enter to add new tag
           </Text>
         </Box>
         <Box display={'flex'} justifyContent={'flex-end'}>
