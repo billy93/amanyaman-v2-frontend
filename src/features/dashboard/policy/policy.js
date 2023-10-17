@@ -6,6 +6,7 @@ import { useGetPolicyListQuery } from './policyApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import Data from './list.json';
 import { debounce } from 'lodash';
+import { SlCalender } from 'react-icons/sl';
 import PageLoader from '../../../components/pageLoader';
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
 import {
