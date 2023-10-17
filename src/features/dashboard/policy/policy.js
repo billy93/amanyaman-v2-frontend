@@ -655,6 +655,7 @@ const Polcies = () => {
   const [page, setPage] = React.useState(0);
   const [size, setSize] = React.useState(5);
   const { data: planTypes } = useGetPlanTypesQuery({ page: 0, size: 9999 });
+  const [dateDisplay, setDateDisplay] = React.useState(null);
   const [filterQuery, setFilterQuery] = React.useState({
     policyNumber: '',
     traveller: '',
@@ -669,7 +670,7 @@ const Polcies = () => {
     bookingNumber: '',
     planType: '',
     policyStatus: '',
-    purchaseDate: null,
+    purchaseDate: '',
   });
   const [showFilter, setShowFilter] = React.useState(false);
   const {
@@ -758,13 +759,25 @@ const Polcies = () => {
     }
   };
 
+  function formatDate(dateObj) {
+    if (dateObj.day && dateObj.month && dateObj.year) {
+      const day = dateObj.day < 10 ? `0${dateObj.day}` : dateObj.day;
+      const month = dateObj.month < 10 ? `0${dateObj.month}` : dateObj.month;
+
+      return `${dateObj.year}-${month}-${day}`;
+    }
+
+    return 'Invalid date object';
+  }
   const selectDate = (date) => {
+    const dates = formatDate(date);
     const filters = {
       ...filterQuery,
-      purchaseDate: date,
+      purchaseDate: dates,
     };
     // console.log('fil', filters);
     setFilterQuery(filters);
+    setDateDisplay(date);
   };
 
   const columns = React.useMemo(
@@ -1086,7 +1099,7 @@ const Polcies = () => {
         policyStatus: '',
         planType: '',
         bookingNumber: '',
-        purchaseDate: null,
+        purchaseDate: '',
       });
     }
   }, [showFilter]);
@@ -1144,10 +1157,10 @@ const Polcies = () => {
             placeholder=" "
             _placeholder={{ opacity: 1, color: 'gray.500' }}
             value={
-              filterQuery?.purchaseDate
-                ? `${filterQuery?.purchaseDate?.day} ${getMonthName(
-                    filterQuery?.purchaseDate?.month
-                  )} ${filterQuery?.purchaseDate?.year}`
+              dateDisplay
+                ? `${dateDisplay?.day} ${getMonthName(dateDisplay?.month)} ${
+                    dateDisplay?.year
+                  }`
                 : ''
             }
             h="48px"
@@ -1158,11 +1171,10 @@ const Polcies = () => {
             pt="1.5"
             style={{
               transform:
-                filterQuery !== null ? 'translate(0, -6px) scale(0.75)' : '',
-              color: filterQuery?.purchaseDate !== null ? '#065baa' : '',
-              fontStyle:
-                filterQuery?.purchaseDate !== null ? 'italic' : 'italic',
-              fontSize: filterQuery?.purchaseDate !== null ? '12px' : '12px',
+                dateDisplay !== null ? 'translate(0, -6px) scale(0.75)' : '',
+              color: dateDisplay !== null ? '#065baa' : '',
+              fontStyle: dateDisplay !== null ? 'italic' : 'italic',
+              fontSize: dateDisplay !== null ? '12px' : '12px',
             }}
             fontFamily={'Mulish'}
           >
@@ -1461,23 +1473,23 @@ const Polcies = () => {
                   y: '-100vh',
                 }}
               >
-                <DatePicker
-                  value={filterQuery?.purchaseDate}
-                  onChange={selectDate}
-                  inputPlaceholder="Select a date" // placeholder
-                  formatInputText={formatInputValue}
-                  inputClassName={
-                    filterQuery?.purchaseDate !== null ? '' : 'my-custom-input'
-                  } // custom class
-                  renderInput={renderCustomInput}
-                  shouldHighlightWeekends
-                  style={{
-                    backgroundColor:
-                      (filterQuery?.purchaseDate !== null) !== null
-                        ? '#e8f0fe'
-                        : '',
-                  }}
-                />
+                <Box bg={dateDisplay !== null ? '#e8f0fe' : ''}>
+                  <DatePicker
+                    value={dateDisplay}
+                    onChange={selectDate}
+                    inputPlaceholder="Select a date" // placeholder
+                    formatInputText={formatInputValue}
+                    inputClassName={
+                      dateDisplay !== null ? '' : 'my-custom-input'
+                    } // custom class
+                    renderInput={renderCustomInput}
+                    shouldHighlightWeekends
+                    style={{
+                      backgroundColor:
+                        (dateDisplay !== null) !== null ? '#e8f0fe' : '',
+                    }}
+                  />
+                </Box>
               </motion.Box>
               {/* <Button variant={'outline'} onClick={handleSearch}>Search</Button> */}
             </Box>
