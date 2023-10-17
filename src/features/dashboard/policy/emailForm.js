@@ -111,6 +111,7 @@ const EmailForm = ({ quotation, handleClose }) => {
             inputValue={tagInput}
             onChange={setSelected}
             addKeys={['Enter', 'Tab']}
+            removeKeys={['Backspace']}
             addOnBlur={true}
             validate={handleValidation}
             onChangeInput={setTagInput}
