@@ -123,7 +123,7 @@ const EmailForm = ({ quotation, handleClose }) => {
                   className="close-button"
                   onClick={() => handleRemoveTag(tag)}
                 >
-                  &times;
+                  x
                 </button>
               </span>
             ))}
