@@ -1401,7 +1401,13 @@ const Polcies = () => {
                     fontWeight: 'normal',
                   }}
                   onChange={handleFilter}
-                />
+                >
+                  <option value="ALL">Select Policy status</option>
+                  <option value="SUCCESS">Success</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="UPDATED">Updated</option>
+                  <option value="UPGRADED">Upgraded</option>
+                </Select>
               </motion.Box>
               <motion.Box
                 w="100%"
