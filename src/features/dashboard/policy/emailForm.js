@@ -57,7 +57,7 @@ const EmailForm = ({ quotation, handleClose }) => {
   const handleAddTag = (tag) => {
     console.log('tag', tag);
     if (handleValidation(tag)) {
-      setSelected([...selected, tag]);
+      setSelected([...selected, ...tag]);
       setTagInput('');
     }
   };
