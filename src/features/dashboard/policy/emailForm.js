@@ -125,7 +125,7 @@ const EmailForm = ({ quotation, handleClose }) => {
             onInputChange={handleInputChange}
             onKeyPress={handleKeyPress}
             onKeyDown={handleKeyDown}
-            // tabIndex="-1" // Prevent TagsInput from being included in the tab order
+            tabIndex="1" // Prevent TagsInput from being included in the tab order
           />
           <Text as="b" fontSize="sm">
             press enter or comma to add new tag
@@ -134,6 +134,7 @@ const EmailForm = ({ quotation, handleClose }) => {
         <Box display={'flex'} justifyContent={'flex-end'}>
           <Button
             ref={sendButtonRef}
+            tabIndex={'2'}
             variant="outline"
             isLoading={isLoading}
             onClick={handleSendEmails}
