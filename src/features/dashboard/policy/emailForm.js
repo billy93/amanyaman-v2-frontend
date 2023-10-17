@@ -61,10 +61,11 @@ const EmailForm = ({ quotation, handleClose }) => {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Tab') {
+    if (e.key === 'Tab' && inputValue.trim() !== '') {
       e.preventDefault(); // Prevent the default behavior of the Tab key
-      // Focus on the "Send" button or perform any other desired action
-      document.getElementById('sendButton').focus();
+      const newSelected = [...selected, inputValue.trim()];
+      setSelected(newSelected);
+      setInputValue('');
     } else if (e.key === 'Enter' || e.key === ',') {
       if (inputValue.trim() !== '') {
         const newSelected = [...selected, inputValue.trim()];
