@@ -117,7 +117,7 @@ const EmailForm = ({ quotation, handleClose }) => {
             onChangeInput={setTagInput}
             tagProps={{ className: 'tag-custom' }}
             renderTag={(props) => (
-              <span className="custom-tag">
+              <span className="tag-custom">
                 {props.tag}
                 <button
                   className="close-button"
