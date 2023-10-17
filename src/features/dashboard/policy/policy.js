@@ -1487,6 +1487,7 @@ const Polcies = () => {
                     style={{
                       backgroundColor:
                         (dateDisplay !== null) !== null ? '#e8f0fe' : '',
+                      height: '40px',
                     }}
                   />
                 </Box>
