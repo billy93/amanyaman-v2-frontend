@@ -1178,7 +1178,7 @@ const Polcies = () => {
             }}
             fontFamily={'Mulish'}
           >
-            Date Of Birth
+            Purchase Date
           </FormLabel>
         </InputGroup>
         {/* It is important that the Label comes after the Control due to css selectors */}
@@ -1479,7 +1479,10 @@ const Polcies = () => {
                   y: '-100vh',
                 }}
               >
-                <Box bg={dateDisplay !== null ? '#e8f0fe' : ''}>
+                <Box
+                  bg={dateDisplay !== null ? '#e8f0fe' : '#ebebeb'}
+                  style={{ height: '40px' }}
+                >
                   <DatePicker
                     value={dateDisplay}
                     onChange={selectDate}
