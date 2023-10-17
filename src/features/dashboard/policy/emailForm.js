@@ -47,42 +47,19 @@ const EmailForm = ({ quotation, handleClose }) => {
     }
   };
 
-  const isEmailValid = (email) => {
-    // Regular expression for email validation
+  const handleValidation = (input) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    return emailRegex.test(email);
-  };
+    const inputArray = input.split(',');
 
-  const areAllTagsValid = (tagsArray) => {
-    return tagsArray.every((tag) => isEmailValid(tag));
-  };
-
-  // const handleAddTag = (tag) => {
-  //   console.log('tag val', handleValidation(tag));
-  //   if (handleValidation(tag)) {
-  //     console.log('tag cha', tag);
-  //     setSelected([...selected, ...tag]);
-  //     setTagInput('');
-  //   }
-  // };
-
-  const handleAddTag = (tag) => {
-    if (tag.trim() !== '') {
-      const newTags = [...selected, tag];
-      if (areAllTagsValid(newTags)) {
-        setSelected(newTags);
-        setTagInput('');
-      } else {
-        // Handle invalid email input here
-        alert('Please enter a valid email address.');
+    for (const entry of inputArray) {
+      if (!emailRegex.test(entry.trim())) {
+        alert('Please enter valid email addresses.');
+        return false;
       }
     }
+
+    return true;
   };
-  console.log('tag', selected);
-  console.log('tag', tagInput);
-  // const handleTagsChange = (tags) => {
-  //   setSelected(tags);
-  // };
 
   React.useEffect(() => {
     if (status === 'fulfilled') {
@@ -126,11 +103,13 @@ const EmailForm = ({ quotation, handleClose }) => {
         <Box>
           <TagsInput
             value={selected}
-            onChange={handleAddTag}
+            inputValue={tagInput}
+            onChange={setSelected}
             addKeys={['Enter', 'Tab']}
-            // addOnBlur={true}
+            addOnBlur={true}
+            validate={handleValidation}
             onChangeInput={setTagInput}
-            // tagProps={{ className: 'tag' }}
+            tagProps={{ className: 'tag' }}
           />
           <Text as="b" fontSize="sm">
             press Tab or Enter to add new tag
