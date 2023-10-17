@@ -124,12 +124,11 @@ const EmailForm = ({ quotation, handleClose }) => {
           /> */}
           <TagsInput
             value={selected}
-            inputValue={tagInput}
             onChange={setSelected}
             addKeys={['Enter', 'Tab']}
-            addOnBlur={true}
-            onChangeInput={setTagInput}
-            tagProps={{ className: 'tag' }}
+            // addOnBlur={true}
+            // onChangeInput={setTagInput}
+            // tagProps={{ className: 'tag' }}
           />
           <Text as="b" fontSize="sm">
             press Tab or Enter to add new tag
