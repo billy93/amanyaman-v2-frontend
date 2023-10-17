@@ -51,6 +51,8 @@ const EmailForm = ({ quotation, handleClose }) => {
   };
 
   const handleSpaceKeyPress = (e) => {
+    console.log('space', e.key);
+    console.log('space', e.key === 32);
     if (e.key === ' ' && inputValue.trim() !== '') {
       const newSelected = [...selected, inputValue.trim()];
       setSelected(newSelected);
