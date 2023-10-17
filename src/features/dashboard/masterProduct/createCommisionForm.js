@@ -565,7 +565,7 @@ const CommisionForm = () => {
 
   const handlePPh = (event) => {
     let newValue = event.target.value;
-    if (newValue === '') {
+    if (newValue === '' || isNaN(newValue)) {
       dispatch(
         setProductForm({
           ...formstate,
@@ -583,7 +583,7 @@ const CommisionForm = () => {
   };
   const handlePPN = (event) => {
     let newValue = event.target.value;
-    if (newValue === '') {
+    if (newValue === '' || isNaN(newValue)) {
       dispatch(
         setProductForm({
           ...formstate,
