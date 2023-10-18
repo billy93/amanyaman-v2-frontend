@@ -1,35 +1,41 @@
-import React, { useState } from 'react'
-import { NavLink,Navigate, useNavigate } from "react-router-dom";
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
-Box,
-Stack,
-Text,
-Link,
-Heading,
-Button,
-Image,
-FormControl,
-Input,
-FormLabel,
-useToast,
-InputGroup,
-InputRightElement,
-Select,
-Divider,
-Textarea,
-Center,
-Breadcrumb,
-BreadcrumbItem,
-BreadcrumbLink,
-} from '@chakra-ui/react'
-import { useSelector } from "react-redux"
-import { useDispatch } from 'react-redux'
-import {setSystemParamsFieldValue,setSystemParamsFieldName,systemParamsValues,systemParamsNames,setFields,listFields} from './docTypeSlice'
-import { differenceInCalendarDays } from 'date-fns';
-import { ChevronRightIcon } from '@chakra-ui/icons'
-import { MdAdd } from 'react-icons/md'
-import {useCreateParamsMutation} from './docTypeApiSlice'
-import { useGetTravelAgentQuery } from "../travelAgent/travelApiSlice"
+  Box,
+  Stack,
+  Text,
+  Button,
+  FormControl,
+  Input,
+  FormLabel,
+  Select,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+} from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import {
+  useCreateUserMutation,
+  useGetRoleQuery,
+} from '../masterUser/userApiSlice';
+import { useCreateAreaMutation } from '../area/listApiSlice';
+import { useUploadFileDocMutation } from './docTypeApiSlice';
+import {
+  setListUser,
+  listUsers,
+  listRoleUsers,
+  setRoleUser,
+  formUser,
+  setFormUser,
+} from '../masterUser/masterUserSlice';
+import { ChevronRightIcon } from '@chakra-ui/icons';
+// import { MdAdd } from 'react-icons/md';
+import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
+// import  OnQueryError  from '../../../components/UseCustomToast'
+import UseCustomToast from '../../../components/UseCustomToast';
+// import { ChevronRightIcon } from '@chakra-ui/icons';
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -43,116 +49,201 @@ function usePrevious(value) {
   return ref.current;
 }
 
-const CreateParams = () => {
-  const dispatch = useDispatch()
-  const hiddenInputIdtty = React.useRef(null)
-  const navigate = useNavigate()
-  const [trigger, setTrigger] = React.useState(false)
-  const list =  useSelector(listFields)
-  const values =  useSelector(systemParamsValues)
-  const [createParams, {isLoading}] = useCreateParamsMutation()
-  
-  const toast = useToast()
-  const handleUploadIdentity = (e) => {
-        hiddenInputIdtty.current.click()
-  }
+const EditCity = () => {
+  const dispatch = useDispatch();
+  const listProducts = useSelector(listUsers);
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+  const listRoles = useSelector(listRoleUsers);
+  const formuser = useSelector(formUser);
+  const [files, setFilesUpload] = useState(null);
+  const [currency] = React.useState([
+    {
+      id: 1,
+      currencyCode: 'USD',
+    },
+    {
+      id: 2,
+      currencyCode: 'EUR',
+    },
+  ]);
+  const [fields, setFields] = React.useState({
+    name: '',
+    description: '',
+  });
+  //   const hiddenInputIdtty = React.useRef(null);
+  const navigate = useNavigate();
+  const [trigger] = React.useState(false);
+  const { data: rolesData } = useGetRoleQuery();
+  const prevListRoles = usePrevious(rolesData);
+  // const [isValid,setIsvalid] = React.useState(true);
+  const [filterby] = React.useState({
+    travelAgentName: '',
+    custCode: '',
+  });
+  const { data: { response: listAgent } = {} } = useGetTravelAgentQuery({
+    page: 0,
+    size: 999,
+    ...filterby,
+  });
 
-   
-    const handleNext = async (e) => {
-      e.preventDefault()
-      try {
-        let data = await createParams(list)
-        //  dispatch(setListUser([...listProducts, datas]));
-        toast({
-                  title: `Created User Syestem Parameters`,
-                  status:"success",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-      })
-        
-      } catch (err) {
-        toast({
-                  title: `${err?.originalStatus}`,
-                  status:"error",
-                  position: 'top-right',
-                  duration:3000,
-                  isClosable: true,
-                  variant:"solid",
-      })
-      }
-      setFields(null)
-      navigate('/master-data/system-params')
-    }
-  
+  const [uploadFileDoc] = useUploadFileDocMutation({
+    skip: trigger === false,
+  });
+
   const handleData = (e) => {
-      const data = {
-          ...list,
-          [e.target.name]: e.target.value
+    const forms = {
+      ...fields,
+      [e.target.name]: e.target.value,
+    };
+    // dispatch(setFormUser(forms));
+    setFields(forms);
+  };
+
+  React.useEffect(() => {
+    if (JSON.stringify(prevListRoles) !== JSON.stringify(rolesData)) {
+      dispatch(setRoleUser(rolesData));
+    }
+  }, [rolesData, prevListRoles, dispatch]);
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files) {
+      console.log('filess', e.target.files[0]);
+      setFilesUpload(e.target.files[0]);
+      // dispatch(setUploadFile({csvfile:e.target.files[0]}))
+    }
+  };
+
+  const handleImport = async (e) => {
+    e.preventDefault();
+    try {
+      let response = await uploadFileDoc(files).unwrap();
+      if (response?.data) {
+        showSuccessToast('Upload successfully!');
+      } else {
+        const errorMessage = `Failed to upload doc. Status Code: ${response?.error?.status}`;
+        showErrorToast(errorMessage);
       }
-      
-      dispatch(setFields(data))
-  }
-  const handleDatas = (e) => {
-    dispatch(setSystemParamsFieldValue(e.target.value))
-  }
-
-  
+    } catch (err) {
+      const statusCode = err?.response?.status || 'Unknown';
+      const errorMessage = `Failed to upload. Status Code: ${statusCode}`;
+      showErrorToast(errorMessage);
+      console.log(err);
+    }
+  };
   return (
-    <Stack mt={{base:"1em", md:"5em"}}>
-      <Box p="12px" display="flex" justifyContent={'space-between'} alignItems="center">
-        <Box as='button' onClick={'handleBackStep'} display="flex"textAlign="left" >
-         <Breadcrumb spacing='8px' separator={<ChevronRightIcon color='gray.500' />}>
-                    <BreadcrumbItem isCurrentPage>
-                            <BreadcrumbLink as={NavLink} to='/master-data/master-user'>
-                                <Text as="b" ml="4" fontSize="sm" color="#065BAA"  _hover={{
-                                    borderBottom: "#065BAA",
-                                    border:"1 px solid"
-                                }}>
-                                    System Parameters
-                                </Text>
-                            </BreadcrumbLink>
-                    </BreadcrumbItem>
+    <Stack mt={{ base: '1em', md: '5em' }}>
+      <Box
+        p="12px"
+        display="flex"
+        justifyContent={'space-between'}
+        alignItems="center"
+      >
+        <Box
+          as="button"
+          onClick={'handleBackStep'}
+          display="flex"
+          textAlign="left"
+        >
+          <Breadcrumb
+            spacing="8px"
+            separator={<ChevronRightIcon color="gray.500" />}
+          >
+            <BreadcrumbItem isCurrentPage>
+              <BreadcrumbLink as={NavLink} to="/master-data/areas">
+                <Text
+                  as="b"
+                  ml="4"
+                  fontSize="sm"
+                  color="#065BAA"
+                  _hover={{
+                    borderBottom: '#065BAA',
+                    border: '1 px solid',
+                  }}
+                >
+                  Area
+                </Text>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
 
-                    <BreadcrumbItem>
-                        <BreadcrumbLink as={NavLink} to='#' style={{ pointerEvents: 'none'}}>
-                            <Text as={'b'} fontSize={'sm'} color="#231F20"
-                           >
-                            {
-                              'Create'
-                            }  
-                            </Text>
-                        </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    </Breadcrumb>
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                as={NavLink}
+                to="#"
+                style={{ pointerEvents: 'none' }}
+              >
+                <Text as={'b'} fontSize={'sm'} color="#231F20">
+                  {'Upload File'}
+                </Text>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </Breadcrumb>
         </Box>
       </Box>
       <Box border="1px" borderColor={'#ebebeb'} borderTop={'none'}>
-        <Box minH={{base:"0", md:'400px'}}>
-            <Box width={{base:"100%",md:"540px"}} m="auto">  
-          <FormControl variant="floating" id="first-name" isRequired mt="14px">      
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="name" value={list?.name} onChange={handleData} h="48px" variant={'custom'}/>
-                        {/* It is important that the Label comes after the Control due to css selectors */}
-                        <FormLabel fontSize="12" pt="1.5">System Parameters Name</FormLabel>
-                        {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-          </FormControl>
+        <Box>
+          <Box width={{ base: '100%', md: '540px' }} m="auto">
+            <FormControl
+              variant="floating"
+              id="first-name"
+              isRequired
+              mt="14px"
+            >
+              <Box
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                p="1em"
+              >
+                <Input type="file" onChange={handleFileChange} />
+              </Box>
+              {/* It is important that the Label comes after the Control due to css selectors */}
+              <FormLabel
+                fontSize="12"
+                pt="1.5"
+                className="floating-label-global"
+              >
+                Name Area
+              </FormLabel>
+              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+            </FormControl>
           </Box>
-            <Box width={{base:"100%",md:"540px"}} m="auto">  
-          <FormControl variant="floating" id="first-name" isRequired mt="14px">      
-                        <Input placeholder=" " _placeholder={{ opacity: 1, color: 'gray.500' }} name="value" value={list?.value} onChange={handleData} h="48px" variant={'custom'}/>
-                        {/* It is important that the Label comes after the Control due to css selectors */}
-                        <FormLabel fontSize="12" pt="1.5">System Parameters Value</FormLabel>
-                        {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-          </FormControl>
-          </Box>
-       </Box>
-      <Box display={'flex'} justifyContent={'flex-end'} alignItems={'center'} p="9px" borderRadius={'5px'} border="1px" borderColor={'#ebebeb'}>
-          <Button isLoading={isLoading} isDisabled={list?.name ==='' || list?.value ==='' || isLoading
-            ? true : false} variant={'ClaimBtn'} style={{ textTransform: 'uppercase', fontSize: '14px' }} fontFamily="arial" fontWeight={'700'} onClick={handleNext}>Add</Button>
-      </Box>
+        </Box>
+        <Box
+          display={'flex'}
+          justifyContent={'flex-end'}
+          alignItems={'center'}
+          p="9px"
+          borderRadius={'5px'}
+          border="1px"
+          borderColor={'#ebebeb'}
+          mt="1em"
+        >
+          <Button
+            variant="ClaimBtn"
+            style={{ textTransform: 'uppercase', fontSize: '14px' }}
+            fontFamily="arial"
+            fontWeight={'700'}
+            onClick={handleBack}
+          >
+            Cancel
+          </Button>
+          <Button
+            isDisabled={fields?.files !== null ? true : false}
+            variant={'ClaimBtn'}
+            style={{ textTransform: 'uppercase', fontSize: '14px' }}
+            fontFamily="arial"
+            fontWeight={'700'}
+            onClick={handleImport}
+          >
+            Add
+          </Button>
+        </Box>
       </Box>
     </Stack>
-  )
- }
-export default CreateParams
+  );
+};
+export default EditCity;

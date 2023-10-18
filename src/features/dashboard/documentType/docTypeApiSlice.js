@@ -28,19 +28,19 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
       //         ? [...result.map(({ id }) => ({ type: 'MasterQuery', id })), 'MasterQuery']
       //        : ['MasterQuery'],
     }),
-    createParams: builder.mutation({
-      query: (data) => {
+    uploadFileDoc: builder.mutation({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
         return {
-          url: '/app/system-parameters',
+          url: '/app/document-types',
           method: 'POST',
-          body: { ...data },
-          invalidatesTags: (result, error, arg) =>
-            result
-              ? [
-                  ...result.map(({ id }) => ({ type: 'MasterQuery', id })),
-                  'MasterQuery',
-                ]
-              : ['MasterQuery'],
+          body: formData,
+
+          transform: (response) => {
+            console.log('repso', response);
+            return response;
+          },
         };
       },
     }),
@@ -84,4 +84,5 @@ export const {
   useCreateParamsMutation,
   useUpdateParamsMutation,
   useDeleteParamsMutation,
+  useUploadFileDocMutation,
 } = systemParamsApiSlice;

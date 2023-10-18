@@ -9,6 +9,7 @@ import {
   useFilters,
   useColumnOrder,
 } from 'react-table';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 import PageLoader from '../../../components/pageLoader';
 import { FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -368,7 +369,7 @@ const Tables = ({
   // }
   const handleAdd = (e) => {
     e.preventDefault();
-    navigate('/master-data/create-system-params');
+    navigate('/master-data/list-document-type/create');
   };
   const [expandedRows, setExpandedRows] = useState([]);
 
@@ -398,6 +399,16 @@ const Tables = ({
             List DocumentType
           </Heading>
           <Stack direction="row" spacing={4} mr="0">
+            <Button
+              variant="ClaimBtn"
+              leftIcon={<AiOutlinePlusCircle />}
+              colorScheme="#231F20"
+              size={'sm'}
+              color="white"
+              onClick={handleAdd}
+            >
+              Add Area
+            </Button>
             {/* <Button variant="ClaimBtn" leftIcon={<AiOutlinePlusCircle />} colorScheme='#231F20' size={'sm'} color="white" onClick={handleAdd}>
                         Add Country 
                     </Button> */}
