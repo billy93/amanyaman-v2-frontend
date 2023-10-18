@@ -228,7 +228,7 @@ const CreateUser = () => {
                   onChange={handleFileChange}
                   // style={{ display: 'none' }}
                 />
-                {files && <span>Current File : {files.name}</span>}
+
                 {/* </div> */}
 
                 {/* <label htmlFor="fileInput" className="custom-file-input">
@@ -236,7 +236,17 @@ const CreateUser = () => {
                 </label> */}
               </Box>
               {/* It is important that the Label comes after the Control due to css selectors */}
-
+              {files && (
+                <Box
+                  style={{
+                    fontSize: '12px',
+                    fontFamily: 'Mulish',
+                    fontStyle: 'italic',
+                  }}
+                >
+                  Current File : {files.name}
+                </Box>
+              )}
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
           </Box>
