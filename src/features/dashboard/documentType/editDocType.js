@@ -175,7 +175,10 @@ const CreateUser = () => {
             separator={<ChevronRightIcon color="gray.500" />}
           >
             <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink as={NavLink} to="/master-data/areas">
+              <BreadcrumbLink
+                as={NavLink}
+                to="/master-data/list-document-types"
+              >
                 <Text
                   as="b"
                   ml="4"
@@ -186,7 +189,7 @@ const CreateUser = () => {
                     border: '1 px solid',
                   }}
                 >
-                  Area
+                  Document Type
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -247,7 +250,10 @@ const CreateUser = () => {
                   justifyContent={'flex-start'}
                   alignItems={'center'}
                 >
-                  Current File : {files.name}
+                  Current File :{' '}
+                  <Text fontSize={'sm'} as="b">
+                    {files.name}
+                  </Text>
                 </Box>
               )}
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
