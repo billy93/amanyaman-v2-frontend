@@ -224,6 +224,7 @@ const CreateUser = () => {
                   type="file"
                   onChange={handleFileChange}
                   value={files?.name}
+                  accept=".xlsx"
                 />
               </Box>
               {/* It is important that the Label comes after the Control due to css selectors */}
