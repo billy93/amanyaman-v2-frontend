@@ -242,7 +242,7 @@ function App() {
             allowedRoles={['ROLE_ADMIN']}
           />
           <Route
-            path="list-document-type"
+            path="list-document-types"
             element={<DocumentType />}
             allowedRoles={['ROLE_ADMIN']}
           />
