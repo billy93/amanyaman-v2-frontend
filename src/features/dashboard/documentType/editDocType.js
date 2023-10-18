@@ -220,12 +220,16 @@ const CreateUser = () => {
                 p="1em"
                 h="120px"
               >
-                <Input
+                <input
                   type="file"
+                  id="fileInput"
+                  accept=".pdf, .docx, .txt"
                   onChange={handleFileChange}
-                  value={files?.name}
-                  accept=".xlsx"
+                  style={{ display: 'none' }}
                 />
+                <label htmlFor="fileInput" className="custom-file-input">
+                  {files ? files.name : 'Select File'}
+                </label>
               </Box>
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
