@@ -35,6 +35,8 @@ import CreateProductPrice from './features/dashboard/productPrice/createProductP
 import DetailMasterUser from './features/dashboard/masterUser/detailMasterUser';
 import ResetPassword from './features/auth/confirmResetPassword';
 import DocumentType from './features/dashboard/documentType/documenType';
+import EditDocumentType from './features/dashboard/documentType/editDocType';
+import CreateDocumentType from './features/dashboard/documentType/createDocType';
 import PlanType from './features/dashboard/planType/planType';
 import BandType from './features/dashboard/bandType/bandTypes';
 import TravellerType from './features/dashboard/travellerType/travellerTypes';
@@ -406,6 +408,22 @@ function App() {
           <Route
             path="edit/:id"
             element={<EditPlanType />}
+            allowedRoles={['ROLE_ADMIN']}
+          />
+        </Route>
+        <Route
+          path="/master-data/list-document-types"
+          exact
+          element={<LayoutDashboard allowedRoles={['ROLE_ADMIN']} />}
+        >
+          <Route
+            path="create"
+            element={<CreateDocumentType />}
+            allowedRoles={['ROLE_ADMIN']}
+          />
+          <Route
+            path="edit/:id"
+            element={<EditDocumentType />}
             allowedRoles={['ROLE_ADMIN']}
           />
         </Route>
