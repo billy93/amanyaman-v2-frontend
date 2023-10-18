@@ -243,6 +243,9 @@ const CreateUser = () => {
                     fontFamily: 'Mulish',
                     fontStyle: 'italic',
                   }}
+                  display={'flex'}
+                  justifyContent={'flex-start'}
+                  alignItems={'center'}
                 >
                   Current File : {files.name}
                 </Box>
