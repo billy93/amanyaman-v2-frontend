@@ -369,7 +369,7 @@ const Tables = ({
   // }
   const handleAdd = (e) => {
     e.preventDefault();
-    navigate('/master-data/list-document-type/create');
+    navigate('/master-data/list-document-types/create');
   };
   const [expandedRows, setExpandedRows] = useState([]);
 
