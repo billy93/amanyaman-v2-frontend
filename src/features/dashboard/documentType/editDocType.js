@@ -155,6 +155,7 @@ const CreateUser = () => {
       // dispatch(setUploadFile({csvfile:e.target.files[0]}))
     }
   };
+
   return (
     <Stack mt={{ base: '1em', md: '5em' }}>
       <Box
@@ -220,21 +221,23 @@ const CreateUser = () => {
                 p="1em"
                 h="120px"
               >
-                <input
-                  type="file"
-                  id="fileInput"
-                  accept=".xlsx"
-                  onChange={handleFileChange}
-                  // style={{ display: 'none' }}
-                />
-                <label htmlFor="fileInput" className="custom-file-input">
-                  {files ? 'Replace File' : 'Select File'}
-                </label>
-                {files && (
-                  <div>
-                    <p>Current file: {files.name}</p>
-                  </div>
-                )}
+                <div>
+                  <label className="custom-file-input">
+                    <input
+                      type="file"
+                      accept=".xlsx"
+                      onChange={handleFileChange}
+                      style={{ display: 'none' }}
+                    />
+                    {files ? 'Replace File' : 'Select File'}
+                  </label>
+                  {files && (
+                    <div>
+                      <p>Current file: {files.name}</p>
+                      <button onClick={handleNext}>Replace File</button>
+                    </div>
+                  )}
+                </div>
 
                 {/* <label htmlFor="fileInput" className="custom-file-input">
                   {files ? files.name : 'Select File'}
