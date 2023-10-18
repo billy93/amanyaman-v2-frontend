@@ -228,8 +228,17 @@ const CreateUser = () => {
                   style={{ display: 'none' }}
                 />
                 <label htmlFor="fileInput" className="custom-file-input">
-                  {files ? files.name : 'Select File'}
+                  {files ? 'Replace File' : 'Select File'}
                 </label>
+                {files && (
+                  <div>
+                    <p>Current file: {files.name}</p>
+                  </div>
+                )}
+
+                {/* <label htmlFor="fileInput" className="custom-file-input">
+                  {files ? files.name : 'Select File'}
+                </label> */}
               </Box>
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
