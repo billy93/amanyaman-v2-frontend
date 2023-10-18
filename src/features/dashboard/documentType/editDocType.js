@@ -223,9 +223,9 @@ const CreateUser = () => {
                 <input
                   type="file"
                   id="fileInput"
-                  accept=".pdf, .docx, .txt"
+                  accept=".xlsx"
                   onChange={handleFileChange}
-                  style={{ display: 'none' }}
+                  // style={{ display: 'none' }}
                 />
                 <label htmlFor="fileInput" className="custom-file-input">
                   {files ? 'Replace File' : 'Select File'}
