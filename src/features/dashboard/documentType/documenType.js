@@ -629,7 +629,7 @@ const DocumentList = () => {
             className="global-td"
             color="#065BAA"
             style={{ textDecoration: 'underline' }}
-            to={`/master-data/detail-system-params/${row.original.id}`}
+            to={`/master-data/list-document-types/${row.original.id}`}
           >
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.id}

@@ -197,6 +197,7 @@ const EditCity = () => {
                 justifyContent={'center'}
                 alignItems={'center'}
                 p="1em"
+                h="120px"
               >
                 <Input type="file" onChange={handleFileChange} />
               </Box>
@@ -206,7 +207,7 @@ const EditCity = () => {
                 pt="1.5"
                 className="floating-label-global"
               >
-                Name Area
+                Upload documentation
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
@@ -232,7 +233,7 @@ const EditCity = () => {
             Cancel
           </Button>
           <Button
-            isDisabled={fields?.files !== null ? true : false}
+            isDisabled={fields?.files === null ? true : false}
             variant={'ClaimBtn'}
             style={{ textTransform: 'uppercase', fontSize: '14px' }}
             fontFamily="arial"

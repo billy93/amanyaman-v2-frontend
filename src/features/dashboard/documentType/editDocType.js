@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, Router, useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
@@ -31,7 +31,11 @@ import {
   setRoleUser,
   formUser,
   setFormUser,
-} from '../masterUser//masterUserSlice';
+} from '../masterUser/masterUserSlice';
+import {
+  useGetDocByIdQuery,
+  useUpdateFileDocMutation,
+} from './docTypeApiSlice';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 // import { MdAdd } from 'react-icons/md';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
@@ -59,6 +63,7 @@ const CreateUser = () => {
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const listRoles = useSelector(listRoleUsers);
   const formuser = useSelector(formUser);
+  const [files, setFilesUpload] = useState(null);
   const [currency] = React.useState([
     {
       id: 1,
@@ -89,7 +94,7 @@ const CreateUser = () => {
     ...filterby,
   });
 
-  const [updateArea] = useUpdateAreaMutation({
+  const [updateFileDoc] = useUpdateFileDocMutation({
     skip: trigger === false,
   });
 
@@ -108,20 +113,20 @@ const CreateUser = () => {
     e.preventDefault();
 
     try {
-      let resp = await updateArea(fields);
+      let resp = await updateFileDoc(files);
       // console.log('ress', resp)
       if (resp?.data) {
-        showSuccessToast('Area edited successfully!');
+        showSuccessToast('Document edited successfully!');
         // dispatch(setListUser([...listProducts, datas]));
-        navigate('/master-data/areas');
+        navigate('/master-data/list-document-types');
       } else {
         // const statusCode = error?.response?.status || 'Unknown';
-        const errorMessage = `Failed to edit area. Status Code: ${resp?.error?.status}`;
+        const errorMessage = `Failed to edit document. Status Code: ${resp?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to edit area. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to edit document. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
     }
     // navigate('/master-data/master-user')
@@ -145,7 +150,13 @@ const CreateUser = () => {
   const handleBack = () => {
     navigate(-1);
   };
-
+  const handleFileChange = (e) => {
+    if (e.target.files) {
+      console.log('filess', e.target.files[0]);
+      setFilesUpload(e.target.files[0]);
+      // dispatch(setUploadFile({csvfile:e.target.files[0]}))
+    }
+  };
   return (
     <Stack mt={{ base: '1em', md: '5em' }}>
       <Box
@@ -204,56 +215,22 @@ const CreateUser = () => {
               isRequired
               mt="14px"
             >
-              <Input
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="name"
-                value={fields?.name}
-                onChange={handleData}
-                h="48px"
-                variant={'custom'}
-                style={{
-                  backgroundColor: fields?.name !== '' ? '#e8f0fe' : '',
-                }}
-              />
+              <Box
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                p="1em"
+                h="120px"
+              >
+                <Input type="file" onChange={handleFileChange} />
+              </Box>
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel
                 fontSize="12"
                 pt="1.5"
                 className="floating-label-global"
               >
-                Name Area
-              </FormLabel>
-              {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-            </FormControl>
-          </Box>
-
-          <Box width={{ base: '100%', md: '540px' }} m="auto">
-            <FormControl
-              variant="floating"
-              id="first-name"
-              isRequired
-              mt="14px"
-            >
-              <Input
-                placeholder=" "
-                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                name="description"
-                value={fields?.description}
-                onChange={handleData}
-                h="48px"
-                variant={'custom'}
-                style={{
-                  backgroundColor: fields?.description !== '' ? '#e8f0fe' : '',
-                }}
-              />
-              {/* It is important that the Label comes after the Control due to css selectors */}
-              <FormLabel
-                fontSize="12"
-                pt="1.5"
-                className="floating-label-global"
-              >
-                Description
+                Upload documentation
               </FormLabel>
               {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
             </FormControl>
@@ -279,9 +256,7 @@ const CreateUser = () => {
             Cancel
           </Button>
           <Button
-            isDisabled={
-              fields?.name === '' || fields?.description === '' ? true : false
-            }
+            isDisabled={fields?.files === null ? true : false}
             variant={'ClaimBtn'}
             style={{ textTransform: 'uppercase', fontSize: '14px' }}
             fontFamily="arial"

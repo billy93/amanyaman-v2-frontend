@@ -28,6 +28,18 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
       //         ? [...result.map(({ id }) => ({ type: 'MasterQuery', id })), 'MasterQuery']
       //        : ['MasterQuery'],
     }),
+    getDocById: builder.query({
+      prepareHeaders: (headers) => {
+        headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+        return headers;
+      },
+      query: (id) => ({
+        url: `/app/document-types/${id}`,
+        cachePolicy: 'no-cache',
+      }),
+      provideTags: (result, error, id) =>
+        result ? [{ type: 'user', id }] : [],
+    }),
     uploadFileDoc: builder.mutation({
       query: (file) => {
         const formData = new FormData();
@@ -44,19 +56,19 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    updateParams: builder.mutation({
-      query: (data) => {
+    updateFileDoc: builder.mutation({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
         return {
-          url: '/app/system-parameters',
-          method: 'PUT',
-          body: { ...data },
-          invalidatesTags: (result, error, arg) =>
-            result
-              ? [
-                  ...result.map(({ id }) => ({ type: 'MasterQuery', id })),
-                  'MasterQuery',
-                ]
-              : ['MasterQuery'],
+          url: '/app/document-types',
+          method: 'POST',
+          body: formData,
+
+          transform: (response) => {
+            console.log('repso', response);
+            return response;
+          },
         };
       },
     }),
@@ -80,9 +92,8 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetDocumentTypesQuery,
-  useGetSystemParamsQuery,
-  useCreateParamsMutation,
-  useUpdateParamsMutation,
   useDeleteParamsMutation,
   useUploadFileDocMutation,
+  useGetDocByIdQuery,
+  useUpdateFileDocMutation,
 } = systemParamsApiSlice;
