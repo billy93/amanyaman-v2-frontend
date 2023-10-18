@@ -222,21 +222,13 @@ const CreateUser = () => {
                 h="120px"
               >
                 <div>
-                  <label className="custom-file-input">
-                    <input
-                      type="file"
-                      accept=".xlsx"
-                      onChange={handleFileChange}
-                      style={{ display: 'none' }}
-                    />
-                    {files ? 'Replace File' : 'Select File'}
-                  </label>
-                  {files && (
-                    <div>
-                      <p>Current file: {files.name}</p>
-                      <button onClick={handleNext}>Replace File</button>
-                    </div>
-                  )}
+                  <input
+                    type="file"
+                    accept=".xlsx"
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                  />
+                  {files ? <span>{files.name}</span> : <span>Empty</span>}
                 </div>
 
                 {/* <label htmlFor="fileInput" className="custom-file-input">
