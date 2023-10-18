@@ -197,7 +197,7 @@ const CreateUser = () => {
                 style={{ pointerEvents: 'none' }}
               >
                 <Text as={'b'} fontSize={'sm'} color="#231F20">
-                  {'Edit Area'}
+                  {'Document Type'}
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -220,7 +220,11 @@ const CreateUser = () => {
                 p="1em"
                 h="120px"
               >
-                <Input type="file" onChange={handleFileChange} />
+                <Input
+                  type="file"
+                  onChange={handleFileChange}
+                  value={files?.name}
+                />
               </Box>
               {/* It is important that the Label comes after the Control due to css selectors */}
               <FormLabel

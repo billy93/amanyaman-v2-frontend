@@ -164,7 +164,7 @@ const EditCity = () => {
                     border: '1 px solid',
                   }}
                 >
-                  Area
+                  Document Type
                 </Text>
               </BreadcrumbLink>
             </BreadcrumbItem>
