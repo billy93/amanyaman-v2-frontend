@@ -58,7 +58,7 @@ function usePrevious(value) {
 const CreateUser = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { data: areaById, refetch } = useGetAreaByIdQuery(id);
+  const { data: areaById, refetch } = useGetDocByIdQuery(id);
   const listProducts = useSelector(listUsers);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const listRoles = useSelector(listRoleUsers);
@@ -100,9 +100,7 @@ const CreateUser = () => {
 
   React.useEffect(() => {
     if (areaById) {
-      setFields({
-        ...areaById,
-      });
+      setFilesUpload(areaById);
     }
   }, [areaById]);
   React.useEffect(() => {
