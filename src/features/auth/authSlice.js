@@ -51,7 +51,7 @@ const authSlice = createSlice({
                 href: '#',
               },
               {
-                link: '/master-data/list-document-type',
+                link: '/master-data/list-document-types',
                 name: 'Document Type',
                 href: '#',
               },
