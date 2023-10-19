@@ -521,11 +521,12 @@ const Login = () => {
                             style={{
                               padding: '11px 5px',
                               textAlign: 'center',
+                              position: 'absolute',
                               color: fields?.username !== '' ? '#065baa' : '',
                               transform:
                                 fields?.username !== ''
-                                  ? 'translateY(-6px)'
-                                  : 'translateY(2px)',
+                                  ? 'translateY(9px)'
+                                  : 'translateY(17px)',
                             }}
                             // top={'20px'}
                             // style={{}}
@@ -564,8 +565,8 @@ const Login = () => {
                                 color: fields?.password !== '' ? '#065baa' : '',
                                 transform:
                                   fields?.password !== ''
-                                    ? 'translateY(4px)'
-                                    : 'translateY(-2px)',
+                                    ? 'translateY(18px)'
+                                    : 'translateY(13px)',
                               }}
                               // top={'20px'}
                               // style={{}}
