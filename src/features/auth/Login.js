@@ -559,17 +559,13 @@ const Login = () => {
                               fontStyle={'italic'}
                               pt="10px"
                               style={{
-                                margin:
-                                  fields?.password !== ''
-                                    ? '-18px 13px'
-                                    : '-7px 12px',
                                 textAlign: 'center',
                                 color: fields?.password !== '' ? '#065baa' : '',
                                 transform:
                                   fields?.password !== '' ||
                                   fields?.password !== undefined
-                                    ? 'translateY(18px)'
-                                    : 'translateY(13px)',
+                                    ? 'translateY(-6px)'
+                                    : 'translateY(3px)',
                               }}
                               // top={'20px'}
                               // style={{}}
