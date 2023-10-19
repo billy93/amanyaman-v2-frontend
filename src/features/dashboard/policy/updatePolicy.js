@@ -417,6 +417,9 @@ const PolicyDetail = () => {
     try {
       const response = await updateDataPolicy(data);
       console.log('response', response.status);
+      if (response?.data) {
+        navigate('/master-data/policies/list');
+      }
     } catch (error) {
       console.log(error);
     }

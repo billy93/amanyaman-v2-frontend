@@ -313,6 +313,9 @@ nav a{
 .chakra-react-select--has-value{
   /* padding-left: 5px!important; */
 }
+.chakra-react-select__input-container{
+  padding-top: 1.125rem!important;
+}
 .chakra-react-select__value-container{
     padding-left: 24px;
     font-size: 11px;
