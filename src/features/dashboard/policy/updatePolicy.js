@@ -419,8 +419,8 @@ const PolicyDetail = () => {
     };
     try {
       const response = await updateDataPolicy(data);
-      console.log('response', response.status);
-      if (response?.data) {
+      console.log('response', response);
+      if (response) {
         navigate('/master-data/policies/list');
       }
     } catch (error) {
@@ -1116,7 +1116,7 @@ const PolicyDetail = () => {
                                                 : '',
                                             transform:
                                               travellers?.placeOfBirth !== ''
-                                                ? 'translateY(-1px)'
+                                                ? 'translateY(-10px)'
                                                 : 'translateY(17px)',
                                           }}
                                           className="floating-label-global"
