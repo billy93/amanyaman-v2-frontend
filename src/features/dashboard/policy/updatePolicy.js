@@ -2172,7 +2172,7 @@ const PolicyDetail = () => {
                                           // classNamePrefix="chakra-react-select"
                                           classNamePrefix={
                                             travellers?.relationship?.length > 0
-                                              ? 'chakra-react-select-defaults'
+                                              ? 'chakra-react-select-default'
                                               : 'chakra-react-select'
                                           }
                                           options={relations}
