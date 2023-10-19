@@ -15,7 +15,7 @@ const DownloadXLSButton = ({ query, page, size }) => {
     if (data) {
       const downloadLink = document.createElement('a');
       downloadLink.href = data;
-      downloadLink.download = 'templateAgent.xlsx'; // Set the desired file name and extension
+      downloadLink.download = 'ExportPolicies.xlsx'; // Set the desired file name and extension
 
       // Append the link to the DOM
       document.body.appendChild(downloadLink);
