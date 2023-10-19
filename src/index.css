@@ -139,6 +139,15 @@ body {
 .chakra-react-select__control.chakra-react-select__value-container{
   background: #e8f0fe;
 }
+.chakra-react-select__menu-portal {
+  margin-top: 10px!important;
+}
+.chakra-react-select-defaults{
+  margin-top: 10px!important;
+}
+.chakra-react-select-default__value-container--has-value{
+  margin-top: 13px!important;
+}
 .chakra-react-select-default__control{
   background: #e8f0fe!important;
   font-size: 11px!important;

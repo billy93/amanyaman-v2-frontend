@@ -661,6 +661,8 @@ const PolicyDetail = () => {
   const handleBack = () => {
     navigate(-1);
   };
+  console.log('trav', quotation);
+  console.log('trav data', dataQuotation);
   let content;
   if (isLoading || loadingDownload || loadingView) {
     content = (
@@ -791,9 +793,10 @@ const PolicyDetail = () => {
                                         <Box className="floating-form" w="100%">
                                           <Box className="react-select-container">
                                             <Select
+                                              menuPortalTarget={document.body}
                                               style={{
                                                 backgroundColor:
-                                                  travellers?.type !== null
+                                                  travellers?.type?.length !== 0
                                                     ? '#e8f0fe'
                                                     : '#ebebeb',
                                               }}
@@ -808,7 +811,7 @@ const PolicyDetail = () => {
                                               value={travellers?.type}
                                               // classNamePrefix="chakra-react-select"
                                               classNamePrefix={
-                                                travellers?.type?.length > 0
+                                                travellers?.type?.length !== 0
                                                   ? 'chakra-react-select-default'
                                                   : 'chakra-react-select'
                                               }
@@ -840,7 +843,7 @@ const PolicyDetail = () => {
                                                 transform:
                                                   travellers &&
                                                   travellers?.type?.length > 0
-                                                    ? 'translate(0, -2px) scale(0.75)'
+                                                    ? 'translate(0, 13px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
@@ -916,7 +919,7 @@ const PolicyDetail = () => {
                                                 transform:
                                                   travellers &&
                                                   travellers?.label?.length > 0
-                                                    ? 'translate(0, -2px) scale(0.75)'
+                                                    ? 'translate(0, 13px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
@@ -1400,8 +1403,7 @@ const PolicyDetail = () => {
                                             <Select
                                               style={{
                                                 backgroundColor:
-                                                  travellers?.relationship !==
-                                                  null
+                                                  travellers?.relations !== null
                                                     ? '#e8f0fe'
                                                     : '#ebebeb',
                                               }}
@@ -1413,7 +1415,7 @@ const PolicyDetail = () => {
                                                   i
                                                 )
                                               }
-                                              value={travellers?.relationship}
+                                              value={travellers?.relations}
                                               // classNamePrefix="chakra-react-select"
                                               classNamePrefix={
                                                 travellers?.relationship
@@ -1448,13 +1450,13 @@ const PolicyDetail = () => {
                                               style={{
                                                 transform:
                                                   travellers &&
-                                                  travellers?.relationship
+                                                  travellers?.relations
                                                     ?.length > 0
                                                     ? 'translate(0, -2px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
-                                                  travellers?.relationship
+                                                  travellers?.relations
                                                     ?.length > 0
                                                     ? '#065baa'
                                                     : '#231F20',
@@ -1528,9 +1530,10 @@ const PolicyDetail = () => {
                                     <Box className="floating-form" w="100%">
                                       <Box className="react-select-container">
                                         <Select
+                                          menuPortalTarget={document.body}
                                           style={{
                                             backgroundColor:
-                                              travellers?.type !== ''
+                                              travellers?.type?.length !== 0
                                                 ? '#e8f0fe'
                                                 : '#ebebeb',
                                           }}
@@ -1542,7 +1545,7 @@ const PolicyDetail = () => {
                                           value={travellers?.type}
                                           classNamePrefix={
                                             travellers?.type?.length > 0
-                                              ? 'chakra-react-select-default'
+                                              ? 'chakra-react-select-defaults'
                                               : 'chakra-react-select'
                                           }
                                           options={types}
@@ -1570,7 +1573,7 @@ const PolicyDetail = () => {
                                             transform:
                                               travellers &&
                                               travellers?.type?.length > 0
-                                                ? 'translate(0, -2px) scale(0.75)'
+                                                ? 'translate(0, 13px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
@@ -1599,7 +1602,7 @@ const PolicyDetail = () => {
                                         <Select
                                           style={{
                                             backgroundColor:
-                                              travellers?.label !== ''
+                                              travellers?.label?.length !== 0
                                                 ? '#e8f0fe'
                                                 : '#ebebeb',
                                           }}
@@ -1640,14 +1643,14 @@ const PolicyDetail = () => {
                                             transform:
                                               travellers &&
                                               travellers?.label?.length > 0
-                                                ? 'translate(0, -2px) scale(0.75)'
+                                                ? 'translate(0, 13px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
                                               travellers?.label?.length > 0
                                                 ? '#065baa'
                                                 : '#231F20',
-                                            fontSize: '14px',
+                                            fontSize: '11px',
                                           }}
                                           fontFamily={'Mulish'}
                                         >
@@ -2119,7 +2122,8 @@ const PolicyDetail = () => {
                                         <Select
                                           style={{
                                             backgroundColor:
-                                              travellers?.relationship !== null
+                                              travellers?.relations?.length !==
+                                              0
                                                 ? '#e8f0fe'
                                                 : '#ebebeb',
                                           }}
@@ -2131,11 +2135,11 @@ const PolicyDetail = () => {
                                               i
                                             )
                                           }
-                                          value={travellers?.relationship}
+                                          value={travellers?.relations}
                                           // classNamePrefix="chakra-react-select"
                                           classNamePrefix={
                                             travellers?.relationship?.length > 0
-                                              ? 'chakra-react-select-default'
+                                              ? 'chakra-react-select-defaults'
                                               : 'chakra-react-select'
                                           }
                                           options={relations}
@@ -2162,17 +2166,15 @@ const PolicyDetail = () => {
                                           style={{
                                             transform:
                                               travellers &&
-                                              travellers?.relationship?.length >
-                                                0
+                                              travellers?.relations?.length > 0
                                                 ? 'translate(0, -2px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
-                                              travellers?.relationship?.length >
-                                                0
+                                              travellers?.relations?.length > 0
                                                 ? '#065baa'
                                                 : '#231F20',
-                                            fontSize: '14px',
+                                            fontSize: '11px',
                                           }}
                                           fontFamily={'Mulish'}
                                         >
