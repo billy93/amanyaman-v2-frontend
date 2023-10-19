@@ -68,7 +68,7 @@ export const policyApiSlice = apiSlice.injectEndpoints({
     }),
     exportPolicy: builder.query({
       query: (data) => {
-        let url = '/app/bookings/policies/export';
+        let url = '/app/bookings/export';
         const params = new URLSearchParams();
         // console.log('quer', data);
         for (const filter in data) {
