@@ -441,8 +441,8 @@ const PolicyDetail = () => {
               </Breadcrumb>
             </Box>
 
-            {quotation?.statusSales !== 'UPDATED' &&
-              quotation?.statusSales !== 'UPGRADED' && (
+            {quotation?.statusSales === 'UPDATED' ||
+              (quotation?.statusSales == null && (
                 <Box
                   display={'flex'}
                   alignItems={'center'}
@@ -521,7 +521,7 @@ const PolicyDetail = () => {
             /> */}
                   {/* <IconButton _hover={{color:"white"}} icon={ <CiTrash color="#065BAA" size={'16px'}/>} bg="white" border="1px solid #ebebeb" onClick={handleDeletAgent}/> */}
                 </Box>
-              )}
+              ))}
             {/* ))} */}
           </Box>
         </Box>
