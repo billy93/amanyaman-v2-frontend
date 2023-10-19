@@ -439,8 +439,8 @@ const PolicyDetail = () => {
                 </BreadcrumbItem>
               </Breadcrumb>
             </Box>
-            {quotation?.statusSales === 'UPDATED' ||
-              (quotation?.statusSales === 'UPGRADED' && (
+            {quotation?.statusSales !== 'UPDATED' ||
+              (quotation?.statusSales !== 'UPGRADED' && (
                 <Box
                   display={'flex'}
                   alignItems={'center'}
