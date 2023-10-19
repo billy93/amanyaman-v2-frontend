@@ -915,6 +915,12 @@ const PolicyDetail = () => {
                                           value={travellers?.firstName}
                                           onChange={(e) => setFirstName(e, i)}
                                           h="48px"
+                                          style={{
+                                            transform:
+                                              travellers?.firstName !== ''
+                                                ? 'translateY(-6px)'
+                                                : 'translateY(2px)',
+                                          }}
                                         />
                                         {/* It is important that the Label comes after the Control due to css selectors */}
                                         <FormLabel
@@ -1417,7 +1423,13 @@ const PolicyDetail = () => {
                                     <FormLabel
                                       fontSize="12"
                                       pt="1.5"
-                                      style={{ zIndex: 0 }}
+                                      style={{
+                                        transform:
+                                          travellers?.firstName !== ''
+                                            ? 'translate(0, -10px) scale(0.75)'
+                                            : 'translate(0, 4px) scale(0.75)',
+                                      }}
+                                      // style={{ zIndex: 0 }}
                                     >
                                       FirstName
                                     </FormLabel>

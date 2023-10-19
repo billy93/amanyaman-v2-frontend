@@ -68,7 +68,7 @@ export const policyApiSlice = apiSlice.injectEndpoints({
     }),
     exportPolicy: builder.query({
       query: (data) => {
-        let url = '/app/bookings/policies';
+        let url = '/app/bookings/policies/export';
         const params = new URLSearchParams();
         // console.log('quer', data);
         for (const filter in data) {
@@ -103,7 +103,7 @@ export const policyApiSlice = apiSlice.injectEndpoints({
     updateDataPolicy: builder.mutation({
       query: (data) => {
         return {
-          url: '/app/bookings/update-policy/export',
+          url: '/app/bookings/update-policy',
           method: 'POST',
           body: { ...data },
           invalidatesTags: (result, error, arg) =>
