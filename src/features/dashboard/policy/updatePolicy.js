@@ -1408,12 +1408,8 @@ const PolicyDetail = () => {
                                     variant="floating"
                                     id="first-name"
                                     isRequired
-                                    style={{
-                                      padding: '20px 0px',
-                                    }}
                                   >
                                     <Input
-                                      pt="10px"
                                       placeholder=" "
                                       _placeholder={{
                                         opacity: 1,

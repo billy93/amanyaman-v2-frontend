@@ -20,7 +20,7 @@ import '@fontsource/mulish/700.css';
 //   },
 // };
 const activeLabelStyles = {
-  transform: 'scale(0.85) translateY(-18px)',
+  transform: 'scale(0.85) translateY(-13px)',
   color: '#065baa',
   fontSize: '12px',
   fontStyle: 'italic',
@@ -238,7 +238,7 @@ const defaultTheme = extendTheme({
                 ...activeLabelStyles,
               },
             label: {
-              top: '15px',
+              top: '0px',
               left: 0,
               zIndex: 2,
               fontSize: '11px',
