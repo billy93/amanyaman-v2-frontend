@@ -1374,7 +1374,7 @@ const Polcies = () => {
                 }}
               >
                 <Select
-                  placeholder="Select by Policy status"
+                  placeholder=""
                   backgroundColor={
                     filterQuery?.policyStatus === '' ? '#ebebeb' : '#e8f0fe'
                   }
