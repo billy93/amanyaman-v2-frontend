@@ -545,6 +545,7 @@ const Login = () => {
                           />
                         </FormControl>
                         <FormControl
+                          mt="10px"
                           variant="floating"
                           id="first-name"
                           isRequired
@@ -565,8 +566,8 @@ const Login = () => {
                                 color: fields?.password !== '' ? '#065baa' : '',
                                 transform:
                                   fields?.password !== ''
-                                    ? 'translateY(-8px)'
-                                    : 'translateY(-1px)',
+                                    ? 'translateY(18px)'
+                                    : 'translateY(13px)',
                               }}
                               // top={'20px'}
                               // style={{}}
