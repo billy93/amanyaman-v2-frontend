@@ -531,7 +531,7 @@ const Login = () => {
                             // top={'20px'}
                             // style={{}}
                           >
-                            Enter Username
+                            Username
                           </FormLabel>
                           <Input
                             variant="custom"

@@ -116,6 +116,7 @@ const EmailForm = ({ quotation, handleClose }) => {
             validate={handleValidation}
             onChangeInput={setTagInput}
             tagProps={{ className: 'tag-custom' }}
+            inputProps={{ placeholder: 'Add new recipents' }}
             renderTag={(props) => (
               <span className="tag-custom">
                 {props.tag}
