@@ -377,11 +377,11 @@ const PolicyDetail = () => {
     setDataQuotation([...newdata]);
   }
 
-  const setSelectedDates = (selectDate) => {
+  const setSelectedDates = (selectDate, i) => {
     const data = [...dataQuotation];
-    data[i].dateOfBirth = e.target.value;
+    data[i].dateOfBirth = selectDate;
     setDataQuotation([...data]);
-    console.log('setSelecteddate', selectDate);
+    // console.log('setSelecteddate', selectDate);
   };
   // console.log('newdata forms dataQuotation', dataQuotation);
   // console.log('newdata forms dataQuotation', quotation);
@@ -1067,7 +1067,9 @@ const PolicyDetail = () => {
                                     >
                                       <DatePicker
                                         value={travellers.dateOfBirth}
-                                        onChange={setSelectedDates}
+                                        onChange={(date) =>
+                                          setSelectedDates(date, i)
+                                        }
                                         inputPlaceholder="Select a date" // placeholder
                                         formatInputText={formatInputValue}
                                         inputClassName="my-custom-inputs" // custom class
@@ -1809,7 +1811,9 @@ const PolicyDetail = () => {
                                 >
                                   <DatePicker
                                     value={travellers.dateOfBirth}
-                                    onChange={setSelectedDates}
+                                    onChange={(date) =>
+                                      setSelectedDates(date, i)
+                                    }
                                     inputPlaceholder="Select a date" // placeholder
                                     formatInputText={formatInputValue}
                                     inputClassName="my-custom-inputs" // custom class
