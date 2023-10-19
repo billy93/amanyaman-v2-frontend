@@ -781,11 +781,12 @@ const PolicyDetail = () => {
                                         <Box className="floating-form" w="100%">
                                           <Box className="react-select-container">
                                             <Select
-                                              bg={
-                                                travellers?.type !== null
-                                                  ? '#e8f0fe'
-                                                  : '#ebebeb'
-                                              }
+                                              style={{
+                                                backgroundColor:
+                                                  travellers?.type !== null
+                                                    ? '#e8f0fe'
+                                                    : '#ebebeb',
+                                              }}
                                               isMulti={false}
                                               name="colors"
                                               onChange={(selectedOption) =>
@@ -851,11 +852,12 @@ const PolicyDetail = () => {
                                         <Box className="floating-form" w="100%">
                                           <Box className="react-select-container">
                                             <Select
-                                              bg={
-                                                travellers?.label !== null
-                                                  ? '#e8f0fe'
-                                                  : '#ebebeb'
-                                              }
+                                              style={{
+                                                backgroundColor:
+                                                  travellers?.label !== null
+                                                    ? '#e8f0fe'
+                                                    : '#ebebeb',
+                                              }}
                                               isMulti={false}
                                               name="colors"
                                               onChange={(selectedOption) =>
@@ -1087,7 +1089,7 @@ const PolicyDetail = () => {
                                           pt="10px"
                                           placeholder=" "
                                           bg={
-                                            travellers?.placeOfBirth !== null
+                                            travellers?.placeOfBirth !== ''
                                               ? '#e8f0fe'
                                               : '#ebebeb'
                                           }
@@ -1128,6 +1130,7 @@ const PolicyDetail = () => {
                                             fontSize: '12px',
                                             fontfamily: 'Mulish',
                                             marginTop: '1em',
+                                            paddingTop: '2em',
                                             color: '#000000ad',
                                           }}
                                           onChange={(e) => setAddresss(e, i)}
@@ -1376,12 +1379,13 @@ const PolicyDetail = () => {
                                         <Box className="floating-form" w="50%">
                                           <Box className="react-select-container">
                                             <Select
-                                              bg={
-                                                travellers?.relationship !==
-                                                null
-                                                  ? '#e8f0fe'
-                                                  : '#ebebeb'
-                                              }
+                                              style={{
+                                                backgroundColor:
+                                                  travellers?.relationship !==
+                                                  null
+                                                    ? '#e8f0fe'
+                                                    : '#ebebeb',
+                                              }}
                                               isMulti={false}
                                               name="colors"
                                               onChange={(selectedOption) =>
@@ -1502,11 +1506,12 @@ const PolicyDetail = () => {
                                     <Box className="floating-form" w="100%">
                                       <Box className="react-select-container">
                                         <Select
-                                          bg={
-                                            travellers?.type !== null
-                                              ? '#e8f0fe'
-                                              : '#ebebeb'
-                                          }
+                                          style={{
+                                            backgroundColor:
+                                              travellers?.type !== ''
+                                                ? '#e8f0fe'
+                                                : '#ebebeb',
+                                          }}
                                           isMulti={false}
                                           name="colors"
                                           onChange={(selectedOption) =>
@@ -1566,11 +1571,12 @@ const PolicyDetail = () => {
                                     <Box className="floating-form" w="100%">
                                       <Box className="react-select-container">
                                         <Select
-                                          bg={
-                                            travellers?.label !== null
-                                              ? '#e8f0fe'
-                                              : '#ebebeb'
-                                          }
+                                          style={{
+                                            backgroundColor:
+                                              travellers?.label !== ''
+                                                ? '#e8f0fe'
+                                                : '#ebebeb',
+                                          }}
                                           isMulti={false}
                                           name="colors"
                                           onChange={(selectedOption) =>
@@ -1658,7 +1664,7 @@ const PolicyDetail = () => {
                                       pt="10px"
                                       placeholder=" "
                                       bg={
-                                        travellers?.firstName !== null
+                                        travellers?.firstName !== ''
                                           ? '#e8f0fe'
                                           : '#ebebeb'
                                       }
@@ -1796,7 +1802,7 @@ const PolicyDetail = () => {
                                       pt="10px"
                                       placeholder=" "
                                       bg={
-                                        travellers?.placeOfBirth !== null
+                                        travellers?.placeOfBirth !== ''
                                           ? '#e8f0fe'
                                           : '#ebebeb'
                                       }
@@ -1821,7 +1827,7 @@ const PolicyDetail = () => {
                                   >
                                     <Textarea
                                       bg={
-                                        travellers?.address !== null
+                                        travellers?.address !== ''
                                           ? '#e8f0fe'
                                           : '#ebebeb'
                                       }
@@ -1835,6 +1841,7 @@ const PolicyDetail = () => {
                                         fontSize: '12px',
                                         fontfamily: 'Mulish',
                                         marginTop: '1em',
+                                        paddingTop: '2em',
                                         color: '#000000ad',
                                       }}
                                       onChange={(e) => setAddresss(e, i)}
@@ -2053,7 +2060,7 @@ const PolicyDetail = () => {
                                       variant="custom"
                                       pt="10px"
                                       bg={
-                                        travellers?.beneficiary !== null
+                                        travellers?.beneficiary !== ''
                                           ? '#e8f0fe'
                                           : '#ebebeb'
                                       }
@@ -2079,11 +2086,12 @@ const PolicyDetail = () => {
                                     <Box className="floating-form" w="50%">
                                       <Box className="react-select-container">
                                         <Select
-                                          bg={
-                                            travellers?.relationship !== null
-                                              ? '#e8f0fe'
-                                              : '#ebebeb'
-                                          }
+                                          style={{
+                                            backgroundColor:
+                                              travellers?.relationship !== null
+                                                ? '#e8f0fe'
+                                                : '#ebebeb',
+                                          }}
                                           isMulti={false}
                                           name="colors"
                                           onChange={(selectedOption) =>
