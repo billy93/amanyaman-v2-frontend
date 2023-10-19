@@ -378,6 +378,9 @@ const PolicyDetail = () => {
   }
 
   const setSelectedDates = (selectDate) => {
+    const data = [...dataQuotation];
+    data[i].dateOfBirth = e.target.value;
+    setDataQuotation([...data]);
     console.log('setSelecteddate', selectDate);
   };
   // console.log('newdata forms dataQuotation', dataQuotation);
@@ -596,7 +599,7 @@ const PolicyDetail = () => {
   const renderCustomInput = ({ ref, value, onClick, ...props }) => {
     const data = [...dataQuotation];
     console.log(data[value].dateOfBirth);
-    console.log(value);
+    console.log('valss', value);
     return (
       <>
         {console.log('test', ref, value, onClick)}
@@ -1437,8 +1440,8 @@ const PolicyDetail = () => {
                                               value={travellers?.relations}
                                               // classNamePrefix="chakra-react-select"
                                               classNamePrefix={
-                                                travellers?.relationship
-                                                  ?.length > 0
+                                                travellers?.relations
+                                                  ?.length !== 0
                                                   ? 'chakra-react-select-default'
                                                   : 'chakra-react-select'
                                               }
@@ -2174,8 +2177,7 @@ const PolicyDetail = () => {
                                           value={travellers?.relations}
                                           // classNamePrefix="chakra-react-select"
                                           classNamePrefix={
-                                            travellers?.relationship?.length !==
-                                            0
+                                            travellers?.relations?.length !== 0
                                               ? 'chakra-react-select-default'
                                               : 'chakra-react-select'
                                           }
