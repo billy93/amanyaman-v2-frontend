@@ -905,32 +905,45 @@ const PolicyDetail = () => {
                                         variant="floating"
                                         id="first-name"
                                         isRequired
+                                        style={{
+                                          textAlign: 'center',
+                                        }}
+                                        height="100%"
                                       >
+                                        <FormLabel
+                                          fontSize="11px"
+                                          fontStyle={'italic'}
+                                          pt="10px"
+                                          style={{
+                                            textAlign: 'center',
+                                            position: 'absolute',
+                                            color:
+                                              travellers?.firstName !== ''
+                                                ? '#065baa'
+                                                : '',
+                                            transform:
+                                              travellers?.firstName !== ''
+                                                ? 'translateY(-10px)'
+                                                : 'translateY(17px)',
+                                          }}
+                                          // top={'20px'}
+                                          // style={{}}
+                                        >
+                                          FirstName
+                                        </FormLabel>
                                         <Input
+                                          variant="custom"
+                                          pt="10px"
                                           placeholder=" "
                                           _placeholder={{
                                             opacity: 1,
                                             color: 'gray.500',
                                           }}
+                                          name="firstName"
                                           value={travellers?.firstName}
                                           onChange={(e) => setFirstName(e, i)}
                                           h="48px"
-                                          style={{
-                                            transform:
-                                              travellers?.firstName !== ''
-                                                ? 'translateY(-6px)'
-                                                : 'translateY(2px)',
-                                          }}
                                         />
-                                        {/* It is important that the Label comes after the Control due to css selectors */}
-                                        <FormLabel
-                                          fontSize="12"
-                                          pt="1.5"
-                                          style={{ zIndex: 0 }}
-                                        >
-                                          FirstName
-                                        </FormLabel>
-                                        {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                                       </FormControl>
                                       <FormControl
                                         variant="floating"
@@ -938,20 +951,34 @@ const PolicyDetail = () => {
                                         isRequired
                                       >
                                         <Input
+                                          variant={'custom'}
+                                          pt="10px"
                                           placeholder=" "
                                           _placeholder={{
                                             opacity: 1,
                                             color: 'gray.500',
                                           }}
+                                          name="lastName"
                                           value={travellers?.lastName}
                                           onChange={(e) => setLastName(e, i)}
                                           h="48px"
                                         />
                                         {/* It is important that the Label comes after the Control due to css selectors */}
                                         <FormLabel
-                                          fontSize="12"
+                                          fontSize="11"
                                           pt="1.5"
-                                          style={{ zIndex: 0 }}
+                                          style={{
+                                            textAlign: 'center',
+                                            position: 'absolute',
+                                            color:
+                                              travellers?.lastName !== ''
+                                                ? '#065baa'
+                                                : '',
+                                            transform:
+                                              travellers?.lastName !== ''
+                                                ? 'translateY(-10px)'
+                                                : 'translateY(17px)',
+                                          }}
                                         >
                                           LastName
                                         </FormLabel>
@@ -999,6 +1026,7 @@ const PolicyDetail = () => {
                                         isRequired
                                       >
                                         <Input
+                                          variant={'custom'}
                                           placeholder=" "
                                           _placeholder={{
                                             opacity: 1,
@@ -1009,14 +1037,24 @@ const PolicyDetail = () => {
                                             setPlaceOfBirth(e, i)
                                           }
                                           h="48px"
-                                          style={{
-                                            fontSize: '12px',
-                                            fontfamily: 'Mulish',
-                                            color: '#000000ad',
-                                          }}
                                         />
                                         {/* It is important that the Label comes after the Control due to css selectors */}
-                                        <FormLabel fontSize="12" pt="1.5">
+                                        <FormLabel
+                                          fontSize="12"
+                                          pt="1.5"
+                                          style={{
+                                            textAlign: 'center',
+                                            position: 'absolute',
+                                            color:
+                                              travellers?.placeOfBirth !== ''
+                                                ? '#065baa'
+                                                : '',
+                                            transform:
+                                              travellers?.placeOfBirth !== ''
+                                                ? 'translateY(-10px)'
+                                                : 'translateY(17px)',
+                                          }}
+                                        >
                                           {' '}
                                           Place Of Birth
                                         </FormLabel>
@@ -1052,7 +1090,18 @@ const PolicyDetail = () => {
                                           pt="1.5"
                                           className={isActive ? 'Active' : ''}
                                           fontFamily={'Mulish'}
-                                          style={{ fontSize: '14px' }}
+                                          style={{
+                                            textAlign: 'center',
+                                            position: 'absolute',
+                                            color:
+                                              travellers?.address !== ''
+                                                ? '#065baa'
+                                                : '',
+                                            transform:
+                                              travellers?.address !== ''
+                                                ? 'translateY(-10px)'
+                                                : 'translateY(17px)',
+                                          }}
                                         >
                                           Address
                                         </FormLabel>
@@ -1067,6 +1116,7 @@ const PolicyDetail = () => {
                                         isInvalid={!isValid}
                                       >
                                         <Input
+                                          variant={'custom'}
                                           type="email"
                                           placeholder=""
                                           value={travellers?.email}
@@ -1075,7 +1125,22 @@ const PolicyDetail = () => {
                                           }
                                           h="48px"
                                         />
-                                        <FormLabel fontSize="12" pt="1.5">
+                                        <FormLabel
+                                          fontSize="12"
+                                          pt="1.5"
+                                          style={{
+                                            textAlign: 'center',
+                                            position: 'absolute',
+                                            color:
+                                              travellers?.email !== ''
+                                                ? '#065baa'
+                                                : '',
+                                            transform:
+                                              travellers?.email !== ''
+                                                ? 'translateY(-10px)'
+                                                : 'translateY(17px)',
+                                          }}
+                                        >
                                           Email
                                         </FormLabel>
                                         <FormErrorMessage>
@@ -1090,6 +1155,7 @@ const PolicyDetail = () => {
                                         isInvalid={!isValidPhone}
                                       >
                                         <Input
+                                          variant={'custom'}
                                           type="tel"
                                           placeholder=" "
                                           _placeholder={{
@@ -1103,7 +1169,22 @@ const PolicyDetail = () => {
                                           h="48px"
                                         />
                                         {/* It is important that the Label comes after the Control due to css selectors */}
-                                        <FormLabel fontSize="12" pt="1.5">
+                                        <FormLabel
+                                          fontSize="12"
+                                          pt="1.5"
+                                          style={{
+                                            textAlign: 'center',
+                                            position: 'absolute',
+                                            color:
+                                              travellers?.phone !== ''
+                                                ? '#065baa'
+                                                : '',
+                                            transform:
+                                              travellers?.phone !== ''
+                                                ? 'translateY(-10px)'
+                                                : 'translateY(17px)',
+                                          }}
+                                        >
                                           Phone Number
                                         </FormLabel>
                                         <FormErrorMessage>
@@ -1120,6 +1201,7 @@ const PolicyDetail = () => {
                                         isRequired
                                       >
                                         <Input
+                                          variant={'custom'}
                                           placeholder=" "
                                           _placeholder={{
                                             opacity: 1,
@@ -1130,7 +1212,22 @@ const PolicyDetail = () => {
                                           h="48px"
                                         />
                                         {/* It is important that the Label comes after the Control due to css selectors */}
-                                        <FormLabel fontSize="12" pt="1.5">
+                                        <FormLabel
+                                          fontSize="12"
+                                          pt="1.5"
+                                          style={{
+                                            textAlign: 'center',
+                                            position: 'absolute',
+                                            color:
+                                              travellers?.passport !== ''
+                                                ? '#065baa'
+                                                : '',
+                                            transform:
+                                              travellers?.passport !== ''
+                                                ? 'translateY(-10px)'
+                                                : 'translateY(17px)',
+                                          }}
+                                        >
                                           Identity card/Passport
                                         </FormLabel>
                                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
@@ -1142,6 +1239,7 @@ const PolicyDetail = () => {
                                         isRequired
                                       >
                                         <Input
+                                          variant={'custom'}
                                           placeholder=" "
                                           _placeholder={{
                                             opacity: 1,
@@ -1157,7 +1255,22 @@ const PolicyDetail = () => {
                                           }}
                                         />
                                         {/* It is important that the Label comes after the Control due to css selectors */}
-                                        <FormLabel fontSize="12" pt="1.5">
+                                        <FormLabel
+                                          fontSize="12"
+                                          pt="1.5"
+                                          style={{
+                                            textAlign: 'center',
+                                            position: 'absolute',
+                                            color:
+                                              travellers?.beneficiary !== ''
+                                                ? '#065baa'
+                                                : '',
+                                            transform:
+                                              travellers?.beneficiary !== ''
+                                                ? 'translateY(-10px)'
+                                                : 'translateY(17px)',
+                                          }}
+                                        >
                                           {' '}
                                           Beneficiary
                                         </FormLabel>
@@ -1223,6 +1336,7 @@ const PolicyDetail = () => {
                                                     ? '#065baa'
                                                     : '#231F20',
                                                 fontSize: '14px',
+                                                position: 'absolute',
                                                 zIndex: '0',
                                               }}
                                               fontFamily={'Mulish'}

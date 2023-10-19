@@ -131,7 +131,7 @@ const EmailForm = ({ quotation, handleClose }) => {
           />
 
           <Text as="b" fontSize="sm">
-            press Tab or Enter to add new recipients
+            press Tab or Enter to add new recipents
           </Text>
         </Box>
         <Box display={'flex'} justifyContent={'flex-end'}>
