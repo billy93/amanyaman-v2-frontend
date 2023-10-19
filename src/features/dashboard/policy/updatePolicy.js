@@ -781,6 +781,11 @@ const PolicyDetail = () => {
                                         <Box className="floating-form" w="100%">
                                           <Box className="react-select-container">
                                             <Select
+                                              bg={
+                                                travellers?.type !== null
+                                                  ? '#e8f0fe'
+                                                  : '#ebebeb'
+                                              }
                                               isMulti={false}
                                               name="colors"
                                               onChange={(selectedOption) =>
@@ -846,6 +851,11 @@ const PolicyDetail = () => {
                                         <Box className="floating-form" w="100%">
                                           <Box className="react-select-container">
                                             <Select
+                                              bg={
+                                                travellers?.label !== null
+                                                  ? '#e8f0fe'
+                                                  : '#ebebeb'
+                                              }
                                               isMulti={false}
                                               name="colors"
                                               onChange={(selectedOption) =>
@@ -938,6 +948,11 @@ const PolicyDetail = () => {
                                           variant="custom"
                                           pt="10px"
                                           placeholder=" "
+                                          bg={
+                                            travellers?.firstName !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
                                           _placeholder={{
                                             opacity: 1,
                                             color: 'gray.500',
@@ -957,6 +972,11 @@ const PolicyDetail = () => {
                                           variant={'custom'}
                                           pt="10px"
                                           placeholder=" "
+                                          bg={
+                                            travellers?.lastName !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
                                           _placeholder={{
                                             opacity: 1,
                                             color: 'gray.500',
@@ -1000,7 +1020,16 @@ const PolicyDetail = () => {
                                         (without degree or special characters)
                                       </Text>
                                     </Box>
-                                    <Box display={'flex'} gap="5px" mt="10px">
+                                    <Box
+                                      display={'flex'}
+                                      gap="5px"
+                                      mt="10px"
+                                      bg={
+                                        travellers?.dateOfBirth !== null
+                                          ? '#e8f0fe'
+                                          : '#ebebeb'
+                                      }
+                                    >
                                       <DatePicker
                                         value={travellers.dateOfBirth}
                                         onChange={setSelectedDates}
@@ -1057,6 +1086,11 @@ const PolicyDetail = () => {
                                           variant="custom"
                                           pt="10px"
                                           placeholder=" "
+                                          bg={
+                                            travellers?.placeOfBirth !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
                                           _placeholder={{
                                             opacity: 1,
                                             color: 'gray.500',
@@ -1079,6 +1113,11 @@ const PolicyDetail = () => {
                                         mt="14px"
                                       >
                                         <Textarea
+                                          bg={
+                                            travellers?.address !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
                                           placeholder=" "
                                           _placeholder={{
                                             opacity: 1,
@@ -1161,6 +1200,11 @@ const PolicyDetail = () => {
                                           onChange={(e) =>
                                             setEmailAddress(e, i)
                                           }
+                                          bg={
+                                            travellers?.email !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
                                           h="48px"
                                         />
                                       </FormControl>
@@ -1198,6 +1242,11 @@ const PolicyDetail = () => {
                                           variant="custom"
                                           pt="10px"
                                           placeholder=" "
+                                          bg={
+                                            travellers?.phone !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
                                           _placeholder={{
                                             opacity: 1,
                                             color: 'gray.500',
@@ -1248,6 +1297,11 @@ const PolicyDetail = () => {
                                           Identity Card/ Passport
                                         </FormLabel>
                                         <Input
+                                          bg={
+                                            travellers?.passport !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
                                           variant="custom"
                                           pt="10px"
                                           placeholder=" "
@@ -1295,6 +1349,11 @@ const PolicyDetail = () => {
                                         <Input
                                           variant="custom"
                                           pt="10px"
+                                          bg={
+                                            travellers?.beneficiary !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
                                           placeholder=" "
                                           _placeholder={{
                                             opacity: 1,
@@ -1317,6 +1376,12 @@ const PolicyDetail = () => {
                                         <Box className="floating-form" w="50%">
                                           <Box className="react-select-container">
                                             <Select
+                                              bg={
+                                                travellers?.relationship !==
+                                                null
+                                                  ? '#e8f0fe'
+                                                  : '#ebebeb'
+                                              }
                                               isMulti={false}
                                               name="colors"
                                               onChange={(selectedOption) =>
@@ -1437,6 +1502,11 @@ const PolicyDetail = () => {
                                     <Box className="floating-form" w="100%">
                                       <Box className="react-select-container">
                                         <Select
+                                          bg={
+                                            travellers?.type !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
                                           isMulti={false}
                                           name="colors"
                                           onChange={(selectedOption) =>
@@ -1469,7 +1539,7 @@ const PolicyDetail = () => {
                                             transform:
                                               travellers &&
                                               travellers?.type?.length > 0
-                                                ? 'translate(0, -10px) scale(0.75)'
+                                                ? 'translate(0, -2px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
@@ -1496,6 +1566,11 @@ const PolicyDetail = () => {
                                     <Box className="floating-form" w="100%">
                                       <Box className="react-select-container">
                                         <Select
+                                          bg={
+                                            travellers?.label !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
                                           isMulti={false}
                                           name="colors"
                                           onChange={(selectedOption) =>
@@ -1529,7 +1604,7 @@ const PolicyDetail = () => {
                                             transform:
                                               travellers &&
                                               travellers?.label?.length > 0
-                                                ? 'translate(0, -10px) scale(0.75)'
+                                                ? 'translate(0, -2px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
@@ -1552,32 +1627,50 @@ const PolicyDetail = () => {
                                     variant="floating"
                                     id="first-name"
                                     isRequired
+                                    style={{
+                                      textAlign: 'center',
+                                    }}
+                                    height="100%"
                                   >
+                                    <FormLabel
+                                      fontSize="11px"
+                                      fontStyle={'italic'}
+                                      pt="10px"
+                                      style={{
+                                        textAlign: 'center',
+                                        position: 'absolute',
+                                        color:
+                                          travellers?.firstName !== ''
+                                            ? '#065baa'
+                                            : '',
+                                        transform:
+                                          travellers?.firstName !== ''
+                                            ? 'translateY(-10px)'
+                                            : 'translateY(17px)',
+                                      }}
+                                      // top={'20px'}
+                                      // style={{}}
+                                    >
+                                      FirstName
+                                    </FormLabel>
                                     <Input
+                                      variant="custom"
+                                      pt="10px"
                                       placeholder=" "
+                                      bg={
+                                        travellers?.firstName !== null
+                                          ? '#e8f0fe'
+                                          : '#ebebeb'
+                                      }
                                       _placeholder={{
                                         opacity: 1,
                                         color: 'gray.500',
                                       }}
+                                      name="firstName"
                                       value={travellers?.firstName}
                                       onChange={(e) => setFirstName(e, i)}
                                       h="48px"
                                     />
-                                    {/* It is important that the Label comes after the Control due to css selectors */}
-                                    <FormLabel
-                                      fontSize="12"
-                                      pt="1.5"
-                                      style={{
-                                        transform:
-                                          travellers?.firstName !== ''
-                                            ? 'translate(0, -10px) scale(0.75)'
-                                            : 'translate(0, 4px) scale(0.75)',
-                                      }}
-                                      // style={{ zIndex: 0 }}
-                                    >
-                                      FirstName
-                                    </FormLabel>
-                                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                                   </FormControl>
                                   <FormControl
                                     variant="floating"
@@ -1585,20 +1678,39 @@ const PolicyDetail = () => {
                                     isRequired
                                   >
                                     <Input
+                                      variant={'custom'}
+                                      pt="10px"
                                       placeholder=" "
+                                      bg={
+                                        travellers?.lastName !== null
+                                          ? '#e8f0fe'
+                                          : '#ebebeb'
+                                      }
                                       _placeholder={{
                                         opacity: 1,
                                         color: 'gray.500',
                                       }}
+                                      name="lastName"
                                       value={travellers?.lastName}
                                       onChange={(e) => setLastName(e, i)}
                                       h="48px"
                                     />
                                     {/* It is important that the Label comes after the Control due to css selectors */}
                                     <FormLabel
-                                      fontSize="12"
+                                      fontSize="11"
                                       pt="1.5"
-                                      style={{ zIndex: 0 }}
+                                      style={{
+                                        textAlign: 'center',
+                                        position: 'absolute',
+                                        color:
+                                          travellers?.lastName !== ''
+                                            ? '#065baa'
+                                            : '',
+                                        transform:
+                                          travellers?.lastName !== ''
+                                            ? 'translateY(-10px)'
+                                            : 'translateY(17px)',
+                                      }}
                                     >
                                       LastName
                                     </FormLabel>
@@ -1617,7 +1729,16 @@ const PolicyDetail = () => {
                                     (without degree or special characters)
                                   </Text>
                                 </Box>
-                                <Box display={'flex'} gap="5px" mt="10px">
+                                <Box
+                                  display={'flex'}
+                                  gap="5px"
+                                  mt="10px"
+                                  bg={
+                                    travellers?.dateOfBirth !== null
+                                      ? '#e8f0fe'
+                                      : '#ebebeb'
+                                  }
+                                >
                                   <DatePicker
                                     value={travellers.dateOfBirth}
                                     onChange={setSelectedDates}
@@ -1644,28 +1765,50 @@ const PolicyDetail = () => {
                                     variant="floating"
                                     id="first-name"
                                     isRequired
+                                    style={{
+                                      textAlign: 'center',
+                                    }}
+                                    height="100%"
                                   >
+                                    <FormLabel
+                                      fontSize="11px"
+                                      fontStyle={'italic'}
+                                      pt="10px"
+                                      style={{
+                                        textAlign: 'center',
+                                        position: 'absolute',
+                                        color:
+                                          travellers?.placeOfBirth !== ''
+                                            ? '#065baa'
+                                            : '',
+                                        transform:
+                                          travellers?.placeOfBirth !== ''
+                                            ? 'translateY(-10px)'
+                                            : 'translateY(17px)',
+                                      }}
+                                      // top={'20px'}
+                                      // style={{}}
+                                    >
+                                      Place Of Birth
+                                    </FormLabel>
                                     <Input
+                                      variant="custom"
+                                      pt="10px"
                                       placeholder=" "
+                                      bg={
+                                        travellers?.placeOfBirth !== null
+                                          ? '#e8f0fe'
+                                          : '#ebebeb'
+                                      }
                                       _placeholder={{
                                         opacity: 1,
                                         color: 'gray.500',
                                       }}
+                                      // name=""
                                       value={travellers?.placeOfBirth}
                                       onChange={(e) => setPlaceOfBirth(e, i)}
                                       h="48px"
-                                      style={{
-                                        fontSize: '12px',
-                                        fontfamily: 'Mulish',
-                                        color: '#000000ad',
-                                      }}
                                     />
-                                    {/* It is important that the Label comes after the Control due to css selectors */}
-                                    <FormLabel fontSize="12" pt="1.5">
-                                      {' '}
-                                      Place Of Birth
-                                    </FormLabel>
-                                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                                   </FormControl>
                                 </Box>
                                 <Box w={{ base: '100%' }} pb="20px">
@@ -1677,6 +1820,11 @@ const PolicyDetail = () => {
                                     mt="14px"
                                   >
                                     <Textarea
+                                      bg={
+                                        travellers?.address !== null
+                                          ? '#e8f0fe'
+                                          : '#ebebeb'
+                                      }
                                       placeholder=" "
                                       _placeholder={{
                                         opacity: 1,
@@ -1697,7 +1845,18 @@ const PolicyDetail = () => {
                                       pt="1.5"
                                       className={isActive ? 'Active' : ''}
                                       fontFamily={'Mulish'}
-                                      style={{ fontSize: '14px' }}
+                                      style={{
+                                        textAlign: 'center',
+                                        position: 'absolute',
+                                        color:
+                                          travellers?.address !== ''
+                                            ? '#065baa'
+                                            : '',
+                                        transform:
+                                          travellers?.address !== ''
+                                            ? 'translateY(-10px)'
+                                            : 'translateY(17px)',
+                                      }}
                                     >
                                       Address
                                     </FormLabel>
@@ -1709,100 +1868,205 @@ const PolicyDetail = () => {
                                     variant="floating"
                                     id="first-name"
                                     isRequired
-                                    isInvalid={!isValid}
+                                    style={{
+                                      textAlign: 'center',
+                                    }}
+                                    height="100%"
                                   >
-                                    <Input
-                                      type="email"
-                                      placeholder=""
-                                      value={travellers?.email}
-                                      onChange={(e) => setEmailAddress(e, i)}
-                                      h="48px"
-                                    />
-                                    <FormLabel fontSize="12" pt="1.5">
+                                    <FormLabel
+                                      fontSize="11px"
+                                      fontStyle={'italic'}
+                                      pt="10px"
+                                      style={{
+                                        textAlign: 'center',
+                                        position: 'absolute',
+                                        color:
+                                          travellers?.email !== ''
+                                            ? '#065baa'
+                                            : '',
+                                        transform:
+                                          travellers?.email !== ''
+                                            ? 'translateY(-10px)'
+                                            : 'translateY(17px)',
+                                      }}
+                                      // top={'20px'}
+                                      // style={{}}
+                                    >
                                       Email
                                     </FormLabel>
-                                    <FormErrorMessage>
-                                      {!isValid &&
-                                        'Invalid email address format'}
-                                    </FormErrorMessage>
-                                  </FormControl>
-                                  <FormControl
-                                    variant="floating"
-                                    id="first-name"
-                                    isRequired
-                                    isInvalid={!isValidPhone}
-                                  >
                                     <Input
-                                      type="tel"
+                                      variant="custom"
+                                      pt="10px"
                                       placeholder=" "
                                       _placeholder={{
                                         opacity: 1,
                                         color: 'gray.500',
                                       }}
+                                      name="email"
+                                      value={travellers?.email}
+                                      onChange={(e) => setEmailAddress(e, i)}
+                                      bg={
+                                        travellers?.email !== null
+                                          ? '#e8f0fe'
+                                          : '#ebebeb'
+                                      }
+                                      h="48px"
+                                    />
+                                  </FormControl>
+                                  <FormControl
+                                    variant="floating"
+                                    id="first-name"
+                                    isRequired
+                                    style={{
+                                      textAlign: 'center',
+                                    }}
+                                    height="100%"
+                                  >
+                                    <FormLabel
+                                      fontSize="11px"
+                                      fontStyle={'italic'}
+                                      pt="10px"
+                                      style={{
+                                        textAlign: 'center',
+                                        position: 'absolute',
+                                        color:
+                                          travellers?.phone !== ''
+                                            ? '#065baa'
+                                            : '',
+                                        transform:
+                                          travellers?.phone !== ''
+                                            ? 'translateY(-10px)'
+                                            : 'translateY(17px)',
+                                      }}
+                                      // top={'20px'}
+                                      // style={{}}
+                                    >
+                                      Phone Number
+                                    </FormLabel>
+                                    <Input
+                                      variant="custom"
+                                      pt="10px"
+                                      placeholder=" "
+                                      bg={
+                                        travellers?.phone !== null
+                                          ? '#e8f0fe'
+                                          : '#ebebeb'
+                                      }
+                                      _placeholder={{
+                                        opacity: 1,
+                                        color: 'gray.500',
+                                      }}
+                                      name="phone"
                                       value={travellers?.phone}
                                       onChange={(e) => setPhoneNumbers(e, i)}
                                       h="48px"
                                     />
-                                    {/* It is important that the Label comes after the Control due to css selectors */}
-                                    <FormLabel fontSize="12" pt="1.5">
-                                      Phone Number
-                                    </FormLabel>
-                                    <FormErrorMessage>
-                                      {!isValidPhone &&
-                                        'Invalid phone number format'}
-                                    </FormErrorMessage>
-                                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                                   </FormControl>
+                                  <FormErrorMessage>
+                                    {!isValid && (
+                                      <span>Invalid Phone Address</span>
+                                    )}
+                                  </FormErrorMessage>
                                 </Box>
                                 <Box display={'flex'} gap="5px" mt="10px">
                                   <FormControl
                                     variant="floating"
                                     id="first-name"
                                     isRequired
+                                    style={{
+                                      textAlign: 'center',
+                                    }}
+                                    height="100%"
                                   >
+                                    <FormLabel
+                                      fontSize="11px"
+                                      fontStyle={'italic'}
+                                      pt="10px"
+                                      style={{
+                                        textAlign: 'center',
+                                        position: 'absolute',
+                                        color:
+                                          travellers?.passport !== ''
+                                            ? '#065baa'
+                                            : '',
+                                        transform:
+                                          travellers?.passport !== ''
+                                            ? 'translateY(-10px)'
+                                            : 'translateY(17px)',
+                                      }}
+                                      // top={'20px'}
+                                      // style={{}}
+                                    >
+                                      Identity Card/ Passport
+                                    </FormLabel>
                                     <Input
+                                      bg={
+                                        travellers?.passport !== null
+                                          ? '#e8f0fe'
+                                          : '#ebebeb'
+                                      }
+                                      variant="custom"
+                                      pt="10px"
                                       placeholder=" "
                                       _placeholder={{
                                         opacity: 1,
                                         color: 'gray.500',
                                       }}
+                                      name="firstName"
                                       value={travellers?.passport}
                                       onChange={(e) => setPassport(e, i)}
                                       h="48px"
                                     />
-                                    {/* It is important that the Label comes after the Control due to css selectors */}
-                                    <FormLabel fontSize="12" pt="1.5">
-                                      Identity card/Passport
-                                    </FormLabel>
-                                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                                   </FormControl>
 
                                   <FormControl
                                     variant="floating"
                                     id="first-name"
                                     isRequired
+                                    style={{
+                                      textAlign: 'center',
+                                    }}
+                                    height="100%"
                                   >
+                                    <FormLabel
+                                      fontSize="11px"
+                                      fontStyle={'italic'}
+                                      pt="10px"
+                                      style={{
+                                        textAlign: 'center',
+                                        position: 'absolute',
+                                        color:
+                                          travellers?.beneficiary !== ''
+                                            ? '#065baa'
+                                            : '',
+                                        transform:
+                                          travellers?.beneficiary !== ''
+                                            ? 'translateY(-10px)'
+                                            : 'translateY(17px)',
+                                      }}
+                                      // top={'20px'}
+                                      // style={{}}
+                                    >
+                                      Beneficiary
+                                    </FormLabel>
                                     <Input
+                                      variant="custom"
+                                      pt="10px"
+                                      bg={
+                                        travellers?.beneficiary !== null
+                                          ? '#e8f0fe'
+                                          : '#ebebeb'
+                                      }
                                       placeholder=" "
                                       _placeholder={{
                                         opacity: 1,
                                         color: 'gray.500',
                                       }}
+                                      name="firstName"
                                       value={travellers?.beneficiary}
                                       onChange={(e) => setBeneficiary(e, i)}
                                       h="48px"
-                                      style={{
-                                        fontSize: '12px',
-                                        fontfamily: 'Mulish',
-                                        color: '#000000ad',
-                                      }}
                                     />
-                                    {/* It is important that the Label comes after the Control due to css selectors */}
-                                    <FormLabel fontSize="12" pt="1.5">
-                                      {' '}
-                                      Beneficiary
-                                    </FormLabel>
-                                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                                   </FormControl>
                                 </Box>
                                 <Box bg="white">
@@ -1815,6 +2079,11 @@ const PolicyDetail = () => {
                                     <Box className="floating-form" w="50%">
                                       <Box className="react-select-container">
                                         <Select
+                                          bg={
+                                            travellers?.relationship !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
                                           isMulti={false}
                                           name="colors"
                                           onChange={(selectedOption) =>
@@ -1851,7 +2120,7 @@ const PolicyDetail = () => {
                                             transform:
                                               travellers &&
                                               travellers?.relations?.length > 0
-                                                ? 'translate(0, -10px) scale(0.75)'
+                                                ? 'translate(0, -2px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
@@ -1859,6 +2128,7 @@ const PolicyDetail = () => {
                                                 ? '#065baa'
                                                 : '#231F20',
                                             fontSize: '14px',
+                                            position: 'absolute',
                                             zIndex: '0',
                                           }}
                                           fontFamily={'Mulish'}
