@@ -503,7 +503,13 @@ const Login = () => {
                           id="first-name"
                           isRequired
                           style={{ margin: '4px 0px' }}
+                          display="flex"
+                          flexDirection="column"
+                          alignItems="center"
                         >
+                          <FormLabel fontSize="12" pb="1.5">
+                            Enter Username
+                          </FormLabel>
                           <Input
                             variant="custom"
                             placeholder=" "
@@ -513,17 +519,15 @@ const Login = () => {
                             onChange={setFieldChange}
                             h="48px"
                           />
-                          {/* It is important that the Label comes after the Control due to css selectors */}
-                          <FormLabel fontSize="12" pt="1.5">
-                            Enter Username
-                          </FormLabel>
-                          {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                         </FormControl>
                         <FormControl
                           variant="floating"
                           id="pwd"
                           isRequired
                           style={{ margin: '4px 0px' }}
+                          display="flex"
+                          flexDirection="column"
+                          alignItems="center"
                         >
                           <InputGroup>
                             <Input

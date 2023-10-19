@@ -72,10 +72,10 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    deleteParams: builder.mutation({
+    deleteDocument: builder.mutation({
       query: (id) => {
         return {
-          url: `/app/system-parameters/${id}`,
+          url: `/app/document-types/${id}`,
           method: 'DELETE',
           invalidatesTags: (result, error, arg) =>
             result
@@ -92,7 +92,7 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetDocumentTypesQuery,
-  useDeleteParamsMutation,
+  useDeleteDocumentTypesQuery,
   useUploadFileDocMutation,
   useGetDocByIdQuery,
   useUpdateFileDocMutation,

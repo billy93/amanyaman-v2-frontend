@@ -62,6 +62,21 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
       }),
       // OnQueryError
     }),
+    deleteVariant: builder.mutation({
+      query: (id) => {
+        return {
+          url: `/app/variants/${id}`,
+          method: 'DELETE',
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterQuery', id })),
+                  'MasterQuery',
+                ]
+              : ['MasterQuery'],
+        };
+      },
+    }),
   }),
 });
 
@@ -70,4 +85,5 @@ export const {
   useCreateVariantMutation,
   useGetVariantByIdQuery,
   useUpdateVariantMutation,
+  useDeleteVariantMutation,
 } = systemParamsApiSlice;

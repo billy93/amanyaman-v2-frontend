@@ -2,7 +2,10 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useGetVariantsQuery } from './systemParamsApiSlice';
+import {
+  useGetVariantsQuery,
+  useDeleteVariantMutation,
+} from './systemParamsApiSlice';
 import {
   usePagination,
   useSortBy,
@@ -534,6 +537,8 @@ const Polcies = () => {
   const fetchIdRef = React.useRef(0);
   const [size, setSize] = React.useState(5);
   const [page, setPage] = React.useState(0);
+  const [deleteVariant, { isLoading: processDelete }] =
+    useDeleteVariantMutation(id);
   const {
     data: { response: systemParams, totalCount } = {},
     isLoading,
@@ -601,9 +606,36 @@ const Polcies = () => {
         filter: 'fuzzyText',
         Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'13px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
+        ),
+      },
     ],
     []
   );
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    try {
+      const res = await deleteVariant(id);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // const data = React.useMemo(() => tempList);
   // console.log('ddd listParams', listParams)

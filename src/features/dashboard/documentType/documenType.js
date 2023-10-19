@@ -1,7 +1,10 @@
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { useGetDocumentTypesQuery } from './docTypeApiSlice';
+import {
+  useGetDocumentTypesQuery,
+  useDeleteDocumentTypesQuery,
+} from './docTypeApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   usePagination,
@@ -567,6 +570,8 @@ const DocumentList = () => {
   const [count, setCount] = React.useState(0);
   const fetchIdRef = React.useRef(0);
   const [page, setPage] = React.useState(0);
+  const [deleteDocument, { isLoading: processDelete }] =
+    useDeleteDocumentTypesQuery(id);
   const [paginations, setPagination] = React.useState({
     page: 0,
     size: 1000,
@@ -654,9 +659,36 @@ const DocumentList = () => {
         filter: 'fuzzyText',
         Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'13px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
+        ),
+      },
     ],
     []
   );
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    try {
+      const res = await deleteDocument(id);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   React.useEffect(() => {
     refetch({ page, size: 10 });
