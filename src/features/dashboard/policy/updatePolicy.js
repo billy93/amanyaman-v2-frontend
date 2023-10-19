@@ -819,7 +819,7 @@ const PolicyDetail = () => {
                                                 transform:
                                                   travellers &&
                                                   travellers?.type?.length > 0
-                                                    ? 'translate(0, -10px) scale(0.75)'
+                                                    ? 'translate(0, -2px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
@@ -885,7 +885,7 @@ const PolicyDetail = () => {
                                                 transform:
                                                   travellers &&
                                                   travellers?.label?.length > 0
-                                                    ? 'translate(0, -10px) scale(0.75)'
+                                                    ? 'translate(0, -2px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
@@ -1330,7 +1330,7 @@ const PolicyDetail = () => {
                                                   travellers &&
                                                   travellers?.relations
                                                     ?.length > 0
-                                                    ? 'translate(0, -10px) scale(0.75)'
+                                                    ? 'translate(0, -2px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&

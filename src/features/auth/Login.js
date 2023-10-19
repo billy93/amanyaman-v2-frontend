@@ -524,7 +524,8 @@ const Login = () => {
                               position: 'absolute',
                               color: fields?.username !== '' ? '#065baa' : '',
                               transform:
-                                fields?.username !== ''
+                                fields?.username !== '' ||
+                                fields?.username !== undefined
                                   ? 'translateY(-8px)'
                                   : 'translateY(-1px)',
                             }}
@@ -565,7 +566,8 @@ const Login = () => {
                                 textAlign: 'center',
                                 color: fields?.password !== '' ? '#065baa' : '',
                                 transform:
-                                  fields?.password !== ''
+                                  fields?.password !== '' ||
+                                  fields?.password !== undefined
                                     ? 'translateY(18px)'
                                     : 'translateY(13px)',
                               }}
