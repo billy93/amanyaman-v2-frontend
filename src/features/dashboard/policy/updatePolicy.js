@@ -850,8 +850,9 @@ const PolicyDetail = () => {
                                                   travellers?.type?.length > 0
                                                     ? '#065baa'
                                                     : '#231F20',
-                                                fontSize: '14px',
+                                                // fontSize: '14px',
                                               }}
+                                              className="floating-label-global"
                                               fontFamily={'Mulish'}
                                             >
                                               Traveller Type
@@ -926,8 +927,9 @@ const PolicyDetail = () => {
                                                   travellers?.label?.length > 0
                                                     ? '#065baa'
                                                     : '#231F20',
-                                                fontSize: '14px',
+                                                // fontSize: '14px',
                                               }}
+                                              className="floating-label-global"
                                               fontFamily={'Mulish'}
                                             >
                                               Title
@@ -965,6 +967,7 @@ const PolicyDetail = () => {
                                           }}
                                           // top={'20px'}
                                           // style={{}}
+                                          className="floating-label-global"
                                         >
                                           FirstName
                                         </FormLabel>
@@ -1026,6 +1029,7 @@ const PolicyDetail = () => {
                                                 ? 'translateY(-10px)'
                                                 : 'translateY(17px)',
                                           }}
+                                          className="floating-label-global"
                                         >
                                           LastName
                                         </FormLabel>
@@ -1101,6 +1105,7 @@ const PolicyDetail = () => {
                                                 ? 'translateY(-10px)'
                                                 : 'translateY(17px)',
                                           }}
+                                          className="floating-label-global"
                                           // top={'20px'}
                                           // style={{}}
                                         >
@@ -1175,6 +1180,7 @@ const PolicyDetail = () => {
                                                 ? 'translateY(4px)'
                                                 : 'translateY(17px)',
                                           }}
+                                          className="floating-label-global"
                                         >
                                           Address
                                         </FormLabel>
@@ -1209,6 +1215,7 @@ const PolicyDetail = () => {
                                           }}
                                           // top={'20px'}
                                           // style={{}}
+                                          className="floating-label-global"
                                         >
                                           Email
                                         </FormLabel>
@@ -1260,6 +1267,7 @@ const PolicyDetail = () => {
                                           }}
                                           // top={'20px'}
                                           // style={{}}
+                                          className="floating-label-global"
                                         >
                                           Phone Number
                                         </FormLabel>
@@ -1318,6 +1326,7 @@ const PolicyDetail = () => {
                                           }}
                                           // top={'20px'}
                                           // style={{}}
+                                          className="floating-label-global"
                                         >
                                           Identity Card/ Passport
                                         </FormLabel>
@@ -1368,6 +1377,7 @@ const PolicyDetail = () => {
                                           }}
                                           // top={'20px'}
                                           // style={{}}
+                                          className="floating-label-global"
                                         >
                                           Beneficiary
                                         </FormLabel>
@@ -1452,7 +1462,7 @@ const PolicyDetail = () => {
                                                   travellers &&
                                                   travellers?.relations
                                                     ?.length > 0
-                                                    ? 'translate(0, -2px) scale(0.75)'
+                                                    ? 'translate(3, -2px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
@@ -1460,8 +1470,9 @@ const PolicyDetail = () => {
                                                     ?.length > 0
                                                     ? '#065baa'
                                                     : '#231F20',
-                                                fontSize: '14px',
+                                                // fontSize: '14px',
                                               }}
+                                              className="floating-label-global"
                                               fontFamily={'Mulish'}
                                             >
                                               Relationship
@@ -1583,6 +1594,7 @@ const PolicyDetail = () => {
                                             fontSize: '14px',
                                           }}
                                           fontFamily={'Mulish'}
+                                          className="floating-label-global"
                                         >
                                           Traveller Type
                                         </FormLabel>
@@ -1650,8 +1662,9 @@ const PolicyDetail = () => {
                                               travellers?.label?.length > 0
                                                 ? '#065baa'
                                                 : '#231F20',
-                                            fontSize: '11px',
+                                            // fontSize: '11px',
                                           }}
+                                          className="floating-label-global"
                                           fontFamily={'Mulish'}
                                         >
                                           Title
@@ -1689,6 +1702,7 @@ const PolicyDetail = () => {
                                       }}
                                       // top={'20px'}
                                       // style={{}}
+                                      className="floating-label-global"
                                     >
                                       FirstName
                                     </FormLabel>
@@ -1750,6 +1764,7 @@ const PolicyDetail = () => {
                                             ? 'translateY(-10px)'
                                             : 'translateY(17px)',
                                       }}
+                                      className="floating-label-global"
                                     >
                                       LastName
                                     </FormLabel>
@@ -1828,6 +1843,7 @@ const PolicyDetail = () => {
                                       }}
                                       // top={'20px'}
                                       // style={{}}
+                                      className="floating-label-global"
                                     >
                                       Place Of Birth
                                     </FormLabel>
@@ -1898,6 +1914,7 @@ const PolicyDetail = () => {
                                             ? 'translateY(4px)'
                                             : 'translateY(17px)',
                                       }}
+                                      className="floating-label-global"
                                     >
                                       Address
                                     </FormLabel>
@@ -1932,6 +1949,7 @@ const PolicyDetail = () => {
                                       }}
                                       // top={'20px'}
                                       // style={{}}
+                                      className="floating-label-global"
                                     >
                                       Email
                                     </FormLabel>
@@ -1981,6 +1999,7 @@ const PolicyDetail = () => {
                                       }}
                                       // top={'20px'}
                                       // style={{}}
+                                      className="floating-label-global"
                                     >
                                       Phone Number
                                     </FormLabel>
@@ -2037,6 +2056,7 @@ const PolicyDetail = () => {
                                       }}
                                       // top={'20px'}
                                       // style={{}}
+                                      className="floating-label-global"
                                     >
                                       Identity Card/ Passport
                                     </FormLabel>
@@ -2087,6 +2107,7 @@ const PolicyDetail = () => {
                                       }}
                                       // top={'20px'}
                                       // style={{}}
+                                      className="floating-label-global"
                                     >
                                       Beneficiary
                                     </FormLabel>
@@ -2167,7 +2188,7 @@ const PolicyDetail = () => {
                                             transform:
                                               travellers &&
                                               travellers?.relations?.length > 0
-                                                ? 'translate(0, -2px) scale(0.75)'
+                                                ? 'translate(3, -2px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
@@ -2177,6 +2198,7 @@ const PolicyDetail = () => {
                                             fontSize: '11px',
                                           }}
                                           fontFamily={'Mulish'}
+                                          className="floating-label-global"
                                         >
                                           Relationship
                                         </FormLabel>
