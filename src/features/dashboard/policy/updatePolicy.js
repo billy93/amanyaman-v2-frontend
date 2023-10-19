@@ -615,7 +615,7 @@ const PolicyDetail = () => {
         >
           <InputGroup id="float-labelss">
             <Input
-              style={{ paddingTop: '10px' }}
+              style={{ paddingTop: '12px' }}
               className="global-input"
               readOnly
               ref={ref}
@@ -642,7 +642,7 @@ const PolicyDetail = () => {
                 color: data[value].dateOfBirth !== null ? '#065baa' : '',
                 transform:
                   data[value].dateOfBirth !== null
-                    ? 'translateY(-3px)'
+                    ? 'translateY(0px)'
                     : 'translateY(17px)',
               }}
               fontFamily={'Mulish'}
