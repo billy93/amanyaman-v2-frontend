@@ -147,6 +147,9 @@ body {
 }
 .chakra-react-select-default__value-container--has-value{
   margin-top: 13px!important;
+  font-size: 12px;
+  font-family: 'Mulish';
+  font-style: italic;
 }
 .chakra-react-select-default__control{
   background: #e8f0fe!important;

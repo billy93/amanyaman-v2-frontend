@@ -972,6 +972,7 @@ const PolicyDetail = () => {
                                           FirstName
                                         </FormLabel>
                                         <Input
+                                          className="global-input"
                                           variant="custom"
                                           pt="10px"
                                           placeholder=" "
@@ -996,6 +997,7 @@ const PolicyDetail = () => {
                                         isRequired
                                       >
                                         <Input
+                                          className="global-input"
                                           variant={'custom'}
                                           pt="10px"
                                           placeholder=" "
@@ -1112,6 +1114,7 @@ const PolicyDetail = () => {
                                           Place Of Birth
                                         </FormLabel>
                                         <Input
+                                          className="global-input"
                                           variant="custom"
                                           pt="10px"
                                           placeholder=" "
@@ -1166,7 +1169,7 @@ const PolicyDetail = () => {
                                         <FormLabel
                                           fontSize="12"
                                           pt="1.5"
-                                          className={isActive ? 'Active' : ''}
+                                          // className={isActive ? 'Active' : ''}
                                           fontFamily={'Mulish'}
                                           style={{
                                             textAlign: 'center',
@@ -1220,6 +1223,7 @@ const PolicyDetail = () => {
                                           Email
                                         </FormLabel>
                                         <Input
+                                          className="global-input"
                                           variant="custom"
                                           pt="10px"
                                           placeholder=" "
@@ -1272,6 +1276,7 @@ const PolicyDetail = () => {
                                           Phone Number
                                         </FormLabel>
                                         <Input
+                                          className="global-input"
                                           variant="custom"
                                           pt="10px"
                                           placeholder=" "
@@ -1331,6 +1336,7 @@ const PolicyDetail = () => {
                                           Identity Card/ Passport
                                         </FormLabel>
                                         <Input
+                                          className="global-input"
                                           bg={
                                             travellers?.passport !== null
                                               ? '#e8f0fe'
@@ -1707,6 +1713,7 @@ const PolicyDetail = () => {
                                       FirstName
                                     </FormLabel>
                                     <Input
+                                      className="global-input"
                                       variant="custom"
                                       pt="10px"
                                       placeholder=" "
@@ -1731,6 +1738,7 @@ const PolicyDetail = () => {
                                     isRequired
                                   >
                                     <Input
+                                      className="global-input"
                                       variant={'custom'}
                                       pt="10px"
                                       placeholder=" "
@@ -1851,6 +1859,7 @@ const PolicyDetail = () => {
                                       variant="custom"
                                       pt="10px"
                                       placeholder=" "
+                                      className="global-input"
                                       bg={
                                         travellers?.placeOfBirth !== ''
                                           ? '#e8f0fe'
@@ -1900,7 +1909,7 @@ const PolicyDetail = () => {
                                     <FormLabel
                                       fontSize="12"
                                       pt="1.5"
-                                      className={isActive ? 'Active' : ''}
+                                      // className={isActive ? 'Active' : ''}
                                       fontFamily={'Mulish'}
                                       style={{
                                         textAlign: 'center',
@@ -1957,6 +1966,7 @@ const PolicyDetail = () => {
                                       variant="custom"
                                       pt="10px"
                                       placeholder=" "
+                                      className="global-input"
                                       _placeholder={{
                                         opacity: 1,
                                         color: 'gray.500',
@@ -2007,6 +2017,7 @@ const PolicyDetail = () => {
                                       variant="custom"
                                       pt="10px"
                                       placeholder=" "
+                                      className="global-input"
                                       bg={
                                         travellers?.phone !== null
                                           ? '#e8f0fe'
@@ -2067,6 +2078,7 @@ const PolicyDetail = () => {
                                           : '#ebebeb'
                                       }
                                       variant="custom"
+                                      className="global-input"
                                       pt="10px"
                                       placeholder=" "
                                       _placeholder={{
