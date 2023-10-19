@@ -1366,7 +1366,7 @@ const PolicyDetail = () => {
                                         height="100%"
                                       >
                                         <FormLabel
-                                          fontSize="11px"
+                                          // fontSize="11px"
                                           fontStyle={'italic'}
                                           pt="10px"
                                           style={{
@@ -1388,6 +1388,7 @@ const PolicyDetail = () => {
                                           Beneficiary
                                         </FormLabel>
                                         <Input
+                                          className="global-input"
                                           variant="custom"
                                           pt="10px"
                                           bg={
@@ -1467,13 +1468,13 @@ const PolicyDetail = () => {
                                                 transform:
                                                   travellers &&
                                                   travellers?.relations
-                                                    ?.length > 0
+                                                    ?.length !== 0
                                                     ? 'translate(3, -2px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
                                                   travellers?.relations
-                                                    ?.length > 0
+                                                    ?.length !== 0
                                                     ? '#065baa'
                                                     : '#231F20',
                                                 // fontSize: '14px',
@@ -2171,7 +2172,8 @@ const PolicyDetail = () => {
                                           value={travellers?.relations}
                                           // classNamePrefix="chakra-react-select"
                                           classNamePrefix={
-                                            travellers?.relationship?.length > 0
+                                            travellers?.relationship?.length !==
+                                            0
                                               ? 'chakra-react-select-default'
                                               : 'chakra-react-select'
                                           }
@@ -2199,15 +2201,17 @@ const PolicyDetail = () => {
                                           style={{
                                             transform:
                                               travellers &&
-                                              travellers?.relations?.length > 0
+                                              travellers?.relations?.length !==
+                                                0
                                                 ? 'translate(3, -2px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
-                                              travellers?.relations?.length > 0
+                                              travellers?.relations?.length !==
+                                                0
                                                 ? '#065baa'
                                                 : '#231F20',
-                                            fontSize: '11px',
+                                            // fontSize: '11px',
                                           }}
                                           fontFamily={'Mulish'}
                                           className="floating-label-global"
