@@ -511,7 +511,7 @@ const Login = () => {
                           variant="floating"
                           id="first-name"
                           isRequired
-                          style={{ padding: '20px 0px', textAlign: 'center' }}
+                          // style={{ padding: '20px 0px', textAlign: 'center' }}
                           height="100%"
                         >
                           <FormLabel
@@ -519,14 +519,14 @@ const Login = () => {
                             fontStyle={'italic'}
                             pt="10px"
                             style={{
-                              padding: '11px 5px',
+                              // padding: '11px 5px',
                               textAlign: 'center',
                               position: 'absolute',
                               color: fields?.username !== '' ? '#065baa' : '',
                               transform:
                                 fields?.username !== ''
-                                  ? 'translateY(9px)'
-                                  : 'translateY(17px)',
+                                  ? 'translateY(-8px)'
+                                  : 'translateY(-1px)',
                             }}
                             // top={'20px'}
                             // style={{}}
@@ -548,7 +548,7 @@ const Login = () => {
                           variant="floating"
                           id="first-name"
                           isRequired
-                          style={{ padding: '20px 0px', textAlign: 'center' }}
+                          // style={{ padding: '20px 0px', textAlign: 'center' }}
                           height="100%"
                         >
                           <InputGroup>
@@ -565,8 +565,8 @@ const Login = () => {
                                 color: fields?.password !== '' ? '#065baa' : '',
                                 transform:
                                   fields?.password !== ''
-                                    ? 'translateY(18px)'
-                                    : 'translateY(13px)',
+                                    ? 'translateY(-8px)'
+                                    : 'translateY(-1px)',
                               }}
                               // top={'20px'}
                               // style={{}}
