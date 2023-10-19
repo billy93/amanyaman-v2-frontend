@@ -625,7 +625,7 @@ const PolicyDetail = () => {
             />
             <InputRightElement children={<SlCalender color="green.500" />} />
             <FormLabel
-              fontSize="12"
+              // fontSize="12"
               pt="1.5"
               style={{
                 textAlign: 'center',
@@ -637,6 +637,8 @@ const PolicyDetail = () => {
                     : 'translateY(17px)',
               }}
               fontFamily={'Mulish'}
+              fontSize="11px"
+              fontStyle="italic"
             >
               Date Of Birth
             </FormLabel>
@@ -1393,7 +1395,7 @@ const PolicyDetail = () => {
                                         fontFamily={'Mulish'}
                                         mt="14px"
                                       >
-                                        <Box className="floating-form" w="50%">
+                                        <Box className="floating-form" w="100%">
                                           <Box className="react-select-container">
                                             <Select
                                               style={{
@@ -1411,11 +1413,16 @@ const PolicyDetail = () => {
                                                   i
                                                 )
                                               }
-                                              value={travellers?.relations}
-                                              classNamePrefix="chakra-react-select"
+                                              value={travellers?.relationship}
+                                              // classNamePrefix="chakra-react-select"
+                                              classNamePrefix={
+                                                travellers?.relationship
+                                                  ?.length > 0
+                                                  ? 'chakra-react-select-default'
+                                                  : 'chakra-react-select'
+                                              }
                                               options={relations}
                                               placeholder=""
-                                              styles={customStyles}
                                               closeMenuOnSelect={true}
                                               chakraStyles={{
                                                 dropdownIndicator: (
@@ -1441,19 +1448,17 @@ const PolicyDetail = () => {
                                               style={{
                                                 transform:
                                                   travellers &&
-                                                  travellers?.relations
+                                                  travellers?.relationship
                                                     ?.length > 0
                                                     ? 'translate(0, -2px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
-                                                  travellers?.relations
+                                                  travellers?.relationship
                                                     ?.length > 0
                                                     ? '#065baa'
                                                     : '#231F20',
                                                 fontSize: '14px',
-                                                position: 'absolute',
-                                                zIndex: '0',
                                               }}
                                               fontFamily={'Mulish'}
                                             >
@@ -1808,6 +1813,7 @@ const PolicyDetail = () => {
                                       style={{
                                         textAlign: 'center',
                                         position: 'absolute',
+
                                         color:
                                           travellers?.placeOfBirth !== ''
                                             ? '#065baa'
@@ -2108,7 +2114,7 @@ const PolicyDetail = () => {
                                     fontFamily={'Mulish'}
                                     mt="14px"
                                   >
-                                    <Box className="floating-form" w="50%">
+                                    <Box className="floating-form" w="100%">
                                       <Box className="react-select-container">
                                         <Select
                                           style={{
@@ -2125,11 +2131,15 @@ const PolicyDetail = () => {
                                               i
                                             )
                                           }
-                                          value={travellers?.relations}
-                                          classNamePrefix="chakra-react-select"
+                                          value={travellers?.relationship}
+                                          // classNamePrefix="chakra-react-select"
+                                          classNamePrefix={
+                                            travellers?.relationship?.length > 0
+                                              ? 'chakra-react-select-default'
+                                              : 'chakra-react-select'
+                                          }
                                           options={relations}
                                           placeholder=""
-                                          styles={customStyles}
                                           closeMenuOnSelect={true}
                                           chakraStyles={{
                                             dropdownIndicator: (
@@ -2152,17 +2162,17 @@ const PolicyDetail = () => {
                                           style={{
                                             transform:
                                               travellers &&
-                                              travellers?.relations?.length > 0
+                                              travellers?.relationship?.length >
+                                                0
                                                 ? 'translate(0, -2px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
-                                              travellers?.relations?.length > 0
+                                              travellers?.relationship?.length >
+                                                0
                                                 ? '#065baa'
                                                 : '#231F20',
                                             fontSize: '14px',
-                                            position: 'absolute',
-                                            zIndex: '0',
                                           }}
                                           fontFamily={'Mulish'}
                                         >
