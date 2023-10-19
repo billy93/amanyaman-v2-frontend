@@ -506,6 +506,10 @@ const PolicyDetail = () => {
       value: 'Close Family',
       label: 'Close Family',
     },
+    {
+      value: 'Test',
+      label: 'Test',
+    },
   ];
   React.useEffect(() => {
     const maxWidth = window.innerWidth * (modalContentWidth / 100);
@@ -1476,7 +1480,7 @@ const PolicyDetail = () => {
                                                   travellers &&
                                                   travellers?.relations
                                                     ?.length !== 0
-                                                    ? 'translate(3, -2px) scale(0.75)'
+                                                    ? 'translate(3px, -2px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
