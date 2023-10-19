@@ -761,7 +761,7 @@ const PolicyDetail = () => {
                                 border={'1px solid #ebebeb'}
                                 borderRadius={'5px'}
                               >
-                                <h2 style={{ marginBottom: '0', p: '1em' }}>
+                                <h2 style={{ marginBottom: '0', p: '10px' }}>
                                   <Box as="div" role="group">
                                     <AccordionButton
                                       style={{ height: '40px' }}
@@ -1048,7 +1048,7 @@ const PolicyDetail = () => {
                                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                                       </FormControl>
                                     </Box>
-                                    <Box>
+                                    <Box pt="7px">
                                       <Text
                                         as="p"
                                         fontFamily={'Mulish'}
@@ -1148,13 +1148,13 @@ const PolicyDetail = () => {
                                         />
                                       </FormControl>
                                     </Box>
-                                    <Box w={{ base: '100%' }} pb="20px">
+                                    <Box w={{ base: '100%' }} pb="10px">
                                       <FormControl
                                         variant="floating"
                                         id="first-name"
                                         isRequired
                                         fontFamily={'Mulish'}
-                                        mt="14px"
+                                        // mt="14px"
                                       >
                                         <Textarea
                                           bg={
@@ -1518,7 +1518,7 @@ const PolicyDetail = () => {
                             border={'1px solid #ebebeb'}
                             borderRadius={'5px'}
                           >
-                            <h2 style={{ marginBottom: '0', p: '1em' }}>
+                            <h2 style={{ marginBottom: '0', p: '110pxem' }}>
                               <Box as="div" role="group">
                                 <AccordionButton
                                   style={{ height: '40px' }}
@@ -1792,7 +1792,7 @@ const PolicyDetail = () => {
                                     {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                                   </FormControl>
                                 </Box>
-                                <Box>
+                                <Box pt="7px">
                                   <Text
                                     as="p"
                                     fontFamily={'Mulish'}
@@ -1891,13 +1891,13 @@ const PolicyDetail = () => {
                                     />
                                   </FormControl>
                                 </Box>
-                                <Box w={{ base: '100%' }} pb="20px">
+                                <Box w={{ base: '100%' }} pb="10px">
                                   <FormControl
                                     variant="floating"
                                     id="first-name"
                                     isRequired
                                     fontFamily={'Mulish'}
-                                    mt="14px"
+                                    // mt="14px"
                                   >
                                     <Textarea
                                       bg={
