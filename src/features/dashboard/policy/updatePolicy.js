@@ -615,6 +615,7 @@ const PolicyDetail = () => {
         >
           <InputGroup id="float-labelss">
             <Input
+              style={{ paddingTop: '10px' }}
               className="global-input"
               readOnly
               ref={ref}
@@ -1115,7 +1116,7 @@ const PolicyDetail = () => {
                                                 : '',
                                             transform:
                                               travellers?.placeOfBirth !== ''
-                                                ? 'translateY(-10px)'
+                                                ? 'translateY(-1px)'
                                                 : 'translateY(17px)',
                                           }}
                                           className="floating-label-global"
@@ -1860,7 +1861,7 @@ const PolicyDetail = () => {
                                             : '',
                                         transform:
                                           travellers?.placeOfBirth !== ''
-                                            ? 'translateY(-10px)'
+                                            ? 'translateY(-1px)'
                                             : 'translateY(17px)',
                                       }}
                                       // top={'20px'}
