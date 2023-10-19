@@ -608,6 +608,7 @@ const PolicyDetail = () => {
         >
           <InputGroup id="float-labelss">
             <Input
+              className="global-input"
               readOnly
               ref={ref}
               placeholder=" "
@@ -637,8 +638,9 @@ const PolicyDetail = () => {
                     : 'translateY(17px)',
               }}
               fontFamily={'Mulish'}
-              fontSize="11px"
-              fontStyle="italic"
+              // fontSize="11px"
+              // fontStyle="italic"
+              className="floating-label-global"
             >
               Date Of Birth
             </FormLabel>
