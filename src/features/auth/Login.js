@@ -364,6 +364,15 @@ const Login = () => {
                         variant="floating"
                         id="first-name"
                         isRequired
+                        style={{
+                          padding: '11px 5px',
+                          textAlign: 'center',
+                          color: fields?.username !== '' ? '#065baa' : '',
+                          transform:
+                            fields?.username !== ''
+                              ? 'translateY(-6px)'
+                              : 'translateY(2px)',
+                        }}
                       >
                         <Input
                           variant="custom"
@@ -516,7 +525,7 @@ const Login = () => {
                               transform:
                                 fields?.username !== ''
                                   ? 'translateY(-6px)'
-                                  : '',
+                                  : 'translateY(2px)',
                             }}
                             // top={'20px'}
                             // style={{}}
@@ -555,8 +564,8 @@ const Login = () => {
                                 color: fields?.password !== '' ? '#065baa' : '',
                                 transform:
                                   fields?.password !== ''
-                                    ? 'translateY(-6px)'
-                                    : '',
+                                    ? 'translateY(4px)'
+                                    : 'translateY(-2px)',
                               }}
                               // top={'20px'}
                               // style={{}}
