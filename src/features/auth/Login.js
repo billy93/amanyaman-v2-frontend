@@ -370,7 +370,7 @@ const Login = () => {
                           color: fields?.username !== '' ? '#065baa' : '',
                           transform:
                             fields?.username !== ''
-                              ? 'translateY(-6px)'
+                              ? 'translateY(-2px)'
                               : 'translateY(2px)',
                         }}
                       >
@@ -384,8 +384,22 @@ const Login = () => {
                           h="48px"
                         />
                         {/* It is important that the Label comes after the Control due to css selectors */}
-                        <FormLabel fontSize="12" pt="1.5">
-                          Enter Username
+                        <FormLabel
+                          fontSize="12"
+                          pt="1.5"
+                          style={{
+                            // padding: '11px 5px',
+                            textAlign: 'center',
+                            position: 'absolute',
+                            color: fields?.username !== '' ? '#065baa' : '',
+                            transform:
+                              fields?.username !== '' ||
+                              fields?.username !== undefined
+                                ? 'translateY(-10px)'
+                                : 'translateY(-1px)',
+                          }}
+                        >
+                          Username
                         </FormLabel>
                         {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
                       </FormControl>
@@ -526,7 +540,7 @@ const Login = () => {
                               transform:
                                 fields?.username !== '' ||
                                 fields?.username !== undefined
-                                  ? 'translateY(-8px)'
+                                  ? 'translateY(-10px)'
                                   : 'translateY(-1px)',
                             }}
                             // top={'20px'}
