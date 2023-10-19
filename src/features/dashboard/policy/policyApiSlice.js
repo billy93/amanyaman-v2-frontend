@@ -66,10 +66,44 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    exportPolicy: builder.query({
+      query: (data) => {
+        let url = '/app/bookings/policies';
+        const params = new URLSearchParams();
+        // console.log('quer', data);
+        for (const filter in data) {
+          if (data[filter] !== '') {
+            if (
+              filter === 'page' ||
+              filter === 'size' ||
+              filter === 'policyNumber' ||
+              filter === 'traveller' ||
+              filter === 'policyStatus' ||
+              filter === 'purchaseDate' ||
+              filter === 'planType'
+            ) {
+              params.append(filter, data[filter]);
+            } else {
+              params.append(filter, encodeURIComponent(data[filter]));
+            }
+          }
+        }
+        if (params.toString() !== '') {
+          url += `?${params.toString()}`;
+        }
+        return {
+          url: url,
+          method: 'GET',
+          responseType: 'blob',
+          responseHandler: (response) =>
+            response.blob().then((blob) => URL.createObjectURL(blob)),
+        };
+      },
+    }),
     updateDataPolicy: builder.mutation({
       query: (data) => {
         return {
-          url: '/app/bookings/update-policy',
+          url: '/app/bookings/update-policy/export',
           method: 'POST',
           body: { ...data },
           invalidatesTags: (result, error, arg) =>
@@ -107,4 +141,5 @@ export const {
   useGetBookingByIdQuery,
   useResendEmailsMutation,
   useUpdateDataPolicyMutation,
+  useExportPolicyQuery,
 } = policyApiSlice;

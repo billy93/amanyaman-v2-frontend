@@ -65,13 +65,14 @@ import policySlice, {
   setStateSelectedt,
   setStatePolicyList,
 } from './policySlice';
-import { MdLogin, MdFilterList } from 'react-icons/md';
+import { MdFilterList } from 'react-icons/md';
 import { AiOutlineClose } from 'react-icons/ai';
 import { BsFillTrashFill } from 'react-icons/bs';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 import CurrencyFormatter from '../../../components/formatCurrency';
+import Export from './export';
 
 const Styles = styled.div`
   // padding: 1rem;
@@ -1227,15 +1228,7 @@ const Polcies = () => {
                 Apply Filter
               </Button>
 
-              <Button
-                leftIcon={<MdLogin />}
-                colorScheme="#231F20"
-                variant="outline"
-                size={'sm'}
-                color="#231F20"
-              >
-                Export All
-              </Button>
+              <Export query={filterQuery} page={page} size={size} />
             </Stack>
           </Box>
           {showFilter && (
