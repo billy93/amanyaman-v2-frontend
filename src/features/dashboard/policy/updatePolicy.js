@@ -627,7 +627,15 @@ const PolicyDetail = () => {
             <FormLabel
               fontSize="12"
               pt="1.5"
-              className={isActive || data[value].dateOfBirth ? 'Actives' : ''}
+              style={{
+                textAlign: 'center',
+                position: 'absolute',
+                color: data[value].dateOfBirth !== null ? '#065baa' : '',
+                transform:
+                  data[value].dateOfBirth !== null
+                    ? 'translateY(-3px)'
+                    : 'translateY(17px)',
+              }}
               fontFamily={'Mulish'}
             >
               Date Of Birth
@@ -796,7 +804,12 @@ const PolicyDetail = () => {
                                                 )
                                               }
                                               value={travellers?.type}
-                                              classNamePrefix="chakra-react-select"
+                                              // classNamePrefix="chakra-react-select"
+                                              classNamePrefix={
+                                                travellers?.type?.length > 0
+                                                  ? 'chakra-react-select-default'
+                                                  : 'chakra-react-select'
+                                              }
                                               options={types}
                                               placeholder=""
                                               closeMenuOnSelect={true}
@@ -867,7 +880,11 @@ const PolicyDetail = () => {
                                                 )
                                               }
                                               value={travellers?.label}
-                                              classNamePrefix="chakra-react-select"
+                                              classNamePrefix={
+                                                travellers?.label?.length > 0
+                                                  ? 'chakra-react-select-default'
+                                                  : 'chakra-react-select'
+                                              }
                                               options={titles}
                                               placeholder=""
                                               closeMenuOnSelect={true}
@@ -1150,7 +1167,7 @@ const PolicyDetail = () => {
                                                 : '',
                                             transform:
                                               travellers?.address !== ''
-                                                ? 'translateY(-10px)'
+                                                ? 'translateY(4px)'
                                                 : 'translateY(17px)',
                                           }}
                                         >
@@ -1518,7 +1535,11 @@ const PolicyDetail = () => {
                                             handleSelectType(selectedOption, i)
                                           }
                                           value={travellers?.type}
-                                          classNamePrefix="chakra-react-select"
+                                          classNamePrefix={
+                                            travellers?.type?.length > 0
+                                              ? 'chakra-react-select-default'
+                                              : 'chakra-react-select'
+                                          }
                                           options={types}
                                           placeholder=""
                                           closeMenuOnSelect={true}
@@ -1583,7 +1604,11 @@ const PolicyDetail = () => {
                                             handleSelectTitle(selectedOption, i)
                                           }
                                           value={travellers?.label}
-                                          classNamePrefix="chakra-react-select"
+                                          classNamePrefix={
+                                            travellers?.label?.length > 0
+                                              ? 'chakra-react-select-default'
+                                              : 'chakra-react-select'
+                                          }
                                           options={titles}
                                           placeholder=""
                                           closeMenuOnSelect={true}
@@ -1861,7 +1886,7 @@ const PolicyDetail = () => {
                                             : '',
                                         transform:
                                           travellers?.address !== ''
-                                            ? 'translateY(-10px)'
+                                            ? 'translateY(4px)'
                                             : 'translateY(17px)',
                                       }}
                                     >
