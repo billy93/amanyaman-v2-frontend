@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { apiSlice } from '../../../app/api/apiSlice';
 
 export const systemParamsApiSlice = apiSlice.injectEndpoints({

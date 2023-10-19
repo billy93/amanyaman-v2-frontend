@@ -16,8 +16,10 @@ import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CiTrash } from 'react-icons/ci';
 import {
   Box,
+  IconButton,
   Stack,
   Heading,
   Text,
@@ -538,7 +540,7 @@ const Polcies = () => {
   const [size, setSize] = React.useState(5);
   const [page, setPage] = React.useState(0);
   const [deleteVariant, { isLoading: processDelete }] =
-    useDeleteVariantMutation(id);
+    useDeleteVariantMutation();
   const {
     data: { response: systemParams, totalCount } = {},
     isLoading,

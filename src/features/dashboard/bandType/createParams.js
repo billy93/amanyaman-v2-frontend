@@ -15,11 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import {
-  setSystemParamsFieldValue,
-  setFields,
-  listFields,
-} from './systemParamsSlice';
+import { setFields, listFields } from './systemParamsSlice';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { useCreateParamsMutation } from './systemParamsApiSlice';
 

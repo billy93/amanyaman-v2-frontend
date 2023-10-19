@@ -12,12 +12,14 @@ import {
   useFilters,
   useColumnOrder,
 } from 'react-table';
+import { CiTrash } from 'react-icons/ci';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import PageLoader from '../../../components/pageLoader';
 import { FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   useToast,
+  IconButton,
   Box,
   Heading,
   Stack,
@@ -571,7 +573,7 @@ const DocumentList = () => {
   const fetchIdRef = React.useRef(0);
   const [page, setPage] = React.useState(0);
   const [deleteDocument, { isLoading: processDelete }] =
-    useDeleteDocumentTypesQuery(id);
+    useDeleteDocumentTypesQuery();
   const [paginations, setPagination] = React.useState({
     page: 0,
     size: 1000,

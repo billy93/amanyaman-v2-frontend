@@ -625,7 +625,12 @@ p{
 
 
 /* highlighter */
-
+/* #first-name {
+  font-size: 11px;
+  top: 10px!important;
+  font-family: 'Mulish';
+  font-style: italic;
+} */
 .highlight {
   position: absolute;
   height: 50%;

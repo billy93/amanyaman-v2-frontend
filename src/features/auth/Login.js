@@ -382,7 +382,7 @@ const Login = () => {
                       </FormControl>
                       <FormControl
                         variant="floating"
-                        id="pwd"
+                        id="first-name"
                         isRequired
                         display={'none'}
                       >
@@ -502,86 +502,103 @@ const Login = () => {
                           variant="floating"
                           id="first-name"
                           isRequired
-                          style={{ margin: '4px 0px' }}
-                          display="flex"
-                          flexDirection="column"
-                          alignItems="center"
+                          style={{ padding: '20px 0px', textAlign: 'center' }}
+                          height="100%"
                         >
-                          <Stack direction="column" alignItems="center">
-                            <FormLabel fontSize="12" pb="1.5">
-                              Enter Username
-                            </FormLabel>
-                            <Input
-                              variant="custom"
-                              placeholder=" "
-                              _placeholder={{ opacity: 1, color: 'gray.500' }}
-                              name="username"
-                              value={fields?.username}
-                              onChange={setFieldChange}
-                              h="48px"
-                            />
-                          </Stack>
+                          <FormLabel
+                            fontSize="11px"
+                            fontStyle={'italic'}
+                            pt="10px"
+                            style={{
+                              padding: '11px 5px',
+                              textAlign: 'center',
+                              color: fields?.username !== '' ? '#065baa' : '',
+                              transform:
+                                fields?.username !== ''
+                                  ? 'translateY(-6px)'
+                                  : '',
+                            }}
+                            // top={'20px'}
+                            // style={{}}
+                          >
+                            Enter Username
+                          </FormLabel>
+                          <Input
+                            variant="custom"
+                            pt="10px"
+                            placeholder=" "
+                            _placeholder={{ opacity: 1, color: 'gray.500' }}
+                            name="username"
+                            value={fields?.username}
+                            onChange={setFieldChange}
+                            h="48px"
+                          />
                         </FormControl>
                         <FormControl
                           variant="floating"
-                          id="pwd"
+                          id="first-name"
                           isRequired
-                          style={{ margin: '4px 0px' }}
-                          display="flex"
-                          flexDirection="column"
-                          alignItems="center"
+                          style={{ padding: '20px 0px', textAlign: 'center' }}
+                          height="100%"
                         >
-                          <Stack direction="column" alignItems="center">
-                            <InputGroup>
-                              <Input
-                                variant="custom"
-                                type={show ? 'text' : 'password'}
-                                placeholder=" "
-                                _placeholder={{ opacity: 1, color: 'gray.500' }}
-                                name="password"
-                                value={fields?.password}
-                                bg={
+                          <InputGroup>
+                            <FormLabel
+                              fontSize="11px"
+                              fontStyle={'italic'}
+                              pt="10px"
+                              style={{
+                                margin:
                                   fields?.password !== ''
-                                    ? '#e8f0fe'
-                                    : '#ebebeb'
-                                }
-                                onChange={setFieldChange}
-                                h="48px"
-                              />
-                              <FormLabel fontSize="12" pt="1.5">
-                                Enter Password
-                              </FormLabel>
-                              <Box>
-                                <InputRightElement width="4.5rem" h="100%">
-                                  <Button
-                                    h="1.75rem"
-                                    size="sm"
-                                    onClick={handleClick}
-                                    bg="none"
-                                    color={'#065BAA'}
-                                    border={'none'}
-                                    _hover={{
-                                      border: 'none',
-                                      transform: 'scale(1.05, 1.05)',
-                                      bg: '#054e912b',
+                                    ? '-18px 13px'
+                                    : '-7px 12px',
+                                textAlign: 'center',
+                                color: fields?.password !== '' ? '#065baa' : '',
+                                transform:
+                                  fields?.password !== ''
+                                    ? 'translateY(-6px)'
+                                    : '',
+                              }}
+                              // top={'20px'}
+                              // style={{}}
+                            >
+                              Password
+                            </FormLabel>
+                            <InputRightElement width="4.5rem" h="100%">
+                              <Button
+                                h="1.75rem"
+                                size="sm"
+                                onClick={handleClick}
+                                bg="none"
+                                color={'#065BAA'}
+                                border={'none'}
+                                _hover={{
+                                  border: 'none',
+                                  transform: 'scale(1.05, 1.05)',
+                                  bg: '#054e912b',
 
-                                      _dark: {
-                                        bg: '#054e91',
-                                      },
-                                    }}
-                                  >
-                                    {show ? (
-                                      <AiFillEye />
-                                    ) : (
-                                      <AiFillEyeInvisible />
-                                    )}
-                                  </Button>
-                                </InputRightElement>
-                              </Box>
-                            </InputGroup>
-                          </Stack>
-                          {/* It is important that the Label comes after the Control due to css selectors */}
+                                  _dark: {
+                                    bg: '#054e91',
+                                  },
+                                }}
+                              >
+                                {show ? <AiFillEye /> : <AiFillEyeInvisible />}
+                              </Button>
+                            </InputRightElement>
+
+                            <Input
+                              type="password"
+                              variant="custom"
+                              pt="10px"
+                              placeholder=" "
+                              _placeholder={{ opacity: 1, color: 'gray.500' }}
+                              name="password"
+                              value={fields?.password}
+                              onChange={setFieldChange}
+                              h="48px"
+                            />
+                          </InputGroup>
                         </FormControl>
+
                         {/* <Link to="/forgot-password"> */}
                         <Box display={'flex'} justifyContent={'flex-end'}>
                           <Text
