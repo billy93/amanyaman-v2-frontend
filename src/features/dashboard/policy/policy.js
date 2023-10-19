@@ -1228,7 +1228,7 @@ const Polcies = () => {
                 Apply Filter
               </Button>
 
-              <Export query={filterQuery} page={page} size={size} />
+              <Export query={filterQuery} page={0} size={totalCount} />
             </Stack>
           </Box>
           {showFilter && (

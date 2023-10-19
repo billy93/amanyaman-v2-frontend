@@ -1,15 +1,21 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { useExportPolicyQuery } from './policyApiSlice';
 import { Button } from '@chakra-ui/react';
 import { MdLogin } from 'react-icons/md';
 
 const DownloadXLSButton = ({ query, page, size }) => {
-  const { data, error, isLoading } = useExportPolicyQuery(
-    {
-      skip: true,
-    },
-    { page, size: size, ...query }
-  );
+  // const [trigger, setTrigger] = React.useState(true);
+  const { data, error, isLoading } = useExportPolicyQuery({
+    page,
+    size: size,
+    ...query,
+  });
+
+  const handleTrigger = async () => {
+    // setTrigger(false);
+    await handleDownload();
+  };
 
   const handleDownload = () => {
     if (data) {
