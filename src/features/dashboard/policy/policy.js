@@ -895,6 +895,38 @@ const Polcies = () => {
               >
                 {'Success'}
               </Box>
+            ) : row.original.statusSales === 'UPGRADED' ? (
+              <Box
+                bg="#ebebeb"
+                border={'1px solid'}
+                style={{
+                  padding: '4px 10px',
+                  borderColor: '#b7791f',
+                  color: '#b7791f',
+                  borderRadius: '4px',
+                  fontWeight: 600,
+                  textAlign: 'center',
+                  border: '1px solid',
+                }}
+              >
+                {'Upgraded'}
+              </Box>
+            ) : row.original.statusSales === 'UPDATED' ? (
+              <Box
+                bg="#ebebeb"
+                border={'1px solid'}
+                style={{
+                  padding: '4px 10px',
+                  borderColor: '#b7791f',
+                  color: '#b7791f',
+                  borderRadius: '4px',
+                  fontWeight: 600,
+                  textAlign: 'center',
+                  border: '1px solid',
+                }}
+              >
+                {'Updated'}
+              </Box>
             ) : (
               <Box
                 border={'1px solid'}
