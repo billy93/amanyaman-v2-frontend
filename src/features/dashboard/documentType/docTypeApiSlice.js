@@ -92,7 +92,7 @@ export const systemParamsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetDocumentTypesQuery,
-  useDeleteDocumentTypesQuery,
+  useDeleteDocumentMutation,
   useUploadFileDocMutation,
   useGetDocByIdQuery,
   useUpdateFileDocMutation,

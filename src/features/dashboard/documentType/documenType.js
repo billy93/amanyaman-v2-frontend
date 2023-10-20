@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import {
   useGetDocumentTypesQuery,
-  useDeleteDocumentTypesQuery,
+  useDeleteDocumentMutation,
 } from './docTypeApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -573,7 +573,7 @@ const DocumentList = () => {
   const fetchIdRef = React.useRef(0);
   const [page, setPage] = React.useState(0);
   const [deleteDocument, { isLoading: processDelete }] =
-    useDeleteDocumentTypesQuery();
+    useDeleteDocumentMutation();
   const [paginations, setPagination] = React.useState({
     page: 0,
     size: 1000,
