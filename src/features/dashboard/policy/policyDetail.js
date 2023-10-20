@@ -380,18 +380,28 @@ const PolicyDetail = () => {
 
   // let cleanupPromise = Promise.resolve();
 
-  const setTriggerDownload = () => {
+  const handleDownloadProforma = () => {
     setOnTriggerDownload(false);
-    handleDownloadProforma();
+    createNewTab();
   };
 
-  const handleDownloadProforma = async () => {
-    // refetch(id);
-    try {
-      if (data) {
-        // Create an empty HTML page
+  const createNewTab = async () => {
+    // Create a Promise to handle the new tab creation
+    if (data) {
+      const newTabPromise = new Promise((resolve) => {
         const newTab = window.open('', '_blank');
+        if (!newTab) {
+          console.error('Pop-up blocked');
+          resolve(null);
+        } else {
+          resolve(newTab);
+        }
+      });
 
+      // Wait for the new tab to open
+      const newTab = await newTabPromise;
+
+      if (newTab) {
         // Create an iframe element and set its source to the fetched data URL
         const iframe = document.createElement('iframe');
         iframe.src = data; // Assuming your response has a URL field
@@ -401,8 +411,6 @@ const PolicyDetail = () => {
         // Append the iframe to the new tab's document
         newTab.document.body.appendChild(iframe);
       }
-    } catch (error) {
-      console.error('Error:', error);
     }
   };
   let content;
@@ -527,7 +535,7 @@ const PolicyDetail = () => {
                       </Text>
                     </Box>
                   </MenuItem>
-                  <MenuItem onClick={setTriggerDownload}>
+                  <MenuItem onClick={handleDownloadProforma}>
                     {/* <DownloadProforma id={id} /> */}
                     <Box gap="5px" display={'flex'} alignItems="center">
                       <AiOutlineDownload color="#065BAA" size={'16px'} />
