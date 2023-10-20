@@ -498,7 +498,7 @@ const PolicyDetail = () => {
                     </Box>
                   </MenuItem>
                   {/* <MenuItem> */}
-                  <DownloadProforma />
+                  <DownloadProforma id={id} />
                   {/* </MenuItem> */}
                   <MenuItem>
                     <Box gap="5px" display={'flex'} alignItems="center">
