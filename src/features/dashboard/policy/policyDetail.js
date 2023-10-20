@@ -387,25 +387,22 @@ const PolicyDetail = () => {
 
   const handleDownloadProforma = async () => {
     // refetch(id);
-    console.log('dat', data);
-    if (proccedDownload) {
-      try {
-        if (data) {
-          // Open a new tab with a blank HTML page
-          const newTab = window.open('', '_blank');
+    try {
+      if (data) {
+        // Create an empty HTML page
+        const newTab = window.open('', '_blank');
 
-          // Create an iframe element and set its source to the fetched data URL
-          const iframe = document.createElement('iframe');
-          iframe.src = data; // Assuming your response has a URL field
-          iframe.style.width = '100%';
-          iframe.style.height = '100%';
+        // Create an iframe element and set its source to the fetched data URL
+        const iframe = document.createElement('iframe');
+        iframe.src = data; // Assuming your response has a URL field
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
 
-          // Append the iframe to the new tab's document
-          newTab.document.body.appendChild(iframe);
-        }
-      } catch (error) {
-        console.error('Error:', error);
+        // Append the iframe to the new tab's document
+        newTab.document.body.appendChild(iframe);
       }
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
   let content;
