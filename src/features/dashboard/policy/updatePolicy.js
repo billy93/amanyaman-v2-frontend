@@ -496,7 +496,7 @@ const PolicyDetail = () => {
       setDataQuotation(city);
     }
   }, [quotation?.travellers, quotation]);
-  console.log('quotation', quotation);
+  // console.log('quotation', quotation);
   console.log('quotation data', dataQuotation);
   const titles = [
     {
@@ -1425,7 +1425,7 @@ const PolicyDetail = () => {
                                             transform:
                                               travellers?.beneficiary !== ''
                                                 ? 'translateY(-10px)'
-                                                : 'translateY(17px)',
+                                                : 'translateY(-3px)',
                                           }}
                                           // top={'20px'}
                                           // style={{}}
@@ -1609,7 +1609,7 @@ const PolicyDetail = () => {
                                           value={travellers?.type}
                                           classNamePrefix={
                                             travellers?.type?.length > 0
-                                              ? 'chakra-react-select-defaults'
+                                              ? 'chakra-react-select-default'
                                               : 'chakra-react-select'
                                           }
                                           options={types}
@@ -1896,7 +1896,7 @@ const PolicyDetail = () => {
                                         transform:
                                           travellers?.placeOfBirth !== ''
                                             ? 'translateY(-1px)'
-                                            : 'translateY(17px)',
+                                            : 'translateY(-9px)',
                                       }}
                                       // top={'20px'}
                                       // style={{}}
@@ -2164,7 +2164,7 @@ const PolicyDetail = () => {
                                         transform:
                                           travellers?.beneficiary !== ''
                                             ? 'translateY(-10px)'
-                                            : 'translateY(17px)',
+                                            : 'translateY(-3px)',
                                       }}
                                       // top={'20px'}
                                       // style={{}}
@@ -2204,8 +2204,9 @@ const PolicyDetail = () => {
                                         <Select
                                           style={{
                                             backgroundColor:
+                                              travellers?.relationship === '' ||
                                               travellers?.relations?.length !==
-                                              0
+                                                0
                                                 ? '#e8f0fe'
                                                 : '#ebebeb',
                                           }}
@@ -2253,9 +2254,10 @@ const PolicyDetail = () => {
                                                 ? 'translate(3, -2px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
-                                              travellers &&
-                                              travellers?.relations?.length !==
-                                                0
+                                              travellers?.relationship === '' ||
+                                              (travellers &&
+                                                travellers?.relations
+                                                  ?.length !== 0)
                                                 ? '#065baa'
                                                 : '#231F20',
                                             // fontSize: '11px',
