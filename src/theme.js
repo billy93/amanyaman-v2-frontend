@@ -207,6 +207,18 @@ const defaultTheme = extendTheme({
         },
       },
     },
+    FormControl: {
+      variants: {
+        customFloatingLabel: {
+          label: {
+            position: 'absolute',
+            top: '-10px', // Adjust the top value as needed
+            fontSize: '16px', // Adjust the font size as needed
+            color: 'red', // Customize the label color
+          },
+        },
+      },
+    },
     Alert: {
       variants: {
         subtle: (props) => {

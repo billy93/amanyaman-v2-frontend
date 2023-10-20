@@ -522,7 +522,8 @@ const Login = () => {
                     <Stack direction={['column']} spacing="10px">
                       <form onSubmit={handlelogin}>
                         <FormControl
-                          variant="floating"
+                          variant="customFloatingLabel"
+                          // variant="floating"
                           id="first-name"
                           isRequired
                           // style={{ padding: '20px 0px', textAlign: 'center' }}
