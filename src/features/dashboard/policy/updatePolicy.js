@@ -682,7 +682,10 @@ const PolicyDetail = () => {
     navigate(-1);
   };
   console.log('trav', quotation);
-  console.log('trav data', dataQuotation);
+  console.log(
+    'trav data',
+    dataQuotation.filter((trav) => trave.policyNumber === policyNumberString)
+  );
   let content;
   if (isLoading || loadingDownload || loadingView) {
     content = (
