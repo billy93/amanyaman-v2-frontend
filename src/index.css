@@ -21,6 +21,16 @@
   display: flex;
   align-items: center;
 }
+
+/* Apply special styles when the input value is empty */
+.empty-value .chakra-input .chakra-form__label {
+  color: red; /* Change label color when empty */
+}
+
+.empty-value .chakra-input .chakra-input__input {
+  border: 2px solid red; /* Change input border when empty */
+}
+
 input[type=file]::file-selector-button {
   margin-right: 20px;
   border: none;

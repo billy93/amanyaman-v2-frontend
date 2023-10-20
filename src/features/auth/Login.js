@@ -532,17 +532,20 @@ const Login = () => {
                             fontSize="11px"
                             fontStyle={'italic'}
                             pt="10px"
-                            style={{
-                              // padding: '11px 5px',
-                              textAlign: 'center',
-                              position: 'absolute',
-                              color: fields?.username !== '' ? '#065baa' : '',
-                              transform:
-                                fields?.username !== '' ||
-                                fields?.username !== undefined
-                                  ? 'translateY(-10px)'
-                                  : 'translateY(-1px)',
-                            }}
+                            className={`center-label-input ${
+                              fields?.username ? '' : 'empty-value'
+                            }`}
+                            // style={{
+                            //   // padding: '11px 5px',
+                            //   textAlign: 'center',
+                            //   position: 'absolute',
+                            //   color: fields?.username !== '' ? '#065baa' : '',
+                            //   transform:
+                            //     fields?.username !== '' ||
+                            //     fields?.username !== undefined
+                            //       ? 'translateY(-10px)'
+                            //       : 'translateY(-1px)',
+                            // }}
                             // top={'20px'}
                             // style={{}}
                           >
