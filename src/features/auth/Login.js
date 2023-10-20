@@ -522,41 +522,35 @@ const Login = () => {
                     <Stack direction={['column']} spacing="10px">
                       <form onSubmit={handlelogin}>
                         <FormControl
-                          variant="customFloatingLabel"
+                          variant="floating"
                           // variant="floating"
                           id="first-name"
                           isRequired
                           // style={{ padding: '20px 0px', textAlign: 'center' }}
                           height="100%"
-                          style={{
-                            position: 'absolute',
-                            top: '-10px', // Adjust the top value as needed
-                            fontSize: '16px', // Adjust the font size as needed
-                            color: 'red', // Customize the label color
-                          }}
                         >
                           <FormLabel
                             fontSize="11px"
                             fontStyle={'italic'}
                             pt="10px"
-                            // style={{
-                            //   // padding: '11px 5px',
-                            //   textAlign: 'center',
-                            //   position: 'absolute',
-                            //   color: fields?.username !== '' ? '#065baa' : '',
-                            //   transform:
-                            //     fields?.username !== '' ||
-                            //     fields?.username !== undefined
-                            //       ? 'translateY(-10px)'
-                            //       : 'translateY(-1px)',
-                            // }}
-                            // top={'20px'}
+                            style={{
+                              // padding: '11px 5px',
+                              textAlign: 'center',
+                              position: 'absolute',
+                              color: fields?.username !== '' ? '#065baa' : '',
+                              transform:
+                                fields?.username !== '' ||
+                                fields?.username !== undefined
+                                  ? 'translateY(-10px)'
+                                  : 'translateY(-1px)',
+                            }}
+                            top={'20px'}
                             // style={{}}
                           >
                             Username
                           </FormLabel>
                           <Input
-                            variant="floatingLabel"
+                            variant="custom"
                             pt="10px"
                             placeholder=" "
                             _placeholder={{ opacity: 1, color: 'gray.500' }}
