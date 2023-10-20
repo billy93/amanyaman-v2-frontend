@@ -419,7 +419,7 @@ const PolicyDetail = () => {
           )
         : [...dataQuotation];
     // console.log('quotData', quotData);
-    const convertData = listtravellers.map((data) => ({
+    const convertData = quotData.map((data) => ({
       ...data,
       dateOfBirth: convertDateObjectToString(data?.dateOfBirth),
     }));
@@ -497,6 +497,7 @@ const PolicyDetail = () => {
     }
   }, [quotation?.travellers, quotation]);
   console.log('quotation', quotation);
+  console.log('quotation data', dataQuotation);
   const titles = [
     {
       value: 'Mr.',
