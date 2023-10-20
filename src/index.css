@@ -16,6 +16,11 @@
   font-size: 13px;
   font-family: 'Mulish';
 }
+.chakra-input .chakra-form__label,
+.chakra-input .chakra-input__input {
+  display: flex;
+  align-items: center;
+}
 input[type=file]::file-selector-button {
   margin-right: 20px;
   border: none;
