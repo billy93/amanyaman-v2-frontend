@@ -192,9 +192,26 @@ const defaultTheme = extendTheme({
   components: {
     Heading: headingTheme,
     Button: buttonTheme,
-    Input: inputTheme,
+    // Input: inputTheme,
     Steps: StepsTheme,
     // CustomSteps,
+    Input: {
+      variants: {
+        floatingLabel: {
+          field: {
+            border: 'none', // Remove the border
+            borderBottom: '1px solid gray', // Add a bottom border
+            _focus: {
+              borderBottom: '1px solid #065baa', // Customize focus style
+            },
+          },
+          input: {
+            position: 'relative',
+            top: '5px', // Reset top position
+          },
+        },
+      },
+    },
     Select,
     Table: {
       variants: {
@@ -212,9 +229,10 @@ const defaultTheme = extendTheme({
         customFloatingLabel: {
           label: {
             position: 'absolute',
+            zIndex: 10,
             top: '-10px', // Adjust the top value as needed
-            fontSize: '16px', // Adjust the font size as needed
-            color: 'red', // Customize the label color
+            fontSize: '12px', // Adjust the font size as needed
+            color: '#231F20', // Customize the label color
           },
         },
       },
