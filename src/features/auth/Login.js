@@ -528,6 +528,12 @@ const Login = () => {
                           isRequired
                           // style={{ padding: '20px 0px', textAlign: 'center' }}
                           height="100%"
+                          style={{
+                            position: 'absolute',
+                            top: '-10px', // Adjust the top value as needed
+                            fontSize: '16px', // Adjust the font size as needed
+                            color: 'red', // Customize the label color
+                          }}
                         >
                           <FormLabel
                             fontSize="11px"
