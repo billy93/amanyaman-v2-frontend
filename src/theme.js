@@ -219,6 +219,7 @@ const defaultTheme = extendTheme({
         },
       },
     },
+
     Alert: {
       variants: {
         subtle: (props) => {

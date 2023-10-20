@@ -73,7 +73,7 @@ const variantCustom = definePartsStyle((props) => {
       },
       _focusVisible: {
         bg: 'gray.200',
-        borderBottom: '1px solid #231F20',
+        borderBottom: '1px solid #065baa',
         _dark: {
           bg: '#ebebeb',
         },
@@ -93,7 +93,7 @@ const variantCustom = definePartsStyle((props) => {
     },
     input: {
       position: 'relative',
-      top: '0', // Reset top position
+      top: '5', // Reset top position
     },
     element: {
       bg: 'white',
