@@ -14,6 +14,8 @@ const DownloadXLSButton = ({ id }) => {
     await handleDownload();
   };
 
+  let cleanupPromise = Promise.resolve();
+
   const handleDownload = () => {
     if (data) {
       // Create a temporary link element to trigger the download
@@ -22,21 +24,28 @@ const DownloadXLSButton = ({ id }) => {
       // Set the href to the blob URL
       downloadLink.href = data;
 
-      // Set the desired file name and extension (e.g., ProformaFiles.pdf)
+      // Set the desired file name and extension
       downloadLink.download = 'ProformaFiles.pdf';
 
       // Append the link to the DOM
       document.body.appendChild(downloadLink);
 
-      // Trigger the download
-      downloadLink.click();
+      // Wait for the cleanup of the previous download
+      cleanupPromise.then(() => {
+        // Trigger the download
+        downloadLink.click();
 
-      // Remove the link element from the DOM after a short delay
-      setTimeout(() => {
+        // Remove the link element from the DOM
         document.body.removeChild(downloadLink);
-        // Clean up the blob URL (not always needed for blob URLs)
+
+        // Clean up the blob URL
         URL.revokeObjectURL(data);
-      }, 1000);
+
+        // Create a new cleanup promise
+        cleanupPromise = new Promise((resolve) => {
+          setTimeout(resolve, 1000); // Cleanup delay
+        });
+      });
     }
   };
 
