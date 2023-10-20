@@ -143,13 +143,12 @@ const PolicyDetail = () => {
     isSuccess,
   } = useGetBookingByIdQuery(id);
   const [onTrigger, setOnTrigger] = useState(true);
+  const [onTriggerDownload, setOnTriggerDownload] = useState(true);
   const [onTriggerView, setOnTriggerView] = useState(true);
   const prevId = usePrevious(id);
-  const {
-    data,
-    error,
-    isLoading: proccedDownload,
-  } = useDownloadProformaQuery(id);
+  const { data, isLoading: proccedDownload } = useDownloadProformaQuery(id, {
+    skip: onTriggerDownload,
+  });
   React.useEffect(() => {
     if (prevId !== id) {
       dispatch(setHistoryForm(0));
@@ -381,7 +380,14 @@ const PolicyDetail = () => {
 
   // let cleanupPromise = Promise.resolve();
 
+  const setTriggerDownload = () => {
+    setOnTriggerDownload(false);
+    handleDownloadProforma();
+  };
+
   const handleDownloadProforma = async () => {
+    // refetch(id);
+    console.log('dat', data);
     if (proccedDownload) {
       try {
         if (data) {
@@ -524,7 +530,7 @@ const PolicyDetail = () => {
                       </Text>
                     </Box>
                   </MenuItem>
-                  <MenuItem onClick={handleDownloadProforma}>
+                  <MenuItem onClick={setTriggerDownload}>
                     {/* <DownloadProforma id={id} /> */}
                     <Box gap="5px" display={'flex'} alignItems="center">
                       <AiOutlineDownload color="#065BAA" size={'16px'} />
