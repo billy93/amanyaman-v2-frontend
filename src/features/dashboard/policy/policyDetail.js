@@ -146,9 +146,11 @@ const PolicyDetail = () => {
   const [onTriggerDownload, setOnTriggerDownload] = useState(true);
   const [onTriggerView, setOnTriggerView] = useState(true);
   const prevId = usePrevious(id);
-  const { data, isLoading: proccedDownload } = useDownloadProformaQuery(id, {
-    skip: onTriggerDownload,
-  });
+  const {
+    data,
+    refetch,
+    isLoading: proccedDownload,
+  } = useDownloadProformaQuery(id);
   React.useEffect(() => {
     if (prevId !== id) {
       dispatch(setHistoryForm(0));
@@ -260,12 +262,7 @@ const PolicyDetail = () => {
     }
   };
 
-  console.log(
-    'onTrigger',
-    policyNumberString,
-    getTravellerId(policyNumberString)
-  );
-  console.log('quot', quotation);
+  // console.log('quot', quotation);
   React.useEffect(() => {
     getTravellerId(policyNumberString);
   }, [policyNumberString, getTravellerId]);
@@ -416,6 +413,7 @@ const PolicyDetail = () => {
 
   React.useEffect(() => {
     createNewTab(data);
+    refetch();
   }, [data]);
   let content;
   if (isLoading || loadingDownload || loadingView || isLoadingState) {
