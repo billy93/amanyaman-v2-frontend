@@ -411,10 +411,12 @@ const PolicyDetail = () => {
     }
   };
 
-  React.useEffect(() => {
-    createNewTab();
-    refetch();
-  }, [data]);
+  // React.useEffect(() => {
+  //   createNewTab();
+  //   refetch();
+  // }, [data]);
+
+  console.log('dataa', data);
   let content;
   if (isLoading || loadingDownload || loadingView || isLoadingState) {
     content = (
