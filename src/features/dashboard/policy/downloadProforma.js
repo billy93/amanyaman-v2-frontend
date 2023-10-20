@@ -16,6 +16,8 @@ const DownloadXLSButton = ({ id }) => {
 
   const handleDownload = () => {
     if (data) {
+      console.log('data', data);
+      console.log('data', data.url);
       // Create a temporary link element to trigger the download
       const downloadLink = document.createElement('a');
       downloadLink.href = data.url; // Assuming your response has a URL field
