@@ -387,7 +387,7 @@ const PolicyDetail = () => {
 
   const createNewTab = async (url) => {
     // Create a Promise to handle the new tab creation
-    if (data) {
+    if (url) {
       const newTabPromise = new Promise((resolve) => {
         const newTab = window.open('', '_blank');
         if (!newTab) {
