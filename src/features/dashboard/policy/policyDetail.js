@@ -385,7 +385,7 @@ const PolicyDetail = () => {
     createNewTab();
   };
 
-  const createNewTab = async () => {
+  const createNewTab = async (url) => {
     // Create a Promise to handle the new tab creation
     if (data) {
       const newTabPromise = new Promise((resolve) => {
@@ -404,7 +404,7 @@ const PolicyDetail = () => {
       if (newTab) {
         // Create an iframe element and set its source to the fetched data URL
         const iframe = document.createElement('iframe');
-        iframe.src = data; // Assuming your response has a URL field
+        iframe.src = url; // Assuming your response has a URL field
         iframe.style.width = '100%';
         iframe.style.height = '100%';
 
@@ -413,6 +413,10 @@ const PolicyDetail = () => {
       }
     }
   };
+
+  React.useEffect(() => {
+    createNewTab(data);
+  }, [data]);
   let content;
   if (isLoading || loadingDownload || loadingView || isLoadingState) {
     content = (
