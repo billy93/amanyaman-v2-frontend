@@ -6,6 +6,7 @@ import { AiOutlineDownload } from 'react-icons/ai';
 
 const DownloadXLSButton = (id) => {
   // const [trigger, setTrigger] = React.useState(true);
+  console.log('id', id);
   const { data, error, isLoading } = useDownloadProformaQuery(id);
 
   const handleTrigger = async () => {
