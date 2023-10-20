@@ -55,10 +55,23 @@ export const policyApiSlice = apiSlice.injectEndpoints({
     }),
     downloadPolicy: builder.query({
       query: (id) => {
-        console.log('Downloading', id);
+        // console.log('Downloading', id);
         // const { page, size } = datas;
         return {
           url: `/app/file-upload/policy/files/download/${id}`,
+          method: 'GET',
+          responseType: 'blob',
+          responseHandler: (response) =>
+            response.blob().then((blob) => URL.createObjectURL(blob)),
+        };
+      },
+    }),
+    downloadProforma: builder.query({
+      query: (id) => {
+        // console.log('Downloading', id);
+        // const { page, size } = datas;
+        return {
+          url: `/app/file-upload/proforma/files/download/${id}`,
           method: 'GET',
           responseType: 'blob',
           responseHandler: (response) =>
@@ -142,4 +155,5 @@ export const {
   useResendEmailsMutation,
   useUpdateDataPolicyMutation,
   useExportPolicyQuery,
+  useDownloadProformaQuery,
 } = policyApiSlice;

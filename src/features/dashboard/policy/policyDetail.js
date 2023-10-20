@@ -76,6 +76,7 @@ import EmailInput from './emailForm';
 import { message, setStateMessage } from './policySlice';
 import View from './view';
 import { setHistoryForm } from '../../auth/authSlice';
+import DownloadProforma from './downloadProforma';
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -496,14 +497,9 @@ const PolicyDetail = () => {
                       </Text>
                     </Box>
                   </MenuItem>
-                  <MenuItem>
-                    <Box gap="5px" display={'flex'} alignItems="center">
-                      <AiOutlineDownload color="#065BAA" size={'16px'} />
-                      <Text as="p" fontSize="xs">
-                        Download Proforma Invoice
-                      </Text>
-                    </Box>
-                  </MenuItem>
+                  {/* <MenuItem> */}
+                  <DownloadProforma />
+                  {/* </MenuItem> */}
                   <MenuItem>
                     <Box gap="5px" display={'flex'} alignItems="center">
                       <BsCreditCard2Front color="#065BAA" size={'16px'} />
