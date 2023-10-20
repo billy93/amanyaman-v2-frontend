@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { useDownloadProformaQuery } from './policyApiSlice';
-import { Button, MenuItem } from '@chakra-ui/react';
+import { Button, MenuItem, Box, Text } from '@chakra-ui/react';
 import { AiOutlineDownload } from 'react-icons/ai';
 
-const DownloadXLSButton = (id) => {
+const DownloadXLSButton = ({ id }) => {
   // const [trigger, setTrigger] = React.useState(true);
-  console.log('id', id);
+  // console.log('id', id);
   const { data, error, isLoading } = useDownloadProformaQuery(id);
 
   const handleTrigger = async () => {
