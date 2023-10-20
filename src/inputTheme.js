@@ -91,6 +91,10 @@ const variantCustom = definePartsStyle((props) => {
         color: `${c}.900`,
       },
     },
+    input: {
+      position: 'relative',
+      top: '0', // Reset top position
+    },
     element: {
       bg: 'white',
       rounded: 'full',
