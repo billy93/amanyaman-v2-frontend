@@ -379,43 +379,29 @@ const PolicyDetail = () => {
     navigate(`/upgrade-quote/search/${id}`);
   };
 
-  console.log('view closed', quotation?.statusSales === 'UPDATED');
+  // let cleanupPromise = Promise.resolve();
 
-  let cleanupPromise = Promise.resolve();
+  const handleDownloadProforma = async () => {
+    if (proccedDownload) {
+      try {
+        if (data) {
+          // Open a new tab with a blank HTML page
+          const newTab = window.open('', '_blank');
 
-  const handleDownloadProforma = () => {
-    if (data) {
-      // Create a temporary link element to trigger the download
-      const downloadLink = document.createElement('a');
+          // Create an iframe element and set its source to the fetched data URL
+          const iframe = document.createElement('iframe');
+          iframe.src = data; // Assuming your response has a URL field
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
 
-      // Set the href to the blob URL
-      downloadLink.href = data;
-
-      // Set the desired file name and extension
-      downloadLink.download = 'ProformaFiles.pdf';
-
-      // Append the link to the DOM
-      document.body.appendChild(downloadLink);
-
-      // Wait for the cleanup of the previous download
-      cleanupPromise.then(() => {
-        // Trigger the download
-        downloadLink.click();
-
-        // Remove the link element from the DOM
-        document.body.removeChild(downloadLink);
-
-        // Clean up the blob URL
-        URL.revokeObjectURL(data);
-
-        // Create a new cleanup promise
-        cleanupPromise = new Promise((resolve) => {
-          setTimeout(resolve, 100); // Cleanup delay
-        });
-      });
+          // Append the iframe to the new tab's document
+          newTab.document.body.appendChild(iframe);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
     }
   };
-
   let content;
   if (isLoading || loadingDownload || loadingView || isLoadingState) {
     content = (
