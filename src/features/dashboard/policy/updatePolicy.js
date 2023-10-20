@@ -404,11 +404,17 @@ const PolicyDetail = () => {
   }
 
   // console.log('number string', policyNumberString);
+  const getTravellers = () => {
+    let data = [];
+
+    return data;
+  };
   const handleUpdate = async () => {
     const quotData = [...dataQuotation];
-    const listtravellers =
+    let listtravellers = [];
+    listtravellers =
       dataQuotation?.travellerType === 'Individual'
-        ? dataQuotation.filter(
+        ? dataQuotation?.filter(
             (policy) => policy.policyNumber === policyNumberString
           )
         : [...dataQuotation];
@@ -681,7 +687,7 @@ const PolicyDetail = () => {
   const handleBack = () => {
     navigate(-1);
   };
-  console.log('trav', quotation);
+  console.log('trav policyNumberString', policyNumberString);
   console.log(
     'trav data',
     dataQuotation?.filter((trav) => trav.policyNumber === policyNumberString)
