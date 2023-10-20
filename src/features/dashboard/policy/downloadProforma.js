@@ -16,8 +16,9 @@ const DownloadXLSButton = ({ id }) => {
 
   const handleDownload = () => {
     if (data) {
+      // Create a temporary link element to trigger the download
       const downloadLink = document.createElement('a');
-      downloadLink.href = data;
+      downloadLink.href = data.url; // Assuming your response has a URL field
       downloadLink.download = 'ProformaFiles.xlsx'; // Set the desired file name and extension
 
       // Append the link to the DOM
@@ -29,8 +30,6 @@ const DownloadXLSButton = ({ id }) => {
       // Remove the link element from the DOM after a short delay
       setTimeout(() => {
         document.body.removeChild(downloadLink);
-        // Clean up the blob URL
-        URL.revokeObjectURL(data);
       }, 1000);
     }
   };
