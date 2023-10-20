@@ -146,11 +146,7 @@ const PolicyDetail = () => {
   const [onTriggerDownload, setOnTriggerDownload] = useState(true);
   const [onTriggerView, setOnTriggerView] = useState(true);
   const prevId = usePrevious(id);
-  const {
-    data,
-    refetch,
-    isLoading: proccedDownload,
-  } = useDownloadProformaQuery(id);
+  const { data, isLoading: proccedDownload } = useDownloadProformaQuery(id);
   React.useEffect(() => {
     if (prevId !== id) {
       dispatch(setHistoryForm(0));
