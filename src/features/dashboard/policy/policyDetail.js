@@ -55,6 +55,7 @@ import { SlCalender } from 'react-icons/sl';
 import {
   useGetBookingByIdQuery,
   useDownloadPolicyQuery,
+  useDownloadProformaQuery,
 } from './policyApiSlice';
 import Files from '../../../img/images/Files.png';
 import Plan from '../../../img/images/Plane.png';
@@ -144,6 +145,11 @@ const PolicyDetail = () => {
   const [onTrigger, setOnTrigger] = useState(true);
   const [onTriggerView, setOnTriggerView] = useState(true);
   const prevId = usePrevious(id);
+  const {
+    data,
+    error,
+    isLoading: proccedDownload,
+  } = useDownloadProformaQuery(id);
   React.useEffect(() => {
     if (prevId !== id) {
       dispatch(setHistoryForm(0));
@@ -375,6 +381,41 @@ const PolicyDetail = () => {
 
   console.log('view closed', quotation?.statusSales === 'UPDATED');
 
+  let cleanupPromise = Promise.resolve();
+
+  const handleDownloadProforma = () => {
+    if (data) {
+      // Create a temporary link element to trigger the download
+      const downloadLink = document.createElement('a');
+
+      // Set the href to the blob URL
+      downloadLink.href = data;
+
+      // Set the desired file name and extension
+      downloadLink.download = 'ProformaFiles.pdf';
+
+      // Append the link to the DOM
+      document.body.appendChild(downloadLink);
+
+      // Wait for the cleanup of the previous download
+      cleanupPromise.then(() => {
+        // Trigger the download
+        downloadLink.click();
+
+        // Remove the link element from the DOM
+        document.body.removeChild(downloadLink);
+
+        // Clean up the blob URL
+        URL.revokeObjectURL(data);
+
+        // Create a new cleanup promise
+        cleanupPromise = new Promise((resolve) => {
+          setTimeout(resolve, 100); // Cleanup delay
+        });
+      });
+    }
+  };
+
   let content;
   if (isLoading || loadingDownload || loadingView || isLoadingState) {
     content = (
@@ -497,9 +538,15 @@ const PolicyDetail = () => {
                       </Text>
                     </Box>
                   </MenuItem>
-                  {/* <MenuItem> */}
-                  <DownloadProforma id={id} />
-                  {/* </MenuItem> */}
+                  <MenuItem onClick={handleDownloadProforma}>
+                    {/* <DownloadProforma id={id} /> */}
+                    <Box gap="5px" display={'flex'} alignItems="center">
+                      <AiOutlineDownload color="#065BAA" size={'16px'} />
+                      <Text as="p" fontSize="xs">
+                        Download Proforma Invoice
+                      </Text>
+                    </Box>
+                  </MenuItem>
                   <MenuItem>
                     <Box gap="5px" display={'flex'} alignItems="center">
                       <BsCreditCard2Front color="#065BAA" size={'16px'} />

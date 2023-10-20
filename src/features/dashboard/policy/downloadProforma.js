@@ -14,8 +14,6 @@ const DownloadXLSButton = ({ id }) => {
     await handleDownload();
   };
 
-  let cleanupPromise = Promise.resolve();
-
   const revokeBlobUrl = (url) => {
     return new Promise((resolve) => {
       URL.revokeObjectURL(url);
@@ -23,6 +21,7 @@ const DownloadXLSButton = ({ id }) => {
     });
   };
 
+  let cleanupPromise = Promise.resolve();
   const handleDownload = () => {
     if (data) {
       // Create a temporary link element to trigger the download
