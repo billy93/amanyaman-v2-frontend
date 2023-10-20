@@ -469,9 +469,12 @@ const PolicyDetail = () => {
 
   React.useEffect(() => {
     // const dataUserDetail = users?.filter((user) => user.id === parseInt(id))
-    if (quotation?.travellers) {
-      if (quotation?.travellers) {
-        let city = quotation?.travellers.map((obj, i) => ({
+    if (quotation?.travellerType?.name === 'Individual') {
+      let data = quotation?.travellers?.filter(
+        (quotation) => quotation?.policyNumber === policyNumberString
+      );
+      if (data) {
+        let city = data.map((obj, i) => ({
           ...obj,
           label: [{ label: obj.title, value: obj.title }],
           type: [{ label: obj.travellerType, value: obj.travellerType }],
@@ -480,6 +483,15 @@ const PolicyDetail = () => {
         }));
         setDataQuotation([...city]);
       }
+    } else {
+      let city = quotation?.travellers.map((obj, i) => ({
+        ...obj,
+        label: [{ label: obj.title, value: obj.title }],
+        type: [{ label: obj.travellerType, value: obj.travellerType }],
+        dateOfBirth: formatDateToObject(obj.dateOfBirth),
+        relations: [{ label: obj.relationship, value: obj.relationship }],
+      }));
+      setDataQuotation([...city]);
     }
   }, [quotation?.travellers]);
 
