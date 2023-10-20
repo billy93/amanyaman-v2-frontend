@@ -19,7 +19,7 @@ const DownloadXLSButton = ({ id }) => {
       // Create a temporary link element to trigger the download
       const downloadLink = document.createElement('a');
       downloadLink.href = data.url; // Assuming your response has a URL field
-      downloadLink.download = 'ProformaFiles.xlsx'; // Set the desired file name and extension
+      downloadLink.download = 'ProformaFiles.pdf'; // Set the desired file name and extension
 
       // Append the link to the DOM
       document.body.appendChild(downloadLink);
