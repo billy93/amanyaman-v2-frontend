@@ -377,14 +377,14 @@ const PolicyDetail = () => {
 
   // let cleanupPromise = Promise.resolve();
 
-  const handleDownloadProforma = () => {
-    setOnTriggerDownload(false);
-    createNewTab();
-  };
+  // const handleDownloadProforma = () => {
+  //   setOnTriggerDownload(false);
+  //   createNewTab();
+  // };
 
-  const createNewTab = async (url) => {
+  const createNewTab = async () => {
     // Create a Promise to handle the new tab creation
-    if (url) {
+    if (data) {
       const newTabPromise = new Promise((resolve) => {
         const newTab = window.open('', '_blank');
         if (!newTab) {
@@ -401,7 +401,7 @@ const PolicyDetail = () => {
       if (newTab) {
         // Create an iframe element and set its source to the fetched data URL
         const iframe = document.createElement('iframe');
-        iframe.src = url; // Assuming your response has a URL field
+        iframe.src = data; // Assuming your response has a URL field
         iframe.style.width = '100%';
         iframe.style.height = '100%';
 
@@ -412,7 +412,7 @@ const PolicyDetail = () => {
   };
 
   React.useEffect(() => {
-    createNewTab(data);
+    createNewTab();
     refetch();
   }, [data]);
   let content;
@@ -537,7 +537,7 @@ const PolicyDetail = () => {
                       </Text>
                     </Box>
                   </MenuItem>
-                  <MenuItem onClick={handleDownloadProforma}>
+                  <MenuItem onClick={createNewTab}>
                     {/* <DownloadProforma id={id} /> */}
                     <Box gap="5px" display={'flex'} alignItems="center">
                       <AiOutlineDownload color="#065BAA" size={'16px'} />
