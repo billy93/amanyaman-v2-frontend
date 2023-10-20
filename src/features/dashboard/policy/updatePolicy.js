@@ -493,7 +493,7 @@ const PolicyDetail = () => {
         relations: [{ label: obj.relationship, value: obj.relationship }],
       }));
       console.log('cty2', city);
-      setDataQuotation([...city]);
+      setDataQuotation(city);
     }
   }, [quotation?.travellers, quotation]);
   console.log('quotation', quotation);
