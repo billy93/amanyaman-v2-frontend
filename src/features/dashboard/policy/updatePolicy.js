@@ -403,20 +403,29 @@ const PolicyDetail = () => {
     return `${year}-${formattedMonth}-${formattedDay}`;
   }
 
+  // console.log('number string', policyNumberString);
   const handleUpdate = async () => {
     const quotData = [...dataQuotation];
     // console.log('quotData', quotData);
     const convertData = quotData.map((data) => ({
       ...data,
       dateOfBirth: convertDateObjectToString(data?.dateOfBirth),
+      travellers:
+        dataQuotation?.travellerType?.name === 'Individual'
+          ? dataQuotation?.travellers?.filter(
+              (data) => data.policyNumber === policyNumber
+            )
+          : [...dataQuotation?.travellers],
     }));
 
+    console.log('asas', convertData);
     const propertiesToRemove = ['type', 'label', 'relations'];
     const list = removePropertiesFromArray(convertData, propertiesToRemove);
     const data = {
       bookingId: quotation?.id,
       travellers: [...list],
     };
+    console.log('dtravs', data);
     try {
       const response = await updateDataPolicy(data);
       // console.log('response', response);
