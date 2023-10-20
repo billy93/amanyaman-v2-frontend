@@ -482,6 +482,7 @@ const PolicyDetail = () => {
           relations: [{ label: obj.relationship, value: obj.relationship }],
         }));
         setDataQuotation([...city]);
+        console.log('cty1', city);
       }
     } else {
       let city = quotation?.travellers.map((obj, i) => ({
@@ -491,6 +492,7 @@ const PolicyDetail = () => {
         dateOfBirth: formatDateToObject(obj.dateOfBirth),
         relations: [{ label: obj.relationship, value: obj.relationship }],
       }));
+      console.log('cty2', city);
       setDataQuotation([...city]);
     }
   }, [quotation?.travellers]);
