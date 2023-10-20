@@ -684,7 +684,7 @@ const PolicyDetail = () => {
   console.log('trav', quotation);
   console.log(
     'trav data',
-    dataQuotation.filter((trav) => trave.policyNumber === policyNumberString)
+    dataQuotation.filter((trav) => trav.policyNumber === policyNumberString)
   );
   let content;
   if (isLoading || loadingDownload || loadingView) {
