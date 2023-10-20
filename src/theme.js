@@ -1,7 +1,7 @@
 import { theme as origTheme, extendTheme } from '@chakra-ui/react';
 import { headingTheme } from './headingTheme';
 import { buttonTheme } from './buttonTheme';
-import { inputTheme } from './inputTheme';
+// import { inputTheme } from './inputTheme';
 import { StepsTheme } from 'chakra-ui-steps';
 import '@fontsource/mulish/800.css';
 import '@fontsource/mulish/700.css';
