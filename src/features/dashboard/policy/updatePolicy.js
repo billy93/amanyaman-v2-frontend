@@ -495,8 +495,8 @@ const PolicyDetail = () => {
       console.log('cty2', city);
       setDataQuotation([...city]);
     }
-  }, [quotation?.travellers]);
-
+  }, [quotation?.travellers, quotation]);
+  console.log('quotation', quotation);
   const titles = [
     {
       value: 'Mr.',
