@@ -590,7 +590,7 @@ const Login = () => {
                                   fields?.password !== '' ? '' : '#ebebeb',
                               }}
                               id="input__password"
-                              type="password"
+                              type={show ? 'text' : 'password'}
                               className="floating__input"
                               name="password"
                               placeholder="Password"
@@ -608,7 +608,14 @@ const Login = () => {
                                 <span className="hidden--visually">
                                   Password
                                 </span>
-                                <button type="button" onClick={handleClick}>
+                                <button
+                                  type="button"
+                                  onClick={handleClick}
+                                  style={{
+                                    pointerEvents: 'visible',
+                                    cursor: 'pointer',
+                                  }}
+                                >
                                   {show ? (
                                     <AiFillEye />
                                   ) : (
