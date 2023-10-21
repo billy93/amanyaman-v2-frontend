@@ -362,6 +362,13 @@ const Login = () => {
                     <Stack direction={['column']} spacing="10px">
                       <div className="floating">
                         <input
+                          style={{
+                            // width: '88%',
+                            backgroundColor:
+                              fieldsReset?.username !== ''
+                                ? '#e8f0fe'
+                                : '#ebebeb',
+                          }}
                           id="input__username"
                           className="floating__input"
                           name="username"
