@@ -839,7 +839,7 @@ p{
 .floating__input {
  font-size: 14px;
     height: 48px;
-    margin-bottom: -3px;
+    /* margin-bottom: -3px; */
     padding: 1.6rem 1rem 0.4rem;
     transition: border-color .2s ease;
     z-index: 0;
