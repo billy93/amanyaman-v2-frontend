@@ -846,6 +846,7 @@ p{
     position: relative;
     width: 100%;
     border: none;
+    background: #ebebeb;
 }
 
 .floating:hover  {
@@ -872,7 +873,7 @@ p{
   font-size: 14px;
 }
 .floating__label::before {
-  color: var(--label__color);
+  /* color: var(--label__color); */
   content: attr(data-content);
   display: inline-block;
   filter: blur(0);
