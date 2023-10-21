@@ -585,7 +585,7 @@ const Login = () => {
                           <div className="floating">
                             <input
                               style={{
-                                width: '88%',
+                                // width: '88%',
                                 backgroundColor:
                                   fields?.password !== ''
                                     ? '#e8f0fe'
