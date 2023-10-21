@@ -485,6 +485,18 @@ const Form1 = ({
     day: endDate.getDate(),
   };
 
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      // Add your custom styles for the control element here
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      fontSize: '12px', // Adjust the font size here
+    }),
+    // Add more styles for other elements as needed
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -907,7 +919,7 @@ const Form1 = ({
                       {initState?.coverageType === '' ||
                       initState?.coverageType === 'Single Trip' ? (
                         <Box
-                          mt="2em"
+                          mt="3em"
                           w={{ base: '100%', md: '520px' }}
                           h={{ sm: '48px' }}
                         >
@@ -924,9 +936,10 @@ const Form1 = ({
                               onChange={handleSelect}
                               value={initState?.destinationCountry}
                               isSearchable={true}
-                              styles={{
-                                menuPortal: (provided) => ({ ...provided }),
-                              }}
+                              styles={customStyles}
+                              // styles={{
+                              //   menuPortal: (provided) => ({ ...provided }),
+                              // }}
                               options={listCountries}
                             />
                             <FormLabel
@@ -957,7 +970,7 @@ const Form1 = ({
                         width={{ base: '100%', md: '530px' }}
                       >
                         <Box
-                          mt="1.5em"
+                          // mt="1.5em"
                           h="48px"
                           width={{ base: '100%', md: '250px' }}
                         >
@@ -1000,7 +1013,7 @@ const Form1 = ({
                         initState.coverageType === 'Single Trip' ? (
                           <Box
                             width={{ base: '100%', md: '250px' }}
-                            mt="1.5em"
+                            // mt="1.5em"
                             h="48px"
                           >
                             <FormControl
@@ -1040,7 +1053,7 @@ const Form1 = ({
                         ) : (
                           <Box
                             width={{ base: '100%', md: '250px' }}
-                            mt="1.5em"
+                            // mt="1.5em"
                             h="48px"
                           >
                             <FormControl
