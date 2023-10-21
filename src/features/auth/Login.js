@@ -574,7 +574,10 @@ const Login = () => {
                             <label
                               htmlFor="input__username"
                               className={`floating__label ${
-                                fields?.username !== '' ? 'isActive-fill' : ''
+                                fields?.username !== '' ||
+                                fields?.username !== undefined
+                                  ? 'isActive-fill'
+                                  : ''
                               } `}
                               data-content="Username"
                             >
@@ -595,11 +598,27 @@ const Login = () => {
                             <label
                               htmlFor="input__password"
                               className={`floating__label ${
-                                fields?.password !== '' ? 'isActive-fill' : ''
+                                fields?.password !== '' ||
+                                fields?.password !== undefined
+                                  ? 'isActive-fill'
+                                  : ''
                               } `}
                               data-content="Password"
                             >
-                              <span className="hidden--visually">Password</span>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'space-between'}
+                                alignItems={'center'}
+                              >
+                                <span className="hidden--visually">
+                                  Password
+                                </span>
+                                {show ? (
+                                  <AiFillEye onClick={handleClick} />
+                                ) : (
+                                  <AiFillEyeInvisible />
+                                )}
+                              </Box>
                             </label>
                           </div>
                           {/* <FormControl
