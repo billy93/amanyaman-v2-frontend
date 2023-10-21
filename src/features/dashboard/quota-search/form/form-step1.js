@@ -932,6 +932,7 @@ const Form1 = ({
                             <Select
                               size="lg"
                               isMulti
+                              placeholder={' select country'}
                               variant="outline"
                               onChange={handleSelect}
                               value={initState?.destinationCountry}
