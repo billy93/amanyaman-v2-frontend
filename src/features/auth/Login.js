@@ -360,95 +360,66 @@ const Login = () => {
                     )}
 
                     <Stack direction={['column']} spacing="10px">
-                      <FormControl
-                        variant="floating"
-                        id="first-name"
-                        isRequired
-                        style={{
-                          padding: '11px 5px',
-                          textAlign: 'center',
-                          color: fields?.username !== '' ? '#065baa' : '',
-                          transform:
-                            fields?.username !== ''
-                              ? 'translateY(-2px)'
-                              : 'translateY(2px)',
-                        }}
-                      >
-                        <Input
-                          variant="custom"
-                          placeholder=" "
-                          _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      <div className="floating">
+                        <input
+                          id="input__username"
+                          className="floating__input"
                           name="username"
+                          type="text"
                           value={fieldsReset?.username}
                           onChange={setFieldResetChange}
-                          h="48px"
+                          placeholder="Username"
                         />
-                        {/* It is important that the Label comes after the Control due to css selectors */}
-                        <FormLabel
-                          fontSize="12"
-                          pt="1.5"
-                          style={{
-                            // padding: '11px 5px',
-                            textAlign: 'center',
-                            position: 'absolute',
-                            color: fields?.username !== '' ? '#065baa' : '',
-                            transform:
-                              fields?.username !== '' ||
-                              fields?.username !== undefined
-                                ? 'translateY(-10px)'
-                                : 'translateY(-1px)',
-                          }}
+                        <label
+                          htmlFor="input__username"
+                          className={`floating__label ${
+                            fieldsReset?.username !== '' ? 'isActive-fill' : ''
+                          } `}
+                          data-content="Username"
                         >
-                          Username
-                        </FormLabel>
-                        {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
-                      </FormControl>
-                      <FormControl
-                        variant="floating"
-                        id="first-name"
-                        isRequired
-                        display={'none'}
-                      >
-                        <InputGroup>
-                          <Input
-                            variant={'custom'}
-                            type={show ? 'text' : 'password'}
-                            placeholder=" "
-                            _placeholder={{ opacity: 1, color: 'gray.500' }}
-                            name="password"
-                            value={fieldsReset?.password}
-                            onChange={setFieldResetChange}
-                            h="48px"
-                          />
-                          <FormLabel fontSize="12" pt="1.5">
-                            Enter Password
-                          </FormLabel>
-                          <Box>
-                            <InputRightElement width="4.5rem" h="100%">
-                              <Button
-                                h="1.75rem"
-                                size="sm"
-                                onClick={handleClick}
-                                bg="none"
-                                color={'#065BAA'}
-                                border={'none'}
-                                _hover={{
-                                  border: 'none',
-                                  transform: 'scale(1.05, 1.05)',
-                                  bg: '#054e912b',
+                          <span className="hidden--visually">Username</span>
+                        </label>
+                      </div>
 
-                                  _dark: {
-                                    bg: '#054e91',
-                                  },
-                                }}
-                              >
-                                {show ? <AiFillEye /> : <AiFillEyeInvisible />}
-                              </Button>
-                            </InputRightElement>
+                      <div className="floating">
+                        <input
+                          style={{
+                            // width: '88%',
+                            backgroundColor:
+                              fieldsReset?.password !== ''
+                                ? '#e8f0fe'
+                                : '#ebebeb',
+                          }}
+                          id="input__password"
+                          type={show ? 'text' : 'password'}
+                          className="floating__input"
+                          name="password"
+                          placeholder="Password"
+                          value={fieldsReset?.password}
+                          onChange={setFieldResetChange}
+                        />
+                        <label
+                          htmlFor="input__password"
+                          className={`floating__label ${
+                            fieldsReset?.password !== '' ? 'isActive-fill' : ''
+                          } `}
+                          data-content="Password"
+                        >
+                          <Box className="show-password">
+                            <span className="hidden--visually">Password</span>
+                            <button
+                              type="button"
+                              onClick={handleClick}
+                              style={{
+                                pointerEvents: 'visible',
+                                cursor: 'pointer',
+                              }}
+                            >
+                              {show ? <AiFillEye /> : <AiFillEyeInvisible />}
+                            </button>
                           </Box>
-                        </InputGroup>
-                        {/* It is important that the Label comes after the Control due to css selectors */}
-                      </FormControl>
+                        </label>
+                      </div>
                       {/* <Link to="/forgot-password"> */}
                       {formReset ? (
                         <>
