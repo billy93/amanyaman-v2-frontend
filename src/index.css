@@ -848,7 +848,11 @@ p{
     border: none;
     background: #ebebeb;
 }
-
+.show-password{
+  position: absolute;
+    top: -30px;
+    right: 17px;
+}
 .floating:hover  {
   border-color: var(--input__border--hover);
 }

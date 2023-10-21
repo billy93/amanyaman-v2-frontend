@@ -605,11 +605,7 @@ const Login = () => {
                               } `}
                               data-content="Password"
                             >
-                              <Box
-                                display={'flex'}
-                                justifyContent={'space-between'}
-                                alignItems={'center'}
-                              >
+                              <Box className="show-password">
                                 <span className="hidden--visually">
                                   Password
                                 </span>
