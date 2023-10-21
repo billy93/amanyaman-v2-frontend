@@ -574,10 +574,7 @@ const Login = () => {
                             <label
                               htmlFor="input__username"
                               className={`floating__label ${
-                                fields?.username !== '' ||
-                                fields?.username !== undefined
-                                  ? 'isActive-fill'
-                                  : ''
+                                fields?.username !== '' ? 'isActive-fill' : ''
                               } `}
                               data-content="Username"
                             >
@@ -587,6 +584,11 @@ const Login = () => {
 
                           <div className="floating">
                             <input
+                              style={{
+                                width: '88%',
+                                backgroundColor:
+                                  fields?.password !== '' ? '' : '#ebebeb',
+                              }}
                               id="input__password"
                               type="password"
                               className="floating__input"
@@ -598,10 +600,7 @@ const Login = () => {
                             <label
                               htmlFor="input__password"
                               className={`floating__label ${
-                                fields?.password !== '' ||
-                                fields?.password !== undefined
-                                  ? 'isActive-fill'
-                                  : ''
+                                fields?.password !== '' ? 'isActive-fill' : ''
                               } `}
                               data-content="Password"
                             >
@@ -609,7 +608,7 @@ const Login = () => {
                                 <span className="hidden--visually">
                                   Password
                                 </span>
-                                <button onClick={handleClick}>
+                                <button type="button" onClick={handleClick}>
                                   {show ? (
                                     <AiFillEye />
                                   ) : (

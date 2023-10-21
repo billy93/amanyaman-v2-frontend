@@ -818,8 +818,8 @@ p{
 }
 
 .floating {
-    background-color: #f5f5f5;
-    background-color: var(--field__background);
+    background-color: #e8f0fe;
+    /* background-color: var(--field__background); */
     margin-bottom: 1rem;
     transition: background-color .2s ease;
     border-bottom: 1px solid #065baa;
