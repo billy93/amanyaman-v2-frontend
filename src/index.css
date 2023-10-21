@@ -877,7 +877,9 @@ p{
   left: 1rem;
   position: relative;
 }
-
+input:disabled {
+  border: none;
+}
 .floating__label::after {
   bottom: 1rem;
   content: "";
