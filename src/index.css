@@ -818,11 +818,15 @@ p{
 }
 
 .floating {
-  margin-bottom: 1rem;
-  background-color: var(--field__background);
-  transition: background-color 0.2s ease;
-  /* border-top-left-radius: 4px; */
-  /* border-top-right-radius: 4px; */
+    background-color: #f5f5f5;
+    background-color: var(--field__background);
+    margin-bottom: 1rem;
+    transition: background-color .2s ease;
+    border-bottom: 1px solid #065baa;
+    z-index: 99;
+    position: relative;
+    height: 50px;
+    border: none;
 }
 
 .floating:hover,
@@ -833,11 +837,15 @@ p{
 }
 
 .floating__input {
-  font-size: 14px;
+ font-size: 14px;
+    height: 48px;
     margin-bottom: -3px;
     padding: 1.6rem 1rem 0.4rem;
     transition: border-color .2s ease;
-    height: 48px;
+    z-index: 0;
+    position: relative;
+    width: 100%;
+    border: none;
 }
 
 .floating:hover  {
