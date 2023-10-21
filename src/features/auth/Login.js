@@ -521,7 +521,7 @@ const Login = () => {
                   <Box width="auto" minH="300px" mt="2" spacing="2">
                     <Stack direction={['column']} spacing="10px">
                       <form onSubmit={handlelogin}>
-                        <FormControl
+                        {/* <FormControl
                           variant="floating"
                           // variant="floating"
                           id="first-name"
@@ -559,7 +559,42 @@ const Login = () => {
                             onChange={setFieldChange}
                             h="48px"
                           />
-                        </FormControl>
+                        </FormControl> */}
+                        <div className="floating">
+                          <input
+                            id="input__username"
+                            className="floating__input"
+                            name="username"
+                            type="text"
+                            value={fields?.username}
+                            onChange={setFieldChange}
+                            placeholder="Username"
+                          />
+                          <label
+                            htmlFor="input__username"
+                            className="floating__label"
+                            data-content="Username"
+                          >
+                            <span className="hidden--visually">Username</span>
+                          </label>
+                        </div>
+
+                        <div className="floating">
+                          <input
+                            id="input__password"
+                            type="password"
+                            className="floating__input"
+                            name="password"
+                            placeholder="Password"
+                          />
+                          <label
+                            htmlFor="input__password"
+                            className="floating__label"
+                            data-content="Password"
+                          >
+                            <span className="hidden--visually">Password</span>
+                          </label>
+                        </div>
                         <FormControl
                           mt="10px"
                           variant="floating"
