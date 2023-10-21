@@ -521,7 +521,8 @@ const Login = () => {
                   <Box width="auto" minH="300px" mt="2" spacing="2">
                     <Stack direction={['column']} spacing="10px">
                       <form onSubmit={handlelogin}>
-                        {/* <FormControl
+                        <Box>
+                          {/* <FormControl
                           variant="floating"
                           // variant="floating"
                           id="first-name"
@@ -560,42 +561,44 @@ const Login = () => {
                             h="48px"
                           />
                         </FormControl> */}
-                        <div className="floating">
-                          <input
-                            id="input__username"
-                            className="floating__input"
-                            name="username"
-                            type="text"
-                            value={fields?.username}
-                            onChange={setFieldChange}
-                            placeholder="Username"
-                          />
-                          <label
-                            htmlFor="input__username"
-                            className="floating__label"
-                            data-content="Username"
-                          >
-                            <span className="hidden--visually">Username</span>
-                          </label>
-                        </div>
+                          <div className="floating">
+                            <input
+                              id="input__username"
+                              className="floating__input"
+                              name="username"
+                              type="text"
+                              value={fields?.username}
+                              onChange={setFieldChange}
+                              placeholder="Username"
+                            />
+                            <label
+                              htmlFor="input__username"
+                              className="floating__label"
+                              data-content="Username"
+                            >
+                              <span className="hidden--visually">Username</span>
+                            </label>
+                          </div>
 
-                        <div className="floating">
-                          <input
-                            id="input__password"
-                            type="password"
-                            className="floating__input"
-                            name="password"
-                            placeholder="Password"
-                          />
-                          <label
-                            htmlFor="input__password"
-                            className="floating__label"
-                            data-content="Password"
-                          >
-                            <span className="hidden--visually">Password</span>
-                          </label>
-                        </div>
-                        <FormControl
+                          <div className="floating">
+                            <input
+                              id="input__password"
+                              type="password"
+                              className="floating__input"
+                              name="password"
+                              placeholder="Password"
+                              value={fields?.password}
+                              onChange={setFieldChange}
+                            />
+                            <label
+                              htmlFor="input__password"
+                              className="floating__label"
+                              data-content="Password"
+                            >
+                              <span className="hidden--visually">Password</span>
+                            </label>
+                          </div>
+                          {/* <FormControl
                           mt="10px"
                           variant="floating"
                           id="first-name"
@@ -656,38 +659,38 @@ const Login = () => {
                               h="48px"
                             />
                           </InputGroup>
-                        </FormControl>
+                        </FormControl> */}
 
-                        {/* <Link to="/forgot-password"> */}
-                        <Box display={'flex'} justifyContent={'flex-end'}>
-                          <Text
-                            fontSize={'sm'}
-                            as="u"
-                            color={'#065BAA'}
-                            fontFamily="Mulish"
-                            fontWeight={'700'}
-                            onClick={handleForgotPass}
-                            cursor={'pointer'}
-                          >
-                            Forgot Password ?
-                          </Text>
-                        </Box>
-                        {/* </Link> */}
-                        <Box onClick={handleRememberMe}>
-                          <Checkbox
-                            defaultChecked
-                            color={'#231F20'}
-                            onClick={handleRememberMe}
-                            checked={persist?.isPersist}
-                            id="persist"
-                          >
-                            <Text fontSize={'sm'} onClick={handleRememberMe}>
-                              Remember Me{' '}
+                          {/* <Link to="/forgot-password"> */}
+                          <Box display={'flex'} justifyContent={'flex-end'}>
+                            <Text
+                              fontSize={'sm'}
+                              as="u"
+                              color={'#065BAA'}
+                              fontFamily="Mulish"
+                              fontWeight={'700'}
+                              onClick={handleForgotPass}
+                              cursor={'pointer'}
+                            >
+                              Forgot Password ?
                             </Text>
-                          </Checkbox>
-                        </Box>
+                          </Box>
+                          {/* </Link> */}
+                          <Box onClick={handleRememberMe}>
+                            <Checkbox
+                              defaultChecked
+                              color={'#231F20'}
+                              onClick={handleRememberMe}
+                              checked={persist?.isPersist}
+                              id="persist"
+                            >
+                              <Text fontSize={'sm'} onClick={handleRememberMe}>
+                                Remember Me{' '}
+                              </Text>
+                            </Checkbox>
+                          </Box>
 
-                        {/* <Button
+                          {/* <Button
                           type="submit"
                           bg="#065BAA"
                           h="48px"
@@ -707,20 +710,21 @@ const Login = () => {
                             Next
                           </Text>
                         </Button> */}
-                        <motion.div
-                          whileTap={{ scale: isClicked ? 1 : 0.95 }}
-                          onClick={handleClicks}
-                        >
-                          <Button
-                            type="submit"
-                            bg="#065BAA"
-                            h="48px"
-                            w="100%"
-                            mt="15px"
+                          <motion.div
+                            whileTap={{ scale: isClicked ? 1 : 0.95 }}
+                            onClick={handleClicks}
                           >
-                            Next
-                          </Button>
-                        </motion.div>
+                            <Button
+                              type="submit"
+                              bg="#065BAA"
+                              h="48px"
+                              w="100%"
+                              mt="15px"
+                            >
+                              Next
+                            </Button>
+                          </motion.div>
+                        </Box>
                       </form>
                     </Stack>
                   </Box>

@@ -836,6 +836,7 @@ p{
   border-bottom: 0.1rem solid var(--input__border);
   transition: border-color 0.2s ease;
   caret-color: var(--color__accent);
+  margin-bottom: -3px;
 }
 
 .floating:hover .floating__input {
@@ -904,18 +905,6 @@ p{
 /* --  Codepen styles & resets - not required  -- */
 /* ---------------------------------------------- */
 
-body {
-  display: flex;
-  align-items: center;
-  padding: 1rem 3rem;
-  max-width: 40rem;
-  margin: 0 auto;
-  font-family: var(--font__family);
-  font-size: var(--font__size);
-  font-weight: 400;
-  min-height: 100vh;
-}
-
 input {
   background: none;
   border-width: 0;
@@ -930,13 +919,6 @@ fieldset {
 legend {
   padding: 0 0.5rem;
 }
-
-/* apply a natural box layout model to all elements, but allowing components to change */
-html {
-  box-sizing: border-box;
-  background: #904e95;
-}
-
 *,
 *:before,
 *:after {
