@@ -587,7 +587,9 @@ const Login = () => {
                               style={{
                                 width: '88%',
                                 backgroundColor:
-                                  fields?.password !== '' ? '' : '#ebebeb',
+                                  fields?.password !== ''
+                                    ? '#e8f0fe'
+                                    : '#ebebeb',
                               }}
                               id="input__password"
                               type={show ? 'text' : 'password'}
