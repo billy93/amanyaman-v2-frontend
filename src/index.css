@@ -865,7 +865,12 @@ p{
   font-size: 14px;
   font-style: italic;
 }
-
+.isActive-fill{
+  color: #065baa;
+  font-style: italic;
+  font-family: 'Mulish';
+  font-size: 14px;
+}
 .floating__label::before {
   color: var(--label__color);
   content: attr(data-content);

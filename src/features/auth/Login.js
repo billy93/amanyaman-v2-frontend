@@ -573,7 +573,9 @@ const Login = () => {
                             />
                             <label
                               htmlFor="input__username"
-                              className="floating__label"
+                              className={'floating__label'`${
+                                fields?.username !== '' ? 'isActive-fill' : ''
+                              } `}
                               data-content="Username"
                             >
                               <span className="hidden--visually">Username</span>
@@ -592,7 +594,9 @@ const Login = () => {
                             />
                             <label
                               htmlFor="input__password"
-                              className="floating__label"
+                              className={'floating__label'`${
+                                fields?.password !== '' ? 'isActive-fill' : ''
+                              } `}
                               data-content="Password"
                             >
                               <span className="hidden--visually">Password</span>
