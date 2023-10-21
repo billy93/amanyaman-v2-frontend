@@ -833,12 +833,11 @@ p{
 }
 
 .floating__input {
-  padding: 1.8rem 1rem 0.6rem;
-  font-size: 1rem;
-  /* border-bottom: 0.1rem solid var(--input__border); */
-  transition: border-color 0.2s ease;
-  caret-color: var(--color__accent);
-  margin-bottom: -3px;
+  font-size: 12px;
+    margin-bottom: -3px;
+    padding: 1.6rem 1rem 0.4rem;
+    transition: border-color .2s ease;
+    height: 48px;
 }
 
 .floating:hover  {
@@ -896,7 +895,7 @@ p{
 
 .floating__label::before,
 .floating__input:focus + .floating__label::before {
-  transform: translate3d(0, -3.12rem, 0) scale3d(0.82, 0.82, 1);
+  transform: translate3d(0, -40px, 0) scale3d(0.82, 0.82, 1);
 }
 
 .floating__input:focus + .floating__label::before {
