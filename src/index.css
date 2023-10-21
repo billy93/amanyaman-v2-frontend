@@ -866,7 +866,7 @@ p{
   font-style: italic;
 }
 .isActive-fill{
-  color: #065baa;
+  color: #065baa!important;
   font-style: italic;
   font-family: 'Mulish';
   font-size: 14px;
