@@ -956,6 +956,9 @@ legend {
   position: absolute;
   width: 1px;
 }
+.react-select__placeholder {
+  font-size: 12px;
+}
 #input__username{
   border: none !important;
 }
