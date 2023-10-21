@@ -828,6 +828,8 @@ p{
 .floating:hover,
 .floating:focus-within {
   background-color: var(--field__background--hover);
+  border: none;
+  border-bottom: 1px solid #065baa;
 }
 
 .floating__input {
