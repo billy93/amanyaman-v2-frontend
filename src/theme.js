@@ -120,11 +120,11 @@ const defaultTheme = extendTheme({
     Text: 'Mulish',
   },
   styles: {
-    global: () => ({
-      body: {
-        bg: '#f7f7f7',
+    global: {
+      '.css-1wa3f7x-placeholder': {
+        fontSize: '12px', // Adjust the font size here
       },
-    }),
+    },
   },
   fontSizes: {
     xs: '0.75rem',
