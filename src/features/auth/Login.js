@@ -609,11 +609,13 @@ const Login = () => {
                                 <span className="hidden--visually">
                                   Password
                                 </span>
-                                {show ? (
-                                  <AiFillEye onClick={handleClick} />
-                                ) : (
-                                  <AiFillEyeInvisible />
-                                )}
+                                <button onClick={handleClick}>
+                                  {show ? (
+                                    <AiFillEye />
+                                  ) : (
+                                    <AiFillEyeInvisible />
+                                  )}
+                                </button>
                               </Box>
                             </label>
                           </div>
