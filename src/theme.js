@@ -119,6 +119,9 @@ const defaultTheme = extendTheme({
     Heading: 'Mulish',
     Text: 'Mulish',
   },
+  zIndices: {
+    chakraSelect: 9999, // Adjust the z-index value as needed
+  },
   styles: {
     global: {
       '.css-1wa3f7x-placeholder': {
