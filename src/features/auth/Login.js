@@ -388,7 +388,7 @@ const Login = () => {
                         </label>
                       </div>
 
-                      <div className="floating">
+                      <div className="floating" style={{ display: 'none' }}>
                         <input
                           style={{
                             // width: '88%',
