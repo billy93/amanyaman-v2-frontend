@@ -31,6 +31,7 @@ import { useTable, useRowSelect } from 'react-table';
 import { useNavigate, Link } from 'react-router-dom';
 import UseCustomToast from '../../../components/UseCustomToast';
 import { CiTrash } from 'react-icons/ci';
+import DeleteModal from '../../../components/DeleteModal';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -499,6 +500,7 @@ const AreaList = () => {
   const [loading, setLoading] = React.useState(false);
   const [pageCount, setPageCount] = React.useState(0);
   const fetchIdRef = React.useRef(0);
+
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const [
     deletedArea,
@@ -627,16 +629,30 @@ const AreaList = () => {
     }
   }, [isSuccess, deletedFailed]);
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+
   const handleActionClick = async (id) => {
     // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    console.log('Confirmed!');
     try {
-      const res = await deletedArea(id);
+      const res = await deletedArea(idx);
       console.log('deleteCity', res);
     } catch (error) {
       console.log(error);
     }
   };
 
+  console.log('id', idx);
   let content;
 
   if (isLoading) {
@@ -649,6 +665,13 @@ const AreaList = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1.1 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete ?.</p>
+        </DeleteModal>
         <Box pl="2em" pr="2em" mt="5em">
           {/* <div>{ console.log('celelng',totalCount)}</div> */}
           <Styles>
