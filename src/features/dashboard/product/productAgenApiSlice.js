@@ -39,7 +39,20 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    getProductsBenefitById: builder.query({
+      prepareHeaders: (headers) => {
+        headers.set('Cache-Control', 'no-store'); // Disable caching in the request headers
+        return headers;
+      },
+      query: (id) => ({
+        url: `/app/product-travel-agents/agent/${id}`,
+        cachePolicy: 'no-cache',
+      }),
+      provideTags: (result, error, id) =>
+        result ? [{ type: 'user', id }] : [],
+    }),
   }),
 });
 
-export const { useGetProductsAgentQuery } = policyApiSlice;
+export const { useGetProductsAgentQuery, useGetProductsBenefitByIdQuery } =
+  policyApiSlice;

@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { debounce } from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
-import { useGetProductsAgentQuery } from './productAgenApiSlice';
+import {
+  useGetProductsAgentQuery,
+  useGetProductsBenefitByIdQuery,
+} from './productAgenApiSlice';
 import { useGetBandTypeQuery } from '../bandType/bandTypesApiSlice';
 import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
 import { useGetTravelAgentQuery } from '../travelAgent/travelApiSlice';
@@ -24,6 +27,7 @@ import {
   Button,
   ButtonGroup,
 } from '@chakra-ui/react';
+import ModalView from './view';
 // import { Select } from 'chakra-react-select'
 import Hospital from '../../../img/images/Hospital.png';
 import Medicine from '../../../img/images/Medicine.png';
@@ -87,6 +91,7 @@ export const useInfiniteLoading = (props) => {
 };
 const Form2 = () => {
   const selectedInsurance = useSelector(selectedTravelInsurance);
+  const { data, isLoading } = useGetProductsBenefitByIdQuery({ skip: true });
   const [showFilter, setShowFilter] = React.useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterby] = React.useState({
@@ -198,8 +203,91 @@ const Form2 = () => {
     const { value } = e.target;
     setSearchTerm(value);
   };
+
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const iframeRef = React.useRef(null);
+
+  const handleIframeLoad = () => {
+    // Access the iframe's contentDocument and body
+    const iframeDoc = iframeRef.current.contentDocument;
+    const iframeBody = iframeDoc.body;
+
+    // Add your custom iframe styles here if needed
+    iframeRef.current.style.width = '100%';
+    iframeRef.current.style.height = '100vh';
+
+    // Clean up the iframe when the modal is closed
+    // onClose && onClose();
+
+    // Clean up any event listeners or resources as needed
+    // You can use the 'beforeunload' event if required
+  };
+  const openNewTab = async (url) => {
+    const newTab = window.open('', '_blank');
+    if (newTab) {
+      newTab.location.href = url;
+      return newTab;
+    } else {
+      console.error('Failed to open a new tab.');
+      return null;
+    }
+  };
+
+  const downloadAndOpenPdfInNewTab = async (pdfData) => {
+    if (!pdfData) {
+      console.error('PDF data is missing.');
+      return;
+    }
+
+    const newTab = await openNewTab(pdfData);
+
+    if (newTab) {
+      // Create an iframe in the new tab and set its source to the PDF data URL
+      const iframe = document.createElement('iframe');
+      iframe.src = pdfData;
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      newTab.document.body.appendChild(iframe);
+
+      // Clean up the blob URL when the new tab is closed
+      newTab.addEventListener('beforeunload', () => {
+        URL.revokeObjectURL(pdfData);
+      });
+    }
+  };
+  const handleConfirm = async () => {
+    await downloadAndOpenPdfInNewTab(data);
+  };
+
   return (
     <Box mt="5em" mr="2em" ml="2em">
+      <ModalView
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onConfirm={handleConfirm}
+      >
+        <iframe
+          ref={iframeRef}
+          src={data}
+          title="Embedded Content"
+          width="800px"
+          height="600px"
+          frameBorder="0"
+          onLoad={handleIframeLoad}
+          scrolling="no"
+        ></iframe>
+      </ModalView>
       <Box
         display={'flex'}
         justifyContent={'space-between'}
@@ -226,6 +314,7 @@ const Form2 = () => {
             variant="outline"
             size={'sm'}
             color="#231F20"
+            onClick={handleConfirm}
           >
             Download
           </Button>
