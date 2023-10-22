@@ -1016,6 +1016,7 @@ const PolicyDetail = () => {
                                           FirstName
                                         </FormLabel>
                                         <Input
+                                          isDisabled={true}
                                           className="global-input"
                                           variant="custom"
                                           pt="10px"
@@ -1041,6 +1042,7 @@ const PolicyDetail = () => {
                                         isRequired
                                       >
                                         <Input
+                                          isDisabled={true}
                                           className="global-input"
                                           variant={'custom'}
                                           pt="10px"
@@ -1109,6 +1111,7 @@ const PolicyDetail = () => {
                                         onChange={(date) =>
                                           setSelectedDates(date, i)
                                         }
+                                        calendarPopperPosition="bottom"
                                         inputPlaceholder="Select a date" // placeholder
                                         formatInputText={formatInputValue}
                                         inputClassName="my-custom-inputs" // custom class
@@ -1447,7 +1450,7 @@ const PolicyDetail = () => {
                                             opacity: 1,
                                             color: 'gray.500',
                                           }}
-                                          name="firstName"
+                                          name="beneficiary"
                                           value={travellers?.beneficiary}
                                           onChange={(e) => setBeneficiary(e, i)}
                                           h="48px"
@@ -1760,6 +1763,7 @@ const PolicyDetail = () => {
                                       FirstName
                                     </FormLabel>
                                     <Input
+                                      isDisabled={true}
                                       className="global-input"
                                       variant="custom"
                                       pt="10px"
@@ -1785,6 +1789,7 @@ const PolicyDetail = () => {
                                     isRequired
                                   >
                                     <Input
+                                      isDisabled={true}
                                       className="global-input"
                                       variant={'custom'}
                                       pt="10px"
@@ -1853,6 +1858,7 @@ const PolicyDetail = () => {
                                     onChange={(date) =>
                                       setSelectedDates(date, i)
                                     }
+                                    calendarPopperPosition="bottom"
                                     inputPlaceholder="Select a date" // placeholder
                                     formatInputText={formatInputValue}
                                     inputClassName="my-custom-inputs" // custom class
@@ -2134,7 +2140,7 @@ const PolicyDetail = () => {
                                         opacity: 1,
                                         color: 'gray.500',
                                       }}
-                                      name="firstName"
+                                      name="passport"
                                       value={travellers?.passport}
                                       onChange={(e) => setPassport(e, i)}
                                       h="48px"
@@ -2185,7 +2191,7 @@ const PolicyDetail = () => {
                                         opacity: 1,
                                         color: 'gray.500',
                                       }}
-                                      name="firstName"
+                                      name="beneficiary"
                                       value={travellers?.beneficiary}
                                       onChange={(e) => setBeneficiary(e, i)}
                                       h="48px"
