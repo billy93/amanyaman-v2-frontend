@@ -991,6 +991,8 @@ const PolicyDetail = () => {
                                         style={{
                                           textAlign: 'center',
                                         }}
+                                        position={'relative'}
+                                        zIndex={0}
                                         height="100%"
                                       >
                                         <FormLabel
@@ -1040,6 +1042,8 @@ const PolicyDetail = () => {
                                         variant="floating"
                                         id="first-name"
                                         isRequired
+                                        position={'relative'}
+                                        zIndex={0}
                                       >
                                         <Input
                                           isDisabled={true}
@@ -1398,7 +1402,7 @@ const PolicyDetail = () => {
                                             opacity: 1,
                                             color: 'gray.500',
                                           }}
-                                          name="firstName"
+                                          name="passport"
                                           value={travellers?.passport}
                                           onChange={(e) => setPassport(e, i)}
                                           h="48px"
@@ -1735,6 +1739,8 @@ const PolicyDetail = () => {
                                     variant="floating"
                                     id="first-name"
                                     isRequired
+                                    position={'relative'}
+                                    zIndex={0}
                                     style={{
                                       textAlign: 'center',
                                     }}
@@ -1787,6 +1793,8 @@ const PolicyDetail = () => {
                                     variant="floating"
                                     id="first-name"
                                     isRequired
+                                    position={'relative'}
+                                    zIndex={0}
                                   >
                                     <Input
                                       isDisabled={true}
