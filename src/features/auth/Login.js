@@ -369,7 +369,7 @@ const Login = () => {
                                 ? '#e8f0fe'
                                 : '#ebebeb',
                           }}
-                          id="input__username"
+                          id="input__usernames"
                           className="floating__input"
                           name="username"
                           type="text"
@@ -378,11 +378,11 @@ const Login = () => {
                           placeholder="Username"
                         />
                         <label
-                          htmlFor="input__username"
+                          htmlFor="input__usernames"
                           className={`floating__label ${
                             fieldsReset?.username !== '' ? 'isActive-fill' : ''
                           } `}
-                          data-content="Username"
+                          data-content="Usernames"
                         >
                           <span className="hidden--visually">Username</span>
                         </label>
@@ -541,6 +541,13 @@ const Login = () => {
                         </FormControl> */}
                           <div className="floating">
                             <input
+                              style={{
+                                // width: '88%',
+                                backgroundColor:
+                                  fields?.username !== ''
+                                    ? '#e8f0fe'
+                                    : '#ebebeb',
+                              }}
                               id="input__username"
                               className="floating__input"
                               name="username"
