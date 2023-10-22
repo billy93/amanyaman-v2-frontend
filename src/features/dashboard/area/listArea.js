@@ -31,7 +31,7 @@ import { useTable, useRowSelect } from 'react-table';
 import { useNavigate, Link } from 'react-router-dom';
 import UseCustomToast from '../../../components/UseCustomToast';
 import { CiTrash } from 'react-icons/ci';
-import DeleteModal from '../../../components/DeleteModal';
+import DeleteModal from '../../../components/globalModal';
 
 const Styles = styled.div`
   padding: 1rem;
