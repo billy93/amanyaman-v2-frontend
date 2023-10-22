@@ -12,6 +12,7 @@ import {
   useFilters,
   useColumnOrder,
 } from 'react-table';
+import DeleteModal from '../../../components/globalModal';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FaSort } from 'react-icons/fa';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
@@ -629,16 +630,6 @@ const Polcies = () => {
     []
   );
 
-  const handleActionClick = async (id) => {
-    // console.log('handleActionClick', id);
-    try {
-      const res = await deleteVariant(id);
-      console.log('deleteCity', res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   // const data = React.useMemo(() => tempList);
   // console.log('ddd listParams', listParams)
   React.useEffect(() => {
@@ -662,6 +653,28 @@ const Polcies = () => {
   const gotoPage = () => {
     setPage(0);
   };
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
+    try {
+      const res = await deleteVariant(idx);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   let content;
   if (isLoading) {
     content = (
@@ -672,6 +685,13 @@ const Polcies = () => {
   } else if (systemParams) {
     content = (
       <Box pl="2em" pr="2em" mt="3em">
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete ?.</p>
+        </DeleteModal>
         {/* <div>{ console.log('celelng',totalCount)}</div> */}
         <Styles>
           <Tables

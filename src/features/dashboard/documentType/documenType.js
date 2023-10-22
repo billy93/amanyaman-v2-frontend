@@ -5,6 +5,7 @@ import {
   useGetDocumentTypesQuery,
   useDeleteDocumentMutation,
 } from './docTypeApiSlice';
+import DeleteModal from '../../../components/globalModal';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   usePagination,
@@ -682,16 +683,6 @@ const DocumentList = () => {
     []
   );
 
-  const handleActionClick = async (id) => {
-    // console.log('handleActionClick', id);
-    try {
-      const res = await deleteDocument(id);
-      console.log('deleteCity', res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   React.useEffect(() => {
     refetch({ page, size: 10 });
   }, [page, refetch]);
@@ -705,6 +696,29 @@ const DocumentList = () => {
     return (page + 1) * 10;
   }, [page]);
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
+    try {
+      const res = await deleteDocument(idx);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   let content;
   if (isLoading) {
     content = <PageLoader loading={isLoading} />;
@@ -716,6 +730,13 @@ const DocumentList = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1.1 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete ?.</p>
+        </DeleteModal>
         <Box ml="2em" mr="2em" mt="6em">
           {/* <div>{ console.log('celelng',totalCount)}</div> */}
           <Styles>

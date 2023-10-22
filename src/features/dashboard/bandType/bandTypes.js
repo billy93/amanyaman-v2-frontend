@@ -18,6 +18,7 @@ import PulseLoader from 'react-spinners/PulseLoader';
 import { FaChevronUp, FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageLoader from '../../../components/pageLoader';
+import DeleteModal from '../../../components/globalModal';
 import {
   useToast,
   Select,
@@ -671,10 +672,23 @@ const Polcies = () => {
     }
   }, [isSuccess, deletedFailed]);
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+
   const handleActionClick = async (id) => {
     // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
     try {
-      const res = await deletedBandType(id);
+      const res = await deletedBandType(idx);
       console.log('deleteCity', res);
     } catch (error) {
       console.log(error);
@@ -691,6 +705,13 @@ const Polcies = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1.1 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete ?.</p>
+        </DeleteModal>
         <Box pl="2em" pr="2em" mt="3em">
           {/* <div>{ console.log('celelng',totalCount)}</div> */}
           <Styles>

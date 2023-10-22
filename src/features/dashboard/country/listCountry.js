@@ -5,6 +5,7 @@ import React from 'react';
 import { useGetListCountryQuery } from './listApiSlice';
 import { useNavigate, Link } from 'react-router-dom';
 import PageLoader from '../../../components/pageLoader';
+import DeleteModal from '../../../components/globalModal';
 import {
   usePagination,
   useSortBy,
@@ -671,10 +672,23 @@ const CountryList = () => {
     }
   }, [isSuccess, deletedFailed]);
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+
   const handleActionClick = async (id) => {
     // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
     try {
-      const res = await deletedCountry(id);
+      const res = await deletedCountry(idx);
       console.log('deleteCity', res);
     } catch (error) {
       console.log(error);
@@ -693,6 +707,13 @@ const CountryList = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1.1 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete ?.</p>
+        </DeleteModal>
         <Box mt="6em" ml="2em" mr="2em" mb={'2em'}>
           {/* <div>{ console.log('celelng',totalCount)}</div> */}
           <Styles>

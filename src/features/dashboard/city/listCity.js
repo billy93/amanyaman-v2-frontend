@@ -9,6 +9,7 @@ import {
   useFilters,
   useColumnOrder,
 } from 'react-table';
+import DeleteModal from '../../../components/globalModal';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -607,16 +608,6 @@ const CityList = () => {
     setPage(0);
   };
 
-  const handleActionClick = async (id) => {
-    // console.log('handleActionClick', id);
-    try {
-      const res = await deleteCity(id);
-      console.log('deleteCity', res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   React.useEffect(() => {
     refetch({ page, size: size });
   }, [isSuccess, page, size, refetch]);
@@ -630,6 +621,29 @@ const CityList = () => {
       showErrorToast('Deleted Failed!', 'deletedcityerrors');
     }
   }, [isSuccess, deletedFailed]);
+
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
+    try {
+      const res = await deleteCity(idx);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const gotoPage = () => {
     setPage(0);
@@ -645,6 +659,13 @@ const CityList = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1.1 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete ?.</p>
+        </DeleteModal>
         <Box mt="6em" ml="2em" mr="2em" mb={'2em'}>
           {/* <div>{ console.log('celelng',totalCount)}</div> */}
           <Styles>

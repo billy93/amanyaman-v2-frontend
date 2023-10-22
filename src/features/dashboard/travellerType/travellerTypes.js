@@ -5,6 +5,7 @@ import {
   useGetTravellerTypesQuery,
 } from './travellerTypesApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import DeleteModal from '../../../components/globalModal';
 import {
   usePagination,
   useSortBy,
@@ -603,16 +604,28 @@ const Polcies = () => {
     }
   }, [isSuccess, deletedFailed]);
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+
   const handleActionClick = async (id) => {
     // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
     try {
-      const res = await deleteTravellerType(id);
+      const res = await deleteTravellerType(idx);
       console.log('deleteCity', res);
     } catch (error) {
       console.log(error);
     }
   };
-
   let content;
   if (isLoading) {
     content = <PageLoader loading={isLoading} />;
@@ -624,6 +637,13 @@ const Polcies = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1.1 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete ?.</p>
+        </DeleteModal>
         <Box pl="2em" pr="2em" mt="4.5em">
           {/* <div>{ console.log('celelng',totalCount)}</div> */}
           <Styles>

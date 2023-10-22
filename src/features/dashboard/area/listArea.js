@@ -643,7 +643,7 @@ const AreaList = () => {
 
   const handleConfirm = async () => {
     // Place your confirmation logic here
-    console.log('Confirmed!');
+    // console.log('Confirmed!');
     try {
       const res = await deletedArea(idx);
       console.log('deleteCity', res);
@@ -652,7 +652,7 @@ const AreaList = () => {
     }
   };
 
-  console.log('id', idx);
+  // console.log('id', idx);
   let content;
 
   if (isLoading) {

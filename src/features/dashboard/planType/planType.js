@@ -2,6 +2,7 @@
 import React from 'react';
 import { useGetPlanTypesQuery } from './planTypeApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import DeleteModal from '../../../components/globalModal';
 import {
   usePagination,
   useSortBy,
@@ -659,10 +660,23 @@ const PlanTypes = () => {
     }
   }, [isSuccess, deletedFailed]);
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+
   const handleActionClick = async (id) => {
     // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
     try {
-      const res = await deletedPlanTypes(id);
+      const res = await deletedPlanTypes(idx);
       console.log('deleteCity', res);
     } catch (error) {
       console.log(error);
@@ -680,6 +694,13 @@ const PlanTypes = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.9, duration: 0.9 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete ?.</p>
+        </DeleteModal>
         <Box ml="2em" mr="2em" mt="6em">
           {/* <div>{ console.log('celelng',totalCount)}</div> */}
           <Styles>

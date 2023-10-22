@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useGetListAreaGroupQuery } from './listApiSlice';
 import { useNavigate, Link } from 'react-router-dom';
+import DeleteModal from '../../../components/globalModal';
 import {
   usePagination,
   useSortBy,
@@ -609,10 +610,23 @@ const GroupArea = () => {
     }
   }, [isSuccess, deletedFailed]);
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+
   const handleActionClick = async (id) => {
     // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
     try {
-      const res = await deletedGroupArea(id);
+      const res = await deletedGroupArea(idx);
       console.log('deleteCity', res);
     } catch (error) {
       console.log(error);
@@ -629,6 +643,13 @@ const GroupArea = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1.1 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete ?.</p>
+        </DeleteModal>
         <Box mt="5.5em" ml="2em" mr="2em">
           {/* <div>{ console.log('celelng',totalCount)}</div> */}
           <Styles>

@@ -1,17 +1,29 @@
 /* eslint-disable indent */
 import React, { useState } from 'react';
-import { useGetSystemParamsQuery } from './systemParamsApiSlice';
-import { Link, useNavigate } from 'react-router-dom';
+import {
+  useGetSystemParamsQuery,
+  useDeleteParamsMutation,
+} from './systemParamsApiSlice';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import DeleteModal from '../../../components/globalModal';
 import {
   usePagination,
   useSortBy,
   useFilters,
   useColumnOrder,
 } from 'react-table';
+import { CiTrash } from 'react-icons/ci';
 import PageLoader from '../../../components/pageLoader';
 import { FaSort } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Box, Heading, Stack, Text, Select } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Stack,
+  Text,
+  Select,
+  IconButton,
+} from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
@@ -490,6 +502,7 @@ function filterGreaterThan(rows, id, filterValue) {
 filterGreaterThan.autoRemove = (val) => typeof val !== 'number';
 
 const Polcies = () => {
+  const { id } = useParams();
   const [size, setSize] = React.useState(5);
   // eslint-disable-next-line no-unused-vars
   const [data, setData] = React.useState([]);
@@ -505,7 +518,8 @@ const Polcies = () => {
     isFetching,
     refetch,
   } = useGetSystemParamsQuery({ page, size: size });
-
+  const [deleteParams, { isLoading: processDelete }] =
+    useDeleteParamsMutation(id);
   const fetchData = React.useCallback(
     ({ pageSize, pageIndex, pageOptions }) => {
       // This will get called when the table needs new data
@@ -584,6 +598,23 @@ const Polcies = () => {
         filter: 'fuzzyText',
         Cell: ({ value }) => <div className="global-td">{value}</div>,
       },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'13px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
+        ),
+      },
     ],
     []
   );
@@ -613,6 +644,29 @@ const Polcies = () => {
     setPage(0);
   };
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
+    try {
+      const res = await deleteParams(idx);
+      console.log('deleteCity', res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   let content;
   if (isLoading) {
     content = <PageLoader loading={isLoading} />;
@@ -620,6 +674,13 @@ const Polcies = () => {
     // const totalCount = data;
     content = (
       <Box pl="2em" pr="2em" mt="6em">
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete ?.</p>
+        </DeleteModal>
         {/* <div>{ console.log('celelng',totalCount)}</div> */}
         <Styles>
           <Tables
