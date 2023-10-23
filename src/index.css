@@ -21,14 +21,14 @@
   display: flex;
   align-items: center;
 }
-.active {
+.nav-active {
   text-decoration: none; /* Remove default underline */
   padding: 8px 16px; /* Add some padding to make it look clickable */
   border-bottom: 2px solid transparent; /* Initially, a transparent border */
   transition: border-bottom 0.3s; /* Add a smooth transition */
 }
 
-.active:hover {
+.nav-active:hover {
   border-bottom: 2px solid blue; /* Change the border color on hover (e.g., blue) */
 }
 /* Apply special styles when the input value is empty */
