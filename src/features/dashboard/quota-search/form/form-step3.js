@@ -194,11 +194,34 @@ const Form3 = ({
   const setSearchTravellers = (e) => {
     setSearchTraveller(e.target.value);
   };
+
+  function convertDateStringToDateObject(dateString) {
+    const parts = dateString.split('-');
+
+    if (parts.length !== 3) {
+      // Check if the input string has the correct format (YYYY-MM-DD)
+      throw new Error('Invalid date format. Expected format: YYYY-MM-DD');
+    }
+
+    const dateObject = {
+      year: parseInt(parts[0]),
+      month: parseInt(parts[1]),
+      day: parseInt(parts[2]),
+    };
+
+    return dateObject;
+  }
   const handleEditTravellersData = (data) => {
     // e.preventDefault();
     console.log('travellers', data);
+    let dates = convertDateStringToDateObject(data?.dateOfBirth);
     // eslint-disable-next-line no-unused-vars
-    dispatch(setEditTraveller(data));
+    dispatch(
+      setEditTraveller({
+        ...data,
+        dateOfBirth: dates,
+      })
+    );
     openModal();
   };
 
@@ -266,7 +289,7 @@ const Form3 = ({
     //   setIsActiveNew(false);
     // }
   };
-  console.log('test', existingTravellers, existingTravellersDate);
+  // console.log('test', existingTravellers, existingTravellersDate);
   function getMonthName(monthNumber) {
     const date = new Date();
     date.setMonth(monthNumber - 1);
@@ -301,7 +324,7 @@ const Form3 = ({
     settriggered(false);
     handlePrevState();
   };
-  console.log('loginss', payload);
+  // console.log('loginss', payload);
   const handlePrevState = async (e) => {
     try {
       const res = await searchproducts(payload);
@@ -431,10 +454,10 @@ const Form3 = ({
             placeholder=" "
             _placeholder={{ opacity: 1, color: 'gray.500' }}
             value={
-              dateOfBirth
-                ? `${dateOfBirth?.day} ${getMonthName(dateOfBirth?.month)} ${
-                    dateOfBirth?.year
-                  }`
+              EditTraveller?.dateOfBirth
+                ? `${EditTraveller?.dateOfBirth?.day} ${getMonthName(
+                    EditTraveller?.dateOfBirth?.month
+                  )} ${EditTraveller?.dateOfBirth?.year}`
                 : ''
             }
             h="48px"
@@ -445,10 +468,13 @@ const Form3 = ({
             pt="1.5"
             style={{
               transform:
-                dateOfBirth !== null ? 'translate(0, -6px) scale(0.75)' : '',
-              color: dateOfBirth !== null ? '#065baa' : '',
-              fontStyle: dateOfBirth !== null ? 'italic' : 'italic',
-              fontSize: dateOfBirth !== null ? '12px' : '12px',
+                EditTraveller?.dateOfBirth !== null
+                  ? 'translate(0, -6px) scale(0.75)'
+                  : '',
+              color: EditTraveller?.dateOfBirth !== null ? '#065baa' : '',
+              fontStyle:
+                EditTraveller?.dateOfBirth !== null ? 'italic' : 'italic',
+              fontSize: EditTraveller?.dateOfBirth !== null ? '12px' : '12px',
             }}
             fontFamily={'Mulish'}
           >
@@ -874,6 +900,7 @@ const Form3 = ({
     // await downloadAndOpenPdfInNewTab(data);
   };
   const controls = useAnimationControls();
+
   const handleChange = (e) => {
     dispatch(
       setEditTraveller({
@@ -882,6 +909,7 @@ const Form3 = ({
       })
     );
   };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
