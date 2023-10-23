@@ -275,7 +275,7 @@ const Form3 = ({
   const selectDateEdit = (date) => {
     setDateOfBirth(date);
     setEditTraveller({
-      ...data,
+      ...EditTraveller,
       dateOfBirth: date,
     });
     if (date !== null) {
