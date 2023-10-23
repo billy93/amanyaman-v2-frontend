@@ -2466,7 +2466,7 @@ const Form3 = ({
                   colorScheme="blue"
                   mr={3}
                   onClick={
-                    EditTraveller?.id !== ''
+                    EditTraveller?.bookingId !== ''
                       ? onEdit
                       : travellersExisting !== null
                       ? onSaveExisting
@@ -2475,7 +2475,7 @@ const Form3 = ({
                   disabled={loadingEdit || loadingAdd}
                   isLoading={loadingEdit || loadingAdd}
                 >
-                  {EditTraveller?.id !== '' ? 'Edit' : 'Add'}
+                  {EditTraveller?.bookingId !== '' ? 'Edit' : 'Add'}
                 </Button>
               </ModalFooter>
             </ModalContent>
