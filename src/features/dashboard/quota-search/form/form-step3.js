@@ -762,7 +762,7 @@ const Form3 = ({
     // e.preventDefault();
     let i = listTravellers?.listTravellers?.length;
     let dates = formatDate(
-      `${dateOfBirth?.year}-${dateOfBirth?.month}-${dateOfBirth?.day}`
+      `${EditTraveller?.dateOfBirth?.year}-${EditTraveller?.dateOfBirth?.month}-${EditTraveller?.dateOfBirth?.day}`
     );
     const now = new Date();
     const newAdd = {
@@ -771,7 +771,7 @@ const Form3 = ({
       firstName: EditTraveller?.firstName,
       lastName: EditTraveller?.lastName,
       title: EditTraveller?.typeStatus,
-      travellerType: EditTraveller?.type,
+      travellerType: EditTraveller?.travellerType,
       fullName: `${EditTraveller?.firstName}${EditTraveller?.lastName}`,
       email: EditTraveller?.email,
       phone: EditTraveller?.phone,
@@ -783,8 +783,10 @@ const Form3 = ({
       flightItinerary: 'New York to London',
       endorsement: 'Some endorsement text',
       refundEndorsement: 'Refund endorsement text',
-      beneficiary: EditTraveller?.beneficiary !== '' ? beneficiary : '',
-      relationship: EditTraveller?.relationship !== '' ? relationship : '',
+      beneficiary:
+        EditTraveller?.beneficiary !== '' ? EditTraveller?.beneficiary : '',
+      relationship:
+        EditTraveller?.relationship !== '' ? EditTraveller?.relationship : '',
     };
     // // eslint-disable-next-line no-unsafe-optional-chaining
     // let travellersData = [...listTravellers?.listTravellers, newAdd];
@@ -961,7 +963,7 @@ const Form3 = ({
     dispatch(
       setEditTraveller({
         ...EditTraveller,
-        [e.taraget.name]: e.target.value,
+        [e.target.name]: e.target.value,
       })
     );
   };
