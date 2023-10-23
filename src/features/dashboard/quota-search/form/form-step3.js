@@ -1323,7 +1323,7 @@ const Form3 = ({
                       name="passport"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={EditTraveller?.pasport}
+                      value={EditTraveller?.passport}
                       onChange={handleChange}
                       h="48px"
                       style={{
@@ -1346,7 +1346,7 @@ const Form3 = ({
                       name="ticket"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={EditTraveller?.ticketNumber}
+                      value={EditTraveller?.ticket}
                       onChange={handleChange}
                       h="48px"
                       style={{
@@ -3006,7 +3006,7 @@ const Form3 = ({
                                   fontFamily={'Mulish'}
                                   style={{ fontSize: '14px' }}
                                 >
-                                  Beneficiary
+                                  Ticket Number
                                 </Text>
                                 <Text
                                   as="p"
