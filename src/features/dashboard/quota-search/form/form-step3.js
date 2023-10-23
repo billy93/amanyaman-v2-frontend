@@ -273,16 +273,12 @@ const Form3 = ({
   };
 
   const selectDateEdit = (date) => {
+    console.log('edit', date);
     setDateOfBirth(date);
     setEditTraveller({
       ...EditTraveller,
       dateOfBirth: { ...date },
     });
-    if (date !== null) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
   };
 
   const selectDateNew = (date) => {
