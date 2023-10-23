@@ -91,7 +91,13 @@ export const useInfiniteLoading = (props) => {
 };
 const Form2 = () => {
   const selectedInsurance = useSelector(selectedTravelInsurance);
-  const { data, isLoading } = useGetProductsBenefitByIdQuery({ skip: true });
+  const {
+    data,
+    refetch: isRefetching,
+    isLoading,
+  } = useGetProductsBenefitByIdQuery(id, {
+    skip: true,
+  });
   const [showFilter, setShowFilter] = React.useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterby] = React.useState({
@@ -210,9 +216,10 @@ const Form2 = () => {
   const closeModal = () => setIsModalOpen(false);
   const [idx, setIdx] = React.useState('');
 
-  const handleActionClick = async (id) => {
-    // console.log('handleActionClick', id);
+  const handleActionClick = async ({ id }) => {
+    console.log('handleActionClick', id);
     openModal();
+    isRefetching(id);
     setIdx(id);
   };
 
@@ -575,8 +582,18 @@ const Form2 = () => {
                   With Additional benefits and Assistance Cover.
                 </Heading>
                 <ButtonGroup gap="5px">
-                  <Button variant="base">View Benefits</Button>
-                  <Button variant="base">Download PDF</Button>
+                  <Button
+                    variant="base"
+                    onClick={(products) => handleActionClick(products.id)}
+                  >
+                    View Benefits
+                  </Button>
+                  <Button
+                    variant="base"
+                    onClick={(products) => handleConfirm(products.id)}
+                  >
+                    Download PDF
+                  </Button>
                 </ButtonGroup>
               </Box>
             </Box>

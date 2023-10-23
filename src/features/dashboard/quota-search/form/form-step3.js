@@ -406,7 +406,7 @@ const Form3 = ({
       setTypeStatus(EditTraveller?.title);
       setType(EditTraveller?.travellerType);
       setBeneficiary(EditTraveller?.beneficiary);
-      setTicketsNumber(EditTraveller?.ticketFlightNumber);
+      setTicketsNumber(EditTraveller?.ticket);
       setRelationship(EditTraveller?.relationship);
     }
   }, [EditTraveller]);
@@ -2223,7 +2223,7 @@ const Form3 = ({
                                   style={{ fontSize: '12px' }}
                                   pl="5px"
                                 >
-                                  {travellers.fullName}
+                                  {`${travellers.firstName} ${travellers.LASTName}`}
                                 </Text>
                               </Box>
                               <Box
