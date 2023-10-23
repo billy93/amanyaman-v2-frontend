@@ -84,6 +84,7 @@ import { MdCreate } from 'react-icons/md';
 import CustomModal from './import';
 import { CiTrash } from 'react-icons/ci';
 import CurrencyFormatter from '../../../../components/formatCurrency';
+import ModalEdit from './modalEdit';
 
 const Form3 = ({
   label,
@@ -141,7 +142,10 @@ const Form3 = ({
   const [dateBirth, setDateBirth] = useState('');
   const [isValid, setIsValid] = useState(true);
   const [isValidPhone, setIsValidPhone] = useState(true);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   const toast = useToast();
   const historyform = useSelector(historyForm);
   const [addTravellerData, { isSuccess, isLoading: loadingAdd }] =
@@ -195,7 +199,7 @@ const Form3 = ({
     console.log('travellers', data);
     // eslint-disable-next-line no-unused-vars
     dispatch(setEditTraveller(data));
-    onOpen();
+    openModal();
   };
 
   const setFirstNames = (e) => {
@@ -857,6 +861,17 @@ const Form3 = ({
     },
   };
 
+  const [idx, setIdx] = React.useState('');
+
+  const handleActionClick = async ({ id }) => {
+    console.log('handleActionClick', id);
+    openModal();
+    // isRefetching(id);
+    setIdx(id);
+  };
+  const handleConfirm = async () => {
+    // await downloadAndOpenPdfInNewTab(data);
+  };
   const controls = useAnimationControls();
   return (
     <motion.div
@@ -871,6 +886,468 @@ const Form3 = ({
           animate={controls}
           exit="exit"
         >
+          <ModalEdit
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            onConfirm={handleConfirm}
+          >
+            <motion.div
+              initial={{ y: '100vh' }}
+              animate={{ y: 0 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+            >
+              <motion.Box
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 1.1 }}
+              >
+                <FormControl
+                  variant="floating"
+                  isRequired
+                  fontFamily={'Mulish'}
+                  mt="14px"
+                  id="float-label"
+                >
+                  <Box className="floating-form">
+                    <Box className="floating-label">
+                      <Select
+                        borderRadius={'5px'}
+                        className="floating-select"
+                        placeholder=""
+                        defaultValue={type}
+                        h="48px"
+                        onChange={handleSelectType}
+                        style={{
+                          backgroundColor: type !== '' ? '#e8f0fe' : '',
+                        }}
+                      >
+                        <option value=""></option>
+                        <option value="Adult">Adult</option>
+                        <option value="Child">Child</option>
+                      </Select>
+                      <span className="highlight"></span>
+                      <FormLabel
+                        fontSize="12"
+                        pt="1.5"
+                        style={{
+                          transform:
+                            isActiveSelectCountry || type !== ''
+                              ? 'translate(0, -9px) scale(0.75)'
+                              : '',
+                          color:
+                            isActiveSelectCountry || type !== ''
+                              ? '#065baa'
+                              : '',
+                          fontStyle:
+                            isActiveSelectCountry || type !== ''
+                              ? 'italic'
+                              : 'normal',
+                          fontSize:
+                            isActiveSelectCountry || type !== ''
+                              ? '12px'
+                              : '14px',
+                        }}
+                        fontFamily={'Mulish'}
+                      >
+                        Select Status
+                      </FormLabel>
+                    </Box>
+                  </Box>
+                  {/* It is important that the Label comes after the Control due to css selectors */}
+                </FormControl>
+              </motion.Box>
+              <motion.Box
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 1.1 }}
+              >
+                <FormControl
+                  variant="floating"
+                  isRequired
+                  fontFamily={'Mulish'}
+                  mt="14px"
+                  id="float-label"
+                >
+                  <Box className="floating-form">
+                    <Box className="floating-label">
+                      <Select
+                        borderRadius={'5px'}
+                        className="floating-select"
+                        placeholder=""
+                        defaultValue={typeStatus}
+                        h="48px"
+                        onChange={handleSelectTypeStatus}
+                        style={{
+                          backgroundColor: typeStatus !== '' ? '#e8f0fe' : '',
+                        }}
+                      >
+                        <option value="Mr">Mr</option>
+                        <option value="Mrs">Mrs</option>
+                        <option value="Ms">Ms</option>
+                      </Select>
+                      <span className="highlight"></span>
+                      <FormLabel
+                        fontSize="12"
+                        pt="1.5"
+                        style={{
+                          transform:
+                            isActiveSelectCountry || type !== ''
+                              ? 'translate(0, -9px) scale(0.75)'
+                              : '',
+                          color:
+                            isActiveSelectCountry || type !== ''
+                              ? '#065baa'
+                              : '',
+                          fontSize: '14px',
+                        }}
+                        fontFamily={'Mulish'}
+                      >
+                        Select Title
+                      </FormLabel>
+                    </Box>
+                  </Box>
+                  {/* It is important that the Label comes after the Control due to css selectors */}
+                </FormControl>
+              </motion.Box>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 1.1 }}
+              >
+                <Box display={'flex'} gap="5px">
+                  <FormControl variant="floating" id="first-name" isRequired>
+                    <Input
+                      placeholder=" "
+                      _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      value={firstName}
+                      onChange={setFirstNames}
+                      h="48px"
+                      style={{
+                        backgroundColor: firstName !== '' ? '#e8f0fe' : '',
+                      }}
+                    />
+                    {/* It is important that the Label comes after the Control due to css selectors */}
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
+                      FirstName
+                    </FormLabel>
+                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                  </FormControl>
+                  <FormControl variant="floating" id="first-name" isRequired>
+                    <Input
+                      placeholder=" "
+                      _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      value={lastName}
+                      onChange={setLastNames}
+                      h="48px"
+                      style={{
+                        backgroundColor: lastName !== '' ? '#e8f0fe' : '',
+                      }}
+                    />
+                    {/* It is important that the Label comes after the Control due to css selectors */}
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
+                      LastName
+                    </FormLabel>
+                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                  </FormControl>
+                </Box>
+              </motion.div>
+              <motion.Box
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 1.1 }}
+              >
+                <Text
+                  as="p"
+                  fontFamily={'Mulish'}
+                  color="#065BAA"
+                  pl="5px"
+                  style={{ fontSize: '12px' }}
+                >
+                  As on ID Card/passport/driving license (without degree or
+                  special characters)
+                </Text>
+              </motion.Box>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 1.1 }}
+              >
+                <Box display={'flex'} gap="5px" mt="10px">
+                  <Box bg={dateOfBirth !== null ? '#e8f0fe' : ''}>
+                    <DatePicker
+                      value={dateOfBirth}
+                      onChange={selectDate}
+                      inputPlaceholder="Select a date" // placeholder
+                      formatInputText={formatInputValue}
+                      inputClassName={
+                        dateOfBirth !== null ? '' : 'my-custom-input'
+                      } // custom class
+                      renderInput={renderCustomInput}
+                      shouldHighlightWeekends
+                      style={{
+                        backgroundColor: dateOfBirth !== null ? '#e8f0fe' : '',
+                      }}
+                    />
+                  </Box>
+                  <FormControl variant="floating" id="first-name" isRequired>
+                    <Input
+                      placeholder=" "
+                      _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      value={placeOfBirth}
+                      onChange={setPlaceOfBirths}
+                      h="48px"
+                      style={{
+                        backgroundColor: placeOfBirth !== '' ? '#e8f0fe' : '',
+                      }}
+                    />
+                    {/* It is important that the Label comes after the Control due to css selectors */}
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
+                      {' '}
+                      Place Of Birth
+                    </FormLabel>
+                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                  </FormControl>
+                </Box>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 1.1 }}
+              >
+                <Box w={{ base: '100%', md: '365px' }} pb="20px">
+                  <FormControl
+                    variant="floating"
+                    id="first-name"
+                    isRequired
+                    fontFamily={'Mulish'}
+                    mt="14px"
+                  >
+                    <Textarea
+                      pt="1em"
+                      placeholder=" "
+                      _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      value={address}
+                      onChange={setAddresss}
+                      style={{
+                        backgroundColor: address !== '' ? '#e8f0fe' : '',
+                        fontSize: '12px',
+                        fontfamily: 'Mulish',
+                        fontWeight: 'normal',
+                      }}
+                      h="48px"
+                    />
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      fontFamily={'Mulish'}
+                      style={{ fontSize: '14px' }}
+                      className="floating-label-global"
+                    >
+                      Address
+                    </FormLabel>
+                    {/* It is important that the Label comes after the Control due to css selectors */}
+                  </FormControl>
+                </Box>
+                <Box display={'flex'} gap="5px">
+                  <FormControl
+                    variant="floating"
+                    id="first-name"
+                    isRequired
+                    isInvalid={!isValid}
+                  >
+                    <Input
+                      type="email"
+                      placeholder=""
+                      value={email}
+                      onChange={setEmailAddress}
+                      h="48px"
+                      style={{
+                        backgroundColor: email !== '' ? '#e8f0fe' : '',
+                      }}
+                    />
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
+                      Email
+                    </FormLabel>
+                    <FormErrorMessage>
+                      {!isValid && 'Invalid email address format'}
+                    </FormErrorMessage>
+                  </FormControl>
+                  <FormControl
+                    variant="floating"
+                    id="first-name"
+                    isRequired
+                    isInvalid={!isValidPhone}
+                  >
+                    <Input
+                      type="tel"
+                      placeholder=" "
+                      _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      value={phoneNumber}
+                      onChange={setPhoneNumbers}
+                      h="48px"
+                      style={{
+                        backgroundColor: phoneNumber !== '' ? '#e8f0fe' : '',
+                      }}
+                    />
+                    {/* It is important that the Label comes after the Control due to css selectors */}
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
+                      Phone Number
+                    </FormLabel>
+                    <FormErrorMessage>
+                      {!isValidPhone && 'Invalid phone number format'}
+                    </FormErrorMessage>
+                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                  </FormControl>
+                </Box>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 1.1 }}
+              >
+                <Box display={'flex'} gap="5px" mt="1em">
+                  <FormControl variant="floating" id="first-name" isRequired>
+                    <Input
+                      placeholder=" "
+                      _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      value={pasportNumber}
+                      onChange={setPasportNumbers}
+                      h="48px"
+                      style={{
+                        backgroundColor: pasportNumber !== '' ? '#e8f0fe' : '',
+                      }}
+                    />
+                    {/* It is important that the Label comes after the Control due to css selectors */}
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
+                      Pasport Number
+                    </FormLabel>
+                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                  </FormControl>
+                  <FormControl variant="floating" id="first-name">
+                    <Input
+                      placeholder=" "
+                      _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      value={ticketNumber}
+                      onChange={setTicketNumbers}
+                      h="48px"
+                      style={{
+                        backgroundColor: ticketNumber !== '' ? '#e8f0fe' : '',
+                      }}
+                    />
+                    {/* It is important that the Label comes after the Control due to css selectors */}
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
+                      Ticket Number
+                    </FormLabel>
+                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                  </FormControl>
+                </Box>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 1.1 }}
+              >
+                <Box display={'flex'} gap="5px" mt="1em">
+                  <FormControl variant="floating" id="first-name">
+                    <Input
+                      placeholder=" "
+                      _placeholder={{ opacity: 1, color: 'gray.500' }}
+                      value={beneficiary}
+                      onChange={setBeneficiaries}
+                      h="48px"
+                      style={{
+                        backgroundColor: beneficiary !== '' ? '#e8f0fe' : '',
+                      }}
+                    />
+                    {/* It is important that the Label comes after the Control due to css selectors */}
+                    <FormLabel
+                      fontSize="12"
+                      pt="1.5"
+                      className="floating-label-global"
+                    >
+                      Beneficiary
+                    </FormLabel>
+                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                  </FormControl>
+                  <FormControl>
+                    <Box className="floating-form">
+                      <Box>
+                        <Select
+                          className="global-input"
+                          style={{
+                            backgroundColor:
+                              relationship !== '' ? '#e8f0fe' : '',
+                          }}
+                          // className="floating-select"
+                          placeholder=""
+                          defaultValue={relationship}
+                          h="48px"
+                          onChange={setRelationships}
+                        >
+                          <option value="" className="">
+                            Relationship
+                          </option>
+                          <option value="parent">Parent</option>
+                          <option value="child">Child</option>
+                          <option value="close-family">Close Family</option>
+                        </Select>
+                        <span className="highlight"></span>
+                        <FormLabel
+                          pt="1.5"
+                          className="floating-label-global"
+                          style={{
+                            transform:
+                              relationship !== ''
+                                ? 'translate(-21px, -54px) scale(0.75)'
+                                : 'translate(-21px, -36px) scale(0.75)',
+                            background: relationship === '' ? 'white' : '',
+
+                            color:
+                              relationship === '' ? '#000000c9' : '#065baa',
+                          }}
+                          _hover={{
+                            backgroundColor: 'none',
+                          }}
+                          fontFamily={'Mulish'}
+                        >
+                          Relationship
+                        </FormLabel>
+                      </Box>
+                    </Box>
+                    {/* {isErrorUser ==='' && <FormErrorMessage>Your Username is invalid</FormErrorMessage>} */}
+                  </FormControl>
+                </Box>
+              </motion.div>
+            </motion.div>
+          </ModalEdit>
           <Modal
             size="xl"
             blockScrollOnMount={false}
