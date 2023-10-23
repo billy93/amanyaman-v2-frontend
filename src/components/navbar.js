@@ -321,10 +321,6 @@ export default function Navbar({ allowedRoles }) {
                       <PopoverTrigger>
                         {link?.children ? (
                           <motion.span
-                            whileHover={{
-                              borderBottom: '1px solid #065baa',
-                              scale: 1.1,
-                            }}
                             style={{
                               fontSize: '14px',
                               fontFamily: 'Mulish',
@@ -336,11 +332,7 @@ export default function Navbar({ allowedRoles }) {
                             {link.name}
                           </motion.span>
                         ) : (
-                          <motion.NewLink
-                            whileHover={{
-                              borderBottom: '1px solid #065baa',
-                              scale: 1.1,
-                            }}
+                          <NewLink
                             as={Nav}
                             to={link?.link}
                             variant={'outline'}
@@ -348,7 +340,7 @@ export default function Navbar({ allowedRoles }) {
                             activeClassName="active"
                           >
                             {link.name}
-                          </motion.NewLink>
+                          </NewLink>
                         )}
                         {/* <NewLink
                           key={i}
