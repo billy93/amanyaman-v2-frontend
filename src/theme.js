@@ -197,6 +197,13 @@ const defaultTheme = extendTheme({
     Button: buttonTheme,
     Input: inputTheme,
     Steps: StepsTheme,
+    Breadcrumb: {
+      baseStyle: {
+        breadcrumb: {
+          border: 'none', // Remove the border
+        },
+      },
+    },
     // CustomSteps,
     // Input: {
     //   variants: {
