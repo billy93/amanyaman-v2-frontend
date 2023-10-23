@@ -1013,15 +1013,18 @@ const Form3 = ({
                   <Box className="floating-form">
                     <Box className="floating-label">
                       <Select
-                        name="status"
+                        name="travellerType"
                         borderRadius={'5px'}
                         className="floating-select"
                         placeholder=""
-                        defaultValue={type}
+                        defaultValue={EditTraveller?.travellerType}
                         h="48px"
                         onChange={handleChange}
                         style={{
-                          backgroundColor: type !== '' ? '#e8f0fe' : '',
+                          backgroundColor:
+                            EditTraveller?.travellerType !== ''
+                              ? '#e8f0fe'
+                              : '',
                         }}
                       >
                         <option value=""></option>
@@ -1078,11 +1081,12 @@ const Form3 = ({
                         borderRadius={'5px'}
                         className="floating-select"
                         placeholder=""
-                        defaultValue={typeStatus}
+                        defaultValue={EditTraveller?.title}
                         h="48px"
                         onChange={handleChange}
                         style={{
-                          backgroundColor: typeStatus !== '' ? '#e8f0fe' : '',
+                          backgroundColor:
+                            EditTraveller?.title !== '' ? '#e8f0fe' : '',
                         }}
                       >
                         <option value="Mr">Mr</option>
@@ -1150,7 +1154,8 @@ const Form3 = ({
                       onChange={handleChange}
                       h="48px"
                       style={{
-                        backgroundColor: lastName !== '' ? '#e8f0fe' : '',
+                        backgroundColor:
+                          EditTraveller?.lastName !== '' ? '#e8f0fe' : '',
                       }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
