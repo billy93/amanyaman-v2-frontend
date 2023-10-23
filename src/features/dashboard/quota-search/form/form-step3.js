@@ -2466,7 +2466,7 @@ const Form3 = ({
                   colorScheme="blue"
                   mr={3}
                   onClick={
-                    EditTraveller !== null
+                    EditTraveller?.id !== ''
                       ? onEdit
                       : travellersExisting !== null
                       ? onSaveExisting
