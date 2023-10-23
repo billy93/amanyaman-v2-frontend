@@ -12,7 +12,13 @@ import {
 
 const GlobalModal = ({ isOpen, onClose, onConfirm, children }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="xl"
+      blockScrollOnMount={false}
+      closeOnOverlayClick={false}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Edit Traveller</ModalHeader>
