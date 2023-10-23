@@ -966,6 +966,15 @@ const Form3 = ({
     );
   };
 
+  const handleChangeRelation = (e) => {
+    dispatch(
+      setEditTraveller({
+        ...data,
+        relationship: e.target.value,
+      })
+    );
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -1428,7 +1437,7 @@ const Form3 = ({
                           placeholder=""
                           defaultValue={EditTraveller?.relationship}
                           h="48px"
-                          onChange={handleChange}
+                          onChange={handleChangeRelation}
                         >
                           <option value="" className="">
                             Select Relationship
