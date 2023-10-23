@@ -34,6 +34,7 @@ const createSearchSlice = createSlice({
         success: false,
         listTravellers: [],
         editTraveller: {
+          bookingId: '',
           title: '',
           travellerType: '',
           firstName: '',

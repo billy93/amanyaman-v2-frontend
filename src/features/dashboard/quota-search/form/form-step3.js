@@ -791,17 +791,7 @@ const Form3 = ({
     // // eslint-disable-next-line no-unsafe-optional-chaining
     // let travellersData = [...listTravellers?.listTravellers, newAdd];
     // dispatch(setTravellersData(travellersData));
-    setFirstName('');
-    setLastName('');
-    setPasportNumber('');
-    setPhoneNumber('');
-    setEmail('');
-    setDateOfBirth(null);
-    setPlaceOfBirth('');
-    setAddress('');
-    setBeneficiary('');
-    setRelationship('');
-    setTicketsNumber('');
+
     toast({
       id: 'editTraveller',
       title: 'Edit Traveller Success',
@@ -820,14 +810,30 @@ const Form3 = ({
             return traveller;
           }
         });
+        const data = {
+          bookingId: '',
+          title: '',
+          travellerType: '',
+          firstName: '',
+          lastName: '',
+          dateOfBirth: null,
+          placeOfBirth: '',
+          address: '',
+          email: '',
+          phone: '',
+          passport: '',
+          ticket: '',
+          beneficiary: '',
+          relationship: '',
+        };
         dispatch(setMessage(true));
         // console.log('tra', travellersData);
-        // dispatch(
-        //   setTravellersData([
-        //     ...listTravellers?.listTravellers,
-        //     ...travellersData,
-        //   ])
-        // );
+        dispatch(
+          setTravellersData({
+            ...EditTraveller,
+            data,
+          })
+        );
       }
       onClose();
     } catch (error) {
