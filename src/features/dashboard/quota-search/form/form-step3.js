@@ -559,7 +559,7 @@ const Form3 = ({
       passport: pasportNumber,
       dateOfBirth: dates,
       placeOfBirth: placeOfBirth,
-      ticketFlightNumber: ticketNumber,
+      ticket: ticketNumber,
       flightItinerary: 'New York to London',
       endorsement: 'Some endorsement text',
       refundEndorsement: 'Refund endorsement text',
@@ -623,7 +623,7 @@ const Form3 = ({
       passport: travellersExisting?.data?.passport,
       dateOfBirth: travellersExisting?.data.dateOfBirth,
       placeOfBirth: travellersExisting?.data?.placeOfBirth,
-      ticketFlightNumber: travellersExisting?.data?.ticket,
+      ticket: travellersExisting?.data?.ticket,
       flightItinerary: 'travellersExisting?.data',
       endorsement: 'Some endorsement text',
       refundEndorsement: 'Refund endorsement text',
@@ -2223,7 +2223,7 @@ const Form3 = ({
                                   style={{ fontSize: '12px' }}
                                   pl="5px"
                                 >
-                                  {`${travellers.firstName} ${travellers.LASTName}`}
+                                  {`${travellers.firstName} ${travellers.lastName}`}
                                 </Text>
                               </Box>
                               <Box
