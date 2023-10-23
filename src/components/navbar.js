@@ -320,7 +320,11 @@ export default function Navbar({ allowedRoles }) {
                     <Popover trigger={'hover'} placement={'bottom-start'}>
                       <PopoverTrigger>
                         {link?.children ? (
-                          <span
+                          <motion.span
+                            whileHover={{
+                              backgroundColor: 'red',
+                              borderBottom: '1px solid grey',
+                            }}
                             style={{
                               fontSize: '14px',
                               fontFamily: 'Mulish',
@@ -330,7 +334,7 @@ export default function Navbar({ allowedRoles }) {
                             className={active ? 'active' : ''}
                           >
                             {link.name}
-                          </span>
+                          </motion.span>
                         ) : (
                           <NewLink
                             as={Nav}
