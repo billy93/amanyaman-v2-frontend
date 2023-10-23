@@ -338,7 +338,7 @@ export default function Navbar({ allowedRoles }) {
                             variant={'outline'}
                             _hover={{ color: '#065BAA' }}
                             className="nav-active "
-                            activeClassName=" active"
+                            activeClassName="active nav-active "
                           >
                             {link.name}
                           </NewLink>
