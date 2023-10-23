@@ -1150,7 +1150,8 @@ const Form3 = ({
                       onChange={handleChange}
                       h="48px"
                       style={{
-                        backgroundColor: firstName !== '' ? '#e8f0fe' : '',
+                        backgroundColor:
+                          EditTraveller?.firstName !== '' ? '#e8f0fe' : '',
                       }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
@@ -1278,7 +1279,8 @@ const Form3 = ({
                       value={EditTraveller?.address}
                       onChange={handleChange}
                       style={{
-                        backgroundColor: address !== '' ? '#e8f0fe' : '',
+                        backgroundColor:
+                          EditTraveller?.address !== '' ? '#e8f0fe' : '',
                         fontSize: '12px',
                         fontfamily: 'Mulish',
                         fontWeight: 'normal',
