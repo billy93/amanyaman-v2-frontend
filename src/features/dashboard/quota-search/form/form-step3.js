@@ -770,7 +770,7 @@ const Form3 = ({
       bookingId: EditTraveller?.bookingId,
       firstName: EditTraveller?.firstName,
       lastName: EditTraveller?.lastName,
-      title: EditTraveller?.typeStatus,
+      title: EditTraveller?.title,
       travellerType: EditTraveller?.travellerType,
       fullName: `${EditTraveller?.firstName}${EditTraveller?.lastName}`,
       email: EditTraveller?.email,
