@@ -327,7 +327,7 @@ export default function Navbar({ allowedRoles }) {
                               fontWeight: 'bold',
                               color: '#231F20',
                             }}
-                            className={active ? 'active-link' : 'nav-active '}
+                            className={active ? 'active' : 'nav-active '}
                           >
                             {link.name}
                           </motion.span>
@@ -338,7 +338,7 @@ export default function Navbar({ allowedRoles }) {
                             variant={'outline'}
                             _hover={{ color: '#065BAA' }}
                             className="nav-active "
-                            activeClassName="active-link"
+                            activeClassName=" active"
                           >
                             {link.name}
                           </NewLink>

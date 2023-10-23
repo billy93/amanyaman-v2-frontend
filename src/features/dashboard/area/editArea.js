@@ -162,7 +162,11 @@ const CreateUser = () => {
             separator={<ChevronRightIcon color="gray.500" />}
           >
             <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink as={NavLink} to="/master-data/areas">
+              <BreadcrumbLink
+                as={NavLink}
+                to="/master-data/areas"
+                border={'none'}
+              >
                 <Text
                   as="b"
                   ml="4"
