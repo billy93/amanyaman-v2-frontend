@@ -276,7 +276,7 @@ const Form3 = ({
     setDateOfBirth(date);
     setEditTraveller({
       ...EditTraveller,
-      dateOfBirth: date,
+      dateOfBirth: { ...date },
     });
     if (date !== null) {
       setIsActive(true);
