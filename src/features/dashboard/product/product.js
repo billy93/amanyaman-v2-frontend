@@ -95,7 +95,7 @@ const Form2 = () => {
     data,
     refetch: isRefetching,
     isLoading,
-  } = useGetProductsBenefitByIdQuery(id, {
+  } = useGetProductsBenefitByIdQuery({
     skip: true,
   });
   const [showFilter, setShowFilter] = React.useState(false);

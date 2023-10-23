@@ -411,7 +411,7 @@ const Form3 = ({
     }
   }, [EditTraveller]);
 
-  // console.log('EditTraveller', EditTraveller);
+  console.log('EditTraveller', EditTraveller);
   const renderCustomInput = ({ ref }) => (
     <>
       <FormControl
@@ -693,7 +693,7 @@ const Form3 = ({
       passport: pasportNumber,
       dateOfBirth: dates,
       placeOfBirth: placeOfBirth,
-      ticketFlightNumber: ticketNumber,
+      ticket: ticketNumber,
       flightItinerary: 'New York to London',
       endorsement: 'Some endorsement text',
       refundEndorsement: 'Refund endorsement text',
