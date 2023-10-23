@@ -647,6 +647,7 @@ const AreaList = () => {
     try {
       const res = await deletedArea(idx);
       if (res?.data) {
+        console.log('Confirmed!', res);
         showSuccessToast('successfully to delete the area');
       } else {
         showErrorToast('fail to delete the area');

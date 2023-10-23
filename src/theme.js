@@ -1,7 +1,7 @@
 import { theme as origTheme, extendTheme } from '@chakra-ui/react';
 import { headingTheme } from './headingTheme';
 import { buttonTheme } from './buttonTheme';
-// import { inputTheme } from './inputTheme';
+import { inputTheme } from './inputTheme';
 import { StepsTheme } from 'chakra-ui-steps';
 import '@fontsource/mulish/800.css';
 import '@fontsource/mulish/700.css';
@@ -195,26 +195,26 @@ const defaultTheme = extendTheme({
   components: {
     Heading: headingTheme,
     Button: buttonTheme,
-    // Input: inputTheme,
+    Input: inputTheme,
     Steps: StepsTheme,
     // CustomSteps,
-    Input: {
-      variants: {
-        floatingLabel: {
-          field: {
-            border: 'none', // Remove the border
-            borderBottom: '1px solid gray', // Add a bottom border
-            _focus: {
-              borderBottom: '1px solid #065baa', // Customize focus style
-            },
-          },
-          input: {
-            position: 'relative',
-            top: '5px', // Reset top position
-          },
-        },
-      },
-    },
+    // Input: {
+    //   variants: {
+    //     floatingLabel: {
+    //       field: {
+    //         border: 'none', // Remove the border
+    //         borderBottom: '1px solid gray', // Add a bottom border
+    //         _focus: {
+    //           borderBottom: '1px solid #065baa', // Customize focus style
+    //         },
+    //       },
+    //       input: {
+    //         position: 'relative',
+    //         top: '5px', // Reset top position
+    //       },
+    //     },
+    //   },
+    // },
     Select,
     Table: {
       variants: {
