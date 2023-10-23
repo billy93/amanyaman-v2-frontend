@@ -966,10 +966,10 @@ const Form3 = ({
   };
 
   const handleChangeRelation = (e) => {
-    console.log('e', e.target.value);
+    // console.log('e', e.target.value);
     dispatch(
       setEditTraveller({
-        ...data,
+        ...EditTraveller,
         relationship: e.target.value,
       })
     );
