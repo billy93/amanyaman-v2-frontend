@@ -322,8 +322,8 @@ export default function Navbar({ allowedRoles }) {
                         {link?.children ? (
                           <motion.span
                             whileHover={{
-                              backgroundColor: 'red',
-                              borderBottom: '1px solid grey',
+                              borderBottom: '1px solid #065baa',
+                              scale: 1.1,
                             }}
                             style={{
                               fontSize: '14px',
@@ -336,7 +336,11 @@ export default function Navbar({ allowedRoles }) {
                             {link.name}
                           </motion.span>
                         ) : (
-                          <NewLink
+                          <motion.NewLink
+                            whileHover={{
+                              borderBottom: '1px solid #065baa',
+                              scale: 1.1,
+                            }}
                             as={Nav}
                             to={link?.link}
                             variant={'outline'}
@@ -344,7 +348,7 @@ export default function Navbar({ allowedRoles }) {
                             activeClassName="active"
                           >
                             {link.name}
-                          </NewLink>
+                          </motion.NewLink>
                         )}
                         {/* <NewLink
                           key={i}
