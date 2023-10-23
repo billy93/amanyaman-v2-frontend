@@ -1438,7 +1438,7 @@ const Form3 = ({
                           placeholder=""
                           defaultValue={EditTraveller?.relationship}
                           h="48px"
-                          onChange={handleChangeRelation}
+                          onChange={handleChange}
                         >
                           <option value="" className="">
                             Select Relationship
