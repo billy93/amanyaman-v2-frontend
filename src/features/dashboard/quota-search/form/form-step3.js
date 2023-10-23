@@ -272,6 +272,19 @@ const Form3 = ({
     }
   };
 
+  const selectDateEdit = (date) => {
+    setDateOfBirth(date);
+    setEditTraveller({
+      ...data,
+      dateOfBirth: date,
+    });
+    if (date !== null) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  };
+
   const selectDateNew = (date) => {
     setDateBirth(date);
     if (date !== null) {
@@ -1170,16 +1183,19 @@ const Form3 = ({
                   >
                     <DatePicker
                       value={EditTraveller?.dateOfBirth}
-                      onChange={selectDate}
+                      onChange={selectDateEdit}
                       inputPlaceholder="Select a date" // placeholder
                       formatInputText={formatInputValue}
                       inputClassName={
-                        dateOfBirth !== null ? '' : 'my-custom-input'
+                        EditTraveller?.dateOfBirth !== null
+                          ? ''
+                          : 'my-custom-input'
                       } // custom class
                       renderInput={renderCustomInput}
                       shouldHighlightWeekends
                       style={{
-                        backgroundColor: dateOfBirth !== null ? '#e8f0fe' : '',
+                        backgroundColor:
+                          EditTraveller?.dateOfBirth !== null ? '#e8f0fe' : '',
                       }}
                     />
                   </Box>
@@ -1264,7 +1280,8 @@ const Form3 = ({
                       onChange={handleChange}
                       h="48px"
                       style={{
-                        backgroundColor: email !== '' ? '#e8f0fe' : '',
+                        backgroundColor:
+                          EditTraveller?.email !== '' ? '#e8f0fe' : '',
                       }}
                     />
                     <FormLabel
@@ -1409,12 +1426,12 @@ const Form3 = ({
                           }}
                           // className="floating-select"
                           placeholder=""
-                          defaultValue={relationship}
+                          defaultValue={EditTraveller?.relationship}
                           h="48px"
                           onChange={handleChange}
                         >
                           <option value="" className="">
-                            Relationship
+                            Select Relationship
                           </option>
                           <option value="parent">Parent</option>
                           <option value="child">Child</option>
