@@ -485,6 +485,49 @@ const Form3 = ({
       </FormControl>
     </>
   );
+  const renderCustomInputadd = ({ ref }) => (
+    <>
+      <FormControl
+        variant="floating"
+        id="first-name"
+        isRequired
+        fontFamily={'Mulish'}
+      >
+        <InputGroup id="float-labelss">
+          <Input
+            readOnly
+            ref={ref}
+            placeholder=" "
+            _placeholder={{ opacity: 1, color: 'gray.500' }}
+            value={
+              dateOfBirth
+                ? `${dateOfBirth?.day} ${getMonthName(dateOfBirth?.month)} ${
+                    dateOfBirth?.year
+                  }`
+                : ''
+            }
+            h="48px"
+          />
+          <InputRightElement children={<SlCalender color="green.500" />} />
+          <FormLabel
+            fontSize="12"
+            pt="1.5"
+            style={{
+              transform:
+                dateOfBirth !== null ? 'translate(0, -6px) scale(0.75)' : '',
+              color: dateOfBirth !== null ? '#065baa' : '',
+              fontStyle: dateOfBirth !== null ? 'italic' : 'italic',
+              fontSize: dateOfBirth !== null ? '12px' : '12px',
+            }}
+            fontFamily={'Mulish'}
+          >
+            Date Of Birth
+          </FormLabel>
+        </InputGroup>
+        {/* It is important that the Label comes after the Control due to css selectors */}
+      </FormControl>
+    </>
+  );
   const renderCustomInputs = ({ ref }) => (
     <>
       <FormControl
@@ -1968,7 +2011,7 @@ const Form3 = ({
                             inputClassName={
                               dateOfBirth !== null ? '' : 'my-custom-input'
                             } // custom class
-                            renderInput={renderCustomInput}
+                            renderInput={renderCustomInputadd}
                             shouldHighlightWeekends
                             style={{
                               backgroundColor:
