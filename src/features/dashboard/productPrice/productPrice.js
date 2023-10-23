@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 import React, { useState } from 'react';
-import { useGetProductPriceQuery } from './productPriceApi';
+import {
+  useGetProductPriceQuery,
+  useDeleteProductPriceMutation,
+} from './productPriceApi';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGetBandTypeQuery } from '../bandType/bandTypesApiSlice';
 import { useGetPlanTypesQuery } from '../planType/planTypeApiSlice';
@@ -27,6 +30,7 @@ import {
   Center,
   useDisclosure,
   Input,
+  IconButton,
 } from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
@@ -40,6 +44,9 @@ import { useTable, useRowSelect } from 'react-table';
 import CustomModal from './ModalImport';
 import CurrencyFormatter from '../../../components/formatCurrency';
 import Export from './export';
+import { CiTrash } from 'react-icons/ci';
+import DeleteModal from '../../../components/globalModal';
+import UseCustomToast from '../../../components/UseCustomToast';
 
 const Styles = styled.div`
   // padding: 1rem;
@@ -477,6 +484,8 @@ const Polcies = () => {
     isFetching,
     refetch,
   } = useGetProductPriceQuery({ page: page, size: size, ...filterQuery });
+  const [deleteProductPrice, { isLoading: processDelete }] =
+    useDeleteProductPriceMutation({ skip: true });
   const { data: bandTypes } = useGetBandTypeQuery({ page: 0, size: 9999 });
 
   const { data: grouparea } = useGetListAreaGroupQuery({ page: 0, size: 9999 });
@@ -543,7 +552,35 @@ const Polcies = () => {
     setFilterQuery(filters);
     setPage(0);
   };
-  // console.log('query filter',travelagents)
+
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
+    try {
+      const res = await deleteProductPrice(idx);
+      if (res?.data) {
+        showSuccessToast('Product Price delete successfully!');
+      } else {
+        showErrorToast('Product Price Delete fail!');
+      }
+    } catch (error) {
+      showErrorToast('Product Price Delete fail!');
+      console.log(error);
+    }
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -638,6 +675,23 @@ const Polcies = () => {
               '-'
             )}
           </Box>
+        ),
+      },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'14px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
         ),
       },
     ],
@@ -754,6 +808,13 @@ const Polcies = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1.1 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete user?.</p>
+        </DeleteModal>
         <Box
           display={'flex'}
           justifyContent={'space-between'}

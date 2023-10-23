@@ -157,6 +157,15 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    deleteProduct: builder.mutation({
+      query: (id) => {
+        // const { page, size } = datas;
+        return {
+          url: `/app/products/${id}`,
+          method: 'DELETE',
+        };
+      },
+    }),
     getProductAdditional: builder.query({
       query: () => {
         // const { page, size } = datas;
@@ -208,6 +217,7 @@ export const {
   useUpdateMasterProductMutation,
   useCreateMasterProductMutation,
   useGetProductByIdMutation,
+  useDeleteProductMutation,
   useGetProductTravelAgentQuery,
   useGetProductsQuery,
   useGetProductByIdQuery,

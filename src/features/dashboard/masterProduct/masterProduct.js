@@ -2,12 +2,18 @@
 /* eslint-disable indent */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
-import { useGetProductsQuery } from './masterProductApiSlice';
+import {
+  useGetProductsQuery,
+  useDeleteProductMutation,
+} from './masterProductApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import matchSorter from 'match-sorter';
 import { usePagination } from 'react-table';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import { CiTrash } from 'react-icons/ci';
+import DeleteModal from '../../../components/globalModal';
+import UseCustomToast from '../../../components/UseCustomToast';
 import { FaSort } from 'react-icons/fa';
 import ExportData from './export';
 import { debounce } from 'lodash';
@@ -671,6 +677,8 @@ const MasterUser = () => {
     refetch,
   } = useGetProductsQuery({ page, size: size, ...filterQuery });
 
+  const [deleteProduct, { isLoading: processDelete }] =
+    useDeleteProductMutation({ skip: true });
   const { data: bandTypes } = useGetBandTypeQuery({ page: 0, size: 9999 });
 
   const [data, setData] = React.useState([]);
@@ -756,6 +764,34 @@ const MasterUser = () => {
     }
   }, [showFilter]);
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
+    try {
+      const res = await deleteProduct(idx);
+      if (res?.data) {
+        showSuccessToast('Product delete successfully!');
+      } else {
+        showErrorToast('Product Delete fail!');
+      }
+    } catch (error) {
+      showErrorToast('Product Delete fail!');
+      console.log(error);
+    }
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -840,6 +876,23 @@ const MasterUser = () => {
         },
         Cell: ({ value }) => (
           <div className="global-td">{value ? value : '-'}</div>
+        ),
+      },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'14px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
         ),
       },
       // {
@@ -1032,6 +1085,13 @@ const MasterUser = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1.1 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete user?.</p>
+        </DeleteModal>
         <Box pl="2em" pr="2em" mt="6em">
           <Box
             display={'flex'}

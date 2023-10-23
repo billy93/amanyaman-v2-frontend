@@ -53,6 +53,15 @@ export const policyApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    deleteProductPrice: builder.mutation({
+      query: (id) => {
+        // const { page, size } = datas;
+        return {
+          url: `/app/product-travel-agents/${id}`,
+          method: 'DELETE',
+        };
+      },
+    }),
     getTemplateFilePrice: builder.query({
       query: (url) => ({
         url: '/app/product-travel-agents/list/template/download',
@@ -145,4 +154,5 @@ export const {
   useUploadFilePriceMutation,
   useExportProductPriceQuery,
   useUpdateProductPriceMutation,
+  useDeleteProductPriceMutation,
 } = policyApiSlice;

@@ -1,7 +1,10 @@
 /* eslint-disable indent */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
-import { useGetTravelAgentQuery } from './travelApiSlice';
+import {
+  useGetTravelAgentQuery,
+  useDeleteAgentMutation,
+} from './travelApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import matchSorter from 'match-sorter';
 import { usePagination } from 'react-table';
@@ -54,6 +57,10 @@ import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect, useFilters, useSortBy } from 'react-table';
 import CustomModal from '../../../components/customModal';
+import { CiTrash } from 'react-icons/ci';
+import DeleteModal from '../../../components/globalModal';
+import UseCustomToast from '../../../components/UseCustomToast';
+
 // import 'react-table-6/react-table.css';
 
 const Styles = styled.div`
@@ -615,6 +622,9 @@ const MasterUser = () => {
     error,
     refetch,
   } = useGetTravelAgentQuery({ page, size: size, ...filterby });
+  const [deleteAgent, { isLoading: processDelete }] = useDeleteAgentMutation({
+    skip: true,
+  });
   const fetchdata = useSelector(isRefetch);
   const prevData = usePrevious(listUserAccount);
   const navigate = useNavigate();
@@ -704,6 +714,34 @@ const MasterUser = () => {
       });
     }
   }, [showFilter]);
+
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
+    try {
+      const res = await deleteAgent(idx);
+      if (res?.data) {
+        showSuccessToast('TravelAgent delete successfully!');
+      } else {
+        showErrorToast('TravelAgent Delete fail!');
+      }
+    } catch (error) {
+      showErrorToast('TravelAgent Delete fail!');
+      console.log(error);
+    }
+  };
 
   // console.log('listUserAccount', listUserAccount)
   const columns = React.useMemo(
@@ -817,6 +855,23 @@ const MasterUser = () => {
             {/* <AiOutlineFileDone size={25} /> */}
             {row.original.allowCreditPayment ? 'True' : 'False'}
           </Link>
+        ),
+      },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'14px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
         ),
       },
     ],
@@ -979,6 +1034,13 @@ const MasterUser = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1.1 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete user?.</p>
+        </DeleteModal>
         <Box pl="2em" pr="2em" mt="6em">
           <Box
             display={'flex'}

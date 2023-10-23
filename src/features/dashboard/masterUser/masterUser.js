@@ -2,7 +2,11 @@
 /* eslint-disable indent */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import { useGetUserQuery, useGetRoleQuery } from './userApiSlice';
+import {
+  useGetUserQuery,
+  useGetRoleQuery,
+  useDeleteUserMutation,
+} from './userApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import matchSorter from 'match-sorter';
 import { usePagination } from 'react-table';
@@ -12,12 +16,15 @@ import { FaSort } from 'react-icons/fa';
 // eslint-disable-next-line no-unused-vars
 import ExportData from './export';
 import { debounce } from 'lodash';
-
+import { CiTrash } from 'react-icons/ci';
+import DeleteModal from '../../../components/globalModal';
+import UseCustomToast from '../../../components/UseCustomToast';
 import {
   useToast,
   Input,
   Modal,
   ModalOverlay,
+  IconButton,
   ModalContent,
   ModalHeader,
   ModalFooter,
@@ -607,6 +614,9 @@ const MasterUser = () => {
   const [debounceName, setDebounceName] = React.useState('');
   const [debounceEmail, setDebounceEmail] = React.useState('');
   const [debounceRole, setDebounceRole] = React.useState('');
+  const [deletedUser, { isLoading: processDelete }] = useDeleteUserMutation({
+    skip: true,
+  });
   // const controls = useAnimation();
   const fetchIdRef = React.useRef(0);
   const [filterby, setFilterBy] = React.useState({
@@ -810,6 +820,34 @@ const MasterUser = () => {
     };
   }, [dispatch, fetchdata]);
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [idx, setIdx] = React.useState('');
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
+
+  const handleActionClick = async (id) => {
+    // console.log('handleActionClick', id);
+    openModal();
+    setIdx(id);
+  };
+
+  const handleConfirm = async () => {
+    // Place your confirmation logic here
+    // console.log('Confirmed!');
+    try {
+      const res = await deletedUser(idx);
+      if (res?.data) {
+        showSuccessToast('User delete successfully!');
+      } else {
+        showErrorToast('User Delete fail!');
+      }
+    } catch (error) {
+      showErrorToast('User Delete fail!');
+      console.log(error);
+    }
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -862,6 +900,23 @@ const MasterUser = () => {
         minWidth: 140,
         width: 200,
         Cell: ({ value }) => <div className="global-td">{value}</div>,
+      },
+      {
+        Header: 'Action',
+        maxWidth: 100,
+        minWidth: 100,
+        width: 100,
+        accessor: 'delete', // This accessor is not used in the traditional sense
+        Cell: ({ row }) => (
+          <IconButton
+            isLoading={processDelete}
+            _hover={{ color: 'white' }}
+            icon={<CiTrash color="#065BAA" size={'14px'} />}
+            bg="white"
+            border="1px solid #ebebeb"
+            onClick={() => handleActionClick(row.original.id)}
+          />
+        ),
       },
     ],
     []
@@ -1041,6 +1096,13 @@ const MasterUser = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1, duration: 1.1 }}
       >
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirm}
+        >
+          <p>Are you sure to delete user?.</p>
+        </DeleteModal>
         <Box pl="2em" pr="2em" mt="6em">
           <Box
             display={'flex'}
