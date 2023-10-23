@@ -870,6 +870,7 @@ const Form3 = ({
     setIdx(id);
   };
   const handleConfirm = async () => {
+    onEdit();
     // await downloadAndOpenPdfInNewTab(data);
   };
   const controls = useAnimationControls();
