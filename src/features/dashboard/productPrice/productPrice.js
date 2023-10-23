@@ -813,7 +813,7 @@ const Polcies = () => {
           onClose={closeModal}
           onConfirm={handleConfirm}
         >
-          <p>Are you sure to delete user?.</p>
+          <p>Are you sure to delete Product Price?.</p>
         </DeleteModal>
         <Box
           display={'flex'}

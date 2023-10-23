@@ -1090,7 +1090,7 @@ const MasterUser = () => {
           onClose={closeModal}
           onConfirm={handleConfirm}
         >
-          <p>Are you sure to delete user?.</p>
+          <p>Are you sure to delete Master Product?.</p>
         </DeleteModal>
         <Box pl="2em" pr="2em" mt="6em">
           <Box
