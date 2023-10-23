@@ -392,28 +392,28 @@ const Form3 = ({
     };
   }
 
-  React.useEffect(() => {
-    if (EditTraveller) {
-      let dates;
-      if (EditTraveller?.dateOfBirth) {
-        formatDates(EditTraveller?.dateOfBirth);
-      }
-      // console.log('dates', formatDates(EditTraveller?.dateOfBirth));
-      setPhoneNumber(EditTraveller?.phone);
-      setFirstName(EditTraveller?.firstName);
-      setLastName(EditTraveller?.lastName);
-      setAddress(EditTraveller?.address);
-      setPlaceOfBirth(EditTraveller?.placeOfBirth);
-      setDateOfBirth(formatDates(EditTraveller?.dateOfBirth));
-      setEmail(EditTraveller?.email);
-      setPasportNumber(EditTraveller?.passport);
-      setTypeStatus(EditTraveller?.title);
-      setType(EditTraveller?.travellerType);
-      setBeneficiary(EditTraveller?.beneficiary);
-      setTicketsNumber(EditTraveller?.ticket);
-      setRelationship(EditTraveller?.relationship);
-    }
-  }, [EditTraveller]);
+  // React.useEffect(() => {
+  //   if (EditTraveller) {
+  //     let dates;
+  //     if (EditTraveller?.dateOfBirth) {
+  //       formatDates(EditTraveller?.dateOfBirth);
+  //     }
+  //     // console.log('dates', formatDates(EditTraveller?.dateOfBirth));
+  //     setPhoneNumber(EditTraveller?.phone);
+  //     setFirstName(EditTraveller?.firstName);
+  //     setLastName(EditTraveller?.lastName);
+  //     setAddress(EditTraveller?.address);
+  //     setPlaceOfBirth(EditTraveller?.placeOfBirth);
+  //     setDateOfBirth(formatDates(EditTraveller?.dateOfBirth));
+  //     setEmail(EditTraveller?.email);
+  //     setPasportNumber(EditTraveller?.passport);
+  //     setTypeStatus(EditTraveller?.title);
+  //     setType(EditTraveller?.travellerType);
+  //     setBeneficiary(EditTraveller?.beneficiary);
+  //     setTicketsNumber(EditTraveller?.ticket);
+  //     setRelationship(EditTraveller?.relationship);
+  //   }
+  // }, [EditTraveller]);
 
   console.log('EditTraveller', EditTraveller);
   const renderCustomInput = ({ ref }) => (
@@ -676,8 +676,8 @@ const Form3 = ({
       console.log('error adding');
     }
   };
-  const onEdit = async (e) => {
-    e.preventDefault();
+  const onEdit = async () => {
+    // e.preventDefault();
     let i = listTravellers?.listTravellers?.length;
     let dates = formatDate(
       `${dateOfBirth?.year}-${dateOfBirth?.month}-${dateOfBirth?.day}`
@@ -685,24 +685,24 @@ const Form3 = ({
     const now = new Date();
     const newAdd = {
       id: EditTraveller?.id,
-      bookingId: listTravellers?.bookingId,
-      firstName: firstName,
-      lastName: lastName,
-      title: typeStatus,
-      travellerType: type,
-      fullName: `${firstName}${lastName}`,
-      email: email,
-      phone: phoneNumber,
-      address: address,
-      passport: pasportNumber,
+      bookingId: EditTraveller?.bookingId,
+      firstName: EditTraveller?.firstName,
+      lastName: EditTraveller?.lastName,
+      title: EditTraveller?.typeStatus,
+      travellerType: EditTraveller?.type,
+      fullName: `${EditTraveller?.firstName}${EditTraveller?.lastName}`,
+      email: EditTraveller?.email,
+      phone: EditTraveller?.phone,
+      address: EditTraveller?.address,
+      passport: EditTraveller?.passport,
       dateOfBirth: dates,
-      placeOfBirth: placeOfBirth,
-      ticket: ticketNumber,
+      placeOfBirth: EditTraveller?.placeOfBirth,
+      ticket: EditTraveller?.ticket,
       flightItinerary: 'New York to London',
       endorsement: 'Some endorsement text',
       refundEndorsement: 'Refund endorsement text',
-      beneficiary: beneficiary !== '' ? beneficiary : '',
-      relationship: relationship !== '' ? relationship : '',
+      beneficiary: EditTraveller?.beneficiary !== '' ? beneficiary : '',
+      relationship: EditTraveller?.relationship !== '' ? relationship : '',
     };
     // // eslint-disable-next-line no-unsafe-optional-chaining
     // let travellersData = [...listTravellers?.listTravellers, newAdd];
@@ -870,10 +870,18 @@ const Form3 = ({
     setIdx(id);
   };
   const handleConfirm = async () => {
-    onEdit();
+    await onEdit();
     // await downloadAndOpenPdfInNewTab(data);
   };
   const controls = useAnimationControls();
+  const handleChange = (e) => {
+    dispatch(
+      setEditTraveller({
+        ...data,
+        [e.taraget.name]: e.target.value,
+      })
+    );
+  };
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -912,12 +920,13 @@ const Form3 = ({
                   <Box className="floating-form">
                     <Box className="floating-label">
                       <Select
+                        name="status"
                         borderRadius={'5px'}
                         className="floating-select"
                         placeholder=""
                         defaultValue={type}
                         h="48px"
-                        onChange={handleSelectType}
+                        onChange={handleChange}
                         style={{
                           backgroundColor: type !== '' ? '#e8f0fe' : '',
                         }}
@@ -972,12 +981,13 @@ const Form3 = ({
                   <Box className="floating-form">
                     <Box className="floating-label">
                       <Select
+                        name="title"
                         borderRadius={'5px'}
                         className="floating-select"
                         placeholder=""
                         defaultValue={typeStatus}
                         h="48px"
-                        onChange={handleSelectTypeStatus}
+                        onChange={handleChange}
                         style={{
                           backgroundColor: typeStatus !== '' ? '#e8f0fe' : '',
                         }}
@@ -1018,10 +1028,11 @@ const Form3 = ({
                 <Box display={'flex'} gap="5px">
                   <FormControl variant="floating" id="first-name" isRequired>
                     <Input
+                      name="firstName"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
                       value={firstName}
-                      onChange={setFirstNames}
+                      onChange={handleChange}
                       h="48px"
                       style={{
                         backgroundColor: firstName !== '' ? '#e8f0fe' : '',
@@ -1039,10 +1050,11 @@ const Form3 = ({
                   </FormControl>
                   <FormControl variant="floating" id="first-name" isRequired>
                     <Input
+                      name="lastName"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
                       value={lastName}
-                      onChange={setLastNames}
+                      onChange={handleChange}
                       h="48px"
                       style={{
                         backgroundColor: lastName !== '' ? '#e8f0fe' : '',
@@ -1100,10 +1112,11 @@ const Form3 = ({
                   </Box>
                   <FormControl variant="floating" id="first-name" isRequired>
                     <Input
+                      name="placeOfBirth"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
                       value={placeOfBirth}
-                      onChange={setPlaceOfBirths}
+                      onChange={handleChange}
                       h="48px"
                       style={{
                         backgroundColor: placeOfBirth !== '' ? '#e8f0fe' : '',
@@ -1136,11 +1149,12 @@ const Form3 = ({
                     mt="14px"
                   >
                     <Textarea
+                      name="address"
                       pt="1em"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
                       value={address}
-                      onChange={setAddresss}
+                      onChange={handleChange}
                       style={{
                         backgroundColor: address !== '' ? '#e8f0fe' : '',
                         fontSize: '12px',
@@ -1169,10 +1183,11 @@ const Form3 = ({
                     isInvalid={!isValid}
                   >
                     <Input
+                      name="email"
                       type="email"
                       placeholder=""
                       value={email}
-                      onChange={setEmailAddress}
+                      onChange={handleChange}
                       h="48px"
                       style={{
                         backgroundColor: email !== '' ? '#e8f0fe' : '',
@@ -1196,11 +1211,12 @@ const Form3 = ({
                     isInvalid={!isValidPhone}
                   >
                     <Input
+                      name="phone"
                       type="tel"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
                       value={phoneNumber}
-                      onChange={setPhoneNumbers}
+                      onChange={handleChange}
                       h="48px"
                       style={{
                         backgroundColor: phoneNumber !== '' ? '#e8f0fe' : '',
@@ -1229,10 +1245,11 @@ const Form3 = ({
                 <Box display={'flex'} gap="5px" mt="1em">
                   <FormControl variant="floating" id="first-name" isRequired>
                     <Input
+                      name="passport"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
                       value={pasportNumber}
-                      onChange={setPasportNumbers}
+                      onChange={handleChange}
                       h="48px"
                       style={{
                         backgroundColor: pasportNumber !== '' ? '#e8f0fe' : '',
@@ -1250,10 +1267,11 @@ const Form3 = ({
                   </FormControl>
                   <FormControl variant="floating" id="first-name">
                     <Input
+                      name="ticket"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
                       value={ticketNumber}
-                      onChange={setTicketNumbers}
+                      onChange={handleChange}
                       h="48px"
                       style={{
                         backgroundColor: ticketNumber !== '' ? '#e8f0fe' : '',
@@ -1279,10 +1297,11 @@ const Form3 = ({
                 <Box display={'flex'} gap="5px" mt="1em">
                   <FormControl variant="floating" id="first-name">
                     <Input
+                      name="beneficiary"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
                       value={beneficiary}
-                      onChange={setBeneficiaries}
+                      onChange={handleChange}
                       h="48px"
                       style={{
                         backgroundColor: beneficiary !== '' ? '#e8f0fe' : '',
@@ -1302,6 +1321,7 @@ const Form3 = ({
                     <Box className="floating-form">
                       <Box>
                         <Select
+                          name="relationship"
                           className="global-input"
                           style={{
                             backgroundColor:
@@ -1311,7 +1331,7 @@ const Form3 = ({
                           placeholder=""
                           defaultValue={relationship}
                           h="48px"
-                          onChange={setRelationships}
+                          onChange={handleChange}
                         >
                           <option value="" className="">
                             Relationship
@@ -2912,6 +2932,32 @@ const Form3 = ({
                                   style={{ fontSize: '12px' }}
                                   pl="5px"
                                 >
+                                  {travellers.ticket ? travellers.ticket : '-'}
+                                </Text>
+                              </Box>
+                              <Box
+                                display={'flex'}
+                                justifyContent={'lex-start'}
+                                alignItems={'center'}
+                                borderBottom={'1px solid #ebebeb'}
+                                pb="10px"
+                                pt="10px"
+                              >
+                                <Text
+                                  as="b"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '14px' }}
+                                >
+                                  Beneficiary
+                                </Text>
+                                <Text
+                                  as="p"
+                                  w="50%"
+                                  fontFamily={'Mulish'}
+                                  style={{ fontSize: '12px' }}
+                                  pl="5px"
+                                >
                                   {travellers.beneficiary
                                     ? travellers.beneficiary
                                     : '-'}
@@ -2931,7 +2977,7 @@ const Form3 = ({
                                   fontFamily={'Mulish'}
                                   style={{ fontSize: '14px' }}
                                 >
-                                  Realtionship
+                                  Relationship
                                 </Text>
                                 <Text
                                   as="p"
