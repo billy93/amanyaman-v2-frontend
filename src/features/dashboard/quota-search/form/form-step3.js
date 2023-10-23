@@ -192,7 +192,7 @@ const Form3 = ({
   };
   const handleEditTravellersData = (data) => {
     // e.preventDefault();
-    // console.log('travellers', data);
+    console.log('travellers', data);
     // eslint-disable-next-line no-unused-vars
     dispatch(setEditTraveller(data));
     onOpen();
