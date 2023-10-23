@@ -1031,7 +1031,7 @@ const Form3 = ({
                       name="firstName"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={firstName}
+                      value={EditTraveller?.firstName}
                       onChange={handleChange}
                       h="48px"
                       style={{
@@ -1053,7 +1053,7 @@ const Form3 = ({
                       name="lastName"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={lastName}
+                      value={EditTraveller?.lastName}
                       onChange={handleChange}
                       h="48px"
                       style={{
@@ -1094,9 +1094,11 @@ const Form3 = ({
                 transition={{ delay: 1.1, duration: 1.1 }}
               >
                 <Box display={'flex'} gap="5px" mt="10px">
-                  <Box bg={dateOfBirth !== null ? '#e8f0fe' : ''}>
+                  <Box
+                    bg={EditTraveller?.dateOfBirth !== null ? '#e8f0fe' : ''}
+                  >
                     <DatePicker
-                      value={dateOfBirth}
+                      value={EditTraveller?.dateOfBirth}
                       onChange={selectDate}
                       inputPlaceholder="Select a date" // placeholder
                       formatInputText={formatInputValue}
@@ -1115,11 +1117,12 @@ const Form3 = ({
                       name="placeOfBirth"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={placeOfBirth}
+                      value={EditTraveller?.placeOfBirth}
                       onChange={handleChange}
                       h="48px"
                       style={{
-                        backgroundColor: placeOfBirth !== '' ? '#e8f0fe' : '',
+                        backgroundColor:
+                          EditTraveller?.placeOfBirth !== '' ? '#e8f0fe' : '',
                       }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
@@ -1153,7 +1156,7 @@ const Form3 = ({
                       pt="1em"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={address}
+                      value={EditTraveller?.address}
                       onChange={handleChange}
                       style={{
                         backgroundColor: address !== '' ? '#e8f0fe' : '',
@@ -1186,7 +1189,7 @@ const Form3 = ({
                       name="email"
                       type="email"
                       placeholder=""
-                      value={email}
+                      value={EditTraveller?.email}
                       onChange={handleChange}
                       h="48px"
                       style={{
@@ -1215,11 +1218,12 @@ const Form3 = ({
                       type="tel"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={phoneNumber}
+                      value={EditTraveller?.phone}
                       onChange={handleChange}
                       h="48px"
                       style={{
-                        backgroundColor: phoneNumber !== '' ? '#e8f0fe' : '',
+                        backgroundColor:
+                          EditTraveller?.phone !== '' ? '#e8f0fe' : '',
                       }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
@@ -1248,11 +1252,12 @@ const Form3 = ({
                       name="passport"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={pasportNumber}
+                      value={EditTraveller?.pasport}
                       onChange={handleChange}
                       h="48px"
                       style={{
-                        backgroundColor: pasportNumber !== '' ? '#e8f0fe' : '',
+                        backgroundColor:
+                          EditTraveller?.passport !== '' ? '#e8f0fe' : '',
                       }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
@@ -1270,11 +1275,12 @@ const Form3 = ({
                       name="ticket"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={ticketNumber}
+                      value={EditTraveller?.ticketNumber}
                       onChange={handleChange}
                       h="48px"
                       style={{
-                        backgroundColor: ticketNumber !== '' ? '#e8f0fe' : '',
+                        backgroundColor:
+                          EditTraveller?.ticket !== '' ? '#e8f0fe' : '',
                       }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
@@ -1300,11 +1306,12 @@ const Form3 = ({
                       name="beneficiary"
                       placeholder=" "
                       _placeholder={{ opacity: 1, color: 'gray.500' }}
-                      value={beneficiary}
+                      value={EditTraveller?.beneficiary}
                       onChange={handleChange}
                       h="48px"
                       style={{
-                        backgroundColor: beneficiary !== '' ? '#e8f0fe' : '',
+                        backgroundColor:
+                          EditTraveller?.beneficiary !== '' ? '#e8f0fe' : '',
                       }}
                     />
                     {/* It is important that the Label comes after the Control due to css selectors */}
@@ -1325,7 +1332,9 @@ const Form3 = ({
                           className="global-input"
                           style={{
                             backgroundColor:
-                              relationship !== '' ? '#e8f0fe' : '',
+                              EditTraveller?.relationship !== ''
+                                ? '#e8f0fe'
+                                : '',
                           }}
                           // className="floating-select"
                           placeholder=""
@@ -1346,13 +1355,16 @@ const Form3 = ({
                           className="floating-label-global"
                           style={{
                             transform:
-                              relationship !== ''
+                              EditTraveller?.relationship !== ''
                                 ? 'translate(-21px, -54px) scale(0.75)'
                                 : 'translate(-21px, -36px) scale(0.75)',
-                            background: relationship === '' ? 'white' : '',
+                            background:
+                              EditTraveller?.relationship === '' ? 'white' : '',
 
                             color:
-                              relationship === '' ? '#000000c9' : '#065baa',
+                              EditTraveller?.relationship === ''
+                                ? '#000000c9'
+                                : '#065baa',
                           }}
                           _hover={{
                             backgroundColor: 'none',
