@@ -639,8 +639,13 @@ const CityList = () => {
     // console.log('Confirmed!');
     try {
       const res = await deleteCity(idx);
-      console.log('deleteCity', res);
+      if (res?.data) {
+        showSuccessToast('successfully to delete the city');
+      } else {
+        showErrorToast('fail to delete the city');
+      }
     } catch (error) {
+      showErrorToast('fail to delete the city');
       console.log(error);
     }
   };

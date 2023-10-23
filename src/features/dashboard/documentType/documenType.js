@@ -7,6 +7,7 @@ import {
 } from './docTypeApiSlice';
 import DeleteModal from '../../../components/globalModal';
 import { Link, useNavigate } from 'react-router-dom';
+import UseCustomToast from '../../../components/UseCustomToast';
 import {
   usePagination,
   useSortBy,
@@ -697,7 +698,7 @@ const DocumentList = () => {
   }, [page]);
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const [idx, setIdx] = React.useState('');
@@ -713,8 +714,13 @@ const DocumentList = () => {
     // console.log('Confirmed!');
     try {
       const res = await deleteDocument(idx);
-      console.log('deleteCity', res);
+      if (res?.data) {
+        showSuccessToast('successfully to delete document type');
+      } else {
+        showErrorToast('failed to delete document type');
+      }
     } catch (error) {
+      showErrorToast('failed to delete document type');
       console.log(error);
     }
   };

@@ -33,6 +33,7 @@ import { Button } from '@chakra-ui/react';
 import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
+import UseCustomToast from '../../../components/UseCustomToast';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -658,6 +659,7 @@ const Polcies = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const [idx, setIdx] = React.useState('');
+  const { showErrorToast, showSuccessToast } = UseCustomToast();
 
   const handleActionClick = async (id) => {
     // console.log('handleActionClick', id);
@@ -670,8 +672,13 @@ const Polcies = () => {
     // console.log('Confirmed!');
     try {
       const res = await deleteVariant(idx);
-      console.log('deleteCity', res);
+      if (res?.data) {
+        showSuccessToast('successfully to delete the variant');
+      } else {
+        showErrorToast('fail to delete the variant');
+      }
     } catch (error) {
+      showErrorToast('fail to delete the variant!');
       console.log(error);
     }
   };

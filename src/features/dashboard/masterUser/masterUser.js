@@ -838,12 +838,12 @@ const MasterUser = () => {
     try {
       const res = await deletedUser(idx);
       if (res?.data) {
-        showSuccessToast('User delete successfully!');
+        showSuccessToast('successfully to delete the user');
       } else {
-        showErrorToast('User Delete fail!');
+        showErrorToast('success to delete the user');
       }
     } catch (error) {
-      showErrorToast('User Delete fail!');
+      showErrorToast('success to delete the user');
       console.log(error);
     }
   };

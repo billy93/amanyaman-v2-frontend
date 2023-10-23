@@ -627,8 +627,13 @@ const GroupArea = () => {
     // console.log('Confirmed!');
     try {
       const res = await deletedGroupArea(idx);
-      console.log('deleteCity', res);
+      if (res?.data) {
+        showSuccessToast('successfully to delete group area');
+      } else {
+        showErrorToast('failed to delete group area');
+      }
     } catch (error) {
+      showErrorToast('failed to delete group area');
       console.log(error);
     }
   };

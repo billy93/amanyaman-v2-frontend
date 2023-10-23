@@ -689,8 +689,13 @@ const CountryList = () => {
     // console.log('Confirmed!');
     try {
       const res = await deletedCountry(idx);
-      console.log('deleteCity', res);
+      if (res?.data) {
+        showSuccessToast('successfully to delete the country');
+      } else {
+        showErrorToast('fail to delete the country');
+      }
     } catch (error) {
+      showErrorToast('fail to delete the country');
       console.log(error);
     }
   };

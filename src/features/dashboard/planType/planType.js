@@ -677,8 +677,13 @@ const PlanTypes = () => {
     // console.log('Confirmed!');
     try {
       const res = await deletedPlanTypes(idx);
-      console.log('deleteCity', res);
+      if (res?.data) {
+        showSuccessToast('successfully to delete the plan type');
+      } else {
+        showErrorToast('failed to delete the plan type');
+      }
     } catch (error) {
+      showErrorToast('failed to delete the plan type');
       console.log(error);
     }
   };

@@ -621,8 +621,13 @@ const Polcies = () => {
     // console.log('Confirmed!');
     try {
       const res = await deleteTravellerType(idx);
-      console.log('deleteCity', res);
+      if (res?.data) {
+        showSuccessToast('successfully to delete the traverller type');
+      } else {
+        showErrorToast('failed to delete the traverller type');
+      }
     } catch (error) {
+      showErrorToast('failed to delete the traverller type');
       console.log(error);
     }
   };

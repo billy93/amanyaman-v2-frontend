@@ -689,9 +689,14 @@ const Polcies = () => {
     // console.log('Confirmed!');
     try {
       const res = await deletedBandType(idx);
-      console.log('deleteCity', res);
+      if (res?.data) {
+        showSuccessToast('successfully to delete the band type');
+      } else {
+        showErrorToast('fail to delete the band type');
+      }
     } catch (error) {
       console.log(error);
+      showErrorToast('fail to delete the band type');
     }
   };
 

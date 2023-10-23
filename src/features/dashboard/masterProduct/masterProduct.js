@@ -782,12 +782,12 @@ const MasterUser = () => {
     try {
       const res = await deleteProduct(idx);
       if (res?.data) {
-        showSuccessToast('Product delete successfully!');
+        showSuccessToast('successfully to delete product');
       } else {
-        showErrorToast('Product Delete fail!');
+        showErrorToast('failed to delete product');
       }
     } catch (error) {
-      showErrorToast('Product Delete fail!');
+      showErrorToast('failed to delete product');
       console.log(error);
     }
   };

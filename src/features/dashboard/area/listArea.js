@@ -634,7 +634,7 @@ const AreaList = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const [idx, setIdx] = React.useState('');
-
+  //  const { showErrorToast, showSuccessToast } = UseCustomToast();
   const handleActionClick = async (id) => {
     // console.log('handleActionClick', id);
     openModal();
@@ -646,9 +646,14 @@ const AreaList = () => {
     // console.log('Confirmed!');
     try {
       const res = await deletedArea(idx);
-      console.log('deleteCity', res);
+      if (res?.data) {
+        showSuccessToast('successfully to delete the area');
+      } else {
+        showErrorToast('fail to delete the area');
+      }
     } catch (error) {
       console.log(error);
+      showErrorToast('fail to delete the area');
     }
   };
 

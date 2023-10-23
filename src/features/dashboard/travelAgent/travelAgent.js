@@ -733,12 +733,12 @@ const MasterUser = () => {
     try {
       const res = await deleteAgent(idx);
       if (res?.data) {
-        showSuccessToast('TravelAgent delete successfully!');
+        showSuccessToast('successfully to delete the agent');
       } else {
-        showErrorToast('TravelAgent Delete fail!');
+        showErrorToast('failed to delete the agent');
       }
     } catch (error) {
-      showErrorToast('TravelAgent Delete fail!');
+      showErrorToast('failed to delete the agent');
       console.log(error);
     }
   };

@@ -571,12 +571,12 @@ const Polcies = () => {
     try {
       const res = await deleteProductPrice(idx);
       if (res?.data) {
-        showSuccessToast('Product Price delete successfully!');
+        showSuccessToast('successfully to delete the product');
       } else {
-        showErrorToast('Product Price Delete fail!');
+        showErrorToast('failed to delete the product');
       }
     } catch (error) {
-      showErrorToast('Product Price Delete fail!');
+      showErrorToast('failed to delete the product');
       console.log(error);
     }
   };
