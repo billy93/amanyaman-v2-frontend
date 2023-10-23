@@ -2475,7 +2475,7 @@ const Form3 = ({
                   disabled={loadingEdit || loadingAdd}
                   isLoading={loadingEdit || loadingAdd}
                 >
-                  {EditTraveller !== null ? 'Edit' : 'Add'}
+                  {EditTraveller?.id !== '' ? 'Edit' : 'Add'}
                 </Button>
               </ModalFooter>
             </ModalContent>
