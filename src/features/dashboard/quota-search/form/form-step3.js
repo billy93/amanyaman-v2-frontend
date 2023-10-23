@@ -974,6 +974,24 @@ const Form3 = ({
       })
     );
   };
+  const handleChangeTitle = (e) => {
+    // console.log('e', e.target.value);
+    dispatch(
+      setEditTraveller({
+        ...EditTraveller,
+        title: e.target.value,
+      })
+    );
+  };
+  const handleChangeTravellerType = (e) => {
+    // console.log('e', e.target.value);
+    dispatch(
+      setEditTraveller({
+        ...EditTraveller,
+        travellerType: e.target.value,
+      })
+    );
+  };
 
   return (
     <motion.div
@@ -1019,7 +1037,7 @@ const Form3 = ({
                         placeholder=""
                         defaultValue={EditTraveller?.travellerType}
                         h="48px"
-                        onChange={handleChange}
+                        onChange={handleChangeTravellerType}
                         style={{
                           backgroundColor:
                             EditTraveller?.travellerType !== ''
@@ -1083,7 +1101,7 @@ const Form3 = ({
                         placeholder=""
                         defaultValue={EditTraveller?.title}
                         h="48px"
-                        onChange={handleChange}
+                        onChange={handleChangeTitle}
                         style={{
                           backgroundColor:
                             EditTraveller?.title !== '' ? '#e8f0fe' : '',
