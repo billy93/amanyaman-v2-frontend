@@ -967,7 +967,7 @@ const Form3 = ({
   };
 
   const handleChangeRelation = (e) => {
-    console.log('e', e);
+    console.log('e', e.target.value);
     dispatch(
       setEditTraveller({
         ...data,
