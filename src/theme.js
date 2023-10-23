@@ -198,8 +198,9 @@ const defaultTheme = extendTheme({
     Input: inputTheme,
     Steps: StepsTheme,
     Breadcrumb: {
+      parts: ['link'], // Target the BreadcrumbLink component
       baseStyle: {
-        breadcrumb: {
+        link: {
           border: 'none', // Remove the border
         },
       },
