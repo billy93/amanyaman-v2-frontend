@@ -273,12 +273,14 @@ const Form3 = ({
   };
 
   const selectDateEdit = (date) => {
-    console.log('edit', date);
+    // console.log('edit', date);
     setDateOfBirth(date);
-    setEditTraveller({
-      ...EditTraveller,
-      dateOfBirth: date,
-    });
+    dispatch(
+      setEditTraveller({
+        ...EditTraveller,
+        dateOfBirth: date,
+      })
+    );
   };
 
   const selectDateNew = (date) => {
@@ -800,7 +802,7 @@ const Form3 = ({
     try {
       const res = await editTravellerData(newAdd);
       if (res.data) {
-        dispatch(setEditTraveller(null));
+        // dispatch(setEditTraveller(null));
         let travellersData = listTravellers?.listTravellers.map((traveller) => {
           if (traveller.id === res.data.id) {
             return traveller;
@@ -825,7 +827,7 @@ const Form3 = ({
         dispatch(setMessage(true));
         // console.log('tra', travellersData);
         dispatch(
-          setTravellersData({
+          setEditTraveller({
             ...EditTraveller,
             data,
           })
@@ -859,7 +861,7 @@ const Form3 = ({
   }, [dispatch, newlistTravellers]);
 
   const handleAddTraveller = () => {
-    dispatch(setEditTraveller(null));
+    // dispatch(setEditTraveller(null));
     onOpen();
   };
 
