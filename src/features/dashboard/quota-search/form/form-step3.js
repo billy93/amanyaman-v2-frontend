@@ -960,7 +960,6 @@ const Form3 = ({
   const handleChange = (e) => {
     dispatch(
       setEditTraveller({
-        ...data,
         [e.taraget.name]: e.target.value,
       })
     );
