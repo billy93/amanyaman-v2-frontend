@@ -218,11 +218,11 @@ const Form2 = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleActionClick = async ({ id }) => {
-    console.log('id', id);
+  const handleActionClick = async ({ products }) => {
+    console.log('id', products.id);
     openModal();
-    setIdx(id);
-    await isRefetching(id);
+    setIdx(products?.id);
+    await isRefetching(products?.id);
   };
 
   console.log('data', data);
@@ -588,23 +588,23 @@ const Form2 = () => {
                 <ButtonGroup gap="5px">
                   <Button
                     variant="base"
-                    onClick={(products) => handleActionClick(products)}
+                    onClick={() => handleActionClick(products)}
                     pointerEvents={'visible'}
                     cursor={'pointer'}
-                    whileHover={{
+                    _hover={{
                       // scale: 1.1,
                       backgroundColor: '#065baa',
                       color: 'white',
                       transition: 'background .3s',
                     }}
-                    whileTap={{
+                    _active={{
                       backgroundColor: '#065baa',
                       color: 'white',
                       transition: 'background .3s',
                     }}
                   >
                     <motion.Box
-                      onClick={(products) => handleActionClick(products.id)}
+                      onClick={() => handleActionClick(products)}
                       pointerEvents={'visible'}
                       cursor={'pointer'}
                     >
@@ -613,23 +613,23 @@ const Form2 = () => {
                   </Button>
                   <Button
                     variant="base"
-                    onClick={(products) => handleConfirm(products.id)}
+                    onClick={() => handleConfirm(products)}
                     pointerEvents={'visible'}
                     cursor={'pointer'}
-                    whileHover={{
+                    _hover={{
                       // scale: 1.1,
                       backgroundColor: '#065baa',
                       color: 'white',
                       transition: 'background .3s',
                     }}
-                    whileTap={{
+                    _active={{
                       backgroundColor: '#065baa',
                       color: 'white',
                       transition: 'background .3s',
                     }}
                   >
                     <motion.Box
-                      onClick={(products) => handleConfirm(products.id)}
+                      onClick={() => handleConfirm(products)}
                       pointerEvents={'visible'}
                       cursor={'pointer'}
                     >
