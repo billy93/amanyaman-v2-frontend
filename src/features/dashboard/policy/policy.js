@@ -1134,6 +1134,7 @@ const Polcies = () => {
         bookingNumber: '',
         purchaseDate: '',
       });
+      setDateDisplay(null);
     }
   }, [showFilter]);
 
