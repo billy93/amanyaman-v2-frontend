@@ -93,13 +93,13 @@ export const useInfiniteLoading = (props) => {
 const Form2 = () => {
   const selectedInsurance = useSelector(selectedTravelInsurance);
   const [idx, setIdx] = React.useState('');
-  // const [trigger, setSe] = React.useState('');
+  const [trigger, setTrigger] = React.useState(false);
   const {
     data,
     refetch: isRefetching,
     isLoading,
   } = useGetProductsBenefitByIdQuery(idx, {
-    skip: true,
+    skip: trigger === false,
   });
   const [showFilter, setShowFilter] = React.useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -219,10 +219,11 @@ const Form2 = () => {
   const closeModal = () => setIsModalOpen(false);
 
   const handleActionClick = async (products) => {
-    console.log('id', products.id);
+    // console.log('id', products.id);
     openModal();
     setIdx(products?.id);
-    await isRefetching(products?.id);
+    setTrigger(true);
+    // await isRefetching(products?.id);
   };
 
   console.log('data', data);
@@ -274,6 +275,7 @@ const Form2 = () => {
       // Clean up the blob URL when the new tab is closed
       newTab.addEventListener('beforeunload', () => {
         URL.revokeObjectURL(pdfData);
+        setTrigger(false);
       });
     }
   };
