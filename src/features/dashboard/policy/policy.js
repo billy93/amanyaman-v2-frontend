@@ -1136,7 +1136,7 @@ const Polcies = () => {
       });
       setDateDisplay(null);
     }
-  }, [showFilter]);
+  }, [showFilter, dateDisplay]);
 
   const handleNexts = () => {
     setPage((prevPage) => prevPage + 1);
