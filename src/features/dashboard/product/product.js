@@ -91,11 +91,13 @@ export const useInfiniteLoading = (props) => {
 };
 const Form2 = () => {
   const selectedInsurance = useSelector(selectedTravelInsurance);
+  const [idx, setIdx] = React.useState('');
+  // const [trigger, setSe] = React.useState('');
   const {
     data,
     refetch: isRefetching,
     isLoading,
-  } = useGetProductsBenefitByIdQuery({
+  } = useGetProductsBenefitByIdQuery(idx, {
     skip: true,
   });
   const [showFilter, setShowFilter] = React.useState(false);
@@ -214,15 +216,15 @@ const Form2 = () => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const [idx, setIdx] = React.useState('');
 
   const handleActionClick = async ({ id }) => {
-    console.log('handleActionClick', id);
     openModal();
-    isRefetching(id);
     setIdx(id);
+    await isRefetching(id);
   };
 
+  console.log('data', data);
+  console.log('idx', idx);
   const iframeRef = React.useRef(null);
 
   const handleIframeLoad = () => {
