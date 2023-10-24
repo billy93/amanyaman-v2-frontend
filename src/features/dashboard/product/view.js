@@ -15,7 +15,7 @@ const GlobalModal = ({ isOpen, onClose, onConfirm, children }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>delete</ModalHeader>
+        <ModalHeader>View PDF</ModalHeader>
         <ModalCloseButton />
         <ModalBody>{children}</ModalBody>
         <ModalFooter>
