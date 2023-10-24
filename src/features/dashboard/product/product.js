@@ -219,6 +219,7 @@ const Form2 = () => {
   const closeModal = () => setIsModalOpen(false);
 
   const handleActionClick = async ({ id }) => {
+    console.log('id', id);
     openModal();
     setIdx(id);
     await isRefetching(id);
@@ -587,23 +588,25 @@ const Form2 = () => {
                 <ButtonGroup gap="5px">
                   <Button
                     variant="base"
-                    onClick={(products) => handleActionClick(products.id)}
+                    onClick={(products) => handleActionClick(products)}
                     pointerEvents={'visible'}
                     cursor={'pointer'}
+                    whileHover={{
+                      // scale: 1.1,
+                      backgroundColor: '#065baa',
+                      color: 'white',
+                      transition: 'background .3s',
+                    }}
+                    whileTap={{
+                      backgroundColor: '#065baa',
+                      color: 'white',
+                      transition: 'background .3s',
+                    }}
                   >
                     <motion.Box
                       onClick={(products) => handleActionClick(products.id)}
                       pointerEvents={'visible'}
                       cursor={'pointer'}
-                      whileHover={{
-                        // scale: 1.1,
-                        backgroundColor: '#065baa',
-                        color: 'white',
-                        transition: 'background .3s',
-                      }}
-                      whileTap={{
-                        backgroundColor: '#065baa',
-                      }}
                     >
                       View Benefits
                     </motion.Box>
@@ -613,20 +616,22 @@ const Form2 = () => {
                     onClick={(products) => handleConfirm(products.id)}
                     pointerEvents={'visible'}
                     cursor={'pointer'}
+                    whileHover={{
+                      // scale: 1.1,
+                      backgroundColor: '#065baa',
+                      color: 'white',
+                      transition: 'background .3s',
+                    }}
+                    whileTap={{
+                      backgroundColor: '#065baa',
+                      color: 'white',
+                      transition: 'background .3s',
+                    }}
                   >
                     <motion.Box
                       onClick={(products) => handleConfirm(products.id)}
                       pointerEvents={'visible'}
                       cursor={'pointer'}
-                      whileHover={{
-                        scale: 1.1,
-                        backgroundColor: '#065baa',
-                        color: 'white',
-                        transition: 'background .3s',
-                      }}
-                      whileTap={{
-                        backgroundColor: '#065baa',
-                      }}
                     >
                       Download PDF
                     </motion.Box>
