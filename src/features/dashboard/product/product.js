@@ -218,7 +218,7 @@ const Form2 = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleActionClick = async ({ products }) => {
+  const handleActionClick = async (products) => {
     console.log('id', products.id);
     openModal();
     setIdx(products?.id);
