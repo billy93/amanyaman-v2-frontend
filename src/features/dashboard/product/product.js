@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { debounce } from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
+import { motion } from 'framer-motion';
 import {
   useGetProductsAgentQuery,
   useGetProductsBenefitByIdQuery,
@@ -587,13 +588,48 @@ const Form2 = () => {
                   <Button
                     variant="base"
                     onClick={(products) => handleActionClick(products.id)}
+                    pointerEvents={'visible'}
+                    cursor={'pointer'}
                   >
-                    View Benefits
+                    <motion.Box
+                      onClick={(products) => handleActionClick(products.id)}
+                      pointerEvents={'visible'}
+                      cursor={'pointer'}
+                      whileHover={{
+                        scale: 1.1,
+                        backgroundColor: '#065baa',
+                        color: 'white',
+                        transition: 'background .3s',
+                      }}
+                      whileTap={{
+                        scale: 0.9,
+                      }}
+                    >
+                      View Benefits
+                    </motion.Box>
                   </Button>
                   <Button
                     variant="base"
                     onClick={(products) => handleConfirm(products.id)}
+                    pointerEvents={'visible'}
+                    cursor={'pointer'}
                   >
+                    <motion.Box
+                      onClick={(products) => handleConfirm(products.id)}
+                      pointerEvents={'visible'}
+                      cursor={'pointer'}
+                      whileHover={{
+                        scale: 1.1,
+                        backgroundColor: '#065baa',
+                        color: 'white',
+                        transition: 'background .3s',
+                      }}
+                      whileTap={{
+                        scale: 0.9,
+                      }}
+                    >
+                      Download PDF
+                    </motion.Box>
                     Download PDF
                   </Button>
                 </ButtonGroup>
