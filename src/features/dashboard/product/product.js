@@ -596,13 +596,13 @@ const Form2 = () => {
                       pointerEvents={'visible'}
                       cursor={'pointer'}
                       whileHover={{
-                        scale: 1.1,
+                        // scale: 1.1,
                         backgroundColor: '#065baa',
                         color: 'white',
                         transition: 'background .3s',
                       }}
                       whileTap={{
-                        scale: 0.9,
+                        backgroundColor: '#065baa',
                       }}
                     >
                       View Benefits
@@ -625,12 +625,11 @@ const Form2 = () => {
                         transition: 'background .3s',
                       }}
                       whileTap={{
-                        scale: 0.9,
+                        backgroundColor: '#065baa',
                       }}
                     >
                       Download PDF
                     </motion.Box>
-                    Download PDF
                   </Button>
                 </ButtonGroup>
               </Box>
