@@ -1556,7 +1556,7 @@ const Polcies = () => {
                 }}
                 initial={{
                   opacity: 1,
-                  y: '-100vw',
+                  x: '-100vw',
                 }}
               >
                 <Button variant={'outline'} onClick={resetFilter}>
