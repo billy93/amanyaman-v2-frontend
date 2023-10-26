@@ -1149,7 +1149,7 @@ const Polcies = () => {
   };
 
   React.useEffect(() => {
-    if (reset) {
+    if (!reset) {
       setFilterQuery({
         policyNumber: '',
         traveller: '',
