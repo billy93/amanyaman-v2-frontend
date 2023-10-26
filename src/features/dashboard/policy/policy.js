@@ -1278,7 +1278,7 @@ const Polcies = () => {
           </Box>
           {showFilter && (
             <Box
-              w={{ base: '100%', md: '70%' }}
+              w={{ base: '100%', md: '80%' }}
               display={'flex'}
               justifyContent={'flex-start'}
               alignItems={'center'}
