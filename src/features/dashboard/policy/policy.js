@@ -657,6 +657,7 @@ const Polcies = () => {
   const [size, setSize] = React.useState(5);
   const { data: planTypes } = useGetPlanTypesQuery({ page: 0, size: 9999 });
   const [dateDisplay, setDateDisplay] = React.useState(null);
+  const [reset, setReset] = React.useState(false);
   const [filterQuery, setFilterQuery] = React.useState({
     policyNumber: '',
     traveller: '',
@@ -1142,10 +1143,9 @@ const Polcies = () => {
     setPage((prevPage) => prevPage + 1);
     // setChangePage(true)
   };
-  const [reset, setReset] = React.useState(false);
 
   const resetFilter = () => {
-    setReset(true);
+    setReset(!reset);
   };
 
   React.useEffect(() => {
@@ -1154,7 +1154,7 @@ const Polcies = () => {
         policyNumber: '',
         traveller: '',
         policyStatus: '',
-        planType: '',
+        planType: 'ALL',
         bookingNumber: '',
         purchaseDate: '',
       });
@@ -1162,6 +1162,7 @@ const Polcies = () => {
     }
   }, [reset]);
 
+  console.log('reset', reset);
   const previousPage = () => {
     setPage((prevPage) => prevPage - 1);
     // setChangePage(true)
@@ -1440,6 +1441,7 @@ const Polcies = () => {
                   _placeholder={{
                     color: 'grey',
                   }}
+                  value={''}
                   defaultValue={''}
                   name="policyStatus"
                   style={{
@@ -1449,7 +1451,7 @@ const Polcies = () => {
                   }}
                   onChange={handleFilter}
                 >
-                  <option value="ALL">Select Policy status</option>
+                  <option value="">Select Policy status</option>
                   <option value="SUCCESS">Success</option>
                   <option value="PENDING">Pending</option>
                   <option value="UPDATED">Updated</option>
