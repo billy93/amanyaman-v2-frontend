@@ -3165,12 +3165,6 @@ const Form3 = ({
               alignItems={'center'}
               w="100%"
               pt="15px"
-              isDisabled={
-                parseInt(payload?.adt) + parseInt(payload?.chd) ===
-                listTravellers?.listTravellers?.length
-                  ? true
-                  : false
-              }
             >
               <motion.div
                 style={{
@@ -3191,6 +3185,12 @@ const Form3 = ({
                   // textShadow: '0px 0px 8px #3182ce',
                   boxShadow: '0px 0px 6px #888888',
                 }}
+                disabled={
+                  parseInt(payload?.adt) + parseInt(payload?.chd) ===
+                  listTravellers?.listTravellers?.length
+                    ? true
+                    : false
+                }
                 onClick={handleAddTraveller}
               >
                 Add Traveller
