@@ -1142,18 +1142,25 @@ const Polcies = () => {
     setPage((prevPage) => prevPage + 1);
     // setChangePage(true)
   };
+  const [reset, setReset] = React.useState(false);
 
   const resetFilter = () => {
-    setFilterQuery({
-      policyNumber: '',
-      traveller: '',
-      policyStatus: '',
-      planType: '',
-      bookingNumber: '',
-      purchaseDate: '',
-    });
-    setDateDisplay(null);
+    setReset(true);
   };
+
+  React.useEffect(() => {
+    if (reset) {
+      setFilterQuery({
+        policyNumber: '',
+        traveller: '',
+        policyStatus: '',
+        planType: '',
+        bookingNumber: '',
+        purchaseDate: '',
+      });
+      setDateDisplay(null);
+    }
+  }, [filterQuery, reset]);
 
   const previousPage = () => {
     setPage((prevPage) => prevPage - 1);

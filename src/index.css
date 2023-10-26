@@ -480,6 +480,12 @@ width: 120px!important;
   min-width: 250px;
   position: relative;
 }
+#float-labelss-filter {
+  display: flex;
+  /* flex-direction: column; */
+  min-width: 200px;
+  position: relative;
+}
 #float-labels2 {
   display: flex;
   /* flex-direction: column; */
