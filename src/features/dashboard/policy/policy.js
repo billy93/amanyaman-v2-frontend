@@ -1441,7 +1441,7 @@ const Polcies = () => {
                   _placeholder={{
                     color: 'grey',
                   }}
-                  value={''}
+                  value={filterQuery?.policyStatus}
                   defaultValue={''}
                   name="policyStatus"
                   style={{
