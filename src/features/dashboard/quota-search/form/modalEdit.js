@@ -10,7 +10,7 @@ import {
   Button,
 } from '@chakra-ui/react';
 
-const GlobalModal = ({ isOpen, onClose, onConfirm, children }) => {
+const GlobalModal = ({ isOpen, onClose, onConfirm, children, invalid }) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -31,6 +31,7 @@ const GlobalModal = ({ isOpen, onClose, onConfirm, children }) => {
           <Button
             colorScheme="green"
             ml={3}
+            isDisabled={invalid}
             onClick={() => {
               onConfirm();
               onClose();

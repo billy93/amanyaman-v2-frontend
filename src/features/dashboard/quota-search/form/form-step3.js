@@ -1000,12 +1000,34 @@ const Form3 = ({
     );
   };
 
-  console.log(
-    'test ',
-    parseInt(payload?.adt) + parseInt(payload?.chd),
-    parseInt(payload?.adt) + parseInt(payload?.chd) ===
-      listTravellers?.listTravellers?.length
-  );
+  const [invalid, setInValid] = React.useState(false);
+  React.useEffect(() => {
+    if (
+      type === '' ||
+      typeStatus === '' ||
+      firstName === '' ||
+      lastName === '' ||
+      email === '' ||
+      address === '' ||
+      pasportNumber === '' ||
+      phoneNumber === '' ||
+      ticketNumber === ''
+    ) {
+      setInValid(true);
+    } else {
+      setInValid(false);
+    }
+  }, [
+    type,
+    typeStatus,
+    firstName,
+    lastName,
+    email,
+    address,
+    pasportNumber,
+    phoneNumber,
+    ticketNumber,
+  ]);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -1023,6 +1045,7 @@ const Form3 = ({
             isOpen={isModalOpen}
             onClose={closeModal}
             onConfirm={handleConfirm}
+            invalid={invalid}
           >
             <motion.div
               initial={{ y: '100vh' }}
