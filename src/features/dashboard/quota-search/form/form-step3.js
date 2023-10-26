@@ -1003,30 +1003,34 @@ const Form3 = ({
   const [invalid, setInValid] = React.useState(false);
   React.useEffect(() => {
     if (
-      type === '' ||
-      typeStatus === '' ||
-      firstName === '' ||
-      lastName === '' ||
-      email === '' ||
-      address === '' ||
-      pasportNumber === '' ||
-      phoneNumber === '' ||
-      ticketNumber === ''
+      EditTraveller?.title === '' ||
+      EditTraveller?.travellerType === '' ||
+      EditTraveller?.firstName === '' ||
+      EditTraveller?.lastName === '' ||
+      EditTraveller?.email === '' ||
+      EditTraveller?.address === '' ||
+      EditTraveller?.passport === '' ||
+      EditTraveller?.phone === '' ||
+      EditTraveller?.placeOfBirth === '' ||
+      EditTraveller?.ticket === '' ||
+      EditTraveller?.dateOfBirth === null
     ) {
       setInValid(true);
     } else {
       setInValid(false);
     }
   }, [
-    type,
-    typeStatus,
-    firstName,
-    lastName,
-    email,
-    address,
-    pasportNumber,
-    phoneNumber,
-    ticketNumber,
+    EditTraveller?.title,
+    EditTraveller?.travellerType,
+    EditTraveller?.firstName,
+    EditTraveller?.lastName,
+    EditTraveller?.email,
+    EditTraveller?.address,
+    EditTraveller?.passport,
+    EditTraveller?.ticket,
+    EditTraveller?.phone,
+    EditTraveller?.placeOfBirth,
+    EditTraveller?.dateOfBirth,
   ]);
   return (
     <motion.div
