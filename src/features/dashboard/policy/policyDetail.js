@@ -488,12 +488,15 @@ const PolicyDetail = () => {
               mt="4em"
             >
               <Menu>
-                {quotation?.statusSales === 'SUCCESS' ||
+                {/* {quotation?.statusSales === 'SUCCESS' ||
                 quotation?.statusSales === null ? (
                   <MenuButton as={Button} colorScheme="white">
                     <FiMoreVertical color="#065BAA" size={'16px'} />
                   </MenuButton>
-                ) : null}
+                ) : null} */}
+                <MenuButton as={Button} colorScheme="white">
+                  <FiMoreVertical color="#065BAA" size={'16px'} />
+                </MenuButton>
                 <MenuList>
                   <MenuItem onClick={handleUpgrade}>
                     <Box gap="5px" display={'flex'} alignItems="center">

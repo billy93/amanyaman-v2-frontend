@@ -1143,6 +1143,18 @@ const Polcies = () => {
     // setChangePage(true)
   };
 
+  const resetFilter = () => {
+    setFilterQuery({
+      policyNumber: '',
+      traveller: '',
+      policyStatus: '',
+      planType: '',
+      bookingNumber: '',
+      purchaseDate: '',
+    });
+    setDateDisplay(null);
+  };
+
   const previousPage = () => {
     setPage((prevPage) => prevPage - 1);
     // setChangePage(true)
@@ -1529,7 +1541,28 @@ const Polcies = () => {
                   />
                 </Box>
               </motion.Box>
-              {/* <Button variant={'outline'} onClick={handleSearch}>Search</Button> */}
+              <motion.Box
+                animate={{
+                  x: 0,
+                  opacity: 0.5,
+                  transition: {
+                    type: 'spring',
+                    stiffness: 400,
+                    delay: 0.9,
+                    duration: 0.5,
+                    staggerChildren: true,
+                    damping: 50,
+                  },
+                }}
+                initial={{
+                  opacity: 1,
+                  y: '-100vw',
+                }}
+              >
+                <Button variant={'outline'} onClick={resetFilter}>
+                  Reset
+                </Button>
+              </motion.Box>
             </Box>
           )}
           <Styles>
