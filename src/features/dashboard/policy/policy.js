@@ -1145,22 +1145,30 @@ const Polcies = () => {
   };
 
   const resetFilter = () => {
-    setReset(!reset);
+    setFilterQuery({
+      policyNumber: '',
+      traveller: '',
+      policyStatus: '',
+      planType: '',
+      bookingNumber: '',
+      purchaseDate: '',
+    });
+    setDateDisplay(null);
   };
 
-  React.useEffect(() => {
-    if (reset === true) {
-      setFilterQuery({
-        policyNumber: '',
-        traveller: '',
-        policyStatus: '',
-        planType: '',
-        bookingNumber: '',
-        purchaseDate: '',
-      });
-      setDateDisplay(null);
-    }
-  }, [reset]);
+  // React.useEffect(() => {
+  //   if (reset === true) {
+  //     setFilterQuery({
+  //       policyNumber: '',
+  //       traveller: '',
+  //       policyStatus: '',
+  //       planType: '',
+  //       bookingNumber: '',
+  //       purchaseDate: '',
+  //     });
+  //     setDateDisplay(null);
+  //   }
+  // }, [reset]);
 
   console.log('reset', reset);
   const previousPage = () => {
