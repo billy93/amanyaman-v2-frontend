@@ -827,11 +827,11 @@ const Polcies = () => {
                     MozBorderRadius: '5px',
                   }}
                 >
-                  <BiSkipPreviousCircle size="25px" color="black" />
+                  {/* <BiSkipPreviousCircle size="25px" color="black" /> */}
                   <Text
                     as="p"
                     fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
+                    style={{ fontSize: '14px' }}
                     color="#231F20"
                     pl="5px"
                   >
@@ -851,10 +851,10 @@ const Polcies = () => {
                   bg="white"
                   border={'none'}
                 >
-                  <BiSkipNextCircle size="25px" color="black" />
+                  {/* <BiSkipNextCircle size="25px" color="black" /> */}
                   <Text
                     fontFamily={'Mulish'}
-                    style={{ fontSize: '12px' }}
+                    style={{ fontSize: '14px' }}
                     color="#231F20"
                     pl="5px"
                   >
