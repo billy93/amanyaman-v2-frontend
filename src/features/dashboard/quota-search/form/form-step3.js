@@ -2468,16 +2468,18 @@ const Form3 = ({
                   onClick={
                     travellersExisting !== null ? onSaveExisting : onSave
                   }
-                  disabled={
+                  isDisabled={
                     loadingAdd ||
                     type === '' ||
                     typeStatus === '' ||
-                    firstName ||
+                    firstName === '' ||
                     lastName === '' ||
                     dateOfBirth === null ||
                     placeOfBirth === '' ||
                     ticketNumber === '' ||
                     pasportNumber === '' ||
+                    phoneNumber === '' ||
+                    email === '' ||
                     address === ''
                       ? true
                       : false
