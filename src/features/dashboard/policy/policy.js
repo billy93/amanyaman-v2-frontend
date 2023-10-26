@@ -1160,7 +1160,7 @@ const Polcies = () => {
       });
       setDateDisplay(null);
     }
-  }, [filterQuery, reset]);
+  }, [reset]);
 
   const previousPage = () => {
     setPage((prevPage) => prevPage - 1);
