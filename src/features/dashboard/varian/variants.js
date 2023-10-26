@@ -30,7 +30,7 @@ import {
 } from '@chakra-ui/react';
 import matchSorter from 'match-sorter';
 import { Button } from '@chakra-ui/react';
-import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
+// import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 import UseCustomToast from '../../../components/UseCustomToast';

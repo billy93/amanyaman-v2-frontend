@@ -30,7 +30,7 @@ import { useDispatch } from 'react-redux';
 import { setStateSelectedt } from '../policy/policySlice';
 import { setTotalCount } from './systemParamsSlice';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
-import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
+// import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 

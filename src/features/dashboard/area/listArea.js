@@ -25,7 +25,7 @@ import { useDeletedAreaMutation } from './listApiSlice';
 import { useDispatch } from 'react-redux';
 import { setStateSelectedt } from '../policy/policySlice';
 // import {setSystemParams,listSystemParam,setTotalCount,totalCounts} from './systemParamsSlice'
-import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
+// import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 import { useNavigate, Link } from 'react-router-dom';

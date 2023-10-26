@@ -53,7 +53,7 @@ import { MdFilterList } from 'react-icons/md';
 import { AiOutlineClose } from 'react-icons/ai';
 import { BsFillTrashFill } from 'react-icons/bs';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
-import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
+// import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect, useFilters, useSortBy } from 'react-table';
 import CustomModal from '../../../components/customModal';

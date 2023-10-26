@@ -26,7 +26,7 @@ import { Button } from '@chakra-ui/react';
 import PageLoader from '../../../components/pageLoader';
 import { useDispatch } from 'react-redux';
 import { setStateSelectedt } from '../policy/policySlice';
-import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
+// import { BiSkipPreviousCircle, BiSkipNextCircle } from 'react-icons/bi';
 import styled from 'styled-components';
 import { useTable, useRowSelect } from 'react-table';
 import UseCustomToast from '../../../components/UseCustomToast';
