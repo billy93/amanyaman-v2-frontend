@@ -2459,23 +2459,32 @@ const Form3 = ({
               </ModalBody>
 
               <ModalFooter>
-                <Button onClick={onClose} disabled={loadingEdit || loadingAdd}>
+                <Button onClick={onClose} disabled={loadingAdd}>
                   Cancel
                 </Button>
                 <Button
                   colorScheme="blue"
                   mr={3}
                   onClick={
-                    EditTraveller?.bookingId !== ''
-                      ? onEdit
-                      : travellersExisting !== null
-                      ? onSaveExisting
-                      : onSave
+                    travellersExisting !== null ? onSaveExisting : onSave
                   }
-                  disabled={loadingEdit || loadingAdd}
-                  isLoading={loadingEdit || loadingAdd}
+                  disabled={
+                    loadingAdd ||
+                    type === '' ||
+                    typeStatus === '' ||
+                    firstName ||
+                    lastName === '' ||
+                    dateOfBirth === null ||
+                    placeOfBirth === '' ||
+                    ticketNumber === '' ||
+                    pasportNumber === '' ||
+                    address === ''
+                      ? true
+                      : false
+                  }
+                  isLoading={loadingAdd}
                 >
-                  {EditTraveller?.bookingId !== '' ? 'Edit' : 'Add'}
+                  {'ADD'}
                 </Button>
               </ModalFooter>
             </ModalContent>
@@ -3141,12 +3150,19 @@ const Form3 = ({
                 </Box>
               );
             })}
+
             <Box
               display={'flex'}
               justifyContent={'center'}
               alignItems={'center'}
               w="100%"
               pt="15px"
+              isDisabled={
+                parseInt(payload?.adt) + parseInt(payload?.chd) ===
+                listTravellers?.listTravellers?.length
+                  ? true
+                  : false
+              }
             >
               <motion.div
                 style={{
