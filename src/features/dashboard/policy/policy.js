@@ -1154,7 +1154,7 @@ const Polcies = () => {
         policyNumber: '',
         traveller: '',
         policyStatus: '',
-        planType: 'ALL',
+        planType: '',
         bookingNumber: '',
         purchaseDate: '',
       });
@@ -1497,6 +1497,7 @@ const Polcies = () => {
                   _placeholder={{
                     color: 'grey',
                   }}
+                  value={filterQuery?.planType}
                   defaultValue={''}
                   name="planType"
                   onChange={handleFilter}
