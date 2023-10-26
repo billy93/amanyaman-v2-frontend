@@ -3158,44 +3158,39 @@ const Form3 = ({
                 </Box>
               );
             })}
-
-            <Box
-              display={'flex'}
-              justifyContent={'center'}
-              alignItems={'center'}
-              w="100%"
-              pt="15px"
-            >
-              <motion.div
-                style={{
-                  padding: ' 4px 8px',
-                  border: '1px solid #3182ce',
-                  color: '#000015',
-                  fontFamily: 'Mulish',
-                  borderRadius: '5px',
-                  textAlign: 'center',
-                  fontWeight: 'normal',
-                  width: '124px',
-                }}
-                whileHover={{
-                  cursor: 'pointer',
-                  scale: 0.9,
-                  backgroundColor: '#3182ce',
-                  color: 'white',
-                  // textShadow: '0px 0px 8px #3182ce',
-                  boxShadow: '0px 0px 6px #888888',
-                }}
-                disabled={
-                  parseInt(payload?.adt) + parseInt(payload?.chd) ===
-                  listTravellers?.listTravellers?.length
-                    ? true
-                    : false
-                }
-                onClick={handleAddTraveller}
+            {parseInt(payload?.adt) + parseInt(payload?.chd) >
+            listTravellers?.listTravellers?.length ? (
+              <Box
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                w="100%"
+                pt="15px"
               >
-                Add Traveller
-              </motion.div>
-              {/* <motion.Button
+                <motion.div
+                  style={{
+                    padding: ' 4px 8px',
+                    border: '1px solid #3182ce',
+                    color: '#000015',
+                    fontFamily: 'Mulish',
+                    borderRadius: '5px',
+                    textAlign: 'center',
+                    fontWeight: 'normal',
+                    width: '124px',
+                  }}
+                  whileHover={{
+                    cursor: 'pointer',
+                    scale: 0.9,
+                    backgroundColor: '#3182ce',
+                    color: 'white',
+                    // textShadow: '0px 0px 8px #3182ce',
+                    boxShadow: '0px 0px 6px #888888',
+                  }}
+                  onClick={handleAddTraveller}
+                >
+                  Add Traveller
+                </motion.div>
+                {/* <motion.Button
                 style={{
                   padding: ' 4px 8px',
                   border: '1px solid #3182ce',
@@ -3215,7 +3210,8 @@ const Form3 = ({
               >
                 Add Travellers
               </motion.Button> */}
-            </Box>
+              </Box>
+            ) : null}
             <Box display={'flex'} justifyContent={'center'} pb="15px" pt="15px">
               or
             </Box>
