@@ -1000,6 +1000,12 @@ const Form3 = ({
     );
   };
 
+  console.log(
+    'test ',
+    parseInt(payload?.adt) + parseInt(payload?.chd),
+    parseInt(payload?.adt) + parseInt(payload?.chd) ===
+      listTravellers?.listTravellers?.length
+  );
   return (
     <motion.div
       initial={{ opacity: 0 }}
