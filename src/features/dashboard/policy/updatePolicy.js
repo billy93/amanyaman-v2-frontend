@@ -564,6 +564,12 @@ const PolicyDetail = () => {
     setDataQuotation([...data]);
   };
 
+  const setTicket = (e, i) => {
+    const data = [...dataQuotation];
+    data[i].ticket = e.target.value;
+    setDataQuotation([...data]);
+  };
+
   const setRelationships = (e, i) => {
     const data = [...dataQuotation];
     data[i].relationship = e.target.value;
@@ -2172,6 +2178,59 @@ const PolicyDetail = () => {
                                         textAlign: 'center',
                                         position: 'absolute',
                                         color:
+                                          travellers?.ticket !== ''
+                                            ? '#065baa'
+                                            : '',
+                                        transform:
+                                          travellers?.ticket !== ''
+                                            ? 'translateY(-10px)'
+                                            : 'translateY(17px)',
+                                      }}
+                                      // top={'20px'}
+                                      // style={{}}
+                                      className="floating-label-global"
+                                    >
+                                      Ticket Number
+                                    </FormLabel>
+                                    <Input
+                                      bg={
+                                        travellers?.ticket !== null
+                                          ? '#e8f0fe'
+                                          : '#ebebeb'
+                                      }
+                                      variant="custom"
+                                      className="global-input"
+                                      pt="10px"
+                                      placeholder=" "
+                                      _placeholder={{
+                                        opacity: 1,
+                                        color: 'gray.500',
+                                      }}
+                                      name="ticket"
+                                      value={travellers?.ticket}
+                                      onChange={(e) => setTicket(e, i)}
+                                      h="48px"
+                                    />
+                                  </FormControl>
+                                </Box>
+                                <Box display={'flex'} gap="5px" mt="10px">
+                                  <FormControl
+                                    variant="floating"
+                                    id="first-name"
+                                    isRequired
+                                    style={{
+                                      textAlign: 'center',
+                                    }}
+                                    height="100%"
+                                  >
+                                    <FormLabel
+                                      fontSize="11px"
+                                      fontStyle={'italic'}
+                                      pt="10px"
+                                      style={{
+                                        textAlign: 'center',
+                                        position: 'absolute',
+                                        color:
                                           travellers?.beneficiary !== ''
                                             ? '#065baa'
                                             : '',
@@ -2205,8 +2264,6 @@ const PolicyDetail = () => {
                                       h="48px"
                                     />
                                   </FormControl>
-                                </Box>
-                                <Box bg="white">
                                   <FormControl
                                     variant="floating"
                                     isRequired

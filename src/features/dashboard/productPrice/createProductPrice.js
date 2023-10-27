@@ -170,15 +170,15 @@ const CreatePrice = () => {
     try {
       const res = await updateProductPrice(data);
       if (res?.data) {
-        showSuccessToast('Plan Types created successfully!');
+        showSuccessToast('Edit product price successfully!');
         navigate('/master-data/product-price');
       } else {
-        const errorMessage = `Failed to create plan types. Status Code: ${res?.error?.status}`;
+        const errorMessage = `Fail to edit product price. Status Code: ${res?.error?.status}`;
         showErrorToast(errorMessage);
       }
     } catch (error) {
       const statusCode = error?.response?.status || 'Unknown';
-      const errorMessage = `Failed to create Plan Types. Status Code: ${statusCode}`;
+      const errorMessage = `Failed to edit product price. Status Code: ${statusCode}`;
       showErrorToast(errorMessage);
       console.log(error);
     }
