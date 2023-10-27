@@ -1362,7 +1362,12 @@ const PolicyDetail = () => {
                                         )}
                                       </FormErrorMessage>
                                     </Box>
-                                    <Box display={'flex'} gap="5px" mt="10px">
+                                    <Box
+                                      display={'flex'}
+                                      gap="5px"
+                                      mt="10px"
+                                      alignItems={'center'}
+                                    >
                                       <FormControl
                                         variant="floating"
                                         id="first-name"
@@ -1449,7 +1454,6 @@ const PolicyDetail = () => {
                                         <Input
                                           className="global-input"
                                           variant="custom"
-                                          pt="10px"
                                           bg={
                                             travellers?.ticket !== null
                                               ? '#e8f0fe'
@@ -1467,7 +1471,11 @@ const PolicyDetail = () => {
                                         />
                                       </FormControl>
                                     </Box>
-                                    <Box display={'flex'} gap="5px" mt="10px">
+                                    <Box
+                                      display={'flex'}
+                                      gap="5px"
+                                      alignItems={'center'}
+                                    >
                                       <FormControl
                                         variant="floating"
                                         id="first-name"
@@ -1523,7 +1531,7 @@ const PolicyDetail = () => {
                                         variant="floating"
                                         isRequired
                                         fontFamily={'Mulish'}
-                                        mt="14px"
+                                        // mt="14px"
                                       >
                                         <Box className="floating-form" w="100%">
                                           <Box className="react-select-container">
