@@ -5,10 +5,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, NavLink, useParams } from 'react-router-dom';
-import {
-  useGetBookingByIdQuery,
-  useGetBookingSearchQuery,
-} from '../../policy/policyApiSlice';
+import { useGetBookingByIdQuery } from '../../policy/policyApiSlice';
+import { useGetBookingSearchQuery } from '../policyApiSlice';
 import {
   setHistoryForm,
   historyForm,
