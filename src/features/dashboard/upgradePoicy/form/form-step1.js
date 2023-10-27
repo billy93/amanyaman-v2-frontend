@@ -124,19 +124,27 @@ const Form1 = ({
     return { year, month, day };
   }
 
-  console.log('dataUpdate', dataUpdate);
-  const setDataFromResponse = React.useCallback((quotation) => {
+  // console.log('dataUpdate', dataUpdate);
+  const setDataFromResponse = React.useCallback((datas) => {
     const type =
-      quotation?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Annual Trip';
+      datas?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Annual Trip';
     dispatch(setFormStateTravellerType(type));
-    if (quotation?.from) {
+    const destinationCountry = datas?.destinations.map((obj) => ({
+      ...obj,
+      label: obj.countryName,
+      name: obj.countryName,
+    }));
+    if (datas?.destinations?.length !== 0) {
+      setFormStateDestinationCountry(destinationCountry);
+    }
+    if (datas?.from) {
       dispatch(
         setFormStateStartDate({
-          startDate: convertDateToObject(quotation.from),
+          startDate: convertDateToObject(datas.from),
         })
       );
     }
-    if (quotation?.to !== undefined) {
+    if (datas?.to !== undefined) {
       dispatch(
         setFormEndDate({
           endDate: {
@@ -157,10 +165,10 @@ const Form1 = ({
   }, []);
 
   React.useEffect(() => {
-    if (quotation !== undefined) {
-      setDataFromResponse(quotation);
+    if (dataUpdate !== undefined) {
+      setDataFromResponse(dataUpdate);
     }
-  }, [quotation, setDataFromResponse]);
+  }, [dataUpdate, setDataFromResponse]);
 
   const handleTypeTrip = (type) => {
     dispatch(setFormStateCoverageType(type));
