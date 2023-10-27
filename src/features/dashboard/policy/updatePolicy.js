@@ -1432,11 +1432,11 @@ const PolicyDetail = () => {
                                             textAlign: 'center',
                                             position: 'absolute',
                                             color:
-                                              travellers?.beneficiary !== ''
+                                              travellers?.ticket !== ''
                                                 ? '#065baa'
                                                 : '',
                                             transform:
-                                              travellers?.beneficiary !== ''
+                                              travellers?.ticket !== ''
                                                 ? 'translateY(-10px)'
                                                 : 'translateY(-3px)',
                                           }}
@@ -1444,14 +1444,14 @@ const PolicyDetail = () => {
                                           // style={{}}
                                           className="floating-label-global"
                                         >
-                                          Beneficiary
+                                          Ticket Number
                                         </FormLabel>
                                         <Input
                                           className="global-input"
                                           variant="custom"
                                           pt="10px"
                                           bg={
-                                            travellers?.beneficiary !== null
+                                            travellers?.ticket !== null
                                               ? '#e8f0fe'
                                               : '#ebebeb'
                                           }
@@ -1460,14 +1460,67 @@ const PolicyDetail = () => {
                                             opacity: 1,
                                             color: 'gray.500',
                                           }}
-                                          name="beneficiary"
-                                          value={travellers?.beneficiary}
-                                          onChange={(e) => setBeneficiary(e, i)}
+                                          name="ticket"
+                                          value={travellers?.ticket}
+                                          onChange={(e) => setTicket(e, i)}
                                           h="48px"
                                         />
                                       </FormControl>
                                     </Box>
-                                    <Box bg="white">
+                                    <Box display={'flex'} gap="5px" mt="10px">
+                                      <FormControl
+                                        variant="floating"
+                                        id="first-name"
+                                        isRequired
+                                        style={{
+                                          textAlign: 'center',
+                                        }}
+                                        height="100%"
+                                      >
+                                        <FormLabel
+                                          fontSize="11px"
+                                          fontStyle={'italic'}
+                                          pt="10px"
+                                          style={{
+                                            textAlign: 'center',
+                                            position: 'absolute',
+                                            color:
+                                              travellers?.passport !== ''
+                                                ? '#065baa'
+                                                : '',
+                                            transform:
+                                              travellers?.passport !== ''
+                                                ? 'translateY(-10px)'
+                                                : 'translateY(17px)',
+                                          }}
+                                          // top={'20px'}
+                                          // style={{}}
+                                          className="floating-label-global"
+                                        >
+                                          Identity Card/ Passport
+                                        </FormLabel>
+                                        <Input
+                                          className="global-input"
+                                          bg={
+                                            travellers?.passport !== null
+                                              ? '#e8f0fe'
+                                              : '#ebebeb'
+                                          }
+                                          variant="custom"
+                                          pt="10px"
+                                          placeholder=" "
+                                          _placeholder={{
+                                            opacity: 1,
+                                            color: 'gray.500',
+                                          }}
+                                          name="passport"
+                                          value={travellers?.passport}
+                                          onChange={(e) => setPassport(e, i)}
+                                          h="48px"
+                                        />
+                                      </FormControl>
+                                    </Box>
+                                    <Box display={'flex'} gap="5px" mt="10px">
                                       <FormControl
                                         variant="floating"
                                         isRequired
@@ -1543,6 +1596,62 @@ const PolicyDetail = () => {
                                             >
                                               Relationship
                                             </FormLabel>
+                                            <FormControl
+                                              variant="floating"
+                                              id="first-name"
+                                              isRequired
+                                              style={{
+                                                textAlign: 'center',
+                                              }}
+                                              height="100%"
+                                            >
+                                              <FormLabel
+                                                // fontSize="11px"
+                                                fontStyle={'italic'}
+                                                pt="10px"
+                                                style={{
+                                                  textAlign: 'center',
+                                                  position: 'absolute',
+                                                  color:
+                                                    travellers?.beneficiary !==
+                                                    ''
+                                                      ? '#065baa'
+                                                      : '',
+                                                  transform:
+                                                    travellers?.beneficiary !==
+                                                    ''
+                                                      ? 'translateY(-10px)'
+                                                      : 'translateY(-3px)',
+                                                }}
+                                                // top={'20px'}
+                                                // style={{}}
+                                                className="floating-label-global"
+                                              >
+                                                Beneficiary
+                                              </FormLabel>
+                                              <Input
+                                                className="global-input"
+                                                variant="custom"
+                                                pt="10px"
+                                                bg={
+                                                  travellers?.beneficiary !==
+                                                  null
+                                                    ? '#e8f0fe'
+                                                    : '#ebebeb'
+                                                }
+                                                placeholder=" "
+                                                _placeholder={{
+                                                  opacity: 1,
+                                                  color: 'gray.500',
+                                                }}
+                                                name="beneficiary"
+                                                value={travellers?.beneficiary}
+                                                onChange={(e) =>
+                                                  setBeneficiary(e, i)
+                                                }
+                                                h="48px"
+                                              />
+                                            </FormControl>
                                           </Box>
                                         </Box>
                                         {/* It is important that the Label comes after the Control due to css selectors */}
