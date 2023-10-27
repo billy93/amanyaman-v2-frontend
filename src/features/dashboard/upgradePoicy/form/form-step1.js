@@ -5,7 +5,10 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, NavLink, useParams } from 'react-router-dom';
-import { useGetBookingByIdQuery } from '../../policy/policyApiSlice';
+import {
+  useGetBookingByIdQuery,
+  useGetBookingSearchQuery,
+} from '../../policy/policyApiSlice';
 import {
   setHistoryForm,
   historyForm,
@@ -103,17 +106,8 @@ const Form1 = ({
     refetch,
     isSuccess,
   } = useGetBookingByIdQuery(id);
-  // console.log('compre', hasCompletedAllSteps)
-  // const [ManualInput, setManualInput] = React.useState({
-  //    coverageType:"",
-  //    travellerType:"",
-  //    amount:"",
-  //    destinationCountry:"",
-  //    startDate:"",
-  //    endDate:"",
-  // })
+  const { data: dataUpdate } = useGetBookingSearchQuery(id);
 
-  console.log('quotation', quotation);
   function formatDateObject(date) {
     if (!(date instanceof Date)) {
       throw new Error('Invalid date object');
@@ -132,6 +126,7 @@ const Form1 = ({
     return { year, month, day };
   }
 
+  console.log('dataUpdate', dataUpdate);
   const setDataFromResponse = React.useCallback((quotation) => {
     const type =
       quotation?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Annual Trip';
