@@ -691,7 +691,7 @@ const Form1 = ({
           </Box>
           {initState?.coverageType === '' ||
           initState?.coverageType === 'Single Trip' ? (
-            <Box mt="2em" w={{ base: '100%' }} h={{ sm: '48px' }}>
+            <Box w={{ base: '100%' }} h={{ sm: '48px' }}>
               <FormControl
                 variant="floating"
                 fontFamily={'Mulish'}
@@ -736,7 +736,7 @@ const Form1 = ({
             gap="4px"
             width={{ base: '100%' }}
           >
-            <Box mt="1.5em" h="48px" width={{ base: '100%' }}>
+            <Box h="48px" width={{ base: '100%' }}>
               <FormControl
                 mt="10px"
                 variant="floating"
@@ -774,7 +774,7 @@ const Form1 = ({
             </Box>
             {initState.coverageType === '' ||
             initState.coverageType === 'Single Trip' ? (
-              <Box width={{ base: '100%' }} mt="1.5em" h="48px">
+              <Box width={{ base: '100%' }} h="48px">
                 <FormControl
                   mt="10px"
                   variant="floating"
@@ -811,7 +811,7 @@ const Form1 = ({
                 </FormControl>
               </Box>
             ) : (
-              <Box width={{ base: '100%' }} mt="1.5em" h="48px">
+              <Box width={{ base: '100%' }} h="48px">
                 <FormControl
                   mt="10px"
                   variant="floating"
