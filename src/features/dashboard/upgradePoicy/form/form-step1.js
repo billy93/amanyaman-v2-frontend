@@ -691,7 +691,7 @@ const Form1 = ({
           </Box>
           {initState?.coverageType === '' ||
           initState?.coverageType === 'Single Trip' ? (
-            <Box w={{ base: '100%' }} h={{ sm: '48px' }}>
+            <Box w={{ base: '100%' }} h={{ sm: '48px' }} mt="3em">
               <FormControl
                 variant="floating"
                 fontFamily={'Mulish'}
