@@ -157,3 +157,4 @@ export const messages = (state) =>
 export const selectPaymentMethod = (state) =>
   state.quotaSearch?.formState?.selectPaymentMethod;
 export const listcountries = (state) => state.quotaSearch?.formState?.countries;
+export const travellerUpgrade = (state) => state.quotaSearch?.upgradeData;

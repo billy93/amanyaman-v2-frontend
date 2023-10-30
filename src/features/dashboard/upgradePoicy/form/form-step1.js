@@ -15,6 +15,7 @@ import {
 } from '../../../auth/authSlice';
 import usePersist from '../../../../features/hook/usePersist';
 import {
+  travellerUpgrade,
   setUpgradeData,
   setTravellersDataUpgrade,
   setSelectTravelInsurancePlan,
@@ -92,6 +93,7 @@ const Form1 = ({
   isLastStep,
 }) => {
   const initState = useSelector(selectManualInput);
+  const initStateUpgraded = useSelector(travellerUpgrade);
   const listTravellers = useSelector(FillTravellersData);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -151,7 +153,7 @@ const Form1 = ({
     return { year, month, day };
   }
 
-  console.log('dataUpdate', dataUpdate);
+  // console.log('dataUpdate', dataUpdate);
   const setDataFromResponse = React.useCallback((datas) => {
     const type =
       datas?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Annual Trip';
@@ -196,9 +198,11 @@ const Form1 = ({
     }
   }, []);
 
+  console.log('initStateUpgraded', initStateUpgraded);
   React.useEffect(() => {
     if (dataUpdate !== undefined) {
       setDataFromResponse(dataUpdate);
+      setUpgradeData(dataUpdate);
     }
   }, [dataUpdate, setDataFromResponse]);
 
