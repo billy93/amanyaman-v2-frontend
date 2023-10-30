@@ -638,9 +638,9 @@ const PolicyDetail = () => {
   };
 
   const renderCustomInput = ({ ref, value, onClick, ...props }) => {
-    const data = [...dataQuotation];
+    // const data = [...dataQuotation];
     console.log(data[value].dateOfBirth);
-    console.log('valss', value);
+    // console.log('valss', value);
     return (
       <>
         {console.log('test', ref, value, onClick)}
@@ -708,11 +708,7 @@ const PolicyDetail = () => {
   const handleBack = () => {
     navigate(-1);
   };
-  console.log('trav policyNumberString', policyNumberString);
-  console.log(
-    'trav data',
-    dataQuotation?.filter((trav) => trav.policyNumber === policyNumberString)
-  );
+
   let content;
   if (isLoading || loadingDownload || loadingView) {
     content = (

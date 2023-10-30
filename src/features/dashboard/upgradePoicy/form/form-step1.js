@@ -15,6 +15,8 @@ import {
 } from '../../../auth/authSlice';
 import usePersist from '../../../../features/hook/usePersist';
 import {
+  setTravellersDataUpgrade,
+  setTravellersData,
   setFormStateAdult,
   setFormStateCoverageChild,
   selectManualInput,
@@ -26,6 +28,7 @@ import {
   setFormEndDate,
   setListCountries,
   listcountries,
+  FillTravellersData,
   setListProducts,
 } from '../quotaSearchSlice';
 import {
@@ -64,6 +67,7 @@ import { AiOutlineWarning } from 'react-icons/ai';
 import {
   useGetListCountriesQuery,
   useSearchproductsMutation,
+  useGetListTravellerQuery,
 } from '../policyApiSlice';
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -86,16 +90,22 @@ const Form1 = ({
   isLastStep,
 }) => {
   const initState = useSelector(selectManualInput);
+  const listTravellers = useSelector(FillTravellersData);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id, policyNumberString } = useParams();
   const [isActive] = useState(false);
   const [persist, setPersist] = usePersist();
   const historyForms = useSelector(historyForm);
   const login = useSelector(userLoginCurrent);
   const listCountries = useSelector(listcountries);
+  const [triggerGetList, setTriggerGetList] = React.useState(false);
   const { data: { response: countries } = {} } = useGetListCountriesQuery();
   const [searchproducts, { isLoading }] = useSearchproductsMutation();
+  const { data: newlistTravellers, refetch: fetchTravellers } =
+    useGetListTravellerQuery(id, {
+      skip: triggerGetList === false ? true : false,
+    });
   const [isActives, setActives] = useState(false);
   const {
     data: quotation,
@@ -105,6 +115,21 @@ const Form1 = ({
     isSuccess,
   } = useGetBookingByIdQuery(id);
   const { data: dataUpdate } = useGetBookingSearchQuery(id);
+
+  React.useEffect(() => {
+    if (policyNumberString !== undefined) {
+      if (newlistTravellers) {
+        const listtraveller = newlistTravellers?.filter(
+          (policy) => policy.policyNumber === policyNumberString
+        );
+        dispatch(setTravellersDataUpgrade([...listtraveller]));
+      }
+    } else {
+      if (newlistTravellers) {
+        dispatch(setTravellersDataUpgrade([...newlistTravellers]));
+      }
+    }
+  }, [dispatch, newlistTravellers, policyNumberString]);
 
   function formatDateObject(date) {
     if (!(date instanceof Date)) {
@@ -207,6 +232,7 @@ const Form1 = ({
   const paddedMonth = initState?.startDate?.month.toString().padStart(2, '0');
   const paddedEndDay = initState?.endDate?.day.toString().padStart(2, '0');
   const paddedEndMonth = initState?.endDate?.month.toString().padStart(2, '0');
+
   const handleNext = async () => {
     const payload = {
       coverType:

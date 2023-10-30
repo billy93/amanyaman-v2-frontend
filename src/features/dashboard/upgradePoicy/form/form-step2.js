@@ -3,7 +3,7 @@
 import React from 'react';
 // import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ModalForm from '../form/modal';
 
 // import usePersist from '../../../../features/hook/usePersist';
@@ -59,9 +59,8 @@ const Form2 = ({
   // const [booksProducts, { isLoading }] = useUpgradePolicyMutation();
   const [triggers, setTriggers] = React.useState(false);
   const [ids, setIds] = React.useState('');
-  // const { data } = useGetDetailBenefitQuery(ids, {
-  //   skip: triggers === false ? true : false,
-  // });
+  // const listTravellers = useSelector(FillTravellersData);
+  const { id } = useParams();
   const initState = useSelector(selectTravelInsurance);
   const login = useSelector(userLoginCurrent);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -96,8 +95,16 @@ const Form2 = ({
   const paddedMonth = stateInt?.startDate?.month.toString().padStart(2, '0');
   const paddedEndDay = stateInt?.endDate?.day.toString().padStart(2, '0');
   const paddedEndMonth = stateInt?.endDate?.month.toString().padStart(2, '0');
+
+  function filterObjectsWithProperty(array, property) {
+    // eslint-disable-next-line no-prototype-builtins
+    return array.filter((obj) => obj.hasOwnProperty(property));
+  }
+
   const handleNext = async (e) => {
     const payload = {
+      bookingId: id,
+      travellers: filterObjectsWithProperty(list?.list, 'id'),
       coverType:
         stateInt.coverageType === 'Single Trip' ? 'SINGLE_TRIP' : 'ANNUAL',
       travellerType:

@@ -69,7 +69,7 @@ const QuotaSearchById = () => {
   const prevListTraveller = usePrevious(list?.listTravellers);
   // const [skipListTraveller, setSkipListTrave] = React.useState(false);
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { id, policyNumberString } = useParams();
   const { data } = useGetBookingSearchQuery(id);
   const {
     data: quotation,
@@ -77,6 +77,7 @@ const QuotaSearchById = () => {
     isError,
   } = useGetBookingByIdQuery(id);
 
+  const 
   const { data: listTravellers, refetch } = useGetListTravellerQuery(id);
   // const { step } = useSelector(quotState);
   const history = localStorage.getItem('persist:root');
@@ -93,7 +94,7 @@ const QuotaSearchById = () => {
 
     return { day, month, year };
   }
-  console.log('persist', persist);
+  // console.log('persist', persist);
   const handlePrev = () => {
     const addStep = {
       ...user,
@@ -215,6 +216,7 @@ const QuotaSearchById = () => {
   const handleBack = () => {
     navigate(-1);
   };
+  
   React.useEffect(() => {
     if (listTravellers) {
       dispatch(setTravellersData([...listTravellers]));
@@ -266,7 +268,9 @@ const QuotaSearchById = () => {
               <BreadcrumbItem>
                 <BreadcrumbLink as={NavLink} onClick={handleBack}>
                   <Text as={'p'} color="#065BAA" fontSize={'sm'}>
-                    {quotation?.travellers[0]?.policyNumber}
+                    {policyNumberString === undefined
+                        ? quotation?.travellers[0]?.policyNumber
+                        : policyNumberString}
                   </Text>
                 </BreadcrumbLink>
               </BreadcrumbItem>

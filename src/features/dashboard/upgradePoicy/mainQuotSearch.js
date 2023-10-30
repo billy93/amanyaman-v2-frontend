@@ -52,7 +52,7 @@ import { useSelector } from 'react-redux';
 // } from '../quotaSearchSlice';
 
 const MainQuotSearch = () => {
-  const { id } = useParams();
+  const { id, policyNumberString } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [persist, setPersist] = usePersist();
@@ -76,13 +76,11 @@ const MainQuotSearch = () => {
       dispatch(setFormStateCoverageType(coverType));
     }
   }, [id, dispatch, searchById?.data?.coverType]);
-  console.log('cover red', id);
-  return id ? (
+  // console.log('cover red', id);
+  return (
     <>
       <QuotaSearchById step={login?.historyStep} />
     </>
-  ) : (
-    <QuotaSearch step={login?.historyStep} />
   );
 };
 export default MainQuotSearch;

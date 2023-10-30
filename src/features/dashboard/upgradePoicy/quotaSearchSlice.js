@@ -33,6 +33,7 @@ const createSearchSlice = createSlice({
         bookingId: '',
         success: false,
         listTravellers: [],
+        list: [],
         editTraveller: null,
       },
       countries: null,
@@ -85,8 +86,12 @@ const createSearchSlice = createSlice({
       state.formState.selectInsurancePlan = travelInsurancePlan;
     },
     setTravellersData: (state, action) => {
-      console.log('action', action.payload);
+      // console.log('action', action.payload);
       state.formState.travellersData.listTravellers = [...action.payload];
+    },
+    setTravellersDataUpgrade: (state, action) => {
+      // console.log('action', action.payload);
+      state.formState.travellersData.list = [...action.payload];
     },
     setBookingId: (state, action) => {
       console.log('action', action.payload);
@@ -119,6 +124,7 @@ export const {
   setFormStateCoverageChild,
   setFormEndDate,
   setTravellersData,
+  setTravellersDataUpgrade,
   setPaymentMethod,
   setFormStateCoverageType,
   setFormStateTravellerType,

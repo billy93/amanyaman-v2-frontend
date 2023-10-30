@@ -93,6 +93,10 @@ function App() {
         >
           <Route path="search" element={<UpgradePolicyPage />} />
           <Route path="search/:id" element={<UpgradePolicyPageId />} />
+          <Route
+            path="search/:policyNumberString/:id"
+            element={<UpgradePolicyPageId />}
+          />
           {/* <Route path="search/:id" element={<QuotaSearchId />} /> */}
         </Route>
         <Route

@@ -368,8 +368,16 @@ const PolicyDetail = () => {
   };
 
   const handleUpgrade = () => {
-    navigate(`/upgrade-quote/search/${id}`);
+    if (policyNumberString !== undefined) {
+      navigate(`/upgrade-quote/search/${policyNumberString}/${id}`);
+    } else {
+      navigate(`/upgrade-quote/search/${id}`);
+    }
   };
+
+  // const handleUpgrade = () => {
+  //   navigate(`/upgrade-quote/search/${id}`);
+  // };
 
   // let cleanupPromise = Promise.resolve();
 
