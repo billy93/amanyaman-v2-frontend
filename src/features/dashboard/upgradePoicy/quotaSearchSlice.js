@@ -49,7 +49,7 @@ const createSearchSlice = createSlice({
       state.formState.manualInput.coverageType = action.payload;
     },
     setUpgradeData: (state, action) => {
-      state.upgradeData = action.payload;
+      state.formState.upgradeData = action.payload;
     },
     setEditTraveller: (state, action) => {
       state.formState.travellersData.editTraveller = action.payload;
@@ -157,4 +157,5 @@ export const messages = (state) =>
 export const selectPaymentMethod = (state) =>
   state.quotaSearch?.formState?.selectPaymentMethod;
 export const listcountries = (state) => state.quotaSearch?.formState?.countries;
-export const travellerUpgrade = (state) => state.quotaSearch?.upgradeData;
+export const travellerUpgrade = (state) =>
+  state.quotaSearch?.formState?.upgradeData;
