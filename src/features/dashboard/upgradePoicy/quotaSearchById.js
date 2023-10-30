@@ -77,7 +77,6 @@ const QuotaSearchById = () => {
     isError,
   } = useGetBookingByIdQuery(id);
 
-  const 
   const { data: listTravellers, refetch } = useGetListTravellerQuery(id);
   // const { step } = useSelector(quotState);
   const history = localStorage.getItem('persist:root');
@@ -216,7 +215,7 @@ const QuotaSearchById = () => {
   const handleBack = () => {
     navigate(-1);
   };
-  
+
   React.useEffect(() => {
     if (listTravellers) {
       dispatch(setTravellersData([...listTravellers]));
@@ -269,8 +268,8 @@ const QuotaSearchById = () => {
                 <BreadcrumbLink as={NavLink} onClick={handleBack}>
                   <Text as={'p'} color="#065BAA" fontSize={'sm'}>
                     {policyNumberString === undefined
-                        ? quotation?.travellers[0]?.policyNumber
-                        : policyNumberString}
+                      ? quotation?.travellers[0]?.policyNumber
+                      : policyNumberString}
                   </Text>
                 </BreadcrumbLink>
               </BreadcrumbItem>

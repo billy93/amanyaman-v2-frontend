@@ -638,7 +638,7 @@ const PolicyDetail = () => {
   };
 
   const renderCustomInput = ({ ref, value, onClick, ...props }) => {
-    // const data = [...dataQuotation];
+    const data = [...dataQuotation];
     // console.log(data[value].dateOfBirth);
     // console.log('valss', value);
     return (
