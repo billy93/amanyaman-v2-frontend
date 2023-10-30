@@ -16,6 +16,7 @@ import {
 import usePersist from '../../../../features/hook/usePersist';
 import {
   setTravellersDataUpgrade,
+  setSelectTravelInsurancePlan,
   setTravellersData,
   setFormStateAdult,
   setFormStateCoverageChild,
@@ -311,7 +312,7 @@ const Form1 = ({
       initState?.endDate?.month
     )} ${initState?.endDate?.year}`;
   };
-  // console.log('manual cover', activeStep);
+  console.log('manual quotation', quotation);
   const renderCustomInput = ({ ref }) => (
     <>
       <FormControl
