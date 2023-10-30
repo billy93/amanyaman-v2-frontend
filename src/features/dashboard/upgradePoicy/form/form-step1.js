@@ -15,6 +15,7 @@ import {
 } from '../../../auth/authSlice';
 import usePersist from '../../../../features/hook/usePersist';
 import {
+  setUpgradeData,
   setTravellersDataUpgrade,
   setSelectTravelInsurancePlan,
   setTravellersData,
@@ -150,7 +151,7 @@ const Form1 = ({
     return { year, month, day };
   }
 
-  // console.log('dataUpdate', dataUpdate);
+  console.log('dataUpdate', dataUpdate);
   const setDataFromResponse = React.useCallback((datas) => {
     const type =
       datas?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Annual Trip';

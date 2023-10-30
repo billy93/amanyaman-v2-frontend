@@ -24,6 +24,7 @@ const createSearchSlice = createSlice({
           year: date.getFullYear(),
         },
       },
+      upgradeData: null,
       selectPaymentMethod: 'Credit Card',
       useGalileoPNR: null,
       selectInsurancePlan: null,
@@ -46,6 +47,9 @@ const createSearchSlice = createSlice({
   reducers: {
     setFormStateCoverageType: (state, action) => {
       state.formState.manualInput.coverageType = action.payload;
+    },
+    setUpgradeData: (state, action) => {
+      state.upgradeData = action.payload;
     },
     setEditTraveller: (state, action) => {
       state.formState.travellersData.editTraveller = action.payload;
@@ -113,6 +117,7 @@ const createSearchSlice = createSlice({
 });
 
 export const {
+  setUpgradeData,
   setMessage,
   setEditTraveller,
   setGetById,
