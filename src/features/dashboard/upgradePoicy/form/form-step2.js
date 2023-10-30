@@ -123,6 +123,7 @@ const Form2 = ({
           ? { ...payload, chd: stateInt.child }
           : { ...payload, chd: 0 }
       );
+      console.log('res upgrade', res);
       if (res?.data?.id) {
         dispatch(setStepActive(activeStep + 2));
         dispatch(setHistoryForm(2));
