@@ -507,6 +507,35 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
+                    {'Upgraded Price'}
+                  </Text>
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                  >
+                    <CurrencyFormatter
+                      amount={payload?.bookingProduct?.finalPrice}
+                    />
+                  </Text>
+                </Box>
+                <Box
+                  w="100%"
+                  display={'flex'}
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                  gap="1em"
+                  borderBottom="1px solid #ebebeb"
+                  pb="10px"
+                  pt="5px"
+                >
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                  >
                     {'Premium Price'}
                   </Text>
                   <Text
@@ -567,6 +596,37 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     {'Stamp Duty'}
+                  </Text>
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                  >
+                    {payload?.stampDuty > 0 ? (
+                      <CurrencyFormatter amount={payload?.stampDuty} />
+                    ) : (
+                      'IDR 0'
+                    )}
+                  </Text>
+                </Box>
+                <Box
+                  w="100%"
+                  display={'flex'}
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                  gap="1em"
+                  borderBottom="1px solid #ebebeb"
+                  pb="10px"
+                  pt="5px"
+                >
+                  <Text
+                    as="b"
+                    size={'sm'}
+                    fontFamily={'Mulish'}
+                    style={{ fontSize: '12px' }}
+                  >
+                    {'Additional Premium'}
                   </Text>
                   <Text
                     as="b"
