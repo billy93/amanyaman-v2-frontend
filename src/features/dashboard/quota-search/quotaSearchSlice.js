@@ -26,6 +26,7 @@ const createSearchSlice = createSlice({
       },
       selectPaymentMethod: 'Credit Card',
       useGalileoPNR: null,
+      upgradeData: null,
       selectInsurancePlan: null,
       travellersData: {
         fullName: '',
@@ -58,6 +59,9 @@ const createSearchSlice = createSlice({
     },
   },
   reducers: {
+    setUpgradeData: (state, action) => {
+      state.formState.upgradeData = action.payload;
+    },
     setFormStateCoverageType: (state, action) => {
       state.formState.manualInput.coverageType = action.payload;
     },
@@ -125,6 +129,7 @@ const createSearchSlice = createSlice({
 export const {
   setMessage,
   setEditTraveller,
+  setUpgradeData,
   setGetById,
   setBookingId,
   setStepActive,
@@ -161,3 +166,5 @@ export const messages = (state) =>
 export const selectPaymentMethod = (state) =>
   state.quotaSearch?.formState?.selectPaymentMethod;
 export const listcountries = (state) => state.quotaSearch?.formState?.countries;
+export const travellerUpgrade = (state) =>
+  state.quotaSearch?.formState?.upgradeData;
