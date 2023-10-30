@@ -60,7 +60,7 @@ const Form2 = ({
   const [triggers, setTriggers] = React.useState(false);
   const [ids, setIds] = React.useState('');
   const listTravellers = useSelector(FillTravellersData);
-  const { id } = useParams();
+  const { id, policyNumberString } = useParams();
   const initState = useSelector(selectTravelInsurance);
   const login = useSelector(userLoginCurrent);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -101,7 +101,7 @@ const Form2 = ({
     return array.filter((obj) => obj.hasOwnProperty(property));
   }
 
-  console.log('list suu', listTravellers?.listTravellers);
+  // console.log('list suu', listTravellers?.listTravellers);
   const handleNext = async (e) => {
     const payload = {
       bookingId: id,
@@ -138,7 +138,13 @@ const Form2 = ({
       if (res?.data?.id) {
         dispatch(setStepActive(activeStep + 2));
         dispatch(setHistoryForm(2));
-        // navigate(`/create-quota/search/${res?.data?.id}`);
+        if (policyNumberString !== undefined) {
+          navigate(
+            `/upgrade-quote/search/${policyNumberString}/${res?.data?.id}`
+          );
+        } else {
+          navigate(`/upgrade-quota/search/${res?.data?.id}`);
+        }
         let travellersData = {
           ...list,
           bookingId: res?.data?.id,
