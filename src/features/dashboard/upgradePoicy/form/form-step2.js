@@ -59,7 +59,7 @@ const Form2 = ({
   // const [booksProducts, { isLoading }] = useUpgradePolicyMutation();
   const [triggers, setTriggers] = React.useState(false);
   const [ids, setIds] = React.useState('');
-  // const listTravellers = useSelector(FillTravellersData);
+  const listTravellers = useSelector(FillTravellersData);
   const { id } = useParams();
   const initState = useSelector(selectTravelInsurance);
   const login = useSelector(userLoginCurrent);
@@ -101,10 +101,14 @@ const Form2 = ({
     return array.filter((obj) => obj.hasOwnProperty(property));
   }
 
+  console.log('list suu', listTravellers?.listTravellers);
   const handleNext = async (e) => {
     const payload = {
       bookingId: id,
-      travellers: filterObjectsWithProperty(list?.list, 'id'),
+      travellers: filterObjectsWithProperty(
+        listTravellers?.listTravellers,
+        'id'
+      ),
       coverType:
         stateInt.coverageType === 'Single Trip' ? 'SINGLE_TRIP' : 'ANNUAL',
       travellerType:
