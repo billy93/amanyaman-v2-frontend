@@ -135,7 +135,12 @@ const Form1 = ({
       name: obj.countryName,
     }));
     if (datas?.destinations?.length !== 0) {
-      setFormStateDestinationCountry(destinationCountry);
+      dispatch(
+        setFormStateDestinationCountry({
+          country: destinationCountry,
+        })
+      );
+      // setFormStateDestinationCountry(destinationCountry);
     }
     if (datas?.from) {
       dispatch(

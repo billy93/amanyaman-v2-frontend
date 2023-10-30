@@ -124,6 +124,7 @@ const Form2 = ({
         dispatch(setStepActive(activeStep + 1));
         dispatch(setHistoryForm(activeStep + 1));
         navigate(`/create-quota/search/${res?.data?.id}`);
+
         let travellersData = {
           ...list,
           bookingId: res?.data?.id,

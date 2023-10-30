@@ -34,10 +34,12 @@ import {
   useDisclosure,
   ButtonGroup,
 } from '@chakra-ui/react';
+
 import {
-  useBooksProductsMutation,
+  useUpgradePolicyMutation,
   useGetDetailBenefitQuery,
 } from '../policyApiSlice';
+
 import Hospital from '../../../../img/images/Hospital.png';
 import Medicine from '../../../../img/images/Medicine.png';
 import TravelCaover from '../../../../img/images/Plane.png';
@@ -53,7 +55,8 @@ const Form2 = ({
   nextStep,
   isLastStep,
 }) => {
-  const [booksProducts, { isLoading }] = useBooksProductsMutation();
+  const [upgradePolicy, { isLoading }] = useUpgradePolicyMutation();
+  // const [booksProducts, { isLoading }] = useUpgradePolicyMutation();
   const [triggers, setTriggers] = React.useState(false);
   const [ids, setIds] = React.useState('');
   // const { data } = useGetDetailBenefitQuery(ids, {
@@ -115,7 +118,7 @@ const Form2 = ({
     };
     // console.log('payload', payload);
     try {
-      const res = await booksProducts(
+      const res = await upgradePolicy(
         stateInt?.travellerType === 'Family'
           ? { ...payload, chd: stateInt.child }
           : { ...payload, chd: 0 }

@@ -42,6 +42,7 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
+
     booksProducts: builder.mutation({
       query: (params) => {
         return {
@@ -62,6 +63,22 @@ export const quotSearch = apiSlice.injectEndpoints({
       query: (params) => {
         return {
           url: '/app/bookings/fill-traveler-data/single',
+          method: 'POST',
+          body: { ...params },
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
+    upgradePolicy: builder.mutation({
+      query: (params) => {
+        return {
+          url: '/app/bookings/upgrade-policy',
           method: 'POST',
           body: { ...params },
           invalidatesTags: (result, error, arg) =>
@@ -232,4 +249,5 @@ export const {
   useBooksProductsMutation,
   useGetListCountriesQuery,
   useSearchproductsMutation,
+  useUpgradePolicyMutation,
 } = quotSearch;
