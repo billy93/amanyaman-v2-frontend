@@ -11,6 +11,8 @@ import {
   usePaymentProccedMutation,
   useCheckAvailabilityCreditMutation,
 } from '../policyApiSlice';
+import { selectManualInput } from '../quotaSearchSlice';
+
 import UseCustomToast from '../../../../components/UseCustomToast';
 import {
   Center,
@@ -64,6 +66,7 @@ const Form3 = ({
   // const [persist] = usePersist();
   // const checkToken = localStorage.getItem('persist').token;
   const login = useSelector(userLoginCurrent);
+  const initState = useSelector(selectManualInput);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const [paymentProcced, { isLoading }] = usePaymentProccedMutation();
   const [checkAvailabilityCredit, { isLoading: loading }] =
@@ -405,7 +408,7 @@ const Form3 = ({
                   color="#065BAA"
                   style={{ fontSize: '12px' }}
                 >
-                  {payload?.bookingProduct?.productName}
+                  {initState?.selectInsurancePlan?.productName}
                 </Text>
               </Box>
             </Box>
@@ -442,13 +445,11 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                     gap="1em"
                   >
-                    {payload?.coverType === 'SINGLE_TRIP'
-                      ? 'Single Trip'
-                      : 'Annual Trip'}
+                    {initState?.coverageType}
                   </Text>
                 </Box>
                 <Box display={'flex'} gap="2px" flexWrap={'nowrap'}>
-                  {payload?.destinations?.map((country, i) => {
+                  {initState?.destinationCountry?.map((country, i) => {
                     return (
                       <Text
                         key={i}
@@ -516,7 +517,7 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     <CurrencyFormatter
-                      amount={payload?.bookingProduct?.finalPrice}
+                      amount={initState?.selectInsurancePlan?.finalPrice}
                     />
                   </Text>
                 </Box>
@@ -545,7 +546,7 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     <CurrencyFormatter
-                      amount={payload?.bookingProduct?.finalPrice}
+                      amount={initState?.selectInsurancePlan?.finalPrice}
                     />
                   </Text>
                 </Box>
