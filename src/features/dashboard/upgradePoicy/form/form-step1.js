@@ -1103,7 +1103,7 @@ const Form1 = ({
                     style={{ fontSize: '12px' }}
                   >
                     {'x'}
-                    {quotation?.travellerType?.id === 1
+                    {quotation?.travellerType?.id !== 2
                       ? quotation?.travellers.length
                       : 1}
                   </Text>
