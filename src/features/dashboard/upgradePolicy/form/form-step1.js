@@ -28,7 +28,7 @@ import {
   setListCountries,
   listcountries,
   setListProducts,
-} from '../quotaSearchSlice';
+} from '../../quota-search/quotaSearchSlice';
 import {
   Text,
   Flex,
@@ -164,6 +164,10 @@ const Form1 = ({
       );
     }
   }, []);
+
+  React.useEffect(() => {
+    refetch(id);
+  }, [id]);
 
   React.useEffect(() => {
     if (quotation) {
