@@ -49,6 +49,7 @@ const upgradeSearchSlice = createSlice({
       state.formState.manualInput.coverageType = action.payload;
     },
     setUpgradeData: (state, action) => {
+      console.log('setanss', action.payload);
       state.formState.upgradeData = action.payload;
     },
     setEditTraveller: (state, action) => {

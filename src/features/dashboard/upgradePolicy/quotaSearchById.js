@@ -126,6 +126,7 @@ const QuotaSearchById = () => {
     }
   }, [id, fetchData]);
 
+  console.log('id', id);
   React.useEffect(() => {
     if (id) {
       let coverType =
