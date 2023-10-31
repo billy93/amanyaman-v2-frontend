@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const date = new Date();
-console.log('date', date.getMonth());
+console.log('date upgrade', date.getMonth());
 const upgradeSearchSlice = createSlice({
   name: 'upgradeQuotaSearch',
   initialState: {

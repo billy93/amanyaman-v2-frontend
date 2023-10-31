@@ -128,6 +128,7 @@ const QuotaSearchById = () => {
 
   React.useEffect(() => {
     if (quotation) {
+      console.log('babiii', quotation);
       dispatch(setUpgradeData(quotation));
     }
   }, [quotation, dispatch]);
