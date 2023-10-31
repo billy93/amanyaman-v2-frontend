@@ -76,6 +76,7 @@ const QuotaSearchById = () => {
     data: quotation,
     isLoading: loading,
     isError,
+    refetch: fetchData,
   } = useGetBookingByIdQuery(id);
 
   const { data: listTravellers, refetch } = useGetListTravellerQuery(id);
@@ -117,6 +118,12 @@ const QuotaSearchById = () => {
     const [year, month, day] = dateString.split('-').map(Number);
     return { year, month, day };
   }
+
+  React.useEffect(() => {
+    if (id) {
+      fetchData(id);
+    }
+  }, [id, fetchData]);
 
   React.useEffect(() => {
     if (quotation) {
