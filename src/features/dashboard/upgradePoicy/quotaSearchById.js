@@ -228,10 +228,7 @@ const QuotaSearchById = () => {
     // Clean up the timeout when the component unmounts or when the effect runs again
     return () => clearTimeout(timeoutId);
   }, [messagesTraveller, dispatch]); // Empty dependency array ensures the effect runs only once after mount
-  console.log(
-    'setHistoryForm',
-    JSON.parse(localStorage.getItem('persist:root-form'))
-  );
+  console.log('setHistoryForm nyet', quotation);
 
   const handleBack = () => {
     navigate(-1);
