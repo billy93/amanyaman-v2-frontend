@@ -48,7 +48,7 @@ import DetailMasterProduct from './features/dashboard/masterProduct/detailMaster
 import PaymentSuccess from './features/dashboard/paymentSuccess/paymentSuccess';
 import PaymentLoader from './components/loaderComponent';
 import UpdatePolicyPage from './features/dashboard/policy/updatePolicy';
-import UpgradePolicyPage from './features/dashboard/upgradePolicy/mainQuotSearch';
+import UpgradePolicyPage from './features/dashboard/upgradePolicy/quotaSearch';
 import UpgradePolicyPageId from './features/dashboard/upgradePolicy/quotaSearchById';
 import CreateCountryList from './features/dashboard/country/createCountry';
 import EditCountryList from './features/dashboard/country/editCountry';
@@ -92,7 +92,7 @@ function App() {
           element={<LayoutDashboard allowedRoles={['ROLE_TRAVEL_AGENT']} />}
         >
           <Route path="search" element={<UpgradePolicyPage />} />
-          <Route path="search/:id" element={<UpgradePolicyPageId />} />
+          <Route path="search/:id" element={<UpgradePolicyPage />} />
           <Route
             path="search/:policyNumberString/:id"
             element={<UpgradePolicyPageId />}

@@ -6,6 +6,7 @@ import QuotaSearch from './quotaSearch';
 import { historyForm, userLoginCurrent } from '../../auth/authSlice';
 import QuotaSearchById from './quotaSearchById';
 import { useGetBookingSearchQuery } from './policyApiSlice';
+import { useGetBookingByIdQuery } from '../policy/policyApiSlice';
 import usePersist from '../../hook/usePersist';
 import {
   Text,
@@ -36,20 +37,21 @@ import {
   setFormStateCoverageType,
 } from './quotaSearchSlice';
 import { useSelector } from 'react-redux';
-// import {
-//   setFormStateAdult,
-//   setFormStateCoverageChild,
-//   selectManualInput,
-//   setFormStateCoverageType,
-//   setFormStateTravellerType,
-//   setFormStateTotalPass,
-//   setFormStateDestinationCountry,
-//   setFormStateStartDate,
-//   setFormEndDate,
-//   setListCountries,
-//   listcountries,
-//   setListProducts,
-// } from '../quotaSearchSlice';
+import {
+  setFormStateAdult,
+  setFormStateCoverageChild,
+  selectManualInput,
+  setFormStateCoverageType,
+  setFormStateTravellerType,
+  setFormStateTotalPass,
+  setFormStateDestinationCountry,
+  setFormStateStartDate,
+  setFormEndDate,
+  setListCountries,
+  listcountries,
+  setListProducts,
+  setUpgradeData,
+} from './quotaSearchSlice';
 
 const MainQuotSearch = () => {
   const { id, policyNumberString } = useParams();
@@ -62,16 +64,29 @@ const MainQuotSearch = () => {
   const { data: searchById } = useGetBookingSearchQuery(id, {
     skip: id === undefined ? true : false,
   });
+  const { data: quotation } = useGetBookingByIdQuery(id);
   // const { step } = useSelector(quotState);
   // const getById = useSelector(getSearchById);
 
   const handleBack = () => {
     navigate(-1);
   };
-
+  React.useEffect(() => {
+    dispatch(setUpgradeData(quotation));
+  }, [quotation]);
+  let content;
+  if (isLoading) {
+    content = <PageLoader loading={isLoading} />;
+  } else if (quotation) {
+    <QuotaSearchById step={login?.historyStep} />;
+  }
   return (
     <>
-      <QuotaSearchById step={login?.historyStep} />
+      {id && policyNumberString !== undefined ? (
+        <QuotaSearchById step={login?.historyStep} />
+      ) : (
+        <QuotaSearch step={login?.historyStep} />
+      )}
     </>
   );
 };
