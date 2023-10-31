@@ -165,18 +165,18 @@ const Form1 = ({
     }
   }, []);
 
-  //   React.useEffect(() => {
-  //     if (quotation !== undefined) {
-  //       //   setDataFromResponse(quotation);
-  //       dispatch(
-  //         setUpgradeData({
-  //           ...quotation,
-  //           from: convertDateToObject(quotation.from),
-  //           to: convertDateToObject(quotation.to),
-  //         })
-  //       );
-  //     }
-  //   }, [quotation]);
+  React.useEffect(() => {
+    if (quotation !== undefined) {
+      //   setDataFromResponse(quotation);
+      dispatch(
+        setUpgradeData({
+          ...quotation,
+          from: convertDateToObject(quotation.from),
+          to: convertDateToObject(quotation.to),
+        })
+      );
+    }
+  }, [quotation]);
 
   const handleTypeTrip = (type) => {
     dispatch(
