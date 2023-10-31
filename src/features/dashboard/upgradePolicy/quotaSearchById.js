@@ -230,13 +230,15 @@ const QuotaSearchById = () => {
       console.log('kuota');
       dispatch(
         setUpgradeData({
-          quotation,
+          ...quotation,
           from: convertDateToObject(quotation.from),
           to: convertDateToObject(quotation.to),
         })
       );
     }
   }, [quotation, dispatch]);
+
+  console.log('quotation setan', quotation);
 
   const handleBack = () => {
     navigate(-1);

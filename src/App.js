@@ -49,7 +49,7 @@ import PaymentSuccess from './features/dashboard/paymentSuccess/paymentSuccess';
 import PaymentLoader from './components/loaderComponent';
 import UpdatePolicyPage from './features/dashboard/policy/updatePolicy';
 import UpgradePolicyPage from './features/dashboard/upgradePolicy/mainQuotSearch';
-import UpgradePolicyPageId from './features/dashboard/upgradePolicy/mainQuotSearch';
+import UpgradePolicyPageId from './features/dashboard/upgradePolicy/quotaSearchById';
 import CreateCountryList from './features/dashboard/country/createCountry';
 import EditCountryList from './features/dashboard/country/editCountry';
 import CreateCitesList from './features/dashboard/city/createCity';
