@@ -43,7 +43,7 @@ import {
   setFormStateDestinationCountry,
   setStepActive,
   setUpgradeData,
-} from '../quota-search/quotaSearchSlice';
+} from './quotaSearchSlice';
 import React from 'react';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 
