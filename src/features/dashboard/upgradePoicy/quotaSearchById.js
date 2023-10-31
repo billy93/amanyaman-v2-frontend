@@ -41,7 +41,8 @@ import {
   setFormStateCoverageChild,
   setFormStateDestinationCountry,
   setStepActive,
-} from './quotaSearchSlice';
+  setUpgradeData,
+} from '../quota-search/quotaSearchSlice';
 import React from 'react';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 
@@ -111,6 +112,26 @@ const QuotaSearchById = () => {
     dispatch(setCredentials({ ...addStep }));
     nextStep();
   };
+
+  function convertDateToObject(dateString) {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return { year, month, day };
+  }
+
+  React.useEffect(() => {
+    if (quotation) {
+      // setDataFromResponse(dataUpdate);
+      // const newData = { ...dataUpdate };
+      dispatch(
+        setUpgradeData({
+          ...quotation,
+          from: convertDateToObject(quotation.from),
+          to: convertDateToObject(quotation.to),
+        })
+      );
+    }
+  }, [quotation, dispatch]);
+
   React.useEffect(() => {
     if (id) {
       let coverType =
