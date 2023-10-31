@@ -132,9 +132,10 @@ const QuotaSearchById = () => {
       // const newData = { ...dataUpdate };
       dispatch(
         setUpgradeData({
-          ...quotation,
-          from: convertDateToObject(quotation.from),
-          to: convertDateToObject(quotation.to),
+          quotation,
+          // ...quotation,
+          // from: convertDateToObject(quotation.from),
+          // to: convertDateToObject(quotation.to),
         })
       );
     }
