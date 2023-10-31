@@ -224,21 +224,6 @@ const QuotaSearchById = () => {
     return () => clearTimeout(timeoutId);
   }, [messagesTraveller, dispatch]); // Empty dependency array ensures the effect runs only once after mount
 
-  React.useEffect(() => {
-    if (quotation) {
-      // setDataFromResponse(dataUpdate);
-      // const newData = { ...dataUpdate };
-      console.log('kuota');
-      dispatch(
-        setUpgradeData({ ...quotation })
-        //   ...quotation,
-        //   from: convertDateToObject(quotation.from),
-        //   to: convertDateToObject(quotation.to),
-        // })
-      );
-    }
-  }, [quotation, dispatch]);
-
   console.log('quotation setan', quotation);
 
   const handleBack = () => {
