@@ -229,11 +229,11 @@ const QuotaSearchById = () => {
       // const newData = { ...dataUpdate };
       console.log('kuota');
       dispatch(
-        setUpgradeData({
-          ...quotation,
-          from: convertDateToObject(quotation.from),
-          to: convertDateToObject(quotation.to),
-        })
+        setUpgradeData(quotation)
+        //   ...quotation,
+        //   from: convertDateToObject(quotation.from),
+        //   to: convertDateToObject(quotation.to),
+        // })
       );
     }
   }, [quotation, dispatch]);
