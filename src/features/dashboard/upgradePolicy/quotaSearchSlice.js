@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const date = new Date();
 console.log('date', date.getMonth());
-const createSearchSlice = createSlice({
-  name: 'createQuotaSearch',
+const upgradeSearchSlice = createSlice({
+  name: 'upgradeQuotaSearch',
   initialState: {
     formState: {
       manualInput: {
@@ -137,9 +137,9 @@ export const {
   setFormStateDestinationCountry,
   setFormStateStartDate,
   setSelectTravelInsurancePlan,
-} = createSearchSlice.actions;
+} = upgradeSearchSlice.actions;
 
-export default createSearchSlice.reducer;
+export default upgradeSearchSlice.reducer;
 export const selectManualInput = (state) =>
   state.upgradePolicy?.formState?.manualInput;
 export const quotState = (state) => state.upgradePolicy?.formState;
