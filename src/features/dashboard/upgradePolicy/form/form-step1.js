@@ -361,6 +361,7 @@ const Form1 = ({
     </>
   );
   const selectDate = (date) => {
+    console.log('sssett', date);
     dispatch(
       setUpgradeData({
         ...quotation,
@@ -368,7 +369,7 @@ const Form1 = ({
       })
     );
 
-    if (initState?.coverType === 'Single Trip') {
+    if (initState?.coverType === 'SINGLE_TRIP') {
       addOneDayLater(date);
     }
     if (date !== null) {
@@ -532,7 +533,7 @@ const Form1 = ({
 
   React.useEffect(() => {
     if (prevTypeCov !== initState?.coverType) {
-      if (initState?.coverType === 'Single Trip') {
+      if (initState?.coverType === 'SINGLE_TRIP') {
         const date = { ...initState?.endDate };
         dispatch(
           setFormEndDate({
@@ -542,7 +543,7 @@ const Form1 = ({
             },
           })
         );
-      } else if (initState?.coverType === 'Anual Trip') {
+      } else if (initState?.coverType === 'ANNUAL_TRIP') {
         addOneYear({ ...initState?.from });
       }
     }
@@ -558,13 +559,13 @@ const Form1 = ({
   React.useEffect(() => {
     if (
       prevDate !== initState?.from?.day &&
-      initState?.coverType === 'Anual Trip'
+      initState?.coverType === 'ANNUAL_TRIP'
     ) {
-      addOneYear({ ...initState?.startDate });
+      addOneYear({ ...initState?.from });
     }
   }, [
     initState?.coverType,
-    initState?.startDate,
+    initState?.from,
     prevDate,
     dispatch,
     initState?.to,
@@ -660,14 +661,14 @@ const Form1 = ({
                 bg="#ebebeb"
                 w={{ base: '100%' }}
                 border={
-                  initState?.coverType === 'Single Trip'
+                  initState?.coverType === 'SINGLE_TRIP'
                     ? '2px solid #065BAA'
                     : ''
                 }
                 h="48px"
                 aria-label="Search database"
                 color={
-                  initState?.coverType === 'Single Trip' ? '#065BAA' : '#231F20'
+                  initState?.coverType === 'SINGLE_TRIP' ? '#065BAA' : '#231F20'
                 }
                 _hover={{
                   bg: '#ebebeb',
@@ -698,7 +699,7 @@ const Form1 = ({
               <Button
                 bg="#ebebeb"
                 border={
-                  initState?.coverType === 'Anual Trip'
+                  initState?.coverType === 'ANNUAL_TRIP'
                     ? '2px solid #065BAA'
                     : ''
                 }
@@ -706,7 +707,7 @@ const Form1 = ({
                 h="48px"
                 aria-label="Search database"
                 color={
-                  initState?.coverType === 'Anual Trip' ? '#065BAA' : '#231F20'
+                  initState?.coverType === 'ANNUAL_TRIP' ? '#065BAA' : '#231F20'
                 }
                 _hover={{
                   bg: '#ebebeb',
@@ -719,7 +720,7 @@ const Form1 = ({
             </FormControl>
           </Box>
           {initState?.coverType === '' ||
-          initState?.coverType === 'Single Trip' ? (
+          initState?.coverType === 'SINGLE_TRIP' ? (
             <Box mt="2em" w={{ base: '100%' }} h={{ sm: '48px' }}>
               <FormControl
                 variant="floating"
@@ -802,7 +803,7 @@ const Form1 = ({
               </FormControl>
             </Box>
             {initState.coverType === '' ||
-            initState.coverType === 'Single Trip' ? (
+            initState.coverType === 'SINGLE_TRIP' ? (
               <Box width={{ base: '100%' }} mt="1.5em" h="48px">
                 <FormControl
                   mt="10px"
