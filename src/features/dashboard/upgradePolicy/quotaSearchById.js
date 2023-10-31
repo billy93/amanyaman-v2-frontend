@@ -43,7 +43,7 @@ import {
   setFormStateDestinationCountry,
   setStepActive,
   setUpgradeData,
-} from './quotaSearchSlice';
+} from '../quota-search/quotaSearchSlice';
 import React from 'react';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 
@@ -121,12 +121,17 @@ const QuotaSearchById = () => {
   }
 
   React.useEffect(() => {
-    if (id) {
-      fetchData(id);
-    }
-  }, [id, fetchData]);
+    // if (id) {
+    fetchData(id);
+    // }
+  }, [id]);
 
-  console.log('id', id);
+  React.useEffect(() => {
+    if (quotation) {
+      dispatch(setUpgradeData(quotation));
+    }
+  }, [quotation, dispatch]);
+
   React.useEffect(() => {
     if (id) {
       let coverType =
