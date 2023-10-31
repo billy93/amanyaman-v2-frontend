@@ -166,7 +166,7 @@ const Form1 = ({
   }, []);
 
   React.useEffect(() => {
-    if (quotation !== undefined) {
+    if (quotation) {
       //   setDataFromResponse(quotation);
       dispatch(
         setUpgradeData({
@@ -176,7 +176,7 @@ const Form1 = ({
         })
       );
     }
-  }, [quotation]);
+  }, [quotation, dispatch]);
 
   const handleTypeTrip = (type) => {
     dispatch(
