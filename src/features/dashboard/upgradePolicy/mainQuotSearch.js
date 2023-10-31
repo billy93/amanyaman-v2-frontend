@@ -68,15 +68,7 @@ const MainQuotSearch = () => {
   const handleBack = () => {
     navigate(-1);
   };
-  React.useEffect(() => {
-    if (id) {
-      let coverType = searchById?.data?.coverType;
-      console.log('cover', coverType);
 
-      dispatch(setFormStateCoverageType(coverType));
-    }
-  }, [id, dispatch, searchById?.data?.coverType]);
-  // console.log('cover red', id);
   return (
     <>
       <QuotaSearchById step={login?.historyStep} />
