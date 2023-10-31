@@ -6,7 +6,6 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, NavLink, useParams } from 'react-router-dom';
 import { useGetBookingByIdQuery } from '../../policy/policyApiSlice';
-import { useGetBookingSearchQuery } from '../policyApiSlice';
 import {
   setHistoryForm,
   historyForm,
@@ -15,11 +14,7 @@ import {
 } from '../../../auth/authSlice';
 import usePersist from '../../../../features/hook/usePersist';
 import {
-  travellerUpgrade,
   setUpgradeData,
-  setTravellersDataUpgrade,
-  setSelectTravelInsurancePlan,
-  setTravellersData,
   setFormStateAdult,
   setFormStateCoverageChild,
   selectManualInput,
@@ -31,7 +26,6 @@ import {
   setFormEndDate,
   setListCountries,
   listcountries,
-  FillTravellersData,
   setListProducts,
 } from '../quotaSearchSlice';
 import {
@@ -70,7 +64,6 @@ import { AiOutlineWarning } from 'react-icons/ai';
 import {
   useGetListCountriesQuery,
   useSearchproductsMutation,
-  useGetListTravellerQuery,
 } from '../policyApiSlice';
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -93,23 +86,16 @@ const Form1 = ({
   isLastStep,
 }) => {
   const initState = useSelector(selectManualInput);
-  const initStateUpgraded = useSelector(travellerUpgrade);
-  const listTravellers = useSelector(FillTravellersData);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id, policyNumberString } = useParams();
+  const { id } = useParams();
   const [isActive] = useState(false);
   const [persist, setPersist] = usePersist();
   const historyForms = useSelector(historyForm);
   const login = useSelector(userLoginCurrent);
   const listCountries = useSelector(listcountries);
-  const [triggerGetList, setTriggerGetList] = React.useState(false);
   const { data: { response: countries } = {} } = useGetListCountriesQuery();
   const [searchproducts, { isLoading }] = useSearchproductsMutation();
-  const { data: newlistTravellers, refetch: fetchTravellers } =
-    useGetListTravellerQuery(id, {
-      skip: triggerGetList === false ? true : false,
-    });
   const [isActives, setActives] = useState(false);
   const {
     data: quotation,
@@ -118,29 +104,17 @@ const Form1 = ({
     refetch,
     isSuccess,
   } = useGetBookingByIdQuery(id);
+  // console.log('compre', hasCompletedAllSteps)
+  // const [ManualInput, setManualInput] = React.useState({
+  //    coverageType:"",
+  //    travellerType:"",
+  //    amount:"",
+  //    destinationCountry:"",
+  //    startDate:"",
+  //    endDate:"",
+  // })
 
-  const { data: dataUpdate, refetch: fetchUpdate } =
-    useGetBookingSearchQuery(id);
-
-  React.useEffect(() => {
-    fetchUpdate(id);
-  }, [id]);
-
-  React.useEffect(() => {
-    if (policyNumberString !== undefined) {
-      if (newlistTravellers) {
-        const listtraveller = newlistTravellers?.filter(
-          (policy) => policy.policyNumber === policyNumberString
-        );
-        // dispatch(setTravellersDataUpgrade([...listtraveller]));
-      }
-    } else {
-      if (newlistTravellers) {
-        // dispatch(setTravellersDataUpgrade([...newlistTravellers]));
-      }
-    }
-  }, [dispatch, newlistTravellers, policyNumberString]);
-
+  console.log('quotation', quotation);
   function formatDateObject(date) {
     if (!(date instanceof Date)) {
       throw new Error('Invalid date object');
@@ -159,32 +133,18 @@ const Form1 = ({
     return { year, month, day };
   }
 
-  // console.log('dataUpdate', dataUpdate);
-  const setDataFromResponse = React.useCallback((datas) => {
+  const setDataFromResponse = React.useCallback((quotation) => {
     const type =
-      datas?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Annual Trip';
+      quotation?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Annual Trip';
     dispatch(setFormStateTravellerType(type));
-    const destinationCountry = datas?.destinations.map((obj) => ({
-      ...obj,
-      label: obj.countryName,
-      name: obj.countryName,
-    }));
-    if (datas?.destinations?.length !== 0) {
-      dispatch(
-        setFormStateDestinationCountry({
-          country: destinationCountry,
-        })
-      );
-      // setFormStateDestinationCountry(destinationCountry);
-    }
-    if (datas?.from) {
+    if (quotation?.from) {
       dispatch(
         setFormStateStartDate({
-          startDate: convertDateToObject(datas.from),
+          startDate: convertDateToObject(quotation.from),
         })
       );
     }
-    if (datas?.to !== undefined) {
+    if (quotation?.to !== undefined) {
       dispatch(
         setFormEndDate({
           endDate: {
@@ -204,20 +164,16 @@ const Form1 = ({
     }
   }, []);
 
-  console.log('initStateUpgraded', initStateUpgraded);
   React.useEffect(() => {
-    if (dataUpdate) {
-      // setDataFromResponse(dataUpdate);
-      // const newData = { ...dataUpdate };
-      dispatch(
-        setUpgradeData({
-          ...dataUpdate,
-          from: convertDateToObject(dataUpdate.from),
-          to: convertDateToObject(dataUpdate.to),
-        })
-      );
+    if (quotation !== undefined) {
+      //   setDataFromResponse(quotation);
+      setUpgradeData({
+        ...quotation,
+        from: convertDateToObject(quotation.from),
+        to: convertDateToObject(quotation.to),
+      });
     }
-  }, [dataUpdate]);
+  }, [quotation]);
 
   const handleTypeTrip = (type) => {
     dispatch(setFormStateCoverageType(type));
@@ -251,24 +207,35 @@ const Form1 = ({
   const paddedMonth = initState?.startDate?.month.toString().padStart(2, '0');
   const paddedEndDay = initState?.endDate?.day.toString().padStart(2, '0');
   const paddedEndMonth = initState?.endDate?.month.toString().padStart(2, '0');
-
   const handleNext = async () => {
     const payload = {
-      coverType: initStateUpgraded?.coverType,
-      travellerType: initStateUpgraded?.travellerType?.id,
-      from: `${initStateUpgraded?.startDate.year}-${paddedMonth}-${paddedDay}`,
-      to: `${initStateUpgraded?.endDate.year}-${paddedEndMonth}-${paddedEndDay}`,
+      coverType:
+        initState.coverageType === 'Single Trip' ? 'SINGLE_TRIP' : 'ANNUAL',
+      travellerType:
+        initState.travellerType === 'Individual'
+          ? {
+              id: 1,
+            }
+          : initState.travellerType === 'Group'
+          ? { id: 3 }
+          : { id: 2 },
+      from: `${initState?.startDate.year}-${paddedMonth}-${paddedDay}`,
+      to: `${initState?.endDate.year}-${paddedEndMonth}-${paddedEndDay}`,
       destinations:
-        initStateUpgraded?.coverType === 'Single Trip'
-          ? initStateUpgraded?.destinations.map((v) => {
+        initState?.coverageType === 'Single Trip'
+          ? initState?.destinationCountry.map((v) => {
               return { id: v.id };
             })
           : [],
-      adt: initStateUpgraded.adult,
+      adt: initState.adult,
     };
 
     try {
-      const res = await searchproducts(payload);
+      const res = await searchproducts(
+        initState?.travellerType === 'Family'
+          ? { ...payload, chd: initState.child }
+          : payload
+      );
       console.log('res', res);
       if (res.data) {
         const addStep = {
@@ -318,7 +285,7 @@ const Form1 = ({
       initState?.endDate?.month
     )} ${initState?.endDate?.year}`;
   };
-  console.log('manual quotation', quotation);
+  // console.log('manual cover', activeStep);
   const renderCustomInput = ({ ref }) => (
     <>
       <FormControl
@@ -334,10 +301,10 @@ const Form1 = ({
             placeholder=" "
             _placeholder={{ opacity: 1, color: 'gray.500' }}
             value={
-              initStateUpgraded?.startDate
-                ? `${initStateUpgraded?.startDate?.day} ${getMonthName(
-                    initStateUpgraded?.startDate?.month
-                  )} ${initStateUpgraded?.startDate?.year}`
+              initState?.startDate
+                ? `${initState?.startDate?.day} ${getMonthName(
+                    initState?.startDate?.month
+                  )} ${initState?.startDate?.year}`
                 : ''
             }
             h="48px"
@@ -346,7 +313,7 @@ const Form1 = ({
           <FormLabel
             fontSize="12"
             pt="1.5"
-            className={isActive || initStateUpgraded?.startDate ? 'Active' : ''}
+            className={isActive || initState?.startDate ? 'Active' : ''}
             fontFamily={'Mulish'}
           >
             Start Date
@@ -371,10 +338,10 @@ const Form1 = ({
             placeholder=" "
             _placeholder={{ opacity: 1, color: 'gray.500' }}
             value={
-              initStateUpgraded?.endDate
-                ? `${initStateUpgraded?.endDate?.day} ${getMonthName(
-                    initStateUpgraded?.endDate?.month
-                  )} ${initStateUpgraded?.endDate?.year}`
+              initState?.endDate
+                ? `${initState?.endDate?.day} ${getMonthName(
+                    initState?.endDate?.month
+                  )} ${initState?.endDate?.year}`
                 : ''
             }
             h="48px"
@@ -383,7 +350,7 @@ const Form1 = ({
           <FormLabel
             fontSize="12"
             pt="1.5"
-            className={isActives || initStateUpgraded?.endDate ? 'Active' : ''}
+            className={isActives || initState?.endDate ? 'Active' : ''}
             fontFamily={'Mulish'}
           >
             End Date
@@ -665,14 +632,14 @@ const Form1 = ({
                 bg="#ebebeb"
                 w={{ base: '100%' }}
                 border={
-                  initStateUpgraded?.coverType === 'Single Trip'
+                  initState?.coverageType === 'Single Trip'
                     ? '2px solid #065BAA'
                     : ''
                 }
                 h="48px"
                 aria-label="Search database"
                 color={
-                  initStateUpgraded?.coverType === 'Single Trip'
+                  initState?.coverageType === 'Single Trip'
                     ? '#065BAA'
                     : '#231F20'
                 }
@@ -705,7 +672,7 @@ const Form1 = ({
               <Button
                 bg="#ebebeb"
                 border={
-                  initStateUpgraded?.coverType === 'Anual Trip'
+                  initState?.coverageType === 'Anual Trip'
                     ? '2px solid #065BAA'
                     : ''
                 }
@@ -713,7 +680,7 @@ const Form1 = ({
                 h="48px"
                 aria-label="Search database"
                 color={
-                  initStateUpgraded?.coverType === 'Anual Trip'
+                  initState?.coverageType === 'Anual Trip'
                     ? '#065BAA'
                     : '#231F20'
                 }
@@ -727,9 +694,9 @@ const Form1 = ({
               {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"14px" }}>Select Coverage Type</FormLabel> */}
             </FormControl>
           </Box>
-          {initStateUpgraded?.coverType === '' ||
-          initStateUpgraded?.coverType === 'Single Trip' ? (
-            <Box w={{ base: '100%' }} h={{ sm: '48px' }} mt="3em">
+          {initState?.coverageType === '' ||
+          initState?.coverageType === 'Single Trip' ? (
+            <Box mt="2em" w={{ base: '100%' }} h={{ sm: '48px' }}>
               <FormControl
                 variant="floating"
                 fontFamily={'Mulish'}
@@ -741,7 +708,7 @@ const Form1 = ({
                   isMulti
                   variant="outline"
                   onChange={handleSelect}
-                  value={initStateUpgraded?.destinations}
+                  value={initState?.destinationCountry}
                   isSearchable={true}
                   styles={{
                     menuPortal: (provided) => ({ ...provided }),
@@ -774,7 +741,7 @@ const Form1 = ({
             gap="4px"
             width={{ base: '100%' }}
           >
-            <Box h="48px" width={{ base: '100%' }}>
+            <Box mt="1.5em" h="48px" width={{ base: '100%' }}>
               <FormControl
                 mt="10px"
                 variant="floating"
@@ -797,7 +764,7 @@ const Form1 = ({
                 </FormLabel>
                 <DatePicker
                   width="100%"
-                  value={initStateUpgraded?.startDate}
+                  value={initState?.startDate}
                   onChange={selectDate}
                   inputPlaceholder="Select a date" // placeholder
                   formatInputText={formatInputValue}
@@ -810,9 +777,9 @@ const Form1 = ({
                 />
               </FormControl>
             </Box>
-            {initStateUpgraded.coverType === '' ||
-            initStateUpgraded.coverType === 'Single Trip' ? (
-              <Box width={{ base: '100%' }} h="48px">
+            {initState.coverageType === '' ||
+            initState.coverageType === 'Single Trip' ? (
+              <Box width={{ base: '100%' }} mt="1.5em" h="48px">
                 <FormControl
                   mt="10px"
                   variant="floating"
@@ -835,7 +802,7 @@ const Form1 = ({
                   </FormLabel>
                   <DatePicker
                     width="100%"
-                    value={initStateUpgraded?.endDate}
+                    value={initState?.endDate}
                     onChange={selectEndDate}
                     inputPlaceholder="Select a date" // placeholder
                     formatInputText={formatInputValues}
@@ -849,7 +816,7 @@ const Form1 = ({
                 </FormControl>
               </Box>
             ) : (
-              <Box width={{ base: '100%' }} h="48px">
+              <Box width={{ base: '100%' }} mt="1.5em" h="48px">
                 <FormControl
                   mt="10px"
                   variant="floating"
@@ -876,9 +843,9 @@ const Form1 = ({
                       padding: '0.7em',
                     }}
                   >
-                    {`${initStateUpgraded?.endDate?.day} ${getMonthName(
-                      initStateUpgraded?.endDate?.month
-                    )} ${initStateUpgraded?.endDate?.year}`}
+                    {`${initState?.endDate?.day} ${getMonthName(
+                      initState?.endDate?.month
+                    )} ${initState?.endDate?.year}`}
                   </Box>
                 </FormControl>
               </Box>
@@ -964,7 +931,7 @@ const Form1 = ({
                   color="#065BAA"
                   style={{ fontSize: '12px' }}
                 >
-                  {initStateUpgraded?.transactionId}
+                  {quotation?.transactionId}
                 </Text>
               </Box>
             </Box>
@@ -1001,7 +968,7 @@ const Form1 = ({
                     style={{ fontSize: '12px' }}
                     gap="1em"
                   >
-                    {initStateUpgraded?.coverType}
+                    {initState?.coverageType}
                   </Text>
                 </Box>
                 <Box
@@ -1010,7 +977,7 @@ const Form1 = ({
                   flexWrap={'nowrap'}
                   flexDirection={'column'}
                 >
-                  {initStateUpgraded?.destinations?.map((country, i) => (
+                  {initState?.destinationCountry?.map((country, i) => (
                     <Text
                       key={i}
                       as="p"
@@ -1020,9 +987,7 @@ const Form1 = ({
                       style={{ fontSize: '12px' }}
                     >
                       {country?.countryName}
-                      {i < initStateUpgraded.destinations.length - 1
-                        ? ', '
-                        : ''}
+                      {i < initState.destinationCountry.length - 1 ? ', ' : ''}
                     </Text>
                   ))}
                 </Box>
@@ -1059,7 +1024,7 @@ const Form1 = ({
                   color="#065BAA"
                   style={{ fontSize: '12px' }}
                 >
-                  {initStateUpgraded?.bookingProduct?.productName}
+                  {quotation?.selectProduct?.productName}
                 </Text>
               </Box>
             </Box>
@@ -1114,7 +1079,7 @@ const Form1 = ({
                     style={{ fontSize: '12px' }}
                   >
                     <CurrencyFormatter
-                      amount={initStateUpgraded?.bookingProduct?.finalPrice}
+                      amount={quotation?.selectProduct?.finalPrice}
                     />
                   </Text>
                 </Box>
@@ -1143,9 +1108,7 @@ const Form1 = ({
                     style={{ fontSize: '12px' }}
                   >
                     {'x'}
-                    {initStateUpgraded?.travellerType?.id === 2
-                      ? quotation?.travellers.length
-                      : 1}
+                    {quotation?.travellers.length}
                   </Text>
                 </Box>
                 <Box
@@ -1174,7 +1137,7 @@ const Form1 = ({
                   >
                     <CurrencyFormatter
                       amount={
-                        initStateUpgraded?.bookingProduct?.finalPrice *
+                        quotation?.selectProduct?.finalPrice *
                         quotation?.travellers.length
                       }
                     />
@@ -1185,19 +1148,18 @@ const Form1 = ({
                     <></>
                   ) : (
                     <>
-                      {initStateUpgraded?.coverType === 'Single Trip' ? (
+                      {initState?.coverageType === 'Single Trip' ? (
                         <Button
                           size="sm"
                           onClick={handleNext}
                           w={{ base: '100%', md: '270px' }}
                           h="48px"
                           isDisabled={
-                            initStateUpgraded?.coverType === '' ||
-                            initStateUpgraded?.travellerType?.id === '' ||
-                            initStateUpgraded?.destinationCountry?.length ===
-                              0 ||
-                            initStateUpgraded?.from === null ||
-                            initStateUpgraded?.to === null
+                            initState?.coverageType === '' ||
+                            initState?.travellerType === '' ||
+                            initState?.destinationCountry?.length === 0 ||
+                            initState?.startDate === null ||
+                            initState?.endDate === null
                               ? true
                               : false
                           }
@@ -1211,10 +1173,10 @@ const Form1 = ({
                           w={{ base: '100%', md: '270px' }}
                           h="48px"
                           isDisabled={
-                            initStateUpgraded?.coverType === '' ||
-                            initStateUpgraded?.travellerType?.id === '' ||
-                            initStateUpgraded?.from === null ||
-                            initStateUpgraded?.to === null
+                            initState?.coverageType === '' ||
+                            initState?.travellerType === '' ||
+                            initState?.startDate === null ||
+                            initState?.endDate === null
                               ? true
                               : false
                           }
