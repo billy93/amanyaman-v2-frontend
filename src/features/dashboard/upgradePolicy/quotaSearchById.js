@@ -23,6 +23,7 @@ import usePersist from '../../../features/hook/usePersist';
 import {
   useGetBookingSearchQuery,
   useGetListTravellerQuery,
+  // useGetBookingByIdQuery,
 } from './policyApiSlice';
 import { useGetBookingByIdQuery } from '../policy/policyApiSlice';
 
