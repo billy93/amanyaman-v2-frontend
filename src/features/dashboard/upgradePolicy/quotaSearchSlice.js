@@ -141,21 +141,22 @@ export const {
 
 export default createSearchSlice.reducer;
 export const selectManualInput = (state) =>
-  state.quotaSearch?.formState?.manualInput;
-export const quotState = (state) => state.quotaSearch?.formState;
-export const getSearchById = (state) => state.quotaSearch?.formState?.getById;
+  state.upgradePolicy?.formState?.manualInput;
+export const quotState = (state) => state.upgradePolicy?.formState;
+export const getSearchById = (state) => state.upgradePolicy?.formState?.getById;
 export const selectTravelInsurance = (state) =>
-  state.quotaSearch?.formState?.listProduct;
+  state.upgradePolicy?.formState?.listProduct;
 export const selectedTravelInsurance = (state) =>
-  state.quotaSearch?.formState?.selectInsurancePlan;
+  state.upgradePolicy?.formState?.selectInsurancePlan;
 export const FillTravellersData = (state) =>
-  state.quotaSearch?.formState?.travellersData;
+  state.upgradePolicy?.formState?.travellersData;
 export const EditTravellers = (state) =>
-  state.quotaSearch?.formState?.travellersData.editTraveller;
+  state.upgradePolicy?.formState?.travellersData.editTraveller;
 export const messages = (state) =>
-  state.quotaSearch?.formState?.travellersData.success;
+  state.upgradePolicy?.formState?.travellersData.success;
 export const selectPaymentMethod = (state) =>
-  state.quotaSearch?.formState?.selectPaymentMethod;
-export const listcountries = (state) => state.quotaSearch?.formState?.countries;
+  state.upgradePolicy?.formState?.selectPaymentMethod;
+export const listcountries = (state) =>
+  state.upgradePolicy?.formState?.countries;
 export const travellerUpgrade = (state) =>
-  state.quotaSearch?.formState?.upgradeData;
+  state.upgradePolicy?.formState?.upgradeData;

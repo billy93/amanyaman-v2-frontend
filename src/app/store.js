@@ -14,6 +14,7 @@ import {
 } from 'reduxjs-toolkit-persist';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
 import createSearchQuotaReducer from '../features/dashboard/quota-search/quotaSearchSlice';
+import upgradeQuotaReducer from '../features/dashboard/upgradePolicy/quotaSearchSlice';
 import policyList from '../features/dashboard/policy/policySlice';
 import masterUser from '../features/dashboard/masterUser/masterUserSlice';
 import masterProducts from '../features/dashboard/masterProduct/masterProductSlice';
@@ -77,6 +78,7 @@ const rootReducer = combineReducers({
   systemParams: systemParams,
   productPrice: productPrice,
   dashboards: dashboards,
+  upgradePolicy: upgradeQuotaReducer,
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);

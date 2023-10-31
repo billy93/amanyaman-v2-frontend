@@ -33,7 +33,7 @@ import {
   listcountries,
   FillTravellersData,
   setListProducts,
-} from '../../quota-search/quotaSearchSlice';
+} from '../quotaSearchSlice';
 import {
   Text,
   Flex,
