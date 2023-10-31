@@ -802,8 +802,7 @@ const Form1 = ({
                 />
               </FormControl>
             </Box>
-            {initState.coverType === '' ||
-            initState.coverType === 'SINGLE_TRIP' ? (
+            {initState.coverType === 'SINGLE_TRIP' ? (
               <Box width={{ base: '100%' }} mt="1.5em" h="48px">
                 <FormControl
                   mt="10px"
