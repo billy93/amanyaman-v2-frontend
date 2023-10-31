@@ -127,21 +127,6 @@ const QuotaSearchById = () => {
   }, [id, fetchData]);
 
   React.useEffect(() => {
-    if (quotation) {
-      // setDataFromResponse(dataUpdate);
-      // const newData = { ...dataUpdate };
-      dispatch(
-        setUpgradeData({
-          quotation,
-          // ...quotation,
-          // from: convertDateToObject(quotation.from),
-          // to: convertDateToObject(quotation.to),
-        })
-      );
-    }
-  }, [quotation, dispatch]);
-
-  React.useEffect(() => {
     if (id) {
       let coverType =
         data?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Anual Trip';
@@ -237,7 +222,21 @@ const QuotaSearchById = () => {
     // Clean up the timeout when the component unmounts or when the effect runs again
     return () => clearTimeout(timeoutId);
   }, [messagesTraveller, dispatch]); // Empty dependency array ensures the effect runs only once after mount
-  console.log('setHistoryForm nyet', quotation);
+
+  React.useEffect(() => {
+    if (quotation) {
+      // setDataFromResponse(dataUpdate);
+      // const newData = { ...dataUpdate };
+      console.log('kuota');
+      dispatch(
+        setUpgradeData({
+          quotation,
+          from: convertDateToObject(quotation.from),
+          to: convertDateToObject(quotation.to),
+        })
+      );
+    }
+  }, [quotation, dispatch]);
 
   const handleBack = () => {
     navigate(-1);
