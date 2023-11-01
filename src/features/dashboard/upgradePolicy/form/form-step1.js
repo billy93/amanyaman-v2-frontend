@@ -36,6 +36,7 @@ import {
   FormLabel,
   Image,
 } from '@chakra-ui/react';
+import { listcountries } from '../../quota-search/quotaSearchSlice';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Select } from 'chakra-react-select';
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
@@ -62,6 +63,7 @@ function usePrevious(value) {
   // Return previous value (happens before update in useEffect above)
   return ref.current;
 }
+
 const Form1 = ({
   label,
   hasCompletedAllSteps,
@@ -79,7 +81,7 @@ const Form1 = ({
   const [persist, setPersist] = usePersist();
   const historyForms = useSelector(historyForm);
   const login = useSelector(userLoginCurrent);
-  // const listCountries = useSelector(listcountries);
+  const listCountries = useSelector(listcountries);
   const { data: { response: countries } = {} } = useGetListCountriesQuery();
   const [searchproducts, { isLoading }] = useSearchproductsMutation();
   const [isActives, setActives] = useState(false);
@@ -249,7 +251,12 @@ const Form1 = ({
         label: obj.countryName,
         value: obj.countryName,
       }));
-      // dispatch(setListCountries(countriesList));
+      dispatch(
+        setUpgradeData({
+          ...quotation,
+          destinations: [...quotation.destinations, countriesList],
+        })
+      );
     }
   }, [countries, dispatch]);
 
