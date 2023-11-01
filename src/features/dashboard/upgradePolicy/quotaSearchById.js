@@ -204,17 +204,17 @@ const QuotaSearchById = () => {
   // }, [listTravellers, dispatch]);
 
   React.useEffect(() => {
-    if (quotation !== undefined) {
+    if (data !== undefined) {
       // console.log('babiii', quotation);
-      const data = {
-        ...quotation,
-        from: convertDateToObject(quotation.from),
-        to: convertDateToObject(quotation.to),
+      const newdata = {
+        ...data,
+        from: convertDateToObject(data.from),
+        to: convertDateToObject(data.to),
       };
-      console.log('tan setan', data);
-      dispatch(setUpgradeData(data));
+      console.log('tan setan', newdata);
+      dispatch(setUpgradeData(newdata));
     }
-  }, [quotation, dispatch]);
+  }, [data, dispatch]);
 
   let content;
   if (loading) {
