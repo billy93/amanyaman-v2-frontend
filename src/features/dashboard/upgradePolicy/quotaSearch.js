@@ -33,6 +33,7 @@ import {
   setUpgradeData,
   travellerUpgrade,
   setUpgradeDataTravellers,
+  upgradeListTravellers,
 } from './upgradeQuotaSearchSlice';
 
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
@@ -54,6 +55,7 @@ function usePrevious(value) {
 const QuotaSearchById = () => {
   const user = useSelector(userLoginCurrent);
   const upgradeData = useSelector(travellerUpgrade);
+  const listTravellers = useSelector(upgradeListTravellers);
   const navigate = useNavigate();
   const historysbumit = useSelector(historyForm);
   const [persist] = usePersist();
@@ -266,7 +268,7 @@ const QuotaSearchById = () => {
                 <BreadcrumbLink as={NavLink} onClick={handleBack}>
                   <Text as={'p'} color="#065BAA" fontSize={'sm'}>
                     {policyNumberString === undefined
-                      ? data?.travellers[0]?.policyNumber
+                      ? listTravellers && listTravellers[0]?.policyNumber
                       : policyNumberString}
                   </Text>
                 </BreadcrumbLink>
