@@ -81,20 +81,19 @@ const Form2 = ({
   // console.log('activeStep', activeStep);
 
   const selectProduct = (data) => {
-    const dataUpgrade = {
-      // ...selectedInsurance,
-      // ...selectedInsurance?.bookingProduct,
-      ...selectedInsurance?.bookingProduct?.product,
-      ...data,
-      // {...selectedInsurance?.bookingProduct?.product, ...data}},
-    };
-    console.log('product upgrade', dataUpgrade);
+    const {
+      bookingProduct: { product },
+    } = selectedInsurance;
+    // console.log('product upgrade', dataUpgrade);
     dispatch(
       setUpgradeData({
         ...selectedInsurance,
         ...selectedInsurance?.bookingProduct,
-        ...selectedInsurance?.bookingProduct?.product,
-        ...dataUpgrade,
+        ...(selectedInsurance?.bookingProduct?.product
+          ? {
+              product: { ...selectedInsurance.bookingProduct.product, ...data },
+            }
+          : {}),
       })
     );
   };
