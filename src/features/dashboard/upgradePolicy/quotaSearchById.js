@@ -128,13 +128,6 @@ const QuotaSearchById = () => {
   }, [id]);
 
   React.useEffect(() => {
-    if (quotation) {
-      console.log('babiii', quotation);
-      dispatch(setUpgradeData(quotation));
-    }
-  }, [quotation, dispatch]);
-
-  React.useEffect(() => {
     if (id) {
       let coverType =
         data?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Anual Trip';
@@ -242,6 +235,13 @@ const QuotaSearchById = () => {
       dispatch(setTravellersData([...listTravellers]));
     }
   }, [listTravellers, dispatch]);
+
+  React.useEffect(() => {
+    if (quotation !== undefined) {
+      console.log('babiii', quotation);
+      dispatch(setUpgradeData(quotation));
+    }
+  }, [quotation, dispatch]);
 
   let content;
   if (loading) {
