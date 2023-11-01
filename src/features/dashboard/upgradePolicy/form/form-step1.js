@@ -13,22 +13,7 @@ import {
   setCredentials,
 } from '../../../auth/authSlice';
 import usePersist from '../../../../features/hook/usePersist';
-import {
-  travellerUpgrade,
-  setUpgradeData,
-  setFormStateAdult,
-  setFormStateCoverageChild,
-  selectManualInput,
-  setFormStateCoverageType,
-  setFormStateTravellerType,
-  setFormStateTotalPass,
-  setFormStateDestinationCountry,
-  setFormStateStartDate,
-  setFormEndDate,
-  setListCountries,
-  listcountries,
-  setListProducts,
-} from '../../quota-search/quotaSearchSlice';
+import { setUpgradeData, travellerUpgrade } from '../upgradeQuotaSearchSlice';
 import {
   Text,
   Flex,
@@ -94,7 +79,7 @@ const Form1 = ({
   const [persist, setPersist] = usePersist();
   const historyForms = useSelector(historyForm);
   const login = useSelector(userLoginCurrent);
-  const listCountries = useSelector(listcountries);
+  // const listCountries = useSelector(listcountries);
   const { data: { response: countries } = {} } = useGetListCountriesQuery();
   const [searchproducts, { isLoading }] = useSearchproductsMutation();
   const [isActives, setActives] = useState(false);
@@ -134,36 +119,36 @@ const Form1 = ({
     return { year, month, day };
   }
 
-  const setDataFromResponse = React.useCallback((quotation) => {
-    const type =
-      quotation?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Annual Trip';
-    dispatch(setFormStateTravellerType(type));
-    if (quotation?.from) {
-      dispatch(
-        setFormStateStartDate({
-          startDate: convertDateToObject(quotation.from),
-        })
-      );
-    }
-    if (quotation?.to !== undefined) {
-      dispatch(
-        setFormEndDate({
-          endDate: {
-            day: 1,
-            month: 12,
-            year: 2000,
-          },
-        })
-      );
-    } else {
-      const date = new Date();
-      dispatch(
-        setFormEndDate({
-          endDate: formatDateObject(date),
-        })
-      );
-    }
-  }, []);
+  // const setDataFromResponse = React.useCallback((quotation) => {
+  //   const type =
+  //     quotation?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Annual Trip';
+  //   dispatch(setFormStateTravellerType(type));
+  //   if (quotation?.from) {
+  //     dispatch(
+  //       setFormStateStartDate({
+  //         startDate: convertDateToObject(quotation.from),
+  //       })
+  //     );
+  //   }
+  //   if (quotation?.to !== undefined) {
+  //     dispatch(
+  //       setFormEndDate({
+  //         endDate: {
+  //           day: 1,
+  //           month: 12,
+  //           year: 2000,
+  //         },
+  //       })
+  //     );
+  //   } else {
+  //     const date = new Date();
+  //     dispatch(
+  //       setFormEndDate({
+  //         endDate: formatDateObject(date),
+  //       })
+  //     );
+  //   }
+  // }, []);
 
   React.useEffect(() => {
     refetch(id);
@@ -190,30 +175,30 @@ const Form1 = ({
       })
     );
   };
-  const handleTravellerType = (type) => {
-    dispatch(setFormStateTravellerType());
-  };
-  const handleTravellerAdult = (e) => {
-    let number = e.target.value;
-    dispatch(setFormStateAdult(number));
-  };
-  const handleTravellerChild = (e) => {
-    let number = e.target.value;
-    dispatch(setFormStateCoverageChild(number));
-  };
-  const handleTotalPass = (e) => {
-    let number = e.target.value;
-    dispatch(setFormStateTotalPass(number));
-  };
-  function handleSelect(data) {
-    // const data = data
-    const d = data;
-    dispatch(
-      setFormStateDestinationCountry({
-        country: d,
-      })
-    );
-  }
+  // const handleTravellerType = (type) => {
+  //   dispatch(setFormStateTravellerType());
+  // };
+  // const handleTravellerAdult = (e) => {
+  //   let number = e.target.value;
+  //   dispatch(setFormStateAdult(number));
+  // };
+  // const handleTravellerChild = (e) => {
+  //   let number = e.target.value;
+  //   dispatch(setFormStateCoverageChild(number));
+  // };
+  // const handleTotalPass = (e) => {
+  //   let number = e.target.value;
+  //   dispatch(setFormStateTotalPass(number));
+  // };
+  // function handleSelect(data) {
+  //   // const data = data
+  //   const d = data;
+  //   dispatch(
+  //     setFormStateDestinationCountry({
+  //       country: d,
+  //     })
+  //   );
+  // }
 
   const paddedDay = initState?.from?.day.toString().padStart(2, '0');
   const paddedMonth = initState?.from?.month.toString().padStart(2, '0');
@@ -249,7 +234,7 @@ const Form1 = ({
         nextStep();
         dispatch(setCredentials({ ...addStep }));
         // localStorage.setItem('persist', JSON.stringify(addStep));
-        dispatch(setListProducts(res.data));
+        // dispatch(setListProducts(res.data));
       }
     } catch (error) {
       console.log(error);
@@ -264,7 +249,7 @@ const Form1 = ({
         label: obj.countryName,
         value: obj.countryName,
       }));
-      dispatch(setListCountries(countriesList));
+      // dispatch(setListCountries(countriesList));
     }
   }, [countries, dispatch]);
 
@@ -539,14 +524,13 @@ const Form1 = ({
     if (prevTypeCov !== initState?.coverType) {
       if (initState?.coverType === 'SINGLE_TRIP') {
         const date = { ...initState?.endDate };
-        dispatch(
-          setFormEndDate({
-            endDate: {
-              ...initState?.from,
-              day: initState?.startDate.day + 1,
-            },
-          })
-        );
+        dispatch();
+        // setFormEndDate({
+        //   endDate: {
+        //     ...initState?.from,
+        //     day: initState?.startDate.day + 1,
+        //   },
+        // })
       } else if (initState?.coverType === 'ANNUAL_TRIP') {
         addOneYear({ ...initState?.from });
       }
@@ -739,7 +723,7 @@ const Form1 = ({
                   size="lg"
                   isMulti
                   variant="outline"
-                  onChange={handleSelect}
+                  // onChange={handleSelect}
                   value={initState?.destinations}
                   isSearchable={true}
                   styles={{

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 import React from 'react';
 import { Box } from '@chakra-ui/react';
@@ -31,42 +32,42 @@ const Forms = ({
                 isLastStep={isLastStep}
               />
             );
-          case 1:
-            return (
-              <FormStep2
-                label={label}
-                hasCompeltedAllSteps={hasCompeltedAllSteps}
-                activeStep={activeStep}
-                reset={reset}
-                prevStep={prevStep}
-                nextStep={nextStep}
-                isLastStep={isLastStep}
-              />
-            );
-          case 2:
-            return (
-              <FormStep4
-                label={label}
-                hasCompeltedAllSteps={hasCompeltedAllSteps}
-                activeStep={activeStep}
-                reset={reset}
-                prevStep={prevStep}
-                nextStep={nextStep}
-                isLastStep={isLastStep}
-              />
-            );
-          case 3:
-            return (
-              <FormStep3
-                label={label}
-                hasCompeltedAllSteps={hasCompeltedAllSteps}
-                activeStep={activeStep}
-                reset={reset}
-                prevStep={prevStep}
-                nextStep={nextStep}
-                isLastStep={isLastStep}
-              />
-            );
+          // case 1:
+          //   return (
+          //     <FormStep2
+          //       label={label}
+          //       hasCompeltedAllSteps={hasCompeltedAllSteps}
+          //       activeStep={activeStep}
+          //       reset={reset}
+          //       prevStep={prevStep}
+          //       nextStep={nextStep}
+          //       isLastStep={isLastStep}
+          //     />
+          //   );
+          // case 2:
+          //   return (
+          //     <FormStep4
+          //       label={label}
+          //       hasCompeltedAllSteps={hasCompeltedAllSteps}
+          //       activeStep={activeStep}
+          //       reset={reset}
+          //       prevStep={prevStep}
+          //       nextStep={nextStep}
+          //       isLastStep={isLastStep}
+          //     />
+          //   );
+          // case 3:
+          //   return (
+          //     <FormStep3
+          //       label={label}
+          //       hasCompeltedAllSteps={hasCompeltedAllSteps}
+          //       activeStep={activeStep}
+          //       reset={reset}
+          //       prevStep={prevStep}
+          //       nextStep={nextStep}
+          //       isLastStep={isLastStep}
+          //     />
+          //   );
           default:
             return null;
         }
