@@ -88,10 +88,12 @@ const Form2 = ({
     dispatch(
       setUpgradeData({
         ...selectedInsurance,
-        ...selectedInsurance?.bookingProduct,
-        ...(selectedInsurance?.bookingProduct?.product
+        ...(selectedInsurance?.bookingProduct
           ? {
-              product: { ...selectedInsurance.bookingProduct.product, ...data },
+              bookingProduct: {
+                ...selectedInsurance.bookingProduct,
+                product: data,
+              },
             }
           : {}),
       })
