@@ -12,7 +12,7 @@ const upgradeSearchSlice = createSlice({
   reducers: {
     setUpgradeData: (state, action) => {
       console.log('setanss', action.payload);
-      state.formState.upgradeData = action.payload;
+      state.formState.upgradeData = { ...action.payload };
     },
   },
 });
