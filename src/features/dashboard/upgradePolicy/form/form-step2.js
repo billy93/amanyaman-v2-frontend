@@ -34,7 +34,11 @@ import {
   useDisclosure,
   ButtonGroup,
 } from '@chakra-ui/react';
-import { upgradeProducts, travellerUpgrade } from '../upgradeQuotaSearchSlice';
+import {
+  upgradeProducts,
+  travellerUpgrade,
+  setUpgradeData,
+} from '../upgradeQuotaSearchSlice';
 import {
   useUpgradePolicyMutation,
   useGetDetailBenefitQuery,
@@ -75,10 +79,13 @@ const Form2 = ({
   const navigate = useNavigate();
   const historyForms = useSelector(historyForm);
   // console.log('activeStep', activeStep);
+
   const selectProduct = (data) => {
     dispatch(
-      setSelectTravelInsurancePlan({
-        travelInsurancePlan: { ...data },
+      setUpgradeData({
+        ...selectedInsurance,
+        ...selectedInsurance.bookingProduct,
+        product: { ...data },
       })
     );
   };
