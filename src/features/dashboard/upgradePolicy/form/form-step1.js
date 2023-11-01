@@ -213,6 +213,7 @@ const Form1 = ({
   const paddedMonth = initState?.from?.month.toString().padStart(2, '0');
   const paddedEndDay = initState?.to?.day.toString().padStart(2, '0');
   const paddedEndMonth = initState?.to?.month.toString().padStart(2, '0');
+
   const handleNext = async () => {
     const payload = {
       coverType: initState?.coverType,
@@ -220,7 +221,7 @@ const Form1 = ({
       from: `${initState?.from.year}-${paddedMonth}-${paddedDay}`,
       to: `${initState?.to.year}-${paddedEndMonth}-${paddedEndDay}`,
       destinations:
-        initState?.coverType === 'Single Trip'
+        initState?.coverType === 'SINGLE_TRIP'
           ? initState?.destinations.map((v) => {
               return { id: v.id };
             })
