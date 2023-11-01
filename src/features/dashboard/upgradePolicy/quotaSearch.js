@@ -227,9 +227,9 @@ const QuotaSearchById = () => {
   // }, [listTravellers, dispatch]);
 
   let content;
-  if (!user) {
+  if (!quotation) {
     content = <PageLoader loading={loading} />;
-  } else if (user) {
+  } else if (loading) {
     content = (
       <Box mt="4em">
         <Box
