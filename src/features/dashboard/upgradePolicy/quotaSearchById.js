@@ -58,7 +58,7 @@ const QuotaSearchById = () => {
   // const [skipListTraveller, setSkipListTrave] = React.useState(false);
   const dispatch = useDispatch();
   const { id, policyNumberString } = useParams();
-  const { data } = useGetBookingSearchQuery(id);
+  const { data, isLoading: loadingData } = useGetBookingSearchQuery(id);
   const {
     data: quotation,
     isLoading: loading,
@@ -217,9 +217,9 @@ const QuotaSearchById = () => {
   }, [data, dispatch]);
 
   let content;
-  if (loading) {
-    content = <PageLoader loading={loading} />;
-  } else if (quotation) {
+  if (loadingData) {
+    content = <PageLoader loading={loadingData} />;
+  } else if (data) {
     content = (
       <Box mt="4em">
         <Box
@@ -256,7 +256,7 @@ const QuotaSearchById = () => {
                 <BreadcrumbLink as={NavLink} onClick={handleBack}>
                   <Text as={'p'} color="#065BAA" fontSize={'sm'}>
                     {policyNumberString === undefined
-                      ? quotation?.travellers[0]?.policyNumber
+                      ? data?.travellers[0]?.policyNumber
                       : policyNumberString}
                   </Text>
                 </BreadcrumbLink>
