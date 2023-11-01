@@ -359,7 +359,7 @@ const Form1 = ({
     </>
   );
   const selectDate = (date) => {
-    // console.log('sssett', date);
+    console.log('sssett', date);
     dispatch(
       setUpgradeData({
         ...initState,
@@ -377,6 +377,7 @@ const Form1 = ({
     }
   };
   const selectEndDate = (date) => {
+    console.log('sssettss', date);
     dispatch(
       setUpgradeData({
         ...initState,
