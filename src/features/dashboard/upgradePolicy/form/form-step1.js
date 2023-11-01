@@ -217,7 +217,7 @@ const Form1 = ({
   const handleNext = async () => {
     const payload = {
       coverType: initState?.coverType,
-      travellerType: initState.travellerType?.name,
+      travellerType: { ...initState.travellerType },
       from: `${initState?.from.year}-${paddedMonth}-${paddedDay}`,
       to: `${initState?.to.year}-${paddedEndMonth}-${paddedEndDay}`,
       destinations:
@@ -226,13 +226,13 @@ const Form1 = ({
               return { id: v.id };
             })
           : [],
-      adt: initState.adt,
+      adt: parseInt(initState.adt),
     };
 
     try {
       const res = await searchproducts(
-        initState?.travellerType === 'Family'
-          ? { ...payload, chd: initState.chd }
+        initState?.travellerType?.name === 'Family'
+          ? { ...payload, chd: parseInt(initState.chd) }
           : payload
       );
       console.log('res', res);
