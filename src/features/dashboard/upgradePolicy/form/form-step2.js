@@ -82,14 +82,20 @@ const Form2 = ({
 
   const selectProduct = (data) => {
     const dataUpgrade = {
-      ...selectedInsurance,
-      ...selectedInsurance?.bookingProduct,
+      // ...selectedInsurance,
+      // ...selectedInsurance?.bookingProduct,
       ...selectedInsurance?.bookingProduct?.product,
       ...data,
       // {...selectedInsurance?.bookingProduct?.product, ...data}},
     };
     console.log('product upgrade', dataUpgrade);
-    dispatch(setUpgradeData(dataUpgrade));
+    dispatch(
+      setUpgradeData({
+        ...selectedInsurance,
+        ...selectedInsurance?.bookingProduct,
+        ...dataUpgrade,
+      })
+    );
   };
   // eslint-disable-next-line no-unused-vars
   const SelectInsurancePlan = (e) => {
