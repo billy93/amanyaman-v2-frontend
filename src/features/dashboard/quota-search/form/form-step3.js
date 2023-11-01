@@ -1012,7 +1012,6 @@ const Form3 = ({
       EditTraveller?.passport === '' ||
       EditTraveller?.phone === '' ||
       EditTraveller?.placeOfBirth === '' ||
-      EditTraveller?.ticket === '' ||
       EditTraveller?.dateOfBirth === null
     ) {
       setInValid(true);
@@ -2509,7 +2508,6 @@ const Form3 = ({
                     lastName === '' ||
                     dateOfBirth === null ||
                     placeOfBirth === '' ||
-                    ticketNumber === '' ||
                     pasportNumber === '' ||
                     phoneNumber === '' ||
                     email === '' ||

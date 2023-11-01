@@ -779,7 +779,7 @@ const Form1 = ({
             </Box>
           ) : null}
           <Box
-            mt="1em"
+            // mt="1em"
             position={'relative'}
             zIndex={'0'}
             display={'flex'}
@@ -788,7 +788,7 @@ const Form1 = ({
             gap="4px"
             width={{ base: '100%' }}
           >
-            <Box mt="1.5em" h="48px" width={{ base: '100%' }}>
+            <Box h="48px" width={{ base: '100%' }}>
               <FormControl
                 mt="10px"
                 variant="floating"
@@ -825,7 +825,7 @@ const Form1 = ({
               </FormControl>
             </Box>
             {initState && initState.coverType === 'SINGLE_TRIP' ? (
-              <Box width={{ base: '100%' }} mt="1.5em" h="48px">
+              <Box width={{ base: '100%' }} h="48px">
                 <FormControl
                   mt="10px"
                   variant="floating"
@@ -862,7 +862,7 @@ const Form1 = ({
                 </FormControl>
               </Box>
             ) : (
-              <Box width={{ base: '100%' }} mt="1.5em" h="48px">
+              <Box width={{ base: '100%' }} h="48px">
                 <FormControl
                   mt="10px"
                   variant="floating"
