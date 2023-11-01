@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import React from 'react';
 import { useSelector, dispatch, useDispatch } from 'react-redux';
 import {
   userLoginCurrent,
@@ -44,7 +45,7 @@ import {
   setStepActive,
   setUpgradeData,
 } from './quotaSearchSlice';
-import React from 'react';
+
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 
 const steps = [
@@ -243,7 +244,7 @@ const QuotaSearchById = () => {
   }, [listTravellers, dispatch]);
 
   let content;
-  if (!user) {
+  if (loading) {
     content = (
       <Center h="50vh" color="#065BAA">
         <Text as={'p'} size="xs">
@@ -251,7 +252,7 @@ const QuotaSearchById = () => {
         </Text>
       </Center>
     );
-  } else if (user) {
+  } else if (quotation) {
     content = (
       <Box mt="4em">
         <Box
