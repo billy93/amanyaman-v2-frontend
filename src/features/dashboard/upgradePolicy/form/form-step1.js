@@ -665,14 +665,16 @@ const Form1 = ({
                 bg="#ebebeb"
                 w={{ base: '100%' }}
                 border={
-                  initState?.coverType === 'SINGLE_TRIP'
+                  initState && initState?.coverType === 'SINGLE_TRIP'
                     ? '2px solid #065BAA'
                     : ''
                 }
                 h="48px"
                 aria-label="Search database"
                 color={
-                  initState?.coverType === 'SINGLE_TRIP' ? '#065BAA' : '#231F20'
+                  initState && initState?.coverType === 'SINGLE_TRIP'
+                    ? '#065BAA'
+                    : '#231F20'
                 }
                 _hover={{
                   bg: '#ebebeb',
@@ -703,7 +705,7 @@ const Form1 = ({
               <Button
                 bg="#ebebeb"
                 border={
-                  initState?.coverType === 'ANNUAL_TRIP'
+                  initState && initState?.coverType === 'ANNUAL_TRIP'
                     ? '2px solid #065BAA'
                     : ''
                 }
@@ -711,7 +713,9 @@ const Form1 = ({
                 h="48px"
                 aria-label="Search database"
                 color={
-                  initState?.coverType === 'ANNUAL_TRIP' ? '#065BAA' : '#231F20'
+                  initState && initState?.coverType === 'ANNUAL_TRIP'
+                    ? '#065BAA'
+                    : '#231F20'
                 }
                 _hover={{
                   bg: '#ebebeb',
@@ -723,8 +727,7 @@ const Form1 = ({
               {/* <FormLabel fontSize="12" pt="1.5" fontFamily={'Mulish'} style={{ transform: "translate(-12px, -31px) scale(0.75)", fontSize:"14px" }}>Select Coverage Type</FormLabel> */}
             </FormControl>
           </Box>
-          {initState?.coverType === '' ||
-          initState?.coverType === 'SINGLE_TRIP' ? (
+          {initState && initState?.coverType === 'SINGLE_TRIP' ? (
             <Box mt="2em" w={{ base: '100%' }} h={{ sm: '48px' }}>
               <FormControl
                 variant="floating"
@@ -806,7 +809,7 @@ const Form1 = ({
                 />
               </FormControl>
             </Box>
-            {initState.coverType === 'SINGLE_TRIP' ? (
+            {initState && initState.coverType === 'SINGLE_TRIP' ? (
               <Box width={{ base: '100%' }} mt="1.5em" h="48px">
                 <FormControl
                   mt="10px"
