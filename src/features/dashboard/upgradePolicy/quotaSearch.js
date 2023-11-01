@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
+import React from 'react';
 import { useSelector, dispatch, useDispatch } from 'react-redux';
+import PageLoader from '../../../components/pageLoader';
 import {
   userLoginCurrent,
   historyForm,
   setHistoryForm,
   setCredentials,
 } from '../../auth/authSlice';
-import PageLoader from '../../../components/pageLoader';
 import Forms from './form/form';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import {
@@ -28,8 +29,12 @@ import {
 } from './policyApiSlice';
 import { useGetBookingByIdQuery } from '../policy/policyApiSlice';
 
-import { setUpgradeData } from './upgradeQuotaSearchSlice';
-import React from 'react';
+import {
+  setUpgradeData,
+  travellerUpgrade,
+  setUpgradeDataTravellers,
+} from './upgradeQuotaSearchSlice';
+
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 
 const steps = [
@@ -48,6 +53,7 @@ function usePrevious(value) {
 
 const QuotaSearchById = () => {
   const user = useSelector(userLoginCurrent);
+  const upgradeData = useSelector(travellerUpgrade);
   const navigate = useNavigate();
   const historysbumit = useSelector(historyForm);
   const [persist] = usePersist();
@@ -57,7 +63,7 @@ const QuotaSearchById = () => {
   // const [skipListTraveller, setSkipListTrave] = React.useState(false);
   const dispatch = useDispatch();
   const { id, policyNumberString } = useParams();
-  const { data } = useGetBookingSearchQuery(id);
+  const { data, isLoading: loadingData } = useGetBookingSearchQuery(id);
   const {
     data: quotation,
     isLoading: loading,
@@ -110,12 +116,6 @@ const QuotaSearchById = () => {
     fetchData(id);
     // }
   }, [id]);
-
-  React.useEffect(() => {
-    if (quotation) {
-      dispatch(setUpgradeData(quotation));
-    }
-  }, [quotation, dispatch]);
 
   // React.useEffect(() => {
   //   if (id) {
@@ -190,46 +190,46 @@ const QuotaSearchById = () => {
 
   // React.useEffect(() => {
   //   if (id) {
-  //     setStepActive(persistedQuotaSearch);
-  //     dispatch(setHistoryForm(historysbumit));
-  //     // dispatch(setFormStateCoverageType(historysbumit));
-  //   }
-  // }, [id, persistedQuotaSearch, dispatch, historysbumit]);
-
-  // React.useEffect(() => {
-  //   if (id) {
   //     if (messagesTraveller) {
   //       refetch(id);
   //     }
   //   }
   // }, [messagesTraveller, id, refetch]);
 
-  // React.useEffect(() => {
-  //   // After 2 seconds, update the message
-  //   const timeoutId = setTimeout(() => {
-  //     dispatch(setMessage(false));
-  //   }, 2000);
-
-  //   // Clean up the timeout when the component unmounts or when the effect runs again
-  //   return () => clearTimeout(timeoutId);
-  // }, [messagesTraveller, dispatch]); // Empty dependency array ensures the effect runs only once after mount
-
-  console.log('quotation setan', quotation);
+  // console.log('quotation setan', quotation);
 
   const handleBack = () => {
     navigate(-1);
   };
 
-  // React.useEffect(() => {
-  //   if (listTravellers) {
-  //     dispatch(setTravellersData([...listTravellers]));
-  //   }
-  // }, [listTravellers, dispatch]);
+  React.useEffect(() => {
+    if (listTravellers) {
+      dispatch(setUpgradeDataTravellers([...listTravellers]));
+    }
+  }, [listTravellers, dispatch]);
+
+  React.useEffect(() => {
+    if (data !== undefined) {
+      // console.log('babiii', quotation);
+      const newdata = {
+        ...data,
+        from: convertDateToObject(data.from),
+        to: convertDateToObject(data.to),
+        destinations: data.destinations.map((obj) => ({
+          ...obj,
+          label: obj.countryName,
+          value: obj.countryName,
+        })),
+      };
+      // console.log('tan setan', newdata);
+      dispatch(setUpgradeData(newdata));
+    }
+  }, [data, dispatch]);
 
   let content;
-  if (!quotation) {
-    content = <PageLoader loading={loading} />;
-  } else if (loading) {
+  if (loadingData) {
+    content = <PageLoader loading={loadingData} />;
+  } else if (data && upgradeData) {
     content = (
       <Box mt="4em">
         <Box
@@ -266,7 +266,7 @@ const QuotaSearchById = () => {
                 <BreadcrumbLink as={NavLink} onClick={handleBack}>
                   <Text as={'p'} color="#065BAA" fontSize={'sm'}>
                     {policyNumberString === undefined
-                      ? quotation?.travellers[0]?.policyNumber
+                      ? data?.travellers[0]?.policyNumber
                       : policyNumberString}
                   </Text>
                 </BreadcrumbLink>
@@ -316,15 +316,17 @@ const QuotaSearchById = () => {
               {steps.map(({ label }, step) => (
                 <Step label={label} key={label} bg="white">
                   <Box sx={{ p: 8, my: 0, rounded: 'sm', bg: 'white', mt: 0 }}>
-                    <Forms
-                      label={step}
-                      hasCompletedAllSteps={hasCompletedAllSteps}
-                      activeStep={user?.historyStep}
-                      reset={reset}
-                      prevStep={handlePrev}
-                      nextStep={handleNext}
-                      isLastStep={isLastStep}
-                    />
+                    {upgradeData !== undefined ? (
+                      <Forms
+                        label={step}
+                        hasCompletedAllSteps={hasCompletedAllSteps}
+                        activeStep={user?.historyStep}
+                        reset={reset}
+                        prevStep={handlePrev}
+                        nextStep={handleNext}
+                        isLastStep={isLastStep}
+                      />
+                    ) : null}
                   </Box>
                 </Step>
               ))}
