@@ -8,6 +8,7 @@ const upgradeSearchSlice = createSlice({
     formState: {
       upgradeData: null,
       listProducts: [],
+      listTravellers: [],
     },
   },
   reducers: {
@@ -17,14 +18,23 @@ const upgradeSearchSlice = createSlice({
     setUpgradeDataProducts: (state, action) => {
       state.formState.listProducts = action.payload;
     },
+    setUpgradeDataTravellers: (state, action) => {
+      state.formState.listTravellers = action.payload;
+    },
   },
 });
 
-export const { setUpgradeData, setUpgradeDataProducts } =
-  upgradeSearchSlice.actions;
+export const {
+  setUpgradeData,
+  setUpgradeDataProducts,
+  setUpgradeDataTravellers,
+} = upgradeSearchSlice.actions;
 export default upgradeSearchSlice.reducer;
 export const travellerUpgrade = (state) =>
   state.upgradePolicy?.formState?.upgradeData;
 
 export const upgradeProducts = (state) =>
   state.upgradePolicy?.formState?.listProducts;
+
+export const upgradeListTravellers = (state) =>
+  state.upgradePolicy?.formState?.listTravellers;

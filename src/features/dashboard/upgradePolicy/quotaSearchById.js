@@ -29,7 +29,11 @@ import {
 } from './policyApiSlice';
 import { useGetBookingByIdQuery } from '../policy/policyApiSlice';
 
-import { setUpgradeData, travellerUpgrade } from './upgradeQuotaSearchSlice';
+import {
+  setUpgradeData,
+  travellerUpgrade,
+  setUpgradeDataTravellers,
+} from './upgradeQuotaSearchSlice';
 
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 
@@ -198,11 +202,11 @@ const QuotaSearchById = () => {
     navigate(-1);
   };
 
-  // React.useEffect(() => {
-  //   if (listTravellers) {
-  //     dispatch(setTravellersData([...listTravellers]));
-  //   }
-  // }, [listTravellers, dispatch]);
+  React.useEffect(() => {
+    if (listTravellers) {
+      dispatch(setUpgradeDataTravellers([...listTravellers]));
+    }
+  }, [listTravellers, dispatch]);
 
   React.useEffect(() => {
     if (data !== undefined) {
