@@ -239,7 +239,7 @@ const QuotaSearchById = () => {
   React.useEffect(() => {
     if (quotation !== undefined) {
       console.log('babiii', quotation);
-      dispatch(setUpgradeData(quotation));
+      dispatch(setUpgradeData({ ...quotation }));
     }
   }, [quotation, dispatch]);
 
