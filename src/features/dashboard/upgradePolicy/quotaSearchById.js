@@ -55,7 +55,7 @@ function usePrevious(value) {
 const QuotaSearchById = () => {
   const user = useSelector(userLoginCurrent);
   const upgradeData = useSelector(travellerUpgrade);
-  const listTravellers = useSelector(upgradeListTravellers);
+  const listTravellersState = useSelector(upgradeListTravellers);
   const navigate = useNavigate();
   const historysbumit = useSelector(historyForm);
   const [persist] = usePersist();
@@ -268,7 +268,8 @@ const QuotaSearchById = () => {
                 <BreadcrumbLink as={NavLink} onClick={handleBack}>
                   <Text as={'p'} color="#065BAA" fontSize={'sm'}>
                     {policyNumberString === undefined
-                      ? listTravellers && listTravellers[0]?.policyNumber
+                      ? listTravellersState &&
+                        listTravellersState[0]?.policyNumber
                       : policyNumberString}
                   </Text>
                 </BreadcrumbLink>
