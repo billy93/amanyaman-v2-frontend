@@ -1046,7 +1046,7 @@ const Form1 = ({
                   color="#065BAA"
                   style={{ fontSize: '12px' }}
                 >
-                  {initState?.selectProduct?.productName}
+                  {initState?.bookingProduct?.productName}
                 </Text>
               </Box>
             </Box>
@@ -1101,7 +1101,7 @@ const Form1 = ({
                     style={{ fontSize: '12px' }}
                   >
                     <CurrencyFormatter
-                      amount={initState?.selectProduct?.finalPrice}
+                      amount={initState?.bookingProduct?.finalPrice}
                     />
                   </Text>
                 </Box>
@@ -1131,7 +1131,7 @@ const Form1 = ({
                   >
                     {'x'}
                     {initState?.travellerType?.name === 'Group'
-                      ? initState?.travellers.length
+                      ? parseInt(initState?.adt) + parseInt(initState?.chd)
                       : 1}
                   </Text>
                 </Box>
@@ -1161,8 +1161,8 @@ const Form1 = ({
                   >
                     <CurrencyFormatter
                       amount={
-                        initState?.selectProduct?.finalPrice *
-                        initState?.travellers.length
+                        initState?.bookingProduct?.finalPrice *
+                        (parseInt(initState?.adt) + parseInt(initState?.chd))
                       }
                     />
                   </Text>
@@ -1172,7 +1172,7 @@ const Form1 = ({
                     <></>
                   ) : (
                     <>
-                      {initState?.coverageType === 'Single Trip' ? (
+                      {initState?.coverType === 'SINGLE_TRIP' ? (
                         <Button
                           size="sm"
                           onClick={handleNext}
