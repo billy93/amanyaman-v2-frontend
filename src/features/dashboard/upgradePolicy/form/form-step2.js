@@ -34,7 +34,7 @@ import {
   useDisclosure,
   ButtonGroup,
 } from '@chakra-ui/react';
-
+import { upgradeProducts, travellerUpgrade } from '../upgradeQuotaSearchSlice';
 import {
   useUpgradePolicyMutation,
   useGetDetailBenefitQuery,
@@ -60,15 +60,17 @@ const Form2 = ({
   const [triggers, setTriggers] = React.useState(false);
   const [ids, setIds] = React.useState('');
   const listTravellers = useSelector(FillTravellersData);
+  const selectedInsurance = useSelector(travellerUpgrade);
   const { id, policyNumberString } = useParams();
   const initState = useSelector(selectTravelInsurance);
+  const initStateUpgrade = useSelector(upgradeProducts);
   const login = useSelector(userLoginCurrent);
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const [persist] = usePersist();
   // const { id } = useParams();
   const stateInt = useSelector(selectManualInput);
   const list = useSelector(FillTravellersData);
-  const selectedInsurance = useSelector(selectedTravelInsurance);
+  // const selectedInsurance = useSelector(selectedTravelInsurance);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const historyForms = useSelector(historyForm);
@@ -316,7 +318,7 @@ const Form2 = ({
           height: '400px',
         }}
       >
-        {initState?.map((products, i) => {
+        {initStateUpgrade?.map((products, i) => {
           return (
             <Box
               mb="1em"
@@ -331,7 +333,9 @@ const Form2 = ({
               boxShadow={'0px 0px 5px 5px rgba(153, 180, 206, 0.2)'}
               p="20px"
               border={
-                products.id === selectedInsurance?.id ? '2px solid #065BAA' : ''
+                products.id === selectedInsurance?.bookingProduct?.product?.id
+                  ? '2px solid #065BAA'
+                  : ''
               }
             >
               <Box
@@ -484,7 +488,7 @@ const Form2 = ({
                   Travel Insurance Selected :
                 </Text>
                 <Text as="b" fontFamily={'Mulish'} pl="5px">
-                  {selectedInsurance?.productName}
+                  {selectedInsurance?.bookingProduct?.productName}
                 </Text>
               </Box>
               <ButtonGroup>

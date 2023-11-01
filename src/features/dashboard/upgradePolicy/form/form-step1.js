@@ -13,7 +13,11 @@ import {
   setCredentials,
 } from '../../../auth/authSlice';
 import usePersist from '../../../../features/hook/usePersist';
-import { setUpgradeData, travellerUpgrade } from '../upgradeQuotaSearchSlice';
+import {
+  setUpgradeData,
+  travellerUpgrade,
+  setUpgradeDataProducts,
+} from '../upgradeQuotaSearchSlice';
 import {
   Text,
   Flex,
@@ -244,7 +248,7 @@ const Form1 = ({
         nextStep();
         dispatch(setCredentials({ ...addStep }));
         // localStorage.setItem('persist', JSON.stringify(addStep));
-        // dispatch(setListProducts(res.data));
+        dispatch(setUpgradeDataProducts(res.data));
       }
     } catch (error) {
       console.log(error);
