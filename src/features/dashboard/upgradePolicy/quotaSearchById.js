@@ -29,7 +29,7 @@ import {
 } from './policyApiSlice';
 import { useGetBookingByIdQuery } from '../policy/policyApiSlice';
 
-import { setUpgradeData } from './upgradeQuotaSearchSlice';
+import { setUpgradeData, travellerUpgrade } from './upgradeQuotaSearchSlice';
 
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 
@@ -49,6 +49,7 @@ function usePrevious(value) {
 
 const QuotaSearchById = () => {
   const user = useSelector(userLoginCurrent);
+  const upgradeData = useSelector(travellerUpgrade);
   const navigate = useNavigate();
   const historysbumit = useSelector(historyForm);
   const [persist] = usePersist();
@@ -191,7 +192,7 @@ const QuotaSearchById = () => {
   //   }
   // }, [messagesTraveller, id, refetch]);
 
-  console.log('quotation setan', quotation);
+  // console.log('quotation setan', quotation);
 
   const handleBack = () => {
     navigate(-1);
@@ -216,7 +217,7 @@ const QuotaSearchById = () => {
           value: obj.countryName,
         })),
       };
-      console.log('tan setan', newdata);
+      // console.log('tan setan', newdata);
       dispatch(setUpgradeData(newdata));
     }
   }, [data, dispatch]);
@@ -224,7 +225,7 @@ const QuotaSearchById = () => {
   let content;
   if (loadingData) {
     content = <PageLoader loading={loadingData} />;
-  } else if (data) {
+  } else if (data && upgradeData) {
     content = (
       <Box mt="4em">
         <Box
@@ -311,15 +312,17 @@ const QuotaSearchById = () => {
               {steps.map(({ label }, step) => (
                 <Step label={label} key={label} bg="white">
                   <Box sx={{ p: 8, my: 0, rounded: 'sm', bg: 'white', mt: 0 }}>
-                    <Forms
-                      label={step}
-                      hasCompletedAllSteps={hasCompletedAllSteps}
-                      activeStep={user?.historyStep}
-                      reset={reset}
-                      prevStep={handlePrev}
-                      nextStep={handleNext}
-                      isLastStep={isLastStep}
-                    />
+                    {upgradeData !== undefined ? (
+                      <Forms
+                        label={step}
+                        hasCompletedAllSteps={hasCompletedAllSteps}
+                        activeStep={user?.historyStep}
+                        reset={reset}
+                        prevStep={handlePrev}
+                        nextStep={handleNext}
+                        isLastStep={isLastStep}
+                      />
+                    ) : null}
                   </Box>
                 </Step>
               ))}

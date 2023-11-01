@@ -367,9 +367,9 @@ const Form1 = ({
       })
     );
 
-    // if (initState?.coverType === 'SINGLE_TRIP') {
-    //   addOneDayLater(date);
-    // }
+    if (initState?.coverType === 'SINGLE_TRIP') {
+      addOneDayLater(date);
+    }
     if (date !== null) {
       //   setActive(true)
     } else {
@@ -534,13 +534,14 @@ const Form1 = ({
     // if (prevTypeCov !== initState?.coverType) {
     if (initState && initState?.coverType === 'SINGLE_TRIP') {
       const date = { ...initState?.to };
-      // dispatch();
-      // setFormEndDate({
-      //   endDate: {
-      //     ...initState?.from,
-      //     day: initState?.startDate.day + 1,
-      //   },
-      // })
+      dispatch(
+        setUpgradeData({
+          to: {
+            ...initState?.from,
+            day: initState?.from.day + 1,
+          },
+        })
+      );
     } else if (initState?.coverType === 'ANNUAL_TRIP') {
       addOneYear({ ...initState?.from });
     }
