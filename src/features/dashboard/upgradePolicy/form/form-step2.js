@@ -38,6 +38,7 @@ import {
   upgradeProducts,
   travellerUpgrade,
   setUpgradeData,
+  upgradeListTravellers,
 } from '../upgradeQuotaSearchSlice';
 import {
   useUpgradePolicyMutation,
@@ -63,7 +64,7 @@ const Form2 = ({
   // const [booksProducts, { isLoading }] = useUpgradePolicyMutation();
   const [triggers, setTriggers] = React.useState(false);
   const [ids, setIds] = React.useState('');
-  const listTravellers = useSelector(FillTravellersData);
+  const listTravellers = useSelector(upgradeListTravellers);
   const selectedInsurance = useSelector(travellerUpgrade);
   const { id, policyNumberString } = useParams();
   const initState = useSelector(selectTravelInsurance);
@@ -72,7 +73,7 @@ const Form2 = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const [persist] = usePersist();
   // const { id } = useParams();
-  const stateInt = useSelector(selectManualInput);
+  const stateInts = useSelector(selectManualInput);
   const list = useSelector(FillTravellersData);
   // const selectedInsurance = useSelector(selectedTravelInsurance);
   const dispatch = useDispatch();
@@ -110,10 +111,14 @@ const Form2 = ({
     );
   };
   // console.log('detailBenefit', detailBenefit);
-  const paddedDay = stateInt?.startDate?.day.toString().padStart(2, '0');
-  const paddedMonth = stateInt?.startDate?.month.toString().padStart(2, '0');
-  const paddedEndDay = stateInt?.endDate?.day.toString().padStart(2, '0');
-  const paddedEndMonth = stateInt?.endDate?.month.toString().padStart(2, '0');
+  const paddedDay = selectedInsurance?.from?.day.toString().padStart(2, '0');
+  const paddedMonth = selectedInsurance?.from?.month
+    .toString()
+    .padStart(2, '0');
+  const paddedEndDay = selectedInsurance?.to?.day.toString().padStart(2, '0');
+  const paddedEndMonth = selectedInsurance?.to?.month
+    .toString()
+    .padStart(2, '0');
 
   function filterObjectsWithProperty(array, property) {
     // eslint-disable-next-line no-prototype-builtins
@@ -124,34 +129,23 @@ const Form2 = ({
   const handleNext = async (e) => {
     const payload = {
       bookingId: id,
-      travellers: filterObjectsWithProperty(
-        listTravellers?.listTravellers,
-        'id'
-      ),
-      coverType:
-        stateInt.coverageType === 'Single Trip' ? 'SINGLE_TRIP' : 'ANNUAL',
-      travellerType:
-        stateInt.travellerType === 'Individual'
-          ? {
-              id: 1,
-            }
-          : stateInt.travellerType === 'Group'
-          ? { id: 3 }
-          : { id: 2 },
-      from: `${stateInt?.startDate.year}-${paddedMonth}-${paddedDay}`,
-      to: `${stateInt?.endDate.year}-${paddedEndMonth}-${paddedEndDay}`,
-      destinations: stateInt?.destinationCountry.map((v) => {
+      travellers: filterObjectsWithProperty(listTravellers, 'id'),
+      coverType: selectedInsurance.coverType,
+      travellerType: { ...selectedInsurance?.travellerType?.id },
+      from: `${selectedInsurance?.from.year}-${paddedMonth}-${paddedDay}`,
+      to: `${selectedInsurance?.to.year}-${paddedEndMonth}-${paddedEndDay}`,
+      destinations: selectedInsurance?.destinations.map((v) => {
         return { id: v.id };
       }),
-      adt: stateInt.adult,
-      product: selectedInsurance.id,
+      adt: selectedInsurance.adt,
+      product: selectedInsurance?.bookingProduct?.product?.id,
     };
     // console.log('payload', payload);
     try {
       const res = await upgradePolicy(
-        stateInt?.travellerType === 'Family'
-          ? { ...payload, chd: stateInt.child }
-          : { ...payload, chd: 0 }
+        selectedInsurance?.travellerType === 'Family'
+          ? { ...payload, chd: selectedInsurance.chd }
+          : { ...payload, chd: selectedInsurance.chd }
       );
       console.log('res upgrade', res);
       if (res?.data?.id) {
@@ -164,12 +158,12 @@ const Form2 = ({
         } else {
           navigate(`/upgrade-quota/search/${res?.data?.id}`);
         }
-        let travellersData = {
-          ...list,
-          bookingId: res?.data?.id,
-        };
+        // let travellersData = {
+        //   ...list,
+        //   bookingId: res?.data?.id,
+        // };
         // console.log('test', list);
-        dispatch(setBookingId(travellersData));
+        // dispatch(setBookingId(travellersData));
         dispatch(setId(res?.data?.id));
         dispatch(setGetById(res));
       }
@@ -350,7 +344,8 @@ const Form2 = ({
               boxShadow={'0px 0px 5px 5px rgba(153, 180, 206, 0.2)'}
               p="20px"
               border={
-                products.id === selectedInsurance?.bookingProduct?.product?.id
+                products.productId ===
+                selectedInsurance?.bookingProduct?.product?.id
                   ? '2px solid #065BAA'
                   : ''
               }
