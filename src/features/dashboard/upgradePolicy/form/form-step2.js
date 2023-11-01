@@ -86,7 +86,9 @@ const Form2 = ({
       ...selectedInsurance?.bookingProduct,
       ...selectedInsurance?.bookingProduct?.product,
       ...data,
+      // {...selectedInsurance?.bookingProduct?.product, ...data}},
     };
+    console.log('product upgrade', dataUpgrade);
     dispatch(setUpgradeData(dataUpgrade));
   };
   // eslint-disable-next-line no-unused-vars
