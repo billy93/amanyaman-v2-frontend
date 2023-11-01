@@ -367,9 +367,9 @@ const Form1 = ({
       })
     );
 
-    if (initState?.coverType === 'SINGLE_TRIP') {
-      addOneDayLater(date);
-    }
+    // if (initState?.coverType === 'SINGLE_TRIP') {
+    //   addOneDayLater(date);
+    // }
     if (date !== null) {
       //   setActive(true)
     } else {
