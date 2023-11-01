@@ -348,6 +348,11 @@ const PolicyDetail = () => {
         ...upgraded,
         from: convertDateToObject(upgraded.from),
         to: convertDateToObject(upgraded.to),
+        destinations: upgraded.destinations.map((obj) => ({
+          ...obj,
+          label: obj.countryName,
+          value: obj.countryName,
+        })),
       };
       // console.log('tan setan', data);
       dispatch(setUpgradeData(data));

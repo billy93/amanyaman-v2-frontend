@@ -210,6 +210,11 @@ const QuotaSearchById = () => {
         ...data,
         from: convertDateToObject(data.from),
         to: convertDateToObject(data.to),
+        destinations: data.destinations.map((obj) => ({
+          ...obj,
+          label: obj.countryName,
+          value: obj.countryName,
+        })),
       };
       console.log('tan setan', newdata);
       dispatch(setUpgradeData(newdata));
