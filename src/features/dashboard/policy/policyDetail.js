@@ -57,7 +57,10 @@ import {
   useDownloadPolicyQuery,
   useDownloadProformaQuery,
 } from './policyApiSlice';
-import { setUpgradeData } from '../quota-search/quotaSearchSlice';
+import {
+  setUpgradeData,
+  travellerUpgrade,
+} from '../upgradePolicy/upgradeQuotaSearchSlice';
 import Files from '../../../img/images/Files.png';
 import Plan from '../../../img/images/Plane.png';
 import Pasport from '../../../img/images/Passport.png';
@@ -94,6 +97,7 @@ function usePrevious(value) {
 const PolicyDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const stateUpgrade = useSelector(travellerUpgrade);
   const messages = useSelector((state) => state.PolicyList);
   const { id, policyNumberString } = useParams();
   const [emails, setEmails] = useState([]);
@@ -337,7 +341,7 @@ const PolicyDetail = () => {
   }
 
   React.useEffect(() => {
-    if (quotation) {
+    if (quotation !== undefined) {
       const data = {
         ...quotation,
         from: convertDateToObject(quotation.from),
@@ -346,9 +350,10 @@ const PolicyDetail = () => {
       console.log('tan setan', data);
       dispatch(setUpgradeData(data));
     }
-  }, [messages, prevMessage]);
+  }, [quotation]);
 
   console.log('tan setan s', quotation);
+  console.log('tan setan stateUpgrade', stateUpgrade);
 
   React.useEffect(() => {
     let timer;
