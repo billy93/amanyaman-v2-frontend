@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 /* eslint-disable no-undef */
 import React from 'react';
@@ -11,7 +12,7 @@ import {
   usePaymentProccedMutation,
   useCheckAvailabilityCreditMutation,
 } from '../policyApiSlice';
-import { selectManualInput } from '../upgradeQuotaSearchSlice';
+import { setUpgradeData, travellerUpgrade } from '../upgradeQuotaSearchSlice';
 
 import UseCustomToast from '../../../../components/UseCustomToast';
 import {

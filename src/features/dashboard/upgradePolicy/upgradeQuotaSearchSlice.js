@@ -18,6 +18,6 @@ const upgradeSearchSlice = createSlice({
 });
 
 export const { setUpgradeData } = upgradeSearchSlice.actions;
-
+export default upgradeSearchSlice.reducer;
 export const travellerUpgrade = (state) =>
   state.upgradePolicy?.formState?.upgradeData;

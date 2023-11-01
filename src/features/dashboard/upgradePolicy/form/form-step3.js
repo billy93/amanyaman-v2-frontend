@@ -13,19 +13,7 @@ import {
   setCredentials,
 } from '../../../auth/authSlice';
 import usePersist from '../../../../features/hook/usePersist';
-import {
-  messages,
-  setMessage,
-  setEditTraveller,
-  EditTravellers,
-  setListProducts,
-  listTravellers,
-  FillTravellersData,
-  setTravellersData,
-  selectManualInput,
-  selectedTravelInsurance,
-  setSelectTravelInsurancePlan,
-} from '../upgradeQuotaSearchSlice';
+import { setUpgradeData, travellerUpgrade } from '../upgradeQuotaSearchSlice';
 import {
   useGetListTravellerQuery,
   useGetTemplateQuery,
@@ -92,18 +80,18 @@ const Form3 = ({
   nextStep,
   isLastStep,
 }) => {
-  const initStateTraveller = useSelector(selectManualInput);
-  const selectedInsurance = useSelector(selectedTravelInsurance);
+  const initStateTraveller = useSelector(travellerUpgrade);
+  // const selectedInsurance = useSelector(selectedTravelInsurance);
   const { id } = useParams();
   const [triggerGetList, setTriggerGetList] = React.useState(false);
   const { data: newlistTravellers, refetch } = useGetListTravellerQuery(id, {
     skip: triggerGetList === false ? true : false,
   });
   const [persist] = usePersist();
-  const listTravellers = useSelector(FillTravellersData);
+  // const listTravellers = useSelector(FillTravellersData);
   const login = useSelector(userLoginCurrent);
-  const message = useSelector(messages);
-  const EditTraveller = useSelector(EditTravellers);
+  // const message = useSelector(messages);
+  // const EditTraveller = useSelector(EditTravellers);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [booksProducts, { isLoading: onsubmitloading }] =
     useBooksProductsMutation();
@@ -180,7 +168,7 @@ const Form3 = ({
     // e.preventDefault();
     // console.log('travellers', data);
     // eslint-disable-next-line no-unused-vars
-    dispatch(setEditTraveller(data));
+    // dispatch(setEditTraveller(data));
     onOpen();
   };
 
@@ -279,18 +267,18 @@ const Form3 = ({
       if (res?.data) {
         // console.log('res', res);
         // console.log('res', payload);
-        dispatch(setListProducts(res.data));
+        // dispatch(setListProducts(res.data));
         const updatestateselectProduct = res.data.filter(
           (item) => item.id === parseInt(payload.product)
         );
         const objProuduct = updatestateselectProduct[0];
         // console.log('ss', objProuduct);
         // console.log('updatestateselectProduct', updatestateselectProduct);
-        dispatch(
-          setSelectTravelInsurancePlan({
-            travelInsurancePlan: { ...objProuduct },
-          })
-        );
+        // dispatch(
+        //   setSelectTravelInsurancePlan({
+        //     travelInsurancePlan: { ...objProuduct },
+        //   })
+        // );
       }
     } catch (error) {
       console.log(error);
@@ -363,28 +351,28 @@ const Form3 = ({
     };
   }
 
-  React.useEffect(() => {
-    if (EditTraveller) {
-      let dates;
-      if (EditTraveller?.dateOfBirth) {
-        formatDates(EditTraveller?.dateOfBirth);
-      }
-      // console.log('dates', formatDates(EditTraveller?.dateOfBirth));
-      setPhoneNumber(EditTraveller?.phone);
-      setFirstName(EditTraveller?.firstName);
-      setLastName(EditTraveller?.lastName);
-      setAddress(EditTraveller?.address);
-      setPlaceOfBirth(EditTraveller?.placeOfBirth);
-      setDateOfBirth(formatDates(EditTraveller?.dateOfBirth));
-      setEmail(EditTraveller?.email);
-      setPasportNumber(EditTraveller?.passport);
-      setTypeStatus(EditTraveller?.title);
-      setType(EditTraveller?.travellerType);
-      setBeneficiary(EditTraveller?.beneficiary);
-      setTicketsNumber(EditTraveller?.ticketFlightNumber);
-      setRelationship(EditTraveller?.relationship);
-    }
-  }, [EditTraveller]);
+  // React.useEffect(() => {
+  //   if (EditTraveller) {
+  //     let dates;
+  //     if (EditTraveller?.dateOfBirth) {
+  //       formatDates(EditTraveller?.dateOfBirth);
+  //     }
+  //     // console.log('dates', formatDates(EditTraveller?.dateOfBirth));
+  //     setPhoneNumber(EditTraveller?.phone);
+  //     setFirstName(EditTraveller?.firstName);
+  //     setLastName(EditTraveller?.lastName);
+  //     setAddress(EditTraveller?.address);
+  //     setPlaceOfBirth(EditTraveller?.placeOfBirth);
+  //     setDateOfBirth(formatDates(EditTraveller?.dateOfBirth));
+  //     setEmail(EditTraveller?.email);
+  //     setPasportNumber(EditTraveller?.passport);
+  //     setTypeStatus(EditTraveller?.title);
+  //     setType(EditTraveller?.travellerType);
+  //     setBeneficiary(EditTraveller?.beneficiary);
+  //     setTicketsNumber(EditTraveller?.ticketFlightNumber);
+  //     setRelationship(EditTraveller?.relationship);
+  //   }
+  // }, [EditTraveller]);
 
   // console.log('EditTraveller', EditTraveller);
   const renderCustomInput = ({ ref }) => (
@@ -483,230 +471,230 @@ const Form3 = ({
     setRelationship('');
     setTicketsNumber('');
   };
-  const onSave = async (e) => {
-    e.preventDefault();
-    let i = listTravellers?.listTravellers?.length;
-    let dates = formatDate(
-      `${dateOfBirth?.year}-${dateOfBirth?.month}-${dateOfBirth?.day}`
-    );
-    const now = new Date();
-    const newAdd = {
-      bookingId: listTravellers?.bookingId,
-      firstName: firstName,
-      lastName: lastName,
-      title: typeStatus,
-      travellerType: type,
-      fullName: `${firstName}${lastName}`,
-      email: email,
-      phone: phoneNumber,
-      address: address,
-      passport: pasportNumber,
-      dateOfBirth: dates,
-      placeOfBirth: placeOfBirth,
-      ticketFlightNumber: ticketNumber,
-      flightItinerary: 'New York to London',
-      endorsement: 'Some endorsement text',
-      refundEndorsement: 'Refund endorsement text',
-      beneficiary: beneficiary !== '' ? beneficiary : '',
-      relationship: relationship !== '' ? relationship : '',
-    };
-    // // eslint-disable-next-line no-unsafe-optional-chaining
-    // let travellersData = [...listTravellers?.listTravellers, newAdd];
-    // dispatch(setTravellersData(travellersData));
-    setFirstName('');
-    setLastName('');
-    setPasportNumber('');
-    setPhoneNumber('');
-    setEmail('');
-    setDateOfBirth(null);
-    setPlaceOfBirth('');
-    setAddress('');
-    setBeneficiary('');
-    setRelationship('');
-    setTicketsNumber('');
-    toast({
-      id: 'addTraveller',
-      title: 'Add Traveller Success',
-      status: 'success',
-      position: 'top-right',
-      duration: 3000,
-      isClosable: true,
-      variant: 'solid',
-    });
-    try {
-      const res = await addTravellerData(newAdd);
-      if (res.data) {
-        dispatch(
-          setTravellersData([...listTravellers?.listTravellers, res?.data])
-        );
-      }
-      onClose();
-    } catch (error) {
-      console.log('error adding');
-    }
-  };
-  const onEdit = async (e) => {
-    e.preventDefault();
-    let i = listTravellers?.listTravellers?.length;
-    let dates = formatDate(
-      `${dateOfBirth?.year}-${dateOfBirth?.month}-${dateOfBirth?.day}`
-    );
-    const now = new Date();
-    const newAdd = {
-      id: EditTraveller?.id,
-      bookingId: listTravellers?.bookingId,
-      firstName: firstName,
-      lastName: lastName,
-      title: typeStatus,
-      travellerType: type,
-      fullName: `${firstName}${lastName}`,
-      email: email,
-      phone: phoneNumber,
-      address: address,
-      passport: pasportNumber,
-      dateOfBirth: dates,
-      placeOfBirth: placeOfBirth,
-      ticketFlightNumber: ticketNumber,
-      flightItinerary: 'New York to London',
-      endorsement: 'Some endorsement text',
-      refundEndorsement: 'Refund endorsement text',
-      beneficiary: beneficiary !== '' ? beneficiary : '',
-      relationship: relationship !== '' ? relationship : '',
-    };
-    // // eslint-disable-next-line no-unsafe-optional-chaining
-    // let travellersData = [...listTravellers?.listTravellers, newAdd];
-    // dispatch(setTravellersData(travellersData));
-    setFirstName('');
-    setLastName('');
-    setPasportNumber('');
-    setPhoneNumber('');
-    setEmail('');
-    setDateOfBirth(null);
-    setPlaceOfBirth('');
-    setAddress('');
-    setBeneficiary('');
-    setRelationship('');
-    setTicketsNumber('');
-    toast({
-      id: 'editTraveller',
-      title: 'Edit Traveller Success',
-      status: 'success',
-      position: 'top-right',
-      duration: 3000,
-      isClosable: true,
-      variant: 'solid',
-    });
-    try {
-      const res = await editTravellerData(newAdd);
-      if (res.data) {
-        dispatch(setEditTraveller(null));
-        let travellersData = listTravellers?.listTravellers.map((traveller) => {
-          if (traveller.id === res.data.id) {
-            return traveller;
-          }
-        });
-        dispatch(setMessage(true));
-        // console.log('tra', travellersData);
-        // dispatch(
-        //   setTravellersData([
-        //     ...listTravellers?.listTravellers,
-        //     ...travellersData,
-        //   ])
-        // );
-      }
-      onClose();
-    } catch (error) {
-      console.log('error adding');
-    }
-  };
+  // const onSave = async (e) => {
+  //   e.preventDefault();
+  //   let i = listTravellers?.listTravellers?.length;
+  //   let dates = formatDate(
+  //     `${dateOfBirth?.year}-${dateOfBirth?.month}-${dateOfBirth?.day}`
+  //   );
+  //   const now = new Date();
+  //   const newAdd = {
+  //     bookingId: listTravellers?.bookingId,
+  //     firstName: firstName,
+  //     lastName: lastName,
+  //     title: typeStatus,
+  //     travellerType: type,
+  //     fullName: `${firstName}${lastName}`,
+  //     email: email,
+  //     phone: phoneNumber,
+  //     address: address,
+  //     passport: pasportNumber,
+  //     dateOfBirth: dates,
+  //     placeOfBirth: placeOfBirth,
+  //     ticketFlightNumber: ticketNumber,
+  //     flightItinerary: 'New York to London',
+  //     endorsement: 'Some endorsement text',
+  //     refundEndorsement: 'Refund endorsement text',
+  //     beneficiary: beneficiary !== '' ? beneficiary : '',
+  //     relationship: relationship !== '' ? relationship : '',
+  //   };
+  //   // // eslint-disable-next-line no-unsafe-optional-chaining
+  //   // let travellersData = [...listTravellers?.listTravellers, newAdd];
+  //   // dispatch(setTravellersData(travellersData));
+  //   setFirstName('');
+  //   setLastName('');
+  //   setPasportNumber('');
+  //   setPhoneNumber('');
+  //   setEmail('');
+  //   setDateOfBirth(null);
+  //   setPlaceOfBirth('');
+  //   setAddress('');
+  //   setBeneficiary('');
+  //   setRelationship('');
+  //   setTicketsNumber('');
+  //   toast({
+  //     id: 'addTraveller',
+  //     title: 'Add Traveller Success',
+  //     status: 'success',
+  //     position: 'top-right',
+  //     duration: 3000,
+  //     isClosable: true,
+  //     variant: 'solid',
+  //   });
+  //   try {
+  //     const res = await addTravellerData(newAdd);
+  //     if (res.data) {
+  //       dispatch(
+  //         setTravellersData([...listTravellers?.listTravellers, res?.data])
+  //       );
+  //     }
+  //     onClose();
+  //   } catch (error) {
+  //     console.log('error adding');
+  //   }
+  // };
+  // const onEdit = async (e) => {
+  //   e.preventDefault();
+  //   let i = listTravellers?.listTravellers?.length;
+  //   let dates = formatDate(
+  //     `${dateOfBirth?.year}-${dateOfBirth?.month}-${dateOfBirth?.day}`
+  //   );
+  //   const now = new Date();
+  //   const newAdd = {
+  //     id: EditTraveller?.id,
+  //     bookingId: listTravellers?.bookingId,
+  //     firstName: firstName,
+  //     lastName: lastName,
+  //     title: typeStatus,
+  //     travellerType: type,
+  //     fullName: `${firstName}${lastName}`,
+  //     email: email,
+  //     phone: phoneNumber,
+  //     address: address,
+  //     passport: pasportNumber,
+  //     dateOfBirth: dates,
+  //     placeOfBirth: placeOfBirth,
+  //     ticketFlightNumber: ticketNumber,
+  //     flightItinerary: 'New York to London',
+  //     endorsement: 'Some endorsement text',
+  //     refundEndorsement: 'Refund endorsement text',
+  //     beneficiary: beneficiary !== '' ? beneficiary : '',
+  //     relationship: relationship !== '' ? relationship : '',
+  //   };
+  //   // // eslint-disable-next-line no-unsafe-optional-chaining
+  //   // let travellersData = [...listTravellers?.listTravellers, newAdd];
+  //   // dispatch(setTravellersData(travellersData));
+  //   setFirstName('');
+  //   setLastName('');
+  //   setPasportNumber('');
+  //   setPhoneNumber('');
+  //   setEmail('');
+  //   setDateOfBirth(null);
+  //   setPlaceOfBirth('');
+  //   setAddress('');
+  //   setBeneficiary('');
+  //   setRelationship('');
+  //   setTicketsNumber('');
+  //   toast({
+  //     id: 'editTraveller',
+  //     title: 'Edit Traveller Success',
+  //     status: 'success',
+  //     position: 'top-right',
+  //     duration: 3000,
+  //     isClosable: true,
+  //     variant: 'solid',
+  //   });
+  //   try {
+  //     const res = await editTravellerData(newAdd);
+  //     if (res.data) {
+  //       dispatch(setEditTraveller(null));
+  //       let travellersData = listTravellers?.listTravellers.map((traveller) => {
+  //         if (traveller.id === res.data.id) {
+  //           return traveller;
+  //         }
+  //       });
+  //       dispatch(setMessage(true));
+  //       // console.log('tra', travellersData);
+  //       // dispatch(
+  //       //   setTravellersData([
+  //       //     ...listTravellers?.listTravellers,
+  //       //     ...travellersData,
+  //       //   ])
+  //       // );
+  //     }
+  //     onClose();
+  //   } catch (error) {
+  //     console.log('error adding');
+  //   }
+  // };
 
-  React.useEffect(() => {
-    let timer;
+  // React.useEffect(() => {
+  //   let timer;
 
-    if (message) {
-      timer = setTimeout(() => {
-        dispatch(setMessage(false));
-      }, 2000);
-    }
+  //   if (message) {
+  //     timer = setTimeout(() => {
+  //       dispatch(setMessage(false));
+  //     }, 2000);
+  //   }
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [dispatch, message]);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [dispatch, message]);
 
-  // console.log('newlistTravellers', newlistTravellers);
-  React.useEffect(() => {
-    if (newlistTravellers) {
-      dispatch(setTravellersData([...newlistTravellers]));
-    }
-  }, [dispatch, newlistTravellers]);
+  // // console.log('newlistTravellers', newlistTravellers);
+  // React.useEffect(() => {
+  //   if (newlistTravellers) {
+  //     dispatch(setTravellersData([...newlistTravellers]));
+  //   }
+  // }, [dispatch, newlistTravellers]);
 
-  const handleAddTraveller = () => {
-    dispatch(setEditTraveller(null));
-    onOpen();
-  };
+  // const handleAddTraveller = () => {
+  //   dispatch(setEditTraveller(null));
+  //   onOpen();
+  // };
 
-  function formatDateToLong(dateString) {
-    const monthNames = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
+  // function formatDateToLong(dateString) {
+  //   const monthNames = [
+  //     'January',
+  //     'February',
+  //     'March',
+  //     'April',
+  //     'May',
+  //     'June',
+  //     'July',
+  //     'August',
+  //     'September',
+  //     'October',
+  //     'November',
+  //     'December',
+  //   ];
 
-    const dateObj = new Date(dateString);
-    const day = dateObj.getDate();
-    const monthIndex = dateObj.getMonth();
-    const year = dateObj.getFullYear();
-    const monthName = monthNames[monthIndex];
+  //   const dateObj = new Date(dateString);
+  //   const day = dateObj.getDate();
+  //   const monthIndex = dateObj.getMonth();
+  //   const year = dateObj.getFullYear();
+  //   const monthName = monthNames[monthIndex];
 
-    const formattedDate = `${day} ${monthName} ${year}`;
-    return formattedDate;
-  }
+  //   const formattedDate = `${day} ${monthName} ${year}`;
+  //   return formattedDate;
+  // }
 
-  const handleDelete = async (id) => {
-    console.log('idd', id);
-    // e.preventDefault();
-    try {
-      const res = await deleteTravellerData(id.id);
-      const idx = 'deletetraveller';
-      // console.log('red del', res);
-      if (res.data === null) {
-        if (!toast.isActive(idx)) {
-          toast({
-            id: 'deletetraveller',
-            title: 'Delete Success',
-            status: 'success',
-            position: 'top-right',
-            duration: 3000,
-            isClosable: true,
-            variant: 'solid',
-          });
-        }
-        setTriggerGetList(true);
-        refetch(id.id);
-        // navigate('/master-data/travel-agent');
-      }
-    } catch (err) {
-      toast({
-        id: 'deletetraveller',
-        title: `${err?.originalStatus}`,
-        status: 'error',
-        position: 'top-right',
-        duration: 3000,
-        isClosable: true,
-        variant: 'solid',
-      });
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   console.log('idd', id);
+  //   // e.preventDefault();
+  //   try {
+  //     const res = await deleteTravellerData(id.id);
+  //     const idx = 'deletetraveller';
+  //     // console.log('red del', res);
+  //     if (res.data === null) {
+  //       if (!toast.isActive(idx)) {
+  //         toast({
+  //           id: 'deletetraveller',
+  //           title: 'Delete Success',
+  //           status: 'success',
+  //           position: 'top-right',
+  //           duration: 3000,
+  //           isClosable: true,
+  //           variant: 'solid',
+  //         });
+  //       }
+  //       setTriggerGetList(true);
+  //       refetch(id.id);
+  //       // navigate('/master-data/travel-agent');
+  //     }
+  //   } catch (err) {
+  //     toast({
+  //       id: 'deletetraveller',
+  //       title: `${err?.originalStatus}`,
+  //       status: 'error',
+  //       position: 'top-right',
+  //       duration: 3000,
+  //       isClosable: true,
+  //       variant: 'solid',
+  //     });
+  //   }
+  // };
 
   React.useEffect(() => {
     if (deleted && triggerGetList) {
@@ -1124,11 +1112,11 @@ const Form3 = ({
             <Button
               colorScheme="blue"
               mr={3}
-              onClick={EditTraveller !== null ? onEdit : onSave}
+              // onClick={EditTraveller !== null ? onEdit : onSave}
               disabled={loadingEdit || loadingAdd}
               isLoading={loadingEdit || loadingAdd}
             >
-              {EditTraveller !== null ? 'Edit' : 'Add'}
+              {/* {EditTraveller !== null ? 'Edit' : 'Add'} */}
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -1339,7 +1327,7 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                     pl="5px"
                   >
-                    {formatDateToLong(payload?.from)}
+                    {/* {formatDateToLong(payload?.from)} */}
                   </Text>
                 </Box>
                 <Box
@@ -1366,7 +1354,7 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                     pl="5px"
                   >
-                    {formatDateToLong(payload?.to)}
+                    {/* {formatDateToLong(payload?.to)} */}
                   </Text>
                 </Box>
               </Box>
