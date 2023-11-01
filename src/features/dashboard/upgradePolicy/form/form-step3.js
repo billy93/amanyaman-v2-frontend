@@ -25,7 +25,7 @@ import {
   selectManualInput,
   selectedTravelInsurance,
   setSelectTravelInsurancePlan,
-} from '../quotaSearchSlice';
+} from '../upgradeQuotaSearchSlice';
 import {
   useGetListTravellerQuery,
   useGetTemplateQuery,

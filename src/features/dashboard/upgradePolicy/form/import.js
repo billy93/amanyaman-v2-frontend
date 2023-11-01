@@ -12,7 +12,7 @@ import {
   ModalContent,
   ModalCloseButton,
 } from '@chakra-ui/react';
-import { setMessage } from '../quotaSearchSlice';
+import { setMessage } from '../upgradeQuotaSearchSlice';
 import { MdLogin } from 'react-icons/md';
 import { useImportFileMutation } from '../policyApiSlice';
 import DownloadBtn from './download';

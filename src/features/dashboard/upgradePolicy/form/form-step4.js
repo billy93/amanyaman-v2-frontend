@@ -11,7 +11,7 @@ import {
   usePaymentProccedMutation,
   useCheckAvailabilityCreditMutation,
 } from '../policyApiSlice';
-import { selectManualInput } from '../quotaSearchSlice';
+import { selectManualInput } from '../upgradeQuotaSearchSlice';
 
 import UseCustomToast from '../../../../components/UseCustomToast';
 import {
