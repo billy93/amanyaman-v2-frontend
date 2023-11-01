@@ -350,8 +350,7 @@ const Form2 = ({
               boxShadow={'0px 0px 5px 5px rgba(153, 180, 206, 0.2)'}
               p="20px"
               border={
-                products.productId ===
-                selectedInsurance?.bookingProduct?.product?.id
+                products.id === selectedInsurance?.bookingProduct?.product?.id
                   ? '2px solid #065BAA'
                   : ''
               }
