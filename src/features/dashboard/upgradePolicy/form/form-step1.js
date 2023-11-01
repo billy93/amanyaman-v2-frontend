@@ -173,10 +173,14 @@ const Form1 = ({
   // }, [quotation, dispatch]);
 
   const handleTypeTrip = (type) => {
+    const coverType = type === 'Single Trip' ? 'SINGLE_TRIP' : 'ANNUAL_TRIP';
+    const travellers = {
+      name: coverType,
+    };
     dispatch(
       setUpgradeData({
-        ...quotation,
-        travellerType: { name: type },
+        ...initState,
+        travellerType: { ...initState?.travellerType, travellers },
       })
     );
   };
@@ -355,10 +359,10 @@ const Form1 = ({
     </>
   );
   const selectDate = (date) => {
-    console.log('sssett', date);
+    // console.log('sssett', date);
     dispatch(
       setUpgradeData({
-        ...quotation,
+        ...initState,
         from: date,
       })
     );
@@ -375,8 +379,8 @@ const Form1 = ({
   const selectEndDate = (date) => {
     dispatch(
       setUpgradeData({
-        ...quotation,
-        toolbar: date,
+        ...initState,
+        to: date,
       })
     );
 
@@ -434,7 +438,7 @@ const Form1 = ({
       newDay = 1;
       dispatch(
         setUpgradeData({
-          ...quotation,
+          ...initState,
           to: {
             year: newYear,
             month: newMonth > 12 ? 1 : newMonth,
@@ -445,7 +449,7 @@ const Form1 = ({
     } else {
       dispatch(
         setUpgradeData({
-          ...quotation,
+          ...initState,
           to: {
             year: year,
             month: month,
@@ -481,7 +485,7 @@ const Form1 = ({
     };
     dispatch(
       setUpgradeData({
-        ...quotation,
+        ...initState,
         to: updatedDate,
       })
     );
@@ -502,7 +506,7 @@ const Form1 = ({
         //   dispatch(setFormStateAdult(2));
         dispatch(
           setUpgradeData({
-            ...quotation,
+            ...initState,
             adt: 2,
           })
         );
@@ -510,14 +514,14 @@ const Form1 = ({
         //   dispatch(setFormStateAdult(1));
         dispatch(
           setUpgradeData({
-            ...quotation,
+            ...initState,
             adt: 1,
           })
         );
       }
       dispatch(
         setUpgradeData({
-          ...quotation,
+          ...initState,
           chd: 1,
         })
       );
@@ -528,7 +532,7 @@ const Form1 = ({
   React.useEffect(() => {
     // if (prevTypeCov !== initState?.coverType) {
     if (initState && initState?.coverType === 'SINGLE_TRIP') {
-      const date = { ...initState?.endDate };
+      const date = { ...initState?.to };
       // dispatch();
       // setFormEndDate({
       //   endDate: {
