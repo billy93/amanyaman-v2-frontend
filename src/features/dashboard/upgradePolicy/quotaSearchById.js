@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { useSelector, dispatch, useDispatch } from 'react-redux';
+import PageLoader from '../../../components/pageLoader';
 import {
   userLoginCurrent,
   historyForm,
@@ -238,20 +239,20 @@ const QuotaSearchById = () => {
 
   React.useEffect(() => {
     if (quotation !== undefined) {
-      console.log('babiii', quotation);
-      dispatch(setUpgradeData({ ...quotation }));
+      // console.log('babiii', quotation);
+      const data = {
+        ...quotation,
+        from: convertDateToObject(quotation.from),
+        to: convertDateToObject(quotation.to),
+      };
+      console.log('tan setan', data);
+      dispatch(setUpgradeData(data));
     }
   }, [quotation, dispatch]);
 
   let content;
   if (loading) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <Text as={'p'} size="xs">
-          Loading...
-        </Text>
-      </Center>
-    );
+    content = <PageLoader loading={loading} />;
   } else if (quotation) {
     content = (
       <Box mt="4em">
