@@ -81,13 +81,13 @@ const Form2 = ({
   // console.log('activeStep', activeStep);
 
   const selectProduct = (data) => {
-    dispatch(
-      setUpgradeData({
-        ...selectedInsurance,
-        ...selectedInsurance.bookingProduct,
-        product: { ...data },
-      })
-    );
+    const dataUpgrade = {
+      ...selectedInsurance,
+      ...selectedInsurance?.bookingProduct,
+      ...selectedInsurance?.bookingProduct?.product,
+      ...data,
+    };
+    dispatch(setUpgradeData(dataUpgrade));
   };
   // eslint-disable-next-line no-unused-vars
   const SelectInsurancePlan = (e) => {
