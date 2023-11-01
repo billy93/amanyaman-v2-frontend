@@ -93,6 +93,7 @@ const Form2 = ({
       setUpgradeData({
         ...selectedInsurance,
         ...selectedInsurance?.bookingProduct,
+        ...selectedInsurance?.bookingProduct?.product,
         ...dataUpgrade,
       })
     );
