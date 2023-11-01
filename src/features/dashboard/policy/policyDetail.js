@@ -57,6 +57,7 @@ import {
   useDownloadPolicyQuery,
   useDownloadProformaQuery,
 } from './policyApiSlice';
+import { useGetBookingSearchQuery } from '../upgradePolicy/policyApiSlice';
 import {
   setUpgradeData,
   travellerUpgrade,
@@ -147,6 +148,7 @@ const PolicyDetail = () => {
     refetch,
     isSuccess,
   } = useGetBookingByIdQuery(id);
+  const { data: upgraded } = useGetBookingSearchQuery(id);
   const [onTrigger, setOnTrigger] = useState(true);
   const [onTriggerDownload, setOnTriggerDownload] = useState(true);
   const [onTriggerView, setOnTriggerView] = useState(true);
@@ -341,16 +343,16 @@ const PolicyDetail = () => {
   }
 
   React.useEffect(() => {
-    if (quotation !== undefined) {
+    if (upgraded !== undefined) {
       const data = {
-        ...quotation,
-        from: convertDateToObject(quotation.from),
-        to: convertDateToObject(quotation.to),
+        ...upgraded,
+        from: convertDateToObject(upgraded.from),
+        to: convertDateToObject(upgraded.to),
       };
       // console.log('tan setan', data);
       dispatch(setUpgradeData(data));
     }
-  }, [quotation]);
+  }, [upgraded]);
 
   // console.log('tan setan s', quotation);
   // console.log('tan setan stateUpgrade', stateUpgrade);
