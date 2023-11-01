@@ -366,16 +366,17 @@ const Form1 = ({
         from: date,
       })
     );
-
-    // if (initState?.coverType === 'SINGLE_TRIP') {
-    //   addOneDayLater(date);
-    // }
     if (date !== null) {
       //   setActive(true)
     } else {
       //   setActive(false)
     }
   };
+  React.useEffect(() => {
+    if (initState?.coverType === 'SINGLE_TRIP') {
+      addOneDayLater(initState?.from);
+    }
+  }, [initState?.from]);
   const selectEndDate = (date) => {
     console.log('sssettss', date);
     dispatch(
