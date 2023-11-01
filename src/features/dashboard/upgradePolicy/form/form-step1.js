@@ -36,7 +36,10 @@ import {
   FormLabel,
   Image,
 } from '@chakra-ui/react';
-import { listcountries } from '../../quota-search/quotaSearchSlice';
+import {
+  listcountries,
+  setListCountries,
+} from '../../quota-search/quotaSearchSlice';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Select } from 'chakra-react-select';
 import DatePicker from '@hassanmojab/react-modern-calendar-datepicker';
@@ -251,12 +254,7 @@ const Form1 = ({
         label: obj.countryName,
         value: obj.countryName,
       }));
-      dispatch(
-        setUpgradeData({
-          ...quotation,
-          destinations: [...quotation.destinations, countriesList],
-        })
-      );
+      dispatch(setListCountries(countriesList));
     }
   }, [countries, dispatch]);
 
@@ -594,6 +592,16 @@ const Form1 = ({
   const handleBack = () => {
     navigate(-1);
   };
+  function handleSelect(data) {
+    // const data = data
+    const d = data;
+    dispatch(
+      setUpgradeData({
+        ...initState,
+        destinations: [initState?.destinations, ...d],
+      })
+    );
+  }
   return (
     <Box border={'1px'} borderColor="#ebebeb">
       <Box
@@ -730,7 +738,7 @@ const Form1 = ({
                   size="lg"
                   isMulti
                   variant="outline"
-                  // onChange={handleSelect}
+                  onChange={handleSelect}
                   value={initState?.destinations}
                   isSearchable={true}
                   styles={{
