@@ -17,6 +17,7 @@ import {
   setUpgradeData,
   travellerUpgrade,
   setUpgradeDataProducts,
+  upgradeListTravellers,
 } from '../upgradeQuotaSearchSlice';
 import {
   Text,
@@ -88,6 +89,7 @@ const Form1 = ({
   const [persist, setPersist] = usePersist();
   const historyForms = useSelector(historyForm);
   const login = useSelector(userLoginCurrent);
+  const initStateListTravellers = useSelector(upgradeListTravellers);
   const listCountries = useSelector(listcountries);
   const { data: { response: countries } = {} } = useGetListCountriesQuery();
   const [searchproducts, { isLoading }] = useSearchproductsMutation();
@@ -1153,7 +1155,7 @@ const Form1 = ({
                   >
                     {'x'}
                     {initState?.travellerType?.name === 'Group'
-                      ? parseInt(initState?.adt) + parseInt(initState?.chd)
+                      ? initStateListTravellers?.length
                       : 1}
                   </Text>
                 </Box>

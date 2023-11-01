@@ -12,7 +12,11 @@ import {
   usePaymentProccedMutation,
   useCheckAvailabilityCreditMutation,
 } from '../policyApiSlice';
-import { setUpgradeData, travellerUpgrade } from '../upgradeQuotaSearchSlice';
+import {
+  setUpgradeData,
+  travellerUpgrade,
+  upgradeListTravellers,
+} from '../upgradeQuotaSearchSlice';
 
 import UseCustomToast from '../../../../components/UseCustomToast';
 import {
@@ -67,7 +71,8 @@ const Form3 = ({
   // const [persist] = usePersist();
   // const checkToken = localStorage.getItem('persist').token;
   const login = useSelector(userLoginCurrent);
-  const initState = useSelector(selectManualInput);
+  const initState = useSelector(travellerUpgrade);
+  const initStateListTravellers = useSelector(upgradeListTravellers);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
   const [paymentProcced, { isLoading }] = usePaymentProccedMutation();
   const [checkAvailabilityCredit, { isLoading: loading }] =
@@ -409,7 +414,7 @@ const Form3 = ({
                   color="#065BAA"
                   style={{ fontSize: '12px' }}
                 >
-                  {initState?.selectInsurancePlan?.productName}
+                  {initState?.bookingProduct?.productName}
                 </Text>
               </Box>
             </Box>
@@ -446,11 +451,11 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                     gap="1em"
                   >
-                    {initState?.coverageType}
+                    {initState?.coverType}
                   </Text>
                 </Box>
                 <Box display={'flex'} gap="2px" flexWrap={'nowrap'}>
-                  {initState?.destinationCountry?.map((country, i) => {
+                  {initState?.destinations?.map((country, i) => {
                     return (
                       <Text
                         key={i}
@@ -518,7 +523,7 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     <CurrencyFormatter
-                      amount={initState?.selectInsurancePlan?.finalPrice}
+                      amount={initState?.bookingProduct?.finalPrice}
                     />
                   </Text>
                 </Box>
@@ -547,7 +552,7 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     <CurrencyFormatter
-                      amount={initState?.selectInsurancePlan?.finalPrice}
+                      amount={initState?.bookingProduct?.finalPrice}
                     />
                   </Text>
                 </Box>
@@ -576,8 +581,8 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     {'x'}
-                    {payload?.travellerType !== 'Group'
-                      ? newlistTravellers?.length
+                    {initState?.travellerType?.name === 'Group'
+                      ? initStateListTravellers?.length
                       : 1}
                   </Text>
                 </Box>
@@ -605,8 +610,8 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {payload?.stampDuty > 0 ? (
-                      <CurrencyFormatter amount={payload?.stampDuty} />
+                    {initState?.stampDuty > 0 ? (
+                      <CurrencyFormatter amount={initState?.stampDuty} />
                     ) : (
                       'IDR 0'
                     )}
@@ -636,8 +641,8 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {payload?.stampDuty > 0 ? (
-                      <CurrencyFormatter amount={payload?.stampDuty} />
+                    {initState?.stampDuty > 0 ? (
+                      <CurrencyFormatter amount={initState?.stampDuty} />
                     ) : (
                       'IDR 0'
                     )}

@@ -129,9 +129,11 @@ const Form2 = ({
   const handleNext = async (e) => {
     const payload = {
       bookingId: id,
-      travellers: filterObjectsWithProperty(listTravellers, 'id'),
+      travellers: listTravellers?.map((v) => {
+        return { id: v.id };
+      }),
       coverType: selectedInsurance.coverType,
-      travellerType: { ...selectedInsurance?.travellerType?.id },
+      travellerType: { ...selectedInsurance?.travellerType },
       from: `${selectedInsurance?.from.year}-${paddedMonth}-${paddedDay}`,
       to: `${selectedInsurance?.to.year}-${paddedEndMonth}-${paddedEndDay}`,
       destinations: selectedInsurance?.destinations.map((v) => {
@@ -345,7 +347,7 @@ const Form2 = ({
               p="20px"
               border={
                 products.productId ===
-                selectedInsurance?.bookingProduct?.product?.id
+                selectedInsurance?.bookingProduct?.product?.productId
                   ? '2px solid #065BAA'
                   : ''
               }
