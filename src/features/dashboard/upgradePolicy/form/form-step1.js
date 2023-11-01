@@ -530,47 +530,47 @@ const Form1 = ({
     }
   }, [initState?.travellerType, prevType, dispatch]);
 
-  React.useEffect(() => {
-    // if (prevTypeCov !== initState?.coverType) {
-    if (initState && initState?.coverType === 'SINGLE_TRIP') {
-      const date = { ...initState?.to };
-      dispatch(
-        setUpgradeData({
-          to: {
-            ...initState?.from,
-            day: initState?.from.day + 1,
-          },
-        })
-      );
-    } else if (initState?.coverType === 'ANNUAL_TRIP') {
-      addOneYear({ ...initState?.from });
-    }
-    // }
-  }, [
-    initState?.coverType,
-    prevTypeCov,
-    dispatch,
-    initState?.to,
-    initState?.from,
-    addOneYear,
-  ]);
-  const prevDate = usePrevious(initState?.from?.day);
-  React.useEffect(() => {
-    if (
-      prevDate !== initState?.from?.day &&
-      initState?.coverType === 'ANNUAL_TRIP'
-    ) {
-      addOneYear({ ...initState?.from });
-    }
-  }, [
-    initState?.coverType,
-    initState?.from,
-    prevDate,
-    dispatch,
-    initState?.to,
-    initState?.from,
-    addOneYear,
-  ]);
+  // React.useEffect(() => {
+  //   if (prevTypeCov !== initState?.coverType) {
+  //   if (initState && initState?.coverType === 'SINGLE_TRIP') {
+  //     const date = { ...initState?.to };
+  //     dispatch(
+  //       setUpgradeData({
+  //         to: {
+  //           ...initState?.from,
+  //           day: initState?.from.day + 1,
+  //         },
+  //       })
+  //     );
+  //   } else if (initState?.coverType === 'ANNUAL_TRIP') {
+  //     addOneYear({ ...initState?.from });
+  //   }
+  //   }
+  // }, [
+  //   initState?.coverType,
+  //   prevTypeCov,
+  //   dispatch,
+  //   initState?.to,
+  //   initState?.from,
+  //   addOneYear,
+  // ]);
+  // const prevDate = usePrevious(initState?.from?.day);
+  // React.useEffect(() => {
+  //   if (
+  //     prevDate !== initState?.from?.day &&
+  //     initState?.coverType === 'ANNUAL_TRIP'
+  //   ) {
+  //     addOneYear({ ...initState?.from });
+  //   }
+  // }, [
+  //   initState?.coverType,
+  //   initState?.from,
+  //   prevDate,
+  //   dispatch,
+  //   initState?.to,
+  //   initState?.from,
+  //   addOneYear,
+  // ]);
 
   const currentDate = new Date();
 
