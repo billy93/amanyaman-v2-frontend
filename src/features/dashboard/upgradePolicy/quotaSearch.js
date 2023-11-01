@@ -6,6 +6,7 @@ import {
   setHistoryForm,
   setCredentials,
 } from '../../auth/authSlice';
+import PageLoader from '../../../components/pageLoader';
 import Forms from './form/form';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import {
@@ -27,23 +28,7 @@ import {
 } from './policyApiSlice';
 import { useGetBookingByIdQuery } from '../policy/policyApiSlice';
 
-import {
-  setMessage,
-  messages,
-  setTravellersData,
-  FillTravellersData,
-  setBookingId,
-  quotState,
-  setFormStateCoverageType,
-  setFormStateTravellerType,
-  setFormStateAdult,
-  setFormEndDate,
-  setFormStateStartDate,
-  setFormStateCoverageChild,
-  setFormStateDestinationCountry,
-  setStepActive,
-  setUpgradeData,
-} from '../quota-search/quotaSearchSlice';
+import { setUpgradeData } from './upgradeQuotaSearchSlice';
 import React from 'react';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 
@@ -66,9 +51,9 @@ const QuotaSearchById = () => {
   const navigate = useNavigate();
   const historysbumit = useSelector(historyForm);
   const [persist] = usePersist();
-  const messagesTraveller = useSelector(messages);
-  const list = useSelector(FillTravellersData);
-  const prevListTraveller = usePrevious(list?.listTravellers);
+  // const messagesTraveller = useSelector(messages);
+  // const list = useSelector(FillTravellersData);
+  // const prevListTraveller = usePrevious(list?.listTravellers);
   // const [skipListTraveller, setSkipListTrave] = React.useState(false);
   const dispatch = useDispatch();
   const { id, policyNumberString } = useParams();
@@ -132,57 +117,57 @@ const QuotaSearchById = () => {
     }
   }, [quotation, dispatch]);
 
-  React.useEffect(() => {
-    if (id) {
-      let coverType =
-        data?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Anual Trip';
-      // console.log('coverType', coverType);
-      dispatch(setFormStateCoverageType(coverType));
+  // React.useEffect(() => {
+  //   if (id) {
+  //     let coverType =
+  //       data?.coverType === 'SINGLE_TRIP' ? 'Single Trip' : 'Anual Trip';
+  //     // console.log('coverType', coverType);
+  //     dispatch(setFormStateCoverageType(coverType));
 
-      dispatch(setFormStateTravellerType(data?.travellerType?.name));
-      let adult = Number(data?.adt);
-      dispatch(setFormStateAdult(adult));
+  //     dispatch(setFormStateTravellerType(data?.travellerType?.name));
+  //     let adult = Number(data?.adt);
+  //     dispatch(setFormStateAdult(adult));
 
-      if (data?.from) {
-        let from = formatDate(data?.from);
-        // console.log('from', from);
-        dispatch(
-          setFormStateStartDate({
-            startDate: from,
-          })
-        );
-      }
+  //     if (data?.from) {
+  //       let from = formatDate(data?.from);
+  //       // console.log('from', from);
+  //       dispatch(
+  //         setFormStateStartDate({
+  //           startDate: from,
+  //         })
+  //       );
+  //     }
 
-      if (data?.to) {
-        let to = formatDate(data?.to);
-        dispatch(
-          setFormEndDate({
-            endDate: to,
-          })
-        );
-      }
-      let chd = Number(data?.chd);
-      dispatch(setFormStateCoverageChild(chd));
-      if (data?.destinations) {
-        let countries = data?.destinations?.map((country) => ({
-          ...country,
-          value: country.countryName,
-          label: country.countryName,
-        }));
-        dispatch(
-          setFormStateDestinationCountry({
-            country: countries,
-          })
-        );
-      }
-      let travellersData = {
-        ...list,
-        bookingId: id,
-      };
+  //     if (data?.to) {
+  //       let to = formatDate(data?.to);
+  //       dispatch(
+  //         setFormEndDate({
+  //           endDate: to,
+  //         })
+  //       );
+  //     }
+  //     let chd = Number(data?.chd);
+  //     dispatch(setFormStateCoverageChild(chd));
+  //     if (data?.destinations) {
+  //       let countries = data?.destinations?.map((country) => ({
+  //         ...country,
+  //         value: country.countryName,
+  //         label: country.countryName,
+  //       }));
+  //       dispatch(
+  //         setFormStateDestinationCountry({
+  //           country: countries,
+  //         })
+  //       );
+  //     }
+  //     let travellersData = {
+  //       ...list,
+  //       bookingId: id,
+  //     };
 
-      dispatch(setBookingId(travellersData));
-    }
-  }, [id, dispatch, data, listTravellers]);
+  //     dispatch(setBookingId(travellersData));
+  //   }
+  // }, [id, dispatch, data, listTravellers]);
 
   const isLastStep = activeStep === steps.length - 1;
   const hasCompletedAllSteps = activeStep === steps.length;
@@ -203,31 +188,31 @@ const QuotaSearchById = () => {
     persistedQuotaSearchJSON
   )?.quotaSearch;
 
-  React.useEffect(() => {
-    if (id) {
-      setStepActive(persistedQuotaSearch);
-      dispatch(setHistoryForm(historysbumit));
-      // dispatch(setFormStateCoverageType(historysbumit));
-    }
-  }, [id, persistedQuotaSearch, dispatch, historysbumit]);
+  // React.useEffect(() => {
+  //   if (id) {
+  //     setStepActive(persistedQuotaSearch);
+  //     dispatch(setHistoryForm(historysbumit));
+  //     // dispatch(setFormStateCoverageType(historysbumit));
+  //   }
+  // }, [id, persistedQuotaSearch, dispatch, historysbumit]);
 
-  React.useEffect(() => {
-    if (id) {
-      if (messagesTraveller) {
-        refetch(id);
-      }
-    }
-  }, [messagesTraveller, id, refetch]);
+  // React.useEffect(() => {
+  //   if (id) {
+  //     if (messagesTraveller) {
+  //       refetch(id);
+  //     }
+  //   }
+  // }, [messagesTraveller, id, refetch]);
 
-  React.useEffect(() => {
-    // After 2 seconds, update the message
-    const timeoutId = setTimeout(() => {
-      dispatch(setMessage(false));
-    }, 2000);
+  // React.useEffect(() => {
+  //   // After 2 seconds, update the message
+  //   const timeoutId = setTimeout(() => {
+  //     dispatch(setMessage(false));
+  //   }, 2000);
 
-    // Clean up the timeout when the component unmounts or when the effect runs again
-    return () => clearTimeout(timeoutId);
-  }, [messagesTraveller, dispatch]); // Empty dependency array ensures the effect runs only once after mount
+  //   // Clean up the timeout when the component unmounts or when the effect runs again
+  //   return () => clearTimeout(timeoutId);
+  // }, [messagesTraveller, dispatch]); // Empty dependency array ensures the effect runs only once after mount
 
   console.log('quotation setan', quotation);
 
@@ -235,21 +220,15 @@ const QuotaSearchById = () => {
     navigate(-1);
   };
 
-  React.useEffect(() => {
-    if (listTravellers) {
-      dispatch(setTravellersData([...listTravellers]));
-    }
-  }, [listTravellers, dispatch]);
+  // React.useEffect(() => {
+  //   if (listTravellers) {
+  //     dispatch(setTravellersData([...listTravellers]));
+  //   }
+  // }, [listTravellers, dispatch]);
 
   let content;
   if (!user) {
-    content = (
-      <Center h="50vh" color="#065BAA">
-        <Text as={'p'} size="xs">
-          Loading...
-        </Text>
-      </Center>
-    );
+    content = <PageLoader loading={loading} />;
   } else if (user) {
     content = (
       <Box mt="4em">
