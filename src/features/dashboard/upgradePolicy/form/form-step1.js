@@ -598,7 +598,8 @@ const Form1 = ({
     dispatch(
       setUpgradeData({
         ...initState,
-        destinations: [{ ...initState?.destinations }, { ...d }],
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        destinations: [...initState?.destinations, d],
       })
     );
   }
