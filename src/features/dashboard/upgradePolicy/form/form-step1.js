@@ -599,7 +599,7 @@ const Form1 = ({
       setUpgradeData({
         ...initState,
         // eslint-disable-next-line no-unsafe-optional-chaining
-        destinations: [...initState?.destinations, d],
+        destinations: [...initState?.destinations, ...d],
       })
     );
   }
