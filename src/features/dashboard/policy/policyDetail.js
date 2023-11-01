@@ -57,6 +57,7 @@ import {
   useDownloadPolicyQuery,
   useDownloadProformaQuery,
 } from './policyApiSlice';
+import { setUpgradeData } from '../upgradePolicy/upgradeQuotaSearchSlice';
 import Files from '../../../img/images/Files.png';
 import Plan from '../../../img/images/Plane.png';
 import Pasport from '../../../img/images/Passport.png';
@@ -327,6 +328,23 @@ const PolicyDetail = () => {
       if (messages === 'fulfilled') {
         onClose();
       }
+    }
+  }, [messages, prevMessage]);
+
+  function convertDateToObject(dateString) {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return { year, month, day };
+  }
+
+  React.useEffect(() => {
+    if (quotation) {
+      const data = {
+        ...quotation,
+        from: convertDateToObject(quotation.from),
+        to: convertDateToObject(quotation.to),
+      };
+      console.log('tan setan', data);
+      dispatch(setUpgradeData(data));
     }
   }, [messages, prevMessage]);
 
