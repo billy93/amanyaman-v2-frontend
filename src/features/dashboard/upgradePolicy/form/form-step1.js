@@ -599,11 +599,12 @@ const Form1 = ({
   function handleSelect(data) {
     // const data = data
     const d = data;
+    console.log('dd', d);
     dispatch(
       setUpgradeData({
         ...initState,
         // eslint-disable-next-line no-unsafe-optional-chaining
-        destinations: d,
+        destinations: [...d],
       })
     );
   }
