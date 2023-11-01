@@ -347,13 +347,13 @@ const PolicyDetail = () => {
         from: convertDateToObject(quotation.from),
         to: convertDateToObject(quotation.to),
       };
-      console.log('tan setan', data);
+      // console.log('tan setan', data);
       dispatch(setUpgradeData(data));
     }
   }, [quotation]);
 
-  console.log('tan setan s', quotation);
-  console.log('tan setan stateUpgrade', stateUpgrade);
+  // console.log('tan setan s', quotation);
+  // console.log('tan setan stateUpgrade', stateUpgrade);
 
   React.useEffect(() => {
     let timer;

@@ -528,20 +528,20 @@ const Form1 = ({
   }, [initState?.travellerType, prevType, dispatch]);
 
   React.useEffect(() => {
-    if (prevTypeCov !== initState?.coverType) {
-      if (initState?.coverType === 'SINGLE_TRIP') {
-        const date = { ...initState?.endDate };
-        dispatch();
-        // setFormEndDate({
-        //   endDate: {
-        //     ...initState?.from,
-        //     day: initState?.startDate.day + 1,
-        //   },
-        // })
-      } else if (initState?.coverType === 'ANNUAL_TRIP') {
-        addOneYear({ ...initState?.from });
-      }
+    // if (prevTypeCov !== initState?.coverType) {
+    if (initState && initState?.coverType === 'SINGLE_TRIP') {
+      const date = { ...initState?.endDate };
+      // dispatch();
+      // setFormEndDate({
+      //   endDate: {
+      //     ...initState?.from,
+      //     day: initState?.startDate.day + 1,
+      //   },
+      // })
+    } else if (initState?.coverType === 'ANNUAL_TRIP') {
+      addOneYear({ ...initState?.from });
     }
+    // }
   }, [
     initState?.coverType,
     prevTypeCov,
