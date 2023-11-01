@@ -598,7 +598,7 @@ const Form1 = ({
     dispatch(
       setUpgradeData({
         ...initState,
-        destinations: [initState?.destinations, ...d],
+        destinations: [{ ...initState?.destinations }, { ...d }],
       })
     );
   }
