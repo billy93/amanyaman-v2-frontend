@@ -57,7 +57,7 @@ import {
   useDownloadPolicyQuery,
   useDownloadProformaQuery,
 } from './policyApiSlice';
-import { setUpgradeData } from '../upgradePolicy/upgradeQuotaSearchSlice';
+import { setUpgradeData } from '../quota-search/quotaSearchSlice';
 import Files from '../../../img/images/Files.png';
 import Plan from '../../../img/images/Plane.png';
 import Pasport from '../../../img/images/Passport.png';
@@ -347,6 +347,8 @@ const PolicyDetail = () => {
       dispatch(setUpgradeData(data));
     }
   }, [messages, prevMessage]);
+
+  console.log('tan setan s', quotation);
 
   React.useEffect(() => {
     let timer;
