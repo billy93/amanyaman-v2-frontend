@@ -889,7 +889,7 @@ const PolicyDetail = () => {
                                                 transform:
                                                   travellers &&
                                                   travellers?.type?.length > 0
-                                                    ? 'translate(0, 13px) scale(0.75)'
+                                                    ? 'translate(0, -1px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
@@ -966,7 +966,7 @@ const PolicyDetail = () => {
                                                 transform:
                                                   travellers &&
                                                   travellers?.label?.length > 0
-                                                    ? 'translate(0, 13px) scale(0.75)'
+                                                    ? 'translate(0, -1px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
@@ -1707,7 +1707,7 @@ const PolicyDetail = () => {
                                             transform:
                                               travellers &&
                                               travellers?.type?.length > 0
-                                                ? 'translate(0, 13px) scale(0.75)'
+                                                ? 'translate(0, -1px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
@@ -1778,7 +1778,7 @@ const PolicyDetail = () => {
                                             transform:
                                               travellers &&
                                               travellers?.label?.length > 0
-                                                ? 'translate(0, 13px) scale(0.75)'
+                                                ? 'translate(0, -1px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
