@@ -1455,6 +1455,10 @@ const PolicyDetail = () => {
                                               ? '#e8f0fe'
                                               : '#ebebeb'
                                           }
+                                          style={{
+                                            position: 'relative',
+                                            paddingTop: '10px',
+                                          }}
                                           placeholder=" "
                                           _placeholder={{
                                             opacity: 1,
@@ -2251,6 +2255,10 @@ const PolicyDetail = () => {
                                           ? '#e8f0fe'
                                           : '#ebebeb'
                                       }
+                                      style={{
+                                        position: 'relative',
+                                        paddingTop: '10px',
+                                      }}
                                       variant="custom"
                                       className="global-input"
                                       pt="10px"
