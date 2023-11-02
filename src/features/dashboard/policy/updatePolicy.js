@@ -2279,6 +2279,7 @@ const PolicyDetail = () => {
                                   gap="5px"
                                   alignItems={'center'}
                                   h="48px"
+                                  mt="10px"
                                 >
                                   <FormControl
                                     variant="floating"
