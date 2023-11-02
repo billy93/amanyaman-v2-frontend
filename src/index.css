@@ -193,7 +193,7 @@ body {
   font-size: 11px!important;
   height: 48px!important;
   font-weight: 300;
-  margin-top: 16px!important;
+  /* margin-top: 16px!important; */
 }
 input, button {
   font: inherit;

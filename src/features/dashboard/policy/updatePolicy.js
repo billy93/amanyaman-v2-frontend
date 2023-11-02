@@ -1471,6 +1471,7 @@ const PolicyDetail = () => {
                                       display={'flex'}
                                       gap="5px"
                                       alignItems={'center'}
+                                      h="48px"
                                     >
                                       <FormControl
                                         variant="floating"
@@ -2264,7 +2265,12 @@ const PolicyDetail = () => {
                                     />
                                   </FormControl>
                                 </Box>
-                                <Box display={'flex'} gap="5px" mt="10px">
+                                <Box
+                                  display={'flex'}
+                                  gap="5px"
+                                  alignItems={'center'}
+                                  h="48px"
+                                >
                                   <FormControl
                                     variant="floating"
                                     id="first-name"
