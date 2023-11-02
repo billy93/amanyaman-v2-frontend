@@ -1472,6 +1472,7 @@ const PolicyDetail = () => {
                                       gap="5px"
                                       alignItems={'center'}
                                       h="48px"
+                                      mt="10px"
                                     >
                                       <FormControl
                                         variant="floating"
@@ -2325,7 +2326,7 @@ const PolicyDetail = () => {
                                     variant="floating"
                                     isRequired
                                     fontFamily={'Mulish'}
-                                    mt="14px"
+                                    // mt="14px"
                                   >
                                     {/* <Box className="floating-form" w="100%"> */}
                                     {/* <Box className="react-select-container"> */}
