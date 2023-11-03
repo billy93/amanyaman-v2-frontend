@@ -3,7 +3,7 @@
 import React from 'react';
 // import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useHistory } from 'react-router-dom';
 import ModalForm from '../form/modal';
 
 // import usePersist from '../../../../features/hook/usePersist';
@@ -78,6 +78,7 @@ const Form2 = ({
   // const selectedInsurance = useSelector(selectedTravelInsurance);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const history = useHistory();
   const historyForms = useSelector(historyForm);
   // console.log('activeStep', activeStep);
 
@@ -154,10 +155,14 @@ const Form2 = ({
         dispatch(setStepActive(activeStep + 2));
         dispatch(setHistoryForm(2));
         if (policyNumberString !== undefined) {
+          // history.push(
+          //   `/upgrade-quote/search/${policyNumberString}/${res?.data?.id}`
+          // );
           navigate(
             `/upgrade-quote/search/${policyNumberString}/${res?.data?.id}`
           );
         } else {
+          // history.push(`/upgrade-quota/search/${res?.data?.id}`);
           navigate(`/upgrade-quota/search/${res?.data?.id}`);
         }
         // let travellersData = {

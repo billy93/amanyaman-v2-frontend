@@ -105,11 +105,11 @@ const Form3 = ({
   }, [dispatch, newlistTravellers, refetch]);
 
   React.useEffect(() => {
-    if (payload) {
-      refetchBooking(id);
-      // dispatch(setTravellersData([...newlistTravellers]));
-    }
-  }, [dispatch, payload, refetchBooking, id]);
+    // if (payload) {
+    refetchBooking(id);
+    // dispatch(setTravellersData([...newlistTravellers]));
+    // }
+  }, [id, refetchBooking]);
 
   const continuePay = async () => {
     const payloadData = {
