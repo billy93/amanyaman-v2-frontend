@@ -110,7 +110,7 @@ export const quotSearch = apiSlice.injectEndpoints({
     paymentProcced: builder.mutation({
       query: (params) => {
         return {
-          url: '/app/bookings/payment',
+          url: '/app/bookings/payment/upgrade',
           method: 'POST',
           body: { ...params },
         };
