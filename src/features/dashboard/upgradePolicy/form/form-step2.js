@@ -187,8 +187,8 @@ const Form2 = ({
       historyStep: 3,
     };
 
-    dispatch(setCredentials({ ...addStep }));
-    dispatch(setHistoryForm(historyForms + 2));
+    // dispatch(setCredentials({ ...addStep }));
+    // dispatch(setHistoryForm(historyForms + 2));
     nextStep();
   };
 

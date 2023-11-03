@@ -245,10 +245,10 @@ const Form1 = ({
       if (res.data) {
         const addStep = {
           ...login,
-          historyStep: 1,
+          historyUpgraded: 1,
         };
         nextStep();
-        dispatch(setCredentials({ ...addStep }));
+        // dispatch(setCredentials({ ...addStep }));
         // localStorage.setItem('persist', JSON.stringify(addStep));
         dispatch(setUpgradeDataProducts(res.data));
       }
