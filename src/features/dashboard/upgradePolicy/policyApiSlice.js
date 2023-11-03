@@ -143,7 +143,7 @@ export const quotSearch = apiSlice.injectEndpoints({
     getBookingSearch: builder.query({
       query: (id) => {
         return {
-          url: `/app/bookings/search/${id}`,
+          url: `/app/bookings/search/upgrade/${id}`,
           method: 'GET',
           invalidatesTags: (result, error, arg) =>
             result

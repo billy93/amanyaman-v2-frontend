@@ -111,9 +111,10 @@ const Form3 = ({
     // }
   }, [id, refetchBooking]);
 
+  console.log('payload', payload);
   const continuePay = async () => {
     const payloadData = {
-      bookingId: payload.id,
+      bookingId: payload.newBooking?.id,
       paymentMethod: tabIndex === 0 ? 'BANK_TRANSFER_BCA' : 'CREDIT_LIMIT',
     };
     try {
@@ -141,7 +142,7 @@ const Form3 = ({
 
   const continuePayCredit = async () => {
     const payloadData = {
-      amount: payload?.bookingProduct.finalPrice,
+      amount: payload?.newPrice,
     };
     try {
       const res = await checkAvailabilityCredit(payloadData);
@@ -414,7 +415,7 @@ const Form3 = ({
                   color="#065BAA"
                   style={{ fontSize: '12px' }}
                 >
-                  {initState?.bookingProduct?.productName}
+                  {payload?.newBooking?.bookingProduct?.productName}
                 </Text>
               </Box>
             </Box>
@@ -451,11 +452,11 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                     gap="1em"
                   >
-                    {initState?.coverType}
+                    {payload?.newBooking?.coverType}
                   </Text>
                 </Box>
                 <Box display={'flex'} gap="2px" flexWrap={'nowrap'}>
-                  {initState?.destinations?.map((country, i) => {
+                  {payload?.newBooking?.destinations?.map((country, i) => {
                     return (
                       <Text
                         key={i}
@@ -522,9 +523,7 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    <CurrencyFormatter
-                      amount={initState?.bookingProduct?.finalPrice}
-                    />
+                    <CurrencyFormatter amount={payload?.newPrice} />
                   </Text>
                 </Box>
                 <Box
@@ -543,7 +542,7 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {'Premium Price'}
+                    {'Previous Price'}
                   </Text>
                   <Text
                     as="b"
@@ -551,9 +550,7 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    <CurrencyFormatter
-                      amount={initState?.bookingProduct?.finalPrice}
-                    />
+                    <CurrencyFormatter amount={payload?.oldPrice} />
                   </Text>
                 </Box>
                 <Box
@@ -581,7 +578,7 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     {'x'}
-                    {initState?.travellerType?.name === 'Group'
+                    {payload?.newBooking?.travellerType?.name === 'Group'
                       ? initStateListTravellers?.length
                       : 1}
                   </Text>
@@ -610,8 +607,10 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {initState?.stampDuty > 0 ? (
-                      <CurrencyFormatter amount={initState?.stampDuty} />
+                    {payload?.newBooking?.stampDuty > 0 ? (
+                      <CurrencyFormatter
+                        amount={payload?.newBooking?.stampDuty}
+                      />
                     ) : (
                       'IDR 0'
                     )}
@@ -641,8 +640,10 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {initState?.stampDuty > 0 ? (
-                      <CurrencyFormatter amount={initState?.stampDuty} />
+                    {payload?.newBooking?.finalPrice > 0 ? (
+                      <CurrencyFormatter
+                        amount={payload?.newBooking?.finalPrice}
+                      />
                     ) : (
                       'IDR 0'
                     )}
