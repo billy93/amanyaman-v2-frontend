@@ -155,6 +155,21 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
+    getBookingSearch: builder.query({
+      query: (id) => {
+        return {
+          url: `/app/bookings/search/${id}`,
+          method: 'GET',
+          invalidatesTags: (result, error, arg) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'MasterAgent', id })),
+                  'MasterAgent',
+                ]
+              : ['MasterAgent'],
+        };
+      },
+    }),
     getDetailBenefit: builder.query({
       query: (id) => {
         return {
@@ -245,6 +260,7 @@ export const {
   useDeleteTravellerDataMutation,
   useEditTravellerDataMutation,
   useAddTravellerDataMutation,
+  useGetBookingSearchQuery,
   useGetBookingSearchUpgradedQuery,
   useBooksProductsMutation,
   useGetListCountriesQuery,
