@@ -641,9 +641,7 @@ const Form3 = ({
                     style={{ fontSize: '12px' }}
                   >
                     {payload?.newBooking?.finalPrice > 0 ? (
-                      <CurrencyFormatter
-                        amount={payload?.newBooking?.finalPrice}
-                      />
+                      <CurrencyFormatter amount={payload?.finalPrice} />
                     ) : (
                       'IDR 0'
                     )}
