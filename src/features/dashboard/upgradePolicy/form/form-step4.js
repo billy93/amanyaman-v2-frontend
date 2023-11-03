@@ -111,7 +111,7 @@ const Form3 = ({
     // }
   }, [id, refetchBooking]);
 
-  console.log('payload', payload);
+  // console.log('payload', payload);
   const continuePay = async () => {
     const payloadData = {
       bookingId: payload.newBooking?.id,
@@ -132,7 +132,7 @@ const Form3 = ({
         res?.data?.paymentMethod === 'CREDIT_LIMIT' &&
         res?.data?.paymentStatus === 'SUCCESS'
       ) {
-        navigate(`/payment/success/${payload?.transactionId}`);
+        navigate(`/payment/success/${payload?.newBooking?.transactionId}`);
       }
       // console.log('res', res);
     } catch (error) {
