@@ -140,7 +140,7 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
-    getBookingSearch: builder.query({
+    getBookingSearchUpgraded: builder.query({
       query: (id) => {
         return {
           url: `/app/bookings/search/upgrade/${id}`,
@@ -245,7 +245,7 @@ export const {
   useDeleteTravellerDataMutation,
   useEditTravellerDataMutation,
   useAddTravellerDataMutation,
-  useGetBookingSearchQuery,
+  useGetBookingSearchUpgradedQuery,
   useBooksProductsMutation,
   useGetListCountriesQuery,
   useSearchproductsMutation,

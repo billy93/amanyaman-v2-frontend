@@ -8,7 +8,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { userLoginCurrent, setCredentials } from '../../../auth/authSlice';
 import {
   useGetListTravellerQuery,
-  useGetBookingSearchQuery,
+  useGetBookingSearchUpgradedQuery,
   usePaymentProccedMutation,
   useCheckAvailabilityCreditMutation,
 } from '../policyApiSlice';
@@ -84,7 +84,7 @@ const Form3 = ({
   const { data: newlistTravellers, refetch } = useGetListTravellerQuery(id);
 
   const { data: payload, refetch: refetchBooking } =
-    useGetBookingSearchQuery(id);
+    useGetBookingSearchUpgradedQuery(id);
   const [tabIndex, setTabIndex] = React.useState(0);
   const handlePrev = () => {
     const addStep = {
