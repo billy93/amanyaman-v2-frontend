@@ -1438,8 +1438,8 @@ const PolicyDetail = () => {
                                                 : '',
                                             transform:
                                               travellers?.ticket !== ''
-                                                ? 'translateY(-10px)'
-                                                : 'translateY(-3px)',
+                                                ? 'translateY(-7px)'
+                                                : 'translateY(-2px)',
                                           }}
                                           // top={'20px'}
                                           // style={{}}
@@ -2240,8 +2240,8 @@ const PolicyDetail = () => {
                                             : '',
                                         transform:
                                           travellers?.ticket !== ''
-                                            ? 'translateY(-10px)'
-                                            : 'translateY(17px)',
+                                            ? 'translateY(-9px)'
+                                            : 'translateY(-2px)',
                                       }}
                                       // top={'20px'}
                                       // style={{}}
