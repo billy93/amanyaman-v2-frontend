@@ -1438,8 +1438,8 @@ const PolicyDetail = () => {
                                                 : '',
                                             transform:
                                               travellers?.ticket !== ''
-                                                ? 'translateY(-7px)'
-                                                : 'translateY(-2px)',
+                                                ? 'translateY(-10px)'
+                                                : 'translateY(-3px)',
                                           }}
                                           // top={'20px'}
                                           // style={{}}
@@ -1555,7 +1555,7 @@ const PolicyDetail = () => {
                                           value={travellers?.relations}
                                           // classNamePrefix="chakra-react-select"
                                           classNamePrefix={
-                                            travellers?.relations?.length !== 0
+                                            travellers?.relations !== null
                                               ? 'chakra-react-select-default'
                                               : 'chakra-react-select'
                                           }
@@ -1583,14 +1583,12 @@ const PolicyDetail = () => {
                                           style={{
                                             transform:
                                               travellers &&
-                                              travellers?.relations?.length !==
-                                                0
+                                              travellers?.relations !== null
                                                 ? 'translate(3px, -2px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
-                                              travellers?.relations?.length !==
-                                                0
+                                              travellers?.relations !== null
                                                 ? '#065baa'
                                                 : '#231F20',
                                             // fontSize: '14px',
@@ -2240,8 +2238,8 @@ const PolicyDetail = () => {
                                             : '',
                                         transform:
                                           travellers?.ticket !== ''
-                                            ? 'translateY(-9px)'
-                                            : 'translateY(-2px)',
+                                            ? 'translateY(-10px)'
+                                            : 'translateY(-3px)',
                                       }}
                                       // top={'20px'}
                                       // style={{}}
@@ -2343,7 +2341,7 @@ const PolicyDetail = () => {
                                       style={{
                                         backgroundColor:
                                           travellers?.relationship === '' ||
-                                          travellers?.relations?.length !== 0
+                                          travellers?.relations !== null
                                             ? '#e8f0fe'
                                             : '#ebebeb',
                                       }}
@@ -2355,7 +2353,7 @@ const PolicyDetail = () => {
                                       value={travellers?.relations}
                                       // classNamePrefix="chakra-react-select"
                                       classNamePrefix={
-                                        travellers?.relations?.length !== 0
+                                        travellers?.relations !== null
                                           ? 'chakra-react-select-default'
                                           : 'chakra-react-select'
                                       }
@@ -2383,13 +2381,13 @@ const PolicyDetail = () => {
                                       style={{
                                         transform:
                                           travellers &&
-                                          travellers?.relations?.length !== 0
+                                          travellers?.relations !== null
                                             ? 'translate(3, -2px) scale(0.75)'
                                             : 'translate(0, 4px) scale(0.75)',
                                         color:
                                           travellers?.relationship === '' ||
                                           (travellers &&
-                                            travellers?.relations?.length !== 0)
+                                            travellers?.relations !== null)
                                             ? '#065baa'
                                             : '#231F20',
                                         // fontSize: '11px',
