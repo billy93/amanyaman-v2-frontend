@@ -2403,7 +2403,9 @@ const PolicyDetail = () => {
                                           className="floating-label-global"
                                         >
                                           Relationship{' '}
-                                          {travellers?.relations?.length > 0}
+                                          {travellers?.relations?.length > 0
+                                            ? 'true'
+                                            : 'false'}
                                         </FormLabel>
                                       </Box>
                                     </Box>
