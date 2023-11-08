@@ -1540,8 +1540,10 @@ const PolicyDetail = () => {
                                             <Select
                                               style={{
                                                 backgroundColor:
-                                                  travellers?.relations
-                                                    ?.length > 0
+                                                  travellers &&
+                                                  travellers?.relations &&
+                                                  travellers?.relations[i]
+                                                    ?.label !== ''
                                                     ? '#e8f0fe'
                                                     : '#ebebeb',
                                               }}
@@ -1588,13 +1590,16 @@ const PolicyDetail = () => {
                                               style={{
                                                 transform:
                                                   travellers &&
-                                                  travellers?.relations
+                                                  travellers?.relations &&
+                                                  travellers?.relations[i]
+                                                    ?.label !== ''
                                                     ? 'translate(3px, -2px) scale(0.75)'
                                                     : 'translate(3px, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
-                                                  travellers?.relations
-                                                    ?.length > 0
+                                                  travellers?.relations &&
+                                                  travellers?.relations[i]
+                                                    ?.label !== ''
                                                     ? '#065baa'
                                                     : '',
                                                 // fontSize: '14px',
@@ -2346,7 +2351,10 @@ const PolicyDetail = () => {
                                         <Select
                                           style={{
                                             backgroundColor:
-                                              travellers?.relations?.length > 0
+                                              travellers &&
+                                              travellers?.relations &&
+                                              travellers?.relations[i]
+                                                ?.label !== ''
                                                 ? '#e8f0fe'
                                                 : '#ebebeb',
                                           }}
@@ -2389,12 +2397,16 @@ const PolicyDetail = () => {
                                           style={{
                                             transform:
                                               travellers &&
-                                              travellers?.relations
+                                              travellers?.relations &&
+                                              travellers?.relations[i]
+                                                ?.label !== ''
                                                 ? 'translate(3px,-1px) scale(0.75)'
                                                 : 'translate(3px,4px) scale(0.75)',
                                             color:
                                               travellers &&
-                                              travellers?.relations?.length > 0
+                                              travellers?.relations &&
+                                              travellers?.relations[i]
+                                                ?.label !== ''
                                                 ? '#065baa'
                                                 : '',
                                             // fontSize: '11px',
@@ -2403,9 +2415,6 @@ const PolicyDetail = () => {
                                           className="floating-label-global"
                                         >
                                           Relationship{' '}
-                                          {travellers?.relations?.length > 0
-                                            ? 'true'
-                                            : 'false'}
                                         </FormLabel>
                                       </Box>
                                     </Box>
