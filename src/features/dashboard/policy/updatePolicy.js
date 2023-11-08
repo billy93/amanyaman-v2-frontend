@@ -1591,7 +1591,7 @@ const PolicyDetail = () => {
                                                   travellers?.relations
                                                     ?.length > 0
                                                     ? 'translate(3px, -2px) scale(0.75)'
-                                                    : 'translate(0, 4px) scale(0.75)',
+                                                    : 'translate(3px, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
                                                   travellers?.relations
