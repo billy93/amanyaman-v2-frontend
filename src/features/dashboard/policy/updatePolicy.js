@@ -2389,10 +2389,12 @@ const PolicyDetail = () => {
                                           pt="1.5"
                                           style={{
                                             transform:
-                                              travellers &&
-                                              travellers?.relations?.length > 0
-                                                ? 'translate(3, -2px) scale(0.75)'
-                                                : 'translate(0, 4px) scale(0.75)',
+                                              (travellers &&
+                                                travellers?.relations?.length >
+                                                  0) ||
+                                              travellers?.relations !== null
+                                                ? 'translate(3px,-1px) scale(0.75)'
+                                                : 'translate(3px,4px) scale(0.75)',
                                             color:
                                               travellers &&
                                               travellers?.relations?.length > 0
