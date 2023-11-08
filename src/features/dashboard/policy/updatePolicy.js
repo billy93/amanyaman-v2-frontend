@@ -1541,7 +1541,7 @@ const PolicyDetail = () => {
                                               style={{
                                                 backgroundColor:
                                                   travellers?.relations
-                                                    ?.length !== 0
+                                                    ?.length > 0
                                                     ? '#e8f0fe'
                                                     : '#ebebeb',
                                               }}
@@ -1556,8 +1556,8 @@ const PolicyDetail = () => {
                                               value={travellers?.relations}
                                               // classNamePrefix="chakra-react-select"
                                               classNamePrefix={
-                                                travellers?.relations
-                                                  ?.length !== 0
+                                                travellers?.relations?.length >
+                                                0
                                                   ? 'chakra-react-select-default'
                                                   : 'chakra-react-select'
                                               }
@@ -1589,15 +1589,15 @@ const PolicyDetail = () => {
                                                 transform:
                                                   travellers &&
                                                   travellers?.relations
-                                                    ?.length !== 0
+                                                    ?.length > 0
                                                     ? 'translate(3px, -2px) scale(0.75)'
                                                     : 'translate(0, 4px) scale(0.75)',
                                                 color:
                                                   travellers &&
                                                   travellers?.relations
-                                                    ?.length !== 0
+                                                    ?.length > 0
                                                     ? '#065baa'
-                                                    : '#231F20',
+                                                    : '',
                                                 // fontSize: '14px',
                                               }}
                                               className="floating-label-global"
@@ -2347,8 +2347,7 @@ const PolicyDetail = () => {
                                         <Select
                                           style={{
                                             backgroundColor:
-                                              travellers?.relations?.length !==
-                                              0
+                                              travellers?.relations?.length > 0
                                                 ? '#e8f0fe'
                                                 : '#ebebeb',
                                           }}
@@ -2363,7 +2362,7 @@ const PolicyDetail = () => {
                                           value={travellers?.relations}
                                           // classNamePrefix="chakra-react-select"
                                           classNamePrefix={
-                                            travellers?.relations !== null
+                                            travellers?.relations?.length > 0
                                               ? 'chakra-react-select-default'
                                               : 'chakra-react-select'
                                           }
@@ -2391,16 +2390,14 @@ const PolicyDetail = () => {
                                           style={{
                                             transform:
                                               travellers &&
-                                              travellers?.relations?.length !==
-                                                0
+                                              travellers?.relations?.length > 0
                                                 ? 'translate(3, -2px) scale(0.75)'
                                                 : 'translate(0, 4px) scale(0.75)',
                                             color:
                                               travellers &&
-                                              travellers?.relations?.length !==
-                                                0
+                                              travellers?.relations?.length > 0
                                                 ? '#065baa'
-                                                : '#231F20',
+                                                : '',
                                             // fontSize: '11px',
                                           }}
                                           fontFamily={'Mulish'}
