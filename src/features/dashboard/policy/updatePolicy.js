@@ -1535,74 +1535,78 @@ const PolicyDetail = () => {
                                         fontFamily={'Mulish'}
                                         // mt="14px"
                                       >
-                                        {/* <Box className="floating-form" w="100%">
-                                          <Box className="react-select-container"> */}
-                                        <Select
-                                          style={{
-                                            backgroundColor:
-                                              travellers?.relations?.length !==
-                                              0
-                                                ? '#e8f0fe'
-                                                : '#ebebeb',
-                                          }}
-                                          isMulti={false}
-                                          name="colors"
-                                          onChange={(selectedOption) =>
-                                            handleSelectRelations(
-                                              selectedOption,
-                                              i
-                                            )
-                                          }
-                                          value={travellers?.relations}
-                                          // classNamePrefix="chakra-react-select"
-                                          classNamePrefix={
-                                            travellers?.relations?.length !== 0
-                                              ? 'chakra-react-select-default'
-                                              : 'chakra-react-select'
-                                          }
-                                          options={relations}
-                                          placeholder=""
-                                          closeMenuOnSelect={true}
-                                          chakraStyles={{
-                                            dropdownIndicator: (
-                                              prev,
-                                              { selectProps: { menuIsOpen } }
-                                            ) => ({
-                                              ...prev,
-                                              '> svg': {
-                                                transitionDuration: 'normal',
-                                                transform: `rotate(${
-                                                  menuIsOpen ? -180 : 0
-                                                }deg)`,
-                                              },
-                                            }),
-                                          }}
-                                        />
-                                        <span className="highlight"></span>
-                                        <FormLabel
-                                          pt="1.5"
-                                          style={{
-                                            transform:
-                                              travellers &&
-                                              travellers?.relations?.length !==
-                                                0
-                                                ? 'translate(3px, -2px) scale(0.75)'
-                                                : 'translate(0, 4px) scale(0.75)',
-                                            color:
-                                              travellers &&
-                                              travellers?.relations?.length !==
-                                                0
-                                                ? '#065baa'
-                                                : '#231F20',
-                                            // fontSize: '14px',
-                                          }}
-                                          className="floating-label-global"
-                                          fontFamily={'Mulish'}
-                                        >
-                                          Relationship
-                                        </FormLabel>
-                                        {/* </Box>
-                                        </Box> */}
+                                        <Box className="floating-form" w="100%">
+                                          <Box className="react-select-container">
+                                            <Select
+                                              style={{
+                                                backgroundColor:
+                                                  travellers?.relations
+                                                    ?.length !== 0
+                                                    ? '#e8f0fe'
+                                                    : '#ebebeb',
+                                              }}
+                                              isMulti={false}
+                                              name="colors"
+                                              onChange={(selectedOption) =>
+                                                handleSelectRelations(
+                                                  selectedOption,
+                                                  i
+                                                )
+                                              }
+                                              value={travellers?.relations}
+                                              // classNamePrefix="chakra-react-select"
+                                              classNamePrefix={
+                                                travellers?.relations
+                                                  ?.length !== 0
+                                                  ? 'chakra-react-select-default'
+                                                  : 'chakra-react-select'
+                                              }
+                                              options={relations}
+                                              placeholder=""
+                                              closeMenuOnSelect={true}
+                                              chakraStyles={{
+                                                dropdownIndicator: (
+                                                  prev,
+                                                  {
+                                                    selectProps: { menuIsOpen },
+                                                  }
+                                                ) => ({
+                                                  ...prev,
+                                                  '> svg': {
+                                                    transitionDuration:
+                                                      'normal',
+                                                    transform: `rotate(${
+                                                      menuIsOpen ? -180 : 0
+                                                    }deg)`,
+                                                  },
+                                                }),
+                                              }}
+                                            />
+                                            <span className="highlight"></span>
+                                            <FormLabel
+                                              pt="1.5"
+                                              style={{
+                                                transform:
+                                                  travellers &&
+                                                  travellers?.relations
+                                                    ?.length !== 0
+                                                    ? 'translate(3px, -2px) scale(0.75)'
+                                                    : 'translate(0, 4px) scale(0.75)',
+                                                color:
+                                                  travellers &&
+                                                  travellers?.relations
+                                                    ?.length !== 0
+                                                    ? '#065baa'
+                                                    : '#231F20',
+                                                // fontSize: '14px',
+                                              }}
+                                              className="floating-label-global"
+                                              fontFamily={'Mulish'}
+                                            >
+                                              Relationship
+                                            </FormLabel>
+                                          </Box>
+                                        </Box>
                                         {/* It is important that the Label comes after the Control due to css selectors */}
                                       </FormControl>
                                     </Box>
@@ -2338,68 +2342,74 @@ const PolicyDetail = () => {
                                     fontFamily={'Mulish'}
                                     // mt="14px"
                                   >
-                                    {/* <Box className="floating-form" w="100%"> */}
-                                    {/* <Box className="react-select-container"> */}
-                                    <Select
-                                      style={{
-                                        backgroundColor:
-                                          travellers?.relations?.length !== 0
-                                            ? '#e8f0fe'
-                                            : '#ebebeb',
-                                      }}
-                                      isMulti={false}
-                                      name="colors"
-                                      onChange={(selectedOption) =>
-                                        handleSelectRelations(selectedOption, i)
-                                      }
-                                      value={travellers?.relations}
-                                      // classNamePrefix="chakra-react-select"
-                                      classNamePrefix={
-                                        travellers?.relations !== null
-                                          ? 'chakra-react-select-default'
-                                          : 'chakra-react-select'
-                                      }
-                                      options={relations}
-                                      placeholder=""
-                                      closeMenuOnSelect={true}
-                                      chakraStyles={{
-                                        dropdownIndicator: (
-                                          prev,
-                                          { selectProps: { menuIsOpen } }
-                                        ) => ({
-                                          ...prev,
-                                          '> svg': {
-                                            transitionDuration: 'normal',
-                                            transform: `rotate(${
-                                              menuIsOpen ? -180 : 0
-                                            }deg)`,
-                                          },
-                                        }),
-                                      }}
-                                    />
-                                    <span className="highlight"></span>
-                                    <FormLabel
-                                      pt="1.5"
-                                      style={{
-                                        transform:
-                                          travellers &&
-                                          travellers?.relations?.length !== 0
-                                            ? 'translate(3, -2px) scale(0.75)'
-                                            : 'translate(0, 4px) scale(0.75)',
-                                        color:
-                                          travellers &&
-                                          travellers?.relations?.length !== 0
-                                            ? '#065baa'
-                                            : '#231F20',
-                                        // fontSize: '11px',
-                                      }}
-                                      fontFamily={'Mulish'}
-                                      className="floating-label-global"
-                                    >
-                                      Relationship
-                                    </FormLabel>
-                                    {/* </Box>
-                                    </Box> */}
+                                    <Box className="floating-form" w="100%">
+                                      <Box className="react-select-container">
+                                        <Select
+                                          style={{
+                                            backgroundColor:
+                                              travellers?.relations?.length !==
+                                              0
+                                                ? '#e8f0fe'
+                                                : '#ebebeb',
+                                          }}
+                                          isMulti={false}
+                                          name="colors"
+                                          onChange={(selectedOption) =>
+                                            handleSelectRelations(
+                                              selectedOption,
+                                              i
+                                            )
+                                          }
+                                          value={travellers?.relations}
+                                          // classNamePrefix="chakra-react-select"
+                                          classNamePrefix={
+                                            travellers?.relations !== null
+                                              ? 'chakra-react-select-default'
+                                              : 'chakra-react-select'
+                                          }
+                                          options={relations}
+                                          placeholder=""
+                                          closeMenuOnSelect={true}
+                                          chakraStyles={{
+                                            dropdownIndicator: (
+                                              prev,
+                                              { selectProps: { menuIsOpen } }
+                                            ) => ({
+                                              ...prev,
+                                              '> svg': {
+                                                transitionDuration: 'normal',
+                                                transform: `rotate(${
+                                                  menuIsOpen ? -180 : 0
+                                                }deg)`,
+                                              },
+                                            }),
+                                          }}
+                                        />
+                                        <span className="highlight"></span>
+                                        <FormLabel
+                                          pt="1.5"
+                                          style={{
+                                            transform:
+                                              travellers &&
+                                              travellers?.relations?.length !==
+                                                0
+                                                ? 'translate(3, -2px) scale(0.75)'
+                                                : 'translate(0, 4px) scale(0.75)',
+                                            color:
+                                              travellers &&
+                                              travellers?.relations?.length !==
+                                                0
+                                                ? '#065baa'
+                                                : '#231F20',
+                                            // fontSize: '11px',
+                                          }}
+                                          fontFamily={'Mulish'}
+                                          className="floating-label-global"
+                                        >
+                                          Relationship
+                                        </FormLabel>
+                                      </Box>
+                                    </Box>
                                     {/* It is important that the Label comes after the Control due to css selectors */}
                                   </FormControl>
                                 </Box>
