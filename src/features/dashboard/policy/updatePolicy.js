@@ -2402,7 +2402,8 @@ const PolicyDetail = () => {
                                           fontFamily={'Mulish'}
                                           className="floating-label-global"
                                         >
-                                          Relationship
+                                          Relationship{' '}
+                                          {travellers?.relations?.length > 0}
                                         </FormLabel>
                                       </Box>
                                     </Box>
