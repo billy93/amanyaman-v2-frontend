@@ -22,55 +22,60 @@ import travelAgent from '../features/dashboard/travelAgent/travelAgentSlice';
 import systemParams from '../features/dashboard/systemParameters/systemParamsSlice';
 import productPrice from '../features/dashboard/productPrice/productPriceSlice';
 import dashboards from '../features/dashboard/dashboards/dashboardSlice';
-// import { encryptTransform } from 'redux-persist-transform-encrypt';
+import { encryptTransform } from 'redux-persist-transform-encrypt';
 // import { encryptData, decryptData } from './encrypt';
 // import { enc, AES } from 'crypto-js';
 // import storageSession from 'reduxjs-toolkit-persist/lib/storage/session';
 // import { apiSlice } from './api/apiSlice';
 // import { logOut } from '../features/auth/authSlice';
-// const secretKey = 'amanyaman-v2-2023';
+const encryptionKey = 'amanyaman-v2-2023';
 
-const rootPersistConfig = {
-  key: 'root',
+const encryptor = encryptTransform({
+  secretKey: encryptionKey,
+  onError: function (error) {
+    console.error('Encryption/Decryption Error:', error);
+  },
+});
+
+const authPersistConfig = {
+  key: 'auth',
   storage,
-  whitelist: ['auth.userLogin'],
-
-  // transforms: [
-  //   {
-  //     in: (state) => {
-  //       // Encrypt the state when persisting
-  //       // console.log('testtt', state);
-  //       const encryptedState = encryptData(state?.userLogin);
-  //       return encryptedState;
-  //     },
-  //     out: (state) => {
-  //       // Decrypt the state when rehydrating
-  //       const decryptedState = decryptData(state);
-  //       return decryptedState;
-  //     },
-  //   },
-  // ],
+  transforms: [encryptor],
+  whitelist: ['userLogin'],
 };
 
-const rootPersistForm = {
-  key: 'root-form',
-  storage,
-  whitelist: ['quotaSearch'],
-};
+// const rootPersistForm = {
+//   key: 'root-form',
+//   storage,
+//   whitelist: ['quotaSearch'],
+// };
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['apiSlice'], // Exclude the 'api' reducer from persisting
+  transforms: [encryptor],
+  // whitelist: ['auth.userLogin'],
+  blacklist: [
+    'apiSlice',
+    'quotaSearch',
+    'policyList',
+    'masterUser',
+    'masterProduct',
+    'agent',
+    'systemParams',
+    'productPrice',
+    'upgradePolicy',
+    'dashboards',
+  ],
 };
 
-const persistAuth = persistReducer(persistConfig, authReducer);
-const persistForm = persistReducer(rootPersistForm, createSearchQuotaReducer);
+// const persistForm = persistReducer(rootPersistForm, createSearchQuotaReducer);
+const authdReducer = persistReducer(authPersistConfig, authReducer);
 
 const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
-  auth: persistAuth,
-  quotaSearch: persistForm,
+  auth: authdReducer,
+  quotaSearch: createSearchQuotaReducer,
   policyList: policyList,
   masterUser: masterUser,
   masterProduct: masterProducts,
@@ -81,9 +86,10 @@ const rootReducer = combineReducers({
   upgradePolicy: upgradeQuotaSearch,
 });
 
-const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
+const persistRoot = persistReducer(persistConfig, rootReducer);
+
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: persistRoot,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

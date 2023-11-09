@@ -86,9 +86,9 @@ const Login = () => {
   const waitForToken = () => {
     return new Promise((resolve) => {
       const checkToken = () => {
-        const token =
-          localStorage.getItem('persist') &&
-          localStorage.getItem('persist').token;
+        const token = usersCurrent?.id_token;
+        // localStorage.getItem('auth') &&
+        // localStorage.getItem('auth').token;
 
         if (token) {
           clearInterval(interval);
@@ -101,6 +101,7 @@ const Login = () => {
     });
   };
 
+  // console.log('usersCurrent', usersCurrent);
   const handleRedirect = React.useCallback(() => {
     const token = waitForToken();
     if (token !== null) {

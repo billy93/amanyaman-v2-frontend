@@ -11,12 +11,12 @@ const usePersist = () => {
       ? JSON.parse(localStorage.getItem('persist')).isPersist
       : true,
   });
-  console.log('test', persist);
+  // console.log('test', persist);
   useEffect(() => {
-    localStorage.setItem(
-      'persist',
-      JSON.stringify({ token, isPersist: persist?.isPersist })
-    );
+    // localStorage.setItem(
+    //   'persist',
+    //   JSON.stringify({ token, isPersist: persist?.isPersist })
+    // );
   }, [persist, token]);
 
   return [persist, setPersist];

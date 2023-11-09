@@ -24,7 +24,7 @@ const LayoutDashboard = ({ allowedRoles }) => {
 
   React.useEffect(() => {
     const checkLocalStorage = setInterval(() => {
-      if (!localStorage.getItem('persist')) {
+      if (!localStorage.getItem('persist:auth')) {
         dispatch(logOut());
       }
     }, 1000); // Adjust the interval as needed
@@ -34,8 +34,8 @@ const LayoutDashboard = ({ allowedRoles }) => {
 
   React.useEffect(() => {
     const handleStorageChange = (event) => {
-      if (event.storageArea === localStorage && event.key === 'persist') {
-        if (!JSON.parse(localStorage.getItem('persist')).token?.id_token) {
+      if (event.storageArea === localStorage && event.key === 'auth') {
+        if (!JSON.parse(localStorage.getItem('persist:auth'))?.id_token) {
           dispatch(logOut());
         }
       }

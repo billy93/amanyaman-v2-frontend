@@ -585,6 +585,7 @@ const Form3 = ({
                   display={'flex'}
                   justifyContent={'center'}
                   flexDirection={'column'}
+                  w="100%"
                 >
                   <Text
                     as="b"
