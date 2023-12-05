@@ -107,7 +107,7 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
-    paymentProcced: builder.mutation({
+    paymentUpgrade: builder.mutation({
       query: (params) => {
         return {
           url: '/app/bookings/payment/upgrade',
@@ -253,7 +253,7 @@ export const {
   useGetDetailBenefitQuery,
   useGetBookingsQuotationQuery,
   useGetCheckPaymentQuery,
-  usePaymentProccedMutation,
+  usePaymentUpgradeMutation,
   useCheckAvailabilityCreditMutation,
   useImportFileMutation,
   useGetTemplateQuery,

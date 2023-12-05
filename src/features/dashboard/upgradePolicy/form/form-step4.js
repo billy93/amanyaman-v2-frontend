@@ -9,7 +9,7 @@ import { userLoginCurrent, setCredentials } from '../../../auth/authSlice';
 import {
   useGetListTravellerQuery,
   useGetBookingSearchUpgradedQuery,
-  usePaymentProccedMutation,
+  usePaymentUpgradeMutation,
   useCheckAvailabilityCreditMutation,
 } from '../policyApiSlice';
 import {
@@ -74,7 +74,7 @@ const Form3 = ({
   const initState = useSelector(travellerUpgrade);
   const initStateListTravellers = useSelector(upgradeListTravellers);
   const { showErrorToast, showSuccessToast } = UseCustomToast();
-  const [paymentProcced, { isLoading }] = usePaymentProccedMutation();
+  const [paymentUpgrade, { isLoading }] = usePaymentUpgradeMutation();
   const [checkAvailabilityCredit, { isLoading: loading }] =
     useCheckAvailabilityCreditMutation();
   const [creditLimit, setCreditLimit] = React.useState(null);
@@ -118,7 +118,7 @@ const Form3 = ({
       paymentMethod: tabIndex === 0 ? 'BANK_TRANSFER_BCA' : 'CREDIT_LIMIT',
     };
     try {
-      const res = await paymentProcced(payloadData);
+      const res = await paymentUpgrade(payloadData);
       console.log('cuk cuk', res);
       if (res?.data?.paymentLink) {
         const addStep = {
