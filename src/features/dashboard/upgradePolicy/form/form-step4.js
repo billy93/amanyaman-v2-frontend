@@ -640,7 +640,7 @@ const Form3 = ({
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {payload?.newBooking?.finalPrice > 0 ? (
+                    {payload?.finalPrice > 0 ? (
                       <CurrencyFormatter amount={payload?.finalPrice} />
                     ) : (
                       'IDR 0'
