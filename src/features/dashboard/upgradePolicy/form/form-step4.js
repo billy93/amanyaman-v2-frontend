@@ -119,6 +119,7 @@ const Form3 = ({
     };
     try {
       const res = await paymentProcced(payloadData);
+      console.log('cuk cuk', res);
       if (res?.data?.paymentLink) {
         const addStep = {
           ...login,
