@@ -116,6 +116,7 @@ export const quotSearch = apiSlice.injectEndpoints({
         };
       },
     }),
+
     editTravellerData: builder.mutation({
       query: (params) => {
         return {
