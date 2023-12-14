@@ -29,8 +29,20 @@ const UseCustomToast = () => {
       allowDuplicate: false,
     });
   };
+  const showWarningToast = (message, id) => {
+    toast({
+      id: id,
+      title: 'Warning',
+      position: 'top-right',
+      description: message,
+      status: 'warning',
+      duration: 5000,
+      isClosable: true,
+      allowDuplicate: false,
+    });
+  };
 
-  return { showErrorToast, showSuccessToast };
+  return { showErrorToast, showSuccessToast, showWarningToast };
 };
 
 export default UseCustomToast;

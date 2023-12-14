@@ -10,26 +10,26 @@ import {
   Button,
 } from '@chakra-ui/react';
 
-const GlobalModal = ({ isOpen, onClose, onConfirm, children }) => {
+const GlobalModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  id,
+  children,
+  handleDelete,
+}) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>delete</ModalHeader>
+        <ModalHeader>Confirmation delete</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>{children}</ModalBody>
+        <ModalBody>{'Are you sure to delete ?'}</ModalBody>
         <ModalFooter>
           <Button colorScheme="red" onClick={onClose}>
             Cancel
           </Button>
-          <Button
-            colorScheme="green"
-            ml={3}
-            onClick={() => {
-              onConfirm();
-              onClose();
-            }}
-          >
+          <Button colorScheme="green" ml={3} onClick={() => handleDelete(id)}>
             Confirm
           </Button>
         </ModalFooter>

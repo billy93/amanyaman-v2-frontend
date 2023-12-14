@@ -85,6 +85,8 @@ import CustomModal from './import';
 import { CiTrash } from 'react-icons/ci';
 import CurrencyFormatter from '../../../../components/formatCurrency';
 import ModalEdit from './modalEdit';
+// import UseCustomToast from '../../../../components/UseCustomToast';
+import GlobalModal from '../../../../components/globalModal';
 
 const Form3 = ({
   label,
@@ -108,6 +110,7 @@ const Form3 = ({
   const message = useSelector(messages);
   const EditTraveller = useSelector(EditTravellers);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  //  const { showWarningToast } = UseCustomToast();
   const [booksProducts, { isLoading: onsubmitloading }] =
     useBooksProductsMutation();
   const dispatch = useDispatch();
@@ -143,9 +146,12 @@ const Form3 = ({
   const [isValid, setIsValid] = useState(true);
   const [isValidPhone, setIsValidPhone] = useState(true);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-
+  const [isModalOpenDel, setIsModalOpenDel] = React.useState(false);
+  const [idxDelete, setIdxDelete] = React.useState('');
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const openModalDel = () => setIsModalOpenDel(true);
+  const closeModalDel = () => setIsModalOpenDel(false);
   const toast = useToast();
   const historyform = useSelector(historyForm);
   const [addTravellerData, { isSuccess, isLoading: loadingAdd }] =
@@ -891,11 +897,18 @@ const Form3 = ({
     return formattedDate;
   }
 
+  const WarningDelete = (id) => {
+    setIsModalOpenDel(true);
+    setIdxDelete(id?.id);
+  };
+
+  // console.log('delete pop', idxDelete);
   const handleDelete = async (id) => {
-    console.log('idd', id);
+    // console.log('test id ini', id);
+    // console.log('test id ini', idxDelete);
     // e.preventDefault();
     try {
-      const res = await deleteTravellerData(id.id);
+      const res = await deleteTravellerData(id);
       const idx = 'deletetraveller';
       // console.log('red del', res);
       if (res.data === null) {
@@ -911,6 +924,7 @@ const Form3 = ({
           });
         }
         setTriggerGetList(true);
+        setIsModalOpenDel(false);
         // refetch(id.id);
         // navigate('/master-data/travel-agent');
       }
@@ -1037,6 +1051,12 @@ const Form3 = ({
       animate={{ opacity: 1 }}
       transition={{ delay: 1.1, duration: 1.1 }}
     >
+      <GlobalModal
+        isOpen={isModalOpenDel}
+        onClose={closeModalDel}
+        handleDelete={handleDelete}
+        id={idxDelete}
+      />
       <Box border={'1px'} borderColor="#ebebeb">
         <motion.div
           variants={wrapperVariants}
@@ -2837,8 +2857,9 @@ const Form3 = ({
                                   }}
                                   bg="white"
                                   icon={<CiTrash size="1em" />}
+                                  // onClick={WarningDelete}
                                   onClick={() =>
-                                    handleDelete({ id: travellers.id })
+                                    WarningDelete({ id: travellers.id })
                                   }
                                 >
                                   {/* <Button
