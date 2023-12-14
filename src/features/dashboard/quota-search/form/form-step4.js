@@ -44,6 +44,7 @@ import CurrencyFormatter from '../../../../components/formatCurrency';
 import { BsWallet2 } from 'react-icons/bs';
 // import usePersist from '../../../../features/hook/usePersist';
 // import { setTravellersData } from '../quotaSearchSlice';
+// import UseCustomToast from './UseCustomToast';
 
 function usePrevious(value) {
   // The ref object is a generic container whose current property is mutable ...
@@ -135,6 +136,11 @@ const Form3 = ({
       // console.log('res', res);
     } catch (error) {
       console.log('err', error);
+      if (error?.originalStatus === '500') {
+        console.log('err', error);
+        const errorMessage = `Failed to payment and try again. Status Code: ${data?.error?.status}`;
+        showErrorToast(errorMessage);
+      }
     }
   };
 

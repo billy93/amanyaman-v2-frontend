@@ -759,6 +759,7 @@ const Polcies = () => {
         historyStep: 3,
       };
       dispatch(setCredentials({ ...addStep }));
+      navigate(`/create-quota/search/${link?.id}`);
     }
   };
 
