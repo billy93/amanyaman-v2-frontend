@@ -751,8 +751,8 @@ const Polcies = () => {
 
   const handleRedirectPaymentPage = (link) => {
     console.log('link', link);
-    if (link?.paymentLink) {
-      window.open(link, '_blank', 'noreferrer');
+    if (link?.paymentLink !== 'Not available') {
+      window.open(link?.paymentLink, '_blank', 'noreferrer');
     } else {
       const addStep = {
         ...login,
