@@ -118,20 +118,26 @@ const Form3 = ({
     };
     try {
       const res = await paymentProcced(payloadData);
-      if (res?.data?.paymentLink) {
-        const addStep = {
-          ...login,
-          historyStep: 0,
-        };
-        console.log('res data', res);
-        dispatch(setCredentials({ ...addStep }));
-        window.location.replace(res?.data?.paymentLink);
-      } else if (
-        res?.data?.paymentLink === null &&
-        res?.data?.paymentMethod === 'CREDIT_LIMIT' &&
-        res?.data?.paymentStatus === 'SUCCESS'
-      ) {
-        navigate(`/payment/success/${payload?.transactionId}`);
+      console.log('res', res);
+      if (res?.error?.status === 500) {
+        const errorMessage = `Failed to payment and try again. Status Code: ${res?.error?.status}`;
+        showErrorToast(errorMessage);
+      } else {
+        if (res?.data?.paymentLink) {
+          const addStep = {
+            ...login,
+            historyStep: 0,
+          };
+          console.log('res data', res);
+          dispatch(setCredentials({ ...addStep }));
+          window.location.replace(res?.data?.paymentLink);
+        } else if (
+          res?.data?.paymentLink === null &&
+          res?.data?.paymentMethod === 'CREDIT_LIMIT' &&
+          res?.data?.paymentStatus === 'SUCCESS'
+        ) {
+          navigate(`/payment/success/${payload?.transactionId}`);
+        }
       }
       // console.log('res', res);
     } catch (error) {
