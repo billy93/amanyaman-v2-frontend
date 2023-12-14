@@ -34,7 +34,7 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
   quotState,
   getSearchById,
-  setFormStateCoverageType,
+  // setFormStateCoverageType,
 } from './quotaSearchSlice';
 import { useSelector } from 'react-redux';
 import {
@@ -52,6 +52,7 @@ import {
   setListProducts,
   setUpgradeData,
 } from './quotaSearchSlice';
+import PageLoader from '../../../components/pageLoader';
 
 const MainQuotSearch = () => {
   const { id, policyNumberString } = useParams();

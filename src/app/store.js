@@ -28,7 +28,7 @@ import { encryptTransform } from 'redux-persist-transform-encrypt';
 // import storageSession from 'reduxjs-toolkit-persist/lib/storage/session';
 // import { apiSlice } from './api/apiSlice';
 // import { logOut } from '../features/auth/authSlice';
-const encryptionKey = 'amanyaman-v2-2023';
+const encryptionKey = 'sales-amanyaman-v2-2023';
 
 const encryptor = encryptTransform({
   secretKey: encryptionKey,
@@ -41,7 +41,7 @@ const authPersistConfig = {
   key: 'auth',
   storage,
   transforms: [encryptor],
-  whitelist: ['userLogin'],
+  whitelist: ['userLogin', 'mainMenu'],
 };
 
 // const rootPersistForm = {

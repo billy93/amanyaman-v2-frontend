@@ -3,7 +3,11 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import QuotaSearch from './quotaSearch';
-import { historyForm, userLoginCurrent } from '../../auth/authSlice';
+import {
+  historyForm,
+  userLoginCurrent,
+  setCredentials,
+} from '../../auth/authSlice';
 import QuotaSearchById from './quotaSearchById';
 import { useGetBookingSearchQuery } from './policyApiSlice';
 import usePersist from '../../hook/usePersist';
@@ -44,9 +48,16 @@ const MainQuotSearch = () => {
   React.useEffect(() => {
     if (id) {
       let coverType = searchById?.data?.coverType;
-      console.log('cover', coverType);
+      // console.log('cover', coverType);
 
       dispatch(setFormStateCoverageType(coverType));
+    } else {
+      const addStep = {
+        ...login,
+        historyStep: 0,
+      };
+
+      dispatch(setCredentials({ ...addStep }));
     }
   }, [id, dispatch, searchById?.data?.coverType]);
   // console.log('cover red', localStorage.getItem('persist').token);
