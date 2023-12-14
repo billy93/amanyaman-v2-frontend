@@ -750,7 +750,16 @@ const Polcies = () => {
   };
 
   const handleRedirectPaymentPage = (link) => {
-    window.open(link, '_blank', 'noreferrer');
+    console.log('link', link);
+    if (link?.paymentLink !== 'Not available') {
+      window.open(link, '_blank', 'noreferrer');
+    } else {
+      const addStep = {
+        ...login,
+        historyStep: 3,
+      };
+      dispatch(setCredentials({ ...addStep }));
+    }
   };
 
   const handleRedirectPaymentPageSuccess = (row) => {
@@ -818,7 +827,7 @@ const Polcies = () => {
             className="global-td"
             onClick={
               row.original.paymentStatus === 'WAITING_FOR_PAYMENT'
-                ? () => handleRedirectPaymentPage(row.original.paymentLink)
+                ? () => handleRedirectPaymentPage(row.original)
                 : row.original.paymentStatus === 'SUCCESS'
                 ? () => handleRedirectPaymentPageSuccess(row.original)
                 : () => handleRedirect(row.original.bookingId)

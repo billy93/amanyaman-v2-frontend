@@ -122,7 +122,7 @@ const Form3 = ({
           ...login,
           historyStep: 0,
         };
-
+        console.log('res data', res);
         dispatch(setCredentials({ ...addStep }));
         window.location.replace(res?.data?.paymentLink);
       } else if (
