@@ -26,6 +26,8 @@ import {
   selectManualInput,
   selectedTravelInsurance,
   setSelectTravelInsurancePlan,
+  setFormStateDestinationCountry,
+  setAnnualDestinations,
 } from '../quotaSearchSlice';
 import {
   useGetListTravellerQuery,
@@ -217,6 +219,7 @@ const Form3 = ({
 
     return dateObject;
   }
+
   const handleEditTravellersData = (data) => {
     // e.preventDefault();
     console.log('travellers', data);
@@ -288,6 +291,16 @@ const Form3 = ({
       })
     );
   };
+
+  React.useEffect(() => {
+    if (payload?.coverType === 'ANNUAL') {
+      dispatch(
+        setAnnualDestinations({
+          ...payload?.bookingProduct?.product?.areaGroup,
+        })
+      );
+    }
+  }, [payload, dispatch]);
 
   const selectDateNew = (date) => {
     setDateBirth(date);
@@ -2723,14 +2736,20 @@ const Form3 = ({
                       style={{ fontSize: '12px' }}
                       pl="5px"
                     >
-                      {payload?.destinations.length > 0 &&
+                      {payload?.coverType === 'ANNUAL' ? (
+                        <span>
+                          {initStateTraveller?.annualDestination?.areaGroupName}
+                        </span>
+                      ) : (
+                        payload?.destinations.length > 0 &&
                         payload?.destinations.map((item, i) => {
                           return (
                             <span key={i}>
                               {(i ? ', ' : '') + item.countryName}
                             </span>
                           );
-                        })}
+                        })
+                      )}
                     </Text>
                   </Box>
                   <Box

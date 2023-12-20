@@ -11,6 +11,7 @@ const createSearchSlice = createSlice({
         travellerType: 'Individual',
         totalPass: 1,
         destinationCountry: [],
+        annualDestination: null,
         adult: 1,
         child: 1,
         startDate: {
@@ -61,6 +62,9 @@ const createSearchSlice = createSlice({
   reducers: {
     setUpgradeData: (state, action) => {
       state.formState.upgradeData = action.payload;
+    },
+    setAnnualDestinations: (state, action) => {
+      state.formState.manualInput.annualDestination = action.payload;
     },
     setFormStateCoverageType: (state, action) => {
       state.formState.manualInput.coverageType = action.payload;
@@ -146,6 +150,7 @@ export const {
   setFormStateDestinationCountry,
   setFormStateStartDate,
   setSelectTravelInsurancePlan,
+  setAnnualDestinations,
 } = createSearchSlice.actions;
 
 export default createSearchSlice.reducer;

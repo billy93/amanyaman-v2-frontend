@@ -81,6 +81,7 @@ export default function Navbar({ allowedRoles }) {
 
     const persistedStateJSON = localStorage.getItem('persist:root');
 
+    console.log('username', username);
     if (persistedStateJSON) {
       const persistedState = JSON.parse(persistedStateJSON);
       const del = persistedState.quotaSearch;
@@ -435,6 +436,23 @@ export default function Navbar({ allowedRoles }) {
                     color="#231F20"
                     style={{ paddingLeft: '4px' }}
                   />
+                </Box>
+                <Box
+                  style={{
+                    fontSize: '10px',
+                    color: '#50b848',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    paddingLeft: '15px',
+                  }}
+                >
+                  {username?.travel_agent_name !== null ? (
+                    <Text as="p" size="sm">
+                      {username?.travel_agent_name}
+                    </Text>
+                  ) : (
+                    'Test Agent Name'
+                  )}
                 </Box>
               </MenuButton>
               <MenuList>

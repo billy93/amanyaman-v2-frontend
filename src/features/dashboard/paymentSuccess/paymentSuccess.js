@@ -235,7 +235,34 @@ const PaymentSuccessPage = () => {
                     fontFamily={'Mulish'}
                     style={{ fontSize: '12px' }}
                   >
-                    {'Singapore'}
+                    {quotation?.coverType === 'ANNUAL' ? (
+                      <Text
+                        as="p"
+                        size={'sm'}
+                        fontFamily={'Mulish'}
+                        style={{ fontSize: '12px' }}
+                      >
+                        {
+                          quotation?.selectProduct?.product?.areaGroup
+                            ?.areaGroupName
+                        }
+                      </Text>
+                    ) : (
+                      quotation?.destinations?.map((country, i) => {
+                        return (
+                          <Text
+                            key={i}
+                            as="p"
+                            size={'sm'}
+                            fontFamily={'Mulish'}
+                            color="#065BAA"
+                            style={{ fontSize: '12px' }}
+                          >
+                            {country.countryName}
+                          </Text>
+                        );
+                      })
+                    )}
                   </Text>
                   <Text
                     as="p"

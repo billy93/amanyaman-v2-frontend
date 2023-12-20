@@ -43,7 +43,7 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import CurrencyFormatter from '../../../../components/formatCurrency';
 import { BsWallet2 } from 'react-icons/bs';
 // import usePersist from '../../../../features/hook/usePersist';
-// import { setTravellersData } from '../quotaSearchSlice';
+import { selectManualInput, setAnnualDestinations } from '../quotaSearchSlice';
 // import UseCustomToast from './UseCustomToast';
 
 function usePrevious(value) {
@@ -67,7 +67,7 @@ const Form3 = ({
   nextStep,
   isLastStep,
 }) => {
-  // const initManual = useSelector(selectManualInput);
+  const initManual = useSelector(selectManualInput);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const [persist] = usePersist();
@@ -110,6 +110,16 @@ const Form3 = ({
       // dispatch(setTravellersData([...newlistTravellers]));
     }
   }, [dispatch, payload, refetchBooking, id]);
+
+  React.useEffect(() => {
+    if (payload?.coverType === 'ANNUAL') {
+      dispatch(
+        setAnnualDestinations({
+          ...payload?.bookingProduct?.product?.areaGroup,
+        })
+      );
+    }
+  }, [payload, dispatch]);
 
   const continuePay = async () => {
     const payloadData = {
@@ -176,7 +186,7 @@ const Form3 = ({
     }
   }, [tabIndex, prevTab]);
 
-  console.log('credit limit', creditLimit);
+  console.log('credit limit payload', payload);
 
   return (
     <Box border={'1px'} borderColor="#ebebeb">
@@ -467,20 +477,32 @@ const Form3 = ({
                     </Text>
                   </Box>
                   <Box display={'flex'} gap="2px" flexWrap={'nowrap'}>
-                    {payload?.destinations?.map((country, i) => {
-                      return (
-                        <Text
-                          key={i}
-                          as="p"
-                          size={'sm'}
-                          fontFamily={'Mulish'}
-                          color="#065BAA"
-                          style={{ fontSize: '12px' }}
-                        >
-                          {country.countryName}
-                        </Text>
-                      );
-                    })}
+                    {payload?.coverType === 'ANNUAL' ? (
+                      <Text
+                        as="p"
+                        size={'sm'}
+                        fontFamily={'Mulish'}
+                        color="#065BAA"
+                        style={{ fontSize: '12px' }}
+                      >
+                        {initManual?.annualDestination?.areaGroupName}
+                      </Text>
+                    ) : (
+                      payload?.destinations?.map((country, i) => {
+                        return (
+                          <Text
+                            key={i}
+                            as="p"
+                            size={'sm'}
+                            fontFamily={'Mulish'}
+                            color="#065BAA"
+                            style={{ fontSize: '12px' }}
+                          >
+                            {country.countryName}
+                          </Text>
+                        );
+                      })
+                    )}
                   </Box>
                 </Box>
               </Box>
