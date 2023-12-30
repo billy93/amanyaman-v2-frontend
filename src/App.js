@@ -66,6 +66,7 @@ import CreateTravellerType from './features/dashboard/travellerType/createTravel
 import EditTravellerType from './features/dashboard/travellerType/editTravellerType';
 import { AnimatePresence } from 'framer-motion';
 
+
 function App() {
   const location = useLocation();
   return (
